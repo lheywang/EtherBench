@@ -43,9 +43,9 @@ set (RUNTIME_LIBRARY_SYSCALLS "--specs=nosys.specs")
 ################### CONFIGURE FLAGS ###################################
 set (CMAKE_EXECUTABLE_SUFFIX ".elf")
 set (CMAKE_STATIC_LIBRARY_SUFFIX ".a")
-set (CMAKE_C_FLAGS "${MCPU} -std=gnu11 ${MFPU} ${MFLOAT_ABI} ${RUNTIME_LIBRARY} -mthumb -Wall -Werror")
-set (CMAKE_CXX_FLAGS "${MCPU} -std=c++17 ${MFPU} ${MFLOAT_ABI} ${RUNTIME_LIBRARY} -mthumb -Wall -Werror")
-set (CMAKE_EXE_LINKER_FLAGS "-T${LINKER_SCRIPT} ${RUNTIME_LIBRARY_SYSCALLS} -Wl,-Map=test.map -Wl,--gc-sections -static -Wl,--start-group -lc -lm -Wl,--end-group")
+set (CMAKE_C_FLAGS "${MCPU} -std=gnu11 ${MFPU} ${MFLOAT_ABI} ${RUNTIME_LIBRARY} -mthumb -Wall -Werror -ffunction-sections -fdata-sections -g3 -O2")
+set (CMAKE_CXX_FLAGS "${MCPU} -std=c++17 ${MFPU} ${MFLOAT_ABI} ${RUNTIME_LIBRARY} -mthumb -Wall -Werror  -ffunction-sections -fdata-sections -g3 -O2")
+set (CMAKE_EXE_LINKER_FLAGS "-T${LINKER_SCRIPT} ${RUNTIME_LIBRARY_SYSCALLS} -Wl,-Map=EtherBench.map,--cref -Wl,--gc-sections -static -Wl,--start-group -lc -lm -Wl,--end-group")
 set (CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -x assembler-with-cpp")
 
 #######################################################################
@@ -64,4 +64,11 @@ add_subdirectory(hal)
 add_subdirectory(bsp)
 
 # Add libraries
-target_link_libraries(${PROJECT_NAME} HAL)
+# Will need to add TASKS when they're complete !
+target_link_libraries(${PROJECT_NAME} HAL THREADX BSP)
+
+# Show the user in console how much RAM and FLASH is used 
+add_custom_command(TARGET EtherBench POST_BUILD
+    COMMAND arm-none-eabi-size ${CMAKE_PROJECT_NAME}
+    COMMAND arm-none-eabi-objdump -h -S ${CMAKE_PROJECT_NAME} > ${CMAKE_PROJECT_NAME}.list
+)

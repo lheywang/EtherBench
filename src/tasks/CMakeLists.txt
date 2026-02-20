@@ -8,6 +8,7 @@
 
 # We only need to add the required subdirectories
 add_subdirectory(hardware)
+add_subdirectory(idle)
 add_subdirectory(inet)
 add_subdirectory(interface)
 add_subdirectory(muxer)
