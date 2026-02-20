@@ -39,3 +39,6 @@
 
 # debug information files
 *.dwo
+
+# STM32 build files
+src/build/*
