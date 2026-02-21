@@ -15,5 +15,4 @@ set(SOURCES
 # Creating the library
 add_library(SYSTEM STATIC ${SOURCES})
 
-# Adding the include folder (empty here)
-# target_include_directories(SYSTEM PUBLIC include/)
+# There's no include, source only. Nothing to be included.

@@ -13,7 +13,7 @@ add_subdirectory(levelx)
 add_subdirectory(netxduo)
 add_subdirectory(usbx)
 
-# Creating an higher level library (to prevent from the user to lin against too much libs)
+# Creating an higher level library (to prevent from the user to link against too much libs)
 add_library(THREADX INTERFACE)
 
 # target_link_libraries(HAL INTERFACE)

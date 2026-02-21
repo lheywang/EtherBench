@@ -48,11 +48,17 @@ set (CMAKE_CXX_FLAGS "${MCPU} -std=c++17 ${MFPU} ${MFLOAT_ABI} ${RUNTIME_LIBRARY
 set (CMAKE_EXE_LINKER_FLAGS "-T${LINKER_SCRIPT} ${RUNTIME_LIBRARY_SYSCALLS} -Wl,-Map=EtherBench.map,--cref -Wl,--gc-sections -static -Wl,--start-group -lc -lm -Wl,--end-group")
 set (CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -x assembler-with-cpp")
 
+# Select the target MCU
+add_definitions(-DSTM32H563xx)
+
 #######################################################################
 
 ################## PROJECT SETUP ######################################
 project(${PROJECT_NAME})
 enable_language(ASM C CXX)
+
+# Add the config directory, which is global
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
 
 # We only add the main.c file, all the remaining is built arround libraries.
 add_executable(${PROJECT_NAME} main.c)
@@ -65,10 +71,10 @@ add_subdirectory(bsp)
 
 # Add libraries
 # Will need to add TASKS when they're complete !
-target_link_libraries(${PROJECT_NAME} HAL THREADX BSP)
+target_link_libraries(${PROJECT_NAME} HAL)
 
 # Show the user in console how much RAM and FLASH is used 
-add_custom_command(TARGET EtherBench POST_BUILD
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND arm-none-eabi-size ${CMAKE_PROJECT_NAME}
     COMMAND arm-none-eabi-objdump -h -S ${CMAKE_PROJECT_NAME} > ${CMAKE_PROJECT_NAME}.list
 )

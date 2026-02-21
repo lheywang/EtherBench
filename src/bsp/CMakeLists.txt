@@ -9,7 +9,7 @@
 # We only need to add the required subdirectories
 add_subdirectory(ethernet)
 
-# Creating an higher level library (to prevent from the user to lin against too much libs)
+# Creating an higher level library (to prevent from the user to link against too much libs)
 add_library(BSP INTERFACE)
 
 target_link_libraries(BSP INTERFACE
