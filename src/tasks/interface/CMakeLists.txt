@@ -15,4 +15,6 @@ set(SOURCES
 add_library(IFACE STATIC ${SOURCES})
 
 # Adding the include folder
-target_include_directories(IFACE PUBLIC include/)
+target_include_directories(IFACE PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)

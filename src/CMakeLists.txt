@@ -33,9 +33,9 @@ add_subdirectory(launcher)
 # Will need to add TASKS when they're complete !
 target_link_libraries(${PROJECT_NAME} 
 	HAL 
+	BSP
+	TASKS
 	LAUNCHER
 	THREADX
-	TASKS
-	BSP
 )
 

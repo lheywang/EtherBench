@@ -15,4 +15,6 @@ set(SOURCES
 add_library(HARDWARE STATIC ${SOURCES})
 
 # Adding the include folder
-target_include_directories(HARDWARE PUBLIC include/)
+target_include_directories(HARDWARE PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)

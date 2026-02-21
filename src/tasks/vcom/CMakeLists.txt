@@ -15,4 +15,6 @@ set(SOURCES
 add_library(VCOM STATIC ${SOURCES})
 
 # Adding the include folder
-target_include_directories(VCOM PUBLIC include/)
+target_include_directories(VCOM PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)

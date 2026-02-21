@@ -15,4 +15,6 @@ set(SOURCES
 add_library(MUXER STATIC ${SOURCES})
 
 # Adding the include folder
-target_include_directories(MUXER PUBLIC include/)
+target_include_directories(MUXER PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)

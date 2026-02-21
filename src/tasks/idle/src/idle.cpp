@@ -23,7 +23,6 @@
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
-
 void idle_task(ULONG arg)
 {
 	/*
@@ -35,4 +34,5 @@ void idle_task(ULONG arg)
 		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
 	}
 }
+
 

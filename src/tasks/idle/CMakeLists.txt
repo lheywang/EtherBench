@@ -18,4 +18,6 @@ add_library(IDLE STATIC ${SOURCES})
 target_link_libraries(IDLE THREADX_OS)
 
 # Adding the include folder
-target_include_directories(IDLE PUBLIC include/)
+target_include_directories(IDLE PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)

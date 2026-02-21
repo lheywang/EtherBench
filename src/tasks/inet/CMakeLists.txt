@@ -15,4 +15,6 @@ set(SOURCES
 add_library(INET STATIC ${SOURCES})
 
 # Adding the include folder
-target_include_directories(INET PUBLIC include/)
+target_include_directories(INET PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)
