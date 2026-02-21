@@ -26,7 +26,6 @@ set(SOURCES
 	src/stm32h5xx_hal_timebase_tim.c
 	src/stm32h5xx_hal_uart_ex.c
 	src/stm32h5xx_hal_uart.c
-	src/system_stm32h5xx.c
 )
 
 # Creating the library

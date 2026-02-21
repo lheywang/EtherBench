@@ -71,8 +71,6 @@ void Error_Handler(void);
  * This snipplet will force GCC to build against the timer_hal base rather than the default __weak one.
  */
 #define USE_TIM6_AS_HAL_TIM
-
-#define INIT_FPU
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -19,7 +19,7 @@
 				<generator>Ninja</generator>
 				<cmake_build_type>Debug</cmake_build_type>
 				<cmake_export_compile_commands/>
-				<cmake_toolchain_file>cubeide-gcc.cmake</cmake_toolchain_file>
+				<cmake_toolchain_file>gcc-arm-none-eabi.cmake</cmake_toolchain_file>
 				<misc_command/>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
