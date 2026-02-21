@@ -26,5 +26,5 @@ add_subdirectory(bsp)
 
 # Add libraries
 # Will need to add TASKS when they're complete !
-target_link_libraries(${PROJECT_NAME} HAL)
+target_link_libraries(${PROJECT_NAME} HAL THREADX)
 
