@@ -16,6 +16,11 @@ add_subdirectory(usbx)
 # Creating an higher level library (to prevent from the user to link against too much libs)
 add_library(THREADX INTERFACE)
 
-target_link_libraries(THREADX INTERFACE THREADX_OS)
+# Some arguments are needed to ensure we link against the whole lib
+target_link_libraries(THREADX INTERFACE 
+	"-Wl,--whole-archive"
+	THREADX_OS
+	"-Wl,--no-whole-archive"
+)
 
 # ADD FATX LEVELX NETXDUO  USBX libs, when sources will be available

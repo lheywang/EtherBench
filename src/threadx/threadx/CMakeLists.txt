@@ -193,7 +193,7 @@ list(APPEND SOURCES
 add_library(THREADX_OS STATIC ${SOURCES})
 
 # Ensure we build against the HAL
-target_link_libraries(THREADX_OS HAL)
+target_link_libraries(THREADX_OS HAL LAUNCHER)
 
 # Adding the include folder
 target_include_directories(THREADX_OS PUBLIC 

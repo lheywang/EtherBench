@@ -17,12 +17,16 @@
 #include "init.h"
 #include "error_handler.h"
 
+// ThreadX library
+#include "app_threadx.h"
+
 // STD
 #include <stdint.h>
 
 // ======================================================================
 //                               CHECKS
 // ======================================================================
+// I'll let it, as a remainder, but this does not cause issues (for now ??)
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
@@ -32,14 +36,16 @@
 // ======================================================================
 int main(void)
 {
-	// Init the MCU
+	// Initialize the MCU
 	if (init() != HAL_OK)
 		Error_Handler();
 
-    /* Loop forever */
-	for(;;)
-	{
-		HAL_Delay(500);
-		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-	}
+	// Launch the RTOS
+	MX_ThreadX_Init();
+
+    /*
+     * We shall never get here, and, if we get, which mean critical failure,
+     * we call the Error_Handler() function. (Infinite loop).
+     */
+	Error_Handler();
 }

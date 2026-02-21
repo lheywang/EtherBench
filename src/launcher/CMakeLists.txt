@@ -1,6 +1,6 @@
 #############################################################################################################################
-# file:  tasks/idle/CMakeLists.txt
-# brief: Task executed when nothing need to be done...
+# file:  tasks/muxer/CMakeLists.txt
+# brief: Main data router inside the project
 # 
 # author : l.heywang <leonard.heywang@proton.me>
 # date : 20/02/2026
@@ -8,14 +8,24 @@
 
 # Set sources
 set(SOURCES 
-	src/idle.cpp
+	src/launcher.c
 )
 
 # Creating the library
-add_library(IDLE STATIC ${SOURCES})
+add_library(LAUNCHER STATIC ${SOURCES})
 
-# Link against the right libraries
-target_link_libraries(IDLE THREADX_OS)
+# Ensure the library link against the right libs
+target_link_libraries(LAUNCHER 
+	HAL 
+	THREADX_OS
+	HARDWARE
+	IDLE
+	INET
+	IFACE
+	MUXER
+	VCOM
+)
+
 
 # Adding the include folder
-target_include_directories(IDLE PUBLIC include/)
+target_include_directories(LAUNCHER PUBLIC include/)

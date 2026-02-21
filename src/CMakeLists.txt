@@ -10,7 +10,11 @@ project("EtherBench")
 enable_language(ASM C CXX)
 
 # We just need to configure variables
-add_compile_definitions(-DUSE_HAL_DRIVER -DSTM32H563xx)
+add_compile_definitions(
+	-DUSE_HAL_DRIVER 
+	-DSTM32H563xx
+	-DTX_SINGLE_MODE_NON_SECURE
+)
 
 # Add the config directory, which is global
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
@@ -23,8 +27,15 @@ add_subdirectory(threadx)
 add_subdirectory(tasks)
 add_subdirectory(hal)
 add_subdirectory(bsp)
+add_subdirectory(launcher)
 
 # Add libraries
 # Will need to add TASKS when they're complete !
-target_link_libraries(${PROJECT_NAME} HAL THREADX)
+target_link_libraries(${PROJECT_NAME} 
+	HAL 
+	LAUNCHER
+	THREADX
+	TASKS
+	BSP
+)
 
