@@ -14,5 +14,8 @@ set(SOURCES
 # Creating the library
 add_library(INTERRUPTS STATIC ${SOURCES})
 
+# Link against the HAL
+target_link_libraries(INTERRUPTS ST_HAL)
+
 # Adding the include folder (empty here)
 target_include_directories(INTERRUPTS PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/)

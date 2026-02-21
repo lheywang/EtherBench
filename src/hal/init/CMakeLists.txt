@@ -25,6 +25,7 @@ list(APPEND SOURCES
 # Creating the library
 add_library(INIT STATIC ${SOURCES})
 
+# Link against the HAL
 target_link_libraries(INIT ST_HAL)
 
 # Adding the include folder (empty here)
