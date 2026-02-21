@@ -18,8 +18,10 @@ add_library(HAL INTERFACE)
 
 target_link_libraries(HAL INTERFACE
     SYSTEM
+    INIT
+    "-Wl,--whole-archive"
     STARTUP
     INTERRUPTS
-    INIT
     ST_HAL
+    "-Wl,--no-whole-archive"
 )

@@ -27,13 +27,11 @@
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
-
 // ======================================================================
 //                              MAIN APP
 // ======================================================================
 int main(void)
 {
-
 	// Init the MCU
 	if (init() != HAL_OK)
 		Error_Handler();

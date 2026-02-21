@@ -1,5 +1,5 @@
 #############################################################################################################################
-# file:  hal/startup/CMakeLists.txt
+# file:  hal/interrupts/CMakeLists.txt
 # brief: System init build files
 # 
 # author : l.heywang <leonard.heywang@proton.me>
