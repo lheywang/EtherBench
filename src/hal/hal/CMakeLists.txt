@@ -23,14 +23,16 @@ set(SOURCES
 	src/stm32h5xx_hal_rcc.c
 	src/stm32h5xx_hal_tim_ex.c
 	src/stm32h5xx_hal_tim.c
+	src/stm32h5xx_hal_timebase_tim.c
 	src/stm32h5xx_hal_uart_ex.c
 	src/stm32h5xx_hal_uart.c
+	src/system_stm32h5xx.c
 )
 
 # Creating the library
 add_library(ST_HAL STATIC ${SOURCES})
 
-# Adding the include folder (empty here)
+# Adding the include folder
 target_include_directories(ST_HAL PUBLIC 
 	${CMAKE_CURRENT_SOURCE_DIR}/include/
 	${CMAKE_CURRENT_SOURCE_DIR}/include/cmsis/

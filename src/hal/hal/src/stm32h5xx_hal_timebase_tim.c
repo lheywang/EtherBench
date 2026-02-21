@@ -20,6 +20,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h5xx_hal.h"
 #include "stm32h5xx_hal_tim.h"
+#include "main.h"
+
+#ifdef USE_TIM6_AS_HAL_TIM
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -132,4 +135,6 @@ void HAL_ResumeTick(void)
   /* Enable TIM6 Update interrupt */
   __HAL_TIM_ENABLE_IT(&htim6, TIM_IT_UPDATE);
 }
+
+#endif
 

@@ -34,9 +34,10 @@ set (MFLOAT_ABI_MIX                   "-mfloat-abi=softfp")
 set (PROJECT_NAME             "EtherBench")
 set (PROJECT_TYPE             "exe")
 set (LINKER_SCRIPT            "../STM32H563ZITX_FLASH.ld")
-set (MCPU                     "-mcpu=Cortex-M33")
+
+set (MCPU                     "-mcpu=cortex-M33")
 set (MFPU                     "-mfpu=fpv5-sp-d16")
-set (MFLOAT_ABI               "")
+set (MFLOAT_ABI               "-mfloat-abi=hard")
 set (RUNTIME_LIBRARY          "--specs=nano.specs")
 set (RUNTIME_LIBRARY_SYSCALLS "--specs=nosys.specs")
 
@@ -50,6 +51,7 @@ set (CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -x assembler-with-cpp")
 
 # Select the target MCU
 add_definitions(-DSTM32H563xx)
+add_definitions(-DUSE_HAL_DRIVER -DSTM32H563xx)
 
 #######################################################################
 

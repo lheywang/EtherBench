@@ -189,6 +189,7 @@ all interrupt callbacks are set to the corresponding weak functions:
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h5xx_hal.h"
+#include "stm32h5xx_hal_conf.h"
 
 /** @addtogroup STM32H5xx_HAL_Driver
   * @{
