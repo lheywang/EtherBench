@@ -21,6 +21,7 @@ target_link_libraries(THREADX INTERFACE
 	"-Wl,--whole-archive"
 	THREADX_OS
 	"-Wl,--no-whole-archive"
+	USBX
 )
 
 # ADD FATX LEVELX NETXDUO  USBX libs, when sources will be available
