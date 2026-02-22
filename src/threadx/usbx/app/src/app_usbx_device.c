@@ -80,29 +80,13 @@ UINT MX_USBX_Device_Init(void)
 {
    UINT ret = UX_SUCCESS;
 
-  UCHAR *pointer;
-  TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL*)usbx_thread_stack;
-  byte_pool->tx_byte_pool_id = TX_BYTE_POOL_ID;
-
-  /* USER CODE BEGIN MX_USBX_Device_Init0 */
-
-  /* USER CODE END MX_USBX_Device_Init0 */
-
-  /* Allocate the stack for device application main thread */
-  if (tx_byte_allocate(byte_pool, (VOID **) &pointer, UX_DEVICE_APP_THREAD_STACK_SIZE,
-                       TX_NO_WAIT) != TX_SUCCESS)
-  {
-    /* USER CODE BEGIN MAIN_THREAD_ALLOCATE_STACK_ERROR */
-    return TX_POOL_ERROR;
-    /* USER CODE END MAIN_THREAD_ALLOCATE_STACK_ERROR */
-  }
-
   /* Create the device application main thread */
   if (tx_thread_create(
 		  &ux_device_app_thread,
 		  UX_DEVICE_APP_THREAD_NAME,
 		  app_ux_device_thread_entry,
-          0, pointer,
+          0,
+		  usbx_thread_stack,
 		  UX_DEVICE_APP_THREAD_STACK_SIZE,
 		  UX_DEVICE_APP_THREAD_PRIO,
           UX_DEVICE_APP_THREAD_PREEMPTION_THRESHOLD,
