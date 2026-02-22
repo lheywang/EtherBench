@@ -27,7 +27,7 @@
 // DEVICE DESCRIPTOR
 // ======================================================================
 const uint8_t device_descriptor[] = {
-    #include "../include/device/device.h"
+	DESC_DEV_BYTES
 };
 
 // ======================================================================
@@ -41,10 +41,15 @@ const uint8_t device_descriptor[] = {
 // ======================================================================
 const uint8_t configuration_descriptor[] = {
     // --- Header ---
-    0x09, 0x02,
-    (TOTAL_LEN & 0xFF), (TOTAL_LEN >> 8), // Little-Endian total length
-    0x06, // Number of Interfaces
-    0x01, 0x00, 0xC0, 0x32,
+    0x09, 					/* bLength (9 bytes) */
+	0x02, 					/* bDescriptorType (Configuration) */
+    (TOTAL_LEN & 0xFF),
+	(TOTAL_LEN >> 8), 		/* wTotalLength (16 bits, LE) */
+    0x06, 					/* bNumInterfaces (6) */
+    0x01,					/* bConfigurationValue (1) */
+	0x00, 					/* iConfiguration (0 = ignored) */
+	0x80, 					/* Bus powered */
+	0xFF,					/* bMaxPower (255 * 2 mA = 500 mA)*/
 
     // --- Interfaces pasted sequentially ---
     DESC_CDC_MUX_BYTES,
@@ -67,7 +72,7 @@ const uint8_t string_framework[] = {
 
     // Index 2: Product Name
     0x02, 0x15,
-    'E', 't', 'h', 'e', 'r', 'B', 'e', 'n', 'c', 'h', ' ', 'M', 'u', 'l', 't', 'i', '-', 'T', 'o', 'o', 'l',
+    'E', 't', 'h', 'e', 'r', 'B', 'e', 'n', 'c', 'h',
 
     // Index 3: Serial Number
     0x03, 0x0B,
@@ -75,6 +80,6 @@ const uint8_t string_framework[] = {
 
     // Index 4: CMSIS-DAP String
     0x04, 0x17,
-    'E', 't', 'h', 'e', 'r', 'B', 'e', 'n', 'c', 'h', ' ', 'C', 'M', 'S', 'I', 'S', '-', 'D', 'A', 'P', ' ', 'v', '2'
+    'E', 't', 'h', 'e', 'r', 'B', 'e', 'n', 'c', 'h', ' ', 'C', 'M', 'S', 'I', 'S', '-', 'D', 'A', 'P', ' ', 'v', '1'
 };
 
