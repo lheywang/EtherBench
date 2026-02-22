@@ -14,10 +14,13 @@ set(SOURCES
 list(APPEND SOURCES
 	src/peripherals/cordic.c
 	src/peripherals/dcache.c
+	src/peripherals/eth.c
 	src/peripherals/fmac.c
 	src/peripherals/gpio.c
 	src/peripherals/icache.c
+	src/peripherals/octospi.c
 	src/peripherals/rcc.c
+	src/peripherals/sdmmc.c
 	src/peripherals/stm32h5xx_hal_msp.c
 	src/peripherals/usart.c
 	src/peripherals/usb.c

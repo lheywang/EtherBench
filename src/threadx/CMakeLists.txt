@@ -8,7 +8,7 @@
 
 # We only need to add the required subdirectories
 add_subdirectory(threadx)
-add_subdirectory(fatx)
+add_subdirectory(filex)
 add_subdirectory(levelx)
 add_subdirectory(netxduo)
 add_subdirectory(usbx)
@@ -24,4 +24,4 @@ target_link_libraries(THREADX INTERFACE
 	USBX
 )
 
-# ADD FATX LEVELX NETXDUO  USBX libs, when sources will be available
+# ADD FILEX LEVELX NETXDUO  USBX libs, when sources will be available
