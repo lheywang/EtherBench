@@ -30,6 +30,12 @@
 #include "ux_device_stack.h"
 #include "ux_device_class_cdc_acm.h"
 #include "ux_device_class_storage.h"
+
+// Overrides
+#include "ux_dummy.h"
+
+// OS
+#include "tx_byte_pool.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -76,6 +82,7 @@ UINT MX_USBX_Device_Init(void)
 
   UCHAR *pointer;
   TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL*)usbx_thread_stack;
+  byte_pool->tx_byte_pool_id = TX_BYTE_POOL_ID;
 
   /* USER CODE BEGIN MX_USBX_Device_Init0 */
 
@@ -136,26 +143,36 @@ static VOID app_ux_device_thread_entry(ULONG thread_input)
 
   if (status != UX_SUCCESS) {
 	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
-	  return UX_ERROR;
+	  for (;;) {}
   }
 
   UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_mux_param = {0};
   status = ux_device_stack_class_register(
-	  _ux_system_class_cdc_acm_name,
+	  (UCHAR *)"ux_device_class_cdc_acm",
 	  ux_device_class_cdc_acm_entry,
 	  1,  // Configuration 1
 	  0,  // Interface 0
 	  &cdc_mux_param
   );
 
+  if (status != UX_SUCCESS) {
+	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
+	  for (;;) {}
+  }
+
   UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_term_param = {0};
   status = ux_device_stack_class_register(
-	  _ux_system_class_cdc_acm_name,
+	  (UCHAR *)"ux_device_class_cdc_acm",
 	  ux_device_class_cdc_acm_entry,
 	  1,  // Configuration 1
 	  2,  // Interface 2
 	  &cdc_term_param
   );
+
+  if (status != UX_SUCCESS) {
+	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
+	  for (;;) {}
+  }
 
   UX_SLAVE_CLASS_STORAGE_PARAMETER storage_param = {0};
   storage_param.ux_slave_class_storage_parameter_number_lun = 2;
@@ -165,26 +182,45 @@ static VOID app_ux_device_thread_entry(ULONG thread_input)
   storage_param.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_block_length = 512;
   storage_param.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_type = 0;
   storage_param.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_removable_flag = 0x80;
-  storage_param.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_read = dummy_msc_read;
-  storage_param.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_write = dummy_msc_write;
-  storage_param.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_status = dummy_msc_status;
+  storage_param.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_read = msc_read;
+  storage_param.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_write = msc_write;
+  storage_param.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_status = msc_status;
 
   // LUN 1: SD Card (32GB)
   storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_last_lba = 62500000;
   storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_block_length = 512;
   storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_type = 0;
   storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_removable_flag = 0x80;
-  storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_read = dummy_msc_read;
-  storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_write = dummy_msc_write;
-  storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_status = dummy_msc_status;
+  storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_read = msc_read;
+  storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_write = msc_write;
+  storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_status = msc_status;
 
   status = ux_device_stack_class_register(
-	  _ux_system_class_storage_name,
+	  (UCHAR *)"ux_device_class_storage",
 	  ux_device_class_storage_entry,
 	  1,  // Configuration 1
 	  4,  // Interface 4
 	  &storage_param
   );
+
+  if (status != UX_SUCCESS) {
+	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
+	  for (;;) {}
+  }
+
+  // Register CDC 1
+  status = ux_device_stack_class_register(
+	  (UCHAR *)"ux_device_class_cdc_acm", // <-- Bulletproof string literal
+	  ux_device_class_cdc_acm_entry,
+	  1,  // Configuration 1
+	  0,  // Interface 0
+	  &cdc_mux_param
+  );
+
+  if (status != UX_SUCCESS) {
+	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
+	  for (;;) {}
+  }
 
   while (1)
   {

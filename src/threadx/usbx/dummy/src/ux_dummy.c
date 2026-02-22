@@ -11,8 +11,6 @@
 //                              INCLUDES
 // ======================================================================
 // Local libraries
-#include "stm32h5xx_hal_def.h"
-
 #include "ux_api.h"
 #include "ux_device_stack.h"
 #include "ux_device_class_cdc_acm.h"
@@ -22,7 +20,7 @@
 //                              FUNCTIONS
 // ======================================================================
 
-__weak UINT msc_read(
+__attribute__((weak)) UINT msc_read(
 		VOID *storage,
 		ULONG lun,
 		UCHAR *data_pointer,
@@ -34,7 +32,7 @@ __weak UINT msc_read(
 	return UX_SUCCESS;
 }
 
-__weak UINT msc_write(
+__attribute__((weak)) UINT msc_write(
 		VOID *storage,
 		ULONG lun,
 		UCHAR *data_pointer,
@@ -46,7 +44,7 @@ __weak UINT msc_write(
 	return UX_SUCCESS;
 }
 
-__weak UINT msc_status(
+__attribute__((weak)) UINT msc_status(
 		VOID *storage,
 		ULONG lun,
 		ULONG media_id,
