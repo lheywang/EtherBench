@@ -116,11 +116,20 @@ list(APPEND SOURCES
 	ll/src/ux_dcd_stm32_uninitialize.c
 )
 
+list(APPEND SOURCES
+	descriptors/src/descriptor.c
+	descriptors/src/device/device_descriptor.c
+	descriptors/src/configuration/debugger.c
+	descriptors/src/configuration/storage.c
+	descriptors/src/configuration/vcom_serial.c
+	descriptors/src/configuration/vcom_terminal.c
+)
+
 # Creating the library
 add_library(USBX STATIC ${SOURCES})
 
 # Link against the OS kernel
-target_link_libraries(USBX THREADX_OS HAL)
+target_link_libraries(USBX HAL THREADX_OS)
 
 # Adding the include folder
 target_include_directories(USBX PUBLIC 

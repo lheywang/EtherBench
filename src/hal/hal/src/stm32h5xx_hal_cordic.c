@@ -137,6 +137,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h5xx_hal.h"
+#include "stm32h5xx_hal_conf.h"
 
 #if defined(CORDIC)
 #ifdef HAL_CORDIC_MODULE_ENABLED

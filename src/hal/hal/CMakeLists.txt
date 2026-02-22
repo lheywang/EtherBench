@@ -12,11 +12,14 @@ set(SOURCES
 	src/stm32h5xx_hal_cortex.c
 	src/stm32h5xx_hal_dcache.c
 	src/stm32h5xx_hal_dma_ex.c
+	src/stm32h5xx_hal_dma.c
 	src/stm32h5xx_hal_exti.c
 	src/stm32h5xx_hal_flash_ex.c
 	src/stm32h5xx_hal_flash.c
+	src/stm32h5xx_hal_fmac.c
 	src/stm32h5xx_hal_gpio.c
 	src/stm32h5xx_hal_icache.c
+	src/stm32h5xx_hal_pcd_ex.c
 	src/stm32h5xx_hal_pcd.c
 	src/stm32h5xx_hal_pwr_ex.c
 	src/stm32h5xx_hal_pwr.c

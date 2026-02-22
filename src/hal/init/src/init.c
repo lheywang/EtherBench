@@ -17,11 +17,15 @@
 
 // Local library
 #include "stm32h5xx_hal.h"
+
+#include "cordic.h"
 #include "dcache.h"
+#include "fmac.h"
 #include "gpio.h"
 #include "icache.h"
 #include "rcc.h"
 #include "usart.h"
+#include "usb.h"
 
 // STD
 #include <stdint.h>
@@ -46,6 +50,11 @@ uint32_t init(void)
     // Then, call the different peripherals inits : 
     MX_GPIO_Init();
     MX_USART3_UART_Init();
+    MX_USB_PCD_Init();
+
+    // Computation peripherals init
+    MX_CORDIC_Init();
+    MX_FMAC_Init();
 
     return HAL_OK;
 }
