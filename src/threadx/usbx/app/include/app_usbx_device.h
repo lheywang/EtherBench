@@ -42,7 +42,7 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 #define USBX_DEVICE_MEMORY_STACK_SIZE       512
 
-#define UX_DEVICE_APP_THREAD_STACK_SIZE   1024
+#define UX_DEVICE_APP_THREAD_STACK_SIZE   16384
 #define UX_DEVICE_APP_THREAD_PRIO         10
 
 /* USER CODE BEGIN EC */
@@ -55,7 +55,7 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-UINT MX_USBX_Device_Init(VOID *memory_ptr);
+UINT MX_USBX_Device_Init(void);
 
 /* USER CODE BEGIN EFP */
 

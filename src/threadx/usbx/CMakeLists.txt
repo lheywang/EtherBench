@@ -118,11 +118,6 @@ list(APPEND SOURCES
 
 list(APPEND SOURCES
 	descriptors/src/descriptor.c
-	descriptors/src/device/device_descriptor.c
-	descriptors/src/configuration/debugger.c
-	descriptors/src/configuration/storage.c
-	descriptors/src/configuration/vcom_serial.c
-	descriptors/src/configuration/vcom_terminal.c
 )
 
 # Creating the library
@@ -137,5 +132,6 @@ target_include_directories(USBX PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/common/include
 	${CMAKE_CURRENT_SOURCE_DIR}/ll/include
 	${CMAKE_CURRENT_SOURCE_DIR}/ports/generic/include
+	${CMAKE_CURRENT_SOURCE_DIR}/descriptors/include
 )
 	

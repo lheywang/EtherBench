@@ -46,7 +46,7 @@
 static TX_THREAD ux_device_app_thread;
 
 /* USER CODE BEGIN PV */
-
+static uint8_t usbx_thread_stack[UX_DEVICE_APP_THREAD_STACK_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -61,12 +61,12 @@ static VOID app_ux_device_thread_entry(ULONG thread_input);
   * @retval status
   */
 
-UINT MX_USBX_Device_Init(VOID *memory_ptr)
+UINT MX_USBX_Device_Init(void)
 {
    UINT ret = UX_SUCCESS;
 
   UCHAR *pointer;
-  TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL*)memory_ptr;
+  TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL*)usbx_thread_stack;
 
   /* USER CODE BEGIN MX_USBX_Device_Init0 */
 
@@ -82,10 +82,17 @@ UINT MX_USBX_Device_Init(VOID *memory_ptr)
   }
 
   /* Create the device application main thread */
-  if (tx_thread_create(&ux_device_app_thread, UX_DEVICE_APP_THREAD_NAME, app_ux_device_thread_entry,
-                       0, pointer, UX_DEVICE_APP_THREAD_STACK_SIZE, UX_DEVICE_APP_THREAD_PRIO,
-                       UX_DEVICE_APP_THREAD_PREEMPTION_THRESHOLD, UX_DEVICE_APP_THREAD_TIME_SLICE,
-                       UX_DEVICE_APP_THREAD_START_OPTION) != TX_SUCCESS)
+  if (tx_thread_create(
+		  &ux_device_app_thread,
+		  UX_DEVICE_APP_THREAD_NAME,
+		  app_ux_device_thread_entry,
+          0, pointer,
+		  UX_DEVICE_APP_THREAD_STACK_SIZE,
+		  UX_DEVICE_APP_THREAD_PRIO,
+          UX_DEVICE_APP_THREAD_PREEMPTION_THRESHOLD,
+		  UX_DEVICE_APP_THREAD_TIME_SLICE,
+          UX_DEVICE_APP_THREAD_START_OPTION
+  ) != TX_SUCCESS)
   {
     /* USER CODE BEGIN MAIN_THREAD_CREATE_ERROR */
     return TX_THREAD_ERROR;
