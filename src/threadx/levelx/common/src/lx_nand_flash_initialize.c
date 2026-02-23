@@ -25,7 +25,7 @@
 
 /* Include necessary system files.  */
 
-#include "../include/lx_api.h"
+#include "lx_api.h"
 
 
 /* Define the NAND flash opened list head and opened count.  */

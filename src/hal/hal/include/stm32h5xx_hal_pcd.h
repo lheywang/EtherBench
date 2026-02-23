@@ -26,6 +26,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h5xx_ll_usb.h"
+#include "stm32h5xx_hal_conf.h"
 
 #if defined (USB_OTG_FS) || defined (USB_OTG_HS) || defined (USB_DRD_FS)
 

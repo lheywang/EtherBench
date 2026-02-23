@@ -49,7 +49,7 @@
 #ifndef FX_DIRECTORY_EXFAT_H
 #define FX_DIRECTORY_EXFAT_H
 
-#include "../include/fx_api.h"
+#include "fx_api.h"
 
 #define FX_EXFAT_DIR_ENTRY_TYPE_ALLOCATION_BITMAP      0x81
 #define FX_EXFAT_DIR_ENTRY_TYPE_UP_CASE_TABLE          0x82

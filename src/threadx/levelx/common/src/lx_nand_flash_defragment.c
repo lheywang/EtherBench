@@ -32,7 +32,7 @@
 
 /* Include necessary system files.  */
 
-#include "../include/lx_api.h"
+#include "lx_api.h"
 
 
 /**************************************************************************/ 

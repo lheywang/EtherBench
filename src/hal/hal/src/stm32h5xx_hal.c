@@ -33,8 +33,6 @@
 
 /* Includes ----------------------------------------------------------------------------------------------------------*/
 #include "stm32h5xx_hal.h"
-#include "stm32h5xx_hal_conf.h"
-#include "main.h"
 
 /** @addtogroup STM32H5xx_HAL_Driver
   * @{
@@ -228,7 +226,6 @@ __weak void HAL_MspDeInit(void)
    */
 }
 
-#ifndef USE_TIM6_AS_HAL_TIM
 /**
   * @brief This function configures the source of the time base.
   *        The time source is configured to have 1ms time base with a dedicated
@@ -301,7 +298,6 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   /* Return function status */
   return HAL_OK;
 }
-#endif
 
 /**
   * @}
@@ -430,7 +426,6 @@ __weak void HAL_Delay(uint32_t Delay)
   }
 }
 
-#ifndef USE_TIM6_AS_HAL_TIM
 /**
   * @brief Suspend Tick increment.
   * @note In the default implementation , SysTick timer is the source of time base. It is
@@ -462,7 +457,6 @@ __weak void HAL_ResumeTick(void)
   /* Enable SysTick Interrupt */
   SysTick->CTRL  |= SysTick_CTRL_TICKINT_Msk;
 }
-#endif
 
 /**
   * @brief  Returns the HAL revision

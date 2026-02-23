@@ -8,51 +8,73 @@
 
 # Set sources
 set(SOURCES 
-	common/src/lx_nand_flash_256byte_ecc_check.c
-	common/src/lx_nand_flash_256byte_ecc_compute.c
-	common/src/lx_nand_flash_block_allocate.c
-	common/src/lx_nand_flash_block_data_move.c
-	common/src/lx_nand_flash_block_find.c
-	common/src/lx_nand_flash_block_mapping_set.c
-	common/src/lx_nand_flash_block_status_set.c
-	common/src/lx_nand_flash_close.c
-	common/src/lx_nand_flash_data_page_copy.c
-	common/src/lx_nand_flash_defragment.c
-	common/src/lx_nand_flash_driver_block_erase.c
-	common/src/lx_nand_flash_driver_block_erased_verify.c
-	common/src/lx_nand_flash_driver_block_status_get.c
-	common/src/lx_nand_flash_driver_block_status_set.c
-	common/src/lx_nand_flash_driver_page_erased_verify.c
-	common/src/lx_nand_flash_erase_count_set.c
-	common/src/lx_nand_flash_extended_cache_enable.c
-	common/src/lx_nand_flash_format.c
-	common/src/lx_nand_flash_free_block_list_add.c
-	common/src/lx_nand_flash_initialize.c
-	common/src/lx_nand_flash_mapped_block_list_add.c
-	common/src/lx_nand_flash_mapped_block_list_get.c
-	common/src/lx_nand_flash_mapped_block_list_remove.c
-	common/src/lx_nand_flash_memory_initialize.c
-	common/src/lx_nand_flash_metadata_allocate.c
-	common/src/lx_nand_flash_metadata_build.c
-	common/src/lx_nand_flash_metadata_write.c
-	common/src/lx_nand_flash_open.c
-	common/src/lx_nand_flash_page_ecc_check.c
-	common/src/lx_nand_flash_page_ecc_compute.c
-	common/src/lx_nand_flash_partial_defragment.c
-	common/src/lx_nand_flash_sectors_read.c
-	common/src/lx_nand_flash_sectors_release.c
-	common/src/lx_nand_flash_sectors_write.c
-	common/src/lx_nand_flash_sector_read.c
-	common/src/lx_nand_flash_sector_release.c
-	common/src/lx_nand_flash_sector_write.c
-	common/src/lx_nand_flash_system_error.c
+	    common/src/fx_nand_flash_simulated_driver.c
+    common/src/fx_nor_flash_simulator_driver.c
+    common/src/lx_nand_flash_256byte_ecc_check.c
+    common/src/lx_nand_flash_256byte_ecc_compute.c
+    common/src/lx_nand_flash_block_allocate.c
+    common/src/lx_nand_flash_block_data_move.c
+    common/src/lx_nand_flash_block_find.c
+    common/src/lx_nand_flash_block_mapping_set.c
+    common/src/lx_nand_flash_block_status_set.c
+    common/src/lx_nand_flash_close.c
+    common/src/lx_nand_flash_data_page_copy.c
+    common/src/lx_nand_flash_defragment.c
+    common/src/lx_nand_flash_driver_block_erase.c
+    common/src/lx_nand_flash_driver_block_erased_verify.c
+    common/src/lx_nand_flash_driver_block_status_get.c
+    common/src/lx_nand_flash_driver_block_status_set.c
+    common/src/lx_nand_flash_driver_page_erased_verify.c
+    common/src/lx_nand_flash_erase_count_set.c
+    common/src/lx_nand_flash_extended_cache_enable.c
+    common/src/lx_nand_flash_format.c
+    common/src/lx_nand_flash_free_block_list_add.c
+    common/src/lx_nand_flash_initialize.c
+    common/src/lx_nand_flash_mapped_block_list_add.c
+    common/src/lx_nand_flash_mapped_block_list_get.c
+    common/src/lx_nand_flash_mapped_block_list_remove.c
+    common/src/lx_nand_flash_memory_initialize.c
+    common/src/lx_nand_flash_metadata_allocate.c
+    common/src/lx_nand_flash_metadata_build.c
+    common/src/lx_nand_flash_metadata_write.c
+    common/src/lx_nand_flash_open.c
+    common/src/lx_nand_flash_page_ecc_check.c
+    common/src/lx_nand_flash_page_ecc_compute.c
+    common/src/lx_nand_flash_partial_defragment.c
+    common/src/lx_nand_flash_sector_read.c
+    common/src/lx_nand_flash_sector_release.c
+    common/src/lx_nand_flash_sector_write.c
+    common/src/lx_nand_flash_sectors_read.c
+    common/src/lx_nand_flash_sectors_release.c
+    common/src/lx_nand_flash_sectors_write.c
+    common/src/lx_nand_flash_simulator.c
+    common/src/lx_nand_flash_system_error.c
+    common/src/lx_nor_flash_block_reclaim.c
+    common/src/lx_nor_flash_close.c
+    common/src/lx_nor_flash_defragment.c
+    common/src/lx_nor_flash_driver_block_erase.c
+    common/src/lx_nor_flash_driver_read.c
+    common/src/lx_nor_flash_driver_write.c
+    common/src/lx_nor_flash_extended_cache_enable.c
+    common/src/lx_nor_flash_initialize.c
+    common/src/lx_nor_flash_logical_sector_find.c
+    common/src/lx_nor_flash_next_block_to_erase_find.c
+    common/src/lx_nor_flash_open.c
+    common/src/lx_nor_flash_partial_defragment.c
+    common/src/lx_nor_flash_physical_sector_allocate.c
+    common/src/lx_nor_flash_sector_mapping_cache_invalidate.c
+    common/src/lx_nor_flash_sector_read.c
+    common/src/lx_nor_flash_sector_release.c
+    common/src/lx_nor_flash_sector_write.c
+    common/src/lx_nor_flash_simulator.c
+    common/src/lx_nor_flash_system_error.c
 )
 
 # Creating the library
 add_library(LEVELX STATIC ${SOURCES})
 
 # Link against the correct libraries
-target_link_libraries(LEVELX HAL THREADX_OS)
+target_link_libraries(LEVELX HAL THREADX_OS FILEX)
 
 # Adding the include folder
 target_include_directories(LEVELX PUBLIC 
