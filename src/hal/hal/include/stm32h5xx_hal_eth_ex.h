@@ -20,8 +20,6 @@
 #ifndef STM32H5xx_HAL_ETH_EX_H
 #define STM32H5xx_HAL_ETH_EX_H
 
-#include "stm32h5xx_hal_conf.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif

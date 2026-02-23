@@ -173,7 +173,7 @@ list(APPEND SOURCES
 add_library(USBX STATIC ${SOURCES})
 
 # Link against the OS kernel
-target_link_libraries(USBX ST_HAL THREADX_OS)
+target_link_libraries(USBX HAL THREADX_OS)
 
 # Adding the include folder
 target_include_directories(USBX PUBLIC 

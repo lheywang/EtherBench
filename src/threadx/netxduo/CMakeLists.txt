@@ -535,7 +535,7 @@ list(APPEND SOURCES
 add_library(NETXDUO STATIC ${SOURCES})
 
 # Link against the base OS
-target_link_libraries(NETXDUO THREADX_OS BSP)
+target_link_libraries(NETXDUO THREADX_OS BSP HAL)
 
 # Adding the include folder
 target_include_directories(NETXDUO PUBLIC 

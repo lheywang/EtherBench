@@ -27,7 +27,6 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h5xx_hal_def.h"
 #include "stm32h5xx_ll_dlyb.h"
-#include "stm32h5xx_hal_conf.h"
 
 #if defined(HSPI) || defined(HSPI1) || defined(HSPI2)|| defined(OCTOSPI) || defined(OCTOSPI1)|| defined(OCTOSPI2)
 

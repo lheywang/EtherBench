@@ -17,7 +17,7 @@ set(SOURCES
 add_library(INTERRUPTS STATIC ${SOURCES})
 
 # Link against the HAL
-target_link_libraries(INTERRUPTS ST_HAL)
+target_link_libraries(INTERRUPTS ST_HAL INIT)
 
 # Adding the include folder
 target_include_directories(INTERRUPTS PUBLIC 

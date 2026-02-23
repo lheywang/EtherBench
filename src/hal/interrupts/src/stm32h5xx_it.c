@@ -240,7 +240,7 @@ void GPDMA2_Channel0_IRQHandler(void)
   /* USER CODE BEGIN GPDMA2_Channel0_IRQn 0 */
 
   /* USER CODE END GPDMA2_Channel0_IRQn 0 */
-  HAL_DMA_IRQHandler(&handle_GPDMA2_Channel0);
+  // HAL_DMA_IRQHandler(&handle_GPDMA2_Channel0);
   /* USER CODE BEGIN GPDMA2_Channel0_IRQn 1 */
 
   /* USER CODE END GPDMA2_Channel0_IRQn 1 */

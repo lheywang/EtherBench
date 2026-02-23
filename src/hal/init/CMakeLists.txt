@@ -17,6 +17,7 @@ list(APPEND SOURCES
 	src/peripherals/dcache.c
 	src/peripherals/eth.c
 	src/peripherals/fmac.c
+	src/peripherals/gpdma.c
 	src/peripherals/gpio.c
 	src/peripherals/i2c.c
 	src/peripherals/icache.c
@@ -34,7 +35,7 @@ list(APPEND SOURCES
 add_library(INIT STATIC ${SOURCES})
 
 # Link against the HAL
-target_link_libraries(INIT ST_HAL INTERRUPTS)
+target_link_libraries(INIT ST_HAL)
 
 # Adding the include folder
 target_include_directories(INIT PRIVATE 

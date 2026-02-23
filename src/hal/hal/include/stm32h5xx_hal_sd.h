@@ -26,8 +26,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h5xx_ll_sdmmc.h"
-#include "stm32h5xx_hal_conf.h"
-
 #if defined (DLYB_SDMMC1) || defined (DLYB_SDMMC2) || defined (DLYB_SDMMC3)
 #include "stm32h5xx_ll_dlyb.h"
 #endif /* (DLYB_SDMMC1) || (DLYB_SDMMC2) */
