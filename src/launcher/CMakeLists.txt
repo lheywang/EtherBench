@@ -12,7 +12,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(LAUNCHER STATIC ${SOURCES})
+add_library(LAUNCHER OBJECT ${SOURCES})
 
 # Ensure the library link against the right libs
 target_link_libraries(LAUNCHER 

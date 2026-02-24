@@ -59,7 +59,7 @@ static TX_THREAD ux_device_app_thread;
 
 /* USER CODE BEGIN PV */
 static __attribute__((aligned(8))) uint8_t usbx_thread_stack[UX_DEVICE_APP_THREAD_STACK_SIZE];
-
+static __attribute__((aligned(8))) uint8_t ux_memory[UX_SYSTEM_MEM_SIZE];
 UX_SLAVE_CLASS_CDC_ACM *serial_instance;
 UX_SLAVE_CLASS_CDC_ACM *terminal_instance;
 /* USER CODE END PV */
@@ -103,12 +103,25 @@ UINT MX_USBX_Device_Init(void)
   */
 VOID app_ux_device_thread_entry(ULONG thread_input)
 {
-	__asm("bkpt 0");
 
-  /* USER CODE BEGIN app_ux_device_thread_entry */
+
+
   TX_PARAMETER_NOT_USED(thread_input);
   UINT status;
 
+/*
+ * Initialize the USB system
+ */
+  status = ux_system_initialize(ux_memory, UX_SYSTEM_MEM_SIZE, UX_NULL, 0);
+  if (status != UX_SUCCESS)
+  {
+      // If you run out of memory, it will fail here!
+      while(1);
+  }
+
+  /*
+   * Launch the USB stack init
+   */
   status = ux_device_stack_initialize(
           (UCHAR *)device_descriptor, 			DEVICE_DESCRIPTOR_LEN,
           (UCHAR *)configuration_descriptor, 	CONFIGURATION_DESCRIPTOR_LEN,
@@ -180,6 +193,7 @@ VOID app_ux_device_thread_entry(ULONG thread_input)
   storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_write = msc_write;
   storage_param.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_status = msc_status;
 
+  /*
   status = ux_device_stack_class_register(
 	  (UCHAR *)"ux_device_class_storage",
 	  ux_device_class_storage_entry,
@@ -187,7 +201,9 @@ VOID app_ux_device_thread_entry(ULONG thread_input)
 	  4,  // Interface 4
 	  &storage_param
   );
+  */
 
+  /*
   if (status != UX_SUCCESS) {
 	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
 	  while (1)
@@ -195,16 +211,20 @@ VOID app_ux_device_thread_entry(ULONG thread_input)
 		  tx_thread_sleep(100);
 	  }
   }
+  */
 
+  /*
   // Register CDC 1
   status = ux_device_stack_class_register(
-	  (UCHAR *)"ux_device_class_cdc_acm", // <-- Bulletproof string literal
+	  (UCHAR *)"ux_device_class_cdc_acm",
 	  ux_device_class_cdc_acm_entry,
 	  1,  // Configuration 1
 	  0,  // Interface 0
 	  &cdc_mux_param
   );
+  */
 
+  /*
   if (status != UX_SUCCESS) {
 	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
 	  while (1)
@@ -212,6 +232,7 @@ VOID app_ux_device_thread_entry(ULONG thread_input)
 		  tx_thread_sleep(100);
 	  }
   }
+  */
 
   while (1)
   {

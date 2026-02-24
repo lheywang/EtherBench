@@ -14,6 +14,7 @@ add_compile_definitions(
 	-DUSE_HAL_DRIVER 
 	-DSTM32H563xx
 	-DTX_SINGLE_MODE_NON_SECURE
+	-DUX_DEVICE_SIDE_ONLY
 )
 
 # Use this switch to select the build type
@@ -37,14 +38,17 @@ add_subdirectory(hal)
 add_subdirectory(bsp)
 add_subdirectory(threadx)
 add_subdirectory(tasks)
-# add_subdirectory(launcher)
+add_subdirectory(launcher)
 
 # Add libraries
 # Will need to add TASKS when they're complete !
 target_link_libraries(${PROJECT_NAME} 
+	"-Wl,--start-group"
 	HAL 
 	BSP
 	THREADX
 	TASKS
+	LAUNCHER
+	"-Wl,--end-group"
 )
 

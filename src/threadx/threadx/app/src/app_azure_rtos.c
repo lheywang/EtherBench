@@ -22,7 +22,10 @@
 #include "app_azure_rtos.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "launcher.h"
+/*
+ * Launcher for tasks, definded in another library, in the "user space"
+ */
+extern uint32_t launcher(void);
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
