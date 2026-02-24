@@ -15,143 +15,104 @@ Commands types accepted, by interface :
 | TELNET (port 23) | No   | Yes          |
 | RAW (port 5025)  | Yes  | No           |
 
-This enable a great flexibility, while maintaining a simple enough routing logic.
+This enable some complex interractions with the device, while retaining a simple routing logic. Everything is handled by a pair process, which are responsible for low level hardware interraction. One parse the commands, the other execute.
 
-## Commands and arguments 
+## SCPI Commands
+Input buffer (4 commands)
+Output buffer (8 commands).
+Policies : Ensure already present commands, returns error in case of overflow.
 
-### Standard commands : 
+**CONFiguration** :
+    VOLTage :
+        level
+        ?
 
-### Global Commands (0x0X)
-**`status`**
-* **Description:** Returns system health, uptime, connected targets, and current IO voltage (to be updated)
-* **Text Syntax:** `status`
-* **Binary Opcode:** `0x01`
-* **Binary Payload:** None (`0x00`)
+**HARDware** : -> low level IO, for buses. A session must be openned for the stream to be available to any consummer process.
+    **READ** :
+        I2C? ADDR len
+        SPI? len
+        UART0? len
+        UART1? len
+        CAN? addr len
 
-**`reset`**
-* **Description:** Triggers a soft system reset of the EtherBench.
-* **Text Syntax:** `reset`
-* **Binary Opcode:** `0x0F`
-* **Binary Payload:** None (`0x00`)
+            CMD : read [target I2C|SPI|UART0|UART1|CAN] [addr]
 
-### 2.2 Hardware Features (0x1X)
-*(Note: JTAG/SWD is handled autonomously via the dedicated CMSIS-DAP USB interface and is excluded from manual terminal control).*
+    **WRITe** :
+        I2C ADDR len #\[data\]
+        SPI LEN #\[data\]
+        UART0 len #\[data\]
+        UART1 len #\[data\]
+        CAN len #\[data\]
 
-**`hw-send`**
-* **Description:** Transmits data over the specified bus.
-* **Text Syntax:** `hw-send <uart|spi|i2c|can> <hex_data>`
-* **Binary Opcode:** `0x10`
-* **Binary Payload:** `[Bus ID (1 byte)] [Data (N bytes)]`
+            CMD : write [target I2C|SPI|UART0|UART1|CAN] [addr] 
 
-**`hw-read`**
-* **Description:** Reads a specified number of bytes from the bus.
-* **Text Syntax:** `hw-read <uart|spi|i2c|can> <address (I2C / SPI)> <num_bytes>`
-* **Binary Opcode:** `0x11`
-* **Binary Payload:** `[Bus ID (1 byte)] [address (2 bytes)] [Length (1 byte)]`
+    **SPY** :
+        I2C \[addr\] [DISAble]
+        SPI [DISAble]
+        UART0 [DISAble]
+        UART1 [DISAble]
+        CAN [DISAble]
 
-**`set-voltage`**
-* **Description:** Configures the reference IO voltage for the target board/level shifters.
-* **Text Syntax:** `set-voltage <volts>` (e.g., `set-voltage 1.8`)
-* **Binary Opcode:** `0x12`
-* **Binary Payload:** `[Voltage * 10 (1 byte)]` (e.g., `0x12` for 1.8V)
+            CMD : spy <--disable> [source I2C|SPI|UART0|UART1|CAN] [addr] 
 
-**`read-current`**
-* **Description:** Reads the onboard INA226/INA219 to report target power draw.
-* **Text Syntax:** `read-current`
-* **Binary Opcode:** `0x13`
-* **Binary Payload:** None. (Returns: `[Current_mA (uint16_t)]`)
+**ANALog** : -> Low level Analog IO
+    **TEMP** :
+        ?
+            CMD : temperature
+    **INPUt** :
+        ? 0 | 1
+            CMD : analog-read --channel 0|1
+    **WRITe** :
+        voltage
+            CMD : analog-write "value"
 
-**`analog-out` / `analog-in`**
-* **Description:** Sets a DAC output voltage or reads an ADC input pin.
-* **Text Syntax:** `analog-out <volts>` / `analog-in <channel 1|2> <sample frequency 0.1-1000>`
-* **Binary Opcode:** `0x14` (Out) / `0x15` (In)
+**FILEsystem** : -> simplified file systems. Higher performance copy methods are available.
+    **CD** path
+        CMD : cd "path"
+    **LS**
+        CMD : ls "path"
+    **MKDIR** name
+        CMD : mkdir "path"
+    
+    *[ONLY SUPPORTED OVER TERMINAL]*
+        CMD : cat "file"
 
-**`set-clock`**
-* **Description:** Outputs a continuous clock signal on the dedicated CLK_OUT pin.
-* **Text Syntax:** `set-clock <freq_hz>`
-* **Binary Opcode:** `0x16`
-* **Binary Payload:** `[Frequency_Hz (uint32_t)]`
+**PROGammation** : -> JTAG / SWD programming interface
+    **CONNect** mode \[uart swd\]
+        CMD : target-connect --mode SWD|JTAG
+    **FLASh** mode file
+        CMD : target-flash --mode SWD|JTAG "file"
+    **VERIfy** mode file
+        CMD : target-verify --mode SWD|JTAG "file"
+    **READ** mode \[target file\]
+        CMD : target-read --mode SWD|JTAG "file"
+    **STATus** mode
+        CMD : target-status --mode SWD|JTAG
+    **DEVIce** mode
+        CMD : target-device --mode SWD|JTAG "file"
+    **DETEct** mode
+        CMD : target-detect --mode SWD|JTAG "file"
 
-### 2.3 Logs and IO Feeds (0x2X)
-*Live feeds are ephemeral (cleared when the terminal session disconnects). Logs are persistent across reboots.*
+**LOGGer** :
+    **SD** :
+        SUBScribe : source \[spy analog swo\]
+        UNSUbscribe : source \[spy analog swo\]
+    **TERMinal** :
+        SUBScribe : source \[spy analog swo\]
+        UNSUbscribe : source \[spy analog swo\]
+    
+    CMD : subscribe --target SD|TERM "source" 
+    CMD : unsubscribe --target SD|TERM "source" 
 
-**`feed-sub`**
-* **Description:** Subscribes the current terminal (VCOM/SSH) to a live data stream.
-* **Text Syntax:** `feed-sub <uart|can|system>`
-* **Binary Opcode:** `0x20`
-* **Binary Payload:** `[Stream ID (1 byte)]`
+**ACTIons** :
+    ACT1 | ACT2 | ACT3:
+        RESET
+            CMD : reset-action --id 1|2|3 "cmd" 
+        SET cmd (accept any string, command formatted (scpi or cmd). Triggered when pressed.
+            CMD : set-action --id 1|2|3 "cmd" 
 
-**`feed-unsub`**
-* **Description:** Stops streaming the specified feed to the current session.
-* **Text Syntax:** `feed-unsub <uart|can|system>`
-* **Binary Opcode:** `0x21`
-* **Binary Payload:** `[Stream ID (1 byte)]`
+**SEQUences** :
+    **RUN** file \[from flash\]
+        CMD : run [file]
 
-**`log-set`**
-* **Description:** Routes a data stream to a persistent file on the storage drive.
-* **Text Syntax:** `log-set <uart|can> <filename>`
-* **Binary Opcode:** `0x22`
-* **Binary Payload:** `[Stream ID (1 byte)] [Null-term String]`
-
-**`log-clear`**
-* **Description:** Stops writing the specified stream to disk.
-* **Text Syntax:** `log-clear <uart|can>`
-* **Binary Opcode:** `0x23`
-* **Binary Payload:** `[Stream ID (1 byte)]`
-
-### 2.4 Programming & Debugging (0x3X)
-**`target-detect`**
-* **Description:** Pings the SWD/JTAG lines to read the target MCU's IDCODE.
-* **Text Syntax:** `target-detect`
-* **Binary Opcode:** `0x30`
-
-**`target-program`**
-* **Description:** Flashes a binary file from the internal storage to the connected target.
-* **Text Syntax:** `target-program <path_to_bin>` (e.g., `target-program /sd/fw.bin`)
-* **Binary Opcode:** `0x31`
-* **Binary Payload:** `[Null-term Path String]`
-
-### 2.5 File System (0x4X)
-*Mounted volumes are `/sd` (SD Card) and `/flash` (QSPI). Note: Text editing is omitted; use USB Mass Storage to edit files directly on a host PC.*
-
-**`pwd`**
-* **Description:** Prints the current working directory.
-* **Text Syntax:** `pwd`
-* **Binary Opcode:** `0x40`
-
-**`ls`**
-* **Description:** Lists files and directories in the current or specified path.
-* **Text Syntax:** `ls [path]`
-* **Binary Opcode:** `0x41`
-* **Binary Payload:** `[Null-term Path String]`
-
-**`mkdir`**
-* **Description:** Creates a new directory.
-* **Text Syntax:** `mkdir <path>`
-* **Binary Opcode:** `0x42`
-
-**`cp`**
-* **Description:** Copies a file (useful for moving logs from `/flash` to `/sd`).
-* **Text Syntax:** `cp <source> <dest>`
-* **Binary Opcode:** `0x43`
-
-**`cat`**
-* **Description:** Dumps the contents of a text file to the terminal.
-* **Text Syntax:** `cat <file>`
-* **Binary Opcode:** `0x44`
-
-**`cd`**
-* **Description:** Move the actual place into another
-* **Text Syntax:** `cd <dir>`
-* **Binary Opcode:** `0x45`
-
-### 2.6 Spy system (0x5X)
-* Enable to spy a bus, in a passive way, just to see what happen, and when. Can be logged*
-
-**`spy`**
-* **Description:** Set the peripheral as a slave, and record every data on it. Once enabled, could be subscribed to.
-* **Text Syntax:** `spy <spi|i2c|can>`
-* **Binary Opcode:** `0x50`
-* **Binary Payload:** `[Bus ID (1 byte)] [Data (N bytes)]`
-
----
++ standard IEEE 488.2 commands (all known and response, but not implemented (ex, \*CAL?).
