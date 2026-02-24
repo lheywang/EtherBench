@@ -16,6 +16,16 @@ add_compile_definitions(
 	-DTX_SINGLE_MODE_NON_SECURE
 )
 
+# Use this switch to select the build type
+option(BUILD_TYPE "If set to True, the build will be release. Otherwise, debug")
+if(BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Debug)
+	add_compile_options(-O0 -g3 -ggdb)
+else()
+	set(CMAKE_BUILD_TYPE Release)
+	add_compile_options(-O2 -g0)
+endif()
+
 # Add the config directory, which is global
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
 

@@ -1,23 +1,27 @@
 # EtherBench Terminal & Binary Protocol Specification
 
-This document defines the unified command interface for both human-readable text terminals (Serial VCOM / Telnet / SSH) and the binary protocol used by desktop applications.
+This document define both interface for programming this tool. It support both commands, over a single session.
 
-## 1. The Binary Frame Protocol
-To allow desktop apps to parse data efficiently without string manipulation, binary commands are wrapped in a strict frame structure.
+The first ones are the command line style ones, which are targetted to humans.
+The seconds ones are the SCPI commands, which are more targetted to automated scripts and others cool stuff like that.
 
-**Frame Structure:** `[SYNC1] [SYNC2] [LEN] [OPCODE] [PAYLOAD...] [CRC16]`
-* **SYNC1:** `0xEB` (EtherBench)
-* **SYNC2:** `0x90` 
-* **LEN:** 1 Byte (Length of Payload only)
-* **OPCODE:** 1 Byte (The specific command ID)
-* **PAYLOAD:** 0 to 255 Bytes
-* **CRC16:** 2 Bytes (CCITT standard, covering LEN, OPCODE, and PAYLOAD)
+Commands types accepted, by interface :
+ 
+| Interface        | SCPI | Command Line |
+| ---------------- | ---- | ------------ |
+| VCOM 0           | Yes  | Yes          |
+| VCOM 1           | No   | No           |
+| SSH (port 22)    | No   | Yes          |
+| TELNET (port 23) | No   | Yes          |
+| RAW (port 5025)  | Yes  | No           |
 
----
+This enable a great flexibility, while maintaining a simple enough routing logic.
 
-## 2. Command Dictionary
+## Commands and arguments 
 
-### 2.1 Global Commands (0x0X)
+### Standard commands : 
+
+### Global Commands (0x0X)
 **`status`**
 * **Description:** Returns system health, uptime, connected targets, and current IO voltage (to be updated)
 * **Text Syntax:** `status`
@@ -59,7 +63,7 @@ To allow desktop apps to parse data efficiently without string manipulation, bin
 
 **`analog-out` / `analog-in`**
 * **Description:** Sets a DAC output voltage or reads an ADC input pin.
-* **Text Syntax:** `analog-out <volts>` / `analog-in <channel 1|2>`
+* **Text Syntax:** `analog-out <volts>` / `analog-in <channel 1|2> <sample frequency 0.1-1000>`
 * **Binary Opcode:** `0x14` (Out) / `0x15` (In)
 
 **`set-clock`**
@@ -145,45 +149,9 @@ To allow desktop apps to parse data efficiently without string manipulation, bin
 * Enable to spy a bus, in a passive way, just to see what happen, and when. Can be logged*
 
 **`spy`**
-* **Description:** Set the peripheral as a slave, and record every data on it.
-* **Text Syntax:** `spy <uart|spi|i2c|can>`
-* **Binary Opcode:** `0x10`
+* **Description:** Set the peripheral as a slave, and record every data on it. Once enabled, could be subscribed to.
+* **Text Syntax:** `spy <spi|i2c|can>`
+* **Binary Opcode:** `0x50`
 * **Binary Payload:** `[Bus ID (1 byte)] [Data (N bytes)]`
 
 ---
-
-## 3. C++ API Architecture (The Command Parser)
-
-The terminal logic uses a C++ struct array to link text commands, binary opcodes, and execution callbacks together in a zero-allocation, RTOS-friendly way.
-
-```cpp
-#include <stdint.h>
-#include <string.h>
-
-// 1. Define the callback signature
-typedef bool (*CommandCallback)(const uint8_t* payload, uint8_t len, const char* arg_string);
-
-// 2. Define the Command Dictionary Struct
-struct EtherBenchCommand {
-    const char* text_command;
-    uint8_t binary_opcode;
-    const char* help_text;
-    CommandCallback execute;
-};
-
-// 3. Implement the callbacks
-bool Cmd_HwSend(const uint8_t* payload, uint8_t len, const char* arg_string) {
-    // If binary payload exists, use it. Otherwise, parse the arg_string!
-    // e.g., hw-send spi 0xFF
-    return true;
-}
-
-// 4. Build the Static Dictionary
-static const EtherBenchCommand command_table[] = {
-    {"status",       0x01, "Shows system health and voltages", Cmd_Status},
-    {"hw-send",      0x10, "Usage: hw-send <bus> <data>",      Cmd_HwSend},
-    {"set-voltage",  0x12, "Usage: set-voltage <volts>",       Cmd_SetVoltage},
-    {"feed-sub",     0x20, "Usage: feed-sub <stream>",         Cmd_FeedSub},
-    {"ls",           0x41, "Lists directory contents",         Cmd_Ls}
-};
-#define NUM_COMMANDS (sizeof(command_table) / sizeof(command_table[0]))
