@@ -17,15 +17,12 @@ add_library(LAUNCHER STATIC ${SOURCES})
 # Ensure the library link against the right libs
 target_link_libraries(LAUNCHER 
 	HAL 
-	THREADX_OS
-	HARDWARE
-	IDLE
-	INET
-	IFACE
-	MUXER
-	VCOM
+	THREADX
+	TASKS
 )
 
-
 # Adding the include folder
-target_include_directories(LAUNCHER PUBLIC include/)
+target_include_directories(LAUNCHER PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)
+

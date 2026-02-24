@@ -17,12 +17,11 @@
 #include "init.h"
 #include "error_handler.h"
 
-// ThreadX library
-#include "app_threadx.h"
-#include "app_usbx_device.h"
-
 // STD
 #include <stdint.h>
+
+// ThreadX
+#include "app_threadx.h"
 
 // ======================================================================
 //                               CHECKS
@@ -40,9 +39,6 @@ int main(void)
 	// Initialize the MCU (peripheral only)
 	if (init() != HAL_OK)
 		Error_Handler();
-
-    // Initialize the RTOS sub functions
-    MX_USBX_Device_Init();
 
 	// Launch the RTOS
 	MX_ThreadX_Init();

@@ -18,9 +18,11 @@
 
 // Local libraries
 #include "main.h"
-#include "app_threadx.h"
-
 #include "idle.h"
+
+// ThreadX library
+#include "app_threadx.h"
+#include "app_usbx_device.h"
 
 // STD
 #include <stdint.h>
@@ -37,6 +39,12 @@ uint8_t idle_stack[IDLE_STACK_SIZE];
 
 uint32_t launcher(void)
 {
+
+	/*
+	 * Launching the USBX task
+	 */
+    MX_USBX_Device_Init();
+
 	/*
 	 * Creating the idle task
 	 */
@@ -47,8 +55,8 @@ uint32_t launcher(void)
 			0,
 			idle_stack,
 			IDLE_STACK_SIZE,
-	        15,
-			15,
+	        31,
+			31,
 			TX_NO_TIME_SLICE,
 			TX_AUTO_START
 	);

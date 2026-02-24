@@ -58,7 +58,7 @@
 static TX_THREAD ux_device_app_thread;
 
 /* USER CODE BEGIN PV */
-static uint8_t usbx_thread_stack[UX_DEVICE_APP_THREAD_STACK_SIZE];
+static __attribute__((aligned(8))) uint8_t usbx_thread_stack[UX_DEVICE_APP_THREAD_STACK_SIZE];
 
 UX_SLAVE_CLASS_CDC_ACM *serial_instance;
 UX_SLAVE_CLASS_CDC_ACM *terminal_instance;
@@ -78,32 +78,22 @@ static VOID app_ux_device_thread_entry(ULONG thread_input);
 
 UINT MX_USBX_Device_Init(void)
 {
-   UINT ret = UX_SUCCESS;
-
   /* Create the device application main thread */
-  if (tx_thread_create(
+   UINT ret = tx_thread_create(
 		  &ux_device_app_thread,
 		  UX_DEVICE_APP_THREAD_NAME,
 		  app_ux_device_thread_entry,
-          0,
+		  0,
 		  usbx_thread_stack,
 		  UX_DEVICE_APP_THREAD_STACK_SIZE,
-		  UX_DEVICE_APP_THREAD_PRIO,
-          UX_DEVICE_APP_THREAD_PREEMPTION_THRESHOLD,
-		  UX_DEVICE_APP_THREAD_TIME_SLICE,
-          UX_DEVICE_APP_THREAD_START_OPTION
-  ) != TX_SUCCESS)
-  {
-    /* USER CODE BEGIN MAIN_THREAD_CREATE_ERROR */
-    return TX_THREAD_ERROR;
-    /* USER CODE END MAIN_THREAD_CREATE_ERROR */
-  }
-
-  /* USER CODE BEGIN MX_USBX_Device_Init1 */
-
-  /* USER CODE END MX_USBX_Device_Init1 */
+		  10,
+		  10,
+		  TX_NO_TIME_SLICE,
+		  TX_AUTO_START
+   );
 
   return ret;
+
 }
 
 /**
@@ -111,8 +101,10 @@ UINT MX_USBX_Device_Init(void)
   * @param  thread_input: User thread input parameter.
   * @retval none
   */
-static VOID app_ux_device_thread_entry(ULONG thread_input)
+VOID app_ux_device_thread_entry(ULONG thread_input)
 {
+	__asm("bkpt 0");
+
   /* USER CODE BEGIN app_ux_device_thread_entry */
   TX_PARAMETER_NOT_USED(thread_input);
   UINT status;
@@ -127,7 +119,10 @@ static VOID app_ux_device_thread_entry(ULONG thread_input)
 
   if (status != UX_SUCCESS) {
 	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
-	  for (;;) {}
+	  while (1)
+	  {
+		  tx_thread_sleep(100);
+	  }
   }
 
   UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_mux_param = {0};
@@ -141,7 +136,10 @@ static VOID app_ux_device_thread_entry(ULONG thread_input)
 
   if (status != UX_SUCCESS) {
 	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
-	  for (;;) {}
+	  while (1)
+	  {
+		  tx_thread_sleep(100);
+	  }
   }
 
   UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_term_param = {0};
@@ -155,7 +153,10 @@ static VOID app_ux_device_thread_entry(ULONG thread_input)
 
   if (status != UX_SUCCESS) {
 	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
-	  for (;;) {}
+	  while (1)
+	  {
+		  tx_thread_sleep(100);
+	  }
   }
 
   UX_SLAVE_CLASS_STORAGE_PARAMETER storage_param = {0};
@@ -189,7 +190,10 @@ static VOID app_ux_device_thread_entry(ULONG thread_input)
 
   if (status != UX_SUCCESS) {
 	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
-	  for (;;) {}
+	  while (1)
+	  {
+		  tx_thread_sleep(100);
+	  }
   }
 
   // Register CDC 1
@@ -203,7 +207,10 @@ static VOID app_ux_device_thread_entry(ULONG thread_input)
 
   if (status != UX_SUCCESS) {
 	  // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is wrong)
-	  for (;;) {}
+	  while (1)
+	  {
+		  tx_thread_sleep(100);
+	  }
   }
 
   while (1)

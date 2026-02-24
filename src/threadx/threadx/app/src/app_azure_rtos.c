@@ -67,14 +67,10 @@ static TX_BYTE_POOL tx_app_byte_pool;
   * @param  first_unused_memory : Pointer to the first unused memory
   * @retval None
   */
+
 VOID tx_application_define(VOID *first_unused_memory)
 {
   /* USER CODE BEGIN  tx_application_define_1*/
-
-	/*
-	 * We call the user space task init function.
-	 */
-	launcher();
 
   /* USER CODE END  tx_application_define_1 */
 #if (USE_STATIC_ALLOCATION == 1)
@@ -104,6 +100,11 @@ VOID tx_application_define(VOID *first_unused_memory)
       /* USER CODE END  App_ThreadX_Init_Error */
     }
     /* USER CODE BEGIN  App_ThreadX_Init_Success */
+
+	/*
+	 * We call the user space task init function.
+	 */
+	launcher();
 
     /* USER CODE END  App_ThreadX_Init_Success */
 

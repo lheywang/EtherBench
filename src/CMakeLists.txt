@@ -33,19 +33,18 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
 add_executable(${CMAKE_PROJECT_NAME} main.c)
 
 # Add the different folders
-add_subdirectory(threadx)
-add_subdirectory(tasks)
 add_subdirectory(hal)
 add_subdirectory(bsp)
-add_subdirectory(launcher)
+add_subdirectory(threadx)
+add_subdirectory(tasks)
+# add_subdirectory(launcher)
 
 # Add libraries
 # Will need to add TASKS when they're complete !
 target_link_libraries(${PROJECT_NAME} 
 	HAL 
 	BSP
-	TASKS
-	LAUNCHER
 	THREADX
+	TASKS
 )
 

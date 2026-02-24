@@ -20,8 +20,10 @@ add_library(THREADX INTERFACE)
 target_link_libraries(THREADX INTERFACE 
 	"-Wl,--whole-archive"
 	THREADX_OS
-	"-Wl,--no-whole-archive"
 	USBX
-)
+	NETXDUO
+	FILEX
+	LEVELX
+	"-Wl,--no-whole-archive"
 
-# ADD FILEX LEVELX NETXDUO  USBX libs, when sources will be available
+)

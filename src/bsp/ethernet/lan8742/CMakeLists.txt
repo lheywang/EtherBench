@@ -14,5 +14,7 @@ set(SOURCES
 # Creating the library
 add_library(LAN8742 STATIC ${SOURCES})
 
-# Adding the include folder (empty here)
-target_include_directories(LAN8742 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+# Adding the include folder
+target_include_directories(LAN8742 PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)

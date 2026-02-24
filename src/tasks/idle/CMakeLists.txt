@@ -15,7 +15,7 @@ set(SOURCES
 add_library(IDLE STATIC ${SOURCES})
 
 # Link against the right libraries
-target_link_libraries(IDLE THREADX_OS)
+target_link_libraries(IDLE THREADX)
 
 # Adding the include folder
 target_include_directories(IDLE PUBLIC 
