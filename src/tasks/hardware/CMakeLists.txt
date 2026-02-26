@@ -12,7 +12,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(HARDWARE STATIC ${SOURCES})
+add_library(HARDWARE OBJECT ${SOURCES})
 
 # Adding the include folder
 target_include_directories(HARDWARE PUBLIC 

@@ -1,6 +1,6 @@
 #############################################################################################################################
-# file:  hal/startup/CMakeLists.txt
-# brief: System init build files
+# file:  bsp/ethernet/lan8742/CMakeLists.txt
+# brief: Ethernet chip drivers
 # 
 # author : l.heywang <leonard.heywang@proton.me>
 # date : 20/02/2026
@@ -8,13 +8,13 @@
 
 # Set sources
 set(SOURCES 
-	src/startup_stm32h563zitx.s
-	src/system_stm32h5xx.c
+	src/lan8742.c
 )
 
 # Creating the library
-add_library(STARTUP STATIC ${SOURCES})
+add_library(LAN8742 OBJECT ${SOURCES})
 
-target_link_libraries(STARTUP ST_HAL)
-
-# There's no include, source only. Nothing to be included.
+# Adding the include folder
+target_include_directories(LAN8742 PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)

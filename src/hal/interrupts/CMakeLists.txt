@@ -14,7 +14,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(INTERRUPTS STATIC ${SOURCES})
+add_library(INTERRUPTS OBJECT ${SOURCES})
 
 # Link against the HAL
 target_link_libraries(INTERRUPTS ST_HAL INIT)

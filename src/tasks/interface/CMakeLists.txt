@@ -12,7 +12,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(IFACE STATIC ${SOURCES})
+add_library(IFACE OBJECT ${SOURCES})
 
 # Adding the include folder
 target_include_directories(IFACE PUBLIC 

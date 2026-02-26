@@ -12,7 +12,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(IDLE STATIC ${SOURCES})
+add_library(IDLE OBJECT ${SOURCES})
 
 # Link against the right libraries
 target_link_libraries(IDLE THREADX)

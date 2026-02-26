@@ -21,7 +21,7 @@ add_compile_definitions(
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
 
 # We only add the main.c file, all the remaining is built arround libraries.
-add_executable(${CMAKE_PROJECT_NAME} main.c)
+add_executable(${CMAKE_PROJECT_NAME} main.c startup/startup_stm32h563zitx.s startup/system_stm32h5xx.c)
 
 # Add the different folders
 add_subdirectory(hal)
@@ -33,12 +33,10 @@ add_subdirectory(launcher)
 # Add libraries
 # Will need to add TASKS when they're complete !
 target_link_libraries(${PROJECT_NAME} 
-	"-Wl,--start-group"
 	HAL 
 	BSP
 	THREADX
 	TASKS
 	LAUNCHER
-	"-Wl,--end-group"
 )
 

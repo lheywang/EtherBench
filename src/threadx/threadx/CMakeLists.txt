@@ -190,7 +190,7 @@ list(APPEND SOURCES
 )
 
 # Creating the library
-add_library(THREADX_OS STATIC ${SOURCES})
+add_library(THREADX_OS OBJECT ${SOURCES})
 
 # Ensure we build against the HAL
 target_link_libraries(THREADX_OS HAL)

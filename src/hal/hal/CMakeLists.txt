@@ -122,7 +122,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(ST_HAL STATIC ${SOURCES})
+add_library(ST_HAL OBJECT ${SOURCES})
 
 # Adding the include folder
 target_include_directories(ST_HAL PUBLIC 

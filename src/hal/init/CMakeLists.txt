@@ -32,7 +32,7 @@ list(APPEND SOURCES
 
 
 # Creating the library
-add_library(INIT STATIC ${SOURCES})
+add_library(INIT OBJECT ${SOURCES})
 
 # Link against the HAL
 target_link_libraries(INIT ST_HAL)

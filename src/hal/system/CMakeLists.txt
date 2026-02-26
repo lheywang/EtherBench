@@ -13,6 +13,6 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(SYSTEM STATIC ${SOURCES})
+add_library(SYSTEM OBJECT ${SOURCES})
 
 # There's no include, source only. Nothing to be included.
