@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
-#include "../include/tx_trace.h"
-#include "../include/tx_thread.h"
 #include "../include/tx_semaphore.h"
-
+#include "../include/tx_thread.h"
+#include "../include/tx_trace.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,182 +69,171 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _tx_semaphore_prioritize(TX_SEMAPHORE *semaphore_ptr)
-{
+UINT _tx_semaphore_prioritize(TX_SEMAPHORE *semaphore_ptr) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-TX_THREAD       *thread_ptr;
-TX_THREAD       *priority_thread_ptr;
-TX_THREAD       *head_ptr;
-UINT            suspended_count;
-TX_THREAD       *next_thread;
-TX_THREAD       *previous_thread;
-UINT            list_changed;
+  TX_THREAD *thread_ptr;
+  TX_THREAD *priority_thread_ptr;
+  TX_THREAD *head_ptr;
+  UINT suspended_count;
+  TX_THREAD *next_thread;
+  TX_THREAD *previous_thread;
+  UINT list_changed;
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  TX_TRACE_IN_LINE_INSERT(TX_TRACE_SEMAPHORE_PRIORITIZE, semaphore_ptr,
+                          semaphore_ptr->tx_semaphore_suspended_count,
+                          TX_POINTER_TO_ULONG_CONVERT(&suspended_count), 0,
+                          TX_TRACE_SEMAPHORE_EVENTS)
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    TX_TRACE_IN_LINE_INSERT(TX_TRACE_SEMAPHORE_PRIORITIZE, semaphore_ptr, semaphore_ptr -> tx_semaphore_suspended_count, TX_POINTER_TO_ULONG_CONVERT(&suspended_count), 0, TX_TRACE_SEMAPHORE_EVENTS)
+  /* Log this kernel call.  */
+  TX_EL_SEMAPHORE_PRIORITIZE_INSERT
 
-    /* Log this kernel call.  */
-    TX_EL_SEMAPHORE_PRIORITIZE_INSERT
+  /* Pickup the suspended count.  */
+  suspended_count = semaphore_ptr->tx_semaphore_suspended_count;
 
-    /* Pickup the suspended count.  */
-    suspended_count =  semaphore_ptr -> tx_semaphore_suspended_count;
+  /* Determine if there are fewer than 2 suspended threads.  */
+  if (suspended_count < ((UINT)2)) {
 
-    /* Determine if there are fewer than 2 suspended threads.  */
-    if (suspended_count < ((UINT) 2))
-    {
+    /* Restore interrupts.  */
+    TX_RESTORE
+  }
 
-        /* Restore interrupts.  */
-        TX_RESTORE
+  /* Determine if there how many threads are suspended on this semaphore.  */
+  else if (suspended_count == ((UINT)2)) {
+
+    /* Pickup the head pointer and the next pointer.  */
+    head_ptr = semaphore_ptr->tx_semaphore_suspension_list;
+    next_thread = head_ptr->tx_thread_suspended_next;
+
+    /* Determine if the next suspended thread has a higher priority.  */
+    if ((next_thread->tx_thread_priority) < (head_ptr->tx_thread_priority)) {
+
+      /* Yes, move the list head to the next thread.  */
+      semaphore_ptr->tx_semaphore_suspension_list = next_thread;
     }
 
-    /* Determine if there how many threads are suspended on this semaphore.  */
-    else if (suspended_count == ((UINT) 2))
-    {
+    /* Restore interrupts.  */
+    TX_RESTORE
+  } else {
 
-        /* Pickup the head pointer and the next pointer.  */
-        head_ptr =  semaphore_ptr -> tx_semaphore_suspension_list;
-        next_thread =  head_ptr -> tx_thread_suspended_next;
+    /* Remember the suspension count and head pointer.  */
+    head_ptr = semaphore_ptr->tx_semaphore_suspension_list;
 
-        /* Determine if the next suspended thread has a higher priority.  */
-        if ((next_thread -> tx_thread_priority) < (head_ptr -> tx_thread_priority))
-        {
+    /* Default the highest priority thread to the thread at the front of the
+     * list.  */
+    priority_thread_ptr = head_ptr;
 
-            /* Yes, move the list head to the next thread.  */
-            semaphore_ptr -> tx_semaphore_suspension_list =  next_thread;
+    /* Setup search pointer.  */
+    thread_ptr = priority_thread_ptr->tx_thread_suspended_next;
+
+    /* Disable preemption.  */
+    _tx_thread_preempt_disable++;
+
+    /* Set the list changed flag to false.  */
+    list_changed = TX_FALSE;
+
+    /* Search through the list to find the highest priority thread.  */
+    do {
+
+      /* Is the current thread higher priority?  */
+      if (thread_ptr->tx_thread_priority <
+          priority_thread_ptr->tx_thread_priority) {
+
+        /* Yes, remember that this thread is the highest priority.  */
+        priority_thread_ptr = thread_ptr;
+      }
+
+      /* Restore interrupts temporarily.  */
+      TX_RESTORE
+
+      /* Disable interrupts again.  */
+      TX_DISABLE
+
+      /* Determine if any changes to the list have occurred while
+         interrupts were enabled.  */
+
+      /* Is the list head the same?  */
+      if (head_ptr != semaphore_ptr->tx_semaphore_suspension_list) {
+
+        /* The list head has changed, set the list changed flag.  */
+        list_changed = TX_TRUE;
+      } else {
+
+        /* Is the suspended count the same?  */
+        if (suspended_count != semaphore_ptr->tx_semaphore_suspended_count) {
+
+          /* The list head has changed, set the list changed flag.  */
+          list_changed = TX_TRUE;
         }
+      }
 
-        /* Restore interrupts.  */
-        TX_RESTORE
-    }
-    else
-    {
+      /* Determine if the list has changed.  */
+      if (list_changed == TX_FALSE) {
 
-        /* Remember the suspension count and head pointer.  */
-        head_ptr =   semaphore_ptr -> tx_semaphore_suspension_list;
+        /* Yes, everything is the same... move the thread pointer to the next
+         * thread.  */
+        thread_ptr = thread_ptr->tx_thread_suspended_next;
+      } else {
 
-        /* Default the highest priority thread to the thread at the front of the list.  */
-        priority_thread_ptr =  head_ptr;
+        /* No, the list is been modified so we need to start the search over. */
+
+        /* Save the suspension count and head pointer.  */
+        head_ptr = semaphore_ptr->tx_semaphore_suspension_list;
+        suspended_count = semaphore_ptr->tx_semaphore_suspended_count;
+
+        /* Default the highest priority thread to the thread at the front of the
+         * list.  */
+        priority_thread_ptr = head_ptr;
 
         /* Setup search pointer.  */
-        thread_ptr =  priority_thread_ptr -> tx_thread_suspended_next;
+        thread_ptr = priority_thread_ptr->tx_thread_suspended_next;
 
-        /* Disable preemption.  */
-        _tx_thread_preempt_disable++;
+        /* Reset the list changed flag.  */
+        list_changed = TX_FALSE;
+      }
 
-        /* Set the list changed flag to false.  */
-        list_changed =  TX_FALSE;
+    } while (thread_ptr != head_ptr);
 
-        /* Search through the list to find the highest priority thread.  */
-        do
-        {
+    /* Release preemption.  */
+    _tx_thread_preempt_disable--;
 
-            /* Is the current thread higher priority?  */
-            if (thread_ptr -> tx_thread_priority < priority_thread_ptr -> tx_thread_priority)
-            {
+    /* Now determine if the highest priority thread is at the front
+       of the list.  */
+    if (priority_thread_ptr != head_ptr) {
 
-                /* Yes, remember that this thread is the highest priority.  */
-                priority_thread_ptr =  thread_ptr;
-            }
+      /* No, we need to move the highest priority suspended thread to the
+         front of the list.  */
 
-            /* Restore interrupts temporarily.  */
-            TX_RESTORE
+      /* First, remove the highest priority thread by updating the
+         adjacent suspended threads.  */
+      next_thread = priority_thread_ptr->tx_thread_suspended_next;
+      previous_thread = priority_thread_ptr->tx_thread_suspended_previous;
+      next_thread->tx_thread_suspended_previous = previous_thread;
+      previous_thread->tx_thread_suspended_next = next_thread;
 
-            /* Disable interrupts again.  */
-            TX_DISABLE
+      /* Now, link the highest priority thread at the front of the list.  */
+      previous_thread = head_ptr->tx_thread_suspended_previous;
+      priority_thread_ptr->tx_thread_suspended_next = head_ptr;
+      priority_thread_ptr->tx_thread_suspended_previous = previous_thread;
+      previous_thread->tx_thread_suspended_next = priority_thread_ptr;
+      head_ptr->tx_thread_suspended_previous = priority_thread_ptr;
 
-            /* Determine if any changes to the list have occurred while
-               interrupts were enabled.  */
-
-            /* Is the list head the same?  */
-            if (head_ptr != semaphore_ptr -> tx_semaphore_suspension_list)
-            {
-
-                /* The list head has changed, set the list changed flag.  */
-                list_changed =  TX_TRUE;
-            }
-            else
-            {
-
-                /* Is the suspended count the same?  */
-                if (suspended_count != semaphore_ptr -> tx_semaphore_suspended_count)
-                {
-
-                    /* The list head has changed, set the list changed flag.  */
-                    list_changed =  TX_TRUE;
-                }
-            }
-
-            /* Determine if the list has changed.  */
-            if (list_changed == TX_FALSE)
-            {
-
-                /* Yes, everything is the same... move the thread pointer to the next thread.  */
-                thread_ptr =  thread_ptr -> tx_thread_suspended_next;
-            }
-            else
-            {
-
-                /* No, the list is been modified so we need to start the search over.  */
-
-                /* Save the suspension count and head pointer.  */
-                head_ptr =   semaphore_ptr -> tx_semaphore_suspension_list;
-                suspended_count =  semaphore_ptr -> tx_semaphore_suspended_count;
-
-                /* Default the highest priority thread to the thread at the front of the list.  */
-                priority_thread_ptr =  head_ptr;
-
-                /* Setup search pointer.  */
-                thread_ptr =  priority_thread_ptr -> tx_thread_suspended_next;
-
-                /* Reset the list changed flag.  */
-                list_changed =  TX_FALSE;
-            }
-
-        } while (thread_ptr != head_ptr);
-
-        /* Release preemption.  */
-        _tx_thread_preempt_disable--;
-
-        /* Now determine if the highest priority thread is at the front
-           of the list.  */
-        if (priority_thread_ptr != head_ptr)
-        {
-
-            /* No, we need to move the highest priority suspended thread to the
-               front of the list.  */
-
-            /* First, remove the highest priority thread by updating the
-               adjacent suspended threads.  */
-            next_thread =                                  priority_thread_ptr -> tx_thread_suspended_next;
-            previous_thread =                              priority_thread_ptr -> tx_thread_suspended_previous;
-            next_thread -> tx_thread_suspended_previous =  previous_thread;
-            previous_thread -> tx_thread_suspended_next =  next_thread;
-
-            /* Now, link the highest priority thread at the front of the list.  */
-            previous_thread =                                      head_ptr -> tx_thread_suspended_previous;
-            priority_thread_ptr -> tx_thread_suspended_next =      head_ptr;
-            priority_thread_ptr -> tx_thread_suspended_previous =  previous_thread;
-            previous_thread -> tx_thread_suspended_next =          priority_thread_ptr;
-            head_ptr -> tx_thread_suspended_previous =             priority_thread_ptr;
-
-            /* Move the list head pointer to the highest priority suspended thread.  */
-            semaphore_ptr -> tx_semaphore_suspension_list =  priority_thread_ptr;
-        }
-
-        /* Restore interrupts.  */
-        TX_RESTORE
-
-        /* Check for preemption.  */
-        _tx_thread_system_preempt_check();
+      /* Move the list head pointer to the highest priority suspended thread. */
+      semaphore_ptr->tx_semaphore_suspension_list = priority_thread_ptr;
     }
 
-    /* Return completion status.  */
-    return(TX_SUCCESS);
-}
+    /* Restore interrupts.  */
+    TX_RESTORE
 
+    /* Check for preemption.  */
+    _tx_thread_system_preempt_check();
+  }
+
+  /* Return completion status.  */
+  return (TX_SUCCESS);
+}

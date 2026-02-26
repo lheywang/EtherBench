@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,15 +20,12 @@
 /**************************************************************************/
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 
-
 #ifdef FX_ENABLE_EXFAT
 #include "fx_utility.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -81,157 +77,168 @@
 /*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_utility_exFAT_system_area_format(FX_MEDIA *media_ptr, ULONG boundary_unit,
-                                           ULONG *system_area_checksum_ptr,
-                                           UCHAR *memory_ptr, UINT memory_size)
-{
+UINT _fx_utility_exFAT_system_area_format(FX_MEDIA *media_ptr,
+                                          ULONG boundary_unit,
+                                          ULONG *system_area_checksum_ptr,
+                                          UCHAR *memory_ptr, UINT memory_size) {
 
-UINT   counter;
-UINT   i;
-UINT   sector_offset   = 0;
-UINT   status;
-UCHAR *system_area_buffer  = NULL;
+  UINT counter;
+  UINT i;
+  UINT sector_offset = 0;
+  UINT status;
+  UCHAR *system_area_buffer = NULL;
 
+  /* Is the memory size large enough?  */
+  if (memory_size < media_ptr->fx_media_bytes_per_sector) {
 
-    /* Is the memory size large enough?  */
-    if (memory_size < media_ptr -> fx_media_bytes_per_sector)
-    {
+    /* No, return an error.  */
+    return (FX_PTR_ERROR);
+  }
 
-        /* No, return an error.  */
-        return(FX_PTR_ERROR);
+  /* Setup pointer to system area buffer.  */
+  system_area_buffer = memory_ptr;
+
+  /* Align the boundary unit.  */
+  boundary_unit = ALIGN_UP(boundary_unit, 128);
+
+  /* Clear work buffer.  */
+  _fx_utility_memory_set(system_area_buffer, 0x00,
+                         media_ptr->fx_media_bytes_per_sector);
+
+  /* Add signature to System area sectors without boot, OEM, reserved and
+   * checksum sector.  */
+  system_area_buffer[media_ptr->fx_media_bytes_per_sector - 2] = FX_SIG_BYTE_1;
+  system_area_buffer[media_ptr->fx_media_bytes_per_sector - 1] = FX_SIG_BYTE_2;
+
+  /* Loop to write all the extended boot sectors.  */
+  for (counter = 0; counter < (FX_EXFAT_FAT_OEM_PARAM_OFFSET -
+                               FX_EXFAT_FAT_EXT_BOOT_SECTOR_OFFSET);
+       counter++) {
+
+    /* Loop to calculate the checksum for System Area  */
+    for (i = 0; i < media_ptr->fx_media_bytes_per_sector; i++) {
+
+      /* Calculate the checksum using the algorithm specified in the
+       * specification.  */
+      /* Right rotate the checksum by one bit position and add the data.  */
+      *system_area_checksum_ptr = ((*system_area_checksum_ptr >> 1) |
+                                   (*system_area_checksum_ptr << 31)) +
+                                  (ULONG)system_area_buffer[i];
     }
 
-    /* Setup pointer to system area buffer.  */
-    system_area_buffer =  memory_ptr;
-
-    /* Align the boundary unit.  */
-    boundary_unit = ALIGN_UP(boundary_unit, 128);
-
-    /* Clear work buffer.  */
-    _fx_utility_memory_set(system_area_buffer, 0x00, media_ptr -> fx_media_bytes_per_sector);
-
-    /* Add signature to System area sectors without boot, OEM, reserved and checksum sector.  */
-    system_area_buffer[media_ptr -> fx_media_bytes_per_sector - 2] =  FX_SIG_BYTE_1;
-    system_area_buffer[media_ptr -> fx_media_bytes_per_sector - 1] =  FX_SIG_BYTE_2;
-
-    /* Loop to write all the extended boot sectors.  */
-    for (counter = 0; counter < (FX_EXFAT_FAT_OEM_PARAM_OFFSET - FX_EXFAT_FAT_EXT_BOOT_SECTOR_OFFSET); counter++)
-    {
-
-        /* Loop to calculate the checksum for System Area  */
-        for (i = 0; i < media_ptr -> fx_media_bytes_per_sector; i++)
-        {
-
-            /* Calculate the checksum using the algorithm specified in the specification.  */
-            /* Right rotate the checksum by one bit position and add the data.  */
-            *system_area_checksum_ptr = ((*system_area_checksum_ptr >> 1) | (*system_area_checksum_ptr << 31)) +
-                (ULONG)system_area_buffer[i];
-        }
-
-        /* Write out the extended boot sector.  */
-        status = _fx_utility_exFAT_system_sector_write(media_ptr, system_area_buffer,
-                                                       (ULONG64) (FX_EXFAT_FAT_EXT_BOOT_SECTOR_OFFSET + counter),
-                                                       ((ULONG) 1), FX_BOOT_SECTOR);
-
-
-        /* Determine if the write was successful.  */
-        if (status != FX_SUCCESS)
-        {
-            return(status);
-        }
-
-        /* Write out the extended boot sector in the backup region.  */
-        status = _fx_utility_exFAT_system_sector_write(media_ptr, system_area_buffer,
-                                                       (ULONG64) (FX_EXFAT_FAT_EXT_BOOT_SECTOR_OFFSET + counter + FX_EXFAT_FAT_MAIN_SYSTEM_AREA_SIZE),
-                                                       ((ULONG) 1), FX_BOOT_SECTOR);
-
-        /* Determine if the write was successful.  */
-        if (status != FX_SUCCESS)
-        {
-            return(status);
-        }
-    }
-
-    /* Add OEM - Flash parameters.  */
-    system_area_buffer[media_ptr -> fx_media_bytes_per_sector - 2] = 0;
-    system_area_buffer[media_ptr -> fx_media_bytes_per_sector - 1] = 0;
-
-    /* GUID 0A0C7E46-3399-4021-90C8-FA6D389C4BA2 */
-    _fx_utility_32_unsigned_write(&(system_area_buffer[sector_offset]), 0x0A0C7E46);
-    _fx_utility_16_unsigned_write(&(system_area_buffer[sector_offset + 4]), 0x3399);
-    _fx_utility_16_unsigned_write(&(system_area_buffer[sector_offset + 6]), 0x4021);
-    system_area_buffer[sector_offset +  8] = 0x90; system_area_buffer[sector_offset +  9] = 0xC8;
-    system_area_buffer[sector_offset + 10] = 0xFA; system_area_buffer[sector_offset + 11] = 0x6D;
-    system_area_buffer[sector_offset + 12] = 0x38; system_area_buffer[sector_offset + 13] = 0x9C;
-    system_area_buffer[sector_offset + 14] = 0x4B; system_area_buffer[sector_offset + 15] = 0xA2;
-
-    /* Add EraseBlockSize.  */
-    _fx_utility_32_unsigned_write(&(system_area_buffer[sector_offset + 16]), boundary_unit / 2);
-
-    /* Write out the OEM parameters sector.  */
-    status = _fx_utility_exFAT_system_sector_write(media_ptr, system_area_buffer,
-                                                   FX_EXFAT_FAT_OEM_PARAM_OFFSET,
-                                                   1, FX_BOOT_SECTOR);
+    /* Write out the extended boot sector.  */
+    status = _fx_utility_exFAT_system_sector_write(
+        media_ptr, system_area_buffer,
+        (ULONG64)(FX_EXFAT_FAT_EXT_BOOT_SECTOR_OFFSET + counter), ((ULONG)1),
+        FX_BOOT_SECTOR);
 
     /* Determine if the write was successful.  */
-    if (status != FX_SUCCESS)
-    {
-        return(status);
+    if (status != FX_SUCCESS) {
+      return (status);
     }
 
-    /* Write out the OEM parameters sector in the backup region.  */
-    status = _fx_utility_exFAT_system_sector_write(media_ptr, system_area_buffer,
-                                                   FX_EXFAT_FAT_OEM_PARAM_OFFSET + FX_EXFAT_FAT_MAIN_SYSTEM_AREA_SIZE,
-                                                   1, FX_BOOT_SECTOR);
+    /* Write out the extended boot sector in the backup region.  */
+    status = _fx_utility_exFAT_system_sector_write(
+        media_ptr, system_area_buffer,
+        (ULONG64)(FX_EXFAT_FAT_EXT_BOOT_SECTOR_OFFSET + counter +
+                  FX_EXFAT_FAT_MAIN_SYSTEM_AREA_SIZE),
+        ((ULONG)1), FX_BOOT_SECTOR);
 
     /* Determine if the write was successful.  */
-    if (status != FX_SUCCESS)
-    {
-        return(status);
+    if (status != FX_SUCCESS) {
+      return (status);
     }
+  }
 
-    /* Loop to calculate checksum for System Area.  */
-    for (counter = 0; counter < media_ptr -> fx_media_bytes_per_sector; counter++)
-    {
+  /* Add OEM - Flash parameters.  */
+  system_area_buffer[media_ptr->fx_media_bytes_per_sector - 2] = 0;
+  system_area_buffer[media_ptr->fx_media_bytes_per_sector - 1] = 0;
 
-        /* Calculate the checksum using the algorithm specified in the specification.  */
-        /* Right rotate the checksum by one bit position and add the data.  */
-        *system_area_checksum_ptr = ((*system_area_checksum_ptr >> 1) | (*system_area_checksum_ptr << 31)) +
-            (ULONG)system_area_buffer[counter];
-    }
+  /* GUID 0A0C7E46-3399-4021-90C8-FA6D389C4BA2 */
+  _fx_utility_32_unsigned_write(&(system_area_buffer[sector_offset]),
+                                0x0A0C7E46);
+  _fx_utility_16_unsigned_write(&(system_area_buffer[sector_offset + 4]),
+                                0x3399);
+  _fx_utility_16_unsigned_write(&(system_area_buffer[sector_offset + 6]),
+                                0x4021);
+  system_area_buffer[sector_offset + 8] = 0x90;
+  system_area_buffer[sector_offset + 9] = 0xC8;
+  system_area_buffer[sector_offset + 10] = 0xFA;
+  system_area_buffer[sector_offset + 11] = 0x6D;
+  system_area_buffer[sector_offset + 12] = 0x38;
+  system_area_buffer[sector_offset + 13] = 0x9C;
+  system_area_buffer[sector_offset + 14] = 0x4B;
+  system_area_buffer[sector_offset + 15] = 0xA2;
 
-    /* Clear work buffer.  */
-    _fx_utility_memory_set(system_area_buffer, 0x00, media_ptr -> fx_media_bytes_per_sector);
+  /* Add EraseBlockSize.  */
+  _fx_utility_32_unsigned_write(&(system_area_buffer[sector_offset + 16]),
+                                boundary_unit / 2);
 
-    /* Loop to calculate checksum for System Area.  */
-    for (counter = 0; counter < media_ptr -> fx_media_bytes_per_sector; counter++)
-    {
+  /* Write out the OEM parameters sector.  */
+  status = _fx_utility_exFAT_system_sector_write(media_ptr, system_area_buffer,
+                                                 FX_EXFAT_FAT_OEM_PARAM_OFFSET,
+                                                 1, FX_BOOT_SECTOR);
 
-        /* Calculate the checksum using the algorithm specified in the specification.  */
-        /* Right rotate the checksum by one bit position and add the data.  */
-        *system_area_checksum_ptr = ((*system_area_checksum_ptr >> 1) | (*system_area_checksum_ptr << 31)) +
-            (ULONG)system_area_buffer[counter];
-    }
+  /* Determine if the write was successful.  */
+  if (status != FX_SUCCESS) {
+    return (status);
+  }
 
-    /* Write out the boot checksum sector.  */
-    status = _fx_utility_exFAT_system_sector_write(media_ptr, system_area_buffer,
-                                                   FX_EXFAT_FAT_OEM_PARAM_OFFSET + 1,
-                                                   1, FX_BOOT_SECTOR);
+  /* Write out the OEM parameters sector in the backup region.  */
+  status = _fx_utility_exFAT_system_sector_write(
+      media_ptr, system_area_buffer,
+      FX_EXFAT_FAT_OEM_PARAM_OFFSET + FX_EXFAT_FAT_MAIN_SYSTEM_AREA_SIZE, 1,
+      FX_BOOT_SECTOR);
 
-    /* Determine if the write was successful.  */
-    if (status != FX_SUCCESS)
-    {
-        return(status);
-    }
+  /* Determine if the write was successful.  */
+  if (status != FX_SUCCESS) {
+    return (status);
+  }
 
-    /* Write out the boot checksum sector in the backup region.  */
-    status = _fx_utility_exFAT_system_sector_write(media_ptr, system_area_buffer,
-                                                   FX_EXFAT_FAT_OEM_PARAM_OFFSET + 1 + FX_EXFAT_FAT_MAIN_SYSTEM_AREA_SIZE,
-                                                   1, FX_BOOT_SECTOR);
+  /* Loop to calculate checksum for System Area.  */
+  for (counter = 0; counter < media_ptr->fx_media_bytes_per_sector; counter++) {
 
-    /* Return completion status.  */
-    return(status);
+    /* Calculate the checksum using the algorithm specified in the
+     * specification.  */
+    /* Right rotate the checksum by one bit position and add the data.  */
+    *system_area_checksum_ptr =
+        ((*system_area_checksum_ptr >> 1) | (*system_area_checksum_ptr << 31)) +
+        (ULONG)system_area_buffer[counter];
+  }
+
+  /* Clear work buffer.  */
+  _fx_utility_memory_set(system_area_buffer, 0x00,
+                         media_ptr->fx_media_bytes_per_sector);
+
+  /* Loop to calculate checksum for System Area.  */
+  for (counter = 0; counter < media_ptr->fx_media_bytes_per_sector; counter++) {
+
+    /* Calculate the checksum using the algorithm specified in the
+     * specification.  */
+    /* Right rotate the checksum by one bit position and add the data.  */
+    *system_area_checksum_ptr =
+        ((*system_area_checksum_ptr >> 1) | (*system_area_checksum_ptr << 31)) +
+        (ULONG)system_area_buffer[counter];
+  }
+
+  /* Write out the boot checksum sector.  */
+  status = _fx_utility_exFAT_system_sector_write(
+      media_ptr, system_area_buffer, FX_EXFAT_FAT_OEM_PARAM_OFFSET + 1, 1,
+      FX_BOOT_SECTOR);
+
+  /* Determine if the write was successful.  */
+  if (status != FX_SUCCESS) {
+    return (status);
+  }
+
+  /* Write out the boot checksum sector in the backup region.  */
+  status = _fx_utility_exFAT_system_sector_write(
+      media_ptr, system_area_buffer,
+      FX_EXFAT_FAT_OEM_PARAM_OFFSET + 1 + FX_EXFAT_FAT_MAIN_SYSTEM_AREA_SIZE, 1,
+      FX_BOOT_SECTOR);
+
+  /* Return completion status.  */
+  return (status);
 }
 
 #endif
-

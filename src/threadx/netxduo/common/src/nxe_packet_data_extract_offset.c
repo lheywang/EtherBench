@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
 #include "../include/nx_packet.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,25 +71,22 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_packet_data_extract_offset(NX_PACKET *packet_ptr, ULONG offset, VOID *buffer_start, ULONG buffer_length, ULONG *bytes_copied)
-{
+UINT _nxe_packet_data_extract_offset(NX_PACKET *packet_ptr, ULONG offset,
+                                     VOID *buffer_start, ULONG buffer_length,
+                                     ULONG *bytes_copied) {
 
-    if (packet_ptr == NX_NULL)
-    {
-        return(NX_PTR_ERROR);
-    }
+  if (packet_ptr == NX_NULL) {
+    return (NX_PTR_ERROR);
+  }
 
-    if (buffer_start == NX_NULL)
-    {
-        return(NX_PTR_ERROR);
-    }
+  if (buffer_start == NX_NULL) {
+    return (NX_PTR_ERROR);
+  }
 
-    if (bytes_copied == NX_NULL)
-    {
-        return(NX_PTR_ERROR);
-    }
+  if (bytes_copied == NX_NULL) {
+    return (NX_PTR_ERROR);
+  }
 
-
-    return(_nx_packet_data_extract_offset(packet_ptr, offset, buffer_start, buffer_length, bytes_copied));
+  return (_nx_packet_data_extract_offset(packet_ptr, offset, buffer_start,
+                                         buffer_length, bytes_copied));
 }
-

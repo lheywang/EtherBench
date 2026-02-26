@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_system.h"
 #include "fx_utility.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -70,16 +67,14 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_utility_16_unsigned_read(UCHAR *source_ptr)
-{
+UINT _fx_utility_16_unsigned_read(UCHAR *source_ptr) {
 
-UINT value;
+  UINT value;
 
-    /* Pickup the UINT from the destination with endian-awareness.  */
-    value =  ((((UINT)*(source_ptr + 1)) & 0xFF) << 8) |
-              ((UINT)*(source_ptr) & 0xFF);
+  /* Pickup the UINT from the destination with endian-awareness.  */
+  value = ((((UINT) * (source_ptr + 1)) & 0xFF) << 8) |
+          ((UINT) * (source_ptr) & 0xFF);
 
-    /* Return value to caller.  */
-    return(value);
+  /* Return value to caller.  */
+  return (value);
 }
-

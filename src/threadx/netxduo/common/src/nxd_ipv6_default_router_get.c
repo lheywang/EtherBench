@@ -19,7 +19,6 @@
 /**************************************************************************/
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -27,7 +26,6 @@
 #ifdef FEATURE_NX_IPV6
 #include "../include/nx_nd_cache.h"
 #endif /* FEATURE_NX_IPV6 */
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,27 +75,28 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_ipv6_default_router_get(NX_IP *ip_ptr, UINT interface_index, NXD_ADDRESS *router_addr,
-                                   ULONG *router_lifetime, ULONG *prefix_length)
-{
+UINT _nxd_ipv6_default_router_get(NX_IP *ip_ptr, UINT interface_index,
+                                  NXD_ADDRESS *router_addr,
+                                  ULONG *router_lifetime,
+                                  ULONG *prefix_length) {
 #ifdef FEATURE_NX_IPV6
-UINT status;
+  UINT status;
 
-    /* Get the first router. */
-    status = _nxd_ipv6_default_router_entry_get(ip_ptr, interface_index, 0,
-                                                router_addr, router_lifetime, prefix_length, NX_NULL);
+  /* Get the first router. */
+  status = _nxd_ipv6_default_router_entry_get(ip_ptr, interface_index, 0,
+                                              router_addr, router_lifetime,
+                                              prefix_length, NX_NULL);
 
-    return(status);
+  return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(interface_index);
-    NX_PARAMETER_NOT_USED(router_addr);
-    NX_PARAMETER_NOT_USED(router_lifetime);
-    NX_PARAMETER_NOT_USED(prefix_length);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(interface_index);
+  NX_PARAMETER_NOT_USED(router_addr);
+  NX_PARAMETER_NOT_USED(router_lifetime);
+  NX_PARAMETER_NOT_USED(prefix_length);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }
-

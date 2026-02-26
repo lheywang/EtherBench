@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -23,13 +22,11 @@
 #define UX_SOURCE_CODE
 #define UX_DCD_STM32_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_dcd_stm32.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -76,22 +73,21 @@
 /*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_dcd_stm32_endpoint_status(UX_DCD_STM32 *dcd_stm32, ULONG endpoint_index)
-{
+UINT _ux_dcd_stm32_endpoint_status(UX_DCD_STM32 *dcd_stm32,
+                                   ULONG endpoint_index) {
 
-UX_DCD_STM32_ED      *ed;
+  UX_DCD_STM32_ED *ed;
 
+  /* Fetch the address of the physical endpoint.  */
+  ed = _stm32_ed_get(dcd_stm32, endpoint_index);
 
-    /* Fetch the address of the physical endpoint.  */
-    ed = _stm32_ed_get(dcd_stm32, endpoint_index);
+  /* Check the endpoint status, if it is free, we have a illegal endpoint.  */
+  if ((ed->ux_dcd_stm32_ed_status & UX_DCD_STM32_ED_STATUS_USED) == 0)
+    return (UX_ERROR);
 
-    /* Check the endpoint status, if it is free, we have a illegal endpoint.  */
-    if ((ed -> ux_dcd_stm32_ed_status & UX_DCD_STM32_ED_STATUS_USED) == 0)
-        return(UX_ERROR);
-
-    /* Check if the endpoint is stalled.  */
-    if ((ed -> ux_dcd_stm32_ed_status & UX_DCD_STM32_ED_STATUS_STALLED) == 0)
-        return(UX_FALSE);
-    else
-        return(UX_TRUE);
+  /* Check if the endpoint is stalled.  */
+  if ((ed->ux_dcd_stm32_ed_status & UX_DCD_STM32_ED_STATUS_STALLED) == 0)
+    return (UX_FALSE);
+  else
+    return (UX_TRUE);
 }

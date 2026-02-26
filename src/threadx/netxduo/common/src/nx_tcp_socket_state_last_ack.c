@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_tcp.h"
 #include "../include/nx_ipv6.h"
+#include "../include/nx_tcp.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,40 +70,40 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_tcp_socket_state_last_ack(NX_TCP_SOCKET *socket_ptr, NX_TCP_HEADER *tcp_header_ptr)
-{
+VOID _nx_tcp_socket_state_last_ack(NX_TCP_SOCKET *socket_ptr,
+                                   NX_TCP_HEADER *tcp_header_ptr) {
 
-    /* Determine if the incoming message is an ACK message.  */
-    if (tcp_header_ptr -> nx_tcp_header_word_3 & NX_TCP_ACK_BIT)
-    {
+  /* Determine if the incoming message is an ACK message.  */
+  if (tcp_header_ptr->nx_tcp_header_word_3 & NX_TCP_ACK_BIT) {
 
-        /*   If it is proper, finish the disconnect. */
-        if ((tcp_header_ptr -> nx_tcp_acknowledgment_number == socket_ptr -> nx_tcp_socket_tx_sequence) &&
-            (tcp_header_ptr -> nx_tcp_sequence_number == socket_ptr -> nx_tcp_socket_rx_sequence))
-        {
+    /*   If it is proper, finish the disconnect. */
+    if ((tcp_header_ptr->nx_tcp_acknowledgment_number ==
+         socket_ptr->nx_tcp_socket_tx_sequence) &&
+        (tcp_header_ptr->nx_tcp_sequence_number ==
+         socket_ptr->nx_tcp_socket_rx_sequence)) {
 
-            /* Cleanup the transmission control block.  */
-            _nx_tcp_socket_block_cleanup(socket_ptr);
+      /* Cleanup the transmission control block.  */
+      _nx_tcp_socket_block_cleanup(socket_ptr);
 
-            /* Determine if we need to wake a thread suspended on the disconnection.  */
-            if (socket_ptr -> nx_tcp_socket_disconnect_suspended_thread)
-            {
+      /* Determine if we need to wake a thread suspended on the disconnection.
+       */
+      if (socket_ptr->nx_tcp_socket_disconnect_suspended_thread) {
 
-                /* Resume suspended thread.  */
-                _nx_tcp_socket_thread_resume(&(socket_ptr -> nx_tcp_socket_disconnect_suspended_thread), NX_SUCCESS);
-            }
+        /* Resume suspended thread.  */
+        _nx_tcp_socket_thread_resume(
+            &(socket_ptr->nx_tcp_socket_disconnect_suspended_thread),
+            NX_SUCCESS);
+      }
 
 #ifndef NX_DISABLE_EXTENDED_NOTIFY_SUPPORT
 
-            /* Is a disconnect callback registered with the TCP socket?  */
-            if (socket_ptr -> nx_tcp_disconnect_complete_notify)
-            {
+      /* Is a disconnect callback registered with the TCP socket?  */
+      if (socket_ptr->nx_tcp_disconnect_complete_notify) {
 
-                /* Call the application's disconnect_complete callback function. */
-                (socket_ptr -> nx_tcp_disconnect_complete_notify)(socket_ptr);
-            }
+        /* Call the application's disconnect_complete callback function. */
+        (socket_ptr->nx_tcp_disconnect_complete_notify)(socket_ptr);
+      }
 #endif
-        }
     }
+  }
 }
-

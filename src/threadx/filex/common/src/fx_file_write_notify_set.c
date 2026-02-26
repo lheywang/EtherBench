@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_file.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,13 +68,12 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_file_write_notify_set(FX_FILE *file_ptr, VOID (*file_write_notify)(FX_FILE *file))
-{
+UINT _fx_file_write_notify_set(FX_FILE *file_ptr,
+                               VOID (*file_write_notify)(FX_FILE *file)) {
 
-    /* Set the notify function. */
-    file_ptr -> fx_file_write_notify = file_write_notify;
+  /* Set the notify function. */
+  file_ptr->fx_file_write_notify = file_write_notify;
 
-    /* Return successful status.  */
-    return(FX_SUCCESS);
+  /* Return successful status.  */
+  return (FX_SUCCESS);
 }
-

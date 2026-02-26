@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,18 +21,15 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
 #include "../include/nx_udp.h"
 
-
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -78,37 +74,32 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_udp_free_port_find(NX_IP *ip_ptr, UINT port, UINT *free_port_ptr)
-{
+UINT _nxe_udp_free_port_find(NX_IP *ip_ptr, UINT port, UINT *free_port_ptr) {
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
+      (free_port_ptr == NX_NULL)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID) || (free_port_ptr == NX_NULL))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check to see if UDP is enabled.  */
+  if (!ip_ptr->nx_ip_udp_packet_receive) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if UDP is enabled.  */
-    if (!ip_ptr -> nx_ip_udp_packet_receive)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for an invalid port.  */
+  if ((!port) || (((ULONG)port) > (ULONG)NX_MAX_PORT)) {
+    return (NX_INVALID_PORT);
+  }
 
-    /* Check for an invalid port.  */
-    if ((!port) || (((ULONG)port) > (ULONG)NX_MAX_PORT))
-    {
-        return(NX_INVALID_PORT);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual UDP free port find function.  */
+  status = _nx_udp_free_port_find(ip_ptr, port, free_port_ptr);
 
-    /* Call actual UDP free port find function.  */
-    status =  _nx_udp_free_port_find(ip_ptr, port, free_port_ptr);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

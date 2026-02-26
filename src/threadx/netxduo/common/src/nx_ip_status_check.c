@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,9 +70,8 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_ip_status_check(NX_IP *ip_ptr, ULONG needed_status,
-                          ULONG *actual_status, ULONG wait_option)
-{
-    return(_nx_ip_interface_status_check(ip_ptr, 0, needed_status, actual_status, wait_option));
+UINT _nx_ip_status_check(NX_IP *ip_ptr, ULONG needed_status,
+                         ULONG *actual_status, ULONG wait_option) {
+  return (_nx_ip_interface_status_check(ip_ptr, 0, needed_status, actual_status,
+                                        wait_option));
 }
-

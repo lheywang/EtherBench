@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_directory.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -76,10 +73,10 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_directory_long_name_get(FX_MEDIA *media_ptr, CHAR *short_file_name, CHAR *long_file_name)
-{
+UINT _fx_directory_long_name_get(FX_MEDIA *media_ptr, CHAR *short_file_name,
+                                 CHAR *long_file_name) {
 
-    /* Call the extended version with maximum long name length.  */
-    return(_fx_directory_long_name_get_extended(media_ptr, short_file_name, long_file_name, FX_MAX_LONG_NAME_LEN));
+  /* Call the extended version with maximum long name length.  */
+  return (_fx_directory_long_name_get_extended(
+      media_ptr, short_file_name, long_file_name, FX_MAX_LONG_NAME_LEN));
 }
-

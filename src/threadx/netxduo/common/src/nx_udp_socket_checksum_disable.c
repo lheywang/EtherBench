@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_udp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,35 +68,33 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_udp_socket_checksum_disable(NX_UDP_SOCKET *socket_ptr)
-{
-TX_INTERRUPT_SAVE_AREA
+UINT _nx_udp_socket_checksum_disable(NX_UDP_SOCKET *socket_ptr) {
+  TX_INTERRUPT_SAVE_AREA
 
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOCKET_CHECKSUM_DISABLE,
+                          socket_ptr->nx_udp_socket_ip_ptr, socket_ptr, 0, 0,
+                          NX_TRACE_UDP_EVENTS, 0, 0);
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOCKET_CHECKSUM_DISABLE, socket_ptr -> nx_udp_socket_ip_ptr, socket_ptr, 0, 0, NX_TRACE_UDP_EVENTS, 0, 0);
+  /* Lockout interrupts.  */
+  TX_DISABLE
 
-    /* Lockout interrupts.  */
-    TX_DISABLE
-
-    /* Determine if the socket is currently bound.  */
-    if (!socket_ptr ->  nx_udp_socket_bound_next)
-    {
-
-        /* Restore interrupts.  */
-        TX_RESTORE
-
-        /* Socket is not bound, return an error message.  */
-        return(NX_NOT_BOUND);
-    }
-
-    /* Set the checksum disable flag.  */
-    socket_ptr -> nx_udp_socket_disable_checksum =  NX_TRUE;
+  /* Determine if the socket is currently bound.  */
+  if (!socket_ptr->nx_udp_socket_bound_next) {
 
     /* Restore interrupts.  */
     TX_RESTORE
 
-    /* Return a successful status.  */
-    return(NX_SUCCESS);
-}
+    /* Socket is not bound, return an error message.  */
+    return (NX_NOT_BOUND);
+  }
 
+  /* Set the checksum disable flag.  */
+  socket_ptr->nx_udp_socket_disable_checksum = NX_TRUE;
+
+  /* Restore interrupts.  */
+  TX_RESTORE
+
+  /* Return a successful status.  */
+  return (NX_SUCCESS);
+}

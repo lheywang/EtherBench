@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -23,13 +22,11 @@
 #define UX_SOURCE_CODE
 #define UX_DCD_STM32_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_dcd_stm32.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,56 +70,61 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_dcd_stm32_endpoint_create(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_ENDPOINT *endpoint)
-{
+UINT _ux_dcd_stm32_endpoint_create(UX_DCD_STM32 *dcd_stm32,
+                                   UX_SLAVE_ENDPOINT *endpoint) {
 
-UX_DCD_STM32_ED     *ed;
-ULONG               stm32_endpoint_index;
+  UX_DCD_STM32_ED *ed;
+  ULONG stm32_endpoint_index;
 
+  /* The endpoint index in the array of the STM32 must match the endpoint
+   * number.  */
+  stm32_endpoint_index =
+      endpoint->ux_slave_endpoint_descriptor.bEndpointAddress &
+      ~UX_ENDPOINT_DIRECTION;
 
-    /* The endpoint index in the array of the STM32 must match the endpoint number.  */
-    stm32_endpoint_index =  endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress & ~UX_ENDPOINT_DIRECTION;
+  /* Get STM32 ED.  */
+  ed = _stm32_ed_get(dcd_stm32,
+                     endpoint->ux_slave_endpoint_descriptor.bEndpointAddress);
 
-    /* Get STM32 ED.  */
-    ed = _stm32_ed_get(dcd_stm32, endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress);
+  if (ed == UX_NULL)
+    return (UX_NO_ED_AVAILABLE);
 
-    if (ed == UX_NULL)
-        return(UX_NO_ED_AVAILABLE);
+  /* Check the endpoint status, if it is free, reserve it. If not reject this
+   * endpoint.  */
+  if ((ed->ux_dcd_stm32_ed_status & UX_DCD_STM32_ED_STATUS_USED) == 0) {
 
-    /* Check the endpoint status, if it is free, reserve it. If not reject this endpoint.  */
-    if ((ed -> ux_dcd_stm32_ed_status & UX_DCD_STM32_ED_STATUS_USED) == 0)
-    {
+    /* We can use this endpoint.  */
+    ed->ux_dcd_stm32_ed_status |= UX_DCD_STM32_ED_STATUS_USED;
 
-        /* We can use this endpoint.  */
-        ed -> ux_dcd_stm32_ed_status |=  UX_DCD_STM32_ED_STATUS_USED;
+    /* Keep the physical endpoint address in the endpoint container.  */
+    endpoint->ux_slave_endpoint_ed = (VOID *)ed;
 
-        /* Keep the physical endpoint address in the endpoint container.  */
-        endpoint -> ux_slave_endpoint_ed =  (VOID *) ed;
+    /* Save the endpoint pointer.  */
+    ed->ux_dcd_stm32_ed_endpoint = endpoint;
 
-        /* Save the endpoint pointer.  */
-        ed -> ux_dcd_stm32_ed_endpoint =  endpoint;
+    /* And its index.  */
+    ed->ux_dcd_stm32_ed_index = stm32_endpoint_index;
 
-        /* And its index.  */
-        ed -> ux_dcd_stm32_ed_index =  stm32_endpoint_index;
+    /* And its direction.  */
+    ed->ux_dcd_stm32_ed_direction =
+        endpoint->ux_slave_endpoint_descriptor.bEndpointAddress &
+        UX_ENDPOINT_DIRECTION;
 
-        /* And its direction.  */
-        ed -> ux_dcd_stm32_ed_direction =  endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION;
+    /* Check if it is non-control endpoint.  */
+    if (stm32_endpoint_index != 0) {
 
-        /* Check if it is non-control endpoint.  */
-        if (stm32_endpoint_index != 0)
-        {
-
-            /* Open the endpoint.  */
-            HAL_PCD_EP_Open(dcd_stm32 -> pcd_handle, endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress,
-                            endpoint -> ux_slave_endpoint_descriptor.wMaxPacketSize,
-                            endpoint -> ux_slave_endpoint_descriptor.bmAttributes & UX_MASK_ENDPOINT_TYPE);
-        }
-
-        /* Return successful completion.  */
-        return(UX_SUCCESS);
+      /* Open the endpoint.  */
+      HAL_PCD_EP_Open(dcd_stm32->pcd_handle,
+                      endpoint->ux_slave_endpoint_descriptor.bEndpointAddress,
+                      endpoint->ux_slave_endpoint_descriptor.wMaxPacketSize,
+                      endpoint->ux_slave_endpoint_descriptor.bmAttributes &
+                          UX_MASK_ENDPOINT_TYPE);
     }
 
-    /* Return an error.  */
-    return(UX_NO_ED_AVAILABLE);
-}
+    /* Return successful completion.  */
+    return (UX_SUCCESS);
+  }
 
+  /* Return an error.  */
+  return (UX_NO_ED_AVAILABLE);
+}

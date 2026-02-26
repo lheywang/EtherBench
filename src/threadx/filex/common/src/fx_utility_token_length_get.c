@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #ifdef FX_ENABLE_EXFAT
 #include "fx_utility.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -70,26 +67,23 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_utility_token_length_get(CHAR *path)
-{
+UINT _fx_utility_token_length_get(CHAR *path) {
 
-UINT length;
+  UINT length;
 
+  /* Initialize the length to 0.  */
+  length = 0;
 
-    /* Initialize the length to 0.  */
-    length =  0;
+  /* Walk to the next sub-directory break.  */
+  while (path[length] && (path[length] != '\\') && (path[length] != '/') &&
+         (length < FX_MAXIMUM_PATH)) {
 
-    /* Walk to the next sub-directory break.  */
-    while (path[length] && (path[length] != '\\') && (path[length] != '/') && (length < FX_MAXIMUM_PATH))
-    {
+    /* Increment length (index).  */
+    length++;
+  }
 
-        /* Increment length (index).  */
-        length++;
-    }
-
-    /* Return length.  */
-    return(length);
+  /* Return length.  */
+  return (length);
 }
 
 #endif
-

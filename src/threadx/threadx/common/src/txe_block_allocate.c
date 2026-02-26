@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
+#include "../include/tx_block_pool.h"
 #include "../include/tx_thread.h"
 #include "../include/tx_timer.h"
-#include "../include/tx_block_pool.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,86 +74,76 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_block_allocate(TX_BLOCK_POOL *pool_ptr, VOID **block_ptr, ULONG wait_option)
-{
+UINT _txe_block_allocate(TX_BLOCK_POOL *pool_ptr, VOID **block_ptr,
+                         ULONG wait_option) {
 
-UINT            status;
-
-#ifndef TX_TIMER_PROCESS_IN_ISR
-
-TX_THREAD       *current_thread;
-#endif
-
-    /* Default status to success.  */
-    status =  TX_SUCCESS;
-
-    /* Check for an invalid pool pointer.  */
-    if (pool_ptr == TX_NULL)
-    {
-
-        /* Pool pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
-    }
-
-    /* Check for an invalid pool pointer.  */
-    else if (pool_ptr -> tx_block_pool_id != TX_BLOCK_POOL_ID)
-    {
-
-        /* Pool pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
-    }
-
-    /* Check for an invalid destination for return pointer.  */
-    else if (block_ptr == TX_NULL)
-    {
-
-        /* Null destination pointer, return appropriate error.  */
-        status =  TX_PTR_ERROR;
-    }
-    else
-    {
-
-        /* Check for a wait option error.  Only threads are allowed any form of
-           suspension.  */
-        if (wait_option != TX_NO_WAIT)
-        {
-
-            /* Is the call from an ISR or Initialization?  */
-            if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
-            {
-
-                /* A non-thread is trying to suspend, return appropriate error code.  */
-                status =  TX_WAIT_ERROR;
-            }
+  UINT status;
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
-            else
-            {
 
-                /* Pickup thread pointer.  */
-                TX_THREAD_GET_CURRENT(current_thread)
-
-                /* Is the current thread the timer thread?  */
-                if (current_thread == &_tx_timer_thread)
-                {
-
-                    /* A non-thread is trying to suspend, return appropriate error code.  */
-                    status =  TX_WAIT_ERROR;
-                }
-            }
+  TX_THREAD *current_thread;
 #endif
+
+  /* Default status to success.  */
+  status = TX_SUCCESS;
+
+  /* Check for an invalid pool pointer.  */
+  if (pool_ptr == TX_NULL) {
+
+    /* Pool pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  }
+
+  /* Check for an invalid pool pointer.  */
+  else if (pool_ptr->tx_block_pool_id != TX_BLOCK_POOL_ID) {
+
+    /* Pool pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  }
+
+  /* Check for an invalid destination for return pointer.  */
+  else if (block_ptr == TX_NULL) {
+
+    /* Null destination pointer, return appropriate error.  */
+    status = TX_PTR_ERROR;
+  } else {
+
+    /* Check for a wait option error.  Only threads are allowed any form of
+       suspension.  */
+    if (wait_option != TX_NO_WAIT) {
+
+      /* Is the call from an ISR or Initialization?  */
+      if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
+
+        /* A non-thread is trying to suspend, return appropriate error code.  */
+        status = TX_WAIT_ERROR;
+      }
+
+#ifndef TX_TIMER_PROCESS_IN_ISR
+      else {
+
+        /* Pickup thread pointer.  */
+        TX_THREAD_GET_CURRENT(current_thread)
+
+        /* Is the current thread the timer thread?  */
+        if (current_thread == &_tx_timer_thread) {
+
+          /* A non-thread is trying to suspend, return appropriate error code.
+           */
+          status = TX_WAIT_ERROR;
         }
+      }
+#endif
     }
+  }
 
-    /* Determine if everything is okay.  */
-    if (status == TX_SUCCESS)
-    {
+  /* Determine if everything is okay.  */
+  if (status == TX_SUCCESS) {
 
-        /* Call actual block allocate function.  */
-        status =  _tx_block_allocate(pool_ptr, block_ptr, wait_option);
-    }
+    /* Call actual block allocate function.  */
+    status = _tx_block_allocate(pool_ptr, block_ptr, wait_option);
+  }
 
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

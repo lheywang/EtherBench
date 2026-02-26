@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 #include "../include/nx_api.h"
 #include "../include/nx_ipv6.h"
@@ -31,7 +29,6 @@
 
 /* Bring in externs for caller checking code.  */
 NX_CALLER_CHECKING_EXTERNS
-
 
 #endif /* FEATURE_NX_IPV6 */
 
@@ -81,41 +78,35 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxde_ipv6_address_delete(NX_IP *ip_ptr,
-                                UINT address_index)
-{
+UINT _nxde_ipv6_address_delete(NX_IP *ip_ptr, UINT address_index) {
 #ifdef FEATURE_NX_IPV6
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Validate the address index. */
+  if (address_index >= NX_MAX_IPV6_ADDRESSES) {
+    return (NX_NO_INTERFACE_ADDRESS);
+  }
 
-    /* Validate the address index. */
-    if (address_index >= NX_MAX_IPV6_ADDRESSES)
-    {
-        return(NX_NO_INTERFACE_ADDRESS);
-    }
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Call actual IPv6 address delete function.  */
+  status = _nxd_ipv6_address_delete(ip_ptr, address_index);
 
-    /* Call actual IPv6 address delete function.  */
-    status = _nxd_ipv6_address_delete(ip_ptr, address_index);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(address_index);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(address_index);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }
-

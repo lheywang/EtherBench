@@ -20,7 +20,6 @@
 /**************************************************************************/
 #define NX_SOURCE_CODE
 
-
 #include "../include/nx_api.h"
 #include "../include/nx_ipv6.h"
 
@@ -71,54 +70,40 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxd_ipv6_find_max_prefix_length(ULONG *addr1, ULONG *addr2, UINT max_length)
-{
-UINT length = 0;
-UINT i, j, bit, time;
+UINT _nxd_ipv6_find_max_prefix_length(ULONG *addr1, ULONG *addr2,
+                                      UINT max_length) {
+  UINT length = 0;
+  UINT i, j, bit, time;
 
-    for (i = 0; i < 4; i++)
-    {
-        if (addr1[i] == addr2[i])
-        {
-            length += 32;
-        }
-        /* Length shall not exceed max_length. Stop compare. */
-        else if (length + 31 < max_length)
-        {
-            break;
-        }
-        else
-        {
-            bit = 16;
-            time = 16;
-            for (j = 0; j < 5; j++)
-            {
-                time = time / 2;
-                if (addr1[i] >> bit == addr2[i] >> bit)
-                {
-                    bit -= time;
-                    if (time == 0)
-                    {
-                        length += (32 - bit);
-                    }
-                }
-                else if (j == 4)
-                {
-                    length += (31 - bit);
-                    break;
-                }
-                else
-                {
-                    bit += time;
-                }
-            }
-            break;
-        }
+  for (i = 0; i < 4; i++) {
+    if (addr1[i] == addr2[i]) {
+      length += 32;
     }
+    /* Length shall not exceed max_length. Stop compare. */
+    else if (length + 31 < max_length) {
+      break;
+    } else {
+      bit = 16;
+      time = 16;
+      for (j = 0; j < 5; j++) {
+        time = time / 2;
+        if (addr1[i] >> bit == addr2[i] >> bit) {
+          bit -= time;
+          if (time == 0) {
+            length += (32 - bit);
+          }
+        } else if (j == 4) {
+          length += (31 - bit);
+          break;
+        } else {
+          bit += time;
+        }
+      }
+      break;
+    }
+  }
 
-
-    return(length);
+  return (length);
 }
 
 #endif /* FEATURE_NX_IPV6 */
-

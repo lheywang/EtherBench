@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
@@ -30,12 +28,10 @@
 #include "fx_utility.h"
 #include "string.h"
 
-
 /* Remove any previous remapping for memory copy when compiling this
    module.  */
 
 #undef _fx_utility_memory_copy
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -80,10 +76,8 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _fx_utility_memory_copy(UCHAR *source_ptr, UCHAR *dest_ptr, ULONG size)
-{
+VOID _fx_utility_memory_copy(UCHAR *source_ptr, UCHAR *dest_ptr, ULONG size) {
 
-    /* Copy the memory.  */
-    memcpy(dest_ptr, source_ptr, size); /* Use case of memcpy is verified. */
+  /* Copy the memory.  */
+  memcpy(dest_ptr, source_ptr, size); /* Use case of memcpy is verified. */
 }
-

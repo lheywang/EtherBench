@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_mutex.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -69,35 +66,28 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_mutex_prioritize(TX_MUTEX *mutex_ptr)
-{
+UINT _txe_mutex_prioritize(TX_MUTEX *mutex_ptr) {
 
-UINT    status;
+  UINT status;
 
+  /* Check for an invalid mutex pointer.  */
+  if (mutex_ptr == TX_NULL) {
 
-    /* Check for an invalid mutex pointer.  */
-    if (mutex_ptr == TX_NULL)
-    {
+    /* Mutex pointer is invalid, return appropriate error code.  */
+    status = TX_MUTEX_ERROR;
+  }
 
-        /* Mutex pointer is invalid, return appropriate error code.  */
-        status =  TX_MUTEX_ERROR;
-    }
+  /* Now check for invalid mutex ID.  */
+  else if (mutex_ptr->tx_mutex_id != TX_MUTEX_ID) {
 
-    /* Now check for invalid mutex ID.  */
-    else if (mutex_ptr -> tx_mutex_id != TX_MUTEX_ID)
-    {
+    /* Mutex pointer is invalid, return appropriate error code.  */
+    status = TX_MUTEX_ERROR;
+  } else {
 
-        /* Mutex pointer is invalid, return appropriate error code.  */
-        status =  TX_MUTEX_ERROR;
-    }
-    else
-    {
+    /* Call actual mutex prioritize function.  */
+    status = _tx_mutex_prioritize(mutex_ptr);
+  }
 
-        /* Call actual mutex prioritize function.  */
-        status =  _tx_mutex_prioritize(mutex_ptr);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

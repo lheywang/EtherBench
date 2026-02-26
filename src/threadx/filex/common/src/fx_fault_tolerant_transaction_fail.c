@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -25,7 +24,8 @@
 #include "fx_api.h"
 #include "fx_fault_tolerant.h"
 
-#if defined(FX_ENABLE_FAULT_TOLERANT) && defined(FX_FAULT_TOLERANT_TRANSACTION_FAIL_FUNCTION)
+#if defined(FX_ENABLE_FAULT_TOLERANT) &&                                       \
+    defined(FX_FAULT_TOLERANT_TRANSACTION_FAIL_FUNCTION)
 /**************************************************************************/
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
@@ -80,26 +80,23 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_fault_tolerant_transaction_fail(FX_MEDIA *media_ptr)
-{
+UINT _fx_fault_tolerant_transaction_fail(FX_MEDIA *media_ptr) {
 
-    /* Check whether fault tolerant is enabled or not. */
-    if (media_ptr -> fx_media_fault_tolerant_enabled == FX_TRUE)
-    {
+  /* Check whether fault tolerant is enabled or not. */
+  if (media_ptr->fx_media_fault_tolerant_enabled == FX_TRUE) {
 
-        /* Yes. Decrease the counter for transaction. */
-        media_ptr -> fx_media_fault_tolerant_transaction_count--;
+    /* Yes. Decrease the counter for transaction. */
+    media_ptr->fx_media_fault_tolerant_transaction_count--;
 
-        /* Is this the last transaction? */
-        if (media_ptr -> fx_media_fault_tolerant_transaction_count == 0)
-        {
+    /* Is this the last transaction? */
+    if (media_ptr->fx_media_fault_tolerant_transaction_count == 0) {
 
-            /* Yes. Perform recover and reset the log file. */
-            _fx_fault_tolerant_recover(media_ptr);
-            _fx_fault_tolerant_reset_log_file(media_ptr);
-        }
+      /* Yes. Perform recover and reset the log file. */
+      _fx_fault_tolerant_recover(media_ptr);
+      _fx_fault_tolerant_reset_log_file(media_ptr);
     }
+  }
 
-    return(FX_SUCCESS);
+  return (FX_SUCCESS);
 }
 #endif

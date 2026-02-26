@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -32,7 +30,6 @@
 #endif /* FEATURE_NX_IPV6 */
 #include "../include/nx_packet.h"
 #include "../include/nx_tcp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -81,9 +78,8 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_tcp_socket_send(NX_TCP_SOCKET *socket_ptr, NX_PACKET *packet_ptr, ULONG wait_option)
-{
+UINT _nx_tcp_socket_send(NX_TCP_SOCKET *socket_ptr, NX_PACKET *packet_ptr,
+                         ULONG wait_option) {
 
-    return(_nx_tcp_socket_send_internal(socket_ptr, packet_ptr, wait_option));
+  return (_nx_tcp_socket_send_internal(socket_ptr, packet_ptr, wait_option));
 }
-

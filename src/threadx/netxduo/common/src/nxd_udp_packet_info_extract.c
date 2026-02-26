@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,16 +21,14 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_udp.h"
 #include "../include/nx_ipv4.h"
+#include "../include/nx_udp.h"
 #ifdef FEATURE_NX_IPV6
 #include "../include/nx_ipv6.h"
 #endif
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -80,133 +77,124 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_udp_packet_info_extract(NX_PACKET *packet_ptr, NXD_ADDRESS *ip_address,
-                                   UINT *protocol, UINT *port, UINT *interface_index)
-{
+UINT _nxd_udp_packet_info_extract(NX_PACKET *packet_ptr,
+                                  NXD_ADDRESS *ip_address, UINT *protocol,
+                                  UINT *port, UINT *interface_index) {
 
-ULONG          *temp_ptr;
-UINT            source_port;
-NX_INTERFACE   *nx_interface;
+  ULONG *temp_ptr;
+  UINT source_port;
+  NX_INTERFACE *nx_interface;
 #ifndef NX_DISABLE_IPV4
-NX_IPV4_HEADER *ipv4_header;
+  NX_IPV4_HEADER *ipv4_header;
 #endif /* !NX_DISABLE_IPV4  */
 #ifdef TX_ENABLE_EVENT_TRACE
-ULONG           address = 0;
-#endif  /* TX_ENABLE_EVENT_TRACE */
+  ULONG address = 0;
+#endif /* TX_ENABLE_EVENT_TRACE */
 #ifdef FEATURE_NX_IPV6
-NX_IPV6_HEADER *ipv6_header;
+  NX_IPV6_HEADER *ipv6_header;
 #endif /* FEATURE_NX_IPV6 */
 
-
-    if (ip_address)
-    {
+  if (ip_address) {
 
 #ifndef NX_DISABLE_IPV4
-        if (packet_ptr -> nx_packet_ip_version == NX_IP_VERSION_V4)
-        {
+    if (packet_ptr->nx_packet_ip_version == NX_IP_VERSION_V4) {
 
-            /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-            ipv4_header = (NX_IPV4_HEADER *)packet_ptr -> nx_packet_ip_header;
+      /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+       * necessary  */
+      ipv4_header = (NX_IPV4_HEADER *)packet_ptr->nx_packet_ip_header;
 
-            ip_address -> nxd_ip_version = NX_IP_VERSION_V4;
+      ip_address->nxd_ip_version = NX_IP_VERSION_V4;
 
-            /* At this point, the IP address in the IPv4 header is in host byte order. */
-            ip_address -> nxd_ip_address.v4 = ipv4_header -> nx_ip_header_source_ip;
+      /* At this point, the IP address in the IPv4 header is in host byte order.
+       */
+      ip_address->nxd_ip_address.v4 = ipv4_header->nx_ip_header_source_ip;
 
 #ifdef TX_ENABLE_EVENT_TRACE
-            address = ip_address -> nxd_ip_address.v4;
-#endif  /* TX_ENABLE_EVENT_TRACE */
-        }
-        else
+      address = ip_address->nxd_ip_address.v4;
+#endif /* TX_ENABLE_EVENT_TRACE */
+    } else
 #endif /* !NX_DISABLE_IPV4  */
 
 #ifdef FEATURE_NX_IPV6
-        if (packet_ptr -> nx_packet_ip_version == NX_IP_VERSION_V6)
-        {
+        if (packet_ptr->nx_packet_ip_version == NX_IP_VERSION_V6) {
 
-            /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-            ipv6_header = (NX_IPV6_HEADER *)packet_ptr -> nx_packet_ip_header;
+      /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+       * necessary  */
+      ipv6_header = (NX_IPV6_HEADER *)packet_ptr->nx_packet_ip_header;
 
-            ip_address -> nxd_ip_version = NX_IP_VERSION_V6;
+      ip_address->nxd_ip_version = NX_IP_VERSION_V6;
 
-            /* At this point, the IP address in the IPv6 header is in host byte order. */
-            COPY_IPV6_ADDRESS(ipv6_header -> nx_ip_header_source_ip, ip_address -> nxd_ip_address.v6);
+      /* At this point, the IP address in the IPv6 header is in host byte order.
+       */
+      COPY_IPV6_ADDRESS(ipv6_header->nx_ip_header_source_ip,
+                        ip_address->nxd_ip_address.v6);
 
 #ifdef TX_ENABLE_EVENT_TRACE
-            address = ip_address -> nxd_ip_address.v6[3];
+      address = ip_address->nxd_ip_address.v6[3];
 #endif /* TX_ENABLE_EVENT_TRACE*/
-        }
-        else
+    } else
 #endif /* FEATURE_NX_IPV6 */
-        {
-
-            /* Invalid IP version . */
-            return(NX_INVALID_PACKET);
-        }
-    }
-
-    /* Build an address to the current top of the packet.  */
-    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-    temp_ptr =  (ULONG *)packet_ptr -> nx_packet_prepend_ptr;
-
-    /* Pickup the source port.  */
-    source_port =  (UINT)(*(temp_ptr - 2) >> NX_SHIFT_BY_16);
-    if (port != NX_NULL)
     {
-        *port = source_port;
+
+      /* Invalid IP version . */
+      return (NX_INVALID_PACKET);
     }
+  }
 
-    if (protocol != NX_NULL)
-    {
-        *protocol = 0x11;
-    }
+  /* Build an address to the current top of the packet.  */
+  /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+   * necessary  */
+  temp_ptr = (ULONG *)packet_ptr->nx_packet_prepend_ptr;
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOURCE_EXTRACT, packet_ptr, address, source_port, 0, NX_TRACE_PACKET_EVENTS, 0, 0);
+  /* Pickup the source port.  */
+  source_port = (UINT)(*(temp_ptr - 2) >> NX_SHIFT_BY_16);
+  if (port != NX_NULL) {
+    *port = source_port;
+  }
 
-    if (interface_index == NX_NULL)
-    {
-        return(NX_SUCCESS);
-    }
+  if (protocol != NX_NULL) {
+    *protocol = 0x11;
+  }
 
-    /* Search for interface index number.  Initialize interface value as
-       invalid (0xFFFFFFFF).  Once we find valid interface, we will update
-       the returned value. */
-    *interface_index = 0xFFFFFFFF;
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOURCE_EXTRACT, packet_ptr, address,
+                          source_port, 0, NX_TRACE_PACKET_EVENTS, 0, 0);
 
-    if (packet_ptr -> nx_packet_ip_version == NX_IP_VERSION_V4)
-    {
-        nx_interface = packet_ptr -> nx_packet_address.nx_packet_interface_ptr;
-    }
+  if (interface_index == NX_NULL) {
+    return (NX_SUCCESS);
+  }
+
+  /* Search for interface index number.  Initialize interface value as
+     invalid (0xFFFFFFFF).  Once we find valid interface, we will update
+     the returned value. */
+  *interface_index = 0xFFFFFFFF;
+
+  if (packet_ptr->nx_packet_ip_version == NX_IP_VERSION_V4) {
+    nx_interface = packet_ptr->nx_packet_address.nx_packet_interface_ptr;
+  }
 #ifdef FEATURE_NX_IPV6
-    else if (packet_ptr -> nx_packet_ip_version == NX_IP_VERSION_V6)
-    {
-        if (packet_ptr -> nx_packet_address.nx_packet_ipv6_address_ptr == NX_NULL)
-        {
+  else if (packet_ptr->nx_packet_ip_version == NX_IP_VERSION_V6) {
+    if (packet_ptr->nx_packet_address.nx_packet_ipv6_address_ptr == NX_NULL) {
 
-            /* No interface attached.  Done here, and return success. */
-            return(NX_SUCCESS);
-        }
-        else
-        {
-            nx_interface = packet_ptr -> nx_packet_address.nx_packet_ipv6_address_ptr -> nxd_ipv6_address_attached;
-        }
+      /* No interface attached.  Done here, and return success. */
+      return (NX_SUCCESS);
+    } else {
+      nx_interface = packet_ptr->nx_packet_address.nx_packet_ipv6_address_ptr
+                         ->nxd_ipv6_address_attached;
     }
+  }
 #endif /* FEATURE_NX_IPV6 */
-    else
-    {
-        return(NX_SUCCESS);
-    }
+  else {
+    return (NX_SUCCESS);
+  }
 
-    if (nx_interface == NX_NULL)
-    {
+  if (nx_interface == NX_NULL) {
 
-        /* No interface attached.  Done here, and return success. */
-        return(NX_SUCCESS);
-    }
+    /* No interface attached.  Done here, and return success. */
+    return (NX_SUCCESS);
+  }
 
-    *interface_index = (UINT)nx_interface -> nx_interface_index;
+  *interface_index = (UINT)nx_interface->nx_interface_index;
 
-    return(NX_SUCCESS);
+  return (NX_SUCCESS);
 }
-

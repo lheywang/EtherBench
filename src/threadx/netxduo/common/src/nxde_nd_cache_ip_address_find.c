@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -33,7 +31,6 @@
 
 /* Bring in externs for caller checking code.  */
 NX_CALLER_CHECKING_EXTERNS
-
 
 #endif /* FEATURE_NX_IPV6 */
 
@@ -85,52 +82,45 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxde_nd_cache_ip_address_find(NX_IP *ip_ptr,
-                                     NXD_ADDRESS *ip_address,
-                                     ULONG physical_msw,
-                                     ULONG physical_lsw,
-                                     UINT *interface_index)
-{
+UINT _nxde_nd_cache_ip_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address,
+                                    ULONG physical_msw, ULONG physical_lsw,
+                                    UINT *interface_index) {
 #ifdef FEATURE_NX_IPV6
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for valid address pointer. */
-    if (ip_address == NX_NULL)
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for valid address pointer. */
+  if (ip_address == NX_NULL) {
+    return (NX_PTR_ERROR);
+  }
 
-    if (interface_index == NX_NULL)
-    {
-        return(NX_PTR_ERROR);
-    }
+  if (interface_index == NX_NULL) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for valid MAC hardware address input. */
-    if ((physical_msw == 0) && (physical_lsw == 0))
-    {
-        return(NX_INVALID_PARAMETERS);
-    }
+  /* Check for valid MAC hardware address input. */
+  if ((physical_msw == 0) && (physical_lsw == 0)) {
+    return (NX_INVALID_PARAMETERS);
+  }
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Call the actual service and return completion status. */
-    return(_nxd_nd_cache_ip_address_find(ip_ptr, ip_address, physical_msw, physical_lsw, interface_index));
+  /* Call the actual service and return completion status. */
+  return (_nxd_nd_cache_ip_address_find(ip_ptr, ip_address, physical_msw,
+                                        physical_lsw, interface_index));
 
 #else /* !FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(ip_address);
-    NX_PARAMETER_NOT_USED(physical_msw);
-    NX_PARAMETER_NOT_USED(physical_lsw);
-    NX_PARAMETER_NOT_USED(interface_index);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_address);
+  NX_PARAMETER_NOT_USED(physical_msw);
+  NX_PARAMETER_NOT_USED(physical_lsw);
+  NX_PARAMETER_NOT_USED(interface_index);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }
-

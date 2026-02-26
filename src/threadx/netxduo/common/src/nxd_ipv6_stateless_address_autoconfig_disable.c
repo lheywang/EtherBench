@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ipv6.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,47 +72,47 @@
 /*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_ipv6_stateless_address_autoconfig_disable(NX_IP *ip_ptr, UINT interface_index)
-{
-
+UINT _nxd_ipv6_stateless_address_autoconfig_disable(NX_IP *ip_ptr,
+                                                    UINT interface_index) {
 
 #if defined(FEATURE_NX_IPV6) && defined(NX_IPV6_STATELESS_AUTOCONFIG_CONTROL)
-NX_INTERFACE *interface_ptr;
+  NX_INTERFACE *interface_ptr;
 
+  /* Set interface_ptr.  */
+  interface_ptr = &ip_ptr->nx_ip_interface[interface_index];
 
-    /* Set interface_ptr.  */
-    interface_ptr = &ip_ptr -> nx_ip_interface[interface_index];
+  /* Make sure IPv6 is not already enabled. */
+  if (interface_ptr->nx_ipv6_stateless_address_autoconfig_status ==
+      NX_STATELESS_ADDRESS_AUTOCONFIG_DISABLED) {
+    return (NX_SUCCESS);
+  }
 
-    /* Make sure IPv6 is not already enabled. */
-    if (interface_ptr -> nx_ipv6_stateless_address_autoconfig_status == NX_STATELESS_ADDRESS_AUTOCONFIG_DISABLED)
-    {
-        return(NX_SUCCESS);
-    }
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IPV6_STATELESS_ADDRESS_AUTOCONFIG_DISABLE,
+                          ip_ptr, interface_ptr, 0, 0, NX_TRACE_IP_EVENTS, 0,
+                          0);
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IPV6_STATELESS_ADDRESS_AUTOCONFIG_DISABLE, ip_ptr, interface_ptr, 0, 0, NX_TRACE_IP_EVENTS, 0, 0);
+  /* Obtain the IP mutex so we can manipulate the internal routing table. */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-    /* Obtain the IP mutex so we can manipulate the internal routing table. */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
-
-    /* Install IPv6 packet receive processing function pointer */
-    interface_ptr -> nx_ipv6_stateless_address_autoconfig_status = NX_STATELESS_ADDRESS_AUTOCONFIG_DISABLED;
+  /* Install IPv6 packet receive processing function pointer */
+  interface_ptr->nx_ipv6_stateless_address_autoconfig_status =
+      NX_STATELESS_ADDRESS_AUTOCONFIG_DISABLED;
 
 #ifndef NX_DISABLE_ICMPV6_ROUTER_SOLICITATION
-    /* Reset the RS count. */
-    interface_ptr -> nx_ipv6_rtr_solicitation_count = 0;
+  /* Reset the RS count. */
+  interface_ptr->nx_ipv6_rtr_solicitation_count = 0;
 #endif /* NX_DISABLE_ICMPV6_ROUTER_SOLICITATION */
 
-    /* Release the IP protection. */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+  /* Release the IP protection. */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    /* Return successful completion.  */
-    return(NX_SUCCESS);
+  /* Return successful completion.  */
+  return (NX_SUCCESS);
 #else
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(interface_index);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(interface_index);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* FEATURE_NX_IPV6 && NX_IPV6_STATELESS_AUTOCONFIG_CONTROL */
 }
-

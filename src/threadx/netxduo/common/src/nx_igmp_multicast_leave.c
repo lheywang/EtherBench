@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_igmp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,16 +69,15 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_igmp_multicast_leave(NX_IP *ip_ptr, ULONG group_address)
-{
+UINT _nx_igmp_multicast_leave(NX_IP *ip_ptr, ULONG group_address) {
 
 #ifndef NX_DISABLE_IPV4
-    return(_nx_igmp_multicast_interface_leave_internal(ip_ptr, group_address, 0));
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(group_address);
+  return (
+      _nx_igmp_multicast_interface_leave_internal(ip_ptr, group_address, 0));
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(group_address);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

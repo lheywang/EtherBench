@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -30,7 +28,6 @@
 #ifdef NX_ENABLE_HTTP_PROXY
 #include "nx_http_proxy_client.h"
 #endif /* NX_ENABLE_HTTP_PROXY */
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,56 +74,53 @@
 /*                                            resulting in version 6.2.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_tcp_socket_state_wait(NX_TCP_SOCKET *socket_ptr, UINT desired_state, ULONG wait_option)
-{
+UINT _nx_tcp_socket_state_wait(NX_TCP_SOCKET *socket_ptr, UINT desired_state,
+                               ULONG wait_option) {
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_TCP_SOCKET_STATE_WAIT, socket_ptr -> nx_tcp_socket_ip_ptr, socket_ptr, desired_state, socket_ptr -> nx_tcp_socket_state, NX_TRACE_TCP_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_TCP_SOCKET_STATE_WAIT,
+                          socket_ptr->nx_tcp_socket_ip_ptr, socket_ptr,
+                          desired_state, socket_ptr->nx_tcp_socket_state,
+                          NX_TRACE_TCP_EVENTS, 0, 0);
 
-    /* Loop to wait for the desired socket state.   */
-    for (;;)
-    {
+  /* Loop to wait for the desired socket state.   */
+  for (;;) {
 
-        /* Determine if the socket pointer is still valid.  */
-        if (socket_ptr -> nx_tcp_socket_id != NX_TCP_ID)
-        {
+    /* Determine if the socket pointer is still valid.  */
+    if (socket_ptr->nx_tcp_socket_id != NX_TCP_ID) {
 
-            /* Not still valid, return an error.  */
-            return(NX_PTR_ERROR);
-        }
+      /* Not still valid, return an error.  */
+      return (NX_PTR_ERROR);
+    }
 
-        /* Determine if the desired state is present.  */
-        if (socket_ptr -> nx_tcp_socket_state == desired_state)
-        {
+    /* Determine if the desired state is present.  */
+    if (socket_ptr->nx_tcp_socket_state == desired_state) {
 
 #ifdef NX_ENABLE_HTTP_PROXY
-            if ((desired_state != NX_TCP_ESTABLISHED) ||
-                (!socket_ptr -> nx_tcp_socket_ip_ptr -> nx_ip_http_proxy_enable) ||
-                (!socket_ptr -> nx_tcp_socket_client_type) ||
-                (socket_ptr -> nx_tcp_socket_http_proxy_state == NX_HTTP_PROXY_STATE_CONNECTED))
+      if ((desired_state != NX_TCP_ESTABLISHED) ||
+          (!socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_http_proxy_enable) ||
+          (!socket_ptr->nx_tcp_socket_client_type) ||
+          (socket_ptr->nx_tcp_socket_http_proxy_state ==
+           NX_HTTP_PROXY_STATE_CONNECTED))
 #endif /* NX_ENABLE_HTTP_PROXY */
-            {
-                /* The desired state is present, return success!  */
-                return(NX_SUCCESS);
-            }
-        }
-
-        /* Check to see if there is more time to wait.  */
-        if (wait_option)
-        {
-
-            /* Yes, there is more time... sleep for a tick.  */
-            tx_thread_sleep(1);
-
-            /* Decrease the wait time.  */
-            wait_option--;
-        }
-        else
-        {
-
-            /* Timeout, just return an error.  */
-            return(NX_NOT_SUCCESSFUL);
-        }
+      {
+        /* The desired state is present, return success!  */
+        return (NX_SUCCESS);
+      }
     }
-}
 
+    /* Check to see if there is more time to wait.  */
+    if (wait_option) {
+
+      /* Yes, there is more time... sleep for a tick.  */
+      tx_thread_sleep(1);
+
+      /* Decrease the wait time.  */
+      wait_option--;
+    } else {
+
+      /* Timeout, just return an error.  */
+      return (NX_NOT_SUCCESSFUL);
+    }
+  }
+}

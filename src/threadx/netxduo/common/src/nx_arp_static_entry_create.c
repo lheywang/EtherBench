@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_arp.h"
 #include "../include/nx_ip.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -78,200 +75,193 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_arp_static_entry_create(NX_IP *ip_ptr, ULONG ip_address,
-                                  ULONG physical_msw, ULONG physical_lsw)
-{
+UINT _nx_arp_static_entry_create(NX_IP *ip_ptr, ULONG ip_address,
+                                 ULONG physical_msw, ULONG physical_lsw) {
 
 #ifndef NX_DISABLE_IPV4
-TX_INTERRUPT_SAVE_AREA
-NX_ARP       *arp_ptr;
-NX_ARP       *search_ptr;
-NX_ARP       *arp_list_head;
-UINT          index;
-UINT          status;
-NX_INTERFACE *nx_interface = NX_NULL;
-ULONG         next_hop_address;
+  TX_INTERRUPT_SAVE_AREA
+  NX_ARP *arp_ptr;
+  NX_ARP *search_ptr;
+  NX_ARP *arp_list_head;
+  UINT index;
+  UINT status;
+  NX_INTERFACE *nx_interface = NX_NULL;
+  ULONG next_hop_address;
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_ARP_STATIC_ENTRY_CREATE, ip_ptr, ip_address, physical_msw, physical_lsw, NX_TRACE_ARP_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_ARP_STATIC_ENTRY_CREATE, ip_ptr, ip_address,
+                          physical_msw, physical_lsw, NX_TRACE_ARP_EVENTS, 0,
+                          0);
 
-    /* Make sure the destination address is directly accessible. */
-    if (_nx_ip_route_find(ip_ptr, ip_address, &nx_interface, &next_hop_address) != NX_SUCCESS)
-    {
+  /* Make sure the destination address is directly accessible. */
+  if (_nx_ip_route_find(ip_ptr, ip_address, &nx_interface, &next_hop_address) !=
+      NX_SUCCESS) {
 
-        return(NX_IP_ADDRESS_ERROR);
+    return (NX_IP_ADDRESS_ERROR);
+  }
+
+  /*lint -e{644} suppress variable might not be initialized, since
+   * "next_hop_address" was initialized in _nx_ip_route_find. */
+  if (next_hop_address != ip_address) {
+
+    return (NX_IP_ADDRESS_ERROR);
+  }
+
+  /* Obtain protection on this IP instance for access into the ARP dynamic
+     list.  */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+
+  /* Calculate the hash index for the specified IP address.  */
+  index = (UINT)((ip_address + (ip_address >> 8)) & NX_ARP_TABLE_MASK);
+
+  /* Pickup the head pointer of the ARP entries for this IP instance.  */
+  arp_list_head = ip_ptr->nx_ip_arp_table[index];
+
+  /* Search the ARP list for the same IP address.  */
+  search_ptr = arp_list_head;
+  arp_ptr = NX_NULL;
+  while (search_ptr) {
+
+    /* Determine if there is a duplicate IP address.  */
+    if (search_ptr->nx_arp_ip_address == ip_address) {
+
+      /* Yes, the IP address matches, setup the ARP entry pointer.  */
+      arp_ptr = search_ptr;
+
+      /* Get out of the loop.  */
+      break;
     }
 
-    /*lint -e{644} suppress variable might not be initialized, since "next_hop_address" was initialized in _nx_ip_route_find. */
-    if (next_hop_address != ip_address)
-    {
+    /* Move to the next entry in the active list.  */
+    search_ptr = search_ptr->nx_arp_active_next;
 
-        return(NX_IP_ADDRESS_ERROR);
+    /* Determine if the search pointer is back at the head of
+       the list.  */
+    if (search_ptr == arp_list_head) {
+
+      /* End of the ARP list, end the search.  */
+      break;
     }
+  }
 
-    /* Obtain protection on this IP instance for access into the ARP dynamic
-       list.  */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Determine if we find an ARP entry.  */
+  if (arp_ptr) {
 
-    /* Calculate the hash index for the specified IP address.  */
-    index =  (UINT)((ip_address + (ip_address >> 8)) & NX_ARP_TABLE_MASK);
+    /* Determine if this is a static entry. */
+    if (arp_ptr->nx_arp_route_static == NX_FALSE) {
 
-    /* Pickup the head pointer of the ARP entries for this IP instance.  */
-    arp_list_head =  ip_ptr -> nx_ip_arp_table[index];
+      /* Disable interrupts temporarily.  */
+      TX_DISABLE
 
-    /* Search the ARP list for the same IP address.  */
-    search_ptr =  arp_list_head;
-    arp_ptr =     NX_NULL;
-    while (search_ptr)
-    {
+      /* Remove this entry from the ARP dynamic list.  */
 
-        /* Determine if there is a duplicate IP address.  */
-        if (search_ptr -> nx_arp_ip_address == ip_address)
-        {
+      /* Determine if this is the only ARP entry on the dynamic list.  */
+      if (arp_ptr == arp_ptr->nx_arp_pool_next) {
 
-            /* Yes, the IP address matches, setup the ARP entry pointer.  */
-            arp_ptr =  search_ptr;
+        /* Remove the sole entry from the dynamic list head.  */
+        ip_ptr->nx_ip_arp_dynamic_list = NX_NULL;
+      } else {
 
-            /* Get out of the loop.  */
-            break;
+        /* Remove the entry from a list of more than one entry.  */
+
+        /* Update the links of the adjacent ARP dynamic pool entries.  */
+        (arp_ptr->nx_arp_pool_next)->nx_arp_pool_previous =
+            arp_ptr->nx_arp_pool_previous;
+        (arp_ptr->nx_arp_pool_previous)->nx_arp_pool_next =
+            arp_ptr->nx_arp_pool_next;
+
+        /* Update the list head pointer.  */
+        if (ip_ptr->nx_ip_arp_dynamic_list == arp_ptr) {
+          ip_ptr->nx_ip_arp_dynamic_list = arp_ptr->nx_arp_pool_next;
         }
+      }
 
-        /* Move to the next entry in the active list.  */
-        search_ptr =  search_ptr -> nx_arp_active_next;
+      /* Decrement the number of active dynamic entries.  */
+      ip_ptr->nx_ip_arp_dynamic_active_count--;
 
-        /* Determine if the search pointer is back at the head of
-           the list.  */
-        if (search_ptr == arp_list_head)
-        {
+      /* Add the entry to the ARP static list.  */
 
-            /* End of the ARP list, end the search.  */
-            break;
-        }
-    }
+      /* Determine if the ARP static list is empty.  */
+      if (ip_ptr->nx_ip_arp_static_list == NX_NULL) {
 
-    /* Determine if we find an ARP entry.  */
-    if (arp_ptr)
-    {
+        /* Just place this single ARP entry on the list.  */
+        arp_ptr->nx_arp_pool_next = arp_ptr;
+        arp_ptr->nx_arp_pool_previous = arp_ptr;
+        ip_ptr->nx_ip_arp_static_list = arp_ptr;
+      } else {
 
-        /* Determine if this is a static entry. */
-        if (arp_ptr -> nx_arp_route_static == NX_FALSE)
-        {
+        /* Add to the end of the ARP static list.  */
+        arp_ptr->nx_arp_pool_next = ip_ptr->nx_ip_arp_static_list;
+        arp_ptr->nx_arp_pool_previous =
+            (ip_ptr->nx_ip_arp_static_list)->nx_arp_pool_previous;
+        ((ip_ptr->nx_ip_arp_static_list)->nx_arp_pool_previous)
+            ->nx_arp_pool_next = arp_ptr;
+        (ip_ptr->nx_ip_arp_static_list)->nx_arp_pool_previous = arp_ptr;
+      }
 
-            /* Disable interrupts temporarily.  */
-            TX_DISABLE
-
-            /* Remove this entry from the ARP dynamic list.  */
-
-            /* Determine if this is the only ARP entry on the dynamic list.  */
-            if (arp_ptr == arp_ptr -> nx_arp_pool_next)
-            {
-
-                /* Remove the sole entry from the dynamic list head.  */
-                ip_ptr -> nx_ip_arp_dynamic_list =  NX_NULL;
-            }
-            else
-            {
-
-                /* Remove the entry from a list of more than one entry.  */
-
-                /* Update the links of the adjacent ARP dynamic pool entries.  */
-                (arp_ptr -> nx_arp_pool_next) -> nx_arp_pool_previous = arp_ptr -> nx_arp_pool_previous;
-                (arp_ptr -> nx_arp_pool_previous) -> nx_arp_pool_next = arp_ptr -> nx_arp_pool_next;
-
-                /* Update the list head pointer.  */
-                if (ip_ptr -> nx_ip_arp_dynamic_list == arp_ptr)
-                {
-                    ip_ptr -> nx_ip_arp_dynamic_list =  arp_ptr -> nx_arp_pool_next;
-                }
-            }
-
-            /* Decrement the number of active dynamic entries.  */
-            ip_ptr -> nx_ip_arp_dynamic_active_count--;
-
-            /* Add the entry to the ARP static list.  */
-
-            /* Determine if the ARP static list is empty.  */
-            if (ip_ptr -> nx_ip_arp_static_list == NX_NULL)
-            {
-
-                /* Just place this single ARP entry on the list.  */
-                arp_ptr -> nx_arp_pool_next =     arp_ptr;
-                arp_ptr -> nx_arp_pool_previous = arp_ptr;
-                ip_ptr -> nx_ip_arp_static_list = arp_ptr;
-            }
-            else
-            {
-
-                /* Add to the end of the ARP static list.  */
-                arp_ptr -> nx_arp_pool_next = ip_ptr -> nx_ip_arp_static_list;
-                arp_ptr -> nx_arp_pool_previous = (ip_ptr -> nx_ip_arp_static_list) -> nx_arp_pool_previous;
-                ((ip_ptr -> nx_ip_arp_static_list) -> nx_arp_pool_previous) -> nx_arp_pool_next = arp_ptr;
-                (ip_ptr -> nx_ip_arp_static_list) -> nx_arp_pool_previous = arp_ptr;
-            }
-
-            /* Restore interrupts.  */
-            TX_RESTORE
+      /* Restore interrupts.  */
+      TX_RESTORE
 
 #ifndef NX_DISABLE_ARP_INFO
-            /* Increment the ARP static entry count.  */
-            ip_ptr -> nx_ip_arp_static_entries++;
+      /* Increment the ARP static entry count.  */
+      ip_ptr->nx_ip_arp_static_entries++;
 #endif
-        }
     }
-    /* Determine if we didn't find an ARP entry and need to allocate a new
-       static entry.  */
-    else
-    {
+  }
+  /* Determine if we didn't find an ARP entry and need to allocate a new
+     static entry.  */
+  else {
 
-        /* No matching IP address in the ARP cache.  */
+    /* No matching IP address in the ARP cache.  */
 
-        /* Allocate a static ARP entry.  */
-        status =  _nx_arp_entry_allocate(ip_ptr, &(ip_ptr -> nx_ip_arp_table[index]), NX_TRUE);
+    /* Allocate a static ARP entry.  */
+    status = _nx_arp_entry_allocate(ip_ptr, &(ip_ptr->nx_ip_arp_table[index]),
+                                    NX_TRUE);
 
-        /* Determine if an error occurred.  */
-        if (status != NX_SUCCESS)
-        {
+    /* Determine if an error occurred.  */
+    if (status != NX_SUCCESS) {
 
-            /* Release the mutex.  */
-            tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+      /* Release the mutex.  */
+      tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-            /* Return the error status.  */
-            return(status);
-        }
-
-        /* Otherwise, setup a pointer to the new ARP entry.  The newly allocated
-           ARP entry was allocated at the end of the ARP list so it should be
-           referenced using the previous pointer from the list head.  */
-        arp_ptr =  (ip_ptr -> nx_ip_arp_table[index]) -> nx_arp_active_previous;
+      /* Return the error status.  */
+      return (status);
     }
 
-    /* Indicate the entry does not need updating.  */
-    arp_ptr -> nx_arp_entry_next_update =  0;
+    /* Otherwise, setup a pointer to the new ARP entry.  The newly allocated
+       ARP entry was allocated at the end of the ARP list so it should be
+       referenced using the previous pointer from the list head.  */
+    arp_ptr = (ip_ptr->nx_ip_arp_table[index])->nx_arp_active_previous;
+  }
 
-    /* Place the important information in the ARP structure.  */
-    arp_ptr -> nx_arp_route_static =          NX_TRUE;
-    arp_ptr -> nx_arp_ip_address =            ip_address;
-    arp_ptr -> nx_arp_physical_address_msw =  physical_msw;
-    arp_ptr -> nx_arp_physical_address_lsw =  physical_lsw;
+  /* Indicate the entry does not need updating.  */
+  arp_ptr->nx_arp_entry_next_update = 0;
 
-    /*lint -e{644} suppress variable might not be initialized, since "nx_interface" was initialized in _nx_ip_route_find. */
-    arp_ptr -> nx_arp_ip_interface =          nx_interface;
+  /* Place the important information in the ARP structure.  */
+  arp_ptr->nx_arp_route_static = NX_TRUE;
+  arp_ptr->nx_arp_ip_address = ip_address;
+  arp_ptr->nx_arp_physical_address_msw = physical_msw;
+  arp_ptr->nx_arp_physical_address_lsw = physical_lsw;
 
-    /* Call queue send function to send the packet queued up, if the original entry is dynamic entry.  */
-    _nx_arp_queue_send(ip_ptr, arp_ptr);
+  /*lint -e{644} suppress variable might not be initialized, since
+   * "nx_interface" was initialized in _nx_ip_route_find. */
+  arp_ptr->nx_arp_ip_interface = nx_interface;
 
-    /* Release the protection on the ARP list.  */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+  /* Call queue send function to send the packet queued up, if the original
+   * entry is dynamic entry.  */
+  _nx_arp_queue_send(ip_ptr, arp_ptr);
 
-    /* Return status to the caller.  */
-    return(NX_SUCCESS);
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(ip_address);
-    NX_PARAMETER_NOT_USED(physical_msw);
-    NX_PARAMETER_NOT_USED(physical_lsw);
+  /* Release the protection on the ARP list.  */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    return(NX_NOT_SUPPORTED);
+  /* Return status to the caller.  */
+  return (NX_SUCCESS);
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_address);
+  NX_PARAMETER_NOT_USED(physical_msw);
+  NX_PARAMETER_NOT_USED(physical_lsw);
+
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

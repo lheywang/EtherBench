@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_directory.h"
 
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -81,31 +78,29 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_directory_information_get(FX_MEDIA *media_ptr, CHAR *directory_name,
-                                     UINT *attributes, ULONG *size,
-                                     UINT *year, UINT *month, UINT *day,
-                                     UINT *hour, UINT *minute, UINT *second)
-{
+UINT _fxe_directory_information_get(FX_MEDIA *media_ptr, CHAR *directory_name,
+                                    UINT *attributes, ULONG *size, UINT *year,
+                                    UINT *month, UINT *day, UINT *hour,
+                                    UINT *minute, UINT *second) {
 
-UINT status;
+  UINT status;
 
+  /* Check for a null media pointer or all null return parameter pointers.  */
+  if ((media_ptr == FX_NULL) ||
+      ((attributes == FX_NULL) && (size == FX_NULL) && (year == FX_NULL) &&
+       (month == FX_NULL) && (day == FX_NULL) && (hour == FX_NULL) &&
+       (minute == FX_NULL) && (second == FX_NULL))) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a null media pointer or all null return parameter pointers.  */
-    if ((media_ptr == FX_NULL) ||
-        ((attributes == FX_NULL) && (size == FX_NULL) && (year == FX_NULL) && (month == FX_NULL) &&
-         (day == FX_NULL) && (hour == FX_NULL) && (minute == FX_NULL) && (second == FX_NULL)))
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual directory information get service.  */
+  status =
+      _fx_directory_information_get(media_ptr, directory_name, attributes, size,
+                                    year, month, day, hour, minute, second);
 
-    /* Call actual directory information get service.  */
-    status =  _fx_directory_information_get(media_ptr, directory_name, attributes, size,
-                                            year, month, day, hour, minute, second);
-
-    /* Directory information get is complete, return status.  */
-    return(status);
+  /* Directory information get is complete, return status.  */
+  return (status);
 }
-

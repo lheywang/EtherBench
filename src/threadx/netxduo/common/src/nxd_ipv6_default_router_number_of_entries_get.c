@@ -19,7 +19,6 @@
 /**************************************************************************/
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -27,7 +26,6 @@
 #ifdef FEATURE_NX_IPV6
 #include "../include/nx_nd_cache.h"
 #endif /* FEATURE_NX_IPV6 */
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -78,56 +76,53 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_ipv6_default_router_number_of_entries_get(NX_IP *ip_ptr, UINT if_index, UINT *num_entries)
-{
+UINT _nxd_ipv6_default_router_number_of_entries_get(NX_IP *ip_ptr,
+                                                    UINT if_index,
+                                                    UINT *num_entries) {
 #ifdef FEATURE_NX_IPV6
 
-UINT                          entries;
-UINT                          i;
-NX_IPV6_DEFAULT_ROUTER_ENTRY *rt_entry;
+  UINT entries;
+  UINT i;
+  NX_IPV6_DEFAULT_ROUTER_ENTRY *rt_entry;
 
+  /* Obtain protection on this IP instance for access into the router table. */
 
-    /* Obtain protection on this IP instance for access into the router table. */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Initialize the return value to be 0. */
+  entries = 0;
 
-    /* Initialize the return value to be 0. */
-    entries = 0;
+  for (i = 0; i < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE; i++) {
 
-    for (i = 0; i < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE; i++)
-    {
-
-        rt_entry = &ip_ptr -> nx_ipv6_default_router_table[i];
-        /* Skip invalid entries. */
-        if (rt_entry -> nx_ipv6_default_router_entry_flag == 0)
-        {
-            continue;
-        }
-
-        /* Match the interface. */
-        if (rt_entry -> nx_ipv6_default_router_entry_interface_ptr -> nx_interface_index != if_index)
-        {
-            continue;
-        }
-
-        /* Find router entriy. */
-        entries++;
+    rt_entry = &ip_ptr->nx_ipv6_default_router_table[i];
+    /* Skip invalid entries. */
+    if (rt_entry->nx_ipv6_default_router_entry_flag == 0) {
+      continue;
     }
 
-    /* Release the mutex.  */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+    /* Match the interface. */
+    if (rt_entry->nx_ipv6_default_router_entry_interface_ptr
+            ->nx_interface_index != if_index) {
+      continue;
+    }
 
-    *num_entries = entries;
+    /* Find router entriy. */
+    entries++;
+  }
 
-    return(NX_SUCCESS);
+  /* Release the mutex.  */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+
+  *num_entries = entries;
+
+  return (NX_SUCCESS);
 
 #else /* !FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(if_index);
-    NX_PARAMETER_NOT_USED(num_entries);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(if_index);
+  NX_PARAMETER_NOT_USED(num_entries);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }
-

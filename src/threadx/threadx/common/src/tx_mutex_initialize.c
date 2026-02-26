@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_mutex.h"
-
 
 #ifndef TX_INLINE_INITIALIZATION
 
@@ -35,47 +32,39 @@
 
 /* Define the head pointer of the created mutex list.  */
 
-TX_MUTEX *   _tx_mutex_created_ptr;
-
+TX_MUTEX *_tx_mutex_created_ptr;
 
 /* Define the variable that holds the number of created mutexes. */
 
-ULONG        _tx_mutex_created_count;
-
+ULONG _tx_mutex_created_count;
 
 #ifdef TX_MUTEX_ENABLE_PERFORMANCE_INFO
 
 /* Define the total number of mutex puts.  */
 
-ULONG        _tx_mutex_performance_put_count;
-
+ULONG _tx_mutex_performance_put_count;
 
 /* Define the total number of mutex gets.  */
 
-ULONG        _tx_mutex_performance_get_count;
-
+ULONG _tx_mutex_performance_get_count;
 
 /* Define the total number of mutex suspensions.  */
 
-ULONG        _tx_mutex_performance_suspension_count;
-
+ULONG _tx_mutex_performance_suspension_count;
 
 /* Define the total number of mutex timeouts.  */
 
-ULONG        _tx_mutex_performance_timeout_count;
-
+ULONG _tx_mutex_performance_timeout_count;
 
 /* Define the total number of priority inversions.  */
 
-ULONG        _tx_mutex_performance_priority_inversion_count;
-
+ULONG _tx_mutex_performance_priority_inversion_count;
 
 /* Define the total number of priority inheritance conditions.  */
 
-ULONG        _tx_mutex_performance__priority_inheritance_count;
+ULONG _tx_mutex_performance__priority_inheritance_count;
 
 #endif
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -120,25 +109,24 @@ ULONG        _tx_mutex_performance__priority_inheritance_count;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _tx_mutex_initialize(VOID)
-{
+VOID _tx_mutex_initialize(VOID) {
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-    /* Initialize the head pointer of the created mutexes list and the
-       number of mutexes created.  */
-    _tx_mutex_created_ptr =        TX_NULL;
-    _tx_mutex_created_count =      TX_EMPTY;
+  /* Initialize the head pointer of the created mutexes list and the
+     number of mutexes created.  */
+  _tx_mutex_created_ptr = TX_NULL;
+  _tx_mutex_created_count = TX_EMPTY;
 
 #ifdef TX_MUTEX_ENABLE_PERFORMANCE_INFO
 
-    /* Initialize the mutex performance counters.  */
-    _tx_mutex_performance_put_count =                   ((ULONG) 0);
-    _tx_mutex_performance_get_count =                   ((ULONG) 0);
-    _tx_mutex_performance_suspension_count =            ((ULONG) 0);
-    _tx_mutex_performance_timeout_count =               ((ULONG) 0);
-    _tx_mutex_performance_priority_inversion_count =    ((ULONG) 0);
-    _tx_mutex_performance__priority_inheritance_count =  ((ULONG) 0);
+  /* Initialize the mutex performance counters.  */
+  _tx_mutex_performance_put_count = ((ULONG)0);
+  _tx_mutex_performance_get_count = ((ULONG)0);
+  _tx_mutex_performance_suspension_count = ((ULONG)0);
+  _tx_mutex_performance_timeout_count = ((ULONG)0);
+  _tx_mutex_performance_priority_inversion_count = ((ULONG)0);
+  _tx_mutex_performance__priority_inheritance_count = ((ULONG)0);
 #endif
 #endif
 }

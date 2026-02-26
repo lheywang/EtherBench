@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,8 +72,6 @@
 /*                                            resulting in version 6.1.8  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_ip_address_set(NX_IP *ip_ptr, ULONG ip_address, ULONG network_mask)
-{
-    return(_nx_ip_interface_address_set(ip_ptr, 0, ip_address, network_mask));
+UINT _nx_ip_address_set(NX_IP *ip_ptr, ULONG ip_address, ULONG network_mask) {
+  return (_nx_ip_interface_address_set(ip_ptr, 0, ip_address, network_mask));
 }
-

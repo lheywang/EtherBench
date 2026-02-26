@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -50,42 +48,38 @@
 #ifndef TX_SEMAPHORE_H
 #define TX_SEMAPHORE_H
 
-
 /* Define semaphore control specific data definitions.  */
 
-#define TX_SEMAPHORE_ID                         ((ULONG) 0x53454D41)
-
+#define TX_SEMAPHORE_ID ((ULONG)0x53454D41)
 
 /* Determine if in-line component initialization is supported by the
    caller.  */
 #ifdef TX_INVOKE_INLINE_INITIALIZATION
-            /* Yes, in-line initialization is supported, remap the
-               semaphore initialization function.  */
+/* Yes, in-line initialization is supported, remap the
+   semaphore initialization function.  */
 #ifndef TX_SEMAPHORE_ENABLE_PERFORMANCE_INFO
-#define _tx_semaphore_initialize() \
-                    _tx_semaphore_created_ptr =                   TX_NULL;     \
-                    _tx_semaphore_created_count =                 TX_EMPTY
+#define _tx_semaphore_initialize()                                             \
+  _tx_semaphore_created_ptr = TX_NULL;                                         \
+  _tx_semaphore_created_count = TX_EMPTY
 #else
-#define _tx_semaphore_initialize() \
-                    _tx_semaphore_created_ptr =                   TX_NULL;     \
-                    _tx_semaphore_created_count =                 TX_EMPTY;    \
-                    _tx_semaphore_performance_put_count =         ((ULONG) 0); \
-                    _tx_semaphore_performance_get_count =         ((ULONG) 0); \
-                    _tx_semaphore_performance_suspension_count =  ((ULONG) 0); \
-                    _tx_semaphore_performance_timeout_count =     ((ULONG) 0)
+#define _tx_semaphore_initialize()                                             \
+  _tx_semaphore_created_ptr = TX_NULL;                                         \
+  _tx_semaphore_created_count = TX_EMPTY;                                      \
+  _tx_semaphore_performance_put_count = ((ULONG)0);                            \
+  _tx_semaphore_performance_get_count = ((ULONG)0);                            \
+  _tx_semaphore_performance_suspension_count = ((ULONG)0);                     \
+  _tx_semaphore_performance_timeout_count = ((ULONG)0)
 #endif
 #define TX_SEMAPHORE_INIT
 #else
-            /* No in-line initialization is supported, use standard
-               function call.  */
-VOID        _tx_semaphore_initialize(VOID);
+/* No in-line initialization is supported, use standard
+   function call.  */
+VOID _tx_semaphore_initialize(VOID);
 #endif
-
 
 /* Define internal semaphore management function prototypes.  */
 
-VOID        _tx_semaphore_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence);
-
+VOID _tx_semaphore_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence);
 
 /* Semaphore management component data declarations follow.  */
 
@@ -99,48 +93,39 @@ VOID        _tx_semaphore_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequen
 #define SEMAPHORE_DECLARE extern
 #endif
 
-
 /* Define the head pointer of the created semaphore list.  */
 
-SEMAPHORE_DECLARE  TX_SEMAPHORE *   _tx_semaphore_created_ptr;
-
+SEMAPHORE_DECLARE TX_SEMAPHORE *_tx_semaphore_created_ptr;
 
 /* Define the variable that holds the number of created semaphores. */
 
-SEMAPHORE_DECLARE  ULONG            _tx_semaphore_created_count;
-
+SEMAPHORE_DECLARE ULONG _tx_semaphore_created_count;
 
 #ifdef TX_SEMAPHORE_ENABLE_PERFORMANCE_INFO
 
 /* Define the total number of semaphore puts.  */
 
-SEMAPHORE_DECLARE  ULONG            _tx_semaphore_performance_put_count;
-
+SEMAPHORE_DECLARE ULONG _tx_semaphore_performance_put_count;
 
 /* Define the total number of semaphore gets.  */
 
-SEMAPHORE_DECLARE  ULONG            _tx_semaphore_performance_get_count;
-
+SEMAPHORE_DECLARE ULONG _tx_semaphore_performance_get_count;
 
 /* Define the total number of semaphore suspensions.  */
 
-SEMAPHORE_DECLARE  ULONG            _tx_semaphore_performance_suspension_count;
-
+SEMAPHORE_DECLARE ULONG _tx_semaphore_performance_suspension_count;
 
 /* Define the total number of semaphore timeouts.  */
 
-SEMAPHORE_DECLARE  ULONG            _tx_semaphore_performance_timeout_count;
-
+SEMAPHORE_DECLARE ULONG _tx_semaphore_performance_timeout_count;
 
 #endif
 
-
-/* Define default post semaphore delete macro to whitespace, if it hasn't been defined previously (typically in tx_port.h).  */
+/* Define default post semaphore delete macro to whitespace, if it hasn't been
+ * defined previously (typically in tx_port.h).  */
 
 #ifndef TX_SEMAPHORE_DELETE_PORT_COMPLETION
 #define TX_SEMAPHORE_DELETE_PORT_COMPLETION(s)
 #endif
 
-
 #endif
-

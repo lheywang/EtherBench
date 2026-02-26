@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -93,115 +92,118 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT    _fx_fault_tolerant_transaction_end(FX_MEDIA *media_ptr)
-{
-ULONG                          relative_sector;
-UINT                           status;
-USHORT                         checksum;
-UINT                           offset;
-FX_FAULT_TOLERANT_LOG_HEADER  *log_header;
-FX_FAULT_TOLERANT_LOG_CONTENT *log_content;
+UINT _fx_fault_tolerant_transaction_end(FX_MEDIA *media_ptr) {
+  ULONG relative_sector;
+  UINT status;
+  USHORT checksum;
+  UINT offset;
+  FX_FAULT_TOLERANT_LOG_HEADER *log_header;
+  FX_FAULT_TOLERANT_LOG_CONTENT *log_content;
 
-    /* Is fault tolerant enabled? */
-    if (media_ptr -> fx_media_fault_tolerant_enabled == FX_FALSE)
-    {
-        return(FX_SUCCESS);
-    }
+  /* Is fault tolerant enabled? */
+  if (media_ptr->fx_media_fault_tolerant_enabled == FX_FALSE) {
+    return (FX_SUCCESS);
+  }
 
-    /* Decrease the transaction. */
-    media_ptr -> fx_media_fault_tolerant_transaction_count--;
+  /* Decrease the transaction. */
+  media_ptr->fx_media_fault_tolerant_transaction_count--;
 
-    /* Is transaction finished? */
-    if (media_ptr -> fx_media_fault_tolerant_transaction_count != 0)
-    {
-        return(FX_SUCCESS);
-    }
+  /* Is transaction finished? */
+  if (media_ptr->fx_media_fault_tolerant_transaction_count != 0) {
+    return (FX_SUCCESS);
+  }
 
-    /* Close this transaction. */
-    media_ptr -> fx_media_fault_tolerant_state = FX_FAULT_TOLERANT_STATE_IDLE;
+  /* Close this transaction. */
+  media_ptr->fx_media_fault_tolerant_state = FX_FAULT_TOLERANT_STATE_IDLE;
 
-    /* Set log header and FAT chain pointer. */
-    log_header = (FX_FAULT_TOLERANT_LOG_HEADER *)media_ptr -> fx_media_fault_tolerant_memory_buffer;
-    log_content = (FX_FAULT_TOLERANT_LOG_CONTENT *)(media_ptr -> fx_media_fault_tolerant_memory_buffer +
-                                                    FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET);
+  /* Set log header and FAT chain pointer. */
+  log_header = (FX_FAULT_TOLERANT_LOG_HEADER *)
+                   media_ptr->fx_media_fault_tolerant_memory_buffer;
+  log_content = (FX_FAULT_TOLERANT_LOG_CONTENT
+                     *)(media_ptr->fx_media_fault_tolerant_memory_buffer +
+                        FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET);
 
-    /* Reset checksum field and update log entry counter field. */
-    _fx_utility_16_unsigned_write((UCHAR *)&log_content -> fx_fault_tolerant_log_content_checksum, 0);
-    _fx_utility_16_unsigned_write((UCHAR *)&log_content -> fx_fault_tolerant_log_content_count,
-                                  media_ptr -> fx_media_fault_tolerant_total_logs);
+  /* Reset checksum field and update log entry counter field. */
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_content->fx_fault_tolerant_log_content_checksum, 0);
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_content->fx_fault_tolerant_log_content_count,
+      media_ptr->fx_media_fault_tolerant_total_logs);
 
-    /* Now calculate the checksum of log content. */
-    checksum = _fx_fault_tolerant_calculate_checksum((media_ptr -> fx_media_fault_tolerant_memory_buffer +
-                                                      FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET),
-                                                     (media_ptr -> fx_media_fault_tolerant_file_size -
-                                                      FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET));
+  /* Now calculate the checksum of log content. */
+  checksum = _fx_fault_tolerant_calculate_checksum(
+      (media_ptr->fx_media_fault_tolerant_memory_buffer +
+       FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET),
+      (media_ptr->fx_media_fault_tolerant_file_size -
+       FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET));
 
-    /* Record checksum field of log content. */
-    _fx_utility_16_unsigned_write((UCHAR *)&log_content -> fx_fault_tolerant_log_content_checksum, checksum);
+  /* Record checksum field of log content. */
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_content->fx_fault_tolerant_log_content_checksum, checksum);
 
-    /* Record log header. */
-    _fx_utility_16_unsigned_write((UCHAR *)&log_header -> fx_fault_tolerant_log_header_total_size,
-                                  media_ptr -> fx_media_fault_tolerant_file_size);
-    _fx_utility_16_unsigned_write((UCHAR *)&log_header -> fx_fault_tolerant_log_header_checksum, 0);
+  /* Record log header. */
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_header->fx_fault_tolerant_log_header_total_size,
+      media_ptr->fx_media_fault_tolerant_file_size);
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_header->fx_fault_tolerant_log_header_checksum, 0);
 
-    /* Calculate checksum of the header. */
-    checksum = _fx_fault_tolerant_calculate_checksum((UCHAR *)log_header, FX_FAULT_TOLERANT_LOG_HEADER_SIZE);
+  /* Calculate checksum of the header. */
+  checksum = _fx_fault_tolerant_calculate_checksum(
+      (UCHAR *)log_header, FX_FAULT_TOLERANT_LOG_HEADER_SIZE);
 
-    /* Record checksum field of the header. */
-    _fx_utility_16_unsigned_write((UCHAR *)&log_header -> fx_fault_tolerant_log_header_checksum, checksum);
+  /* Record checksum field of the header. */
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_header->fx_fault_tolerant_log_header_checksum, checksum);
 
-    /* Flush log content and flush first sector at last. The first sector contains size of total log file.
-     * The log file will contain wrong value of size when it is interrupted after first sector flushed to file system. */
-    relative_sector = 1;
-    offset = media_ptr -> fx_media_bytes_per_sector;
-    while (offset < media_ptr -> fx_media_fault_tolerant_file_size)
-    {
+  /* Flush log content and flush first sector at last. The first sector contains
+   * size of total log file. The log file will contain wrong value of size when
+   * it is interrupted after first sector flushed to file system. */
+  relative_sector = 1;
+  offset = media_ptr->fx_media_bytes_per_sector;
+  while (offset < media_ptr->fx_media_fault_tolerant_file_size) {
 
-        /* Write back the log.  */
-        status =  _fx_fault_tolerant_write_log_file(media_ptr, relative_sector);
-
-        /* Check for good completion status.  */
-        if (status !=  FX_SUCCESS)
-        {
-
-            /* Error.  */
-            return(status);
-        }
-
-        /* Increase relative sector and offset. */
-        relative_sector++;
-        offset += media_ptr -> fx_media_bytes_per_sector;
-    }
-
-    /* Flush first sector.  */
-    status =  _fx_fault_tolerant_write_log_file(media_ptr, 0);
+    /* Write back the log.  */
+    status = _fx_fault_tolerant_write_log_file(media_ptr, relative_sector);
 
     /* Check for good completion status.  */
-    if (status !=  FX_SUCCESS)
-    {
+    if (status != FX_SUCCESS) {
 
-        /* Error.  */
-        return(status);
+      /* Error.  */
+      return (status);
     }
 
-    /* At this pointer, the vital information has been flushed to the physical medium.
-       Update the file system (FAT table, directory entry) using information recorded in the
-       log file.  */
-    status = _fx_fault_tolerant_apply_logs(media_ptr);
+    /* Increase relative sector and offset. */
+    relative_sector++;
+    offset += media_ptr->fx_media_bytes_per_sector;
+  }
 
-    /* Check for a bad status.  */
-    if (status != FX_SUCCESS)
-    {
+  /* Flush first sector.  */
+  status = _fx_fault_tolerant_write_log_file(media_ptr, 0);
 
-        /* Return the bad status.  */
-        return(status);
-    }
+  /* Check for good completion status.  */
+  if (status != FX_SUCCESS) {
 
-    /* The file system has been updated successfully.  Remove and reset the fault tolerant
-       log file. */
-    status = _fx_fault_tolerant_reset_log_file(media_ptr);
+    /* Error.  */
+    return (status);
+  }
 
-    return(status);
+  /* At this pointer, the vital information has been flushed to the physical
+     medium. Update the file system (FAT table, directory entry) using
+     information recorded in the log file.  */
+  status = _fx_fault_tolerant_apply_logs(media_ptr);
+
+  /* Check for a bad status.  */
+  if (status != FX_SUCCESS) {
+
+    /* Return the bad status.  */
+    return (status);
+  }
+
+  /* The file system has been updated successfully.  Remove and reset the fault
+     tolerant log file. */
+  status = _fx_fault_tolerant_reset_log_file(media_ptr);
+
+  return (status);
 }
 #endif /* FX_ENABLE_FAULT_TOLERANT */
-

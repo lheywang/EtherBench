@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_tcp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -81,12 +78,11 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_tcp_packet_send_ack(NX_TCP_SOCKET *socket_ptr, ULONG tx_sequence)
-{
-    _nx_tcp_packet_send_control(socket_ptr, NX_TCP_ACK_BIT, tx_sequence,
-                                socket_ptr -> nx_tcp_socket_rx_sequence, 0, 0, NX_NULL);
+VOID _nx_tcp_packet_send_ack(NX_TCP_SOCKET *socket_ptr, ULONG tx_sequence) {
+  _nx_tcp_packet_send_control(socket_ptr, NX_TCP_ACK_BIT, tx_sequence,
+                              socket_ptr->nx_tcp_socket_rx_sequence, 0, 0,
+                              NX_NULL);
 
-    /* Setup a new delayed ACK timeout.  */
-    socket_ptr -> nx_tcp_socket_delayed_ack_timeout =  _nx_tcp_ack_timer_rate;
+  /* Setup a new delayed ACK timeout.  */
+  socket_ptr->nx_tcp_socket_delayed_ack_timeout = _nx_tcp_ack_timer_rate;
 }
-

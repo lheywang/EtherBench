@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -50,11 +48,9 @@
 #ifndef TX_MUTEX_H
 #define TX_MUTEX_H
 
-
 /* Define mutex control specific data definitions.  */
 
-#define TX_MUTEX_ID                             ((ULONG) 0x4D555445)
-
+#define TX_MUTEX_ID ((ULONG)0x4D555445)
 
 /* Determine if in-line component initialization is supported by the
    caller.  */
@@ -65,34 +61,32 @@
    function.  */
 
 #ifndef TX_MUTEX_ENABLE_PERFORMANCE_INFO
-#define _tx_mutex_initialize() \
-                    _tx_mutex_created_ptr =                             TX_NULL;      \
-                    _tx_mutex_created_count =                           TX_EMPTY
+#define _tx_mutex_initialize()                                                 \
+  _tx_mutex_created_ptr = TX_NULL;                                             \
+  _tx_mutex_created_count = TX_EMPTY
 #else
-#define _tx_mutex_initialize() \
-                    _tx_mutex_created_ptr =                             TX_NULL;      \
-                    _tx_mutex_created_count =                           TX_EMPTY;     \
-                    _tx_mutex_performance_put_count =                   ((ULONG) 0);  \
-                    _tx_mutex_performance_get_count =                   ((ULONG) 0);  \
-                    _tx_mutex_performance_suspension_count =            ((ULONG) 0);  \
-                    _tx_mutex_performance_timeout_count =               ((ULONG) 0);  \
-                    _tx_mutex_performance_priority_inversion_count =    ((ULONG) 0);  \
-                    _tx_mutex_performance__priority_inheritance_count = ((ULONG) 0)
+#define _tx_mutex_initialize()                                                 \
+  _tx_mutex_created_ptr = TX_NULL;                                             \
+  _tx_mutex_created_count = TX_EMPTY;                                          \
+  _tx_mutex_performance_put_count = ((ULONG)0);                                \
+  _tx_mutex_performance_get_count = ((ULONG)0);                                \
+  _tx_mutex_performance_suspension_count = ((ULONG)0);                         \
+  _tx_mutex_performance_timeout_count = ((ULONG)0);                            \
+  _tx_mutex_performance_priority_inversion_count = ((ULONG)0);                 \
+  _tx_mutex_performance__priority_inheritance_count = ((ULONG)0)
 #endif
 #define TX_MUTEX_INIT
 #else
 
 /* No in-line initialization is supported, use standard function call.  */
-VOID        _tx_mutex_initialize(VOID);
+VOID _tx_mutex_initialize(VOID);
 #endif
-
 
 /* Define internal mutex management function prototypes.  */
 
-VOID        _tx_mutex_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence);
-VOID        _tx_mutex_thread_release(TX_THREAD *thread_ptr);
-VOID        _tx_mutex_priority_change(TX_THREAD *thread_ptr, UINT new_priority);
-
+VOID _tx_mutex_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence);
+VOID _tx_mutex_thread_release(TX_THREAD *thread_ptr);
+VOID _tx_mutex_priority_change(TX_THREAD *thread_ptr, UINT new_priority);
 
 /* Mutex management component data declarations follow.  */
 
@@ -106,57 +100,47 @@ VOID        _tx_mutex_priority_change(TX_THREAD *thread_ptr, UINT new_priority);
 #define MUTEX_DECLARE extern
 #endif
 
-
 /* Define the head pointer of the created mutex list.  */
 
-MUTEX_DECLARE  TX_MUTEX *   _tx_mutex_created_ptr;
-
+MUTEX_DECLARE TX_MUTEX *_tx_mutex_created_ptr;
 
 /* Define the variable that holds the number of created mutexes. */
 
-MUTEX_DECLARE  ULONG        _tx_mutex_created_count;
-
+MUTEX_DECLARE ULONG _tx_mutex_created_count;
 
 #ifdef TX_MUTEX_ENABLE_PERFORMANCE_INFO
 
 /* Define the total number of mutex puts.  */
 
-MUTEX_DECLARE  ULONG        _tx_mutex_performance_put_count;
-
+MUTEX_DECLARE ULONG _tx_mutex_performance_put_count;
 
 /* Define the total number of mutex gets.  */
 
-MUTEX_DECLARE  ULONG        _tx_mutex_performance_get_count;
-
+MUTEX_DECLARE ULONG _tx_mutex_performance_get_count;
 
 /* Define the total number of mutex suspensions.  */
 
-MUTEX_DECLARE  ULONG        _tx_mutex_performance_suspension_count;
-
+MUTEX_DECLARE ULONG _tx_mutex_performance_suspension_count;
 
 /* Define the total number of mutex timeouts.  */
 
-MUTEX_DECLARE  ULONG        _tx_mutex_performance_timeout_count;
-
+MUTEX_DECLARE ULONG _tx_mutex_performance_timeout_count;
 
 /* Define the total number of priority inversions.  */
 
-MUTEX_DECLARE  ULONG        _tx_mutex_performance_priority_inversion_count;
-
+MUTEX_DECLARE ULONG _tx_mutex_performance_priority_inversion_count;
 
 /* Define the total number of priority inheritance conditions.  */
 
-MUTEX_DECLARE  ULONG        _tx_mutex_performance__priority_inheritance_count;
-
+MUTEX_DECLARE ULONG _tx_mutex_performance__priority_inheritance_count;
 
 #endif
 
-
-/* Define default post mutex delete macro to whitespace, if it hasn't been defined previously (typically in tx_port.h).  */
+/* Define default post mutex delete macro to whitespace, if it hasn't been
+ * defined previously (typically in tx_port.h).  */
 
 #ifndef TX_MUTEX_DELETE_PORT_COMPLETION
 #define TX_MUTEX_DELETE_PORT_COMPLETION(m)
 #endif
-
 
 #endif

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -30,8 +28,6 @@
 #ifdef FEATURE_NX_IPV6
 #include "../include/nx_ipv6.h"
 #endif /* FEATURE_NX_IPV6 */
-
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -85,52 +81,53 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_nd_cache_hardware_address_find(NX_IP *ip_ptr,
-                                          NXD_ADDRESS *ip_address,
-                                          ULONG *physical_msw,
-                                          ULONG *physical_lsw,
-                                          UINT *interface_index)
-{
+UINT _nxd_nd_cache_hardware_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address,
+                                         ULONG *physical_msw,
+                                         ULONG *physical_lsw,
+                                         UINT *interface_index) {
 #ifdef FEATURE_NX_IPV6
 
-ND_CACHE_ENTRY *entry;
+  ND_CACHE_ENTRY *entry;
 
-    /* Obtain the protection. */
-    tx_mutex_get(&ip_ptr -> nx_ip_protection, TX_WAIT_FOREVER);
+  /* Obtain the protection. */
+  tx_mutex_get(&ip_ptr->nx_ip_protection, TX_WAIT_FOREVER);
 
-    /* Find ND cache entry for a given IP address. */
-    if (_nx_nd_cache_find_entry(ip_ptr, ip_address -> nxd_ip_address.v6, &entry))
-    {
-        /* Release the protection. */
-        tx_mutex_put(&ip_ptr -> nx_ip_protection);
-
-        /* Not found */
-        return(NX_ENTRY_NOT_FOUND);
-    }
-
-    /* Construct the MAC address. */
-    /*lint -e{644} suppress variable might not be initialized, since "entry" was initialized when the return value of _nx_nd_cache_find_entry is NX_SUCCESS. */
-    *physical_msw = ((ULONG)entry -> nx_nd_cache_mac_addr[0]) << 8 | (ULONG)entry -> nx_nd_cache_mac_addr[1];
-    *physical_lsw = ((ULONG)entry -> nx_nd_cache_mac_addr[2]) << 24 | ((ULONG)entry -> nx_nd_cache_mac_addr[3]) << 16 |
-        ((ULONG)entry -> nx_nd_cache_mac_addr[4]) << 8 | (ULONG)entry -> nx_nd_cache_mac_addr[5];
-
-    /* Get the interface_index.  */
-    *interface_index = (entry -> nx_nd_cache_interface_ptr -> nx_interface_index);
-
+  /* Find ND cache entry for a given IP address. */
+  if (_nx_nd_cache_find_entry(ip_ptr, ip_address->nxd_ip_address.v6, &entry)) {
     /* Release the protection. */
-    tx_mutex_put(&ip_ptr -> nx_ip_protection);
+    tx_mutex_put(&ip_ptr->nx_ip_protection);
 
-    return(NX_SUCCESS);
+    /* Not found */
+    return (NX_ENTRY_NOT_FOUND);
+  }
+
+  /* Construct the MAC address. */
+  /*lint -e{644} suppress variable might not be initialized, since "entry" was
+   * initialized when the return value of _nx_nd_cache_find_entry is NX_SUCCESS.
+   */
+  *physical_msw = ((ULONG)entry->nx_nd_cache_mac_addr[0]) << 8 |
+                  (ULONG)entry->nx_nd_cache_mac_addr[1];
+  *physical_lsw = ((ULONG)entry->nx_nd_cache_mac_addr[2]) << 24 |
+                  ((ULONG)entry->nx_nd_cache_mac_addr[3]) << 16 |
+                  ((ULONG)entry->nx_nd_cache_mac_addr[4]) << 8 |
+                  (ULONG)entry->nx_nd_cache_mac_addr[5];
+
+  /* Get the interface_index.  */
+  *interface_index = (entry->nx_nd_cache_interface_ptr->nx_interface_index);
+
+  /* Release the protection. */
+  tx_mutex_put(&ip_ptr->nx_ip_protection);
+
+  return (NX_SUCCESS);
 
 #else /* !FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(ip_address);
-    NX_PARAMETER_NOT_USED(physical_msw);
-    NX_PARAMETER_NOT_USED(physical_lsw);
-    NX_PARAMETER_NOT_USED(interface_index);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_address);
+  NX_PARAMETER_NOT_USED(physical_msw);
+  NX_PARAMETER_NOT_USED(physical_lsw);
+  NX_PARAMETER_NOT_USED(interface_index);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }
-

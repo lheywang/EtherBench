@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
-#include "../include/tx_trace.h"
 #include "../include/tx_queue.h"
-
+#include "../include/tx_trace.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,38 +69,38 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _tx_queue_send_notify(TX_QUEUE *queue_ptr, VOID (*queue_send_notify)(TX_QUEUE *notify_queue_ptr))
-{
+UINT _tx_queue_send_notify(
+    TX_QUEUE *queue_ptr,
+    VOID (*queue_send_notify)(TX_QUEUE *notify_queue_ptr)) {
 
 #ifdef TX_DISABLE_NOTIFY_CALLBACKS
 
-    TX_QUEUE_NOT_USED(queue_ptr);
-    TX_QUEUE_SEND_NOTIFY_NOT_USED(queue_send_notify);
+  TX_QUEUE_NOT_USED(queue_ptr);
+  TX_QUEUE_SEND_NOTIFY_NOT_USED(queue_send_notify);
 
-    /* Feature is not enabled, return error.  */
-    return(TX_FEATURE_NOT_ENABLED);
+  /* Feature is not enabled, return error.  */
+  return (TX_FEATURE_NOT_ENABLED);
 #else
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Make entry in event log.  */
+  TX_TRACE_IN_LINE_INSERT(TX_TRACE_QUEUE_SEND_NOTIFY, queue_ptr, 0, 0, 0,
+                          TX_TRACE_QUEUE_EVENTS)
 
-    /* Make entry in event log.  */
-    TX_TRACE_IN_LINE_INSERT(TX_TRACE_QUEUE_SEND_NOTIFY, queue_ptr, 0, 0, 0, TX_TRACE_QUEUE_EVENTS)
+  /* Make entry in event log.  */
+  TX_EL_QUEUE_SEND_NOTIFY_INSERT
 
-    /* Make entry in event log.  */
-    TX_EL_QUEUE_SEND_NOTIFY_INSERT
+  /* Setup queue send notification callback function.  */
+  queue_ptr->tx_queue_send_notify = queue_send_notify;
 
-    /* Setup queue send notification callback function.  */
-    queue_ptr -> tx_queue_send_notify =  queue_send_notify;
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Return success to caller.  */
-    return(TX_SUCCESS);
+  /* Return success to caller.  */
+  return (TX_SUCCESS);
 #endif
 }
-

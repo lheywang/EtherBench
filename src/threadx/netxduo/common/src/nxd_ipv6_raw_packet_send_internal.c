@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,9 +21,7 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
-
 
 #include "../include/nx_api.h"
 #include "../include/nx_ipv6.h"
@@ -78,42 +75,44 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_ipv6_raw_packet_send_internal(NX_IP *ip_ptr, NX_PACKET *packet_ptr,
-                                         NXD_ADDRESS *destination_ip,
-                                         ULONG protocol)
-{
+UINT _nxd_ipv6_raw_packet_send_internal(NX_IP *ip_ptr, NX_PACKET *packet_ptr,
+                                        NXD_ADDRESS *destination_ip,
+                                        ULONG protocol) {
 
 #ifdef TX_ENABLE_EVENT_TRACE
-ULONG ip_address_lsw;
+  ULONG ip_address_lsw;
 #endif /* TX_ENABLE_EVENT_TRACE */
-
 
 #ifdef TX_ENABLE_EVENT_TRACE
 
-    ip_address_lsw = destination_ip -> nxd_ip_address.v6[3];
+  ip_address_lsw = destination_ip->nxd_ip_address.v6[3];
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IPV6_RAW_PACKET_SEND, ip_ptr, ip_address_lsw, protocol, packet_ptr, NX_TRACE_IP_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IPV6_RAW_PACKET_SEND, ip_ptr,
+                          ip_address_lsw, protocol, packet_ptr,
+                          NX_TRACE_IP_EVENTS, 0, 0);
 #endif /* TX_ENABLE_EVENT_TRACE */
 
-    NX_ASSERT(packet_ptr -> nx_packet_address.nx_packet_ipv6_address_ptr != NX_NULL);
+  NX_ASSERT(packet_ptr->nx_packet_address.nx_packet_ipv6_address_ptr !=
+            NX_NULL);
 
-    /* Tag the IP version for this packet. */
-    packet_ptr -> nx_packet_ip_version = NX_IP_VERSION_V6;
+  /* Tag the IP version for this packet. */
+  packet_ptr->nx_packet_ip_version = NX_IP_VERSION_V6;
 
-    /* Get mutex protection.  */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Get mutex protection.  */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-    /* Ok to send the packet! */
-    _nx_ipv6_packet_send(ip_ptr, packet_ptr, protocol, packet_ptr -> nx_packet_length, ip_ptr -> nx_ipv6_hop_limit,
-                         packet_ptr -> nx_packet_address.nx_packet_ipv6_address_ptr -> nxd_ipv6_address,
-                         destination_ip -> nxd_ip_address.v6);
+  /* Ok to send the packet! */
+  _nx_ipv6_packet_send(ip_ptr, packet_ptr, protocol,
+                       packet_ptr->nx_packet_length, ip_ptr->nx_ipv6_hop_limit,
+                       packet_ptr->nx_packet_address.nx_packet_ipv6_address_ptr
+                           ->nxd_ipv6_address,
+                       destination_ip->nxd_ip_address.v6);
 
-    /* Release mutex protection.  */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+  /* Release mutex protection.  */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    /* Return a successful status!  */
-    return(NX_SUCCESS);
+  /* Return a successful status!  */
+  return (NX_SUCCESS);
 }
 #endif /* FEATURE_NX_IPV6 */
-

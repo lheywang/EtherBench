@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -50,13 +48,11 @@
 #ifndef TX_EVENT_FLAGS_H
 #define TX_EVENT_FLAGS_H
 
-
 /* Define event flags control specific data definitions.  */
 
-#define TX_EVENT_FLAGS_ID                       ((ULONG) 0x4456444E)
-#define TX_EVENT_FLAGS_AND_MASK                 ((UINT) 0x2)
-#define TX_EVENT_FLAGS_CLEAR_MASK               ((UINT) 0x1)
-
+#define TX_EVENT_FLAGS_ID ((ULONG)0x4456444E)
+#define TX_EVENT_FLAGS_AND_MASK ((UINT)0x2)
+#define TX_EVENT_FLAGS_CLEAR_MASK ((UINT)0x1)
 
 /* Determine if in-line component initialization is supported by the
    caller.  */
@@ -66,30 +62,28 @@
    function.  */
 
 #ifndef TX_EVENT_FLAGS_ENABLE_PERFORMANCE_INFO
-#define _tx_event_flags_initialize() \
-                    _tx_event_flags_created_ptr =                   TX_NULL;     \
-                    _tx_event_flags_created_count =                 TX_EMPTY
+#define _tx_event_flags_initialize()                                           \
+  _tx_event_flags_created_ptr = TX_NULL;                                       \
+  _tx_event_flags_created_count = TX_EMPTY
 #else
-#define _tx_event_flags_initialize() \
-                    _tx_event_flags_created_ptr =                   TX_NULL;     \
-                    _tx_event_flags_created_count =                 TX_EMPTY;    \
-                    _tx_event_flags_performance_set_count =         ((ULONG) 0); \
-                    _tx_event_flags_performance_get_count =         ((ULONG) 0); \
-                    _tx_event_flags_performance_suspension_count =  ((ULONG) 0); \
-                    _tx_event_flags_performance_timeout_count =     ((ULONG) 0)
+#define _tx_event_flags_initialize()                                           \
+  _tx_event_flags_created_ptr = TX_NULL;                                       \
+  _tx_event_flags_created_count = TX_EMPTY;                                    \
+  _tx_event_flags_performance_set_count = ((ULONG)0);                          \
+  _tx_event_flags_performance_get_count = ((ULONG)0);                          \
+  _tx_event_flags_performance_suspension_count = ((ULONG)0);                   \
+  _tx_event_flags_performance_timeout_count = ((ULONG)0)
 #endif
 #define TX_EVENT_FLAGS_INIT
 #else
 
 /* No in-line initialization is supported, use standard function call.  */
-VOID        _tx_event_flags_initialize(VOID);
+VOID _tx_event_flags_initialize(VOID);
 #endif
-
 
 /* Define internal event flags management function prototypes.  */
 
-VOID        _tx_event_flags_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence);
-
+VOID _tx_event_flags_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence);
 
 /* Event flags management component data declarations follow.  */
 
@@ -103,47 +97,39 @@ VOID        _tx_event_flags_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequ
 #define EVENT_FLAGS_DECLARE extern
 #endif
 
-
 /* Define the head pointer of the created event flags list.  */
 
-EVENT_FLAGS_DECLARE  TX_EVENT_FLAGS_GROUP * _tx_event_flags_created_ptr;
-
+EVENT_FLAGS_DECLARE TX_EVENT_FLAGS_GROUP *_tx_event_flags_created_ptr;
 
 /* Define the variable that holds the number of created event flag groups. */
 
-EVENT_FLAGS_DECLARE  ULONG                  _tx_event_flags_created_count;
-
+EVENT_FLAGS_DECLARE ULONG _tx_event_flags_created_count;
 
 #ifdef TX_EVENT_FLAGS_ENABLE_PERFORMANCE_INFO
 
 /* Define the total number of event flag sets.  */
 
-EVENT_FLAGS_DECLARE  ULONG                  _tx_event_flags_performance_set_count;
-
+EVENT_FLAGS_DECLARE ULONG _tx_event_flags_performance_set_count;
 
 /* Define the total number of event flag gets.  */
 
-EVENT_FLAGS_DECLARE  ULONG                  _tx_event_flags_performance_get_count;
-
+EVENT_FLAGS_DECLARE ULONG _tx_event_flags_performance_get_count;
 
 /* Define the total number of event flag suspensions.  */
 
-EVENT_FLAGS_DECLARE  ULONG                  _tx_event_flags_performance_suspension_count;
-
+EVENT_FLAGS_DECLARE ULONG _tx_event_flags_performance_suspension_count;
 
 /* Define the total number of event flag timeouts.  */
 
-EVENT_FLAGS_DECLARE  ULONG                  _tx_event_flags_performance_timeout_count;
-
+EVENT_FLAGS_DECLARE ULONG _tx_event_flags_performance_timeout_count;
 
 #endif
 
-/* Define default post event flag group delete macro to whitespace, if it hasn't been defined previously (typically in tx_port.h).  */
+/* Define default post event flag group delete macro to whitespace, if it hasn't
+ * been defined previously (typically in tx_port.h).  */
 
 #ifndef TX_EVENT_FLAGS_GROUP_DELETE_PORT_COMPLETION
 #define TX_EVENT_FLAGS_GROUP_DELETE_PORT_COMPLETION(g)
 #endif
 
-
 #endif
-

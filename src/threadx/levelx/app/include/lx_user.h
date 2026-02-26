@@ -64,25 +64,29 @@
 
 /* USER CODE END 1 */
 
-/* Determine if logical sector mapping bitmap should be enabled in extended cache.
-   Cache memory will be allocated to sector mapping bitmap first. One bit can be allocated for each physical sector.
+/* Determine if logical sector mapping bitmap should be enabled in extended
+   cache. Cache memory will be allocated to sector mapping bitmap first. One bit
+   can be allocated for each physical sector.
 */
 
 /* #define LX_NOR_ENABLE_MAPPING_BITMAP */
 
 /* Determine if obsolete count cache should be enabled in extended cache.
-   Cache memory will be allocated to obsolete count cache after the mapping bitmap if enabled,
-   and the rest of the cache memory is allocated to sector cache.
+   Cache memory will be allocated to obsolete count cache after the mapping
+   bitmap if enabled, and the rest of the cache memory is allocated to sector
+   cache.
 */
 
 /* #define LX_NOR_ENABLE_OBSOLETE_COUNT_CACHE */
 
-/* Defines obsolete count cache element size. If number of sectors per block is greater than 256, use USHORT instead of UCHAR. */
+/* Defines obsolete count cache element size. If number of sectors per block is
+ * greater than 256, use USHORT instead of UCHAR. */
 
 /* #define LX_NOR_OBSOLETE_COUNT_CACHE_TYPE            UCHAR */
 
-/* Define the logical sector size for NOR flash. The sector size is in units of 32-bit words.
-   This sector size should match the sector size used in file system.  */
+/* Define the logical sector size for NOR flash. The sector size is in units of
+   32-bit words. This sector size should match the sector size used in file
+   system.  */
 
 /* #define LX_NOR_SECTOR_SIZE         (512/sizeof(ULONG)) */
 
@@ -97,7 +101,8 @@
 
 /* #define LX_THREAD_SAFE_ENABLE */
 
-/* Defined, LevelX will be used in standalone mode (without Azure RTOS ThreadX) */
+/* Defined, LevelX will be used in standalone mode (without Azure RTOS ThreadX)
+ */
 
 /* #define LX_STANDALONE_ENABLE */
 

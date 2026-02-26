@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -23,13 +22,11 @@
 #define UX_SOURCE_CODE
 #define UX_DCD_STM32_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_dcd_stm32.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,10 +71,9 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_dcd_stm32_frame_number_get(UX_DCD_STM32 *dcd_stm32, ULONG *frame_number)
-{
+UINT _ux_dcd_stm32_frame_number_get(UX_DCD_STM32 *dcd_stm32,
+                                    ULONG *frame_number) {
 
-    /* This function never fails. */
-    return(UX_SUCCESS);
+  /* This function never fails. */
+  return (UX_SUCCESS);
 }
-

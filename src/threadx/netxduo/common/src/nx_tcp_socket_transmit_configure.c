@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_tcp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -83,33 +80,34 @@
 /*                                            resulting in version 6.4.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_tcp_socket_transmit_configure(NX_TCP_SOCKET *socket_ptr, ULONG max_queue_depth,
-                                        ULONG timeout, ULONG max_retries, ULONG timeout_shift)
-{
+UINT _nx_tcp_socket_transmit_configure(NX_TCP_SOCKET *socket_ptr,
+                                       ULONG max_queue_depth, ULONG timeout,
+                                       ULONG max_retries, ULONG timeout_shift) {
 
-NX_IP *ip_ptr;
+  NX_IP *ip_ptr;
 
+  /* Pickup the associated IP structure.  */
+  ip_ptr = socket_ptr->nx_tcp_socket_ip_ptr;
 
-    /* Pickup the associated IP structure.  */
-    ip_ptr =  socket_ptr -> nx_tcp_socket_ip_ptr;
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_TCP_SOCKET_TRANSMIT_CONFIGURE, ip_ptr,
+                          socket_ptr, max_queue_depth, timeout,
+                          NX_TRACE_TCP_EVENTS, 0, 0);
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_TCP_SOCKET_TRANSMIT_CONFIGURE, ip_ptr, socket_ptr, max_queue_depth, timeout, NX_TRACE_TCP_EVENTS, 0, 0);
+  /* Obtain the IP mutex so we can initiate accept processing for this socket.
+   */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-    /* Obtain the IP mutex so we can initiate accept processing for this socket.  */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Setup the socket with the new transmit parameters.  */
+  socket_ptr->nx_tcp_socket_timeout_rate = timeout;
+  socket_ptr->nx_tcp_socket_timeout_max_retries = max_retries;
+  socket_ptr->nx_tcp_socket_timeout_shift = (UCHAR)timeout_shift;
+  socket_ptr->nx_tcp_socket_transmit_queue_maximum_default = max_queue_depth;
+  socket_ptr->nx_tcp_socket_transmit_queue_maximum = max_queue_depth;
 
-    /* Setup the socket with the new transmit parameters.  */
-    socket_ptr -> nx_tcp_socket_timeout_rate =                    timeout;
-    socket_ptr -> nx_tcp_socket_timeout_max_retries =             max_retries;
-    socket_ptr -> nx_tcp_socket_timeout_shift =                   (UCHAR)timeout_shift;
-    socket_ptr -> nx_tcp_socket_transmit_queue_maximum_default =  max_queue_depth;
-    socket_ptr -> nx_tcp_socket_transmit_queue_maximum =          max_queue_depth;
+  /* Release the IP protection.  */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    /* Release the IP protection.  */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
-
-    /* Return completion status.  */
-    return(NX_SUCCESS);
+  /* Return completion status.  */
+  return (NX_SUCCESS);
 }
-

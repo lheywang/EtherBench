@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,18 +21,16 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
-#include "fx_system.h"
 #include "fx_directory.h"
 #include "fx_media.h"
+#include "fx_system.h"
 #include "fx_utility.h"
 #ifdef FX_ENABLE_EXFAT
 #include "fx_directory_exFAT.h"
 #endif /* FX_ENABLE_EXFAT */
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -83,10 +80,10 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_media_volume_get(FX_MEDIA *media_ptr, CHAR *volume_name, UINT volume_source)
-{
+UINT _fx_media_volume_get(FX_MEDIA *media_ptr, CHAR *volume_name,
+                          UINT volume_source) {
 
-    /* Call the extended version with 12 bytes volume name length.  */
-    return(_fx_media_volume_get_extended(media_ptr, volume_name, 12, volume_source));
+  /* Call the extended version with 12 bytes volume name length.  */
+  return (
+      _fx_media_volume_get_extended(media_ptr, volume_name, 12, volume_source));
 }
-

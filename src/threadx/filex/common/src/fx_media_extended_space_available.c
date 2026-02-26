@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
-#include "fx_system.h"
 #include "fx_media.h"
-
+#include "fx_system.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,44 +69,45 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_media_extended_space_available(FX_MEDIA *media_ptr, ULONG64 *available_bytes_ptr)
-{
+UINT _fx_media_extended_space_available(FX_MEDIA *media_ptr,
+                                        ULONG64 *available_bytes_ptr) {
 
-ULONG64 available_bytes;
-ULONG   bytes_per_cluster;
-ULONG   available_clusters;
+  ULONG64 available_bytes;
+  ULONG bytes_per_cluster;
+  ULONG available_clusters;
 
+  /* Check the media to make sure it is open.  */
+  if (media_ptr->fx_media_id != FX_MEDIA_ID) {
 
-    /* Check the media to make sure it is open.  */
-    if (media_ptr -> fx_media_id != FX_MEDIA_ID)
-    {
+    /* Return the media not opened error.  */
+    return (FX_MEDIA_NOT_OPEN);
+  }
 
-        /* Return the media not opened error.  */
-        return(FX_MEDIA_NOT_OPEN);
-    }
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  FX_TRACE_IN_LINE_INSERT(
+      FX_TRACE_MEDIA_SPACE_AVAILABLE, media_ptr, available_bytes_ptr,
+      media_ptr->fx_media_available_clusters, 0, FX_TRACE_MEDIA_EVENTS, 0, 0)
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    FX_TRACE_IN_LINE_INSERT(FX_TRACE_MEDIA_SPACE_AVAILABLE, media_ptr, available_bytes_ptr, media_ptr -> fx_media_available_clusters, 0, FX_TRACE_MEDIA_EVENTS, 0, 0)
+  /* Protect against other threads accessing the media.  */
+  FX_PROTECT
 
-    /* Protect against other threads accessing the media.  */
-    FX_PROTECT
+  /* Pickup the number of free clusters.  */
+  available_clusters = media_ptr->fx_media_available_clusters;
 
-    /* Pickup the number of free clusters.  */
-    available_clusters =  media_ptr -> fx_media_available_clusters;
+  /* Derive the bytes per cluster.  */
+  bytes_per_cluster = media_ptr->fx_media_bytes_per_sector *
+                      media_ptr->fx_media_sectors_per_cluster;
 
-    /* Derive the bytes per cluster.  */
-    bytes_per_cluster =  media_ptr -> fx_media_bytes_per_sector * media_ptr -> fx_media_sectors_per_cluster;
+  /* Calculate the free space.  */
+  available_bytes =
+      ((ULONG64)available_clusters) * ((ULONG64)bytes_per_cluster);
 
-    /* Calculate the free space.  */
-    available_bytes =  ((ULONG64)available_clusters) * ((ULONG64)bytes_per_cluster);
+  /* Return the value.  */
+  *available_bytes_ptr = available_bytes;
 
-    /* Return the value.  */
-    *available_bytes_ptr =  available_bytes;
+  /* Release media protection.  */
+  FX_UNPROTECT
 
-    /* Release media protection.  */
-    FX_UNPROTECT
-
-    /* Return a successful status to the caller.  */
-    return(FX_SUCCESS);
+  /* Return a successful status to the caller.  */
+  return (FX_SUCCESS);
 }
-

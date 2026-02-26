@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
 #include "../include/nx_ipv6.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -83,64 +80,67 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_ip_raw_packet_source_send(NX_IP *ip_ptr,
-                                     NX_PACKET *packet_ptr,
-                                     NXD_ADDRESS *destination_ip,
-                                     UINT address_index,
-                                     ULONG protocol,
-                                     UINT ttl,
-                                     ULONG tos)
-{
+UINT _nxd_ip_raw_packet_source_send(NX_IP *ip_ptr, NX_PACKET *packet_ptr,
+                                    NXD_ADDRESS *destination_ip,
+                                    UINT address_index, ULONG protocol,
+                                    UINT ttl, ULONG tos) {
 
 #ifndef NX_DISABLE_IPV4
-ULONG next_hop_address = NX_NULL;
+  ULONG next_hop_address = NX_NULL;
 #endif /* NX_DISABLE_IPV4  */
-UINT  status = NX_SUCCESS;
+  UINT status = NX_SUCCESS;
 
 #ifdef NX_DISABLE_IPV4
-    NX_PARAMETER_NOT_USED(ttl);
-    NX_PARAMETER_NOT_USED(tos);
+  NX_PARAMETER_NOT_USED(ttl);
+  NX_PARAMETER_NOT_USED(tos);
 #endif /* NX_DISABLE_IPV4 */
 
-    /* Add debug information. */
-    NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
+  /* Add debug information. */
+  NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
 
-    /* Get mutex protection.  */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Get mutex protection.  */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
 #ifndef NX_DISABLE_IPV4
 
-    /* Store address information into the packet structure. */
-    if (destination_ip -> nxd_ip_version == NX_IP_VERSION_V4)
-    {
-        packet_ptr -> nx_packet_address.nx_packet_interface_ptr = &(ip_ptr -> nx_ip_interface[address_index]);
+  /* Store address information into the packet structure. */
+  if (destination_ip->nxd_ip_version == NX_IP_VERSION_V4) {
+    packet_ptr->nx_packet_address.nx_packet_interface_ptr =
+        &(ip_ptr->nx_ip_interface[address_index]);
 
-        /* Figure out a suitable outgoing interface. */
-        /* Since next_hop_address is validated in _nx_ip_packet_send, there is no need to check the value here. */
-        _nx_ip_route_find(ip_ptr, destination_ip -> nxd_ip_address.v4, &packet_ptr -> nx_packet_address.nx_packet_interface_ptr, &next_hop_address);
+    /* Figure out a suitable outgoing interface. */
+    /* Since next_hop_address is validated in _nx_ip_packet_send, there is no
+     * need to check the value here. */
+    _nx_ip_route_find(ip_ptr, destination_ip->nxd_ip_address.v4,
+                      &packet_ptr->nx_packet_address.nx_packet_interface_ptr,
+                      &next_hop_address);
 
-        /* If trace is enabled, insert this event into the trace buffer.  */
-        NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_RAW_PACKET_SEND, ip_ptr, packet_ptr, destination_ip, 0, NX_TRACE_IP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_RAW_PACKET_SEND, ip_ptr, packet_ptr,
+                            destination_ip, 0, NX_TRACE_IP_EVENTS, 0, 0);
 
-        /* Yes, raw packet sending and receiving is enabled send packet!  */
-        /*lint -e{644} suppress variable might not be initialized, since "next_hop_address" was initialized in _nx_ip_route_find. */
-        _nx_ip_packet_send(ip_ptr, packet_ptr, destination_ip -> nxd_ip_address.v4, (tos & 0xFF) << 16, (ttl & 0xFF), protocol << 16, NX_FRAGMENT_OKAY, next_hop_address);
-    }
+    /* Yes, raw packet sending and receiving is enabled send packet!  */
+    /*lint -e{644} suppress variable might not be initialized, since
+     * "next_hop_address" was initialized in _nx_ip_route_find. */
+    _nx_ip_packet_send(ip_ptr, packet_ptr, destination_ip->nxd_ip_address.v4,
+                       (tos & 0xFF) << 16, (ttl & 0xFF), protocol << 16,
+                       NX_FRAGMENT_OKAY, next_hop_address);
+  }
 #endif /* NX_DISABLE_IPV4  */
 
 #ifdef FEATURE_NX_IPV6
-    if (destination_ip -> nxd_ip_version == NX_IP_VERSION_V6)
-    {
-        packet_ptr -> nx_packet_address.nx_packet_ipv6_address_ptr = &(ip_ptr -> nx_ipv6_address[address_index]);
+  if (destination_ip->nxd_ip_version == NX_IP_VERSION_V6) {
+    packet_ptr->nx_packet_address.nx_packet_ipv6_address_ptr =
+        &(ip_ptr->nx_ipv6_address[address_index]);
 
-        status =  _nxd_ipv6_raw_packet_send_internal(ip_ptr, packet_ptr, destination_ip, protocol);
-    }
+    status = _nxd_ipv6_raw_packet_send_internal(ip_ptr, packet_ptr,
+                                                destination_ip, protocol);
+  }
 #endif /* FEATURE_NX_IPV6 */
 
-    /* Release mutex protection.  */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+  /* Release mutex protection.  */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    /* Return a status!  */
-    return(status);
+  /* Return a status!  */
+  return (status);
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,16 +20,13 @@
 /**************************************************************************/
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 
-
 #ifdef FX_ENABLE_EXFAT
 #include "fx_directory_exFAT.h"
 #include "fx_utility.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,44 +69,42 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-USHORT  _fx_utility_exFAT_unicode_name_hash_get(CHAR *unicode_name, ULONG unicode_length)
-{
+USHORT _fx_utility_exFAT_unicode_name_hash_get(CHAR *unicode_name,
+                                               ULONG unicode_length) {
 
-USHORT hash;
-USHORT upcased_char;
+  USHORT hash;
+  USHORT upcased_char;
 
-    /* Initialize hash to 0. */
-    hash = 0;
+  /* Initialize hash to 0. */
+  hash = 0;
 
-    /* Is there a name?  */
-    if (!unicode_name)
-    {
+  /* Is there a name?  */
+  if (!unicode_name) {
 
-        /* No, just return 0.  */
-        return(0);
-    }
+    /* No, just return 0.  */
+    return (0);
+  }
 
-    /* Create hash for name.  */
-    while (unicode_length)
-    {
+  /* Create hash for name.  */
+  while (unicode_length) {
 
-        /* Get up-cased character.  */
-        upcased_char = (USHORT)(_fx_utility_exFAT_upcase_get((USHORT)(*unicode_name | (*(unicode_name + 1) << 8))));
+    /* Get up-cased character.  */
+    upcased_char = (USHORT)(_fx_utility_exFAT_upcase_get(
+        (USHORT)(*unicode_name | (*(unicode_name + 1) << 8))));
 
-        /* Compute hash.  */
-        hash = (USHORT)(((hash >> 1) | (hash << 15)) + (upcased_char & 0xFF));
-        hash = (USHORT)(((hash >> 1) | (hash << 15)) + (upcased_char >> 8));
+    /* Compute hash.  */
+    hash = (USHORT)(((hash >> 1) | (hash << 15)) + (upcased_char & 0xFF));
+    hash = (USHORT)(((hash >> 1) | (hash << 15)) + (upcased_char >> 8));
 
-        /* Move to next character of the Unicode name.  */
-        unicode_name = unicode_name + 2;
+    /* Move to next character of the Unicode name.  */
+    unicode_name = unicode_name + 2;
 
-        /* Decrement length.  */
-        unicode_length--;
-    }
+    /* Decrement length.  */
+    unicode_length--;
+  }
 
-    /* Return the hash.  */
-    return(hash);
+  /* Return the hash.  */
+  return (hash);
 }
 
 #endif /* FX_ENABLE_EXFAT */
-

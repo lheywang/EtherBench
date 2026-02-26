@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,9 +21,7 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
-
 
 #include "../include/nx_api.h"
 #include "../include/nx_ipv6.h"
@@ -35,7 +32,6 @@
 NX_CALLER_CHECKING_EXTERNS
 
 #endif /* FEATURE_NX_IPV6 */
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -87,49 +83,47 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxde_ipv6_address_get(NX_IP *ip_ptr, UINT address_index, NXD_ADDRESS *ip_address, ULONG *prefix_length, UINT *interface_index)
-{
+UINT _nxde_ipv6_address_get(NX_IP *ip_ptr, UINT address_index,
+                            NXD_ADDRESS *ip_address, ULONG *prefix_length,
+                            UINT *interface_index) {
 #ifdef FEATURE_NX_IPV6
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid IP pointer.  */
+  if (ip_ptr == NX_NULL) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid IP pointer.  */
-    if (ip_ptr == NX_NULL)
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for other invalid input.  */
+  if ((ip_ptr->nx_ip_id != NX_IP_ID) || (ip_address == NX_NULL) ||
+      (prefix_length == NX_NULL) || (interface_index == NX_NULL)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for other invalid input.  */
-    if ((ip_ptr -> nx_ip_id != NX_IP_ID) || (ip_address == NX_NULL) || (prefix_length == NX_NULL) || (interface_index == NX_NULL))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check the validity of the address index.  */
+  if (address_index >= (NX_MAX_IPV6_ADDRESSES + NX_LOOPBACK_IPV6_ENABLED)) {
+    return (NX_NO_INTERFACE_ADDRESS);
+  }
 
-    /* Check the validity of the address index.  */
-    if (address_index >= (NX_MAX_IPV6_ADDRESSES + NX_LOOPBACK_IPV6_ENABLED))
-    {
-        return(NX_NO_INTERFACE_ADDRESS);
-    }
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Call actual IP address get function.  */
+  status = _nxd_ipv6_address_get(ip_ptr, address_index, ip_address,
+                                 prefix_length, interface_index);
 
-    /* Call actual IP address get function.  */
-    status =  _nxd_ipv6_address_get(ip_ptr, address_index, ip_address, prefix_length, interface_index);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(address_index);
-    NX_PARAMETER_NOT_USED(ip_address);
-    NX_PARAMETER_NOT_USED(prefix_length);
-    NX_PARAMETER_NOT_USED(interface_index);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(address_index);
+  NX_PARAMETER_NOT_USED(ip_address);
+  NX_PARAMETER_NOT_USED(prefix_length);
+  NX_PARAMETER_NOT_USED(interface_index);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }
-

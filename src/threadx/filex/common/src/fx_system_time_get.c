@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_system.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,46 +71,40 @@
 /*                                            resulting in version 6.1.7  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_system_time_get(UINT *hour, UINT *minute, UINT *second)
-{
+UINT _fx_system_time_get(UINT *hour, UINT *minute, UINT *second) {
 
-UINT time;
+  UINT time;
 
+  /* Get a copy of the current system time.  */
+  time = _fx_system_time;
 
-    /* Get a copy of the current system time.  */
-    time =  _fx_system_time;
+  /* Check to see if the hour is required.  */
+  if (hour) {
 
-    /* Check to see if the hour is required.  */
-    if (hour)
-    {
+    /* Pickup the hour.  */
+    *hour = (time >> FX_HOUR_SHIFT) & FX_HOUR_MASK;
+  }
 
-        /* Pickup the hour.  */
-        *hour =  (time >> FX_HOUR_SHIFT) & FX_HOUR_MASK;
-    }
+  /* Check to see if the minute is required.  */
+  if (minute) {
 
-    /* Check to see if the minute is required.  */
-    if (minute)
-    {
+    /* Pickup the minute.  */
+    *minute = (time >> FX_MINUTE_SHIFT) & FX_MINUTE_MASK;
+  }
 
-        /* Pickup the minute.  */
-        *minute =  (time >> FX_MINUTE_SHIFT) & FX_MINUTE_MASK;
-    }
+  /* Check to see if the second is required.  */
+  if (second) {
 
-    /* Check to see if the second is required.  */
-    if (second)
-    {
+    /* Pickup the second.  */
+    *second = (time & FX_SECOND_MASK) * 2;
+  }
 
-        /* Pickup the second.  */
-        *second =  (time & FX_SECOND_MASK) * 2;
-    }
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  if (hour && minute && second) {
+    FX_TRACE_IN_LINE_INSERT(FX_TRACE_SYSTEM_TIME_GET, *hour, *minute, *second,
+                            0, FX_TRACE_INTERNAL_EVENTS, 0, 0)
+  }
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    if (hour && minute && second)
-    {
-        FX_TRACE_IN_LINE_INSERT(FX_TRACE_SYSTEM_TIME_GET, *hour, *minute, *second, 0, FX_TRACE_INTERNAL_EVENTS, 0, 0)
-    }
-
-    /* Return successful status.  */
-    return(FX_SUCCESS);
+  /* Return successful status.  */
+  return (FX_SUCCESS);
 }
-

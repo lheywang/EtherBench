@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -68,39 +66,35 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_igmp_queue_process(NX_IP *ip_ptr)
-{
+VOID _nx_igmp_queue_process(NX_IP *ip_ptr) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-NX_PACKET *queue_head;
-NX_PACKET *packet_ptr;
+  NX_PACKET *queue_head;
+  NX_PACKET *packet_ptr;
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Remove the IGMP message queue from the IP structure.  */
+  queue_head = ip_ptr->nx_ip_igmp_queue_head;
+  ip_ptr->nx_ip_igmp_queue_head = NX_NULL;
 
-    /* Remove the IGMP message queue from the IP structure.  */
-    queue_head =  ip_ptr -> nx_ip_igmp_queue_head;
-    ip_ptr -> nx_ip_igmp_queue_head =  NX_NULL;
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+  /* Walk through the entire IGMP message queue and process packets
+     one by one.  */
+  while (queue_head) {
 
-    /* Walk through the entire IGMP message queue and process packets
-       one by one.  */
-    while (queue_head)
-    {
+    /* Pickup the first queue IGMP message and remove it from the
+       IGMP queue.  */
+    packet_ptr = queue_head;
+    queue_head = queue_head->nx_packet_queue_next;
+    packet_ptr->nx_packet_queue_next = NX_NULL;
 
-        /* Pickup the first queue IGMP message and remove it from the
-           IGMP queue.  */
-        packet_ptr =  queue_head;
-        queue_head =  queue_head -> nx_packet_queue_next;
-        packet_ptr -> nx_packet_queue_next =  NX_NULL;
-
-        /* Process the packet.  */
-        _nx_igmp_packet_process(ip_ptr, packet_ptr);
-    }
+    /* Process the packet.  */
+    _nx_igmp_packet_process(ip_ptr, packet_ptr);
+  }
 }
 #endif /* !NX_DISABLE_IPV4  */
-

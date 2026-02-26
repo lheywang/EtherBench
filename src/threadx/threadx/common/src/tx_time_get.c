@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
-#include "../include/tx_trace.h"
 #include "../include/tx_timer.h"
-
+#include "../include/tx_trace.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,33 +69,33 @@
 /*                                            resulting in version 6.1.3  */
 /*                                                                        */
 /**************************************************************************/
-ULONG  _tx_time_get(VOID)
-{
+ULONG _tx_time_get(VOID) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
 #ifdef TX_ENABLE_EVENT_TRACE
-ULONG   another_temp_time =  ((ULONG) 0);
+  ULONG another_temp_time = ((ULONG)0);
 #endif
-ULONG   temp_time;
+  ULONG temp_time;
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Pickup the system clock time.  */
+  temp_time = _tx_timer_system_clock;
 
-    /* Pickup the system clock time.  */
-    temp_time =  _tx_timer_system_clock;
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  TX_TRACE_IN_LINE_INSERT(TX_TRACE_TIME_GET,
+                          TX_ULONG_TO_POINTER_CONVERT(temp_time),
+                          TX_POINTER_TO_ULONG_CONVERT(&another_temp_time), 0, 0,
+                          TX_TRACE_TIME_EVENTS)
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    TX_TRACE_IN_LINE_INSERT(TX_TRACE_TIME_GET, TX_ULONG_TO_POINTER_CONVERT(temp_time), TX_POINTER_TO_ULONG_CONVERT(&another_temp_time), 0, 0, TX_TRACE_TIME_EVENTS)
+  /* Log this kernel call.  */
+  TX_EL_TIME_GET_INSERT
 
-    /* Log this kernel call.  */
-    TX_EL_TIME_GET_INSERT
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Return the time.  */
-    return(temp_time);
+  /* Return the time.  */
+  return (temp_time);
 }
-

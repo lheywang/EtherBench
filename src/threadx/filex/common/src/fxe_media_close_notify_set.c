@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,15 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_media.h"
 
-
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,23 +70,21 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_media_close_notify_set(FX_MEDIA *media_ptr, VOID (*media_close_notify)(FX_MEDIA *media))
-{
-UINT status;
+UINT _fxe_media_close_notify_set(FX_MEDIA *media_ptr,
+                                 VOID (*media_close_notify)(FX_MEDIA *media)) {
+  UINT status;
 
-    /* Check for invalid input pointers.  */
-    if (media_ptr == FX_NULL)
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for invalid input pointers.  */
+  if (media_ptr == FX_NULL) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Call actual media close notify set service.  */
-    status =  _fx_media_close_notify_set(media_ptr, media_close_notify);
+  /* Call actual media close notify set service.  */
+  status = _fx_media_close_notify_set(media_ptr, media_close_notify);
 
-    /* Return status.  */
-    return(status);
+  /* Return status.  */
+  return (status);
 }
-

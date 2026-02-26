@@ -1,4 +1,4 @@
 {
-  "device": "STM32H563ZIT6",
-  "toolchain": "GCC"
+    "device": "STM32H563ZIT6",
+    "toolchain": "GCC"
 }

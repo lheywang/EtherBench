@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_unicode.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,11 +74,12 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_unicode_short_name_get(FX_MEDIA *media_ptr, UCHAR *source_unicode_name, ULONG source_unicode_length,
-                                 CHAR *destination_short_name)
-{
+UINT _fx_unicode_short_name_get(FX_MEDIA *media_ptr, UCHAR *source_unicode_name,
+                                ULONG source_unicode_length,
+                                CHAR *destination_short_name) {
 
-    /* Call the extended version with 13 bytes short name length.  */
-    return(_fx_unicode_short_name_get_extended(media_ptr, source_unicode_name, source_unicode_length, destination_short_name, 13));
+  /* Call the extended version with 13 bytes short name length.  */
+  return (_fx_unicode_short_name_get_extended(media_ptr, source_unicode_name,
+                                              source_unicode_length,
+                                              destination_short_name, 13));
 }
-

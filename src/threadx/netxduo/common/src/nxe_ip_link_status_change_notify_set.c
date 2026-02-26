@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -75,20 +73,21 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_ip_link_status_change_notify_set(NX_IP *ip_ptr,  VOID (*link_status_change_notify)(NX_IP *ip_ptr, UINT interface_index, UINT link_up))
-{
-UINT status;
+UINT _nxe_ip_link_status_change_notify_set(
+    NX_IP *ip_ptr,
+    VOID (*link_status_change_notify)(NX_IP *ip_ptr, UINT interface_index,
+                                      UINT link_up)) {
+  UINT status;
 
-    if ((ip_ptr == NX_NULL) || (link_status_change_notify == NX_NULL))
-    {
-        return(NX_PTR_ERROR);
-    }
+  if ((ip_ptr == NX_NULL) || (link_status_change_notify == NX_NULL)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    status = _nx_ip_link_status_change_notify_set(ip_ptr, link_status_change_notify);
+  status =
+      _nx_ip_link_status_change_notify_set(ip_ptr, link_status_change_notify);
 
-    return(status);
+  return (status);
 }
-

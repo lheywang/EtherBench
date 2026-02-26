@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
 #include "../include/nx_packet.h"
 #include "../include/nx_tcp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,61 +70,55 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_tcp_socket_transmit_queue_flush(NX_TCP_SOCKET *socket_ptr)
-{
+VOID _nx_tcp_socket_transmit_queue_flush(NX_TCP_SOCKET *socket_ptr) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-NX_PACKET *packet_ptr;
-NX_PACKET *next_packet_ptr;
+  NX_PACKET *packet_ptr;
+  NX_PACKET *next_packet_ptr;
 
+  /* Setup packet pointer.  */
+  packet_ptr = socket_ptr->nx_tcp_socket_transmit_sent_head;
 
-    /* Setup packet pointer.  */
-    packet_ptr =  socket_ptr -> nx_tcp_socket_transmit_sent_head;
+  /* Clear the head and the tail pointers.  */
+  socket_ptr->nx_tcp_socket_transmit_sent_head = NX_NULL;
+  socket_ptr->nx_tcp_socket_transmit_sent_tail = NX_NULL;
 
-    /* Clear the head and the tail pointers.  */
-    socket_ptr -> nx_tcp_socket_transmit_sent_head =  NX_NULL;
-    socket_ptr -> nx_tcp_socket_transmit_sent_tail =  NX_NULL;
+  /* Loop to clear all the packets out.  */
+  while (socket_ptr->nx_tcp_socket_transmit_sent_count) {
 
-    /* Loop to clear all the packets out.  */
-    while (socket_ptr -> nx_tcp_socket_transmit_sent_count)
-    {
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-        /* Disable interrupts.  */
-        TX_DISABLE
+    /* Pickup the next queued packet.  */
+    next_packet_ptr = packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next;
 
-        /* Pickup the next queued packet.  */
-        next_packet_ptr =  packet_ptr -> nx_packet_union_next.nx_packet_tcp_queue_next;
+    /* Mark the packet as no longer being in a TCP queue.  */
+    /*lint -e{923} suppress cast of ULONG to pointer.  */
+    packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next =
+        (NX_PACKET *)NX_PACKET_ALLOCATED;
 
-        /* Mark the packet as no longer being in a TCP queue.  */
-        /*lint -e{923} suppress cast of ULONG to pointer.  */
-        packet_ptr -> nx_packet_union_next.nx_packet_tcp_queue_next =  (NX_PACKET *)NX_PACKET_ALLOCATED;
+    /* Has the packet been transmitted?  */
+    /*lint -e{923} suppress cast of ULONG to pointer.  */
+    if (packet_ptr->nx_packet_queue_next == ((NX_PACKET *)NX_DRIVER_TX_DONE)) {
 
-        /* Has the packet been transmitted?  */
-        /*lint -e{923} suppress cast of ULONG to pointer.  */
-        if (packet_ptr -> nx_packet_queue_next ==  ((NX_PACKET *)NX_DRIVER_TX_DONE))
-        {
+      /* Yes, the driver has already released the packet.  */
 
-            /* Yes, the driver has already released the packet.  */
+      /* Restore interrupts.  */
+      TX_RESTORE
 
-            /* Restore interrupts.  */
-            TX_RESTORE
+      /* Release the packet.  */
+      _nx_packet_release(packet_ptr);
+    } else {
 
-            /* Release the packet.  */
-            _nx_packet_release(packet_ptr);
-        }
-        else
-        {
-
-            /* Just restore interrupts.  */
-            TX_RESTORE
-        }
-
-        /* Move to the next packet.  */
-        packet_ptr =  next_packet_ptr;
-
-        /* Decrease the queued packet count.  */
-        socket_ptr -> nx_tcp_socket_transmit_sent_count--;
+      /* Just restore interrupts.  */
+      TX_RESTORE
     }
-}
 
+    /* Move to the next packet.  */
+    packet_ptr = next_packet_ptr;
+
+    /* Decrease the queued packet count.  */
+    socket_ptr->nx_tcp_socket_transmit_sent_count--;
+  }
+}

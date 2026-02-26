@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_udp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -82,80 +79,76 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_udp_socket_info_get(NX_UDP_SOCKET *socket_ptr, ULONG *udp_packets_sent, ULONG *udp_bytes_sent,
-                              ULONG *udp_packets_received, ULONG *udp_bytes_received, ULONG *udp_packets_queued,
-                              ULONG *udp_receive_packets_dropped, ULONG *udp_checksum_errors)
-{
+UINT _nx_udp_socket_info_get(NX_UDP_SOCKET *socket_ptr, ULONG *udp_packets_sent,
+                             ULONG *udp_bytes_sent, ULONG *udp_packets_received,
+                             ULONG *udp_bytes_received,
+                             ULONG *udp_packets_queued,
+                             ULONG *udp_receive_packets_dropped,
+                             ULONG *udp_checksum_errors) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(
+      NX_TRACE_UDP_SOCKET_INFO_GET, socket_ptr->nx_udp_socket_ip_ptr,
+      socket_ptr, socket_ptr->nx_udp_socket_bytes_sent,
+      socket_ptr->nx_udp_socket_bytes_received, NX_TRACE_UDP_EVENTS, 0, 0);
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOCKET_INFO_GET, socket_ptr -> nx_udp_socket_ip_ptr, socket_ptr, socket_ptr -> nx_udp_socket_bytes_sent, socket_ptr -> nx_udp_socket_bytes_received, NX_TRACE_UDP_EVENTS, 0, 0);
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Determine if packets sent is wanted.  */
+  if (udp_packets_sent) {
 
-    /* Determine if packets sent is wanted.  */
-    if (udp_packets_sent)
-    {
+    /* Return the number of packets sent by this socket.  */
+    *udp_packets_sent = socket_ptr->nx_udp_socket_packets_sent;
+  }
 
-        /* Return the number of packets sent by this socket.  */
-        *udp_packets_sent =  socket_ptr -> nx_udp_socket_packets_sent;
-    }
+  /* Determine if bytes sent is wanted.  */
+  if (udp_bytes_sent) {
 
-    /* Determine if bytes sent is wanted.  */
-    if (udp_bytes_sent)
-    {
+    /* Return the number of bytes sent by this socket.  */
+    *udp_bytes_sent = socket_ptr->nx_udp_socket_bytes_sent;
+  }
 
-        /* Return the number of bytes sent by this socket.  */
-        *udp_bytes_sent =  socket_ptr -> nx_udp_socket_bytes_sent;
-    }
+  /* Determine if packets received is wanted.  */
+  if (udp_packets_received) {
 
-    /* Determine if packets received is wanted.  */
-    if (udp_packets_received)
-    {
+    /* Return the number of packets received by this socket.  */
+    *udp_packets_received = socket_ptr->nx_udp_socket_packets_received;
+  }
 
-        /* Return the number of packets received by this socket.  */
-        *udp_packets_received =  socket_ptr -> nx_udp_socket_packets_received;
-    }
+  /* Determine if bytes received is wanted.  */
+  if (udp_bytes_received) {
 
-    /* Determine if bytes received is wanted.  */
-    if (udp_bytes_received)
-    {
+    /* Return the number of bytes received by this socket.  */
+    *udp_bytes_received = socket_ptr->nx_udp_socket_bytes_received;
+  }
 
-        /* Return the number of bytes received by this socket.  */
-        *udp_bytes_received =  socket_ptr -> nx_udp_socket_bytes_received;
-    }
+  /* Determine if receive packets queued is wanted.  */
+  if (udp_packets_queued) {
 
-    /* Determine if receive packets queued is wanted.  */
-    if (udp_packets_queued)
-    {
+    /* Return the number of queued receive packets by this socket.  */
+    *udp_packets_queued = socket_ptr->nx_udp_socket_receive_count;
+  }
 
-        /* Return the number of queued receive packets by this socket.  */
-        *udp_packets_queued =  socket_ptr -> nx_udp_socket_receive_count;
-    }
+  /* Determine if receive packets dropped is wanted.  */
+  if (udp_receive_packets_dropped) {
 
-    /* Determine if receive packets dropped is wanted.  */
-    if (udp_receive_packets_dropped)
-    {
+    /* Return the number of receive packets dropped by this socket.  */
+    *udp_receive_packets_dropped = socket_ptr->nx_udp_socket_packets_dropped;
+  }
 
-        /* Return the number of receive packets dropped by this socket.  */
-        *udp_receive_packets_dropped =  socket_ptr -> nx_udp_socket_packets_dropped;
-    }
+  /* Determine if checksum errors is wanted.  */
+  if (udp_checksum_errors) {
 
-    /* Determine if checksum errors is wanted.  */
-    if (udp_checksum_errors)
-    {
+    /* Return the number of checksum errors by this socket.  */
+    *udp_checksum_errors = socket_ptr->nx_udp_socket_checksum_errors;
+  }
 
-        /* Return the number of checksum errors by this socket.  */
-        *udp_checksum_errors =  socket_ptr -> nx_udp_socket_checksum_errors;
-    }
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Return successful completion.  */
-    return(NX_SUCCESS);
+  /* Return successful completion.  */
+  return (NX_SUCCESS);
 }
-

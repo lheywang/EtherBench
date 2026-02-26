@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,15 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_directory.h"
 
-
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,31 +70,31 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_directory_short_name_get_extended(FX_MEDIA *media_ptr, CHAR *long_file_name, CHAR *short_file_name, UINT short_file_name_length)
-{
+UINT _fxe_directory_short_name_get_extended(FX_MEDIA *media_ptr,
+                                            CHAR *long_file_name,
+                                            CHAR *short_file_name,
+                                            UINT short_file_name_length) {
 
-UINT status;
+  UINT status;
 
+  /* Check for a NULL media or file name pointer.  */
+  if ((media_ptr == FX_NULL) || (short_file_name == FX_NULL) ||
+      (long_file_name == FX_NULL)) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a NULL media or file name pointer.  */
-    if ((media_ptr == FX_NULL) || (short_file_name == FX_NULL) || (long_file_name == FX_NULL))
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for zero length buffer.  */
+  if (short_file_name_length == 0) {
+    return (FX_BUFFER_ERROR);
+  }
 
-    /* Check for zero length buffer.  */
-    if (short_file_name_length == 0)
-    {
-        return(FX_BUFFER_ERROR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual short name get service.  */
+  status = _fx_directory_short_name_get_extended(
+      media_ptr, long_file_name, short_file_name, short_file_name_length);
 
-    /* Call actual short name get service.  */
-    status =  _fx_directory_short_name_get_extended(media_ptr, long_file_name, short_file_name, short_file_name_length);
-
-    /* Return status to the caller.  */
-    return(status);
+  /* Return status to the caller.  */
+  return (status);
 }
-

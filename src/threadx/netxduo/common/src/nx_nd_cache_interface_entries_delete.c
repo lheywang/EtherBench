@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -73,24 +71,21 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_nd_cache_interface_entries_delete(NX_IP *ip_ptr, UINT index)
-{
+UINT _nx_nd_cache_interface_entries_delete(NX_IP *ip_ptr, UINT index) {
 
-NX_INTERFACE *interface_ptr;
-UINT          i;
+  NX_INTERFACE *interface_ptr;
+  UINT i;
 
-    interface_ptr = &(ip_ptr -> nx_ip_interface[index]);
+  interface_ptr = &(ip_ptr->nx_ip_interface[index]);
 
-    for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++)
-    {
-        if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_interface_ptr == interface_ptr)
-        {
+  for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++) {
+    if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_interface_ptr ==
+        interface_ptr) {
 
-            _nx_nd_cache_delete_internal(ip_ptr, &ip_ptr -> nx_ipv6_nd_cache[i]);
-        }
+      _nx_nd_cache_delete_internal(ip_ptr, &ip_ptr->nx_ipv6_nd_cache[i]);
     }
+  }
 
-    return(NX_SUCCESS);
+  return (NX_SUCCESS);
 }
 #endif /* FEATURE_NX_IPV6 */
-

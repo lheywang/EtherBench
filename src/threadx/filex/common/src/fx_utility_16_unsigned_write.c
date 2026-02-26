@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_system.h"
 #include "fx_utility.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,11 +68,9 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _fx_utility_16_unsigned_write(UCHAR *dest_ptr, UINT value)
-{
+VOID _fx_utility_16_unsigned_write(UCHAR *dest_ptr, UINT value) {
 
-    /* Store the UINT into the destination with endian-awareness.  */
-    *(dest_ptr) =       (UCHAR)(value & 0xFF);
-    *(dest_ptr + 1) =   (UCHAR)((value >> 8) & 0xFF);
+  /* Store the UINT into the destination with endian-awareness.  */
+  *(dest_ptr) = (UCHAR)(value & 0xFF);
+  *(dest_ptr + 1) = (UCHAR)((value >> 8) & 0xFF);
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -23,9 +22,8 @@
 #define FX_SOURCE_CODE
 
 #include "fx_api.h"
-#include "fx_utility.h"
 #include "fx_fault_tolerant.h"
-
+#include "fx_utility.h"
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
 /**************************************************************************/
@@ -77,102 +75,102 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT    _fx_fault_tolerant_read_directory_sector(FX_MEDIA *media_ptr, ULONG64 logical_sector,
-                                                 VOID *buffer_ptr, ULONG64 sectors)
-{
-ULONG                      logs_remaining;
-ULONG                      copy_offset;
-ULONG                      copy_size;
-UCHAR                     *current_ptr;
-UCHAR                     *current_buffer_ptr;
-ULONG                      size;
-USHORT                     type;
-ULONG                      log_len;
-ULONG64                    log_sector;
-FX_FAULT_TOLERANT_DIR_LOG *dir_log;
+UINT _fx_fault_tolerant_read_directory_sector(FX_MEDIA *media_ptr,
+                                              ULONG64 logical_sector,
+                                              VOID *buffer_ptr,
+                                              ULONG64 sectors) {
+  ULONG logs_remaining;
+  ULONG copy_offset;
+  ULONG copy_size;
+  UCHAR *current_ptr;
+  UCHAR *current_buffer_ptr;
+  ULONG size;
+  USHORT type;
+  ULONG log_len;
+  ULONG64 log_sector;
+  FX_FAULT_TOLERANT_DIR_LOG *dir_log;
 
-    /* Get fault tolerant data. */
-    logs_remaining = media_ptr -> fx_media_fault_tolerant_total_logs;
+  /* Get fault tolerant data. */
+  logs_remaining = media_ptr->fx_media_fault_tolerant_total_logs;
 
-    /* Any redo logs? */
-    if (logs_remaining == 0)
-    {
+  /* Any redo logs? */
+  if (logs_remaining == 0) {
 
-        /* No. Just return. */
-        return(FX_SUCCESS);
+    /* No. Just return. */
+    return (FX_SUCCESS);
+  }
+
+  /* Get size of all logs. */
+  size = media_ptr->fx_media_fault_tolerant_file_size -
+         FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET;
+
+  /* Get the first log pointer. */
+  current_ptr = media_ptr->fx_media_fault_tolerant_memory_buffer +
+                FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET +
+                FX_FAULT_TOLERANT_LOG_CONTENT_HEADER_SIZE;
+
+  /* Loop throught all FAT logs. */
+  while (logs_remaining) {
+
+    /* Check log type. */
+    type = (USHORT)_fx_utility_16_unsigned_read(current_ptr);
+
+    /* Get log length. */
+    log_len = _fx_utility_16_unsigned_read(current_ptr + 2);
+
+    /* Validate the size value. */
+    if (log_len > size) {
+
+      /* Log file is corrupted.  Nothing can be done.  Return.*/
+      return (FX_FILE_CORRUPT);
     }
+    size -= log_len;
 
-    /* Get size of all logs. */
-    size = media_ptr -> fx_media_fault_tolerant_file_size - FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET;
+    /* Check log type. */
+    if (type == FX_FAULT_TOLERANT_DIR_LOG_TYPE) {
 
-    /* Get the first log pointer. */
-    current_ptr = media_ptr -> fx_media_fault_tolerant_memory_buffer +
-                  FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET +
-                  FX_FAULT_TOLERANT_LOG_CONTENT_HEADER_SIZE;
+      /* Get the log pointer. */
+      dir_log = (FX_FAULT_TOLERANT_DIR_LOG *)current_ptr;
 
-    /* Loop throught all FAT logs. */
-    while (logs_remaining)
-    {
+      /* Get the sector of log. */
+      log_sector = _fx_utility_64_unsigned_read(
+          (UCHAR *)&dir_log->fx_fault_tolerant_dir_log_sector);
 
-        /* Check log type. */
-        type = (USHORT)_fx_utility_16_unsigned_read(current_ptr);
+      /* Is this log sector in the range of sectors to read? */
+      if ((log_sector >= logical_sector) &&
+          (log_sector < logical_sector + sectors)) {
 
-        /* Get log length. */
-        log_len = _fx_utility_16_unsigned_read(current_ptr + 2);
+        /* Yes. Update the content in this sector. */
+        current_buffer_ptr =
+            ((UCHAR *)buffer_ptr) + (log_sector - logical_sector) *
+                                        media_ptr->fx_media_bytes_per_sector;
 
-        /* Validate the size value. */
-        if (log_len > size)
-        {
+        /* Set copy information. */
+        copy_offset = _fx_utility_32_unsigned_read(
+            (UCHAR *)&dir_log->fx_fault_tolerant_dir_log_offset);
 
-            /* Log file is corrupted.  Nothing can be done.  Return.*/
-            return(FX_FILE_CORRUPT);
-        }
-        size -= log_len;
+        copy_size = log_len - FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE;
 
-        /* Check log type. */
-        if (type == FX_FAULT_TOLERANT_DIR_LOG_TYPE)
-        {
-
-            /* Get the log pointer. */
-            dir_log = (FX_FAULT_TOLERANT_DIR_LOG *)current_ptr;
-
-            /* Get the sector of log. */
-            log_sector = _fx_utility_64_unsigned_read((UCHAR *)&dir_log -> fx_fault_tolerant_dir_log_sector);
-
-            /* Is this log sector in the range of sectors to read? */
-            if ((log_sector >= logical_sector) && (log_sector < logical_sector + sectors))
-            {
-
-                /* Yes. Update the content in this sector. */
-                current_buffer_ptr = ((UCHAR *)buffer_ptr) + (log_sector - logical_sector) *
-                    media_ptr -> fx_media_bytes_per_sector;
-
-                /* Set copy information. */
-                copy_offset = _fx_utility_32_unsigned_read((UCHAR *)&dir_log -> fx_fault_tolerant_dir_log_offset);
-
-                copy_size = log_len - FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE;
-
-                if ((copy_offset + copy_size) > media_ptr -> fx_media_bytes_per_sector)
-                {
-                    return(FX_FILE_CORRUPT);
-                }
-
-                /* Copy data into destination sector. */
-                memcpy(current_buffer_ptr + copy_offset,  /* Use case of memcpy is verified. */
-                       current_ptr + FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE, copy_size);
-            }
+        if ((copy_offset + copy_size) > media_ptr->fx_media_bytes_per_sector) {
+          return (FX_FILE_CORRUPT);
         }
 
-        /* Decrease the logs_remaining counter. */
-        logs_remaining--;
-
-        /* Move to start position of next log entry. */
-        current_ptr += log_len;
+        /* Copy data into destination sector. */
+        memcpy(current_buffer_ptr +
+                   copy_offset, /* Use case of memcpy is verified. */
+               current_ptr + FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE, copy_size);
+      }
     }
 
-    /* Return success. */
-    return(FX_SUCCESS);
+    /* Decrease the logs_remaining counter. */
+    logs_remaining--;
+
+    /* Move to start position of next log entry. */
+    current_ptr += log_len;
+  }
+
+  /* Return success. */
+  return (FX_SUCCESS);
 }
 
 #endif /* FX_ENABLE_FAULT_TOLERANT */
-

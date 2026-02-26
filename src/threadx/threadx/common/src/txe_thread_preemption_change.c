@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_thread.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,59 +71,51 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_thread_preemption_change(TX_THREAD *thread_ptr, UINT new_threshold, UINT *old_threshold)
-{
+UINT _txe_thread_preemption_change(TX_THREAD *thread_ptr, UINT new_threshold,
+                                   UINT *old_threshold) {
 
-UINT        status;
+  UINT status;
 
+  /* Check for an invalid thread pointer.  */
+  if (thread_ptr == TX_NULL) {
 
-    /* Check for an invalid thread pointer.  */
-    if (thread_ptr == TX_NULL)
-    {
+    /* Thread pointer is invalid, return appropriate error code.  */
+    status = TX_THREAD_ERROR;
+  }
 
-        /* Thread pointer is invalid, return appropriate error code.  */
-        status =  TX_THREAD_ERROR;
-    }
+  /* Now check for invalid thread ID.  */
+  else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
 
-    /* Now check for invalid thread ID.  */
-    else if (thread_ptr -> tx_thread_id != TX_THREAD_ID)
-    {
+    /* Thread pointer is invalid, return appropriate error code.  */
+    status = TX_THREAD_ERROR;
+  }
 
-        /* Thread pointer is invalid, return appropriate error code.  */
-        status =  TX_THREAD_ERROR;
-    }
+  /* Check for a valid old threshold pointer.  */
+  else if (old_threshold == TX_NULL) {
 
-    /* Check for a valid old threshold pointer.  */
-    else if (old_threshold == TX_NULL)
-    {
+    /* Invalid destination pointer, return appropriate error code.  */
+    status = TX_PTR_ERROR;
+  }
 
-        /* Invalid destination pointer, return appropriate error code.  */
-        status =  TX_PTR_ERROR;
-    }
+  /* Check for invalid caller of this function.  */
+  else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-    /* Check for invalid caller of this function.  */
-    else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
-    {
+    /* Invalid caller of this function, return appropriate error code.  */
+    status = TX_CALLER_ERROR;
+  }
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status =  TX_CALLER_ERROR;
-    }
+  /* Determine if the preemption-threshold is valid.  */
+  else if (new_threshold > thread_ptr->tx_thread_user_priority) {
 
-    /* Determine if the preemption-threshold is valid.  */
-    else if (new_threshold > thread_ptr -> tx_thread_user_priority)
-    {
+    /* Return an error status.  */
+    status = TX_THRESH_ERROR;
+  } else {
 
-        /* Return an error status.  */
-        status =  TX_THRESH_ERROR;
-    }
-    else
-    {
+    /* Call actual change thread preemption function.  */
+    status =
+        _tx_thread_preemption_change(thread_ptr, new_threshold, old_threshold);
+  }
 
-        /* Call actual change thread preemption function.  */
-        status =  _tx_thread_preemption_change(thread_ptr, new_threshold, old_threshold);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

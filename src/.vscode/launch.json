@@ -13,8 +13,10 @@
             "interface": "swd",
             "v1": false,
             "svdFile": "${workspaceFolder}/stm32h563.svd",
+            "preLaunchTask": "CMake: build",
             "serverArgs": [
-                "-m", "1", // Select core one. Why ? I don't know. But, I know.
+                "-m",
+                "1", // Select core one. Why ? I don't know. But, I know.
             ],
             "postStartSessionCommands": [
                 "sharedlibrary",

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_event_flags.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,55 +71,46 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_event_flags_set(TX_EVENT_FLAGS_GROUP *group_ptr, ULONG flags_to_set, UINT set_option)
-{
+UINT _txe_event_flags_set(TX_EVENT_FLAGS_GROUP *group_ptr, ULONG flags_to_set,
+                          UINT set_option) {
 
-UINT        status;
+  UINT status;
 
+  /* Default status to success.  */
+  status = TX_SUCCESS;
 
-    /* Default status to success.  */
-    status =  TX_SUCCESS;
+  /* Check for an invalid event flag group pointer.  */
+  if (group_ptr == TX_NULL) {
 
-    /* Check for an invalid event flag group pointer.  */
-    if (group_ptr == TX_NULL)
-    {
+    /* Event flags group pointer is invalid, return appropriate error code.  */
+    status = TX_GROUP_ERROR;
+  }
 
-        /* Event flags group pointer is invalid, return appropriate error code.  */
-        status =  TX_GROUP_ERROR;
+  /* Now check for invalid event flag group ID.  */
+  else if (group_ptr->tx_event_flags_group_id != TX_EVENT_FLAGS_ID) {
+
+    /* Event flags group pointer is invalid, return appropriate error code.  */
+    status = TX_GROUP_ERROR;
+  } else {
+
+    /* Check for invalid set option.  */
+    if (set_option != TX_AND) {
+
+      if (set_option != TX_OR) {
+
+        /* Invalid set events option, return appropriate error.  */
+        status = TX_OPTION_ERROR;
+      }
     }
+  }
 
-    /* Now check for invalid event flag group ID.  */
-    else if (group_ptr -> tx_event_flags_group_id != TX_EVENT_FLAGS_ID)
-    {
+  /* Determine if everything is okay.  */
+  if (status == TX_SUCCESS) {
 
-        /* Event flags group pointer is invalid, return appropriate error code.  */
-        status =  TX_GROUP_ERROR;
-    }
-    else
-    {
+    /* Call actual event flags set function.  */
+    status = _tx_event_flags_set(group_ptr, flags_to_set, set_option);
+  }
 
-        /* Check for invalid set option.  */
-        if (set_option != TX_AND)
-        {
-
-            if (set_option != TX_OR)
-            {
-
-                /* Invalid set events option, return appropriate error.  */
-                status =  TX_OPTION_ERROR;
-            }
-        }
-    }
-
-    /* Determine if everything is okay.  */
-    if (status == TX_SUCCESS)
-    {
-
-        /* Call actual event flags set function.  */
-        status =  _tx_event_flags_set(group_ptr, flags_to_set, set_option);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

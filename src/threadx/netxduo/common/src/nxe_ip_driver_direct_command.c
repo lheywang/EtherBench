@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -75,24 +73,23 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_ip_driver_direct_command(NX_IP *ip_ptr, UINT command, ULONG *return_value_ptr)
-{
+UINT _nxe_ip_driver_direct_command(NX_IP *ip_ptr, UINT command,
+                                   ULONG *return_value_ptr) {
 
-UINT status;
+  UINT status;
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID) || (return_value_ptr == NX_NULL))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
+      (return_value_ptr == NX_NULL)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    /* Call actual IP direct driver command function.  */
-    status =  _nx_ip_driver_direct_command(ip_ptr, command, return_value_ptr);
+  /* Call actual IP direct driver command function.  */
+  status = _nx_ip_driver_direct_command(ip_ptr, command, return_value_ptr);
 
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

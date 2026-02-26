@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
-#include "../include/tx_trace.h"
 #include "../include/tx_thread.h"
-
+#include "../include/tx_trace.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -76,172 +73,163 @@
 /*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _tx_thread_wait_abort(TX_THREAD  *thread_ptr)
-{
+UINT _tx_thread_wait_abort(TX_THREAD *thread_ptr) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-VOID            (*suspend_cleanup)(struct TX_THREAD_STRUCT *suspend_thread_ptr, ULONG suspension_sequence);
-UINT            status;
-ULONG           suspension_sequence;
+  VOID (*suspend_cleanup)(struct TX_THREAD_STRUCT *suspend_thread_ptr,
+                          ULONG suspension_sequence);
+  UINT status;
+  ULONG suspension_sequence;
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_WAIT_ABORT, thread_ptr,
+                          thread_ptr->tx_thread_state, 0, 0,
+                          TX_TRACE_THREAD_EVENTS)
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_WAIT_ABORT, thread_ptr, thread_ptr -> tx_thread_state, 0, 0, TX_TRACE_THREAD_EVENTS)
+  /* Log this kernel call.  */
+  TX_EL_THREAD_WAIT_ABORT_INSERT
 
-    /* Log this kernel call.  */
-    TX_EL_THREAD_WAIT_ABORT_INSERT
+  /* Determine if the thread is currently suspended.  */
+  if (thread_ptr->tx_thread_state < TX_SLEEP) {
 
-    /* Determine if the thread is currently suspended.  */
-    if (thread_ptr -> tx_thread_state < TX_SLEEP)
-    {
+    /* Thread is either ready, completed, terminated, or in a pure
+       suspension condition.  */
 
-        /* Thread is either ready, completed, terminated, or in a pure
-           suspension condition.  */
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-        /* Restore interrupts.  */
-        TX_RESTORE
+    /* Just return with an error message to indicate that
+       nothing was done.  */
+    status = TX_WAIT_ABORT_ERROR;
+  } else {
 
-        /* Just return with an error message to indicate that
-           nothing was done.  */
-        status =  TX_WAIT_ABORT_ERROR;
-    }
-    else
-    {
+    /* Check for a sleep condition.  */
+    if (thread_ptr->tx_thread_state == TX_SLEEP) {
 
-        /* Check for a sleep condition.  */
-        if (thread_ptr -> tx_thread_state == TX_SLEEP)
-        {
+      /* Set the state to terminated.  */
+      thread_ptr->tx_thread_state = TX_SUSPENDED;
 
-            /* Set the state to terminated.  */
-            thread_ptr -> tx_thread_state =    TX_SUSPENDED;
+      /* Set the TX_WAIT_ABORTED status in the thread that is
+         sleeping.  */
+      thread_ptr->tx_thread_suspend_status = TX_WAIT_ABORTED;
 
-            /* Set the TX_WAIT_ABORTED status in the thread that is
-               sleeping.  */
-            thread_ptr -> tx_thread_suspend_status =  TX_WAIT_ABORTED;
-
-            /* Make sure there isn't a suspend cleanup routine.  */
-            thread_ptr -> tx_thread_suspend_cleanup =  TX_NULL;
+      /* Make sure there isn't a suspend cleanup routine.  */
+      thread_ptr->tx_thread_suspend_cleanup = TX_NULL;
 
 #ifndef TX_NOT_INTERRUPTABLE
 
-            /* Increment the disable preemption flag.  */
-            _tx_thread_preempt_disable++;
+      /* Increment the disable preemption flag.  */
+      _tx_thread_preempt_disable++;
 
-            /* Restore interrupts.  */
-            TX_RESTORE
+      /* Restore interrupts.  */
+      TX_RESTORE
 #endif
-        }
-        else if(thread_ptr -> tx_thread_suspend_cleanup == TX_NULL)
-        {
-            /* Thread is coming out of suspension elsewhere.  */
+    } else if (thread_ptr->tx_thread_suspend_cleanup == TX_NULL) {
+      /* Thread is coming out of suspension elsewhere.  */
 
 #ifndef TX_NOT_INTERRUPTABLE
-            /* Increment the disable preemption flag.  */
-            _tx_thread_preempt_disable++;
+      /* Increment the disable preemption flag.  */
+      _tx_thread_preempt_disable++;
 
-            /* Restore interrupts.  */
-            TX_RESTORE
+      /* Restore interrupts.  */
+      TX_RESTORE
 #endif
-        }
-        else
-        {
+    } else {
 
-            /* Process all other suspension timeouts.  */
+      /* Process all other suspension timeouts.  */
 
-            /* Set the state to suspended.  */
-            thread_ptr -> tx_thread_state =    TX_SUSPENDED;
+      /* Set the state to suspended.  */
+      thread_ptr->tx_thread_state = TX_SUSPENDED;
 
-            /* Pickup the cleanup routine address.  */
-            suspend_cleanup =  thread_ptr -> tx_thread_suspend_cleanup;
+      /* Pickup the cleanup routine address.  */
+      suspend_cleanup = thread_ptr->tx_thread_suspend_cleanup;
 
 #ifndef TX_NOT_INTERRUPTABLE
 
-            /* Pickup the suspension sequence number that is used later to verify that the
-               cleanup is still necessary.  */
-            suspension_sequence =  thread_ptr -> tx_thread_suspension_sequence;
+      /* Pickup the suspension sequence number that is used later to verify that
+         the cleanup is still necessary.  */
+      suspension_sequence = thread_ptr->tx_thread_suspension_sequence;
 #else
 
-            /* When not interruptable is selected, the suspension sequence is not used - just set to 0.  */
-            suspension_sequence =  ((ULONG) 0);
+      /* When not interruptable is selected, the suspension sequence is not used
+       * - just set to 0.  */
+      suspension_sequence = ((ULONG)0);
 #endif
 
-            /* Set the TX_WAIT_ABORTED status in the thread that was
-               suspended.  */
-            thread_ptr -> tx_thread_suspend_status =  TX_WAIT_ABORTED;
+      /* Set the TX_WAIT_ABORTED status in the thread that was
+         suspended.  */
+      thread_ptr->tx_thread_suspend_status = TX_WAIT_ABORTED;
 
 #ifndef TX_NOT_INTERRUPTABLE
 
-            /* Increment the disable preemption flag.  */
-            _tx_thread_preempt_disable++;
+      /* Increment the disable preemption flag.  */
+      _tx_thread_preempt_disable++;
 
-            /* Restore interrupts.  */
-            TX_RESTORE
+      /* Restore interrupts.  */
+      TX_RESTORE
 #endif
 
-            /* Call cleanup routine.  */
-            (suspend_cleanup)(thread_ptr, suspension_sequence);
-        }
+          /* Call cleanup routine.  */
+          (suspend_cleanup)(thread_ptr, suspension_sequence);
+    }
 
-        /* If the abort of the thread wait was successful, if so resume the thread.  */
-        if (thread_ptr -> tx_thread_suspend_status == TX_WAIT_ABORTED)
-        {
+    /* If the abort of the thread wait was successful, if so resume the thread.
+     */
+    if (thread_ptr->tx_thread_suspend_status == TX_WAIT_ABORTED) {
 
 #ifdef TX_THREAD_ENABLE_PERFORMANCE_INFO
 
-            /* Increment the total number of thread wait aborts.  */
-            _tx_thread_performance_wait_abort_count++;
+      /* Increment the total number of thread wait aborts.  */
+      _tx_thread_performance_wait_abort_count++;
 
-            /* Increment this thread's wait abort count.  */
-            thread_ptr -> tx_thread_performance_wait_abort_count++;
+      /* Increment this thread's wait abort count.  */
+      thread_ptr->tx_thread_performance_wait_abort_count++;
 #endif
 
 #ifdef TX_NOT_INTERRUPTABLE
 
-            /* Resume the thread!  */
-            _tx_thread_system_ni_resume(thread_ptr);
+      /* Resume the thread!  */
+      _tx_thread_system_ni_resume(thread_ptr);
 
-            /* Restore interrupts.  */
-            TX_RESTORE
+      /* Restore interrupts.  */
+      TX_RESTORE
 #else
 
-            /* Lift the suspension on the previously waiting thread.  */
-            _tx_thread_system_resume(thread_ptr);
+      /* Lift the suspension on the previously waiting thread.  */
+      _tx_thread_system_resume(thread_ptr);
 #endif
 
-            /* Return a successful status.  */
-            status =  TX_SUCCESS;
-        }
-        else
-        {
+      /* Return a successful status.  */
+      status = TX_SUCCESS;
+    } else {
 
 #ifdef TX_NOT_INTERRUPTABLE
 
-            /* Restore interrupts.  */
-            TX_RESTORE
+      /* Restore interrupts.  */
+      TX_RESTORE
 
 #else
 
-            /* Disable interrupts.  */
-            TX_DISABLE
+      /* Disable interrupts.  */
+      TX_DISABLE
 
-            /* Decrement the disable preemption flag.  */
-            _tx_thread_preempt_disable--;
+      /* Decrement the disable preemption flag.  */
+      _tx_thread_preempt_disable--;
 
-            /* Restore interrupts.  */
-            TX_RESTORE
+      /* Restore interrupts.  */
+      TX_RESTORE
 #endif
 
-            /* Return with an error message to indicate that
-               nothing was done.  */
-            status =  TX_WAIT_ABORT_ERROR;
-        }
+      /* Return with an error message to indicate that
+         nothing was done.  */
+      status = TX_WAIT_ABORT_ERROR;
     }
+  }
 
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

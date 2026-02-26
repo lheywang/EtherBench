@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_thread.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,43 +69,35 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_thread_terminate(TX_THREAD *thread_ptr)
-{
+UINT _txe_thread_terminate(TX_THREAD *thread_ptr) {
 
-UINT        status;
+  UINT status;
 
+  /* Check for an invalid thread pointer.  */
+  if (thread_ptr == TX_NULL) {
 
-    /* Check for an invalid thread pointer.  */
-    if (thread_ptr == TX_NULL)
-    {
+    /* Thread pointer is invalid, return appropriate error code.  */
+    status = TX_THREAD_ERROR;
+  }
 
-        /* Thread pointer is invalid, return appropriate error code.  */
-        status =  TX_THREAD_ERROR;
-    }
+  /* Now check for invalid thread ID.  */
+  else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
 
-    /* Now check for invalid thread ID.  */
-    else if (thread_ptr -> tx_thread_id != TX_THREAD_ID)
-    {
+    /* Thread pointer is invalid, return appropriate error code.  */
+    status = TX_THREAD_ERROR;
+  }
 
-        /* Thread pointer is invalid, return appropriate error code.  */
-        status =  TX_THREAD_ERROR;
-    }
+  /* Check for invalid caller of this function.  */
+  else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-    /* Check for invalid caller of this function.  */
-    else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
-    {
+    /* Invalid caller of this function, return appropriate error code.  */
+    status = TX_CALLER_ERROR;
+  } else {
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status =  TX_CALLER_ERROR;
-    }
-    else
-    {
+    /* Call actual thread terminate function.  */
+    status = _tx_thread_terminate(thread_ptr);
+  }
 
-        /* Call actual thread terminate function.  */
-        status =  _tx_thread_terminate(thread_ptr);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

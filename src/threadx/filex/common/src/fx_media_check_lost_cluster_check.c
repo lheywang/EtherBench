@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_media.h"
 #include "fx_utility.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -78,93 +75,88 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-ULONG  _fx_media_check_lost_cluster_check(FX_MEDIA *media_ptr, UCHAR *logical_fat, ULONG total_clusters, ULONG error_correction_option)
-{
+ULONG _fx_media_check_lost_cluster_check(FX_MEDIA *media_ptr,
+                                         UCHAR *logical_fat,
+                                         ULONG total_clusters,
+                                         ULONG error_correction_option) {
 
-ULONG cluster, next_cluster = 0;
-ULONG fat_last;
-ULONG error;
-UINT  status;
+  ULONG cluster, next_cluster = 0;
+  ULONG fat_last;
+  ULONG error;
+  UINT status;
 
+  /* Calculate the FAT reserved and last sector values.  */
+  if (media_ptr->fx_media_32_bit_FAT) {
+    fat_last = FX_LAST_CLUSTER_1_32;
+  } else {
+    fat_last = FX_LAST_CLUSTER_1;
+  }
 
-    /* Calculate the FAT reserved and last sector values.  */
-    if (media_ptr -> fx_media_32_bit_FAT)
-    {
-        fat_last =      FX_LAST_CLUSTER_1_32;
+  /* Initialize the error.  */
+  error = 0;
+
+  /* Loop through all the clusters to see if any clusters NOT in the logical
+     sector FAT have a non zero value.  */
+  for (cluster = FX_FAT_ENTRY_START; cluster < total_clusters; cluster++) {
+
+    /* Determine if this cluster is in the logical FAT.  */
+    if (logical_fat[cluster >> 3] & (1 << (cluster & 7))) {
+
+      /* Yes, the cluster is in use by a file or sub-directory.  Just continue
+       * the loop.  */
+      continue;
     }
-    else
-    {
-        fat_last =      FX_LAST_CLUSTER_1;
+
+    /* Otherwise, the cluster is not in use.  */
+
+    /* Read the contents of what should be a free cluster.  */
+    status = _fx_utility_FAT_entry_read(media_ptr, cluster, &next_cluster);
+
+    /* Check for a good status.  */
+    if (status) {
+
+      /* Set the error code.  */
+      error = error | FX_IO_ERROR;
+
+      /* Return error code.  */
+      return (error);
     }
 
-    /* Initialize the error.  */
-    error =  0;
+    /* Determine if the contents of the cluster is valid.  */
+    if (((next_cluster > (ULONG)FX_FREE_CLUSTER) &&
+         (next_cluster < media_ptr->fx_media_fat_reserved)) ||
+        (next_cluster >= fat_last)) {
 
-    /* Loop through all the clusters to see if any clusters NOT in the logical sector FAT have
-       a non zero value.  */
-    for (cluster = FX_FAT_ENTRY_START; cluster < total_clusters; cluster++)
-    {
+      /* Lost cluster is present.  */
 
-        /* Determine if this cluster is in the logical FAT.  */
-        if (logical_fat[cluster >> 3] & (1 << (cluster & 7)))
-        {
+      /* Set the error code status.  */
+      error = FX_LOST_CLUSTER_ERROR;
 
-            /* Yes, the cluster is in use by a file or sub-directory.  Just continue the loop.  */
-            continue;
-        }
+      /* Determine if the lost cluster should be recovered.  */
+      if (error_correction_option & FX_LOST_CLUSTER_ERROR) {
 
-        /* Otherwise, the cluster is not in use.  */
-
-        /* Read the contents of what should be a free cluster.  */
-        status = _fx_utility_FAT_entry_read(media_ptr, cluster, &next_cluster);
+        /* Make the cluster available again.  */
+        status =
+            _fx_utility_FAT_entry_write(media_ptr, cluster, FX_FREE_CLUSTER);
 
         /* Check for a good status.  */
-        if (status)
-        {
+        if (status) {
 
-            /* Set the error code.  */
-            error = error | FX_IO_ERROR;
+          /* Increment the available clusters.  */
+          media_ptr->fx_media_available_clusters++;
 
-            /* Return error code.  */
-            return(error);
+          /* Set the error code.  */
+          error = error | FX_IO_ERROR;
+
+          /* Return error code.  */
+          return (error);
         }
-
-        /* Determine if the contents of the cluster is valid.  */
-        if (((next_cluster > (ULONG)FX_FREE_CLUSTER) && (next_cluster < media_ptr -> fx_media_fat_reserved)) ||
-            (next_cluster >= fat_last))
-        {
-
-            /* Lost cluster is present.  */
-
-            /* Set the error code status.  */
-            error =  FX_LOST_CLUSTER_ERROR;
-
-            /* Determine if the lost cluster should be recovered.  */
-            if (error_correction_option & FX_LOST_CLUSTER_ERROR)
-            {
-
-                /* Make the cluster available again.  */
-                status =  _fx_utility_FAT_entry_write(media_ptr, cluster, FX_FREE_CLUSTER);
-
-                /* Check for a good status.  */
-                if (status)
-                {
-
-                    /* Increment the available clusters.  */
-                    media_ptr -> fx_media_available_clusters++;
-
-                    /* Set the error code.  */
-                    error =  error | FX_IO_ERROR;
-
-                    /* Return error code.  */
-                    return(error);
-                }
-            }
-        }
+      }
     }
+  }
 
-    /* Return error code.  */
-    return(error);
+  /* Return error code.  */
+  return (error);
 }
 
 #ifdef FX_ENABLE_EXFAT
@@ -215,68 +207,64 @@ UINT  status;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-ULONG  _fx_media_check_exFAT_lost_cluster_check(FX_MEDIA *media_ptr, UCHAR *logical_fat, ULONG total_clusters, ULONG error_correction_option)
-{
-ULONG cluster = FX_FAT_ENTRY_START;
-ULONG cached_bitmap_bytes = media_ptr -> fx_media_exfat_bitmap_cache_size_in_sectors * media_ptr -> fx_media_bytes_per_sector;
-ULONG cached_bitmap_bits = cached_bitmap_bytes << 3;
-ULONG offset = 0;
-UINT status, i;
+ULONG _fx_media_check_exFAT_lost_cluster_check(FX_MEDIA *media_ptr,
+                                               UCHAR *logical_fat,
+                                               ULONG total_clusters,
+                                               ULONG error_correction_option) {
+  ULONG cluster = FX_FAT_ENTRY_START;
+  ULONG cached_bitmap_bytes =
+      media_ptr->fx_media_exfat_bitmap_cache_size_in_sectors *
+      media_ptr->fx_media_bytes_per_sector;
+  ULONG cached_bitmap_bits = cached_bitmap_bytes << 3;
+  ULONG offset = 0;
+  UINT status, i;
 
-    /* This parameter has not been supported yet. */
-    FX_PARAMETER_NOT_USED(error_correction_option);
+  /* This parameter has not been supported yet. */
+  FX_PARAMETER_NOT_USED(error_correction_option);
 
-    /* Flush Allocation Bitmap Table first. */
-    status = _fx_utility_exFAT_bitmap_flush(media_ptr);
-    
-    if (FX_SUCCESS != status)
-    {
-        return(status);
+  /* Flush Allocation Bitmap Table first. */
+  status = _fx_utility_exFAT_bitmap_flush(media_ptr);
+
+  if (FX_SUCCESS != status) {
+    return (status);
+  }
+
+  while (total_clusters) {
+
+    /* Read Allocation Bitmap Table from disk. */
+    status = _fx_utility_exFAT_bitmap_cache_update(media_ptr, cluster);
+
+    if (FX_SUCCESS != status) {
+      return (status);
     }
 
-    while (total_clusters)
-    {
+    if (total_clusters >= cached_bitmap_bits) {
+      total_clusters -= cached_bitmap_bits;
 
-        /* Read Allocation Bitmap Table from disk. */
-        status = _fx_utility_exFAT_bitmap_cache_update(media_ptr, cluster);
-
-        if (FX_SUCCESS != status)
-        {
-            return(status);
+      /* Compare cached bitmap with logical_fat. */
+      for (i = 0; i < media_ptr->fx_media_bytes_per_sector; i++) {
+        if (logical_fat[offset + i] !=
+            ((UCHAR *)(media_ptr->fx_media_exfat_bitmap_cache))[i]) {
+          return (FX_LOST_CLUSTER_ERROR);
         }
 
-        if (total_clusters >= cached_bitmap_bits)
-        {
-            total_clusters -= cached_bitmap_bits;
+        offset += cached_bitmap_bytes;
+        cluster += cached_bitmap_bits;
+      }
+    } else {
 
-            /* Compare cached bitmap with logical_fat. */
-            for (i = 0; i < media_ptr -> fx_media_bytes_per_sector; i++)
-            {
-                if (logical_fat[offset + i] != ((UCHAR *)(media_ptr -> fx_media_exfat_bitmap_cache))[i])
-                {
-                    return(FX_LOST_CLUSTER_ERROR);
-                }
-
-                offset += cached_bitmap_bytes;
-                cluster += cached_bitmap_bits;
-            }
+      /* Compare cached bitmap with logical_fat. */
+      for (i = 0; i < ((total_clusters + 7) >> 3); i++) {
+        if (logical_fat[offset + i] !=
+            ((UCHAR *)(media_ptr->fx_media_exfat_bitmap_cache))[i]) {
+          return (FX_LOST_CLUSTER_ERROR);
         }
-        else
-        {
+      }
 
-            /* Compare cached bitmap with logical_fat. */
-            for (i = 0; i < ((total_clusters + 7) >> 3); i++)
-            {
-                if (logical_fat[offset + i] != ((UCHAR *)(media_ptr -> fx_media_exfat_bitmap_cache))[i])
-                {
-                    return(FX_LOST_CLUSTER_ERROR);
-                }
-            }
-
-            total_clusters = 0;
-        }
+      total_clusters = 0;
     }
+  }
 
-    return(FX_SUCCESS);
+  return (FX_SUCCESS);
 }
 #endif /* FX_ENABLE_EXFAT */

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define FX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -70,25 +68,21 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_file_delete(FX_MEDIA *media_ptr, CHAR *file_name)
-{
+UINT _fxe_file_delete(FX_MEDIA *media_ptr, CHAR *file_name) {
 
-UINT status;
+  UINT status;
 
+  /* Check for a null media pointer.  */
+  if (media_ptr == FX_NULL) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a null media pointer.  */
-    if (media_ptr == FX_NULL)
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual file delete service.  */
+  status = _fx_file_delete(media_ptr, file_name);
 
-    /* Call actual file delete service.  */
-    status =  _fx_file_delete(media_ptr, file_name);
-
-    /* File delete is complete, return status.  */
-    return(status);
+  /* File delete is complete, return status.  */
+  return (status);
 }
-

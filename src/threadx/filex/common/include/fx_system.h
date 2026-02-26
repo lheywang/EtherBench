@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -50,11 +48,9 @@
 #ifndef FX_SYSTEM_H
 #define FX_SYSTEM_H
 
-
 /* Define System component constants.  */
 
-#define FX_TIMER_ID                 ((ULONG) 0x46585359)
-
+#define FX_TIMER_ID ((ULONG)0x46585359)
 
 /* Define the external System component function prototypes.  */
 
@@ -70,7 +66,6 @@ UINT _fxe_system_time_set(UINT hour, UINT minute, UINT second);
 UINT _fxe_system_date_get(UINT *year, UINT *month, UINT *day);
 UINT _fxe_system_time_get(UINT *hour, UINT *minute, UINT *second);
 
-
 /* System Component data declarations follow.  */
 
 /* Determine if the initialization function of this component is including
@@ -83,40 +78,33 @@ UINT _fxe_system_time_get(UINT *hour, UINT *minute, UINT *second);
 #define SYSTEM_DECLARE extern
 #endif
 
-
 /* Define the head pointer of the opened media list.  */
 
-SYSTEM_DECLARE  FX_MEDIA  *_fx_system_media_opened_ptr;
-
+SYSTEM_DECLARE FX_MEDIA *_fx_system_media_opened_ptr;
 
 /* Define the variable that holds the number of open media. */
 
-SYSTEM_DECLARE  ULONG  _fx_system_media_opened_count;
-
+SYSTEM_DECLARE ULONG _fx_system_media_opened_count;
 
 /* Define the system date variable.  */
 
-SYSTEM_DECLARE  UINT  _fx_system_date;
-
+SYSTEM_DECLARE UINT _fx_system_date;
 
 /* Define the system time variable.  */
 
-SYSTEM_DECLARE  UINT  _fx_system_time;
-
+SYSTEM_DECLARE UINT _fx_system_time;
 
 /* Define the variable that holds the maximum size of the sector cache.  */
 
-SYSTEM_DECLARE  ULONG  _fx_system_media_max_sector_cache;
-
+SYSTEM_DECLARE ULONG _fx_system_media_max_sector_cache;
 
 /* Define the variable that holds the maximum size of the FAT cache.  */
 
-SYSTEM_DECLARE  ULONG  _fx_system_media_max_fat_cache;
+SYSTEM_DECLARE ULONG _fx_system_media_max_fat_cache;
 
-
-/* Define the global FileX build options variables. These variables contain a bit
-   map representing how the FileX library was built. The following are the bit
-   field definitions:
+/* Define the global FileX build options variables. These variables contain a
+   bit map representing how the FileX library was built. The following are the
+   bit field definitions:
 
     _fx_system_build_options_1:
 
@@ -153,23 +141,21 @@ SYSTEM_DECLARE  ULONG  _fx_system_media_max_fat_cache;
                     23-16               FX_UPDATE_RATE_IN_SECONDS
                     15-0                FX_UPDATE_RATE_IN_TICKS
 
-   Note that values greater than the value that can be represented in the build options
-   bit field are represented as all ones in the bit field. For example, if FX_MAX_LONG_NAME_LEN
-   is 256, the value in the bits 31-24 of _fx_system_build_options_1 is 0xFF, which is 255
-   decimal.  */
+   Note that values greater than the value that can be represented in the build
+   options bit field are represented as all ones in the bit field. For example,
+   if FX_MAX_LONG_NAME_LEN is 256, the value in the bits 31-24 of
+   _fx_system_build_options_1 is 0xFF, which is 255 decimal.  */
 
-SYSTEM_DECLARE  ULONG _fx_system_build_options_1;
-SYSTEM_DECLARE  ULONG _fx_system_build_options_2;
-SYSTEM_DECLARE  ULONG _fx_system_build_options_3;
-
+SYSTEM_DECLARE ULONG _fx_system_build_options_1;
+SYSTEM_DECLARE ULONG _fx_system_build_options_2;
+SYSTEM_DECLARE ULONG _fx_system_build_options_3;
 
 /* Define system timer control block.  If accurate date/time stamps on
    files is not needed, the define FX_NO_TIMER should be used when
    compiling fx_system_initialize.c to eliminate the FileX timer.  */
 
 #ifndef FX_NO_TIMER
-SYSTEM_DECLARE  TX_TIMER _fx_system_timer;
+SYSTEM_DECLARE TX_TIMER _fx_system_timer;
 #endif
 
 #endif
-

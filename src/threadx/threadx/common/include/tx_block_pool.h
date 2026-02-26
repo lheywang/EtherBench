@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -50,11 +48,9 @@
 #ifndef TX_BLOCK_POOL_H
 #define TX_BLOCK_POOL_H
 
-
 /* Define block memory control specific data definitions.  */
 
-#define TX_BLOCK_POOL_ID                        ((ULONG) 0x424C4F43)
-
+#define TX_BLOCK_POOL_ID ((ULONG)0x424C4F43)
 
 /* Determine if in-line component initialization is supported by the
    caller.  */
@@ -65,30 +61,28 @@
    initialization function.  */
 
 #ifndef TX_BLOCK_POOL_ENABLE_PERFORMANCE_INFO
-#define _tx_block_pool_initialize() \
-                    _tx_block_pool_created_ptr =                   TX_NULL;     \
-                    _tx_block_pool_created_count =                 TX_EMPTY
+#define _tx_block_pool_initialize()                                            \
+  _tx_block_pool_created_ptr = TX_NULL;                                        \
+  _tx_block_pool_created_count = TX_EMPTY
 #else
-#define _tx_block_pool_initialize() \
-                    _tx_block_pool_created_ptr =                   TX_NULL;     \
-                    _tx_block_pool_created_count =                 TX_EMPTY;    \
-                    _tx_block_pool_performance_allocate_count =    ((ULONG) 0); \
-                    _tx_block_pool_performance_release_count =     ((ULONG) 0); \
-                    _tx_block_pool_performance_suspension_count =  ((ULONG) 0); \
-                    _tx_block_pool_performance_timeout_count =     ((ULONG) 0)
+#define _tx_block_pool_initialize()                                            \
+  _tx_block_pool_created_ptr = TX_NULL;                                        \
+  _tx_block_pool_created_count = TX_EMPTY;                                     \
+  _tx_block_pool_performance_allocate_count = ((ULONG)0);                      \
+  _tx_block_pool_performance_release_count = ((ULONG)0);                       \
+  _tx_block_pool_performance_suspension_count = ((ULONG)0);                    \
+  _tx_block_pool_performance_timeout_count = ((ULONG)0)
 #endif
 #define TX_BLOCK_POOL_INIT
 #else
 
 /* No in-line initialization is supported, use standard function call.  */
-VOID        _tx_block_pool_initialize(VOID);
+VOID _tx_block_pool_initialize(VOID);
 #endif
-
 
 /* Define internal block memory pool management function prototypes.  */
 
-VOID        _tx_block_pool_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence);
-
+VOID _tx_block_pool_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence);
 
 /* Block pool management component data declarations follow.  */
 
@@ -102,47 +96,39 @@ VOID        _tx_block_pool_cleanup(TX_THREAD *thread_ptr, ULONG suspension_seque
 #define BLOCK_POOL_DECLARE extern
 #endif
 
-
 /* Define the head pointer of the created block pool list.  */
 
-BLOCK_POOL_DECLARE  TX_BLOCK_POOL *         _tx_block_pool_created_ptr;
-
+BLOCK_POOL_DECLARE TX_BLOCK_POOL *_tx_block_pool_created_ptr;
 
 /* Define the variable that holds the number of created block pools. */
 
-BLOCK_POOL_DECLARE  ULONG                   _tx_block_pool_created_count;
-
+BLOCK_POOL_DECLARE ULONG _tx_block_pool_created_count;
 
 #ifdef TX_BLOCK_POOL_ENABLE_PERFORMANCE_INFO
 
 /* Define the total number of block allocates.  */
 
-BLOCK_POOL_DECLARE  ULONG                  _tx_block_pool_performance_allocate_count;
-
+BLOCK_POOL_DECLARE ULONG _tx_block_pool_performance_allocate_count;
 
 /* Define the total number of block releases.  */
 
-BLOCK_POOL_DECLARE  ULONG                  _tx_block_pool_performance_release_count;
-
+BLOCK_POOL_DECLARE ULONG _tx_block_pool_performance_release_count;
 
 /* Define the total number of block pool suspensions.  */
 
-BLOCK_POOL_DECLARE  ULONG                  _tx_block_pool_performance_suspension_count;
-
+BLOCK_POOL_DECLARE ULONG _tx_block_pool_performance_suspension_count;
 
 /* Define the total number of block pool timeouts.  */
 
-BLOCK_POOL_DECLARE  ULONG                  _tx_block_pool_performance_timeout_count;
-
+BLOCK_POOL_DECLARE ULONG _tx_block_pool_performance_timeout_count;
 
 #endif
 
-
-/* Define default post block pool delete macro to whitespace, if it hasn't been defined previously (typically in tx_port.h).  */
+/* Define default post block pool delete macro to whitespace, if it hasn't been
+ * defined previously (typically in tx_port.h).  */
 
 #ifndef TX_BLOCK_POOL_DELETE_PORT_COMPLETION
 #define TX_BLOCK_POOL_DELETE_PORT_COMPLETION(p)
 #endif
-
 
 #endif

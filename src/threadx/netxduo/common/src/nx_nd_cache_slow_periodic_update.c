@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -30,7 +28,6 @@
 #include "../include/nx_nd_cache.h"
 
 #ifdef FEATURE_NX_IPV6
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -80,69 +77,64 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID _nx_nd_cache_slow_periodic_update(NX_IP *ip_ptr)
-{
+VOID _nx_nd_cache_slow_periodic_update(NX_IP *ip_ptr) {
 
-INT i;
+  INT i;
 
-    /* Check all entries in the ND cache for timer expiration. */
-    for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++)
-    {
-        /* Skip the invalid or empty ones. */
-        if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status == ND_CACHE_STATE_INVALID)
-        {
-            continue;
-        }
-
-        /* No need to update the static entries! */
-        if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_is_static)
-        {
-            continue;
-        }
-
-        /* If this is a reachable entry... */
-        if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status == ND_CACHE_STATE_REACHABLE)
-        {
-
-            ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick--;
-
-            /* And we have timed out... */
-            if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick == 0)
-            {
-
-                /* Time to move the state into the STALE state. */
-                ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status = ND_CACHE_STATE_STALE;
-            }
-        }
-        /* Entries in the delay state are set to be 'probed'. */
-        else if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status == ND_CACHE_STATE_DELAY)
-        {
-
-            ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick--;
-
-            /* Has the timeout expired? */
-            if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick == 0)
-            {
-
-                /* Set to the probe state. We do not send out NS;
-                   the nd_cache_fast_periodic_update will handle the
-                   processing of this entry now. */
-                ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status = ND_CACHE_STATE_PROBE;
-                ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_num_solicit = NX_MAX_UNICAST_SOLICIT;
-            }
-        }
-        else if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status == ND_CACHE_STATE_STALE)
-        {
-
-            /* When the entry is in stale mode, we actually increment the timer_tick.
-               The larger the timer_tick value, the longer then entry has been in
-               stale mode.  This makes the entry a target for recycling (being replaced
-               by a newer reachable entry). */
-            ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick++;
-        }
+  /* Check all entries in the ND cache for timer expiration. */
+  for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++) {
+    /* Skip the invalid or empty ones. */
+    if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status ==
+        ND_CACHE_STATE_INVALID) {
+      continue;
     }
+
+    /* No need to update the static entries! */
+    if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_is_static) {
+      continue;
+    }
+
+    /* If this is a reachable entry... */
+    if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status ==
+        ND_CACHE_STATE_REACHABLE) {
+
+      ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick--;
+
+      /* And we have timed out... */
+      if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick == 0) {
+
+        /* Time to move the state into the STALE state. */
+        ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status =
+            ND_CACHE_STATE_STALE;
+      }
+    }
+    /* Entries in the delay state are set to be 'probed'. */
+    else if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status ==
+             ND_CACHE_STATE_DELAY) {
+
+      ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick--;
+
+      /* Has the timeout expired? */
+      if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick == 0) {
+
+        /* Set to the probe state. We do not send out NS;
+           the nd_cache_fast_periodic_update will handle the
+           processing of this entry now. */
+        ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status =
+            ND_CACHE_STATE_PROBE;
+        ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_num_solicit =
+            NX_MAX_UNICAST_SOLICIT;
+      }
+    } else if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status ==
+               ND_CACHE_STATE_STALE) {
+
+      /* When the entry is in stale mode, we actually increment the timer_tick.
+         The larger the timer_tick value, the longer then entry has been in
+         stale mode.  This makes the entry a target for recycling (being
+         replaced by a newer reachable entry). */
+      ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick++;
+    }
+  }
 }
 
-
 #endif /* FEATURE_NX_IPV6 */
-

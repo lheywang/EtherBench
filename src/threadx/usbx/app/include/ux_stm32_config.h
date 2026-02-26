@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    ux_stm32_config.h
-  * @author  MCD Application Team
-  * @brief   USBX STM32 config header file
-  ******************************************************************************
-    * @attention
-  *
-  * Copyright (c) 2026 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    ux_stm32_config.h
+ * @author  MCD Application Team
+ * @brief   USBX STM32 config header file
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2026 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __UX_STM32_CONFIG_H__
@@ -34,8 +34,8 @@ extern "C" {
 
 /* Private defines -----------------------------------------------------------*/
 
-#define UX_DCD_STM32_MAX_ED                   8
-#define UX_HCD_STM32_MAX_NB_CHANNELS          8
+#define UX_DCD_STM32_MAX_ED 8
+#define UX_HCD_STM32_MAX_NB_CHANNELS 8
 
 /* USER CODE BEGIN Private defines */
 
@@ -48,5 +48,4 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-#endif  /* __UX_STM32_CONFIG_H__ */
-
+#endif /* __UX_STM32_CONFIG_H__ */

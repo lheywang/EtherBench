@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
@@ -30,7 +28,6 @@
 #ifdef TX_ENABLE_EVENT_TRACE
 #include "tx_trace.h"
 #endif
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,67 +68,62 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _tx_timer_activate(TX_TIMER *timer_ptr)
-{
+UINT _tx_timer_activate(TX_TIMER *timer_ptr) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-UINT        status;
+  UINT status;
 
-
-    /* Disable interrupts to put the timer on the created list.  */
-    TX_DISABLE
+  /* Disable interrupts to put the timer on the created list.  */
+  TX_DISABLE
 
 #ifdef TX_ENABLE_EVENT_TRACE
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    TX_TRACE_IN_LINE_INSERT(TX_TRACE_TIMER_ACTIVATE, timer_ptr, 0, 0, 0, TX_TRACE_TIMER_EVENTS)
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  TX_TRACE_IN_LINE_INSERT(TX_TRACE_TIMER_ACTIVATE, timer_ptr, 0, 0, 0,
+                          TX_TRACE_TIMER_EVENTS)
 #endif
 
 #ifdef TX_ENABLE_EVENT_LOGGING
 
-    /* Log this kernel call.  */
-    TX_EL_TIMER_ACTIVATE_INSERT
+  /* Log this kernel call.  */
+  TX_EL_TIMER_ACTIVATE_INSERT
 #endif
 
-    /* Check for an already active timer.  */
-    if (timer_ptr -> tx_timer_internal.tx_timer_internal_list_head != TX_NULL)
-    {
+  /* Check for an already active timer.  */
+  if (timer_ptr->tx_timer_internal.tx_timer_internal_list_head != TX_NULL) {
 
-        /* Timer is already active, return an error.  */
-        status =  TX_ACTIVATE_ERROR;
-    }
+    /* Timer is already active, return an error.  */
+    status = TX_ACTIVATE_ERROR;
+  }
 
-    /* Check for a timer with a zero expiration.  */
-    else if (timer_ptr -> tx_timer_internal.tx_timer_internal_remaining_ticks == ((ULONG) 0))
-    {
+  /* Check for a timer with a zero expiration.  */
+  else if (timer_ptr->tx_timer_internal.tx_timer_internal_remaining_ticks ==
+           ((ULONG)0)) {
 
-        /* Timer is being activated with a zero expiration.  */
-        status =  TX_ACTIVATE_ERROR;
-    }
-    else
-    {
+    /* Timer is being activated with a zero expiration.  */
+    status = TX_ACTIVATE_ERROR;
+  } else {
 
 #ifdef TX_TIMER_ENABLE_PERFORMANCE_INFO
 
-        /* Increment the total activations counter.  */
-        _tx_timer_performance_activate_count++;
+    /* Increment the total activations counter.  */
+    _tx_timer_performance_activate_count++;
 
-        /* Increment the number of activations on this timer.  */
-        timer_ptr -> tx_timer_performance_activate_count++;
+    /* Increment the number of activations on this timer.  */
+    timer_ptr->tx_timer_performance_activate_count++;
 #endif
 
-        /* Call actual activation function.  */
-        _tx_timer_system_activate(&(timer_ptr -> tx_timer_internal));
+    /* Call actual activation function.  */
+    _tx_timer_system_activate(&(timer_ptr->tx_timer_internal));
 
-        /* Return a successful status.  */
-        status =  TX_SUCCESS;
-    }
+    /* Return a successful status.  */
+    status = TX_SUCCESS;
+  }
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,18 +21,15 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_ip.h"
 #include "../include/nx_igmp.h"
-
+#include "../include/nx_ip.h"
 
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,50 +73,43 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_igmp_multicast_leave(NX_IP *ip_ptr, ULONG group_address)
-{
+UINT _nxe_igmp_multicast_leave(NX_IP *ip_ptr, ULONG group_address) {
 
 #ifndef NX_DISABLE_IPV4
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid multicast address.  */
+  if ((group_address & NX_IP_CLASS_D_MASK) != NX_IP_CLASS_D_TYPE) {
+    return (NX_IP_ADDRESS_ERROR);
+  }
 
-    /* Check for invalid multicast address.  */
-    if ((group_address & NX_IP_CLASS_D_MASK) != NX_IP_CLASS_D_TYPE)
-    {
-        return(NX_IP_ADDRESS_ERROR);
-    }
+  /* Check to see if IGMP is enabled.  */
+  if (!ip_ptr->nx_ip_igmp_packet_receive) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if IGMP is enabled.  */
-    if (!ip_ptr -> nx_ip_igmp_packet_receive)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Validate the interface.  */
+  if (ip_ptr->nx_ip_interface[0].nx_interface_valid == NX_FALSE) {
+    return (NX_INVALID_INTERFACE);
+  }
 
-    /* Validate the interface.  */
-    if (ip_ptr -> nx_ip_interface[0].nx_interface_valid == NX_FALSE)
-    {
-        return(NX_INVALID_INTERFACE);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual IGMP multicast leave function.  */
+  status = _nx_igmp_multicast_leave(ip_ptr, group_address);
 
-    /* Call actual IGMP multicast leave function.  */
-    status =  _nx_igmp_multicast_leave(ip_ptr, group_address);
+  /* Return completion status.  */
+  return (status);
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(group_address);
 
-    /* Return completion status.  */
-    return(status);
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(group_address);
-
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

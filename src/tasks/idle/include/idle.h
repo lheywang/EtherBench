@@ -30,4 +30,3 @@ void idle_task(ULONG arg);
 #ifdef __cplusplus
 }
 #endif
-

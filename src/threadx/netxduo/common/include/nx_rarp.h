@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -55,19 +53,18 @@
 
 #include "../include/nx_api.h"
 
-
 #ifndef NX_DISABLE_IPV4
 /* Define RARP Message format.  This will get encapsulated by an Ethernet frame
-   as well.  The Ethernet frame will typically have a 6-byte Ethernet destination
-   address, a 6-byte Ethernet source address, and a 2-byte Ethernet Frame type,
-   which is 0x8035.  Regular IP frames have a frame type of 0x0800.
+   as well.  The Ethernet frame will typically have a 6-byte Ethernet
+   destination address, a 6-byte Ethernet source address, and a 2-byte Ethernet
+   Frame type, which is 0x8035.  Regular IP frames have a frame type of 0x0800.
 
     Byte offset     Size            Meaning
 
         0           2           Hardware type (1 for Ethernet)
         2           2           Protocol type (0x0800 for IP)
-        4           1           Number of bytes for hardware address (6 for Ethernet)
-        5           1           Number of bytes for IP address (4 for IP)
+        4           1           Number of bytes for hardware address (6 for
+   Ethernet) 5           1           Number of bytes for IP address (4 for IP)
         6           2           Operation, ARP request is 1, ARP reply is 2
         8           6           Sender's Ethernet Address
         14          4           Sender's IP Address
@@ -75,13 +72,13 @@
         24          4           Target IP Address
  */
 
-#define NX_RARP_HARDWARE_TYPE   ((ULONG)0x0001)
-#define NX_RARP_PROTOCOL_TYPE   ((ULONG)0x0800)
-#define NX_RARP_HARDWARE_SIZE   ((ULONG)0x06)
-#define NX_RARP_PROTOCOL_SIZE   ((ULONG)0x04)
-#define NX_RARP_OPTION_REQUEST  ((ULONG)0x0003)
+#define NX_RARP_HARDWARE_TYPE ((ULONG)0x0001)
+#define NX_RARP_PROTOCOL_TYPE ((ULONG)0x0800)
+#define NX_RARP_HARDWARE_SIZE ((ULONG)0x06)
+#define NX_RARP_PROTOCOL_SIZE ((ULONG)0x04)
+#define NX_RARP_OPTION_REQUEST ((ULONG)0x0003)
 #define NX_RARP_OPTION_RESPONSE ((ULONG)0x0004)
-#define NX_RARP_MESSAGE_SIZE    28
+#define NX_RARP_MESSAGE_SIZE 28
 
 /* Define RARP internal function prototypes.  */
 VOID _nx_rarp_packet_send(NX_IP *ip_ptr);
@@ -94,15 +91,16 @@ VOID _nx_rarp_queue_process(NX_IP *ip_ptr);
 /* Define RARP function prototypes.  */
 UINT _nx_rarp_enable(NX_IP *ip_ptr);
 UINT _nx_rarp_disable(NX_IP *ip_ptr);
-UINT _nx_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent, ULONG *rarp_responses_received,
+UINT _nx_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent,
+                       ULONG *rarp_responses_received,
                        ULONG *rarp_invalid_messages);
 
-/* Define error checking shells for RARP services.  These are only referenced by the
-   application.  */
+/* Define error checking shells for RARP services.  These are only referenced by
+   the application.  */
 
 UINT _nxe_rarp_enable(NX_IP *ip_ptr);
 UINT _nxe_rarp_disable(NX_IP *ip_ptr);
-UINT _nxe_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent, ULONG *rarp_responses_received,
+UINT _nxe_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent,
+                        ULONG *rarp_responses_received,
                         ULONG *rarp_invalid_messages);
 #endif
-

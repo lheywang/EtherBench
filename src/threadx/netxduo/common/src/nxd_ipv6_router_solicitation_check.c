@@ -19,14 +19,12 @@
 /**************************************************************************/
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
+#include "../include/nx_icmpv6.h"
 #include "../include/nx_ipv6.h"
 #include "../include/nx_nd_cache.h"
-#include "../include/nx_icmpv6.h"
-
 
 #ifdef FEATURE_NX_IPV6
 
@@ -81,42 +79,35 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-void _nxd_ipv6_router_solicitation_check(NX_IP *ip_ptr)
-{
-UINT i;
+void _nxd_ipv6_router_solicitation_check(NX_IP *ip_ptr) {
+  UINT i;
 
-    for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++)
-    {
-        if (ip_ptr -> nx_ip_interface[i].nx_interface_valid == NX_TRUE)
-        {
+  for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
+    if (ip_ptr->nx_ip_interface[i].nx_interface_valid == NX_TRUE) {
 
-            /* Check if max number of router solicitation messages have been sent. */
-            if (ip_ptr -> nx_ip_interface[i].nx_ipv6_rtr_solicitation_count != 0)
-            {
+      /* Check if max number of router solicitation messages have been sent. */
+      if (ip_ptr->nx_ip_interface[i].nx_ipv6_rtr_solicitation_count != 0) {
 
-                /* Check on count down timer for sending out next router solicitation message. */
-                ip_ptr -> nx_ip_interface[i].nx_ipv6_rtr_solicitation_timer--;
-                if (ip_ptr -> nx_ip_interface[i].nx_ipv6_rtr_solicitation_timer == 0)
-                {
-                    if (_nx_icmpv6_send_rs(ip_ptr, i) &&
-                        (ip_ptr -> nx_ip_interface[i].nx_ipv6_rtr_solicitation_count ==
-                         ip_ptr -> nx_ip_interface[i].nx_ipv6_rtr_solicitation_max))
-                    {
+        /* Check on count down timer for sending out next router solicitation
+         * message. */
+        ip_ptr->nx_ip_interface[i].nx_ipv6_rtr_solicitation_timer--;
+        if (ip_ptr->nx_ip_interface[i].nx_ipv6_rtr_solicitation_timer == 0) {
+          if (_nx_icmpv6_send_rs(ip_ptr, i) &&
+              (ip_ptr->nx_ip_interface[i].nx_ipv6_rtr_solicitation_count ==
+               ip_ptr->nx_ip_interface[i].nx_ipv6_rtr_solicitation_max)) {
 
-                        /* Initial RS is not sent successfully. */
-                        /* Try it next round. */
-                        ip_ptr -> nx_ip_interface[i].nx_ipv6_rtr_solicitation_timer = 1;
-                    }
-                    else
-                    {
-                        ip_ptr -> nx_ip_interface[i].nx_ipv6_rtr_solicitation_count--;
-                        ip_ptr -> nx_ip_interface[i].nx_ipv6_rtr_solicitation_timer = ip_ptr -> nx_ip_interface[i].nx_ipv6_rtr_solicitation_interval;
-                    }
-                }
-            }
+            /* Initial RS is not sent successfully. */
+            /* Try it next round. */
+            ip_ptr->nx_ip_interface[i].nx_ipv6_rtr_solicitation_timer = 1;
+          } else {
+            ip_ptr->nx_ip_interface[i].nx_ipv6_rtr_solicitation_count--;
+            ip_ptr->nx_ip_interface[i].nx_ipv6_rtr_solicitation_timer =
+                ip_ptr->nx_ip_interface[i].nx_ipv6_rtr_solicitation_interval;
+          }
         }
+      }
     }
+  }
 }
 #endif /* NX_DISABLE_ICMPV6_ROUTER_SOLICITATION */
 #endif /* FEATURE_NX_IPV6 */
-

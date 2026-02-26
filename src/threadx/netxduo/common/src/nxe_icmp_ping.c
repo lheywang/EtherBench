@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,18 +21,15 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_ip.h"
 #include "../include/nx_icmp.h"
-
+#include "../include/nx_ip.h"
 
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -79,51 +75,46 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_icmp_ping(NX_IP *ip_ptr, ULONG ip_address,
-                     CHAR *data_ptr, ULONG data_size,
-                     NX_PACKET **response_ptr, ULONG wait_option)
-{
+UINT _nxe_icmp_ping(NX_IP *ip_ptr, ULONG ip_address, CHAR *data_ptr,
+                    ULONG data_size, NX_PACKET **response_ptr,
+                    ULONG wait_option) {
 
 #ifndef NX_DISABLE_IPV4
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
+      (response_ptr == NX_NULL)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID) || (response_ptr == NX_NULL))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid IP address.  */
+  if (!ip_address) {
+    return (NX_IP_ADDRESS_ERROR);
+  }
 
-    /* Check for invalid IP address.  */
-    if (!ip_address)
-    {
-        return(NX_IP_ADDRESS_ERROR);
-    }
+  /* Check to see if ICMP is enabled.  */
+  if (!ip_ptr->nx_ip_icmp_packet_receive) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if ICMP is enabled.  */
-    if (!ip_ptr -> nx_ip_icmp_packet_receive)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual ICMP ping function.  */
+  status = _nx_icmp_ping(ip_ptr, ip_address, data_ptr, data_size, response_ptr,
+                         wait_option);
 
-    /* Call actual ICMP ping function.  */
-    status =  _nx_icmp_ping(ip_ptr, ip_address, data_ptr, data_size,
-                            response_ptr, wait_option);
+  /* Return completion status.  */
+  return (status);
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_address);
+  NX_PARAMETER_NOT_USED(data_ptr);
+  NX_PARAMETER_NOT_USED(data_size);
+  NX_PARAMETER_NOT_USED(response_ptr);
+  NX_PARAMETER_NOT_USED(wait_option);
 
-    /* Return completion status.  */
-    return(status);
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(ip_address);
-    NX_PARAMETER_NOT_USED(data_ptr);
-    NX_PARAMETER_NOT_USED(data_size);
-    NX_PARAMETER_NOT_USED(response_ptr);
-    NX_PARAMETER_NOT_USED(wait_option);
-
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

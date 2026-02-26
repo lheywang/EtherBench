@@ -1,25 +1,26 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    stm32h5xx_it.c
-  * @brief   Interrupt Service Routines.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2026 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    stm32h5xx_it.c
+ * @brief   Interrupt Service Routines.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2026 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 #include "stm32h5xx_it.h"
+#include "main.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -69,85 +70,74 @@ extern TIM_HandleTypeDef htim6;
 /*           Cortex Processor Interruption and Exception Handlers          */
 /******************************************************************************/
 /**
-  * @brief This function handles Non maskable interrupt.
-  */
-void NMI_Handler(void)
-{
+ * @brief This function handles Non maskable interrupt.
+ */
+void NMI_Handler(void) {
   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
 
   /* USER CODE END NonMaskableInt_IRQn 0 */
   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
-   while (1)
-  {
+  while (1) {
   }
   /* USER CODE END NonMaskableInt_IRQn 1 */
 }
 
 /**
-  * @brief This function handles Hard fault interrupt.
-  */
-void HardFault_Handler(void)
-{
+ * @brief This function handles Hard fault interrupt.
+ */
+void HardFault_Handler(void) {
   /* USER CODE BEGIN HardFault_IRQn 0 */
 
   /* USER CODE END HardFault_IRQn 0 */
-  while (1)
-  {
+  while (1) {
     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
     /* USER CODE END W1_HardFault_IRQn 0 */
   }
 }
 
 /**
-  * @brief This function handles Memory management fault.
-  */
-void MemManage_Handler(void)
-{
+ * @brief This function handles Memory management fault.
+ */
+void MemManage_Handler(void) {
   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
 
   /* USER CODE END MemoryManagement_IRQn 0 */
-  while (1)
-  {
+  while (1) {
     /* USER CODE BEGIN W1_MemoryManagement_IRQn 0 */
     /* USER CODE END W1_MemoryManagement_IRQn 0 */
   }
 }
 
 /**
-  * @brief This function handles Pre-fetch fault, memory access fault.
-  */
-void BusFault_Handler(void)
-{
+ * @brief This function handles Pre-fetch fault, memory access fault.
+ */
+void BusFault_Handler(void) {
   /* USER CODE BEGIN BusFault_IRQn 0 */
 
   /* USER CODE END BusFault_IRQn 0 */
-  while (1)
-  {
+  while (1) {
     /* USER CODE BEGIN W1_BusFault_IRQn 0 */
     /* USER CODE END W1_BusFault_IRQn 0 */
   }
 }
 
 /**
-  * @brief This function handles Undefined instruction or illegal state.
-  */
-void UsageFault_Handler(void)
-{
+ * @brief This function handles Undefined instruction or illegal state.
+ */
+void UsageFault_Handler(void) {
   /* USER CODE BEGIN UsageFault_IRQn 0 */
 
   /* USER CODE END UsageFault_IRQn 0 */
-  while (1)
-  {
+  while (1) {
     /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
     /* USER CODE END W1_UsageFault_IRQn 0 */
   }
 }
 
 /**
-  * @brief This function handles Debug monitor.
-  */
-void DebugMon_Handler(void)
-{
+ * @brief This function handles Debug monitor.
+ */
+void DebugMon_Handler(void) {
   /* USER CODE BEGIN DebugMonitor_IRQn 0 */
 
   /* USER CODE END DebugMonitor_IRQn 0 */
@@ -164,10 +154,9 @@ void DebugMon_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles Flash non-secure global interrupt.
-  */
-void FLASH_IRQHandler(void)
-{
+ * @brief This function handles Flash non-secure global interrupt.
+ */
+void FLASH_IRQHandler(void) {
   /* USER CODE BEGIN FLASH_IRQn 0 */
 
   /* USER CODE END FLASH_IRQn 0 */
@@ -178,10 +167,9 @@ void FLASH_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles RCC non-secure global interrupt.
-  */
-void RCC_IRQHandler(void)
-{
+ * @brief This function handles RCC non-secure global interrupt.
+ */
+void RCC_IRQHandler(void) {
   /* USER CODE BEGIN RCC_IRQn 0 */
 
   /* USER CODE END RCC_IRQn 0 */
@@ -191,10 +179,9 @@ void RCC_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM6 global interrupt.
-  */
-void TIM6_IRQHandler(void)
-{
+ * @brief This function handles TIM6 global interrupt.
+ */
+void TIM6_IRQHandler(void) {
   /* USER CODE BEGIN TIM6_IRQn 0 */
 
   /* USER CODE END TIM6_IRQn 0 */
@@ -205,10 +192,9 @@ void TIM6_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles USART3 global interrupt.
-  */
-void USART3_IRQHandler(void)
-{
+ * @brief This function handles USART3 global interrupt.
+ */
+void USART3_IRQHandler(void) {
   /* USER CODE BEGIN USART3_IRQn 0 */
 
   /* USER CODE END USART3_IRQn 0 */
@@ -219,10 +205,9 @@ void USART3_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles USB FS global interrupt.
-  */
-void USB_DRD_FS_IRQHandler(void)
-{
+ * @brief This function handles USB FS global interrupt.
+ */
+void USB_DRD_FS_IRQHandler(void) {
   /* USER CODE BEGIN USB_DRD_FS_IRQn 0 */
 
   /* USER CODE END USB_DRD_FS_IRQn 0 */
@@ -233,10 +218,9 @@ void USB_DRD_FS_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles GPDMA2 Channel 0 global interrupt.
-  */
-void GPDMA2_Channel0_IRQHandler(void)
-{
+ * @brief This function handles GPDMA2 Channel 0 global interrupt.
+ */
+void GPDMA2_Channel0_IRQHandler(void) {
   /* USER CODE BEGIN GPDMA2_Channel0_IRQn 0 */
 
   /* USER CODE END GPDMA2_Channel0_IRQn 0 */
@@ -247,10 +231,9 @@ void GPDMA2_Channel0_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles FPU global interrupt.
-  */
-void FPU_IRQHandler(void)
-{
+ * @brief This function handles FPU global interrupt.
+ */
+void FPU_IRQHandler(void) {
   /* USER CODE BEGIN FPU_IRQn 0 */
 
   /* USER CODE END FPU_IRQn 0 */
@@ -260,10 +243,9 @@ void FPU_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles Instruction cache global interrupt.
-  */
-void ICACHE_IRQHandler(void)
-{
+ * @brief This function handles Instruction cache global interrupt.
+ */
+void ICACHE_IRQHandler(void) {
   /* USER CODE BEGIN ICACHE_IRQn 0 */
 
   /* USER CODE END ICACHE_IRQn 0 */
@@ -274,10 +256,9 @@ void ICACHE_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles Ethernet global interrupt.
-  */
-void ETH_IRQHandler(void)
-{
+ * @brief This function handles Ethernet global interrupt.
+ */
+void ETH_IRQHandler(void) {
   /* USER CODE BEGIN ETH_IRQn 0 */
 
   /* USER CODE END ETH_IRQn 0 */
@@ -288,10 +269,9 @@ void ETH_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles Ethernet Wakeup global interrupt.
-  */
-void ETH_WKUP_IRQHandler(void)
-{
+ * @brief This function handles Ethernet Wakeup global interrupt.
+ */
+void ETH_WKUP_IRQHandler(void) {
   /* USER CODE BEGIN ETH_WKUP_IRQn 0 */
 
   /* USER CODE END ETH_WKUP_IRQn 0 */

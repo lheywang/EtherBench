@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -23,10 +22,9 @@
 #define FX_SOURCE_CODE
 
 #include "fx_api.h"
-#include "fx_utility.h"
 #include "fx_directory.h"
 #include "fx_fault_tolerant.h"
-
+#include "fx_utility.h"
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
 /**************************************************************************/
@@ -89,54 +87,72 @@
 /*                                                                        */
 /**************************************************************************/
 
-UINT _fx_fault_tolerant_reset_log_file(FX_MEDIA *media_ptr)
-{
-UINT                           status;
-USHORT                         checksum;
-FX_FAULT_TOLERANT_LOG_HEADER  *log_header;
-FX_FAULT_TOLERANT_FAT_CHAIN   *FAT_chain;
-FX_FAULT_TOLERANT_LOG_CONTENT *log_content;
+UINT _fx_fault_tolerant_reset_log_file(FX_MEDIA *media_ptr) {
+  UINT status;
+  USHORT checksum;
+  FX_FAULT_TOLERANT_LOG_HEADER *log_header;
+  FX_FAULT_TOLERANT_FAT_CHAIN *FAT_chain;
+  FX_FAULT_TOLERANT_LOG_CONTENT *log_content;
 
-    /* Set log header, FAT chain and log content pointer. */
-    log_header = (FX_FAULT_TOLERANT_LOG_HEADER *)media_ptr -> fx_media_fault_tolerant_memory_buffer;
-    FAT_chain = (FX_FAULT_TOLERANT_FAT_CHAIN *)(media_ptr -> fx_media_fault_tolerant_memory_buffer +
-                                                FX_FAULT_TOLERANT_FAT_CHAIN_OFFSET);
-    log_content = (FX_FAULT_TOLERANT_LOG_CONTENT *)(media_ptr -> fx_media_fault_tolerant_memory_buffer +
-                                                    FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET);
+  /* Set log header, FAT chain and log content pointer. */
+  log_header = (FX_FAULT_TOLERANT_LOG_HEADER *)
+                   media_ptr->fx_media_fault_tolerant_memory_buffer;
+  FAT_chain = (FX_FAULT_TOLERANT_FAT_CHAIN
+                   *)(media_ptr->fx_media_fault_tolerant_memory_buffer +
+                      FX_FAULT_TOLERANT_FAT_CHAIN_OFFSET);
+  log_content = (FX_FAULT_TOLERANT_LOG_CONTENT
+                     *)(media_ptr->fx_media_fault_tolerant_memory_buffer +
+                        FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET);
 
-    /* Reset the log file header. */
-    _fx_utility_32_unsigned_write((UCHAR *)&log_header -> fx_fault_tolerant_log_header_id, FX_FAULT_TOLERANT_ID);
-    _fx_utility_16_unsigned_write((UCHAR *)&log_header -> fx_fault_tolerant_log_header_total_size,
-                                  (FX_FAULT_TOLERANT_LOG_HEADER_SIZE + FX_FAULT_TOLERANT_FAT_CHAIN_SIZE));
-    _fx_utility_16_unsigned_write((UCHAR *)&log_header -> fx_fault_tolerant_log_header_checksum, 0);
-    log_header -> fx_fault_tolerant_log_header_version_major = FX_FAULT_TOLERANT_VERSION_MAJOR;
-    log_header -> fx_fault_tolerant_log_header_version_minor = FX_FAULT_TOLERANT_VERSION_MINOR;
-    _fx_utility_16_unsigned_write((UCHAR *)&log_header -> fx_fault_tolerant_log_header_reserved, 0);
-    checksum = _fx_fault_tolerant_calculate_checksum((UCHAR *)log_header, FX_FAULT_TOLERANT_LOG_HEADER_SIZE);
-    _fx_utility_16_unsigned_write((UCHAR *)&log_header -> fx_fault_tolerant_log_header_checksum, checksum);
+  /* Reset the log file header. */
+  _fx_utility_32_unsigned_write(
+      (UCHAR *)&log_header->fx_fault_tolerant_log_header_id,
+      FX_FAULT_TOLERANT_ID);
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_header->fx_fault_tolerant_log_header_total_size,
+      (FX_FAULT_TOLERANT_LOG_HEADER_SIZE + FX_FAULT_TOLERANT_FAT_CHAIN_SIZE));
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_header->fx_fault_tolerant_log_header_checksum, 0);
+  log_header->fx_fault_tolerant_log_header_version_major =
+      FX_FAULT_TOLERANT_VERSION_MAJOR;
+  log_header->fx_fault_tolerant_log_header_version_minor =
+      FX_FAULT_TOLERANT_VERSION_MINOR;
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_header->fx_fault_tolerant_log_header_reserved, 0);
+  checksum = _fx_fault_tolerant_calculate_checksum(
+      (UCHAR *)log_header, FX_FAULT_TOLERANT_LOG_HEADER_SIZE);
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_header->fx_fault_tolerant_log_header_checksum, checksum);
 
-    /* Reset the undo log section. */
-    _fx_utility_16_unsigned_write((UCHAR *)&FAT_chain -> fx_fault_tolerant_FAT_chain_checksumm, 0xFFFF);
-    FAT_chain -> fx_fault_tolerant_FAT_chain_flag = 0;
-    FAT_chain -> fx_fault_tolerant_FAT_chain_reserved = 0;
-    _fx_utility_32_unsigned_write((UCHAR *)&FAT_chain -> fx_fault_tolerant_FAT_chain_insertion_front, 0);
-    _fx_utility_32_unsigned_write((UCHAR *)&FAT_chain -> fx_fault_tolerant_FAT_chain_head_new, 0);
-    _fx_utility_32_unsigned_write((UCHAR *)&FAT_chain -> fx_fault_tolerant_FAT_chain_head_original, 0);
-    _fx_utility_32_unsigned_write((UCHAR *)&FAT_chain -> fx_fault_tolerant_FAT_chain_insertion_back, 0);
-    _fx_utility_32_unsigned_write((UCHAR *)&FAT_chain -> fx_fault_tolerant_FAT_chain_next_deletion, 0);
+  /* Reset the undo log section. */
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_checksumm, 0xFFFF);
+  FAT_chain->fx_fault_tolerant_FAT_chain_flag = 0;
+  FAT_chain->fx_fault_tolerant_FAT_chain_reserved = 0;
+  _fx_utility_32_unsigned_write(
+      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_insertion_front, 0);
+  _fx_utility_32_unsigned_write(
+      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_head_new, 0);
+  _fx_utility_32_unsigned_write(
+      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_head_original, 0);
+  _fx_utility_32_unsigned_write(
+      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_insertion_back, 0);
+  _fx_utility_32_unsigned_write(
+      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_next_deletion, 0);
 
-    /* Reset log content header. */
-    _fx_utility_16_unsigned_write((UCHAR *)&log_content -> fx_fault_tolerant_log_content_checksum, 0xFFFF);
-    _fx_utility_16_unsigned_write((UCHAR *)&log_content -> fx_fault_tolerant_log_content_count, 0xFFFF);
+  /* Reset log content header. */
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_content->fx_fault_tolerant_log_content_checksum, 0xFFFF);
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&log_content->fx_fault_tolerant_log_content_count, 0xFFFF);
 
-    /* No matter success or fail, close this transaction. */
-    media_ptr -> fx_media_fault_tolerant_state = FX_FAULT_TOLERANT_STATE_IDLE;
+  /* No matter success or fail, close this transaction. */
+  media_ptr->fx_media_fault_tolerant_state = FX_FAULT_TOLERANT_STATE_IDLE;
 
-    /* Write the log header and FAT chain.  */
-    status =  _fx_fault_tolerant_write_log_file(media_ptr, 0);
+  /* Write the log header and FAT chain.  */
+  status = _fx_fault_tolerant_write_log_file(media_ptr, 0);
 
-    /* Return the status.  */
-    return(status);
+  /* Return the status.  */
+  return (status);
 }
 #endif /* FX_ENABLE_FAULT_TOLERANT */
-

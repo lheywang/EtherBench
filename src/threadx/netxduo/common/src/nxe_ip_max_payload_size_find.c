@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
@@ -34,7 +32,6 @@
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -93,44 +90,34 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                                                        */
 /**************************************************************************/
 
-UINT _nxe_ip_max_payload_size_find(NX_IP *ip_ptr,
-                                   NXD_ADDRESS *dest_address,
-                                   UINT if_index,
-                                   UINT src_port,
-                                   UINT dest_port,
-                                   ULONG protocol,
-                                   ULONG *start_offset_ptr,
-                                   ULONG *payload_length_ptr)
-{
+UINT _nxe_ip_max_payload_size_find(NX_IP *ip_ptr, NXD_ADDRESS *dest_address,
+                                   UINT if_index, UINT src_port, UINT dest_port,
+                                   ULONG protocol, ULONG *start_offset_ptr,
+                                   ULONG *payload_length_ptr) {
 
-    /* Check for valid pointer to an IP instance.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for valid pointer to an IP instance.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Destination address must be valid. */
-    if (dest_address == NX_NULL)
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Destination address must be valid. */
+  if (dest_address == NX_NULL) {
+    return (NX_PTR_ERROR);
+  }
 
-    if ((dest_address -> nxd_ip_version != NX_IP_VERSION_V4) &&
-        (dest_address -> nxd_ip_version != NX_IP_VERSION_V6))
-    {
-        return(NX_IP_ADDRESS_ERROR);
-    }
+  if ((dest_address->nxd_ip_version != NX_IP_VERSION_V4) &&
+      (dest_address->nxd_ip_version != NX_IP_VERSION_V6)) {
+    return (NX_IP_ADDRESS_ERROR);
+  }
 
-    if ((protocol != NX_PROTOCOL_UDP) &&
-        (protocol != NX_PROTOCOL_TCP))
-    {
-        return(NX_NOT_SUPPORTED);
-    }
+  if ((protocol != NX_PROTOCOL_UDP) && (protocol != NX_PROTOCOL_TCP)) {
+    return (NX_NOT_SUPPORTED);
+  }
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    return(_nx_ip_max_payload_size_find(ip_ptr, dest_address, if_index, src_port, dest_port,
-                                        protocol, start_offset_ptr, payload_length_ptr));
+  return (_nx_ip_max_payload_size_find(ip_ptr, dest_address, if_index, src_port,
+                                       dest_port, protocol, start_offset_ptr,
+                                       payload_length_ptr));
 }
-

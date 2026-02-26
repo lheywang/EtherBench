@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,17 +21,14 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_tcp.h"
 
-
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -82,67 +78,60 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxde_tcp_client_socket_connect(NX_TCP_SOCKET *socket_ptr,
-                                      NXD_ADDRESS *server_ip,
-                                      UINT server_port, ULONG wait_option)
-{
+UINT _nxde_tcp_client_socket_connect(NX_TCP_SOCKET *socket_ptr,
+                                     NXD_ADDRESS *server_ip, UINT server_port,
+                                     ULONG wait_option) {
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((socket_ptr == NX_NULL) || (socket_ptr -> nx_tcp_socket_id != NX_TCP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Verify TCP is enabled.  */
+  if (!(socket_ptr->nx_tcp_socket_ip_ptr)->nx_ip_tcp_packet_receive) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Verify TCP is enabled.  */
-    if (!(socket_ptr -> nx_tcp_socket_ip_ptr) -> nx_ip_tcp_packet_receive)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for valid TCP server address. */
+  if (server_ip == NX_NULL) {
+    return (NX_IP_ADDRESS_ERROR);
+  }
 
+  /* Check that the server IP address version is either IPv4 or IPv6. */
+  if ((server_ip->nxd_ip_version != NX_IP_VERSION_V4) &&
+      (server_ip->nxd_ip_version != NX_IP_VERSION_V6)) {
 
-    /* Check for valid TCP server address. */
-    if (server_ip == NX_NULL)
-    {
-        return(NX_IP_ADDRESS_ERROR);
-    }
-
-    /* Check that the server IP address version is either IPv4 or IPv6. */
-    if ((server_ip -> nxd_ip_version != NX_IP_VERSION_V4) &&
-        (server_ip -> nxd_ip_version != NX_IP_VERSION_V6))
-    {
-
-        return(NX_IP_ADDRESS_ERROR);
-    }
+    return (NX_IP_ADDRESS_ERROR);
+  }
 
 #ifndef NX_DISABLE_IPV4
-    /* Check for a valid server IP address if the server_ip is version IPv4.  */
-    if (server_ip -> nxd_ip_version == NX_IP_VERSION_V4)
-    {
-        if (((server_ip -> nxd_ip_address.v4 & NX_IP_CLASS_A_MASK) != NX_IP_CLASS_A_TYPE) &&
-            ((server_ip -> nxd_ip_address.v4 & NX_IP_CLASS_B_MASK) != NX_IP_CLASS_B_TYPE) &&
-            ((server_ip -> nxd_ip_address.v4 & NX_IP_CLASS_C_MASK) != NX_IP_CLASS_C_TYPE))
-        {
-            return(NX_IP_ADDRESS_ERROR);
-        }
+  /* Check for a valid server IP address if the server_ip is version IPv4.  */
+  if (server_ip->nxd_ip_version == NX_IP_VERSION_V4) {
+    if (((server_ip->nxd_ip_address.v4 & NX_IP_CLASS_A_MASK) !=
+         NX_IP_CLASS_A_TYPE) &&
+        ((server_ip->nxd_ip_address.v4 & NX_IP_CLASS_B_MASK) !=
+         NX_IP_CLASS_B_TYPE) &&
+        ((server_ip->nxd_ip_address.v4 & NX_IP_CLASS_C_MASK) !=
+         NX_IP_CLASS_C_TYPE)) {
+      return (NX_IP_ADDRESS_ERROR);
     }
+  }
 #endif /* !NX_DISABLE_IPV4  */
 
-    /* Check for an invalid port.  */
-    if (((ULONG)server_port) > (ULONG)NX_MAX_PORT)
-    {
-        return(NX_INVALID_PORT);
-    }
+  /* Check for an invalid port.  */
+  if (((ULONG)server_port) > (ULONG)NX_MAX_PORT) {
+    return (NX_INVALID_PORT);
+  }
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Call actual TCP client socket connect function.  */
-    status =  _nxd_tcp_client_socket_connect(socket_ptr, server_ip, server_port, wait_option);
+  /* Call actual TCP client socket connect function.  */
+  status = _nxd_tcp_client_socket_connect(socket_ptr, server_ip, server_port,
+                                          wait_option);
 
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

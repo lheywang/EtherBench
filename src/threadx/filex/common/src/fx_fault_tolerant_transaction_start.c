@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -24,7 +23,6 @@
 
 #include "fx_api.h"
 #include "fx_fault_tolerant.h"
-
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
 /**************************************************************************/
@@ -82,34 +80,31 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT    _fx_fault_tolerant_transaction_start(FX_MEDIA *media_ptr)
-{
+UINT _fx_fault_tolerant_transaction_start(FX_MEDIA *media_ptr) {
 
-    /* Is fault tolerant enabled? */
-    if (media_ptr -> fx_media_fault_tolerant_enabled == FX_TRUE)
-    {
+  /* Is fault tolerant enabled? */
+  if (media_ptr->fx_media_fault_tolerant_enabled == FX_TRUE) {
 
-        /* Is this a new transaction? */
-        if (media_ptr -> fx_media_fault_tolerant_transaction_count == 0)
-        {
+    /* Is this a new transaction? */
+    if (media_ptr->fx_media_fault_tolerant_transaction_count == 0) {
 
-            /* Yes. Initialize data. */
-            media_ptr -> fx_media_fault_tolerant_file_size = FX_FAULT_TOLERANT_LOG_HEADER_SIZE +
-                                                             FX_FAULT_TOLERANT_FAT_CHAIN_SIZE +
-                                                             FX_FAULT_TOLERANT_LOG_CONTENT_HEADER_SIZE;
+      /* Yes. Initialize data. */
+      media_ptr->fx_media_fault_tolerant_file_size =
+          FX_FAULT_TOLERANT_LOG_HEADER_SIZE + FX_FAULT_TOLERANT_FAT_CHAIN_SIZE +
+          FX_FAULT_TOLERANT_LOG_CONTENT_HEADER_SIZE;
 
-            /* Reset total logs. */
-            media_ptr -> fx_media_fault_tolerant_total_logs = 0;
+      /* Reset total logs. */
+      media_ptr->fx_media_fault_tolerant_total_logs = 0;
 
-            /* Set state of fault tolerant. */
-            media_ptr -> fx_media_fault_tolerant_state = FX_FAULT_TOLERANT_STATE_STARTED;
-        }
-
-        /* Increase the transaction. */
-        media_ptr -> fx_media_fault_tolerant_transaction_count++;
+      /* Set state of fault tolerant. */
+      media_ptr->fx_media_fault_tolerant_state =
+          FX_FAULT_TOLERANT_STATE_STARTED;
     }
 
-    return(FX_SUCCESS);
+    /* Increase the transaction. */
+    media_ptr->fx_media_fault_tolerant_transaction_count++;
+  }
+
+  return (FX_SUCCESS);
 }
 #endif /* FX_ENABLE_FAULT_TOLERANT */
-

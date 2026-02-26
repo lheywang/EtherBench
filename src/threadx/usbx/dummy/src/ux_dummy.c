@@ -12,51 +12,35 @@
 // ======================================================================
 // Local libraries
 #include "ux_api.h"
-#include "ux_device_stack.h"
 #include "ux_device_class_cdc_acm.h"
 #include "ux_device_class_storage.h"
+#include "ux_device_stack.h"
 
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
 
-__attribute__((weak)) UINT msc_read(
-		VOID *storage,
-		ULONG lun,
-		UCHAR *data_pointer,
-		ULONG number_blocks,
-		ULONG lba,
-		ULONG *media_status
-)
-{
-	return UX_SUCCESS;
+__attribute__((weak)) UINT msc_read(VOID *storage, ULONG lun,
+                                    UCHAR *data_pointer, ULONG number_blocks,
+                                    ULONG lba, ULONG *media_status) {
+  return UX_SUCCESS;
 }
 
-__attribute__((weak)) UINT msc_write(
-		VOID *storage,
-		ULONG lun,
-		UCHAR *data_pointer,
-		ULONG number_blocks,
-		ULONG lba,
-		ULONG *media_status
-)
-{
-	return UX_SUCCESS;
+__attribute__((weak)) UINT msc_write(VOID *storage, ULONG lun,
+                                     UCHAR *data_pointer, ULONG number_blocks,
+                                     ULONG lba, ULONG *media_status) {
+  return UX_SUCCESS;
 }
 
-__attribute__((weak)) UINT msc_status(
-		VOID *storage,
-		ULONG lun,
-		ULONG media_id,
-		ULONG *media_status
-)
-{
-	/* Not sure about the values here */
-	*media_status = UX_SLAVE_CLASS_STORAGE_TEST_READY_OPERATION;
+__attribute__((weak)) UINT msc_status(VOID *storage, ULONG lun, ULONG media_id,
+                                      ULONG *media_status) {
+  /* Not sure about the values here */
+  *media_status = UX_SLAVE_CLASS_STORAGE_TEST_READY_OPERATION;
 
-    if (lun == 1)
-    	*media_status |= UX_SLAVE_CLASS_STORAGE_REQUEST_CODE_MEDIA_PROTECTED; // SD Card is Read-Only!
+  if (lun == 1)
+    *media_status |=
+        UX_SLAVE_CLASS_STORAGE_REQUEST_CODE_MEDIA_PROTECTED; // SD Card is
+                                                             // Read-Only!
 
-    return UX_SUCCESS;
+  return UX_SUCCESS;
 }
-

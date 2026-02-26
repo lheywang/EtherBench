@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_ip.h"
 #include "../include/nx_igmp.h"
-
+#include "../include/nx_ip.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,17 +71,17 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_ipv4_multicast_interface_join(NX_IP *ip_ptr, ULONG group_address, UINT interface_index)
-{
+UINT _nx_ipv4_multicast_interface_join(NX_IP *ip_ptr, ULONG group_address,
+                                       UINT interface_index) {
 
 #ifndef NX_DISABLE_IPV4
-    return(_nx_igmp_multicast_interface_join_internal(ip_ptr, group_address, interface_index, NX_WAIT_FOREVER));
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(group_address);
-    NX_PARAMETER_NOT_USED(interface_index);
+  return (_nx_igmp_multicast_interface_join_internal(
+      ip_ptr, group_address, interface_index, NX_WAIT_FOREVER));
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(group_address);
+  NX_PARAMETER_NOT_USED(interface_index);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

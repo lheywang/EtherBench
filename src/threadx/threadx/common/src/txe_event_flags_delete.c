@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
+#include "../include/tx_event_flags.h"
 #include "../include/tx_thread.h"
 #include "../include/tx_timer.h"
-#include "../include/tx_event_flags.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,76 +70,66 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_event_flags_delete(TX_EVENT_FLAGS_GROUP *group_ptr)
-{
+UINT _txe_event_flags_delete(TX_EVENT_FLAGS_GROUP *group_ptr) {
 
-UINT            status;
+  UINT status;
 #ifndef TX_TIMER_PROCESS_IN_ISR
-TX_THREAD       *thread_ptr;
+  TX_THREAD *thread_ptr;
 #endif
-
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-    /* Default status to success.  */
-    status =  TX_SUCCESS;
+  /* Default status to success.  */
+  status = TX_SUCCESS;
 #endif
 
-    /* Check for an invalid event flag group pointer.  */
-    if (group_ptr == TX_NULL)
-    {
+  /* Check for an invalid event flag group pointer.  */
+  if (group_ptr == TX_NULL) {
 
-        /* Event flags group pointer is invalid, return appropriate error code.  */
-        status =  TX_GROUP_ERROR;
-    }
+    /* Event flags group pointer is invalid, return appropriate error code.  */
+    status = TX_GROUP_ERROR;
+  }
 
-    /* Now check for invalid event flag group ID.  */
-    else if (group_ptr -> tx_event_flags_group_id != TX_EVENT_FLAGS_ID)
-    {
+  /* Now check for invalid event flag group ID.  */
+  else if (group_ptr->tx_event_flags_group_id != TX_EVENT_FLAGS_ID) {
 
-        /* Event flags group pointer is invalid, return appropriate error code.  */
-        status =  TX_GROUP_ERROR;
-    }
+    /* Event flags group pointer is invalid, return appropriate error code.  */
+    status = TX_GROUP_ERROR;
+  }
 
-    /* Check for invalid caller of this function.  */
+  /* Check for invalid caller of this function.  */
 
-    /* Is the caller an ISR or Initialization?  */
-    else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
-    {
+  /* Is the caller an ISR or Initialization?  */
+  else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status =  TX_CALLER_ERROR;
-    }
-    else
-    {
+    /* Invalid caller of this function, return appropriate error code.  */
+    status = TX_CALLER_ERROR;
+  } else {
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-        /* Pickup thread pointer.  */
-        TX_THREAD_GET_CURRENT(thread_ptr)
+    /* Pickup thread pointer.  */
+    TX_THREAD_GET_CURRENT(thread_ptr)
 
-        /* Is the caller the system timer thread?  */
-        if (thread_ptr == &_tx_timer_thread)
-        {
+    /* Is the caller the system timer thread?  */
+    if (thread_ptr == &_tx_timer_thread) {
 
-            /* Invalid caller of this function, return appropriate error code.  */
-            status =  TX_CALLER_ERROR;
-        }
-
-        /* Determine if everything is okay.  */
-        if (status == TX_SUCCESS)
-        {
-#endif
-
-            /* Call actual event flag group delete function.  */
-            status =  _tx_event_flags_delete(group_ptr);
-
-#ifndef TX_TIMER_PROCESS_IN_ISR
-        }
-#endif
+      /* Invalid caller of this function, return appropriate error code.  */
+      status = TX_CALLER_ERROR;
     }
 
-    /* Return completion status.  */
-    return(status);
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
+#endif
+
+      /* Call actual event flag group delete function.  */
+      status = _tx_event_flags_delete(group_ptr);
+
+#ifndef TX_TIMER_PROCESS_IN_ISR
+    }
+#endif
+  }
+
+  /* Return completion status.  */
+  return (status);
 }
-

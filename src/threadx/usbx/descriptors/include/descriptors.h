@@ -15,17 +15,19 @@
 #include <stdint.h>
 
 // Local libraries
-#include "device/device.h"
 #include "configuration/cmsis.h"
 #include "configuration/serial.h"
 #include "configuration/storage.h"
 #include "configuration/terminal.h"
+#include "device/device.h"
 
 // ======================================================================
 // CONFIGURATION DESCRIPTOR LENGTH MATH
 // ======================================================================
-#define SIZE_HEADER  9
-#define TOTAL_LEN    (SIZE_HEADER + DESC_CMSIS_LEN + DESC_CDC_MUX_LEN + DESC_MSC_LEN + DESC_CDC_TRM_LEN)
+#define SIZE_HEADER 9
+#define TOTAL_LEN                                                              \
+  (SIZE_HEADER + DESC_CMSIS_LEN + DESC_CDC_MUX_LEN + DESC_MSC_LEN +            \
+   DESC_CDC_TRM_LEN)
 
 // ======================================================================
 // DEVICE DESCRIPTOR
@@ -36,7 +38,8 @@
 extern const uint8_t device_descriptor[];
 
 /**
- * @brief 	Configuration descriptor for all the interfaces (2x VCOM, 1x MSC, 1x CUSTOM).
+ * @brief 	Configuration descriptor for all the interfaces (2x VCOM, 1x
+ * MSC, 1x CUSTOM).
  */
 extern const uint8_t configuration_descriptor[];
 
@@ -69,6 +72,3 @@ extern const uint8_t string_framework[];
 #ifndef STRING_FRAMEWORK_LEN
 #define STRING_FRAMEWORK_LEN (67)
 #endif
-
-
-

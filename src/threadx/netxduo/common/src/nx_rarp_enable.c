@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_rarp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,81 +68,74 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_rarp_enable(NX_IP *ip_ptr)
-{
+UINT _nx_rarp_enable(NX_IP *ip_ptr) {
 
 #ifndef NX_DISABLE_IPV4
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-UINT i, rarp_enable;
+  UINT i, rarp_enable;
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_RARP_ENABLE, ip_ptr, 0, 0, 0, NX_TRACE_RARP_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_RARP_ENABLE, ip_ptr, 0, 0, 0,
+                          NX_TRACE_RARP_EVENTS, 0, 0);
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Initialize the outcome to cancelling RARP enable. */
-    rarp_enable = NX_FALSE;
+  /* Initialize the outcome to cancelling RARP enable. */
+  rarp_enable = NX_FALSE;
 
-    /* Loop through all the interfaces. */
-    for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++)
-    {
+  /* Loop through all the interfaces. */
+  for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
 
-        /* Skip the interfaces that are not initialized or is not Ethernet-like.*/
-        if ((ip_ptr -> nx_ip_interface[i].nx_interface_valid == 0) ||
-            (ip_ptr -> nx_ip_interface[i].nx_interface_address_mapping_needed == 0))
-        {
-            continue;
-        }
-
-
-        /* Does this interface need a valid IP address? */
-        if (ip_ptr -> nx_ip_interface[i].nx_interface_ip_address == 0)
-        {
-
-            /* Yes, reset to the flag to enable RARP. */
-            rarp_enable = NX_TRUE;
-            break;
-        }
+    /* Skip the interfaces that are not initialized or is not Ethernet-like.*/
+    if ((ip_ptr->nx_ip_interface[i].nx_interface_valid == 0) ||
+        (ip_ptr->nx_ip_interface[i].nx_interface_address_mapping_needed == 0)) {
+      continue;
     }
 
-    if (rarp_enable == NX_FALSE)
-    {
-        /* Error, all host interfaces already have a valid IP address (non-zero).  */
+    /* Does this interface need a valid IP address? */
+    if (ip_ptr->nx_ip_interface[i].nx_interface_ip_address == 0) {
 
-        /* Restore interrupts.  */
-        TX_RESTORE
-
-        /* Return to caller.  */
-        return(NX_IP_ADDRESS_ERROR);
+      /* Yes, reset to the flag to enable RARP. */
+      rarp_enable = NX_TRUE;
+      break;
     }
+  }
 
-    /* Check to see if RARP has been enabled already.  */
-    if (ip_ptr -> nx_ip_rarp_periodic_update)
-    {
-
-        /* Error, IP instance already has RARP enabled.  */
-
-        /* Restore interrupts.  */
-        TX_RESTORE
-
-        /* Return to caller.  */
-        return(NX_ALREADY_ENABLED);
-    }
-
-    /* Setup the RARP periodic update routine.  */
-    ip_ptr -> nx_ip_rarp_periodic_update =  _nx_rarp_periodic_update;
+  if (rarp_enable == NX_FALSE) {
+    /* Error, all host interfaces already have a valid IP address (non-zero). */
 
     /* Restore interrupts.  */
     TX_RESTORE
 
-    /* Return successful completion.  */
-    return(NX_SUCCESS);
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
+    /* Return to caller.  */
+    return (NX_IP_ADDRESS_ERROR);
+  }
 
-    return(NX_NOT_SUPPORTED);
+  /* Check to see if RARP has been enabled already.  */
+  if (ip_ptr->nx_ip_rarp_periodic_update) {
+
+    /* Error, IP instance already has RARP enabled.  */
+
+    /* Restore interrupts.  */
+    TX_RESTORE
+
+    /* Return to caller.  */
+    return (NX_ALREADY_ENABLED);
+  }
+
+  /* Setup the RARP periodic update routine.  */
+  ip_ptr->nx_ip_rarp_periodic_update = _nx_rarp_periodic_update;
+
+  /* Restore interrupts.  */
+  TX_RESTORE
+
+  /* Return successful completion.  */
+  return (NX_SUCCESS);
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

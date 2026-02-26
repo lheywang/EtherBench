@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,16 +21,14 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
+#include "../include/nx_icmpv6.h"
 #include "../include/nx_ipv6.h"
 #include "../include/nx_nd_cache.h"
-#include "../include/nx_icmpv6.h"
 
 #ifdef FEATURE_NX_IPV6
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -86,73 +83,69 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID _nx_nd_cache_fast_periodic_update(NX_IP *ip_ptr)
-{
+VOID _nx_nd_cache_fast_periodic_update(NX_IP *ip_ptr) {
 
-INT i;
+  INT i;
 
-    /* Loop through all entries, and invalidate the ones that are timed out. */
-    for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++)
-    {
+  /* Loop through all entries, and invalidate the ones that are timed out. */
+  for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++) {
 
-        /* Check the entry is valid. */
-        if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status == ND_CACHE_STATE_INVALID)
-        {
-            continue;
-        }
-
-        /* Is this entry being checked for neighbor discovery? */
-        if ((ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status != ND_CACHE_STATE_PROBE) &&
-            (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status != ND_CACHE_STATE_INCOMPLETE))
-        {
-
-            /* No, so skip over. */
-            continue;
-        }
-
-
-
-        /* Has this entry timed out? */
-        if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick == 0)
-        {
-
-            /* Yes, is the max number of solicitations used up? */
-            if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_num_solicit == 0)
-            {
-
-                /* Yes; We already sent #num_solicit packets. So the destination
-                   is unreachable.  Clean up router, destination and cache table entries and crosslinks. */
-                _nx_nd_cache_delete_internal(ip_ptr, &ip_ptr -> nx_ipv6_nd_cache[i]);
-            }
-            else
-            {
-            /*  Send another solicitation (NS) packet. */
-            INT uniCastNS;
-
-                uniCastNS = (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status == ND_CACHE_STATE_PROBE);
-
-                /* Send out another mcast ns.*/
-                _nx_icmpv6_send_ns(ip_ptr, ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_dest_ip,
-                                   1, ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_outgoing_address, uniCastNS, &ip_ptr -> nx_ipv6_nd_cache[i]);
-
-                /* Keep track of how many we have sent. */
-                ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_num_solicit--;
-
-                /* Reset the expiration timer for sending the next NS.  */
-                ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick = ip_ptr -> nx_ipv6_retrans_timer_ticks;
-            }
-        }
-        else
-        {
-
-            /* Note that the only cache entries whose timer ticks are being decremented in this
-               function are states whose timer tick was set in actual timer ticks (as compared
-               with the slow periodic update where cache entry'timer ticks' are updated in
-               seconds.  This is intentional and correct behavior. */
-            ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick--;
-        }
+    /* Check the entry is valid. */
+    if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status ==
+        ND_CACHE_STATE_INVALID) {
+      continue;
     }
+
+    /* Is this entry being checked for neighbor discovery? */
+    if ((ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status !=
+         ND_CACHE_STATE_PROBE) &&
+        (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status !=
+         ND_CACHE_STATE_INCOMPLETE)) {
+
+      /* No, so skip over. */
+      continue;
+    }
+
+    /* Has this entry timed out? */
+    if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick == 0) {
+
+      /* Yes, is the max number of solicitations used up? */
+      if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_num_solicit == 0) {
+
+        /* Yes; We already sent #num_solicit packets. So the destination
+           is unreachable.  Clean up router, destination and cache table entries
+           and crosslinks. */
+        _nx_nd_cache_delete_internal(ip_ptr, &ip_ptr->nx_ipv6_nd_cache[i]);
+      } else {
+        /*  Send another solicitation (NS) packet. */
+        INT uniCastNS;
+
+        uniCastNS = (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status ==
+                     ND_CACHE_STATE_PROBE);
+
+        /* Send out another mcast ns.*/
+        _nx_icmpv6_send_ns(
+            ip_ptr, ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_dest_ip, 1,
+            ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_outgoing_address, uniCastNS,
+            &ip_ptr->nx_ipv6_nd_cache[i]);
+
+        /* Keep track of how many we have sent. */
+        ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_num_solicit--;
+
+        /* Reset the expiration timer for sending the next NS.  */
+        ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick =
+            ip_ptr->nx_ipv6_retrans_timer_ticks;
+      }
+    } else {
+
+      /* Note that the only cache entries whose timer ticks are being
+         decremented in this function are states whose timer tick was set in
+         actual timer ticks (as compared with the slow periodic update where
+         cache entry'timer ticks' are updated in seconds.  This is intentional
+         and correct behavior. */
+      ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_timer_tick--;
+    }
+  }
 }
 
 #endif /* FEATURE_NX_IPV6 */
-

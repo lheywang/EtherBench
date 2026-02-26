@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_directory.h"
 
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,24 +71,24 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_directory_default_get_copy(FX_MEDIA *media_ptr, CHAR *return_path_name_buffer, UINT return_path_name_buffer_size)
-{
+UINT _fxe_directory_default_get_copy(FX_MEDIA *media_ptr,
+                                     CHAR *return_path_name_buffer,
+                                     UINT return_path_name_buffer_size) {
 
-UINT    status;
+  UINT status;
 
+  /* Check for a null media pointer or name buffer pointer.  */
+  if ((media_ptr == FX_NULL) || (return_path_name_buffer == FX_NULL)) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a null media pointer or name buffer pointer.  */
-    if ((media_ptr == FX_NULL) || (return_path_name_buffer == FX_NULL))
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual default directory get copy service.  */
+  status = _fx_directory_default_get_copy(media_ptr, return_path_name_buffer,
+                                          return_path_name_buffer_size);
 
-    /* Call actual default directory get copy service.  */
-    status =  _fx_directory_default_get_copy(media_ptr, return_path_name_buffer, return_path_name_buffer_size);
-
-    /* Return successful status.  */
-    return(status);
+  /* Return successful status.  */
+  return (status);
 }

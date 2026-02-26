@@ -3,8 +3,10 @@
   * @file    stm32h5xx_hal_usart_ex.c
   * @author  MCD Application Team
   * @brief   Extended USART HAL module driver.
-  *          This file provides firmware functions to manage the following extended
-  *          functionalities of the Universal Synchronous Receiver Transmitter Peripheral (USART).
+  *          This file provides firmware functions to manage the following
+  extended
+  *          functionalities of the Universal Synchronous Receiver Transmitter
+  Peripheral (USART).
   *           + Peripheral Control functions
   *
   *
@@ -43,46 +45,46 @@
 #include "stm32h5xx_hal.h"
 
 /** @addtogroup STM32H5xx_HAL_Driver
-  * @{
-  */
+ * @{
+ */
 
 /** @defgroup USARTEx USARTEx
-  * @brief USART Extended HAL module driver
-  * @{
-  */
+ * @brief USART Extended HAL module driver
+ * @{
+ */
 
 #ifdef HAL_USART_MODULE_ENABLED
 
 /* Private typedef -----------------------------------------------------------*/
 /** @defgroup USARTEx_Private_Constants USARTEx Private Constants
-  * @{
-  */
+ * @{
+ */
 /* USART RX FIFO depth */
 #define RX_FIFO_DEPTH 8U
 
 /* USART TX FIFO depth */
 #define TX_FIFO_DEPTH 8U
 /**
-  * @}
-  */
+ * @}
+ */
 
 /* Private define ------------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup USARTEx_Private_Functions USARTEx Private Functions
-  * @{
-  */
+ * @{
+ */
 static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart);
 /**
-  * @}
-  */
+ * @}
+ */
 
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup USARTEx_Exported_Functions  USARTEx Exported Functions
-  * @{
-  */
+ * @{
+ */
 
 /** @defgroup USARTEx_Exported_Functions_Group1 IO operation functions
   * @brief Extended USART Transmit/Receive functions
@@ -102,38 +104,38 @@ static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart);
   */
 
 /**
-  * @brief  USART RX Fifo full callback.
-  * @param  husart USART handle.
-  * @retval None
-  */
-__weak void HAL_USARTEx_RxFifoFullCallback(USART_HandleTypeDef *husart)
-{
+ * @brief  USART RX Fifo full callback.
+ * @param  husart USART handle.
+ * @retval None
+ */
+__weak void HAL_USARTEx_RxFifoFullCallback(USART_HandleTypeDef *husart) {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(husart);
 
   /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_USARTEx_RxFifoFullCallback can be implemented in the user file.
+            the HAL_USARTEx_RxFifoFullCallback can be implemented in the user
+     file.
    */
 }
 
 /**
-  * @brief  USART TX Fifo empty callback.
-  * @param  husart USART handle.
-  * @retval None
-  */
-__weak void HAL_USARTEx_TxFifoEmptyCallback(USART_HandleTypeDef *husart)
-{
+ * @brief  USART TX Fifo empty callback.
+ * @param  husart USART handle.
+ * @retval None
+ */
+__weak void HAL_USARTEx_TxFifoEmptyCallback(USART_HandleTypeDef *husart) {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(husart);
 
   /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_USARTEx_TxFifoEmptyCallback can be implemented in the user file.
+            the HAL_USARTEx_TxFifoEmptyCallback can be implemented in the user
+     file.
    */
 }
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /** @defgroup USARTEx_Exported_Functions_Group2 Peripheral Control functions
   * @brief    Extended Peripheral Control functions
@@ -157,22 +159,21 @@ __weak void HAL_USARTEx_TxFifoEmptyCallback(USART_HandleTypeDef *husart)
   */
 
 /**
-  * @brief  Enable the SPI slave mode.
-  * @note When the USART operates in SPI slave mode, it handles data flow using
-  *       the serial interface clock derived from the external SCLK signal
-  *       provided by the external master SPI device.
-  * @note In SPI slave mode, the USART must be enabled before starting the master
-  *       communications (or between frames while the clock is stable). Otherwise,
-  *       if the USART slave is enabled while the master is in the middle of a
-  *       frame, it will become desynchronized with the master.
-  * @note The data register of the slave needs to be ready before the first edge
-  *       of the communication clock or before the end of the ongoing communication,
-  *       otherwise the SPI slave will transmit zeros.
-  * @param husart      USART handle.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_USARTEx_EnableSlaveMode(USART_HandleTypeDef *husart)
-{
+ * @brief  Enable the SPI slave mode.
+ * @note When the USART operates in SPI slave mode, it handles data flow using
+ *       the serial interface clock derived from the external SCLK signal
+ *       provided by the external master SPI device.
+ * @note In SPI slave mode, the USART must be enabled before starting the master
+ *       communications (or between frames while the clock is stable).
+ * Otherwise, if the USART slave is enabled while the master is in the middle of
+ * a frame, it will become desynchronized with the master.
+ * @note The data register of the slave needs to be ready before the first edge
+ *       of the communication clock or before the end of the ongoing
+ * communication, otherwise the SPI slave will transmit zeros.
+ * @param husart      USART handle.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_USARTEx_EnableSlaveMode(USART_HandleTypeDef *husart) {
   uint32_t tmpcr1;
 
   /* Check parameters */
@@ -193,7 +194,8 @@ HAL_StatusTypeDef HAL_USARTEx_EnableSlaveMode(USART_HandleTypeDef *husart)
   - LINEN and CLKEN bit in the USART_CR2 register
   - HDSEL, SCEN and IREN bits in the USART_CR3 register.*/
   CLEAR_BIT(husart->Instance->CR2, (USART_CR2_LINEN | USART_CR2_CLKEN));
-  CLEAR_BIT(husart->Instance->CR3, (USART_CR3_SCEN | USART_CR3_HDSEL | USART_CR3_IREN));
+  CLEAR_BIT(husart->Instance->CR3,
+            (USART_CR3_SCEN | USART_CR3_HDSEL | USART_CR3_IREN));
 
   /* Enable SPI slave mode */
   SET_BIT(husart->Instance->CR2, USART_CR2_SLVEN);
@@ -215,12 +217,11 @@ HAL_StatusTypeDef HAL_USARTEx_EnableSlaveMode(USART_HandleTypeDef *husart)
 }
 
 /**
-  * @brief  Disable the SPI slave mode.
-  * @param husart      USART handle.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_USARTEx_DisableSlaveMode(USART_HandleTypeDef *husart)
-{
+ * @brief  Disable the SPI slave mode.
+ * @param husart      USART handle.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_USARTEx_DisableSlaveMode(USART_HandleTypeDef *husart) {
   uint32_t tmpcr1;
 
   /* Check parameters */
@@ -254,21 +255,21 @@ HAL_StatusTypeDef HAL_USARTEx_DisableSlaveMode(USART_HandleTypeDef *husart)
 }
 
 /**
-  * @brief  Configure the Slave Select input pin (NSS).
-  * @note Software NSS management: SPI slave will always be selected and NSS
-  *       input pin will be ignored.
-  * @note Hardware NSS management: the SPI slave selection depends on NSS
-  *       input pin. The slave is selected when NSS is low and deselected when
-  *       NSS is high.
-  * @param husart      USART handle.
-  * @param NSSConfig   NSS configuration.
-  *          This parameter can be one of the following values:
-  *            @arg @ref USART_NSS_HARD
-  *            @arg @ref USART_NSS_SOFT
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_USARTEx_ConfigNSS(USART_HandleTypeDef *husart, uint32_t NSSConfig)
-{
+ * @brief  Configure the Slave Select input pin (NSS).
+ * @note Software NSS management: SPI slave will always be selected and NSS
+ *       input pin will be ignored.
+ * @note Hardware NSS management: the SPI slave selection depends on NSS
+ *       input pin. The slave is selected when NSS is low and deselected when
+ *       NSS is high.
+ * @param husart      USART handle.
+ * @param NSSConfig   NSS configuration.
+ *          This parameter can be one of the following values:
+ *            @arg @ref USART_NSS_HARD
+ *            @arg @ref USART_NSS_SOFT
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_USARTEx_ConfigNSS(USART_HandleTypeDef *husart,
+                                        uint32_t NSSConfig) {
   uint32_t tmpcr1;
 
   /* Check parameters */
@@ -301,12 +302,11 @@ HAL_StatusTypeDef HAL_USARTEx_ConfigNSS(USART_HandleTypeDef *husart, uint32_t NS
 }
 
 /**
-  * @brief  Enable the FIFO mode.
-  * @param husart      USART handle.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_USARTEx_EnableFifoMode(USART_HandleTypeDef *husart)
-{
+ * @brief  Enable the FIFO mode.
+ * @param husart      USART handle.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_USARTEx_EnableFifoMode(USART_HandleTypeDef *husart) {
   uint32_t tmpcr1;
 
   /* Check parameters */
@@ -342,12 +342,11 @@ HAL_StatusTypeDef HAL_USARTEx_EnableFifoMode(USART_HandleTypeDef *husart)
 }
 
 /**
-  * @brief  Disable the FIFO mode.
-  * @param husart      USART handle.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_USARTEx_DisableFifoMode(USART_HandleTypeDef *husart)
-{
+ * @brief  Disable the FIFO mode.
+ * @param husart      USART handle.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_USARTEx_DisableFifoMode(USART_HandleTypeDef *husart) {
   uint32_t tmpcr1;
 
   /* Check parameters */
@@ -380,20 +379,20 @@ HAL_StatusTypeDef HAL_USARTEx_DisableFifoMode(USART_HandleTypeDef *husart)
 }
 
 /**
-  * @brief  Set the TXFIFO threshold.
-  * @param husart      USART handle.
-  * @param Threshold  TX FIFO threshold value
-  *          This parameter can be one of the following values:
-  *            @arg @ref USART_TXFIFO_THRESHOLD_1_8
-  *            @arg @ref USART_TXFIFO_THRESHOLD_1_4
-  *            @arg @ref USART_TXFIFO_THRESHOLD_1_2
-  *            @arg @ref USART_TXFIFO_THRESHOLD_3_4
-  *            @arg @ref USART_TXFIFO_THRESHOLD_7_8
-  *            @arg @ref USART_TXFIFO_THRESHOLD_8_8
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_USARTEx_SetTxFifoThreshold(USART_HandleTypeDef *husart, uint32_t Threshold)
-{
+ * @brief  Set the TXFIFO threshold.
+ * @param husart      USART handle.
+ * @param Threshold  TX FIFO threshold value
+ *          This parameter can be one of the following values:
+ *            @arg @ref USART_TXFIFO_THRESHOLD_1_8
+ *            @arg @ref USART_TXFIFO_THRESHOLD_1_4
+ *            @arg @ref USART_TXFIFO_THRESHOLD_1_2
+ *            @arg @ref USART_TXFIFO_THRESHOLD_3_4
+ *            @arg @ref USART_TXFIFO_THRESHOLD_7_8
+ *            @arg @ref USART_TXFIFO_THRESHOLD_8_8
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_USARTEx_SetTxFifoThreshold(USART_HandleTypeDef *husart,
+                                                 uint32_t Threshold) {
   uint32_t tmpcr1;
 
   /* Check parameters */
@@ -429,20 +428,20 @@ HAL_StatusTypeDef HAL_USARTEx_SetTxFifoThreshold(USART_HandleTypeDef *husart, ui
 }
 
 /**
-  * @brief  Set the RXFIFO threshold.
-  * @param husart      USART handle.
-  * @param Threshold  RX FIFO threshold value
-  *          This parameter can be one of the following values:
-  *            @arg @ref USART_RXFIFO_THRESHOLD_1_8
-  *            @arg @ref USART_RXFIFO_THRESHOLD_1_4
-  *            @arg @ref USART_RXFIFO_THRESHOLD_1_2
-  *            @arg @ref USART_RXFIFO_THRESHOLD_3_4
-  *            @arg @ref USART_RXFIFO_THRESHOLD_7_8
-  *            @arg @ref USART_RXFIFO_THRESHOLD_8_8
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_USARTEx_SetRxFifoThreshold(USART_HandleTypeDef *husart, uint32_t Threshold)
-{
+ * @brief  Set the RXFIFO threshold.
+ * @param husart      USART handle.
+ * @param Threshold  RX FIFO threshold value
+ *          This parameter can be one of the following values:
+ *            @arg @ref USART_RXFIFO_THRESHOLD_1_8
+ *            @arg @ref USART_RXFIFO_THRESHOLD_1_4
+ *            @arg @ref USART_RXFIFO_THRESHOLD_1_2
+ *            @arg @ref USART_RXFIFO_THRESHOLD_3_4
+ *            @arg @ref USART_RXFIFO_THRESHOLD_7_8
+ *            @arg @ref USART_RXFIFO_THRESHOLD_8_8
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_USARTEx_SetRxFifoThreshold(USART_HandleTypeDef *husart,
+                                                 uint32_t Threshold) {
   uint32_t tmpcr1;
 
   /* Check the parameters */
@@ -478,64 +477,65 @@ HAL_StatusTypeDef HAL_USARTEx_SetRxFifoThreshold(USART_HandleTypeDef *husart, ui
 }
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /** @addtogroup USARTEx_Private_Functions
-  * @{
-  */
+ * @{
+ */
 
 /**
-  * @brief Calculate the number of data to process in RX/TX ISR.
-  * @note The RX FIFO depth and the TX FIFO depth is extracted from
-  *       the USART configuration registers.
-  * @param husart USART handle.
-  * @retval None
-  */
-static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart)
-{
+ * @brief Calculate the number of data to process in RX/TX ISR.
+ * @note The RX FIFO depth and the TX FIFO depth is extracted from
+ *       the USART configuration registers.
+ * @param husart USART handle.
+ * @retval None
+ */
+static void USARTEx_SetNbDataToProcess(USART_HandleTypeDef *husart) {
   uint8_t rx_fifo_depth;
   uint8_t tx_fifo_depth;
   uint8_t rx_fifo_threshold;
   uint8_t tx_fifo_threshold;
   /* 2 0U/1U added for MISRAC2012-Rule-18.1_b and MISRAC2012-Rule-18.1_d */
-  static const uint8_t numerator[]   = {1U, 1U, 1U, 3U, 7U, 1U, 0U, 0U};
+  static const uint8_t numerator[] = {1U, 1U, 1U, 3U, 7U, 1U, 0U, 0U};
   static const uint8_t denominator[] = {8U, 4U, 2U, 4U, 8U, 1U, 1U, 1U};
 
-  if (husart->FifoMode == USART_FIFOMODE_DISABLE)
-  {
+  if (husart->FifoMode == USART_FIFOMODE_DISABLE) {
     husart->NbTxDataToProcess = 1U;
     husart->NbRxDataToProcess = 1U;
-  }
-  else
-  {
+  } else {
     rx_fifo_depth = RX_FIFO_DEPTH;
     tx_fifo_depth = TX_FIFO_DEPTH;
-    rx_fifo_threshold = (uint8_t)((READ_BIT(husart->Instance->CR3,
-                                            USART_CR3_RXFTCFG) >> USART_CR3_RXFTCFG_Pos) & 0xFFU);
-    tx_fifo_threshold = (uint8_t)((READ_BIT(husart->Instance->CR3,
-                                            USART_CR3_TXFTCFG) >> USART_CR3_TXFTCFG_Pos) & 0xFFU);
-    husart->NbTxDataToProcess = ((uint16_t)tx_fifo_depth * numerator[tx_fifo_threshold]) /
-                                (uint16_t)denominator[tx_fifo_threshold];
-    husart->NbRxDataToProcess = ((uint16_t)rx_fifo_depth * numerator[rx_fifo_threshold]) /
-                                (uint16_t)denominator[rx_fifo_threshold];
+    rx_fifo_threshold =
+        (uint8_t)((READ_BIT(husart->Instance->CR3, USART_CR3_RXFTCFG) >>
+                   USART_CR3_RXFTCFG_Pos) &
+                  0xFFU);
+    tx_fifo_threshold =
+        (uint8_t)((READ_BIT(husart->Instance->CR3, USART_CR3_TXFTCFG) >>
+                   USART_CR3_TXFTCFG_Pos) &
+                  0xFFU);
+    husart->NbTxDataToProcess =
+        ((uint16_t)tx_fifo_depth * numerator[tx_fifo_threshold]) /
+        (uint16_t)denominator[tx_fifo_threshold];
+    husart->NbRxDataToProcess =
+        ((uint16_t)rx_fifo_depth * numerator[rx_fifo_threshold]) /
+        (uint16_t)denominator[rx_fifo_threshold];
   }
 }
 /**
-  * @}
-  */
+ * @}
+ */
 
 #endif /* HAL_USART_MODULE_ENABLED */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
-
+ * @}
+ */

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,26 +72,26 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_ip_driver_deferred_enable(NX_IP *ip_ptr, VOID (*driver_deferred_packet_handler)(NX_IP *ip_ptr, NX_PACKET *packet_ptr))
-{
+VOID _nx_ip_driver_deferred_enable(NX_IP *ip_ptr,
+                                   VOID (*driver_deferred_packet_handler)(
+                                       NX_IP *ip_ptr, NX_PACKET *packet_ptr)) {
 
 #ifdef NX_DRIVER_DEFERRED_PROCESSING
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Initialize the deferred packet queue to be empty */
-    ip_ptr -> nx_ip_driver_deferred_packet_head =  NX_NULL;
-    ip_ptr -> nx_ip_driver_deferred_packet_tail =  NX_NULL;
+  /* Initialize the deferred packet queue to be empty */
+  ip_ptr->nx_ip_driver_deferred_packet_head = NX_NULL;
+  ip_ptr->nx_ip_driver_deferred_packet_tail = NX_NULL;
 
-    /* Setup the driver's deferred packet processing routine */
-    ip_ptr ->  nx_ip_driver_deferred_packet_handler =  driver_deferred_packet_handler;
+  /* Setup the driver's deferred packet processing routine */
+  ip_ptr->nx_ip_driver_deferred_packet_handler = driver_deferred_packet_handler;
 
-    TX_RESTORE
+  TX_RESTORE
 #else
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(driver_deferred_packet_handler);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(driver_deferred_packet_handler);
 #endif
 }
-

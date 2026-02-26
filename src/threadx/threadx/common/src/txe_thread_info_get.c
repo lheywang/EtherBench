@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_thread.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -82,38 +79,34 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_thread_info_get(TX_THREAD *thread_ptr, CHAR **name, UINT *state, ULONG *run_count,
-                UINT *priority, UINT *preemption_threshold, ULONG *time_slice,
-                TX_THREAD **next_thread, TX_THREAD **next_suspended_thread)
-{
+UINT _txe_thread_info_get(TX_THREAD *thread_ptr, CHAR **name, UINT *state,
+                          ULONG *run_count, UINT *priority,
+                          UINT *preemption_threshold, ULONG *time_slice,
+                          TX_THREAD **next_thread,
+                          TX_THREAD **next_suspended_thread) {
 
-UINT    status;
+  UINT status;
 
+  /* Check for an invalid thread pointer.  */
+  if (thread_ptr == TX_NULL) {
 
-    /* Check for an invalid thread pointer.  */
-    if (thread_ptr == TX_NULL)
-    {
+    /* Thread pointer is invalid, return appropriate error code.  */
+    status = TX_THREAD_ERROR;
+  }
 
-        /* Thread pointer is invalid, return appropriate error code.  */
-        status =  TX_THREAD_ERROR;
-    }
+  /* Now check for invalid thread ID.  */
+  else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
 
-    /* Now check for invalid thread ID.  */
-    else if (thread_ptr -> tx_thread_id != TX_THREAD_ID)
-    {
+    /* Thread pointer is invalid, return appropriate error code.  */
+    status = TX_THREAD_ERROR;
+  } else {
 
-        /* Thread pointer is invalid, return appropriate error code.  */
-        status =  TX_THREAD_ERROR;
-    }
-    else
-    {
+    /* Call the actual thread information get service.  */
+    status = _tx_thread_info_get(thread_ptr, name, state, run_count, priority,
+                                 preemption_threshold, time_slice, next_thread,
+                                 next_suspended_thread);
+  }
 
-        /* Call the actual thread information get service.  */
-        status =  _tx_thread_info_get(thread_ptr, name, state, run_count, priority, preemption_threshold,
-                            time_slice, next_thread, next_suspended_thread);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

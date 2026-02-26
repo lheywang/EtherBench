@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,17 +21,14 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_tcp.h"
 
-
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,31 +71,26 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_tcp_socket_delete(NX_TCP_SOCKET *socket_ptr)
-{
+UINT _nxe_tcp_socket_delete(NX_TCP_SOCKET *socket_ptr) {
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((socket_ptr == NX_NULL) || (socket_ptr -> nx_tcp_socket_id != NX_TCP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check to see if TCP is enabled.  */
+  if (!(socket_ptr->nx_tcp_socket_ip_ptr)->nx_ip_tcp_packet_receive) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if TCP is enabled.  */
-    if (!(socket_ptr -> nx_tcp_socket_ip_ptr) -> nx_ip_tcp_packet_receive)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual TCP socket delete function.  */
+  status = _nx_tcp_socket_delete(socket_ptr);
 
-    /* Call actual TCP socket delete function.  */
-    status =  _nx_tcp_socket_delete(socket_ptr);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

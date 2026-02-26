@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_unicode.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,10 +69,8 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-ULONG  _fx_unicode_length_get(UCHAR *unicode_name)
-{
+ULONG _fx_unicode_length_get(UCHAR *unicode_name) {
 
-    /* Call the extended version with 256 bytes maximum buffer length.  */
-    return(_fx_unicode_length_get_extended(unicode_name, 256));
+  /* Call the extended version with 256 bytes maximum buffer length.  */
+  return (_fx_unicode_length_get_extended(unicode_name, 256));
 }
-

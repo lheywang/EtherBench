@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_igmp.h"
-
 
 #ifndef NX_DISABLE_IPV4
 /**************************************************************************/
@@ -75,34 +72,32 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_igmp_multicast_check(NX_IP *ip_ptr, ULONG group, NX_INTERFACE *nx_interface)
-{
+UINT _nx_igmp_multicast_check(NX_IP *ip_ptr, ULONG group,
+                              NX_INTERFACE *nx_interface) {
 
-UINT i;
+  UINT i;
 
-    /* Check for "all hosts" group.  We always assume all hosts membership.  */
-    /*lint -e{835} -e{845} suppress operating on zero. */
-    if (group ==  NX_ALL_HOSTS_ADDRESS)
-    {
-        return(NX_TRUE);
+  /* Check for "all hosts" group.  We always assume all hosts membership.  */
+  /*lint -e{835} -e{845} suppress operating on zero. */
+  if (group == NX_ALL_HOSTS_ADDRESS) {
+    return (NX_TRUE);
+  }
+
+  /* Loop through the IP multicast join list to find the matching group that is
+     being responded to by another host on this same network.  */
+
+  for (i = 0; i < NX_MAX_MULTICAST_GROUPS; i++) {
+
+    /* Check for a match.  */
+    if ((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list ==
+         group) &&
+        (nx_interface == ip_ptr->nx_ipv4_multicast_entry[i]
+                             .nx_ipv4_multicast_join_interface_list)) {
+      return (NX_TRUE);
     }
+  }
 
-    /* Loop through the IP multicast join list to find the matching group that is being
-       responded to by another host on this same network.  */
-
-    for (i = 0; i < NX_MAX_MULTICAST_GROUPS; i++)
-    {
-
-        /* Check for a match.  */
-        if ((ip_ptr -> nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list == group) &&
-            (nx_interface == ip_ptr -> nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_interface_list))
-        {
-            return(NX_TRUE);
-        }
-    }
-
-    /* Otherwise, we have searched the entire list, return false.  */
-    return(NX_FALSE);
+  /* Otherwise, we have searched the entire list, return false.  */
+  return (NX_FALSE);
 }
 #endif /* !NX_DISABLE_IPV4  */
-

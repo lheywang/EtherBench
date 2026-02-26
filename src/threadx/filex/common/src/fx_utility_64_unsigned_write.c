@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_system.h"
 #include "fx_utility.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,11 +68,9 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _fx_utility_64_unsigned_write(UCHAR *dest_ptr, ULONG64 value)
-{
+VOID _fx_utility_64_unsigned_write(UCHAR *dest_ptr, ULONG64 value) {
 
-    /* Store the ULONG64 into the destination with endian-awareness.  */
-    _fx_utility_32_unsigned_write(dest_ptr, (ULONG)value);
-    _fx_utility_32_unsigned_write(dest_ptr + sizeof(ULONG), (ULONG)(value >> 32));
+  /* Store the ULONG64 into the destination with endian-awareness.  */
+  _fx_utility_32_unsigned_write(dest_ptr, (ULONG)value);
+  _fx_utility_32_unsigned_write(dest_ptr + sizeof(ULONG), (ULONG)(value >> 32));
 }
-

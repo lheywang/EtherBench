@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -28,8 +27,6 @@
 #include "../include/nx_icmpv6.h"
 
 #ifdef FEATURE_NX_IPV6
-
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -86,32 +83,33 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_icmp_ping6(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, CHAR *data_ptr, ULONG data_size,
-                     NX_PACKET **response_ptr, ULONG wait_option)
-{
+UINT _nx_icmp_ping6(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, CHAR *data_ptr,
+                    ULONG data_size, NX_PACKET **response_ptr,
+                    ULONG wait_option) {
 
-UINT              status;
-NXD_IPV6_ADDRESS *outgoing_address;
+  UINT status;
+  NXD_IPV6_ADDRESS *outgoing_address;
 
-    /* Clear the destination pointer.  */
-    *response_ptr =  NX_NULL;
+  /* Clear the destination pointer.  */
+  *response_ptr = NX_NULL;
 
-    /* Find a suitable outgoing interface. */
-    status = _nxd_ipv6_interface_find(ip_ptr, ip_address -> nxd_ip_address.v6,
-                                      &outgoing_address, NX_NULL);
+  /* Find a suitable outgoing interface. */
+  status = _nxd_ipv6_interface_find(ip_ptr, ip_address->nxd_ip_address.v6,
+                                    &outgoing_address, NX_NULL);
 
-    /* Cannot find usable outgoing interface. */
-    if (status != NX_SUCCESS)
-    {
-        return(status);
-    }
+  /* Cannot find usable outgoing interface. */
+  if (status != NX_SUCCESS) {
+    return (status);
+  }
 
-    /* Now send the actual ping packet. */
-    /*lint -e{644} suppress variable might not be initialized, since "outgoing_address" was initialized in _nxd_ipv6_interface_find. */
-    status = _nx_icmp_interface_ping6(ip_ptr, ip_address, data_ptr, data_size, outgoing_address, response_ptr, wait_option);
+  /* Now send the actual ping packet. */
+  /*lint -e{644} suppress variable might not be initialized, since
+   * "outgoing_address" was initialized in _nxd_ipv6_interface_find. */
+  status =
+      _nx_icmp_interface_ping6(ip_ptr, ip_address, data_ptr, data_size,
+                               outgoing_address, response_ptr, wait_option);
 
-    return(status);
+  return (status);
 }
 
 #endif /* FEATURE_NX_IPV6 */
-

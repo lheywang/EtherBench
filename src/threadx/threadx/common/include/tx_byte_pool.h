@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -50,23 +48,21 @@
 #ifndef TX_BYTE_POOL_H
 #define TX_BYTE_POOL_H
 
-
 /* Define byte memory control specific data definitions.  */
 
-#define TX_BYTE_POOL_ID                         ((ULONG) 0x42595445)
+#define TX_BYTE_POOL_ID ((ULONG)0x42595445)
 
 #ifndef TX_BYTE_BLOCK_FREE
-#define TX_BYTE_BLOCK_FREE                      ((ULONG) 0xFFFFEEEEUL)
+#define TX_BYTE_BLOCK_FREE ((ULONG)0xFFFFEEEEUL)
 #endif
 
 #ifndef TX_BYTE_BLOCK_MIN
-#define TX_BYTE_BLOCK_MIN                       ((ULONG) 20)
+#define TX_BYTE_BLOCK_MIN ((ULONG)20)
 #endif
 
 #ifndef TX_BYTE_POOL_MIN
-#define TX_BYTE_POOL_MIN                        ((ULONG) 100)
+#define TX_BYTE_POOL_MIN ((ULONG)100)
 #endif
-
 
 /* Determine if in-line component initialization is supported by the
    caller.  */
@@ -77,34 +73,32 @@
    initialization function.  */
 
 #ifndef TX_BYTE_POOL_ENABLE_PERFORMANCE_INFO
-#define _tx_byte_pool_initialize() \
-                    _tx_byte_pool_created_ptr =                   TX_NULL;      \
-                    _tx_byte_pool_created_count =                 TX_EMPTY
+#define _tx_byte_pool_initialize()                                             \
+  _tx_byte_pool_created_ptr = TX_NULL;                                         \
+  _tx_byte_pool_created_count = TX_EMPTY
 #else
-#define _tx_byte_pool_initialize() \
-                    _tx_byte_pool_created_ptr =                   TX_NULL;      \
-                    _tx_byte_pool_created_count =                 TX_EMPTY;     \
-                    _tx_byte_pool_performance_allocate_count =    ((ULONG) 0);  \
-                    _tx_byte_pool_performance_release_count =     ((ULONG) 0);  \
-                    _tx_byte_pool_performance_merge_count =       ((ULONG) 0);  \
-                    _tx_byte_pool_performance_split_count =       ((ULONG) 0);  \
-                    _tx_byte_pool_performance_search_count =      ((ULONG) 0);  \
-                    _tx_byte_pool_performance_suspension_count =  ((ULONG) 0);  \
-                    _tx_byte_pool_performance_timeout_count =     ((ULONG) 0)
+#define _tx_byte_pool_initialize()                                             \
+  _tx_byte_pool_created_ptr = TX_NULL;                                         \
+  _tx_byte_pool_created_count = TX_EMPTY;                                      \
+  _tx_byte_pool_performance_allocate_count = ((ULONG)0);                       \
+  _tx_byte_pool_performance_release_count = ((ULONG)0);                        \
+  _tx_byte_pool_performance_merge_count = ((ULONG)0);                          \
+  _tx_byte_pool_performance_split_count = ((ULONG)0);                          \
+  _tx_byte_pool_performance_search_count = ((ULONG)0);                         \
+  _tx_byte_pool_performance_suspension_count = ((ULONG)0);                     \
+  _tx_byte_pool_performance_timeout_count = ((ULONG)0)
 #endif
 #define TX_BYTE_POOL_INIT
 #else
 
 /* No in-line initialization is supported, use standard function call.  */
-VOID        _tx_byte_pool_initialize(VOID);
+VOID _tx_byte_pool_initialize(VOID);
 #endif
-
 
 /* Define internal byte memory pool management function prototypes.  */
 
-UCHAR       *_tx_byte_pool_search(TX_BYTE_POOL *pool_ptr, ULONG memory_size);
-VOID        _tx_byte_pool_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence);
-
+UCHAR *_tx_byte_pool_search(TX_BYTE_POOL *pool_ptr, ULONG memory_size);
+VOID _tx_byte_pool_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence);
 
 /* Byte pool management component data declarations follow.  */
 
@@ -118,62 +112,51 @@ VOID        _tx_byte_pool_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequen
 #define BYTE_POOL_DECLARE extern
 #endif
 
-
 /* Define the head pointer of the created byte pool list.  */
 
-BYTE_POOL_DECLARE  TX_BYTE_POOL *   _tx_byte_pool_created_ptr;
-
+BYTE_POOL_DECLARE TX_BYTE_POOL *_tx_byte_pool_created_ptr;
 
 /* Define the variable that holds the number of created byte pools. */
 
-BYTE_POOL_DECLARE  ULONG            _tx_byte_pool_created_count;
-
+BYTE_POOL_DECLARE ULONG _tx_byte_pool_created_count;
 
 #ifdef TX_BYTE_POOL_ENABLE_PERFORMANCE_INFO
 
 /* Define the total number of allocates.  */
 
-BYTE_POOL_DECLARE  ULONG            _tx_byte_pool_performance_allocate_count;
-
+BYTE_POOL_DECLARE ULONG _tx_byte_pool_performance_allocate_count;
 
 /* Define the total number of releases.  */
 
-BYTE_POOL_DECLARE  ULONG            _tx_byte_pool_performance_release_count;
-
+BYTE_POOL_DECLARE ULONG _tx_byte_pool_performance_release_count;
 
 /* Define the total number of adjacent memory fragment merges.  */
 
-BYTE_POOL_DECLARE  ULONG            _tx_byte_pool_performance_merge_count;
-
+BYTE_POOL_DECLARE ULONG _tx_byte_pool_performance_merge_count;
 
 /* Define the total number of memory fragment splits.  */
 
-BYTE_POOL_DECLARE  ULONG            _tx_byte_pool_performance_split_count;
-
+BYTE_POOL_DECLARE ULONG _tx_byte_pool_performance_split_count;
 
 /* Define the total number of memory fragments searched during allocation.  */
 
-BYTE_POOL_DECLARE  ULONG            _tx_byte_pool_performance_search_count;
-
+BYTE_POOL_DECLARE ULONG _tx_byte_pool_performance_search_count;
 
 /* Define the total number of byte pool suspensions.  */
 
-BYTE_POOL_DECLARE  ULONG            _tx_byte_pool_performance_suspension_count;
-
+BYTE_POOL_DECLARE ULONG _tx_byte_pool_performance_suspension_count;
 
 /* Define the total number of byte pool timeouts.  */
 
-BYTE_POOL_DECLARE  ULONG            _tx_byte_pool_performance_timeout_count;
-
+BYTE_POOL_DECLARE ULONG _tx_byte_pool_performance_timeout_count;
 
 #endif
 
-
-/* Define default post byte pool delete macro to whitespace, if it hasn't been defined previously (typically in tx_port.h).  */
+/* Define default post byte pool delete macro to whitespace, if it hasn't been
+ * defined previously (typically in tx_port.h).  */
 
 #ifndef TX_BYTE_POOL_DELETE_PORT_COMPLETION
 #define TX_BYTE_POOL_DELETE_PORT_COMPLETION(p)
 #endif
-
 
 #endif

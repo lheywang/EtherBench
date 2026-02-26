@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /* Bring in externs for caller checking code.  */
 
@@ -75,38 +72,34 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_ip_gateway_address_set(NX_IP *ip_ptr, ULONG ip_address)
-{
+UINT _nxe_ip_gateway_address_set(NX_IP *ip_ptr, ULONG ip_address) {
 
 #ifndef NX_DISABLE_IPV4
-UINT status;
+  UINT status;
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Determine if this is a valid gateway address.  */
-    /*lint -e{835} -e{845} suppress operating on zero. */
-    if (ip_address == IP_ADDRESS(0, 0, 0, 0))
-    {
-        return(NX_IP_ADDRESS_ERROR);
-    }
+  /* Determine if this is a valid gateway address.  */
+  /*lint -e{835} -e{845} suppress operating on zero. */
+  if (ip_address == IP_ADDRESS(0, 0, 0, 0)) {
+    return (NX_IP_ADDRESS_ERROR);
+  }
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    /* Call actual IP gateway address set function.  */
-    status =  _nx_ip_gateway_address_set(ip_ptr, ip_address);
+  /* Call actual IP gateway address set function.  */
+  status = _nx_ip_gateway_address_set(ip_ptr, ip_address);
 
-    /* Return completion status.  */
-    return(status);
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(ip_address);
+  /* Return completion status.  */
+  return (status);
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_address);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

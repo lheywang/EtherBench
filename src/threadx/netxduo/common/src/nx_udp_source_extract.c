@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_udp.h"
 #include "../include/nx_ipv4.h"
-
-
+#include "../include/nx_udp.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,37 +70,39 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_udp_source_extract(NX_PACKET *packet_ptr, ULONG *ip_address, UINT *port)
-{
+UINT _nx_udp_source_extract(NX_PACKET *packet_ptr, ULONG *ip_address,
+                            UINT *port) {
 
 #ifndef NX_DISABLE_IPV4
-ULONG          *temp_ptr;
-NX_IPV4_HEADER *ipv4_header;
+  ULONG *temp_ptr;
+  NX_IPV4_HEADER *ipv4_header;
 
-    /* Build an address to the current top of the packet.  */
-    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-    temp_ptr =  (ULONG *)packet_ptr -> nx_packet_prepend_ptr;
+  /* Build an address to the current top of the packet.  */
+  /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+   * necessary  */
+  temp_ptr = (ULONG *)packet_ptr->nx_packet_prepend_ptr;
 
-    /* Pickup the source port.  */
-    *port =  (UINT)(*(temp_ptr - 2) >> NX_SHIFT_BY_16);
+  /* Pickup the source port.  */
+  *port = (UINT)(*(temp_ptr - 2) >> NX_SHIFT_BY_16);
 
-    /* Obtain the IPv4 header. */
-    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-    ipv4_header = (NX_IPV4_HEADER *)packet_ptr -> nx_packet_ip_header;
+  /* Obtain the IPv4 header. */
+  /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+   * necessary  */
+  ipv4_header = (NX_IPV4_HEADER *)packet_ptr->nx_packet_ip_header;
 
-    /* Pickup the source IP address.  */
-    *ip_address =  ipv4_header -> nx_ip_header_source_ip;
+  /* Pickup the source IP address.  */
+  *ip_address = ipv4_header->nx_ip_header_source_ip;
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOURCE_EXTRACT, packet_ptr, *ip_address, *port, 0, NX_TRACE_UDP_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOURCE_EXTRACT, packet_ptr, *ip_address,
+                          *port, 0, NX_TRACE_UDP_EVENTS, 0, 0);
 
-    return(NX_SUCCESS);
+  return (NX_SUCCESS);
 #else
-    NX_PARAMETER_NOT_USED(packet_ptr);
-    NX_PARAMETER_NOT_USED(ip_address);
-    NX_PARAMETER_NOT_USED(port);
+  NX_PARAMETER_NOT_USED(packet_ptr);
+  NX_PARAMETER_NOT_USED(ip_address);
+  NX_PARAMETER_NOT_USED(port);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

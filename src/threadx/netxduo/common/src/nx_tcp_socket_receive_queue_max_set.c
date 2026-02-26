@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_tcp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -67,36 +64,36 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_tcp_socket_receive_queue_max_set(NX_TCP_SOCKET *socket_ptr, UINT receive_queue_maximum)
-{
+UINT _nx_tcp_socket_receive_queue_max_set(NX_TCP_SOCKET *socket_ptr,
+                                          UINT receive_queue_maximum) {
 #ifdef NX_ENABLE_LOW_WATERMARK
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-    /* Get mutex protection.  */
-    tx_mutex_get(&(socket_ptr -> nx_tcp_socket_ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Get mutex protection.  */
+  tx_mutex_get(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection),
+               TX_WAIT_FOREVER);
 
-    /* Disable interrupts to get a packet from the pool.  */
-    TX_DISABLE
+  /* Disable interrupts to get a packet from the pool.  */
+  TX_DISABLE
 
-    /* Set maximum receive queue of socket. */
-    socket_ptr -> nx_tcp_socket_receive_queue_maximum = receive_queue_maximum;
+  /* Set maximum receive queue of socket. */
+  socket_ptr->nx_tcp_socket_receive_queue_maximum = receive_queue_maximum;
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Release protection.  */
-    tx_mutex_put(&(socket_ptr -> nx_tcp_socket_ip_ptr -> nx_ip_protection));
+  /* Release protection.  */
+  tx_mutex_put(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection));
 
-    /* Return completion status.  */
-    return(NX_SUCCESS);
+  /* Return completion status.  */
+  return (NX_SUCCESS);
 
 #else /* !NX_ENABLE_LOW_WATERMARK */
-    NX_PARAMETER_NOT_USED(socket_ptr);
-    NX_PARAMETER_NOT_USED(receive_queue_maximum);
+  NX_PARAMETER_NOT_USED(socket_ptr);
+  NX_PARAMETER_NOT_USED(receive_queue_maximum);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* NX_ENABLE_LOW_WATERMARK */
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,19 +21,17 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
-#include "fx_system.h"
-#include "fx_file.h"
-#include "fx_utility.h"
 #include "fx_directory.h"
+#include "fx_file.h"
+#include "fx_system.h"
+#include "fx_utility.h"
 
 #ifndef FX_NO_LOCAL_PATH
 FX_LOCAL_PATH_SETUP
 #endif
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,38 +74,35 @@ FX_LOCAL_PATH_SETUP
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_directory_local_path_clear(FX_MEDIA *media_ptr)
-{
-
+UINT _fx_directory_local_path_clear(FX_MEDIA *media_ptr) {
 
 #ifndef FX_MEDIA_STATISTICS_DISABLE
 
-    /* Increment the number of times this service has been called.  */
-    media_ptr -> fx_media_directory_local_path_clears++;
+  /* Increment the number of times this service has been called.  */
+  media_ptr->fx_media_directory_local_path_clears++;
 #endif
 
-    /* Check the media to make sure it is open.  */
-    if (media_ptr -> fx_media_id != FX_MEDIA_ID)
-    {
+  /* Check the media to make sure it is open.  */
+  if (media_ptr->fx_media_id != FX_MEDIA_ID) {
 
-        /* Return the media not opened error.  */
-        return(FX_MEDIA_NOT_OPEN);
-    }
+    /* Return the media not opened error.  */
+    return (FX_MEDIA_NOT_OPEN);
+  }
 
 #ifdef FX_NO_LOCAL_PATH
 
-    /* Error, return to caller.  */
-    return(FX_NOT_IMPLEMENTED);
+  /* Error, return to caller.  */
+  return (FX_NOT_IMPLEMENTED);
 #else
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    FX_TRACE_IN_LINE_INSERT(FX_TRACE_DIRECTORY_LOCAL_PATH_CLEAR, media_ptr, 0, 0, 0, FX_TRACE_DIRECTORY_EVENTS, 0, 0)
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  FX_TRACE_IN_LINE_INSERT(FX_TRACE_DIRECTORY_LOCAL_PATH_CLEAR, media_ptr, 0, 0,
+                          0, FX_TRACE_DIRECTORY_EVENTS, 0, 0)
 
-    /* Clear this thread's local path pointer.  */
-    _tx_thread_current_ptr -> tx_thread_filex_ptr =  FX_NULL;
+  /* Clear this thread's local path pointer.  */
+  _tx_thread_current_ptr->tx_thread_filex_ptr = FX_NULL;
 
-    /* Local default directory clear is complete, return status.  */
-    return(FX_SUCCESS);
+  /* Local default directory clear is complete, return status.  */
+  return (FX_SUCCESS);
 #endif
 }
-

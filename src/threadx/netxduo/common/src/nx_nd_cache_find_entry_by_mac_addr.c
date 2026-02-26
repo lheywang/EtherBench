@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -30,7 +28,6 @@
 #include "../include/nx_nd_cache.h"
 
 #ifdef FEATURE_NX_IPV6
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -83,48 +80,49 @@
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_nd_cache_find_entry_by_mac_addr(NX_IP *ip_ptr, ULONG physical_msw,
-                                         ULONG physical_lsw, ND_CACHE_ENTRY **nd_cache_entry)
-{
-INT   i;
-ULONG mac_msw, mac_lsw;
+                                         ULONG physical_lsw,
+                                         ND_CACHE_ENTRY **nd_cache_entry) {
+  INT i;
+  ULONG mac_msw, mac_lsw;
 
-    /* Initialize the return value. */
-    *nd_cache_entry = NX_NULL;
+  /* Initialize the return value. */
+  *nd_cache_entry = NX_NULL;
 
-    /* Loop to match the physical address.  */
-    for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++)
-    {
+  /* Loop to match the physical address.  */
+  for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++) {
 
-        /* Check the interface pointer.  */
-        if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_interface_ptr == NX_NULL)
-        {
-            continue;
-        }
-
-        /* Check the ND CACHE status.  */
-        if (ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_nd_status == ND_CACHE_STATE_INVALID)
-        {
-            continue;
-        }
-
-        /* Set the physical address.  */
-        mac_msw = ((ULONG)ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[0] << 8) | ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[1];
-        mac_lsw = ((ULONG)ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[2] << 24) | ((ULONG)ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[3] << 16) |
-            ((ULONG)ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[4] << 8) | ip_ptr -> nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[5];
-
-        /* Check the physical address.  */
-        if ((mac_msw == physical_msw) && (mac_lsw == physical_lsw))
-        {
-
-            /* Find a match */
-            *nd_cache_entry = &ip_ptr -> nx_ipv6_nd_cache[i];
-
-            return(NX_SUCCESS);
-        }
+    /* Check the interface pointer.  */
+    if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_interface_ptr == NX_NULL) {
+      continue;
     }
 
-    return(NX_NOT_SUCCESSFUL);
+    /* Check the ND CACHE status.  */
+    if (ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_nd_status ==
+        ND_CACHE_STATE_INVALID) {
+      continue;
+    }
+
+    /* Set the physical address.  */
+    mac_msw =
+        ((ULONG)ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[0] << 8) |
+        ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[1];
+    mac_lsw =
+        ((ULONG)ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[2] << 24) |
+        ((ULONG)ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[3] << 16) |
+        ((ULONG)ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[4] << 8) |
+        ip_ptr->nx_ipv6_nd_cache[i].nx_nd_cache_mac_addr[5];
+
+    /* Check the physical address.  */
+    if ((mac_msw == physical_msw) && (mac_lsw == physical_lsw)) {
+
+      /* Find a match */
+      *nd_cache_entry = &ip_ptr->nx_ipv6_nd_cache[i];
+
+      return (NX_SUCCESS);
+    }
+  }
+
+  return (NX_NOT_SUCCESSFUL);
 }
 
 #endif /* FEATURE_NX_IPV6 */
-

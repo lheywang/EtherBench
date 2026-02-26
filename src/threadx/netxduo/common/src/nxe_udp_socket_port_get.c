@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,16 +21,13 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_udp.h"
 
-
 /* Bring in externs for caller checking code.  */
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -76,31 +72,27 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_udp_socket_port_get(NX_UDP_SOCKET *socket_ptr, UINT *port_ptr)
-{
+UINT _nxe_udp_socket_port_get(NX_UDP_SOCKET *socket_ptr, UINT *port_ptr) {
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((socket_ptr == NX_NULL) || (socket_ptr->nx_udp_socket_id != NX_UDP_ID) ||
+      (port_ptr == NX_NULL)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((socket_ptr == NX_NULL) || (socket_ptr -> nx_udp_socket_id != NX_UDP_ID) || (port_ptr == NX_NULL))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check to see if UDP is enabled.  */
+  if (!(socket_ptr->nx_udp_socket_ip_ptr)->nx_ip_udp_packet_receive) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if UDP is enabled.  */
-    if (!(socket_ptr -> nx_udp_socket_ip_ptr) -> nx_ip_udp_packet_receive)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual UDP socket port get function.  */
+  status = _nx_udp_socket_port_get(socket_ptr, port_ptr);
 
-    /* Call actual UDP socket port get function.  */
-    status =  _nx_udp_socket_port_get(socket_ptr, port_ptr);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

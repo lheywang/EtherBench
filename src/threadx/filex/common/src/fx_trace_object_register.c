@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -32,10 +31,7 @@
 
 #ifdef TX_ENABLE_EVENT_TRACE
 
-
 /* Include necessary system files.  */
-
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -80,20 +76,20 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _fx_trace_object_register(UCHAR object_type, VOID *object_ptr, CHAR *object_name, ULONG parameter_1, ULONG parameter_2)
-{
+VOID _fx_trace_object_register(UCHAR object_type, VOID *object_ptr,
+                               CHAR *object_name, ULONG parameter_1,
+                               ULONG parameter_2) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Call actual object register function.  */
+  _tx_trace_object_register(object_type, object_ptr, object_name, parameter_1,
+                            parameter_2);
 
-    /* Call actual object register function.  */
-    _tx_trace_object_register(object_type, object_ptr, object_name, parameter_1, parameter_2);
-
-    /* Restore interrupts.  */
-    TX_RESTORE
+  /* Restore interrupts.  */
+  TX_RESTORE
 }
 #endif
-

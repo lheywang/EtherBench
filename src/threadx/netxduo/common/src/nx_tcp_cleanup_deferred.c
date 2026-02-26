@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_tcp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,11 +71,9 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_tcp_cleanup_deferred(TX_THREAD *thread_ptr NX_CLEANUP_PARAMETER)
-{
-    NX_PARAMETER_NOT_USED(thread_ptr);
+VOID _nx_tcp_cleanup_deferred(TX_THREAD *thread_ptr NX_CLEANUP_PARAMETER) {
+  NX_PARAMETER_NOT_USED(thread_ptr);
 
-    NX_CLEANUP_EXTENSION
-    /* This function is never called... so do nothing!  */
+  NX_CLEANUP_EXTENSION
+  /* This function is never called... so do nothing!  */
 }
-

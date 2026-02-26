@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_byte_pool.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -78,38 +75,33 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_byte_pool_info_get(TX_BYTE_POOL *pool_ptr, CHAR **name, ULONG *available_bytes,
-                    ULONG *fragments, TX_THREAD **first_suspended,
-                    ULONG *suspended_count, TX_BYTE_POOL **next_pool)
-{
+UINT _txe_byte_pool_info_get(TX_BYTE_POOL *pool_ptr, CHAR **name,
+                             ULONG *available_bytes, ULONG *fragments,
+                             TX_THREAD **first_suspended,
+                             ULONG *suspended_count, TX_BYTE_POOL **next_pool) {
 
-UINT    status;
+  UINT status;
 
+  /* Check for an invalid byte pool pointer.  */
+  if (pool_ptr == TX_NULL) {
 
-    /* Check for an invalid byte pool pointer.  */
-    if (pool_ptr == TX_NULL)
-    {
+    /* Block pool pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  }
 
-        /* Block pool pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
-    }
+  /* Now check for invalid pool ID.  */
+  else if (pool_ptr->tx_byte_pool_id != TX_BYTE_POOL_ID) {
 
-    /* Now check for invalid pool ID.  */
-    else if (pool_ptr -> tx_byte_pool_id != TX_BYTE_POOL_ID)
-    {
+    /* Block pool pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  } else {
 
-        /* Block pool pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
-    }
-    else
-    {
+    /* Otherwise, call the actual byte pool information get service.  */
+    status =
+        _tx_byte_pool_info_get(pool_ptr, name, available_bytes, fragments,
+                               first_suspended, suspended_count, next_pool);
+  }
 
-        /* Otherwise, call the actual byte pool information get service.  */
-        status =  _tx_byte_pool_info_get(pool_ptr, name, available_bytes,
-                            fragments, first_suspended, suspended_count, next_pool);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

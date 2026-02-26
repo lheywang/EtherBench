@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_unicode.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -69,35 +66,32 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-ULONG  _fx_unicode_length_get_extended(UCHAR *unicode_name, UINT buffer_length)
-{
+ULONG _fx_unicode_length_get_extended(UCHAR *unicode_name, UINT buffer_length) {
 
-ULONG i;
-ULONG length;
+  ULONG i;
+  ULONG length;
 
+  i = 0;
+  length = 0;
+  while (i < buffer_length) {
 
-    i =  0;
-    length =  0;
-    while (i < buffer_length)
-    {
-
-        /* See if we are at the end of the unicode string...  This assumes that there is a NULL at the end of the string.  */
-        if ((unicode_name[i] == 0) && (unicode_name[i + 1] == 0))
-        {
-            break;
-        }
-
-        /* Increment index.  */
-        i =  i + 2;
-
-        /* Increment the length.  */
-        length++;
+    /* See if we are at the end of the unicode string...  This assumes that
+     * there is a NULL at the end of the string.  */
+    if ((unicode_name[i] == 0) && (unicode_name[i + 1] == 0)) {
+      break;
     }
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    FX_TRACE_IN_LINE_INSERT(FX_TRACE_UNICODE_LENGTH_GET, unicode_name, length, 0, 0, FX_TRACE_FILE_EVENTS, 0, 0)
+    /* Increment index.  */
+    i = i + 2;
 
-    /* Return length.  */
-    return(length);
+    /* Increment the length.  */
+    length++;
+  }
+
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  FX_TRACE_IN_LINE_INSERT(FX_TRACE_UNICODE_LENGTH_GET, unicode_name, length, 0,
+                          0, FX_TRACE_FILE_EVENTS, 0, 0)
+
+  /* Return length.  */
+  return (length);
 }
-

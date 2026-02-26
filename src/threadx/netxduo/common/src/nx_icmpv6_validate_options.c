@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_ipv6.h"
 #include "../include/nx_icmpv6.h"
+#include "../include/nx_ipv6.h"
 
 #ifdef FEATURE_NX_IPV6
 
@@ -75,45 +73,41 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_icmpv6_validate_options(NX_ICMPV6_OPTION *option, INT length, INT additional_check)
-{
+UINT _nx_icmpv6_validate_options(NX_ICMPV6_OPTION *option, INT length,
+                                 INT additional_check) {
 
-UINT option_len;
+  UINT option_len;
 
-    /* Parse all option headers from the ICMPv6 header. */
-    while (length > 0)
-    {
-        /* Verify that the option length is not zero. */
-        if (option -> nx_icmpv6_option_length == 0)
-        {
-            return(NX_NOT_SUCCESSFUL);
-        }
-
-        /* Also check for NO SOURCE LINK LAYER ADDRESS.  */
-        if ((additional_check == NX_NO_SLLA) &&
-            (option -> nx_icmpv6_option_type == 1))
-        {
-
-            return(NX_NOT_SUCCESSFUL);
-        }
-
-        /* Get the next option. */
-        option_len = ((UINT)option -> nx_icmpv6_option_length) << 3;
-        length -= (INT)option_len;
-
-        /*lint -e{923} suppress cast between pointer and ULONG, since it is necessary  */
-        option = (NX_ICMPV6_OPTION *)NX_UCHAR_POINTER_ADD(option, option_len);
+  /* Parse all option headers from the ICMPv6 header. */
+  while (length > 0) {
+    /* Verify that the option length is not zero. */
+    if (option->nx_icmpv6_option_length == 0) {
+      return (NX_NOT_SUCCESSFUL);
     }
 
-    if (length < 0)
-    {
+    /* Also check for NO SOURCE LINK LAYER ADDRESS.  */
+    if ((additional_check == NX_NO_SLLA) &&
+        (option->nx_icmpv6_option_type == 1)) {
 
-        /* Invalid packet length. */
-        return(NX_NOT_SUCCESSFUL);
+      return (NX_NOT_SUCCESSFUL);
     }
 
-    return(NX_SUCCESS);
+    /* Get the next option. */
+    option_len = ((UINT)option->nx_icmpv6_option_length) << 3;
+    length -= (INT)option_len;
+
+    /*lint -e{923} suppress cast between pointer and ULONG, since it is
+     * necessary  */
+    option = (NX_ICMPV6_OPTION *)NX_UCHAR_POINTER_ADD(option, option_len);
+  }
+
+  if (length < 0) {
+
+    /* Invalid packet length. */
+    return (NX_NOT_SUCCESSFUL);
+  }
+
+  return (NX_SUCCESS);
 }
 
 #endif /* FEATURE_NX_IPV6 */
-

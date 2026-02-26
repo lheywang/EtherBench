@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -23,9 +22,8 @@
 #define FX_SOURCE_CODE
 
 #include "fx_api.h"
-#include "fx_utility.h"
 #include "fx_fault_tolerant.h"
-
+#include "fx_utility.h"
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
 /**************************************************************************/
@@ -77,57 +75,62 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_fault_tolerant_add_dir_log(FX_MEDIA *media_ptr, ULONG64 logical_sector, ULONG offset,
-                                    UCHAR *data, ULONG data_size)
-{
-ULONG                      file_size;
-FX_FAULT_TOLERANT_DIR_LOG *dir_log;
+UINT _fx_fault_tolerant_add_dir_log(FX_MEDIA *media_ptr, ULONG64 logical_sector,
+                                    ULONG offset, UCHAR *data,
+                                    ULONG data_size) {
+  ULONG file_size;
+  FX_FAULT_TOLERANT_DIR_LOG *dir_log;
 
-    /* Increment the size of the log file. */
-    file_size = media_ptr -> fx_media_fault_tolerant_file_size + data_size + FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE;
+  /* Increment the size of the log file. */
+  file_size = media_ptr->fx_media_fault_tolerant_file_size + data_size +
+              FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE;
 
-    /* Check whether log file exceeds the buffer. */
-    if (file_size > media_ptr -> fx_media_fault_tolerant_memory_buffer_size)
-    {
+  /* Check whether log file exceeds the buffer. */
+  if (file_size > media_ptr->fx_media_fault_tolerant_memory_buffer_size) {
 
-        /*  Log file exceeds the size of the log buffer.  This is a failure. */
-        return(FX_NO_MORE_SPACE);
-    }
+    /*  Log file exceeds the size of the log buffer.  This is a failure. */
+    return (FX_NO_MORE_SPACE);
+  }
 
-    /* Any data to write? */
-    if (data_size == 0)
-    {
+  /* Any data to write? */
+  if (data_size == 0) {
 
-        /* No. Just return. */
-        return FX_SUCCESS;
-    }
+    /* No. Just return. */
+    return FX_SUCCESS;
+  }
 
-    /* Set log pointer. */
-    dir_log = (FX_FAULT_TOLERANT_DIR_LOG *)(media_ptr -> fx_media_fault_tolerant_memory_buffer +
-                                            media_ptr -> fx_media_fault_tolerant_file_size);
+  /* Set log pointer. */
+  dir_log = (FX_FAULT_TOLERANT_DIR_LOG
+                 *)(media_ptr->fx_media_fault_tolerant_memory_buffer +
+                    media_ptr->fx_media_fault_tolerant_file_size);
 
-    /* Set log type. */
-    _fx_utility_16_unsigned_write((UCHAR *)&dir_log -> fx_fault_tolerant_dir_log_type,
-                                  FX_FAULT_TOLERANT_DIR_LOG_TYPE);
+  /* Set log type. */
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&dir_log->fx_fault_tolerant_dir_log_type,
+      FX_FAULT_TOLERANT_DIR_LOG_TYPE);
 
-    /* Size of log. */
-    _fx_utility_16_unsigned_write((UCHAR *)&dir_log -> fx_fault_tolerant_dir_log_size,
-                                  data_size + FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE);
+  /* Size of log. */
+  _fx_utility_16_unsigned_write(
+      (UCHAR *)&dir_log->fx_fault_tolerant_dir_log_size,
+      data_size + FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE);
 
-    /* Set sector and offset. */
-    _fx_utility_64_unsigned_write((UCHAR *)&dir_log -> fx_fault_tolerant_dir_log_sector, logical_sector);
-    _fx_utility_32_unsigned_write((UCHAR *)&dir_log -> fx_fault_tolerant_dir_log_offset, offset);
+  /* Set sector and offset. */
+  _fx_utility_64_unsigned_write(
+      (UCHAR *)&dir_log->fx_fault_tolerant_dir_log_sector, logical_sector);
+  _fx_utility_32_unsigned_write(
+      (UCHAR *)&dir_log->fx_fault_tolerant_dir_log_offset, offset);
 
-    memcpy(media_ptr -> fx_media_fault_tolerant_memory_buffer +  /* Use case of memcpy is verified. */
-           media_ptr -> fx_media_fault_tolerant_file_size + FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE,
-           data, data_size);
+  memcpy(
+      media_ptr->fx_media_fault_tolerant_memory_buffer + /* Use case of memcpy
+                                                            is verified. */
+          media_ptr->fx_media_fault_tolerant_file_size +
+          FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE,
+      data, data_size);
 
+  /* Update log information. */
+  media_ptr->fx_media_fault_tolerant_file_size = (USHORT)file_size;
+  media_ptr->fx_media_fault_tolerant_total_logs += 1;
 
-    /* Update log information. */
-    media_ptr -> fx_media_fault_tolerant_file_size = (USHORT)file_size;
-    media_ptr -> fx_media_fault_tolerant_total_logs += 1;
-
-    return(FX_SUCCESS);
+  return (FX_SUCCESS);
 }
 #endif /* FX_ENABLE_FAULT_TOLERANT */
-

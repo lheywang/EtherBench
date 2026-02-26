@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
-#include "../include/tx_trace.h"
 #include "../include/tx_thread.h"
 #include "../include/tx_timer.h"
-
+#include "../include/tx_trace.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,45 +72,44 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _tx_thread_time_slice_change(TX_THREAD *thread_ptr, ULONG new_time_slice, ULONG *old_time_slice)
-{
+UINT _tx_thread_time_slice_change(TX_THREAD *thread_ptr, ULONG new_time_slice,
+                                  ULONG *old_time_slice) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-TX_THREAD       *current_thread;
+  TX_THREAD *current_thread;
 
+  /* Lockout interrupts while the thread is being resumed.  */
+  TX_DISABLE
 
-    /* Lockout interrupts while the thread is being resumed.  */
-    TX_DISABLE
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_TIME_SLICE_CHANGE, thread_ptr,
+                          new_time_slice, thread_ptr->tx_thread_new_time_slice,
+                          0, TX_TRACE_THREAD_EVENTS)
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_TIME_SLICE_CHANGE, thread_ptr, new_time_slice, thread_ptr -> tx_thread_new_time_slice, 0, TX_TRACE_THREAD_EVENTS)
+  /* Log this kernel call.  */
+  TX_EL_THREAD_TIME_SLICE_CHANGE_INSERT
 
-    /* Log this kernel call.  */
-    TX_EL_THREAD_TIME_SLICE_CHANGE_INSERT
+  /* Return the old time slice.  */
+  *old_time_slice = thread_ptr->tx_thread_new_time_slice;
 
-    /* Return the old time slice.  */
-    *old_time_slice =  thread_ptr -> tx_thread_new_time_slice;
+  /* Setup the new time-slice.  */
+  thread_ptr->tx_thread_time_slice = new_time_slice;
+  thread_ptr->tx_thread_new_time_slice = new_time_slice;
 
-    /* Setup the new time-slice.  */
-    thread_ptr -> tx_thread_time_slice =      new_time_slice;
-    thread_ptr -> tx_thread_new_time_slice =  new_time_slice;
+  /* Pickup thread pointer.  */
+  TX_THREAD_GET_CURRENT(current_thread)
 
-    /* Pickup thread pointer.  */
-    TX_THREAD_GET_CURRENT(current_thread)
+  /* Determine if this thread is the currently executing thread.  */
+  if (thread_ptr == current_thread) {
 
-    /* Determine if this thread is the currently executing thread.  */
-    if (thread_ptr == current_thread)
-    {
+    /* Yes, update the time-slice countdown variable.  */
+    _tx_timer_time_slice = new_time_slice;
+  }
 
-        /* Yes, update the time-slice countdown variable.  */
-        _tx_timer_time_slice =  new_time_slice;
-    }
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Return completion status.  */
-    return(TX_SUCCESS);
+  /* Return completion status.  */
+  return (TX_SUCCESS);
 }
-

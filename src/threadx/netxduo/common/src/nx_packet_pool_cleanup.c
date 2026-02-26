@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "tx_thread.h"
 #include "../include/nx_packet.h"
-
+#include "tx_thread.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,91 +70,84 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_packet_pool_cleanup(TX_THREAD *thread_ptr NX_CLEANUP_PARAMETER)
-{
+VOID _nx_packet_pool_cleanup(TX_THREAD *thread_ptr NX_CLEANUP_PARAMETER) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-NX_PACKET_POOL *pool_ptr;   /* Working packet pool pointer  */
+  NX_PACKET_POOL *pool_ptr; /* Working packet pool pointer  */
 
-    NX_CLEANUP_EXTENSION
+  NX_CLEANUP_EXTENSION
 
-    /* Setup pointer to packet pool control block.  */
-    pool_ptr =  (NX_PACKET_POOL *)thread_ptr -> tx_thread_suspend_control_block;
+  /* Setup pointer to packet pool control block.  */
+  pool_ptr = (NX_PACKET_POOL *)thread_ptr->tx_thread_suspend_control_block;
 
-    /* Disable interrupts to remove the suspended thread from the packet pool.  */
-    TX_DISABLE
+  /* Disable interrupts to remove the suspended thread from the packet pool.  */
+  TX_DISABLE
 
-    /* Determine if the cleanup is still required.  */
-    if ((thread_ptr -> tx_thread_suspend_cleanup) && (pool_ptr) &&
-        (pool_ptr -> nx_packet_pool_id == NX_PACKET_POOL_ID))
-    {
+  /* Determine if the cleanup is still required.  */
+  if ((thread_ptr->tx_thread_suspend_cleanup) && (pool_ptr) &&
+      (pool_ptr->nx_packet_pool_id == NX_PACKET_POOL_ID)) {
 
-        /* Yes, we still have thread suspension!  */
+    /* Yes, we still have thread suspension!  */
 
-        /* Clear the suspension cleanup flag.  */
-        thread_ptr -> tx_thread_suspend_cleanup =  TX_NULL;
+    /* Clear the suspension cleanup flag.  */
+    thread_ptr->tx_thread_suspend_cleanup = TX_NULL;
 
-        /* Remove the suspended thread from the list.  */
+    /* Remove the suspended thread from the list.  */
 
-        /* See if this is the only suspended thread on the list.  */
-        if (thread_ptr == thread_ptr -> tx_thread_suspended_next)
-        {
+    /* See if this is the only suspended thread on the list.  */
+    if (thread_ptr == thread_ptr->tx_thread_suspended_next) {
 
-            /* Yes, the only suspended thread.  */
+      /* Yes, the only suspended thread.  */
 
-            /* Update the head pointer.  */
-            pool_ptr -> nx_packet_pool_suspension_list =  TX_NULL;
-        }
-        else
-        {
+      /* Update the head pointer.  */
+      pool_ptr->nx_packet_pool_suspension_list = TX_NULL;
+    } else {
 
-            /* At least one more thread is on the same suspension list.  */
+      /* At least one more thread is on the same suspension list.  */
 
-            /* Update the list head pointer if necessary.  */
-            if (pool_ptr -> nx_packet_pool_suspension_list == thread_ptr)
-            {
-                pool_ptr -> nx_packet_pool_suspension_list =  thread_ptr -> tx_thread_suspended_next;
-            }
+      /* Update the list head pointer if necessary.  */
+      if (pool_ptr->nx_packet_pool_suspension_list == thread_ptr) {
+        pool_ptr->nx_packet_pool_suspension_list =
+            thread_ptr->tx_thread_suspended_next;
+      }
 
-            /* Update the links of the adjacent threads.  */
-            (thread_ptr -> tx_thread_suspended_next) -> tx_thread_suspended_previous =
-                thread_ptr -> tx_thread_suspended_previous;
-            (thread_ptr -> tx_thread_suspended_previous) -> tx_thread_suspended_next =
-                thread_ptr -> tx_thread_suspended_next;
-        }
-
-        /* Decrement the suspension count.  */
-        pool_ptr -> nx_packet_pool_suspended_count--;
-
-        /* Now we need to determine if this cleanup is from a terminate, timeout,
-           or from a wait abort.  */
-        if (thread_ptr -> tx_thread_state == TX_TCP_IP)
-        {
-
-            /* Thread still suspended on the packet pool.  Setup return error status and
-               resume the thread.  */
-
-            /* Setup return status.  */
-            thread_ptr -> tx_thread_suspend_status =  NX_NO_PACKET;
-
-            /* Temporarily disable preemption.  */
-            _tx_thread_preempt_disable++;
-
-            /* Restore interrupts.  */
-            TX_RESTORE
-
-            /* Resume the thread!  Check for preemption even though we are executing
-               from the system timer thread right now which normally executes at the
-               highest priority.  */
-            _tx_thread_system_resume(thread_ptr);
-
-            /* Finished, just return.  */
-            return;
-        }
+      /* Update the links of the adjacent threads.  */
+      (thread_ptr->tx_thread_suspended_next)->tx_thread_suspended_previous =
+          thread_ptr->tx_thread_suspended_previous;
+      (thread_ptr->tx_thread_suspended_previous)->tx_thread_suspended_next =
+          thread_ptr->tx_thread_suspended_next;
     }
 
-    /* Restore interrupts.  */
-    TX_RESTORE
-}
+    /* Decrement the suspension count.  */
+    pool_ptr->nx_packet_pool_suspended_count--;
 
+    /* Now we need to determine if this cleanup is from a terminate, timeout,
+       or from a wait abort.  */
+    if (thread_ptr->tx_thread_state == TX_TCP_IP) {
+
+      /* Thread still suspended on the packet pool.  Setup return error status
+         and resume the thread.  */
+
+      /* Setup return status.  */
+      thread_ptr->tx_thread_suspend_status = NX_NO_PACKET;
+
+      /* Temporarily disable preemption.  */
+      _tx_thread_preempt_disable++;
+
+      /* Restore interrupts.  */
+      TX_RESTORE
+
+      /* Resume the thread!  Check for preemption even though we are executing
+         from the system timer thread right now which normally executes at the
+         highest priority.  */
+      _tx_thread_system_resume(thread_ptr);
+
+      /* Finished, just return.  */
+      return;
+    }
+  }
+
+  /* Restore interrupts.  */
+  TX_RESTORE
+}

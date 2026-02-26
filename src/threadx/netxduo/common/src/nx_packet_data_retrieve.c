@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_packet.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,61 +69,66 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_packet_data_retrieve(NX_PACKET *packet_ptr, VOID *buffer_start, ULONG *bytes_copied)
-{
+UINT _nx_packet_data_retrieve(NX_PACKET *packet_ptr, VOID *buffer_start,
+                              ULONG *bytes_copied) {
 
-ULONG  remaining_bytes;
-UCHAR *destination_ptr;
-ULONG  bytes_to_copy;
+  ULONG remaining_bytes;
+  UCHAR *destination_ptr;
+  ULONG bytes_to_copy;
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_PACKET_DATA_RETRIEVE, packet_ptr, buffer_start, bytes_copied, 0, NX_TRACE_PACKET_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_PACKET_DATA_RETRIEVE, packet_ptr,
+                          buffer_start, bytes_copied, 0, NX_TRACE_PACKET_EVENTS,
+                          0, 0);
 
-    /* Setup the destination pointer.  */
-    destination_ptr =  buffer_start;
+  /* Setup the destination pointer.  */
+  destination_ptr = buffer_start;
 
-    /* Pickup the amount of bytes to copy.  */
-    *bytes_copied =  packet_ptr -> nx_packet_length;
+  /* Pickup the amount of bytes to copy.  */
+  *bytes_copied = packet_ptr->nx_packet_length;
 
-    /* Setup the remaining bytes.  */
-    remaining_bytes =  packet_ptr -> nx_packet_length;
-
-#ifndef NX_DISABLE_PACKET_CHAIN
-    /* Loop to copy bytes from packet(s).  */
-    while (packet_ptr)
-    {
-#endif /* NX_DISABLE_PACKET_CHAIN */
-
-        /* Calculate the bytes to copy in this packet. */
-        /*lint -e{946} -e{947} suppress pointer subtraction, since it is necessary. */
-        bytes_to_copy = (ULONG)(packet_ptr -> nx_packet_append_ptr - packet_ptr -> nx_packet_prepend_ptr);
-
-        /* Copy data to destination. */
-        /* Note: The buffer size must be not less than packet_ptr -> nx_packet_length.  */
-        memcpy(destination_ptr, packet_ptr -> nx_packet_prepend_ptr, bytes_to_copy); /* Use case of memcpy is verified. The buffer is provided by user.  lgtm[cpp/banned-api-usage-required-any] */
-
-        remaining_bytes -= bytes_to_copy;
-        destination_ptr += bytes_to_copy;
+  /* Setup the remaining bytes.  */
+  remaining_bytes = packet_ptr->nx_packet_length;
 
 #ifndef NX_DISABLE_PACKET_CHAIN
-        /* Move to next packet.  */
-        packet_ptr =  packet_ptr -> nx_packet_next;
-    }
+  /* Loop to copy bytes from packet(s).  */
+  while (packet_ptr) {
 #endif /* NX_DISABLE_PACKET_CHAIN */
 
-    /* Determine if the packet chain was valid.  */
-    if (remaining_bytes)
-    {
+    /* Calculate the bytes to copy in this packet. */
+    /*lint -e{946} -e{947} suppress pointer subtraction, since it is necessary.
+     */
+    bytes_to_copy = (ULONG)(packet_ptr->nx_packet_append_ptr -
+                            packet_ptr->nx_packet_prepend_ptr);
 
-        /* Invalid packet chain.  Calculate the actual number of bytes
-           copied.  */
-        *bytes_copied =  *bytes_copied - remaining_bytes;
+    /* Copy data to destination. */
+    /* Note: The buffer size must be not less than packet_ptr ->
+     * nx_packet_length.  */
+    memcpy(destination_ptr, packet_ptr->nx_packet_prepend_ptr,
+           bytes_to_copy); /* Use case of memcpy is verified. The buffer is
+                              provided by user.
+                              lgtm[cpp/banned-api-usage-required-any] */
 
-        /* Return an error.  */
-        return(NX_INVALID_PACKET);
-    }
+    remaining_bytes -= bytes_to_copy;
+    destination_ptr += bytes_to_copy;
 
-    /* Return successful completion.  */
-    return(NX_SUCCESS);
+#ifndef NX_DISABLE_PACKET_CHAIN
+    /* Move to next packet.  */
+    packet_ptr = packet_ptr->nx_packet_next;
+  }
+#endif /* NX_DISABLE_PACKET_CHAIN */
+
+  /* Determine if the packet chain was valid.  */
+  if (remaining_bytes) {
+
+    /* Invalid packet chain.  Calculate the actual number of bytes
+       copied.  */
+    *bytes_copied = *bytes_copied - remaining_bytes;
+
+    /* Return an error.  */
+    return (NX_INVALID_PACKET);
+  }
+
+  /* Return successful completion.  */
+  return (NX_SUCCESS);
 }
-

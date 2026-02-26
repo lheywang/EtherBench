@@ -19,7 +19,6 @@
 /**************************************************************************/
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -27,7 +26,6 @@
 #ifdef FEATURE_NX_IPV6
 #include "../include/nx_nd_cache.h"
 #endif /* FEATURE_NX_IPV6 */
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -76,41 +74,37 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_ipv6_default_router_add(NX_IP *ip_ptr,
-                                   NXD_ADDRESS *router_addr,
-                                   ULONG router_lifetime,
-                                   UINT interface_index)
-{
+UINT _nxd_ipv6_default_router_add(NX_IP *ip_ptr, NXD_ADDRESS *router_addr,
+                                  ULONG router_lifetime, UINT interface_index) {
 #ifdef FEATURE_NX_IPV6
 
-UINT status;
+  UINT status;
 
+  NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IPV6_DEFAULT_ROUTER_ADD, ip_ptr,
+                          router_addr->nxd_ip_address.v6[3], router_lifetime, 0,
+                          NX_TRACE_IP_EVENTS, 0, 0);
 
-    NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IPV6_DEFAULT_ROUTER_ADD, ip_ptr, router_addr -> nxd_ip_address.v6[3], router_lifetime, 0, NX_TRACE_IP_EVENTS, 0, 0);
+  /* Obtain protection on this IP instance for access into the default router
+   * table. */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-    /* Obtain protection on this IP instance for access into the default router table. */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  status = _nxd_ipv6_default_router_add_internal(
+      ip_ptr, router_addr->nxd_ip_address.v6, router_lifetime,
+      &ip_ptr->nx_ip_interface[interface_index], NX_IPV6_ROUTE_TYPE_STATIC,
+      NX_NULL);
 
-    status = _nxd_ipv6_default_router_add_internal(ip_ptr,
-                                                   router_addr -> nxd_ip_address.v6,
-                                                   router_lifetime,
-                                                   &ip_ptr -> nx_ip_interface[interface_index],
-                                                   NX_IPV6_ROUTE_TYPE_STATIC,
-                                                   NX_NULL);
+  /* Release the mutex.  */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    /* Release the mutex.  */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
-
-    return(status);
+  return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(router_addr);
-    NX_PARAMETER_NOT_USED(router_lifetime);
-    NX_PARAMETER_NOT_USED(interface_index);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(router_addr);
+  NX_PARAMETER_NOT_USED(router_lifetime);
+  NX_PARAMETER_NOT_USED(interface_index);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }
-

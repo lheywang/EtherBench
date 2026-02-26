@@ -9,11 +9,10 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/ux_api.h"
 #include "../include/ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -52,40 +49,41 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    _ux_device_stack_transfer_abort       Transfer abort                */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _ux_device_stack_transfer_abort       Transfer abort                */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Device Stack                                                        */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_stack_transfer_all_request_abort(UX_SLAVE_ENDPOINT *endpoint, ULONG completion_code)
-{
+UINT _ux_device_stack_transfer_all_request_abort(UX_SLAVE_ENDPOINT *endpoint,
+                                                 ULONG completion_code) {
 
-UX_SLAVE_TRANSFER       *transfer_request;    
+  UX_SLAVE_TRANSFER *transfer_request;
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_TRANSFER_ALL_REQUEST_ABORT, endpoint, completion_code, 0, 0, UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_TRANSFER_ALL_REQUEST_ABORT,
+                          endpoint, completion_code, 0, 0,
+                          UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
 
-    /* Get the transfer request for this endpoint.  */
-    transfer_request =  &endpoint -> ux_slave_endpoint_transfer_request;
-    
-    /* Abort this request.  */
-    _ux_device_stack_transfer_abort(transfer_request, completion_code);
+  /* Get the transfer request for this endpoint.  */
+  transfer_request = &endpoint->ux_slave_endpoint_transfer_request;
 
-    /* Return successful completion.  */
-    return(UX_SUCCESS);
+  /* Abort this request.  */
+  _ux_device_stack_transfer_abort(transfer_request, completion_code);
+
+  /* Return successful completion.  */
+  return (UX_SUCCESS);
 }
-

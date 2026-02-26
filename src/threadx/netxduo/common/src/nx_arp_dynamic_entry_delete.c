@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -73,85 +71,78 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_arp_dynamic_entry_delete(NX_IP *ip_ptr, NX_ARP *arp_ptr)
-{
+UINT _nx_arp_dynamic_entry_delete(NX_IP *ip_ptr, NX_ARP *arp_ptr) {
 
-TX_INTERRUPT_SAVE_AREA
-NX_PACKET *packet_ptr, *next_packet_ptr;
+  TX_INTERRUPT_SAVE_AREA
+  NX_PACKET *packet_ptr, *next_packet_ptr;
 
+  /* Determine if this ARP entry is already active.  */
+  if (arp_ptr->nx_arp_active_list_head) {
 
-    /* Determine if this ARP entry is already active.  */
-    if (arp_ptr -> nx_arp_active_list_head)
-    {
+    /* Remove this dynamic ARP entry from the associated list.  */
 
-        /* Remove this dynamic ARP entry from the associated list.  */
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-        /* Disable interrupts.  */
-        TX_DISABLE
+    /* Determine if this is the only ARP entry on the list.  */
+    if (arp_ptr == arp_ptr->nx_arp_active_next) {
 
-        /* Determine if this is the only ARP entry on the list.  */
-        if (arp_ptr == arp_ptr -> nx_arp_active_next)
-        {
+      /* Remove the entry from the list.  */
+      *(arp_ptr->nx_arp_active_list_head) = NX_NULL;
+    } else {
 
-            /* Remove the entry from the list.  */
-            *(arp_ptr -> nx_arp_active_list_head) =  NX_NULL;
-        }
-        else
-        {
+      /* Remove the entry from a list of more than one entry.  */
 
-            /* Remove the entry from a list of more than one entry.  */
+      /* Update the list head pointer.  */
+      if (*(arp_ptr->nx_arp_active_list_head) == arp_ptr) {
+        *(arp_ptr->nx_arp_active_list_head) = arp_ptr->nx_arp_active_next;
+      }
 
-            /* Update the list head pointer.  */
-            if (*(arp_ptr -> nx_arp_active_list_head) == arp_ptr)
-            {
-                *(arp_ptr -> nx_arp_active_list_head) =  arp_ptr -> nx_arp_active_next;
-            }
+      /* Update the links of the adjacent ARP entries.  */
+      (arp_ptr->nx_arp_active_next)->nx_arp_active_previous =
+          arp_ptr->nx_arp_active_previous;
+      (arp_ptr->nx_arp_active_previous)->nx_arp_active_next =
+          arp_ptr->nx_arp_active_next;
+    }
 
-            /* Update the links of the adjacent ARP entries.  */
-            (arp_ptr -> nx_arp_active_next) -> nx_arp_active_previous = arp_ptr -> nx_arp_active_previous;
-            (arp_ptr -> nx_arp_active_previous) -> nx_arp_active_next =  arp_ptr -> nx_arp_active_next;
-        }
+    /* No longer active, clear the active list head.  */
+    arp_ptr->nx_arp_active_list_head = NX_NULL;
 
-        /* No longer active, clear the active list head.  */
-        arp_ptr -> nx_arp_active_list_head =  NX_NULL;
+    /* Decrease the number of active ARP entries.  */
+    ip_ptr->nx_ip_arp_dynamic_active_count--;
 
-        /* Decrease the number of active ARP entries.  */
-        ip_ptr -> nx_ip_arp_dynamic_active_count--;
+    /* Pickup the queued packets head pointer.  */
+    next_packet_ptr = arp_ptr->nx_arp_packets_waiting;
 
-        /* Pickup the queued packets head pointer.  */
-        next_packet_ptr =  arp_ptr -> nx_arp_packets_waiting;
+    /* Clear the queued packets head pointer.  */
+    arp_ptr->nx_arp_packets_waiting = NX_NULL;
 
-        /* Clear the queued packets head pointer.  */
-        arp_ptr -> nx_arp_packets_waiting =  NX_NULL;
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-        /* Restore interrupts.  */
-        TX_RESTORE
+    /* Loop to remove all queued packets.  */
+    while (next_packet_ptr) {
 
-        /* Loop to remove all queued packets.  */
-        while (next_packet_ptr)
-        {
+      /* Pickup the packet pointer at the head of the queue.  */
+      packet_ptr = next_packet_ptr;
 
-            /* Pickup the packet pointer at the head of the queue.  */
-            packet_ptr =  next_packet_ptr;
+      /* Move to the next packet in the queue.  */
+      next_packet_ptr = next_packet_ptr->nx_packet_queue_next;
 
-            /* Move to the next packet in the queue.  */
-            next_packet_ptr =  next_packet_ptr -> nx_packet_queue_next;
-
-            /* Clear the next packet queue pointer.  */
-            packet_ptr -> nx_packet_queue_next =  NX_NULL;
+      /* Clear the next packet queue pointer.  */
+      packet_ptr->nx_packet_queue_next = NX_NULL;
 
 #ifndef NX_DISABLE_IP_INFO
 
-            /* Increment the IP send packets dropped count.  */
-            ip_ptr -> nx_ip_send_packets_dropped++;
+      /* Increment the IP send packets dropped count.  */
+      ip_ptr->nx_ip_send_packets_dropped++;
 #endif
 
-            /* Release the packet that was queued from the previous ARP entry.  */
-            _nx_packet_transmit_release(packet_ptr);
-        }
+      /* Release the packet that was queued from the previous ARP entry.  */
+      _nx_packet_transmit_release(packet_ptr);
     }
+  }
 
-    return(NX_SUCCESS);
+  return (NX_SUCCESS);
 }
 #endif /* !NX_DISABLE_IPV4  */
-

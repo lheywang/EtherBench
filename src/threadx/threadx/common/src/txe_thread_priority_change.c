@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_thread.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,59 +72,50 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_thread_priority_change(TX_THREAD *thread_ptr, UINT new_priority, UINT *old_priority)
-{
+UINT _txe_thread_priority_change(TX_THREAD *thread_ptr, UINT new_priority,
+                                 UINT *old_priority) {
 
-UINT        status;
+  UINT status;
 
+  /* Check for an invalid thread pointer.  */
+  if (thread_ptr == TX_NULL) {
 
-    /* Check for an invalid thread pointer.  */
-    if (thread_ptr == TX_NULL)
-    {
+    /* Thread pointer is invalid, return appropriate error code.  */
+    status = TX_THREAD_ERROR;
+  }
 
-        /* Thread pointer is invalid, return appropriate error code.  */
-        status =  TX_THREAD_ERROR;
-    }
+  /* Now check for invalid thread ID.  */
+  else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
 
-    /* Now check for invalid thread ID.  */
-    else if (thread_ptr -> tx_thread_id != TX_THREAD_ID)
-    {
+    /* Thread pointer is invalid, return appropriate error code.  */
+    status = TX_THREAD_ERROR;
+  }
 
-        /* Thread pointer is invalid, return appropriate error code.  */
-        status =  TX_THREAD_ERROR;
-    }
+  /* Check for a valid old priority pointer.  */
+  else if (old_priority == TX_NULL) {
 
-    /* Check for a valid old priority pointer.  */
-    else if (old_priority == TX_NULL)
-    {
+    /* Invalid destination pointer, return appropriate error code.  */
+    status = TX_PTR_ERROR;
+  }
 
-        /* Invalid destination pointer, return appropriate error code.  */
-        status =  TX_PTR_ERROR;
-    }
+  /* Determine if the priority is legal.  */
+  else if (new_priority >= ((UINT)TX_MAX_PRIORITIES)) {
 
-    /* Determine if the priority is legal.  */
-    else if (new_priority >= ((UINT) TX_MAX_PRIORITIES))
-    {
+    /* Return an error status.  */
+    status = TX_PRIORITY_ERROR;
+  }
 
-        /* Return an error status.  */
-        status =  TX_PRIORITY_ERROR;
-    }
+  /* Check for invalid caller of this function.  */
+  else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-    /* Check for invalid caller of this function.  */
-    else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
-    {
+    /* Invalid caller of this function, return appropriate error code.  */
+    status = TX_CALLER_ERROR;
+  } else {
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status =  TX_CALLER_ERROR;
-    }
-    else
-    {
+    /* Call actual change thread priority function.  */
+    status = _tx_thread_priority_change(thread_ptr, new_priority, old_priority);
+  }
 
-        /* Call actual change thread priority function.  */
-        status =  _tx_thread_priority_change(thread_ptr, new_priority, old_priority);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

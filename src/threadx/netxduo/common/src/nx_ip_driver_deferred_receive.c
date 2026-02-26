@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
 #include "../include/nx_packet.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,47 +70,44 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_ip_driver_deferred_receive(NX_IP *ip_ptr, NX_PACKET *packet_ptr)
-{
+VOID _nx_ip_driver_deferred_receive(NX_IP *ip_ptr, NX_PACKET *packet_ptr) {
 
 #ifdef NX_DRIVER_DEFERRED_PROCESSING
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Add the packet to the end of the driver queue for processing */
-    packet_ptr -> nx_packet_queue_next = NX_NULL;
-    if (ip_ptr -> nx_ip_driver_deferred_packet_head == NX_NULL)
-    {
+  /* Add the packet to the end of the driver queue for processing */
+  packet_ptr->nx_packet_queue_next = NX_NULL;
+  if (ip_ptr->nx_ip_driver_deferred_packet_head == NX_NULL) {
 
-        /* The queue is empty, set both the first and last packet
-            pointers to the new packet */
-        ip_ptr -> nx_ip_driver_deferred_packet_head = packet_ptr;
-        ip_ptr -> nx_ip_driver_deferred_packet_tail = packet_ptr;
+    /* The queue is empty, set both the first and last packet
+        pointers to the new packet */
+    ip_ptr->nx_ip_driver_deferred_packet_head = packet_ptr;
+    ip_ptr->nx_ip_driver_deferred_packet_tail = packet_ptr;
 
-        /* Restore interrupts.  */
-        TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-        /* Wakeup IP helper thread to process the packet.  */
-        tx_event_flags_set(&(ip_ptr -> nx_ip_events), NX_IP_DRIVER_PACKET_EVENT, TX_OR);
-    }
-    else
-    {
+    /* Wakeup IP helper thread to process the packet.  */
+    tx_event_flags_set(&(ip_ptr->nx_ip_events), NX_IP_DRIVER_PACKET_EVENT,
+                       TX_OR);
+  } else {
 
-        /* The queue is not empty, simply add the packet to the end of the queue.  */
-        (ip_ptr -> nx_ip_driver_deferred_packet_tail) -> nx_packet_queue_next = packet_ptr;
-        ip_ptr -> nx_ip_driver_deferred_packet_tail = packet_ptr;
+    /* The queue is not empty, simply add the packet to the end of the queue. */
+    (ip_ptr->nx_ip_driver_deferred_packet_tail)->nx_packet_queue_next =
+        packet_ptr;
+    ip_ptr->nx_ip_driver_deferred_packet_tail = packet_ptr;
 
-        /* Restore interrupts.  */
-        TX_RESTORE
-    }
+    /* Restore interrupts.  */
+    TX_RESTORE
+  }
 
 #else
-    NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_ptr);
 
-    /* No deferred packet processing, just release the packet.  */
-    _nx_packet_release(packet_ptr);
+  /* No deferred packet processing, just release the packet.  */
+  _nx_packet_release(packet_ptr);
 #endif
 }
-

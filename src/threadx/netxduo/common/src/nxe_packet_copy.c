@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -31,7 +29,6 @@
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,41 +74,36 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_packet_copy(NX_PACKET *packet_ptr, NX_PACKET **new_packet_ptr,
-                       NX_PACKET_POOL *pool_ptr, ULONG wait_option)
-{
+UINT _nxe_packet_copy(NX_PACKET *packet_ptr, NX_PACKET **new_packet_ptr,
+                      NX_PACKET_POOL *pool_ptr, ULONG wait_option) {
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((pool_ptr == NX_NULL) ||
+      (pool_ptr->nx_packet_pool_id != NX_PACKET_POOL_ID) ||
+      (packet_ptr == NX_NULL) || (new_packet_ptr == NX_NULL)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((pool_ptr == NX_NULL) || (pool_ptr -> nx_packet_pool_id != NX_PACKET_POOL_ID) ||
-        (packet_ptr == NX_NULL) || (new_packet_ptr == NX_NULL))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for an invalid packet prepend pointer.  */
+  /*lint -e{946} suppress pointer subtraction, since it is necessary. */
+  if (packet_ptr->nx_packet_prepend_ptr < packet_ptr->nx_packet_data_start) {
+    return (NX_UNDERFLOW);
+  }
 
-    /* Check for an invalid packet prepend pointer.  */
-    /*lint -e{946} suppress pointer subtraction, since it is necessary. */
-    if (packet_ptr -> nx_packet_prepend_ptr < packet_ptr -> nx_packet_data_start)
-    {
-        return(NX_UNDERFLOW);
-    }
+  /* Check for an invalid packet append pointer.  */
+  /*lint -e{946} suppress pointer subtraction, since it is necessary. */
+  if (packet_ptr->nx_packet_append_ptr > packet_ptr->nx_packet_data_end) {
+    return (NX_OVERFLOW);
+  }
 
-    /* Check for an invalid packet append pointer.  */
-    /*lint -e{946} suppress pointer subtraction, since it is necessary. */
-    if (packet_ptr -> nx_packet_append_ptr > packet_ptr -> nx_packet_data_end)
-    {
-        return(NX_OVERFLOW);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREAD_WAIT_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREAD_WAIT_CALLER_CHECKING
+  /* Call actual packet copy function.  */
+  status = _nx_packet_copy(packet_ptr, new_packet_ptr, pool_ptr, wait_option);
 
-    /* Call actual packet copy function.  */
-    status =  _nx_packet_copy(packet_ptr, new_packet_ptr, pool_ptr, wait_option);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

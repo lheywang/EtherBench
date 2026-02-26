@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,15 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_media.h"
 
-
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -92,31 +88,31 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1.5  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_media_format(FX_MEDIA *media_ptr, VOID (*driver)(FX_MEDIA *media), VOID *driver_info_ptr, UCHAR *memory_ptr, UINT memory_size,
-                        CHAR *volume_name, UINT number_of_fats, UINT directory_entries, UINT hidden_sectors,
-                        ULONG total_sectors, UINT bytes_per_sector, UINT sectors_per_cluster,
-                        UINT heads, UINT sectors_per_track)
-{
+UINT _fxe_media_format(FX_MEDIA *media_ptr, VOID (*driver)(FX_MEDIA *media),
+                       VOID *driver_info_ptr, UCHAR *memory_ptr,
+                       UINT memory_size, CHAR *volume_name, UINT number_of_fats,
+                       UINT directory_entries, UINT hidden_sectors,
+                       ULONG total_sectors, UINT bytes_per_sector,
+                       UINT sectors_per_cluster, UINT heads,
+                       UINT sectors_per_track) {
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((media_ptr == FX_NULL) || (driver == FX_NULL) ||
+      (memory_ptr == FX_NULL)) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((media_ptr == FX_NULL) || (driver == FX_NULL) || (memory_ptr == FX_NULL))
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual media format service.  */
+  status = _fx_media_format(
+      media_ptr, driver, driver_info_ptr, memory_ptr, memory_size, volume_name,
+      number_of_fats, directory_entries, hidden_sectors, total_sectors,
+      bytes_per_sector, sectors_per_cluster, heads, sectors_per_track);
 
-    /* Call actual media format service.  */
-    status =  _fx_media_format(media_ptr, driver, driver_info_ptr, memory_ptr, memory_size,
-                               volume_name, number_of_fats, directory_entries, hidden_sectors,
-                               total_sectors, bytes_per_sector, sectors_per_cluster,
-                               heads, sectors_per_track);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

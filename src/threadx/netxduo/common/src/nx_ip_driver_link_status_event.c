@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -20,12 +19,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -68,20 +65,19 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_ip_driver_link_status_event(NX_IP *ip_ptr, UINT interface_index)
-{
-TX_INTERRUPT_SAVE_AREA
+VOID _nx_ip_driver_link_status_event(NX_IP *ip_ptr, UINT interface_index) {
+  TX_INTERRUPT_SAVE_AREA
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Mark link status changed. */
-    ip_ptr -> nx_ip_interface[interface_index].nx_interface_link_status_change = NX_TRUE;
+  /* Mark link status changed. */
+  ip_ptr->nx_ip_interface[interface_index].nx_interface_link_status_change =
+      NX_TRUE;
 
-    /* Wakeup IP helper thread to process the link status event.  */
-    tx_event_flags_set(&(ip_ptr -> nx_ip_events), NX_IP_LINK_STATUS_EVENT, TX_OR);
+  /* Wakeup IP helper thread to process the link status event.  */
+  tx_event_flags_set(&(ip_ptr->nx_ip_events), NX_IP_LINK_STATUS_EVENT, TX_OR);
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+  /* Restore interrupts.  */
+  TX_RESTORE
 }
-

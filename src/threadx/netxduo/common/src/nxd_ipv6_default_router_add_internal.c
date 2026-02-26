@@ -19,13 +19,11 @@
 /**************************************************************************/
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ipv6.h"
 #include "../include/nx_nd_cache.h"
-
 
 #ifdef FEATURE_NX_IPV6
 /**************************************************************************/
@@ -85,151 +83,134 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_ipv6_default_router_add_internal(NX_IP *ip_ptr,
-                                            ULONG *router_addr,
-                                            ULONG router_lifetime,
-                                            NX_INTERFACE *if_ptr,
-                                            INT router_type,
-                                            NX_IPV6_DEFAULT_ROUTER_ENTRY **_ret)
-{
+UINT _nxd_ipv6_default_router_add_internal(
+    NX_IP *ip_ptr, ULONG *router_addr, ULONG router_lifetime,
+    NX_INTERFACE *if_ptr, INT router_type,
+    NX_IPV6_DEFAULT_ROUTER_ENTRY **_ret) {
 
-UINT                          i;
-UINT                          first_available = (UINT)0xFFFFFFFF;
-ULONG                         address_type;
-NX_IPV6_DEFAULT_ROUTER_ENTRY *ret = NX_NULL;
-NXD_IPV6_ADDRESS             *ipv6_address;
+  UINT i;
+  UINT first_available = (UINT)0xFFFFFFFF;
+  ULONG address_type;
+  NX_IPV6_DEFAULT_ROUTER_ENTRY *ret = NX_NULL;
+  NXD_IPV6_ADDRESS *ipv6_address;
 
+  /* If a router pointer is provided, initialize it to NULL. */
+  if (_ret) {
+    *_ret = NX_NULL;
+  }
 
-    /* If a router pointer is provided, initialize it to NULL. */
-    if (_ret)
-    {
-        *_ret = NX_NULL;
-    }
+  /* Verify gateway address is reachable. */
+  address_type = IPv6_Address_Type(router_addr);
+  if (address_type & IPV6_ADDRESS_UNICAST) {
 
-    /* Verify gateway address is reachable. */
-    address_type = IPv6_Address_Type(router_addr);
-    if (address_type & IPV6_ADDRESS_UNICAST)
-    {
+    /* It is a unicast address. */
+    if (address_type & IPV6_ADDRESS_GLOBAL) {
 
-        /* It is a unicast address. */
-        if (address_type & IPV6_ADDRESS_GLOBAL)
-        {
+      /* It is a global address. */
+      /* Point to the first address unit in the interface. */
+      ipv6_address = if_ptr->nxd_interface_ipv6_address_list_head;
+      while (ipv6_address) {
 
-            /* It is a global address. */
-            /* Point to the first address unit in the interface. */
-            ipv6_address = if_ptr -> nxd_interface_ipv6_address_list_head;
-            while (ipv6_address)
-            {
+        /* Check whether destination is on link. */
+        if (_nxd_ipv6_find_max_prefix_length(
+                router_addr, ipv6_address->nxd_ipv6_address,
+                ipv6_address->nxd_ipv6_address_prefix_length) >=
+            ipv6_address->nxd_ipv6_address_prefix_length) {
 
-                /* Check whether destination is on link. */
-                if (_nxd_ipv6_find_max_prefix_length(router_addr, ipv6_address -> nxd_ipv6_address,
-                                                     ipv6_address -> nxd_ipv6_address_prefix_length) >= ipv6_address -> nxd_ipv6_address_prefix_length)
-                {
-
-                    /* Router address is on link. */
-                    break;
-                }
-
-                /* Point to the next address unit. */
-                ipv6_address = ipv6_address -> nxd_ipv6_address_next;
-            }
-
-            if (ipv6_address == NX_NULL)
-            {
-
-                /* Gateway address is unreachable. */
-                return(NX_IP_ADDRESS_ERROR);
-            }
+          /* Router address is on link. */
+          break;
         }
-    }
-    else
-    {
+
+        /* Point to the next address unit. */
+        ipv6_address = ipv6_address->nxd_ipv6_address_next;
+      }
+
+      if (ipv6_address == NX_NULL) {
 
         /* Gateway address is unreachable. */
-        return(NX_IP_ADDRESS_ERROR);
+        return (NX_IP_ADDRESS_ERROR);
+      }
     }
+  } else {
 
-    /* Search through the list for an already existing entry. */
-    for (i = 0; i < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE; i++)
-    {
+    /* Gateway address is unreachable. */
+    return (NX_IP_ADDRESS_ERROR);
+  }
 
-        /* Does this slot contain a valid router? */
-        if (ip_ptr -> nx_ipv6_default_router_table[i].nx_ipv6_default_router_entry_flag)
-        {
+  /* Search through the list for an already existing entry. */
+  for (i = 0; i < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE; i++) {
 
-            /* Check for matching router address. */
-            if (CHECK_IPV6_ADDRESSES_SAME(router_addr, ip_ptr -> nx_ipv6_default_router_table[i].nx_ipv6_default_router_entry_router_address) &&
-                if_ptr == ip_ptr -> nx_ipv6_default_router_table[i].nx_ipv6_default_router_entry_interface_ptr)
-            {
+    /* Does this slot contain a valid router? */
+    if (ip_ptr->nx_ipv6_default_router_table[i]
+            .nx_ipv6_default_router_entry_flag) {
 
-                /* Its a match! */
-                ret = &ip_ptr -> nx_ipv6_default_router_table[i];
+      /* Check for matching router address. */
+      if (CHECK_IPV6_ADDRESSES_SAME(
+              router_addr, ip_ptr->nx_ipv6_default_router_table[i]
+                               .nx_ipv6_default_router_entry_router_address) &&
+          if_ptr == ip_ptr->nx_ipv6_default_router_table[i]
+                        .nx_ipv6_default_router_entry_interface_ptr) {
 
-                /* Update the router lifetime with the specified input. */
-                ret -> nx_ipv6_default_router_entry_life_time = (USHORT)router_lifetime;
+        /* Its a match! */
+        ret = &ip_ptr->nx_ipv6_default_router_table[i];
 
-                /* Set a pointer to the router location in the table. */
-                if (_ret)
-                {
-                    *_ret = ret;
-                }
+        /* Update the router lifetime with the specified input. */
+        ret->nx_ipv6_default_router_entry_life_time = (USHORT)router_lifetime;
 
-                return(NX_SUCCESS);
-            }
+        /* Set a pointer to the router location in the table. */
+        if (_ret) {
+          *_ret = ret;
         }
-        else
-        {
 
-            /* Flag this as a slot we can use to add the new router. */
-            if (first_available == (UINT)0xFFFFFFFF)
-            {
-                first_available = i;
-            }
-        }
+        return (NX_SUCCESS);
+      }
+    } else {
+
+      /* Flag this as a slot we can use to add the new router. */
+      if (first_available == (UINT)0xFFFFFFFF) {
+        first_available = i;
+      }
     }
+  }
 
-    /* Did we find an empty slot in the table? */
-    if (first_available != (UINT)0xFFFFFFFF)
-    {
+  /* Did we find an empty slot in the table? */
+  if (first_available != (UINT)0xFFFFFFFF) {
 
-        /* Set up local pointer. */
-        ret = &ip_ptr -> nx_ipv6_default_router_table[first_available];
+    /* Set up local pointer. */
+    ret = &ip_ptr->nx_ipv6_default_router_table[first_available];
 
-        /* Copy the router's address into the router table.  */
-        COPY_IPV6_ADDRESS(router_addr, ret -> nx_ipv6_default_router_entry_router_address);
+    /* Copy the router's address into the router table.  */
+    COPY_IPV6_ADDRESS(router_addr,
+                      ret->nx_ipv6_default_router_entry_router_address);
 
-        /* Add the specified input to the router record. */
-        ret -> nx_ipv6_default_router_entry_flag = (UCHAR)(router_type | NX_IPV6_ROUTE_TYPE_VALID);
-        ret -> nx_ipv6_default_router_entry_life_time = (USHORT)router_lifetime;
+    /* Add the specified input to the router record. */
+    ret->nx_ipv6_default_router_entry_flag =
+        (UCHAR)(router_type | NX_IPV6_ROUTE_TYPE_VALID);
+    ret->nx_ipv6_default_router_entry_life_time = (USHORT)router_lifetime;
 
-        /* Set the interface index.  */
-        ret -> nx_ipv6_default_router_entry_interface_ptr = if_ptr;
+    /* Set the interface index.  */
+    ret->nx_ipv6_default_router_entry_interface_ptr = if_ptr;
 
-        /* Has no entry in the cache table. Neighbor Discovery process handles this
-           automaticaly. */
-        ret -> nx_ipv6_default_router_entry_neighbor_cache_ptr = NX_NULL;
+    /* Has no entry in the cache table. Neighbor Discovery process handles this
+       automaticaly. */
+    ret->nx_ipv6_default_router_entry_neighbor_cache_ptr = NX_NULL;
 
-        /* Update the count of routers currently in the table. */
-        ip_ptr -> nx_ipv6_default_router_table_size++;
-    }
-    else
-    {
+    /* Update the count of routers currently in the table. */
+    ip_ptr->nx_ipv6_default_router_table_size++;
+  } else {
 
-        /* No empty slot. */
-        return(NX_NO_MORE_ENTRIES);
-    }
+    /* No empty slot. */
+    return (NX_NO_MORE_ENTRIES);
+  }
 
-    /* If a router pointer was supplied, set it to the location of the router
-       we just added to the table. */
-    if (_ret)
-    {
-        *_ret = ret;
-    }
+  /* If a router pointer was supplied, set it to the location of the router
+     we just added to the table. */
+  if (_ret) {
+    *_ret = ret;
+  }
 
-    /* Successful completion, we're done! */
-    return(NX_SUCCESS);
+  /* Successful completion, we're done! */
+  return (NX_SUCCESS);
 }
 
-
 #endif /* FEATURE_NX_IPV6 */
-

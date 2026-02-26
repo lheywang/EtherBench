@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -31,7 +29,6 @@
 
 /* Bring in externs for caller checking code.  */
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -81,41 +78,39 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent, ULONG *rarp_responses_received,
-                         ULONG *rarp_invalid_messages)
-{
+UINT _nxe_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent,
+                        ULONG *rarp_responses_received,
+                        ULONG *rarp_invalid_messages) {
 
 #ifndef NX_DISABLE_IPV4
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check to see if RARP is enabled.  */
+  if ((!ip_ptr->nx_ip_rarp_queue_process) &&
+      (ip_ptr->nx_ip_rarp_responses_received == 0)) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if RARP is enabled.  */
-    if ((!ip_ptr -> nx_ip_rarp_queue_process) && (ip_ptr -> nx_ip_rarp_responses_received == 0))
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Call actual RARP information get function.  */
+  status = _nx_rarp_info_get(ip_ptr, rarp_requests_sent,
+                             rarp_responses_received, rarp_invalid_messages);
 
-    /* Call actual RARP information get function.  */
-    status =  _nx_rarp_info_get(ip_ptr, rarp_requests_sent, rarp_responses_received, rarp_invalid_messages);
+  /* Return completion status.  */
+  return (status);
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(rarp_requests_sent);
+  NX_PARAMETER_NOT_USED(rarp_responses_received);
+  NX_PARAMETER_NOT_USED(rarp_invalid_messages);
 
-    /* Return completion status.  */
-    return(status);
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(rarp_requests_sent);
-    NX_PARAMETER_NOT_USED(rarp_responses_received);
-    NX_PARAMETER_NOT_USED(rarp_invalid_messages);
-
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -33,7 +31,6 @@
 
 NX_CALLER_CHECKING_EXTERNS
 #endif /* FEATURE_NX_IPV6 */
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -76,31 +73,27 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxde_ipv6_disable(NX_IP *ip_ptr)
-{
+UINT _nxde_ipv6_disable(NX_IP *ip_ptr) {
 #ifdef FEATURE_NX_IPV6
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Call actual IPv6 disable function.  */
+  status = _nxd_ipv6_disable(ip_ptr);
 
-    /* Call actual IPv6 disable function.  */
-    status =  _nxd_ipv6_disable(ip_ptr);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 
 #else /* ! FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    return(NX_NOT_SUPPORTED);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }
-

@@ -35,13 +35,18 @@
 
                      ##### How to use this driver #####
   ==============================================================================
-  [..] This driver provides functions to configure Noise Filter and Wake Up Feature
-    (#) Configure I2C Analog noise filter using the function HAL_I2CEx_ConfigAnalogFilter()
-    (#) Configure I2C Digital noise filter using the function HAL_I2CEx_ConfigDigitalFilter()
-    (#) Configure the enable or disable of I2C Wake Up Mode using the functions :
+  [..] This driver provides functions to configure Noise Filter and Wake Up
+  Feature
+    (#) Configure I2C Analog noise filter using the function
+  HAL_I2CEx_ConfigAnalogFilter()
+    (#) Configure I2C Digital noise filter using the function
+  HAL_I2CEx_ConfigDigitalFilter()
+    (#) Configure the enable or disable of I2C Wake Up Mode using the functions
+  :
           (++) HAL_I2CEx_EnableWakeUp()
           (++) HAL_I2CEx_DisableWakeUp()
-    (#) Configure the enable or disable of fast mode plus driving capability using the functions :
+    (#) Configure the enable or disable of fast mode plus driving capability
+  using the functions :
           (++) HAL_I2CEx_ConfigFastModePlus()
   @endverbatim
   */
@@ -50,13 +55,13 @@
 #include "stm32h5xx_hal.h"
 
 /** @addtogroup STM32H5xx_HAL_Driver
-  * @{
-  */
+ * @{
+ */
 
 /** @defgroup I2CEx I2CEx
-  * @brief I2C Extended HAL module driver
-  * @{
-  */
+ * @brief I2C Extended HAL module driver
+ * @{
+ */
 
 #ifdef HAL_I2C_MODULE_ENABLED
 
@@ -68,8 +73,8 @@
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup I2CEx_Exported_Functions I2C Extended Exported Functions
-  * @{
-  */
+ * @{
+ */
 
 /** @defgroup I2CEx_Exported_Functions_Group1 Filter Mode Functions
   * @brief    Filter Mode Functions
@@ -86,20 +91,20 @@
   */
 
 /**
-  * @brief  Configure I2C Analog noise filter.
-  * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
-  *                the configuration information for the specified I2Cx peripheral.
-  * @param  AnalogFilter New state of the Analog filter.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_I2CEx_ConfigAnalogFilter(I2C_HandleTypeDef *hi2c, uint32_t AnalogFilter)
-{
+ * @brief  Configure I2C Analog noise filter.
+ * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
+ *                the configuration information for the specified I2Cx
+ * peripheral.
+ * @param  AnalogFilter New state of the Analog filter.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_I2CEx_ConfigAnalogFilter(I2C_HandleTypeDef *hi2c,
+                                               uint32_t AnalogFilter) {
   /* Check the parameters */
   assert_param(IS_I2C_ALL_INSTANCE(hi2c->Instance));
   assert_param(IS_I2C_ANALOG_FILTER(AnalogFilter));
 
-  if (hi2c->State == HAL_I2C_STATE_READY)
-  {
+  if (hi2c->State == HAL_I2C_STATE_READY) {
     /* Process Locked */
     __HAL_LOCK(hi2c);
 
@@ -122,30 +127,29 @@ HAL_StatusTypeDef HAL_I2CEx_ConfigAnalogFilter(I2C_HandleTypeDef *hi2c, uint32_t
     __HAL_UNLOCK(hi2c);
 
     return HAL_OK;
-  }
-  else
-  {
+  } else {
     return HAL_BUSY;
   }
 }
 
 /**
-  * @brief  Configure I2C Digital noise filter.
-  * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
-  *                the configuration information for the specified I2Cx peripheral.
-  * @param  DigitalFilter Coefficient of digital noise filter between Min_Data=0x00 and Max_Data=0x0F.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c, uint32_t DigitalFilter)
-{
+ * @brief  Configure I2C Digital noise filter.
+ * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
+ *                the configuration information for the specified I2Cx
+ * peripheral.
+ * @param  DigitalFilter Coefficient of digital noise filter between
+ * Min_Data=0x00 and Max_Data=0x0F.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c,
+                                                uint32_t DigitalFilter) {
   uint32_t tmpreg;
 
   /* Check the parameters */
   assert_param(IS_I2C_ALL_INSTANCE(hi2c->Instance));
   assert_param(IS_I2C_DIGITAL_FILTER(DigitalFilter));
 
-  if (hi2c->State == HAL_I2C_STATE_READY)
-  {
+  if (hi2c->State == HAL_I2C_STATE_READY) {
     /* Process Locked */
     __HAL_LOCK(hi2c);
 
@@ -174,15 +178,13 @@ HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c, uint32_
     __HAL_UNLOCK(hi2c);
 
     return HAL_OK;
-  }
-  else
-  {
+  } else {
     return HAL_BUSY;
   }
 }
 /**
-  * @}
-  */
+ * @}
+ */
 
 /** @defgroup I2CEx_Exported_Functions_Group2 WakeUp Mode Functions
   * @brief    WakeUp Mode Functions
@@ -199,18 +201,17 @@ HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c, uint32_
   */
 
 /**
-  * @brief  Enable I2C wakeup from Stop mode(s).
-  * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
-  *                the configuration information for the specified I2Cx peripheral.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_I2CEx_EnableWakeUp(I2C_HandleTypeDef *hi2c)
-{
+ * @brief  Enable I2C wakeup from Stop mode(s).
+ * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
+ *                the configuration information for the specified I2Cx
+ * peripheral.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_I2CEx_EnableWakeUp(I2C_HandleTypeDef *hi2c) {
   /* Check the parameters */
   assert_param(IS_I2C_WAKEUP_FROMSTOP_INSTANCE(hi2c->Instance));
 
-  if (hi2c->State == HAL_I2C_STATE_READY)
-  {
+  if (hi2c->State == HAL_I2C_STATE_READY) {
     /* Process Locked */
     __HAL_LOCK(hi2c);
 
@@ -230,26 +231,23 @@ HAL_StatusTypeDef HAL_I2CEx_EnableWakeUp(I2C_HandleTypeDef *hi2c)
     __HAL_UNLOCK(hi2c);
 
     return HAL_OK;
-  }
-  else
-  {
+  } else {
     return HAL_BUSY;
   }
 }
 
 /**
-  * @brief  Disable I2C wakeup from Stop mode(s).
-  * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
-  *                the configuration information for the specified I2Cx peripheral.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_I2CEx_DisableWakeUp(I2C_HandleTypeDef *hi2c)
-{
+ * @brief  Disable I2C wakeup from Stop mode(s).
+ * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
+ *                the configuration information for the specified I2Cx
+ * peripheral.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_I2CEx_DisableWakeUp(I2C_HandleTypeDef *hi2c) {
   /* Check the parameters */
   assert_param(IS_I2C_WAKEUP_FROMSTOP_INSTANCE(hi2c->Instance));
 
-  if (hi2c->State == HAL_I2C_STATE_READY)
-  {
+  if (hi2c->State == HAL_I2C_STATE_READY) {
     /* Process Locked */
     __HAL_LOCK(hi2c);
 
@@ -269,15 +267,13 @@ HAL_StatusTypeDef HAL_I2CEx_DisableWakeUp(I2C_HandleTypeDef *hi2c)
     __HAL_UNLOCK(hi2c);
 
     return HAL_OK;
-  }
-  else
-  {
+  } else {
     return HAL_BUSY;
   }
 }
 /**
-  * @}
-  */
+ * @}
+ */
 
 /** @defgroup I2CEx_Exported_Functions_Group3 Fast Mode Plus Functions
   * @brief    Fast Mode Plus Functions
@@ -294,20 +290,20 @@ HAL_StatusTypeDef HAL_I2CEx_DisableWakeUp(I2C_HandleTypeDef *hi2c)
   */
 
 /**
-  * @brief  Configure I2C Fast Mode Plus.
-  * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
-  *                the configuration information for the specified I2Cx peripheral.
-  * @param  FastModePlus New state of the Fast Mode Plus.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_I2CEx_ConfigFastModePlus(I2C_HandleTypeDef *hi2c, uint32_t FastModePlus)
-{
+ * @brief  Configure I2C Fast Mode Plus.
+ * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
+ *                the configuration information for the specified I2Cx
+ * peripheral.
+ * @param  FastModePlus New state of the Fast Mode Plus.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_I2CEx_ConfigFastModePlus(I2C_HandleTypeDef *hi2c,
+                                               uint32_t FastModePlus) {
   /* Check the parameters */
   assert_param(IS_I2C_ALL_INSTANCE(hi2c->Instance));
   assert_param(IS_I2C_FASTMODEPLUS(FastModePlus));
 
-  if (hi2c->State == HAL_I2C_STATE_READY)
-  {
+  if (hi2c->State == HAL_I2C_STATE_READY) {
     /* Process Locked */
     __HAL_LOCK(hi2c);
 
@@ -316,13 +312,10 @@ HAL_StatusTypeDef HAL_I2CEx_ConfigFastModePlus(I2C_HandleTypeDef *hi2c, uint32_t
     /* Disable the selected I2C peripheral */
     __HAL_I2C_DISABLE(hi2c);
 
-    if (FastModePlus == I2C_FASTMODEPLUS_ENABLE)
-    {
+    if (FastModePlus == I2C_FASTMODEPLUS_ENABLE) {
       /* Set I2Cx FMP bit */
       hi2c->Instance->CR1 |= (I2C_CR1_FMP);
-    }
-    else
-    {
+    } else {
       /* Reset I2Cx FMP bit */
       hi2c->Instance->CR1 &= ~(I2C_CR1_FMP);
     }
@@ -335,25 +328,23 @@ HAL_StatusTypeDef HAL_I2CEx_ConfigFastModePlus(I2C_HandleTypeDef *hi2c, uint32_t
     __HAL_UNLOCK(hi2c);
 
     return HAL_OK;
-  }
-  else
-  {
+  } else {
     return HAL_BUSY;
   }
 }
 
 /**
-  * @}
-  */
+ * @}
+ */
 /**
-  * @}
-  */
+ * @}
+ */
 
 #endif /* HAL_I2C_MODULE_ENABLED */
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */

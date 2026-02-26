@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_media.h"
 #include "fx_utility.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,62 +70,59 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_media_cache_invalidate(FX_MEDIA *media_ptr)
-{
+UINT _fx_media_cache_invalidate(FX_MEDIA *media_ptr) {
 
-UINT status;
-UINT i;
-
+  UINT status;
+  UINT i;
 
 #ifndef FX_MEDIA_STATISTICS_DISABLE
 
-    /* Increment the number of times this service has been called.  */
-    media_ptr -> fx_media_flushes++;
+  /* Increment the number of times this service has been called.  */
+  media_ptr->fx_media_flushes++;
 #endif
 
-    /* Check the media to make sure it is open.  */
-    if (media_ptr -> fx_media_id != FX_MEDIA_ID)
-    {
+  /* Check the media to make sure it is open.  */
+  if (media_ptr->fx_media_id != FX_MEDIA_ID) {
 
-        /* Return the media not opened error.  */
-        return(FX_MEDIA_NOT_OPEN);
-    }
+    /* Return the media not opened error.  */
+    return (FX_MEDIA_NOT_OPEN);
+  }
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    FX_TRACE_IN_LINE_INSERT(FX_TRACE_MEDIA_CACHE_INVALIDATE, media_ptr, 0, 0, 0, FX_TRACE_MEDIA_EVENTS, 0, 0)
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  FX_TRACE_IN_LINE_INSERT(FX_TRACE_MEDIA_CACHE_INVALIDATE, media_ptr, 0, 0, 0,
+                          FX_TRACE_MEDIA_EVENTS, 0, 0)
 
-    /* Protect against other threads accessing the media.  */
-    FX_PROTECT
-    /* Flush the cached individual FAT entries */
-    _fx_utility_FAT_flush(media_ptr);
+  /* Protect against other threads accessing the media.  */
+  FX_PROTECT
+  /* Flush the cached individual FAT entries */
+  _fx_utility_FAT_flush(media_ptr);
 
-    /* Flush changed sector(s) in the primary FAT to secondary FATs.  */
-    _fx_utility_FAT_map_flush(media_ptr);
+  /* Flush changed sector(s) in the primary FAT to secondary FATs.  */
+  _fx_utility_FAT_map_flush(media_ptr);
 
-    /* Clear the FAT cache entry array.  */
-    for (i = 0; i < FX_MAX_FAT_CACHE; i++)
-    {
+  /* Clear the FAT cache entry array.  */
+  for (i = 0; i < FX_MAX_FAT_CACHE; i++) {
 
-        /* Clear entry in the FAT cache.  */
-        media_ptr -> fx_media_fat_cache[i].fx_fat_cache_entry_cluster =   0;
-        media_ptr -> fx_media_fat_cache[i].fx_fat_cache_entry_value   =   0;
-    }
+    /* Clear entry in the FAT cache.  */
+    media_ptr->fx_media_fat_cache[i].fx_fat_cache_entry_cluster = 0;
+    media_ptr->fx_media_fat_cache[i].fx_fat_cache_entry_value = 0;
+  }
 
-    /* Clear the secondary FAT update map.  */
-    for (i = 0; i < FX_FAT_MAP_SIZE; i++)
-    {
+  /* Clear the secondary FAT update map.  */
+  for (i = 0; i < FX_FAT_MAP_SIZE; i++) {
 
-        /* Clear bit map entry for secondary FAT update.  */
-        media_ptr -> fx_media_fat_secondary_update_map[i] =  0;
-    }
+    /* Clear bit map entry for secondary FAT update.  */
+    media_ptr->fx_media_fat_secondary_update_map[i] = 0;
+  }
 
-    /* Call the logical sector flush to invalidate the logical sector cache.  */
-    status =  _fx_utility_logical_sector_flush(media_ptr, ((ULONG64) 1), (ULONG64) (media_ptr -> fx_media_total_sectors), FX_TRUE);
+  /* Call the logical sector flush to invalidate the logical sector cache.  */
+  status = _fx_utility_logical_sector_flush(
+      media_ptr, ((ULONG64)1), (ULONG64)(media_ptr->fx_media_total_sectors),
+      FX_TRUE);
 
-    /* Release media protection.  */
-    FX_UNPROTECT
+  /* Release media protection.  */
+  FX_UNPROTECT
 
-    /* If we get here, return successful status to the caller.  */
-    return(status);
+  /* If we get here, return successful status to the caller.  */
+  return (status);
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -69,43 +67,40 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_rarp_queue_process(NX_IP *ip_ptr)
-{
+VOID _nx_rarp_queue_process(NX_IP *ip_ptr) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-NX_PACKET *packet_ptr;
+  NX_PACKET *packet_ptr;
 
+  /* Loop to process all RARP deferred packet requests.  */
+  while (ip_ptr->nx_ip_rarp_deferred_received_packet_head) {
 
-    /* Loop to process all RARP deferred packet requests.  */
-    while (ip_ptr -> nx_ip_rarp_deferred_received_packet_head)
-    {
+    /* Remove the first packet and process it!  */
 
-        /* Remove the first packet and process it!  */
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-        /* Disable interrupts.  */
-        TX_DISABLE
+    /* Pickup the first packet.  */
+    packet_ptr = ip_ptr->nx_ip_rarp_deferred_received_packet_head;
 
-        /* Pickup the first packet.  */
-        packet_ptr =  ip_ptr -> nx_ip_rarp_deferred_received_packet_head;
+    /* Move the head pointer to the next packet.  */
+    ip_ptr->nx_ip_rarp_deferred_received_packet_head =
+        packet_ptr->nx_packet_queue_next;
 
-        /* Move the head pointer to the next packet.  */
-        ip_ptr -> nx_ip_rarp_deferred_received_packet_head =  packet_ptr -> nx_packet_queue_next;
+    /* Check for end of RARP deferred processing queue.  */
+    if (ip_ptr->nx_ip_rarp_deferred_received_packet_head == NX_NULL) {
 
-        /* Check for end of RARP deferred processing queue.  */
-        if (ip_ptr -> nx_ip_rarp_deferred_received_packet_head == NX_NULL)
-        {
-
-            /* Yes, the RARP deferred queue is empty.  Set the tail pointer to NULL.  */
-            ip_ptr -> nx_ip_rarp_deferred_received_packet_tail =  NX_NULL;
-        }
-
-        /* Restore interrupts.  */
-        TX_RESTORE
-
-        /* Call the actual RARP packet receive function.  */
-        _nx_rarp_packet_receive(ip_ptr, packet_ptr);
+      /* Yes, the RARP deferred queue is empty.  Set the tail pointer to NULL.
+       */
+      ip_ptr->nx_ip_rarp_deferred_received_packet_tail = NX_NULL;
     }
+
+    /* Restore interrupts.  */
+    TX_RESTORE
+
+    /* Call the actual RARP packet receive function.  */
+    _nx_rarp_packet_receive(ip_ptr, packet_ptr);
+  }
 }
 #endif /* !NX_DISABLE_IPV4  */
-

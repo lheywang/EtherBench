@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
-#include "../include/tx_thread.h"
 #include "../include/tx_event_flags.h"
-
+#include "../include/tx_thread.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,165 +72,156 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _tx_event_flags_cleanup(TX_THREAD  *thread_ptr, ULONG suspension_sequence)
-{
+VOID _tx_event_flags_cleanup(TX_THREAD *thread_ptr, ULONG suspension_sequence) {
 
 #ifndef TX_NOT_INTERRUPTABLE
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 #endif
 
-TX_EVENT_FLAGS_GROUP        *group_ptr;
-UINT                        suspended_count;
-TX_THREAD                   *suspension_head;
-TX_THREAD                   *next_thread;
-TX_THREAD                   *previous_thread;
-
+  TX_EVENT_FLAGS_GROUP *group_ptr;
+  UINT suspended_count;
+  TX_THREAD *suspension_head;
+  TX_THREAD *next_thread;
+  TX_THREAD *previous_thread;
 
 #ifndef TX_NOT_INTERRUPTABLE
 
-    /* Disable interrupts to remove the suspended thread from the event flags group.  */
-    TX_DISABLE
+  /* Disable interrupts to remove the suspended thread from the event flags
+   * group.  */
+  TX_DISABLE
 
-    /* Determine if the cleanup is still required.  */
-    if (thread_ptr -> tx_thread_suspend_cleanup == &(_tx_event_flags_cleanup))
-    {
+  /* Determine if the cleanup is still required.  */
+  if (thread_ptr->tx_thread_suspend_cleanup == &(_tx_event_flags_cleanup)) {
 
-        /* Check for valid suspension sequence.  */
-        if (suspension_sequence == thread_ptr -> tx_thread_suspension_sequence)
-        {
+    /* Check for valid suspension sequence.  */
+    if (suspension_sequence == thread_ptr->tx_thread_suspension_sequence) {
 
-            /* Setup pointer to event flags control block.  */
-            group_ptr =  TX_VOID_TO_EVENT_FLAGS_POINTER_CONVERT(thread_ptr -> tx_thread_suspend_control_block);
+      /* Setup pointer to event flags control block.  */
+      group_ptr = TX_VOID_TO_EVENT_FLAGS_POINTER_CONVERT(
+          thread_ptr->tx_thread_suspend_control_block);
 
-            /* Check for a NULL event flags control block pointer.  */
-            if (group_ptr != TX_NULL)
-            {
+      /* Check for a NULL event flags control block pointer.  */
+      if (group_ptr != TX_NULL) {
 
-                /* Is the group pointer ID valid?  */
-                if (group_ptr -> tx_event_flags_group_id == TX_EVENT_FLAGS_ID)
-                {
+        /* Is the group pointer ID valid?  */
+        if (group_ptr->tx_event_flags_group_id == TX_EVENT_FLAGS_ID) {
 
-                    /* Determine if there are any thread suspensions.  */
-                    if (group_ptr -> tx_event_flags_group_suspended_count != TX_NO_SUSPENSIONS)
-                    {
+          /* Determine if there are any thread suspensions.  */
+          if (group_ptr->tx_event_flags_group_suspended_count !=
+              TX_NO_SUSPENSIONS) {
 #else
 
-                        /* Setup pointer to event flags control block.  */
-                        group_ptr =  TX_VOID_TO_EVENT_FLAGS_POINTER_CONVERT(thread_ptr -> tx_thread_suspend_control_block);
+  /* Setup pointer to event flags control block.  */
+  group_ptr = TX_VOID_TO_EVENT_FLAGS_POINTER_CONVERT(
+      thread_ptr->tx_thread_suspend_control_block);
 #endif
 
-                        /* Yes, we still have thread suspension!  */
+            /* Yes, we still have thread suspension!  */
 
-                        /* Clear the suspension cleanup flag.  */
-                        thread_ptr -> tx_thread_suspend_cleanup =  TX_NULL;
+            /* Clear the suspension cleanup flag.  */
+            thread_ptr->tx_thread_suspend_cleanup = TX_NULL;
 
-                        /* Pickup the suspended count.  */
-                        suspended_count =  group_ptr -> tx_event_flags_group_suspended_count;
+            /* Pickup the suspended count.  */
+            suspended_count = group_ptr->tx_event_flags_group_suspended_count;
 
-                        /* Pickup the suspension head.  */
-                        suspension_head =  group_ptr -> tx_event_flags_group_suspension_list;
+            /* Pickup the suspension head.  */
+            suspension_head = group_ptr->tx_event_flags_group_suspension_list;
 
-                        /* Determine if the cleanup is being done while a set operation was interrupted.  If the
-                           suspended count is non-zero and the suspension head is NULL, the list is being processed
-                           and cannot be touched from here. The suspension list removal will instead take place
-                           inside the event flag set code.  */
-                        if (suspension_head != TX_NULL)
-                        {
+            /* Determine if the cleanup is being done while a set operation was
+               interrupted.  If the suspended count is non-zero and the
+               suspension head is NULL, the list is being processed and cannot
+               be touched from here. The suspension list removal will instead
+               take place inside the event flag set code.  */
+            if (suspension_head != TX_NULL) {
 
-                            /* Remove the suspended thread from the list.  */
+              /* Remove the suspended thread from the list.  */
 
-                            /* Decrement the local suspension count.  */
-                            suspended_count--;
+              /* Decrement the local suspension count.  */
+              suspended_count--;
 
-                            /* Store the updated suspended count.  */
-                            group_ptr -> tx_event_flags_group_suspended_count =  suspended_count;
+              /* Store the updated suspended count.  */
+              group_ptr->tx_event_flags_group_suspended_count = suspended_count;
 
-                            /* See if this is the only suspended thread on the list.  */
-                            if (suspended_count == TX_NO_SUSPENSIONS)
-                            {
+              /* See if this is the only suspended thread on the list.  */
+              if (suspended_count == TX_NO_SUSPENSIONS) {
 
-                                /* Yes, the only suspended thread.  */
+                /* Yes, the only suspended thread.  */
 
-                                /* Update the head pointer.  */
-                                group_ptr -> tx_event_flags_group_suspension_list =  TX_NULL;
-                            }
-                            else
-                            {
+                /* Update the head pointer.  */
+                group_ptr->tx_event_flags_group_suspension_list = TX_NULL;
+              } else {
 
-                                /* At least one more thread is on the same suspension list.  */
+                /* At least one more thread is on the same suspension list.  */
 
-                                /* Update the links of the adjacent threads.  */
-                                next_thread =                                  thread_ptr -> tx_thread_suspended_next;
-                                previous_thread =                              thread_ptr -> tx_thread_suspended_previous;
-                                next_thread -> tx_thread_suspended_previous =  previous_thread;
-                                previous_thread -> tx_thread_suspended_next =  next_thread;
+                /* Update the links of the adjacent threads.  */
+                next_thread = thread_ptr->tx_thread_suspended_next;
+                previous_thread = thread_ptr->tx_thread_suspended_previous;
+                next_thread->tx_thread_suspended_previous = previous_thread;
+                previous_thread->tx_thread_suspended_next = next_thread;
 
-                                /* Determine if we need to update the head pointer.  */
-                                if (suspension_head == thread_ptr)
-                                {
+                /* Determine if we need to update the head pointer.  */
+                if (suspension_head == thread_ptr) {
 
-                                    /* Update the list head pointer.  */
-                                    group_ptr -> tx_event_flags_group_suspension_list =  next_thread;
-                                }
-                            }
-                        }
-                        else
-                        {
+                  /* Update the list head pointer.  */
+                  group_ptr->tx_event_flags_group_suspension_list = next_thread;
+                }
+              }
+            } else {
 
-                            /* In this case, the search pointer in an interrupted event flag set must be reset.  */
-                            group_ptr -> tx_event_flags_group_reset_search =  TX_TRUE;
-                        }
+              /* In this case, the search pointer in an interrupted event flag
+               * set must be reset.  */
+              group_ptr->tx_event_flags_group_reset_search = TX_TRUE;
+            }
 
-                        /* Now we need to determine if this cleanup is from a terminate, timeout,
-                           or from a wait abort.  */
-                        if (thread_ptr -> tx_thread_state == TX_EVENT_FLAG)
-                        {
+            /* Now we need to determine if this cleanup is from a terminate,
+               timeout, or from a wait abort.  */
+            if (thread_ptr->tx_thread_state == TX_EVENT_FLAG) {
 
-                            /* Timeout condition and the thread still suspended on the event flags group.
-                               Setup return error status and resume the thread.  */
+              /* Timeout condition and the thread still suspended on the event
+                 flags group. Setup return error status and resume the thread.
+               */
 
 #ifdef TX_EVENT_FLAGS_ENABLE_PERFORMANCE_INFO
 
-                            /* Increment the total timeouts counter.  */
-                            _tx_event_flags_performance_timeout_count++;
+              /* Increment the total timeouts counter.  */
+              _tx_event_flags_performance_timeout_count++;
 
-                            /* Increment the number of timeouts on this event flags group.  */
-                            group_ptr -> tx_event_flags_group____performance_timeout_count++;
+              /* Increment the number of timeouts on this event flags group.  */
+              group_ptr->tx_event_flags_group____performance_timeout_count++;
 #endif
 
-                            /* Setup return status.  */
-                            thread_ptr -> tx_thread_suspend_status =  TX_NO_EVENTS;
+              /* Setup return status.  */
+              thread_ptr->tx_thread_suspend_status = TX_NO_EVENTS;
 
 #ifdef TX_NOT_INTERRUPTABLE
 
-                            /* Resume the thread!  */
-                            _tx_thread_system_ni_resume(thread_ptr);
+              /* Resume the thread!  */
+              _tx_thread_system_ni_resume(thread_ptr);
 #else
 
-                           /* Temporarily disable preemption.  */
-                            _tx_thread_preempt_disable++;
-
-                            /* Restore interrupts.  */
-                            TX_RESTORE
-
-                            /* Resume the thread!  Check for preemption even though we are executing
-                               from the system timer thread right now which normally executes at the
-                               highest priority.  */
-                            _tx_thread_system_resume(thread_ptr);
-
-                            /* Disable interrupts.  */
-                            TX_DISABLE
-#endif
-                        }
-#ifndef TX_NOT_INTERRUPTABLE
-                    }
-                }
-            }
-        }
-    }
+    /* Temporarily disable preemption.  */
+    _tx_thread_preempt_disable++;
 
     /* Restore interrupts.  */
     TX_RESTORE
+
+    /* Resume the thread!  Check for preemption even though we are executing
+       from the system timer thread right now which normally executes at the
+       highest priority.  */
+    _tx_thread_system_resume(thread_ptr);
+
+    /* Disable interrupts.  */
+    TX_DISABLE
+#endif
+            }
+#ifndef TX_NOT_INTERRUPTABLE
+          }
+        }
+      }
+    }
+  }
+
+  /* Restore interrupts.  */
+  TX_RESTORE
 #endif
 }
-

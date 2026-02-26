@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_event_flags.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -80,38 +77,34 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_event_flags_info_get(TX_EVENT_FLAGS_GROUP *group_ptr, CHAR **name, ULONG *current_flags,
-                    TX_THREAD **first_suspended, ULONG *suspended_count,
-                    TX_EVENT_FLAGS_GROUP **next_group)
-{
+UINT _txe_event_flags_info_get(TX_EVENT_FLAGS_GROUP *group_ptr, CHAR **name,
+                               ULONG *current_flags,
+                               TX_THREAD **first_suspended,
+                               ULONG *suspended_count,
+                               TX_EVENT_FLAGS_GROUP **next_group) {
 
-UINT        status;
+  UINT status;
 
+  /* Check for an invalid event flag group pointer.  */
+  if (group_ptr == TX_NULL) {
 
-    /* Check for an invalid event flag group pointer.  */
-    if (group_ptr == TX_NULL)
-    {
+    /* Event flags group pointer is invalid, return appropriate error code.  */
+    status = TX_GROUP_ERROR;
+  }
 
-        /* Event flags group pointer is invalid, return appropriate error code.  */
-        status =  TX_GROUP_ERROR;
-    }
+  /* Now check for invalid event flag group ID.  */
+  else if (group_ptr->tx_event_flags_group_id != TX_EVENT_FLAGS_ID) {
 
-    /* Now check for invalid event flag group ID.  */
-    else if (group_ptr -> tx_event_flags_group_id != TX_EVENT_FLAGS_ID)
-    {
+    /* Event flags group pointer is invalid, return appropriate error code.  */
+    status = TX_GROUP_ERROR;
+  } else {
 
-        /* Event flags group pointer is invalid, return appropriate error code.  */
-        status =  TX_GROUP_ERROR;
-    }
-    else
-    {
+    /* Otherwise, call the actual event flags group information get service.  */
+    status =
+        _tx_event_flags_info_get(group_ptr, name, current_flags,
+                                 first_suspended, suspended_count, next_group);
+  }
 
-        /* Otherwise, call the actual event flags group information get service.  */
-        status =  _tx_event_flags_info_get(group_ptr, name, current_flags, first_suspended,
-                                                            suspended_count, next_group);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

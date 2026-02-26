@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ipv6.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,40 +68,44 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_ipv6_address_change_notify(NX_IP *ip_ptr, VOID (*ip_address_change_notify)(NX_IP *ip_ptr, UINT status, UINT interface_index, UINT address_index, ULONG *ip_address))
-{
+UINT _nxd_ipv6_address_change_notify(
+    NX_IP *ip_ptr,
+    VOID (*ip_address_change_notify)(NX_IP *ip_ptr, UINT status,
+                                     UINT interface_index, UINT address_index,
+                                     ULONG *ip_address)) {
 
 #if defined(NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY) && defined(FEATURE_NX_IPV6)
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IPV6_ADDRESS_CHANGE_NOTIFY, ip_ptr,
+                          ip_address_change_notify, 0, 0, NX_TRACE_IP_EVENTS, 0,
+                          0);
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IPV6_ADDRESS_CHANGE_NOTIFY, ip_ptr, ip_address_change_notify, 0, 0, NX_TRACE_IP_EVENTS, 0, 0);
+  /* Get mutex protection.  */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-    /* Get mutex protection.  */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Setup the IP address change callback function and the additional
+   * information pointers. */
+  ip_ptr->nx_ipv6_address_change_notify = ip_address_change_notify;
 
-    /* Setup the IP address change callback function and the additional information pointers. */
-    ip_ptr -> nx_ipv6_address_change_notify =  ip_address_change_notify;
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+  /* Release mutex protection.  */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    /* Release mutex protection.  */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
-
-    /* Return completion status.  */
-    return(NX_SUCCESS);
+  /* Return completion status.  */
+  return (NX_SUCCESS);
 
 #else
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(ip_address_change_notify);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_address_change_notify);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY && FEATURE_NX_IPV6 */
 }
-

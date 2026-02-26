@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -51,11 +49,12 @@
 
 /* Define internal secure thread stack function prototypes.  */
 
-extern UINT    _tx_thread_secure_mode_stack_initialize(void);
-extern UINT    _tx_thread_secure_mode_stack_allocate(TX_THREAD *thread_ptr, ULONG stack_size);
-extern UINT    _tx_thread_secure_mode_stack_free(TX_THREAD *thread_ptr);
-extern void    _tx_thread_secure_stack_initialize(void);
-extern void    _tx_thread_secure_stack_context_save(TX_THREAD *thread_ptr);
-extern void    _tx_thread_secure_stack_context_restore(TX_THREAD *thread_ptr);
+extern UINT _tx_thread_secure_mode_stack_initialize(void);
+extern UINT _tx_thread_secure_mode_stack_allocate(TX_THREAD *thread_ptr,
+                                                  ULONG stack_size);
+extern UINT _tx_thread_secure_mode_stack_free(TX_THREAD *thread_ptr);
+extern void _tx_thread_secure_stack_initialize(void);
+extern void _tx_thread_secure_stack_context_save(TX_THREAD *thread_ptr);
+extern void _tx_thread_secure_stack_context_restore(TX_THREAD *thread_ptr);
 
 #endif

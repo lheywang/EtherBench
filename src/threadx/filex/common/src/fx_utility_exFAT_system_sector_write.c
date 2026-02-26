@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -24,7 +23,6 @@
 
 #include "fx_api.h"
 #include "fx_utility.h"
-
 
 #ifdef FX_ENABLE_EXFAT
 /**************************************************************************/
@@ -71,34 +69,35 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_utility_exFAT_system_sector_write(FX_MEDIA *media_ptr, UCHAR *data_buffer,
-                                            ULONG64 logical_sector, ULONG sector_count,
-                                            ULONG sector_type)
-{
+UINT _fx_utility_exFAT_system_sector_write(FX_MEDIA *media_ptr,
+                                           UCHAR *data_buffer,
+                                           ULONG64 logical_sector,
+                                           ULONG sector_count,
+                                           ULONG sector_type) {
 
-
-    /* Build sector write command.  */
+  /* Build sector write command.  */
 #ifdef FX_DRIVER_USE_64BIT_LBA
-    media_ptr -> fx_media_driver_logical_sector =   logical_sector;
+  media_ptr->fx_media_driver_logical_sector = logical_sector;
 #else
-    media_ptr -> fx_media_driver_logical_sector =   (ULONG)logical_sector;
+  media_ptr->fx_media_driver_logical_sector = (ULONG)logical_sector;
 #endif
-    media_ptr -> fx_media_driver_request =          FX_DRIVER_WRITE;
-    media_ptr -> fx_media_driver_sectors =          sector_count;
-    media_ptr -> fx_media_driver_system_write =     FX_TRUE;
-    media_ptr -> fx_media_driver_sector_type =      sector_type;
-    media_ptr -> fx_media_driver_buffer =           data_buffer;
-    media_ptr -> fx_media_driver_status =           FX_IO_ERROR;
+  media_ptr->fx_media_driver_request = FX_DRIVER_WRITE;
+  media_ptr->fx_media_driver_sectors = sector_count;
+  media_ptr->fx_media_driver_system_write = FX_TRUE;
+  media_ptr->fx_media_driver_sector_type = sector_type;
+  media_ptr->fx_media_driver_buffer = data_buffer;
+  media_ptr->fx_media_driver_status = FX_IO_ERROR;
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    FX_TRACE_IN_LINE_INSERT(FX_TRACE_INTERNAL_IO_DRIVER_WRITE, media_ptr, media_ptr -> fx_media_driver_logical_sector, 1, sector_type, FX_TRACE_INTERNAL_EVENTS, 0, 0)
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  FX_TRACE_IN_LINE_INSERT(FX_TRACE_INTERNAL_IO_DRIVER_WRITE, media_ptr,
+                          media_ptr->fx_media_driver_logical_sector, 1,
+                          sector_type, FX_TRACE_INTERNAL_EVENTS, 0, 0)
 
-    /* Write out the sector.  */
-    (media_ptr -> fx_media_driver_entry)(media_ptr);
+  /* Write out the sector.  */
+  (media_ptr->fx_media_driver_entry)(media_ptr);
 
-    /* Return status.  */
-    return(media_ptr -> fx_media_driver_status);
+  /* Return status.  */
+  return (media_ptr->fx_media_driver_status);
 }
 
 #endif
-

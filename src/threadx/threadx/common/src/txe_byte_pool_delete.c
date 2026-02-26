@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
+#include "../include/tx_byte_pool.h"
 #include "../include/tx_thread.h"
 #include "../include/tx_timer.h"
-#include "../include/tx_byte_pool.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,74 +70,65 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_byte_pool_delete(TX_BYTE_POOL *pool_ptr)
-{
+UINT _txe_byte_pool_delete(TX_BYTE_POOL *pool_ptr) {
 
-UINT            status;
+  UINT status;
 #ifndef TX_TIMER_PROCESS_IN_ISR
-TX_THREAD       *thread_ptr;
+  TX_THREAD *thread_ptr;
 #endif
-
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-    /* Default status to success.  */
-    status =  TX_SUCCESS;
+  /* Default status to success.  */
+  status = TX_SUCCESS;
 #endif
 
-    /* Check for an invalid byte pool pointer.  */
-    if (pool_ptr == TX_NULL)
-    {
+  /* Check for an invalid byte pool pointer.  */
+  if (pool_ptr == TX_NULL) {
 
-        /* Byte pool pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
-    }
+    /* Byte pool pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  }
 
-    /* Now check the pool ID.  */
-    else if (pool_ptr -> tx_byte_pool_id != TX_BYTE_POOL_ID)
-    {
+  /* Now check the pool ID.  */
+  else if (pool_ptr->tx_byte_pool_id != TX_BYTE_POOL_ID) {
 
-        /* Byte pool pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
-    }
+    /* Byte pool pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  }
 
-    /* Check for interrupt or initialization.  */
-    else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
-    {
+  /* Check for interrupt or initialization.  */
+  else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status =  TX_CALLER_ERROR;
-    }
-    else
-    {
+    /* Invalid caller of this function, return appropriate error code.  */
+    status = TX_CALLER_ERROR;
+  } else {
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-        /* Pickup thread pointer.  */
-        TX_THREAD_GET_CURRENT(thread_ptr)
+    /* Pickup thread pointer.  */
+    TX_THREAD_GET_CURRENT(thread_ptr)
 
-        /* Check for invalid caller of this function.  First check for a calling thread.  */
-        if (thread_ptr == &_tx_timer_thread)
-        {
+    /* Check for invalid caller of this function.  First check for a calling
+     * thread.  */
+    if (thread_ptr == &_tx_timer_thread) {
 
-            /* Invalid caller of this function, return appropriate error code.  */
-            status =  TX_CALLER_ERROR;
-        }
-
-        /* Determine if everything is okay.  */
-        if (status == TX_SUCCESS)
-        {
-#endif
-
-            /* Call actual byte pool delete function.  */
-            status =  _tx_byte_pool_delete(pool_ptr);
-
-#ifndef TX_TIMER_PROCESS_IN_ISR
-        }
-#endif
+      /* Invalid caller of this function, return appropriate error code.  */
+      status = TX_CALLER_ERROR;
     }
 
-    /* Return completion status.  */
-    return(status);
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
+#endif
+
+      /* Call actual byte pool delete function.  */
+      status = _tx_byte_pool_delete(pool_ptr);
+
+#ifndef TX_TIMER_PROCESS_IN_ISR
+    }
+#endif
+  }
+
+  /* Return completion status.  */
+  return (status);
 }
-

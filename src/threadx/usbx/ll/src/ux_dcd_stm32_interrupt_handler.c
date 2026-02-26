@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define UX_SOURCE_CODE
 #define UX_DCD_STM32_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -75,21 +73,17 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _ux_dcd_stm32_interrupt_handler(VOID)
-{
+VOID _ux_dcd_stm32_interrupt_handler(VOID) {
 
+  UX_SLAVE_DCD *dcd;
+  UX_DCD_STM32 *dcd_stm32;
 
-UX_SLAVE_DCD            *dcd;
-UX_DCD_STM32            *dcd_stm32;
+  /* Get the pointer to the DCD.  */
+  dcd = &_ux_system_slave->ux_system_slave_dcd;
 
+  /* Get the pointer to the STM32 DCD.  */
+  dcd_stm32 = (UX_DCD_STM32 *)dcd->ux_slave_dcd_controller_hardware;
 
-    /* Get the pointer to the DCD.  */
-    dcd =  &_ux_system_slave -> ux_system_slave_dcd;
-
-    /* Get the pointer to the STM32 DCD.  */
-    dcd_stm32 = (UX_DCD_STM32 *) dcd -> ux_slave_dcd_controller_hardware;
-
-    /* Call the actual interrupt handler function.  */
-    HAL_PCD_IRQHandler(dcd_stm32 -> pcd_handle);
-
+  /* Call the actual interrupt handler function.  */
+  HAL_PCD_IRQHandler(dcd_stm32->pcd_handle);
 }

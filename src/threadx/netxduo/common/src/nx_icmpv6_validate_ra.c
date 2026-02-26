@@ -23,11 +23,10 @@
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_ipv6.h"
 #include "../include/nx_icmpv6.h"
+#include "../include/nx_ipv6.h"
 
 #ifdef FEATURE_NX_IPV6
-
 
 #ifndef NX_DISABLE_ICMPV6_ROUTER_ADVERTISEMENT_PROCESS
 
@@ -73,76 +72,77 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_icmpv6_validate_ra(NX_PACKET *packet_ptr)
-{
+UINT _nx_icmpv6_validate_ra(NX_PACKET *packet_ptr) {
 
-NX_IPV6_HEADER   *ipv6_header;
-NX_ICMPV6_RA     *header_ptr;
-NX_ICMPV6_OPTION *option_ptr;
-INT               option_length;
-ULONG             source_address_type, dest_address_type;
+  NX_IPV6_HEADER *ipv6_header;
+  NX_ICMPV6_RA *header_ptr;
+  NX_ICMPV6_OPTION *option_ptr;
+  INT option_length;
+  ULONG source_address_type, dest_address_type;
 
+  /* Set a pointer to he ICMP message header.  */
+  /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+   * necessary  */
+  header_ptr = (NX_ICMPV6_RA *)packet_ptr->nx_packet_prepend_ptr;
 
-    /* Set a pointer to he ICMP message header.  */
-    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-    header_ptr =  (NX_ICMPV6_RA *)packet_ptr -> nx_packet_prepend_ptr;
+  /* Set a pointer to the IPv6 header. */
+  /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+   * necessary  */
+  ipv6_header = (NX_IPV6_HEADER *)packet_ptr->nx_packet_ip_header;
 
-    /* Set a pointer to the IPv6 header. */
-    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-    ipv6_header = (NX_IPV6_HEADER *)packet_ptr -> nx_packet_ip_header;
+  source_address_type = IPv6_Address_Type(ipv6_header->nx_ip_header_source_ip);
+  dest_address_type =
+      IPv6_Address_Type(ipv6_header->nx_ip_header_destination_ip);
 
-    source_address_type = IPv6_Address_Type(ipv6_header -> nx_ip_header_source_ip);
-    dest_address_type = IPv6_Address_Type(ipv6_header -> nx_ip_header_destination_ip);
+  /* Validate the IP header information. */
 
-    /* Validate the IP header information. */
+  /*  The source address must be the link local router address. RFC2461 4.2 */
+  if ((source_address_type & IPV6_ADDRESS_LINKLOCAL) !=
+      IPV6_ADDRESS_LINKLOCAL) {
 
-    /*  The source address must be the link local router address. RFC2461 4.2 */
-    if ((source_address_type & IPV6_ADDRESS_LINKLOCAL) != IPV6_ADDRESS_LINKLOCAL)
-    {
+    return (NX_NOT_SUCCESSFUL);
+  }
 
-        return(NX_NOT_SUCCESSFUL);
-    }
+  /* IP destination address must be multicast address or solicited sender link
+   * local address. */
+  if ((dest_address_type !=
+       (ULONG)(IPV6_ADDRESS_LINKLOCAL | IPV6_ADDRESS_UNICAST)) &&
+      (dest_address_type !=
+       (ULONG)(IPV6_ALL_NODE_MCAST | IPV6_ADDRESS_MULTICAST))) {
 
-    /* IP destination address must be multicast address or solicited sender link local address. */
-    if ((dest_address_type  != (ULONG)(IPV6_ADDRESS_LINKLOCAL | IPV6_ADDRESS_UNICAST)) &&
-        (dest_address_type  != (ULONG)(IPV6_ALL_NODE_MCAST | IPV6_ADDRESS_MULTICAST)))
-    {
+    return (NX_NOT_SUCCESSFUL);
+  }
 
-        return(NX_NOT_SUCCESSFUL);
-    }
+  /*  The IP header hop limit must be 255 */
+  if ((ipv6_header->nx_ip_header_word_1 & 0xFF) != 0xFF) {
 
-    /*  The IP header hop limit must be 255 */
-    if ((ipv6_header -> nx_ip_header_word_1 & 0xFF) != 0xFF)
-    {
+    return (NX_NOT_SUCCESSFUL);
+  }
 
-        return(NX_NOT_SUCCESSFUL);
-    }
+  /* Validate ICMP fields */
+  if (header_ptr->nx_icmpv6_ra_icmpv6_header.nx_icmpv6_header_code != 0) {
 
-    /* Validate ICMP fields */
-    if (header_ptr -> nx_icmpv6_ra_icmpv6_header.nx_icmpv6_header_code != 0)
-    {
+    return (NX_NOT_SUCCESSFUL);
+  }
 
-        return(NX_NOT_SUCCESSFUL);
-    }
+  /* Locate the option field. */
+  /*lint -e{923} suppress cast between pointer and ULONG, since it is necessary
+   */
+  option_ptr = (NX_ICMPV6_OPTION *)NX_UCHAR_POINTER_ADD(header_ptr,
+                                                        sizeof(NX_ICMPV6_RA));
+  option_length = (INT)(packet_ptr->nx_packet_length - sizeof(NX_ICMPV6_RA));
 
-    /* Locate the option field. */
-    /*lint -e{923} suppress cast between pointer and ULONG, since it is necessary  */
-    option_ptr = (NX_ICMPV6_OPTION *)NX_UCHAR_POINTER_ADD(header_ptr, sizeof(NX_ICMPV6_RA));
-    option_length = (INT)(packet_ptr -> nx_packet_length - sizeof(NX_ICMPV6_RA));
+  /* Check for options (if there is a non zero option length ICMPv6 header
+   * field). */
+  if (option_length) {
 
-    /* Check for options (if there is a non zero option length ICMPv6 header field). */
-    if (option_length)
-    {
+    /* Validate option field(s). */
+    return (_nx_icmpv6_validate_options(option_ptr, option_length, NX_NULL));
+  }
 
-        /* Validate option field(s). */
-        return(_nx_icmpv6_validate_options(option_ptr, option_length, NX_NULL));
-    }
-
-    return(NX_SUCCESS);
+  return (NX_SUCCESS);
 }
-
 
 #endif /* NX_DISABLE_ICMPV6_ROUTER_ADVERTISEMENT_PROCESS */
 
 #endif /* FEATURE_NX_IPV6 */
-

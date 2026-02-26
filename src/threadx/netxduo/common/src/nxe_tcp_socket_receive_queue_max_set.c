@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -76,27 +74,26 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_tcp_socket_receive_queue_max_set(NX_TCP_SOCKET *socket_ptr, UINT receive_queue_maximum)
-{
+UINT _nxe_tcp_socket_receive_queue_max_set(NX_TCP_SOCKET *socket_ptr,
+                                           UINT receive_queue_maximum) {
 #ifdef NX_ENABLE_LOW_WATERMARK
 
-    /* Check for invalid input pointers.  */
-    if ((socket_ptr == NX_NULL) || (socket_ptr -> nx_tcp_socket_id != NX_TCP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid input pointers.  */
+  if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for appropriate caller.  */
-    NX_NOT_ISR_CALLER_CHECKING
+  /* Check for appropriate caller.  */
+  NX_NOT_ISR_CALLER_CHECKING
 
-    return(_nx_tcp_socket_receive_queue_max_set(socket_ptr, receive_queue_maximum));
+  return (
+      _nx_tcp_socket_receive_queue_max_set(socket_ptr, receive_queue_maximum));
 
 #else /* !NX_ENABLE_LOW_WATERMARK */
-    NX_PARAMETER_NOT_USED(socket_ptr);
-    NX_PARAMETER_NOT_USED(receive_queue_maximum);
+  NX_PARAMETER_NOT_USED(socket_ptr);
+  NX_PARAMETER_NOT_USED(receive_queue_maximum);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* NX_ENABLE_LOW_WATERMARK */
 }
-

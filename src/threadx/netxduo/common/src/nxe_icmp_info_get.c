@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,19 +21,15 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_ip.h"
 #include "../include/nx_icmp.h"
+#include "../include/nx_ip.h"
 
 /* Bring in externs for caller checking code.  */
 
-
 NX_CALLER_CHECKING_EXTERNS
-
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -89,34 +84,32 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_icmp_info_get(NX_IP *ip_ptr, ULONG *pings_sent, ULONG *ping_timeouts,
-                         ULONG *ping_threads_suspended, ULONG *ping_responses_received,
-                         ULONG *icmp_checksum_errors, ULONG *icmp_unhandled_messages)
-{
+UINT _nxe_icmp_info_get(NX_IP *ip_ptr, ULONG *pings_sent, ULONG *ping_timeouts,
+                        ULONG *ping_threads_suspended,
+                        ULONG *ping_responses_received,
+                        ULONG *icmp_checksum_errors,
+                        ULONG *icmp_unhandled_messages) {
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check to see if ICMP is enabled.  */
+  if (!ip_ptr->nx_ip_icmp_packet_receive) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if ICMP is enabled.  */
-    if (!ip_ptr -> nx_ip_icmp_packet_receive)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Call actual ICMP information get function.  */
+  status = _nx_icmp_info_get(ip_ptr, pings_sent, ping_timeouts,
+                             ping_threads_suspended, ping_responses_received,
+                             icmp_checksum_errors, icmp_unhandled_messages);
 
-    /* Call actual ICMP information get function.  */
-    status =  _nx_icmp_info_get(ip_ptr, pings_sent, ping_timeouts, ping_threads_suspended,
-                                ping_responses_received, icmp_checksum_errors, icmp_unhandled_messages);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

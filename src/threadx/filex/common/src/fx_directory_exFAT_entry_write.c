@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,14 +20,12 @@
 /**************************************************************************/
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 
 #ifdef FX_ENABLE_EXFAT
 #include "fx_directory.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -85,18 +82,18 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_directory_exFAT_entry_write(FX_MEDIA *media_ptr, FX_DIR_ENTRY *entry_ptr, UCHAR update_level)
-{
+UINT _fx_directory_exFAT_entry_write(FX_MEDIA *media_ptr,
+                                     FX_DIR_ENTRY *entry_ptr,
+                                     UCHAR update_level) {
 
-UINT status;
+  UINT status;
 
+  /* Call the unicode director entry write function.  */
+  status = _fx_directory_exFAT_unicode_entry_write(media_ptr, entry_ptr,
+                                                   update_level, NULL, 0);
 
-    /* Call the unicode director entry write function.  */
-    status =  _fx_directory_exFAT_unicode_entry_write(media_ptr, entry_ptr, update_level, NULL, 0);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
 
 #endif
-

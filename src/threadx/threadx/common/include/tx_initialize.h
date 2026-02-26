@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -50,31 +48,28 @@
 #ifndef TX_INITIALIZE_H
 #define TX_INITIALIZE_H
 
-
 /* Define constants that indicate initialization is in progress.  */
 
-#define TX_INITIALIZE_IN_PROGRESS               ((ULONG) 0xF0F0F0F0UL)
-#define TX_INITIALIZE_ALMOST_DONE               ((ULONG) 0xF0F0F0F1UL)
-#define TX_INITIALIZE_IS_FINISHED               ((ULONG) 0x00000000UL)
-
+#define TX_INITIALIZE_IN_PROGRESS ((ULONG)0xF0F0F0F0UL)
+#define TX_INITIALIZE_ALMOST_DONE ((ULONG)0xF0F0F0F1UL)
+#define TX_INITIALIZE_IS_FINISHED ((ULONG)0x00000000UL)
 
 /* Define internal initialization function prototypes.  */
 
-VOID        _tx_initialize_high_level(VOID);
-VOID        _tx_initialize_kernel_setup(VOID);
-VOID        _tx_initialize_low_level(VOID);
+VOID _tx_initialize_high_level(VOID);
+VOID _tx_initialize_kernel_setup(VOID);
+VOID _tx_initialize_low_level(VOID);
 
-
-/* Define the macro for adding additional port-specific global data. This macro is defined
-   as white space, unless defined by tx_port.h.  */
+/* Define the macro for adding additional port-specific global data. This macro
+   is defined as white space, unless defined by tx_port.h.  */
 
 #ifndef TX_PORT_SPECIFIC_DATA
 #define TX_PORT_SPECIFIC_DATA
 #endif
 
-
-/* Define the macro for adding additional port-specific pre and post initialization processing.
-   These macros is defined as white space, unless defined by tx_port.h.  */
+/* Define the macro for adding additional port-specific pre and post
+   initialization processing. These macros is defined as white space, unless
+   defined by tx_port.h.  */
 
 #ifndef TX_PORT_SPECIFIC_PRE_INITIALIZATION
 #define TX_PORT_SPECIFIC_PRE_INITIALIZATION
@@ -88,7 +83,6 @@ VOID        _tx_initialize_low_level(VOID);
 #define TX_PORT_SPECIFIC_PRE_SCHEDULER_INITIALIZATION
 #endif
 
-
 /* Initialization component data declarations follow.  */
 
 /* Determine if the initialization function of this component is including
@@ -101,13 +95,11 @@ VOID        _tx_initialize_low_level(VOID);
 #define INITIALIZE_DECLARE extern
 #endif
 
-
 /* Define the unused memory pointer.  The value of the first available
    memory address is placed in this variable in the low-level
    initialization function.  The content of this variable is passed
    to the application's system definition function.  */
 
-INITIALIZE_DECLARE VOID     *_tx_initialize_unused_memory;
-
+INITIALIZE_DECLARE VOID *_tx_initialize_unused_memory;
 
 #endif

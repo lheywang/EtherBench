@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /* Bring in externs for caller checking code.  */
 NX_CALLER_CHECKING_EXTERNS
@@ -74,24 +71,21 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_ip_raw_receive_queue_max_set(NX_IP *ip_ptr, ULONG queue_max)
-{
+UINT _nxe_ip_raw_receive_queue_max_set(NX_IP *ip_ptr, ULONG queue_max) {
 
-UINT status;
+  UINT status;
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    /* Call actual TCP socket MSS set function.  */
-    status =  _nx_ip_raw_receive_queue_max_set(ip_ptr, queue_max);
+  /* Call actual TCP socket MSS set function.  */
+  status = _nx_ip_raw_receive_queue_max_set(ip_ptr, queue_max);
 
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

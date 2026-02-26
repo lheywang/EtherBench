@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_semaphore.h"
-
 
 #ifndef TX_INLINE_INITIALIZATION
 
@@ -35,37 +32,31 @@
 
 /* Define the head pointer of the created semaphore list.  */
 
-TX_SEMAPHORE *   _tx_semaphore_created_ptr;
-
+TX_SEMAPHORE *_tx_semaphore_created_ptr;
 
 /* Define the variable that holds the number of created semaphores. */
 
-ULONG            _tx_semaphore_created_count;
-
+ULONG _tx_semaphore_created_count;
 
 #ifdef TX_SEMAPHORE_ENABLE_PERFORMANCE_INFO
 
 /* Define the total number of semaphore puts.  */
 
-ULONG            _tx_semaphore_performance_put_count;
-
+ULONG _tx_semaphore_performance_put_count;
 
 /* Define the total number of semaphore gets.  */
 
-ULONG            _tx_semaphore_performance_get_count;
-
+ULONG _tx_semaphore_performance_get_count;
 
 /* Define the total number of semaphore suspensions.  */
 
-ULONG            _tx_semaphore_performance_suspension_count;
-
+ULONG _tx_semaphore_performance_suspension_count;
 
 /* Define the total number of semaphore timeouts.  */
 
-ULONG            _tx_semaphore_performance_timeout_count;
+ULONG _tx_semaphore_performance_timeout_count;
 
 #endif
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -110,23 +101,22 @@ ULONG            _tx_semaphore_performance_timeout_count;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _tx_semaphore_initialize(VOID)
-{
+VOID _tx_semaphore_initialize(VOID) {
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-    /* Initialize the head pointer of the created semaphores list and the
-       number of semaphores created.  */
-    _tx_semaphore_created_ptr =        TX_NULL;
-    _tx_semaphore_created_count =      TX_EMPTY;
+  /* Initialize the head pointer of the created semaphores list and the
+     number of semaphores created.  */
+  _tx_semaphore_created_ptr = TX_NULL;
+  _tx_semaphore_created_count = TX_EMPTY;
 
 #ifdef TX_SEMAPHORE_ENABLE_PERFORMANCE_INFO
 
-    /* Initialize semaphore performance counters.  */
-    _tx_semaphore_performance_put_count =         ((ULONG) 0);
-    _tx_semaphore_performance_get_count =         ((ULONG) 0);
-    _tx_semaphore_performance_suspension_count =  ((ULONG) 0);
-    _tx_semaphore_performance_timeout_count =     ((ULONG) 0);
+  /* Initialize semaphore performance counters.  */
+  _tx_semaphore_performance_put_count = ((ULONG)0);
+  _tx_semaphore_performance_get_count = ((ULONG)0);
+  _tx_semaphore_performance_suspension_count = ((ULONG)0);
+  _tx_semaphore_performance_timeout_count = ((ULONG)0);
 #endif
 #endif
 }

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,17 +21,14 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_tcp.h"
 
-
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -76,31 +72,27 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_tcp_server_socket_accept(NX_TCP_SOCKET *socket_ptr, ULONG wait_option)
-{
+UINT _nxe_tcp_server_socket_accept(NX_TCP_SOCKET *socket_ptr,
+                                   ULONG wait_option) {
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((socket_ptr == NX_NULL) || (socket_ptr -> nx_tcp_socket_id != NX_TCP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check to see if TCP is enabled.  */
+  if (!(socket_ptr->nx_tcp_socket_ip_ptr)->nx_ip_tcp_packet_receive) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if TCP is enabled.  */
-    if (!(socket_ptr -> nx_tcp_socket_ip_ptr) -> nx_ip_tcp_packet_receive)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual TCP server socket accept function.  */
+  status = _nx_tcp_server_socket_accept(socket_ptr, wait_option);
 
-    /* Call actual TCP server socket accept function.  */
-    status =  _nx_tcp_server_socket_accept(socket_ptr, wait_option);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

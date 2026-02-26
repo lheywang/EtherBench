@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_system.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,18 +68,16 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_system_date_set(UINT year, UINT month, UINT day)
-{
+UINT _fx_system_date_set(UINT year, UINT month, UINT day) {
 
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  FX_TRACE_IN_LINE_INSERT(FX_TRACE_SYSTEM_DATE_SET, year, month, day, 0,
+                          FX_TRACE_INTERNAL_EVENTS, 0, 0)
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    FX_TRACE_IN_LINE_INSERT(FX_TRACE_SYSTEM_DATE_SET, year, month, day, 0, FX_TRACE_INTERNAL_EVENTS, 0, 0)
+  /* Set the system date.  */
+  _fx_system_date = ((year - FX_BASE_YEAR) << FX_YEAR_SHIFT) |
+                    (month << FX_MONTH_SHIFT) | day;
 
-    /* Set the system date.  */
-    _fx_system_date =  ((year - FX_BASE_YEAR) << FX_YEAR_SHIFT) |
-        (month << FX_MONTH_SHIFT) | day;
-
-    /* Return successful status.  */
-    return(FX_SUCCESS);
+  /* Return successful status.  */
+  return (FX_SUCCESS);
 }
-

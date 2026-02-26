@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
-#include "../include/tx_trace.h"
 #include "../include/tx_event_flags.h"
-
+#include "../include/tx_trace.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,38 +69,38 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _tx_event_flags_set_notify(TX_EVENT_FLAGS_GROUP *group_ptr, VOID (*events_set_notify)(TX_EVENT_FLAGS_GROUP *notify_group_ptr))
-{
+UINT _tx_event_flags_set_notify(
+    TX_EVENT_FLAGS_GROUP *group_ptr,
+    VOID (*events_set_notify)(TX_EVENT_FLAGS_GROUP *notify_group_ptr)) {
 
 #ifdef TX_DISABLE_NOTIFY_CALLBACKS
 
-    TX_EVENT_FLAGS_GROUP_NOT_USED(group_ptr);
-    TX_EVENT_FLAGS_SET_NOTIFY_NOT_USED(events_set_notify);
+  TX_EVENT_FLAGS_GROUP_NOT_USED(group_ptr);
+  TX_EVENT_FLAGS_SET_NOTIFY_NOT_USED(events_set_notify);
 
-    /* Feature is not enabled, return error.  */
-    return(TX_FEATURE_NOT_ENABLED);
+  /* Feature is not enabled, return error.  */
+  return (TX_FEATURE_NOT_ENABLED);
 #else
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Make entry in event log.  */
+  TX_TRACE_IN_LINE_INSERT(TX_TRACE_EVENT_FLAGS_SET_NOTIFY, group_ptr, 0, 0, 0,
+                          TX_TRACE_EVENT_FLAGS_EVENTS)
 
-    /* Make entry in event log.  */
-    TX_TRACE_IN_LINE_INSERT(TX_TRACE_EVENT_FLAGS_SET_NOTIFY, group_ptr, 0, 0, 0, TX_TRACE_EVENT_FLAGS_EVENTS)
+  /* Make entry in event log.  */
+  TX_EL_EVENT_FLAGS_SET_NOTIFY_INSERT
 
-    /* Make entry in event log.  */
-    TX_EL_EVENT_FLAGS_SET_NOTIFY_INSERT
+  /* Setup event flag group set notification callback function.  */
+  group_ptr->tx_event_flags_group_set_notify = events_set_notify;
 
-    /* Setup event flag group set notification callback function.  */
-    group_ptr -> tx_event_flags_group_set_notify =  events_set_notify;
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Return success to caller.  */
-    return(TX_SUCCESS);
+  /* Return success to caller.  */
+  return (TX_SUCCESS);
 #endif
 }
-

@@ -14,7 +14,7 @@
 #define NX_STM32_ETH_CONFIG_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -48,7 +48,7 @@
 /* Exported functions prototypes ---------------------------------------------*/
 extern ETH_HandleTypeDef heth;
 
-#define eth_handle  heth
+#define eth_handle heth
 
 #ifdef NX_DRIVER_ETH_HW_IP_INIT
 extern void MX_ETH_Init(void);

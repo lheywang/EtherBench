@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
 #include "../include/nx_packet.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -69,28 +66,24 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_ip_delete_queue_clear(NX_PACKET *head_ptr)
-{
+VOID _nx_ip_delete_queue_clear(NX_PACKET *head_ptr) {
 
-NX_PACKET *next_packet;
-NX_PACKET *current_packet;
+  NX_PACKET *next_packet;
+  NX_PACKET *current_packet;
 
+  /* Setup next packet to queue head.  */
+  next_packet = head_ptr;
 
-    /* Setup next packet to queue head.  */
-    next_packet =  head_ptr;
+  /* Release any raw IP packets queued up.  */
+  while (next_packet) {
 
-    /* Release any raw IP packets queued up.  */
-    while (next_packet)
-    {
+    /* Setup the current packet pointer.  */
+    current_packet = next_packet;
 
-        /* Setup the current packet pointer.  */
-        current_packet =  next_packet;
+    /* Move to the next packet.  */
+    next_packet = next_packet->nx_packet_queue_next;
 
-        /* Move to the next packet.  */
-        next_packet =  next_packet -> nx_packet_queue_next;
-
-        /* Release the current packet.  */
-        _nx_packet_release(current_packet);
-    }
+    /* Release the current packet.  */
+    _nx_packet_release(current_packet);
+  }
 }
-

@@ -21,14 +21,12 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 #include "../include/nx_api.h"
-#include "../include/nx_ipv6.h"
 #include "../include/nx_icmpv6.h"
+#include "../include/nx_ipv6.h"
 
 #ifdef FEATURE_NX_IPV6
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -80,57 +78,63 @@
 
 #ifdef NX_ENABLE_IPV6_PATH_MTU_DISCOVERY
 
-VOID _nx_icmpv6_destination_table_periodic_update(NX_IP *ip_ptr)
-{
+VOID _nx_icmpv6_destination_table_periodic_update(NX_IP *ip_ptr) {
 
-UINT i, table_size;
+  UINT i, table_size;
 
-    /* Set a local variable for convenience. */
-    table_size = ip_ptr -> nx_ipv6_destination_table_size;
+  /* Set a local variable for convenience. */
+  table_size = ip_ptr->nx_ipv6_destination_table_size;
 
-    for (i = 0; table_size && (i < NX_IPV6_DESTINATION_TABLE_SIZE); i++)
-    {
+  for (i = 0; table_size && (i < NX_IPV6_DESTINATION_TABLE_SIZE); i++) {
 
-        /* Ignore entries whose path MTU is already at the host MTU. */
-        if (ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_path_mtu &&
-            ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_nd_entry &&
-            (ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_path_mtu ==
-             ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_nd_entry -> nx_nd_cache_interface_ptr -> nx_interface_ip_mtu_size))
-        {
-            continue;
-        }
-
-        /* Check for valid entries with a non infinite path MTU timeout. */
-        if (ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_valid &&
-            (ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_MTU_timer_tick != NX_WAIT_FOREVER))
-        {
-
-            /* Keep track of valid entries we have checked. */
-            table_size--;
-
-            /* Decrement the timer on table entry. */
-            if (ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_MTU_timer_tick <= NX_IP_PERIODIC_RATE)
-            {
-
-                /* Reset the path MTU to the IP instance MTU. */
-                ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_path_mtu =
-                    ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_nd_entry -> nx_nd_cache_interface_ptr -> nx_interface_ip_mtu_size;
-
-                /* This is our optimal path MTU. So there is no need to age this table entry
-                   and attempt to increase the path MTU; ok set it to infinity. */
-                ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_MTU_timer_tick = NX_WAIT_FOREVER;
-            }
-            else
-            {
-
-                ip_ptr -> nx_ipv6_destination_table[i].nx_ipv6_destination_entry_MTU_timer_tick -= (ULONG)NX_IP_PERIODIC_RATE;
-            }
-        }
+    /* Ignore entries whose path MTU is already at the host MTU. */
+    if (ip_ptr->nx_ipv6_destination_table[i]
+            .nx_ipv6_destination_entry_path_mtu &&
+        ip_ptr->nx_ipv6_destination_table[i]
+            .nx_ipv6_destination_entry_nd_entry &&
+        (ip_ptr->nx_ipv6_destination_table[i]
+             .nx_ipv6_destination_entry_path_mtu ==
+         ip_ptr->nx_ipv6_destination_table[i]
+             .nx_ipv6_destination_entry_nd_entry->nx_nd_cache_interface_ptr
+             ->nx_interface_ip_mtu_size)) {
+      continue;
     }
 
-    return;
+    /* Check for valid entries with a non infinite path MTU timeout. */
+    if (ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_valid &&
+        (ip_ptr->nx_ipv6_destination_table[i]
+             .nx_ipv6_destination_entry_MTU_timer_tick != NX_WAIT_FOREVER)) {
+
+      /* Keep track of valid entries we have checked. */
+      table_size--;
+
+      /* Decrement the timer on table entry. */
+      if (ip_ptr->nx_ipv6_destination_table[i]
+              .nx_ipv6_destination_entry_MTU_timer_tick <=
+          NX_IP_PERIODIC_RATE) {
+
+        /* Reset the path MTU to the IP instance MTU. */
+        ip_ptr->nx_ipv6_destination_table[i]
+            .nx_ipv6_destination_entry_path_mtu =
+            ip_ptr->nx_ipv6_destination_table[i]
+                .nx_ipv6_destination_entry_nd_entry->nx_nd_cache_interface_ptr
+                ->nx_interface_ip_mtu_size;
+
+        /* This is our optimal path MTU. So there is no need to age this table
+           entry and attempt to increase the path MTU; ok set it to infinity. */
+        ip_ptr->nx_ipv6_destination_table[i]
+            .nx_ipv6_destination_entry_MTU_timer_tick = NX_WAIT_FOREVER;
+      } else {
+
+        ip_ptr->nx_ipv6_destination_table[i]
+            .nx_ipv6_destination_entry_MTU_timer_tick -=
+            (ULONG)NX_IP_PERIODIC_RATE;
+      }
+    }
+  }
+
+  return;
 }
-#endif  /* NX_ENABLE_IPV6_PATH_MTU_DISCOVERY */
+#endif /* NX_ENABLE_IPV6_PATH_MTU_DISCOVERY */
 
-#endif  /* FEATURE_NX_IPV6 */
-
+#endif /* FEATURE_NX_IPV6 */

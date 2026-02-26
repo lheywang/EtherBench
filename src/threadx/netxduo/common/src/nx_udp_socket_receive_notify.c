@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_udp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,25 +71,25 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_udp_socket_receive_notify(NX_UDP_SOCKET *socket_ptr,
-                                    VOID (*udp_receive_notify)(NX_UDP_SOCKET *socket_ptr))
-{
-TX_INTERRUPT_SAVE_AREA
+UINT _nx_udp_socket_receive_notify(
+    NX_UDP_SOCKET *socket_ptr,
+    VOID (*udp_receive_notify)(NX_UDP_SOCKET *socket_ptr)) {
+  TX_INTERRUPT_SAVE_AREA
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Setup the receive notify function pointer.  */
+  socket_ptr->nx_udp_receive_callback = udp_receive_notify;
 
-    /* Setup the receive notify function pointer.  */
-    socket_ptr -> nx_udp_receive_callback =  udp_receive_notify;
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOCKET_RECEIVE_NOTIFY,
+                          socket_ptr->nx_udp_socket_ip_ptr, socket_ptr,
+                          udp_receive_notify, 0, NX_TRACE_UDP_EVENTS, 0, 0);
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOCKET_RECEIVE_NOTIFY, socket_ptr -> nx_udp_socket_ip_ptr, socket_ptr, udp_receive_notify, 0, NX_TRACE_UDP_EVENTS, 0, 0);
-
-    /* Return successful completion.  */
-    return(NX_SUCCESS);
+  /* Return successful completion.  */
+  return (NX_SUCCESS);
 }
-

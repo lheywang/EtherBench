@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_semaphore.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,43 +70,35 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_semaphore_ceiling_put(TX_SEMAPHORE *semaphore_ptr, ULONG ceiling)
-{
+UINT _txe_semaphore_ceiling_put(TX_SEMAPHORE *semaphore_ptr, ULONG ceiling) {
 
-UINT        status;
+  UINT status;
 
+  /* Check for an invalid semaphore pointer.  */
+  if (semaphore_ptr == TX_NULL) {
 
-    /* Check for an invalid semaphore pointer.  */
-    if (semaphore_ptr == TX_NULL)
-    {
+    /* Semaphore pointer is invalid, return appropriate error code.  */
+    status = TX_SEMAPHORE_ERROR;
+  }
 
-        /* Semaphore pointer is invalid, return appropriate error code.  */
-        status =  TX_SEMAPHORE_ERROR;
-    }
+  /* Now check for a valid semaphore ID.  */
+  else if (semaphore_ptr->tx_semaphore_id != TX_SEMAPHORE_ID) {
 
-    /* Now check for a valid semaphore ID.  */
-    else if (semaphore_ptr -> tx_semaphore_id != TX_SEMAPHORE_ID)
-    {
+    /* Semaphore pointer is invalid, return appropriate error code.  */
+    status = TX_SEMAPHORE_ERROR;
+  }
 
-        /* Semaphore pointer is invalid, return appropriate error code.  */
-        status =  TX_SEMAPHORE_ERROR;
-    }
+  /* Determine if the ceiling is valid - must be greater than 1.  */
+  else if (ceiling == ((ULONG)0)) {
 
-    /* Determine if the ceiling is valid - must be greater than 1.  */
-    else if (ceiling == ((ULONG) 0))
-    {
+    /* Invalid ceiling, return error.  */
+    status = TX_INVALID_CEILING;
+  } else {
 
-        /* Invalid ceiling, return error.  */
-        status =  TX_INVALID_CEILING;
-    }
-    else
-    {
+    /* Call actual semaphore ceiling put function.  */
+    status = _tx_semaphore_ceiling_put(semaphore_ptr, ceiling);
+  }
 
-        /* Call actual semaphore ceiling put function.  */
-        status =  _tx_semaphore_ceiling_put(semaphore_ptr, ceiling);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

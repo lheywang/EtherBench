@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_directory.h"
 
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,25 +70,21 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_directory_default_get(FX_MEDIA *media_ptr, CHAR **return_path_name)
-{
+UINT _fxe_directory_default_get(FX_MEDIA *media_ptr, CHAR **return_path_name) {
 
-UINT status;
+  UINT status;
 
+  /* Check for a null media pointer or null destination for the default path. */
+  if ((media_ptr == FX_NULL) || (return_path_name == FX_NULL)) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a null media pointer or null destination for the default path.  */
-    if ((media_ptr == FX_NULL) || (return_path_name == FX_NULL))
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual default directory get service.  */
+  status = _fx_directory_default_get(media_ptr, return_path_name);
 
-    /* Call actual default directory get service.  */
-    status =  _fx_directory_default_get(media_ptr, return_path_name);
-
-    /* Return default directory get status.  */
-    return(status);
+  /* Return default directory get status.  */
+  return (status);
 }
-

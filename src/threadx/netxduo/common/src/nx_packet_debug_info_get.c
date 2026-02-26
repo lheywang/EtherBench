@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_packet.h"
-
 
 #ifdef NX_ENABLE_PACKET_DEBUG_INFO
 /**************************************************************************/
@@ -74,57 +71,61 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_packet_debug_info_get(NX_PACKET_POOL *pool_ptr, UINT packet_index, NX_PACKET **packet_pptr,
-                                ULONG *packet_status, CHAR **thread_info, CHAR **file_info, ULONG *line)
-{
-ULONG      payload_size;    /* Rounded payload size       */
-ULONG      header_size;     /* Rounded header size        */
-NX_PACKET *packet_ptr;
+UINT _nx_packet_debug_info_get(NX_PACKET_POOL *pool_ptr, UINT packet_index,
+                               NX_PACKET **packet_pptr, ULONG *packet_status,
+                               CHAR **thread_info, CHAR **file_info,
+                               ULONG *line) {
+  ULONG payload_size; /* Rounded payload size       */
+  ULONG header_size;  /* Rounded header size        */
+  NX_PACKET *packet_ptr;
 
-    /* Get the first packet. */
-    packet_ptr = (NX_PACKET *)(pool_ptr -> nx_packet_pool_start);
+  /* Get the first packet. */
+  packet_ptr = (NX_PACKET *)(pool_ptr->nx_packet_pool_start);
 
-    /* Calculate header size. */
-    header_size = (ULONG)((ALIGN_TYPE)(packet_ptr -> nx_packet_data_start) - (ALIGN_TYPE)packet_ptr);
+  /* Calculate header size. */
+  header_size = (ULONG)((ALIGN_TYPE)(packet_ptr->nx_packet_data_start) -
+                        (ALIGN_TYPE)packet_ptr);
 
-    /* Round the packet size up to something that helps guarantee proper alignment for header and payload.  */
-    payload_size = (ULONG)(((pool_ptr -> nx_packet_pool_payload_size + header_size + NX_PACKET_ALIGNMENT  - 1) / NX_PACKET_ALIGNMENT) * NX_PACKET_ALIGNMENT - header_size);
+  /* Round the packet size up to something that helps guarantee proper alignment
+   * for header and payload.  */
+  payload_size = (ULONG)(((pool_ptr->nx_packet_pool_payload_size + header_size +
+                           NX_PACKET_ALIGNMENT - 1) /
+                          NX_PACKET_ALIGNMENT) *
+                             NX_PACKET_ALIGNMENT -
+                         header_size);
 
-    /* Calculate packet pointer. */
-    packet_ptr = (NX_PACKET *)(pool_ptr -> nx_packet_pool_start + packet_index * (header_size + payload_size));
+  /* Calculate packet pointer. */
+  packet_ptr = (NX_PACKET *)(pool_ptr->nx_packet_pool_start +
+                             packet_index * (header_size + payload_size));
 
-    /* Get packet pointer. */
-    if (packet_pptr)
-    {
-        *packet_pptr = packet_ptr;
-    }
+  /* Get packet pointer. */
+  if (packet_pptr) {
+    *packet_pptr = packet_ptr;
+  }
 
-    /* Get packet status. */
-    if (packet_status)
-    {
-        *packet_status = (ULONG)(ALIGN_TYPE)packet_ptr -> nx_packet_union_next.nx_packet_tcp_queue_next;
-    }
+  /* Get packet status. */
+  if (packet_status) {
+    *packet_status =
+        (ULONG)(ALIGN_TYPE)
+            packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next;
+  }
 
-    /* Get thread info. */
-    if (thread_info)
-    {
-        *thread_info = packet_ptr -> nx_packet_debug_thread;
-    }
+  /* Get thread info. */
+  if (thread_info) {
+    *thread_info = packet_ptr->nx_packet_debug_thread;
+  }
 
-    /* Get file info. */
-    if (file_info)
-    {
-        *file_info = packet_ptr -> nx_packet_debug_file;
-    }
+  /* Get file info. */
+  if (file_info) {
+    *file_info = packet_ptr->nx_packet_debug_file;
+  }
 
-    /* Get line. */
-    if (line)
-    {
-        *line = packet_ptr -> nx_packet_debug_line;
-    }
+  /* Get line. */
+  if (line) {
+    *line = packet_ptr->nx_packet_debug_line;
+  }
 
-    /* Return success. */
-    return(NX_SUCCESS);
+  /* Return success. */
+  return (NX_SUCCESS);
 }
 #endif /* NX_ENABLE_PACKET_DEBUG_INFO */
-

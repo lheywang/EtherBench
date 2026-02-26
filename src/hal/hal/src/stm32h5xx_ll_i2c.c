@@ -1,105 +1,104 @@
 /**
-  ******************************************************************************
-  * @file    stm32h5xx_ll_i2c.c
-  * @author  MCD Application Team
-  * @brief   I2C LL module driver.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2023 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    stm32h5xx_ll_i2c.c
+ * @author  MCD Application Team
+ * @brief   I2C LL module driver.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2023 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 #if defined(USE_FULL_LL_DRIVER)
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h5xx_ll_i2c.h"
 #include "stm32h5xx_ll_bus.h"
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 #include "stm32_assert.h"
 #else
 #define assert_param(expr) ((void)0U)
 #endif /* USE_FULL_ASSERT */
 
 /** @addtogroup STM32H5xx_LL_Driver
-  * @{
-  */
+ * @{
+ */
 
-#if defined (I2C1) || defined (I2C2) || defined (I2C3) || defined (I2C4)
+#if defined(I2C1) || defined(I2C2) || defined(I2C3) || defined(I2C4)
 
 /** @defgroup I2C_LL I2C
-  * @{
-  */
+ * @{
+ */
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @addtogroup I2C_LL_Private_Macros
-  * @{
-  */
+ * @{
+ */
 
-#define IS_LL_I2C_PERIPHERAL_MODE(__VALUE__)    (((__VALUE__) == LL_I2C_MODE_I2C)          || \
-                                                 ((__VALUE__) == LL_I2C_MODE_SMBUS_HOST)   || \
-                                                 ((__VALUE__) == LL_I2C_MODE_SMBUS_DEVICE) || \
-                                                 ((__VALUE__) == LL_I2C_MODE_SMBUS_DEVICE_ARP))
+#define IS_LL_I2C_PERIPHERAL_MODE(__VALUE__)                                   \
+  (((__VALUE__) == LL_I2C_MODE_I2C) ||                                         \
+   ((__VALUE__) == LL_I2C_MODE_SMBUS_HOST) ||                                  \
+   ((__VALUE__) == LL_I2C_MODE_SMBUS_DEVICE) ||                                \
+   ((__VALUE__) == LL_I2C_MODE_SMBUS_DEVICE_ARP))
 
-#define IS_LL_I2C_ANALOG_FILTER(__VALUE__)      (((__VALUE__) == LL_I2C_ANALOGFILTER_ENABLE) || \
-                                                 ((__VALUE__) == LL_I2C_ANALOGFILTER_DISABLE))
+#define IS_LL_I2C_ANALOG_FILTER(__VALUE__)                                     \
+  (((__VALUE__) == LL_I2C_ANALOGFILTER_ENABLE) ||                              \
+   ((__VALUE__) == LL_I2C_ANALOGFILTER_DISABLE))
 
-#define IS_LL_I2C_DIGITAL_FILTER(__VALUE__)     ((__VALUE__) <= 0x0000000FU)
+#define IS_LL_I2C_DIGITAL_FILTER(__VALUE__) ((__VALUE__) <= 0x0000000FU)
 
-#define IS_LL_I2C_OWN_ADDRESS1(__VALUE__)       ((__VALUE__) <= 0x000003FFU)
+#define IS_LL_I2C_OWN_ADDRESS1(__VALUE__) ((__VALUE__) <= 0x000003FFU)
 
-#define IS_LL_I2C_TYPE_ACKNOWLEDGE(__VALUE__)   (((__VALUE__) == LL_I2C_ACK) || \
-                                                 ((__VALUE__) == LL_I2C_NACK))
+#define IS_LL_I2C_TYPE_ACKNOWLEDGE(__VALUE__)                                  \
+  (((__VALUE__) == LL_I2C_ACK) || ((__VALUE__) == LL_I2C_NACK))
 
-#define IS_LL_I2C_OWN_ADDRSIZE(__VALUE__)       (((__VALUE__) == LL_I2C_OWNADDRESS1_7BIT) || \
-                                                 ((__VALUE__) == LL_I2C_OWNADDRESS1_10BIT))
+#define IS_LL_I2C_OWN_ADDRSIZE(__VALUE__)                                      \
+  (((__VALUE__) == LL_I2C_OWNADDRESS1_7BIT) ||                                 \
+   ((__VALUE__) == LL_I2C_OWNADDRESS1_10BIT))
 /**
-  * @}
-  */
+ * @}
+ */
 
 /* Private function prototypes -----------------------------------------------*/
 
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup I2C_LL_Exported_Functions
-  * @{
-  */
+ * @{
+ */
 
 /** @addtogroup I2C_LL_EF_Init
-  * @{
-  */
+ * @{
+ */
 
 /**
-  * @brief  De-initialize the I2C registers to their default reset values.
-  * @param  I2Cx I2C Instance.
-  * @retval An ErrorStatus enumeration value:
-  *          - SUCCESS: I2C registers are de-initialized
-  *          - ERROR: I2C registers are not de-initialized
-  */
-ErrorStatus LL_I2C_DeInit(const I2C_TypeDef *I2Cx)
-{
+ * @brief  De-initialize the I2C registers to their default reset values.
+ * @param  I2Cx I2C Instance.
+ * @retval An ErrorStatus enumeration value:
+ *          - SUCCESS: I2C registers are de-initialized
+ *          - ERROR: I2C registers are not de-initialized
+ */
+ErrorStatus LL_I2C_DeInit(const I2C_TypeDef *I2Cx) {
   ErrorStatus status = SUCCESS;
 
   /* Check the I2C Instance I2Cx */
   assert_param(IS_I2C_ALL_INSTANCE(I2Cx));
 
-  if (I2Cx == I2C1)
-  {
+  if (I2Cx == I2C1) {
     /* Force reset of I2C clock */
     LL_APB1_GRP1_ForceReset(LL_APB1_GRP1_PERIPH_I2C1);
 
     /* Release reset of I2C clock */
     LL_APB1_GRP1_ReleaseReset(LL_APB1_GRP1_PERIPH_I2C1);
-  }
-  else if (I2Cx == I2C2)
-  {
+  } else if (I2Cx == I2C2) {
     /* Force reset of I2C clock */
     LL_APB1_GRP1_ForceReset(LL_APB1_GRP1_PERIPH_I2C2);
 
@@ -108,8 +107,7 @@ ErrorStatus LL_I2C_DeInit(const I2C_TypeDef *I2Cx)
 
   }
 #if defined(I2C3)
-  else if (I2Cx == I2C3)
-  {
+  else if (I2Cx == I2C3) {
     /* Force reset of I2C clock */
     LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_I2C3);
 
@@ -118,8 +116,7 @@ ErrorStatus LL_I2C_DeInit(const I2C_TypeDef *I2Cx)
   }
 #endif /* I2C3 */
 #if defined(I2C4)
-  else if (I2Cx == I2C4)
-  {
+  else if (I2Cx == I2C4) {
     /* Force reset of I2C clock */
     LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_I2C4);
 
@@ -127,8 +124,7 @@ ErrorStatus LL_I2C_DeInit(const I2C_TypeDef *I2Cx)
     LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_I2C4);
   }
 #endif /* I2C4 */
-  else
-  {
+  else {
     status = ERROR;
   }
 
@@ -136,15 +132,16 @@ ErrorStatus LL_I2C_DeInit(const I2C_TypeDef *I2Cx)
 }
 
 /**
-  * @brief  Initialize the I2C registers according to the specified parameters in I2C_InitStruct.
-  * @param  I2Cx I2C Instance.
-  * @param  I2C_InitStruct pointer to a @ref LL_I2C_InitTypeDef structure.
-  * @retval An ErrorStatus enumeration value:
-  *          - SUCCESS: I2C registers are initialized
-  *          - ERROR: Not applicable
-  */
-ErrorStatus LL_I2C_Init(I2C_TypeDef *I2Cx, const LL_I2C_InitTypeDef *I2C_InitStruct)
-{
+ * @brief  Initialize the I2C registers according to the specified parameters in
+ * I2C_InitStruct.
+ * @param  I2Cx I2C Instance.
+ * @param  I2C_InitStruct pointer to a @ref LL_I2C_InitTypeDef structure.
+ * @retval An ErrorStatus enumeration value:
+ *          - SUCCESS: I2C registers are initialized
+ *          - ERROR: Not applicable
+ */
+ErrorStatus LL_I2C_Init(I2C_TypeDef *I2Cx,
+                        const LL_I2C_InitTypeDef *I2C_InitStruct) {
   /* Check the I2C Instance I2Cx */
   assert_param(IS_I2C_ALL_INSTANCE(I2Cx));
 
@@ -164,12 +161,15 @@ ErrorStatus LL_I2C_Init(I2C_TypeDef *I2Cx, const LL_I2C_InitTypeDef *I2C_InitStr
    * - AnalogFilter: I2C_CR1_ANFOFF bit
    * - DigitalFilter: I2C_CR1_DNF[3:0] bits
    */
-  LL_I2C_ConfigFilters(I2Cx, I2C_InitStruct->AnalogFilter, I2C_InitStruct->DigitalFilter);
+  LL_I2C_ConfigFilters(I2Cx, I2C_InitStruct->AnalogFilter,
+                       I2C_InitStruct->DigitalFilter);
 
   /*---------------------------- I2Cx TIMINGR Configuration --------------------
-   * Configure the SDA setup, hold time and the SCL high, low period with parameter :
-   * - Timing: I2C_TIMINGR_PRESC[3:0], I2C_TIMINGR_SCLDEL[3:0], I2C_TIMINGR_SDADEL[3:0],
-   *           I2C_TIMINGR_SCLH[7:0] and I2C_TIMINGR_SCLL[7:0] bits
+   * Configure the SDA setup, hold time and the SCL high, low period with
+   * parameter :
+   * - Timing: I2C_TIMINGR_PRESC[3:0], I2C_TIMINGR_SCLDEL[3:0],
+   * I2C_TIMINGR_SDADEL[3:0], I2C_TIMINGR_SCLH[7:0] and I2C_TIMINGR_SCLL[7:0]
+   * bits
    */
   LL_I2C_SetTiming(I2Cx, I2C_InitStruct->Timing);
 
@@ -182,16 +182,16 @@ ErrorStatus LL_I2C_Init(I2C_TypeDef *I2Cx, const LL_I2C_InitTypeDef *I2C_InitStr
    * - OwnAddrSize:  I2C_OAR1_OA1MODE bit
    */
   LL_I2C_DisableOwnAddress1(I2Cx);
-  LL_I2C_SetOwnAddress1(I2Cx, I2C_InitStruct->OwnAddress1, I2C_InitStruct->OwnAddrSize);
+  LL_I2C_SetOwnAddress1(I2Cx, I2C_InitStruct->OwnAddress1,
+                        I2C_InitStruct->OwnAddrSize);
 
   /* OwnAdress1 == 0 is reserved for General Call address */
-  if (I2C_InitStruct->OwnAddress1 != 0U)
-  {
+  if (I2C_InitStruct->OwnAddress1 != 0U) {
     LL_I2C_EnableOwnAddress1(I2Cx);
   }
 
   /*---------------------------- I2Cx MODE Configuration -----------------------
-  * Configure I2Cx peripheral mode with parameter :
+   * Configure I2Cx peripheral mode with parameter :
    * - PeripheralMode: I2C_CR1_SMBDEN and I2C_CR1_SMBHEN bits
    */
   LL_I2C_SetMode(I2Cx, I2C_InitStruct->PeripheralMode);
@@ -207,38 +207,37 @@ ErrorStatus LL_I2C_Init(I2C_TypeDef *I2Cx, const LL_I2C_InitTypeDef *I2C_InitStr
 }
 
 /**
-  * @brief  Set each @ref LL_I2C_InitTypeDef field to default value.
-  * @param  I2C_InitStruct Pointer to a @ref LL_I2C_InitTypeDef structure.
-  * @retval None
-  */
-void LL_I2C_StructInit(LL_I2C_InitTypeDef *I2C_InitStruct)
-{
+ * @brief  Set each @ref LL_I2C_InitTypeDef field to default value.
+ * @param  I2C_InitStruct Pointer to a @ref LL_I2C_InitTypeDef structure.
+ * @retval None
+ */
+void LL_I2C_StructInit(LL_I2C_InitTypeDef *I2C_InitStruct) {
   /* Set I2C_InitStruct fields to default values */
-  I2C_InitStruct->PeripheralMode  = LL_I2C_MODE_I2C;
-  I2C_InitStruct->Timing          = 0U;
-  I2C_InitStruct->AnalogFilter    = LL_I2C_ANALOGFILTER_ENABLE;
-  I2C_InitStruct->DigitalFilter   = 0U;
-  I2C_InitStruct->OwnAddress1     = 0U;
+  I2C_InitStruct->PeripheralMode = LL_I2C_MODE_I2C;
+  I2C_InitStruct->Timing = 0U;
+  I2C_InitStruct->AnalogFilter = LL_I2C_ANALOGFILTER_ENABLE;
+  I2C_InitStruct->DigitalFilter = 0U;
+  I2C_InitStruct->OwnAddress1 = 0U;
   I2C_InitStruct->TypeAcknowledge = LL_I2C_NACK;
-  I2C_InitStruct->OwnAddrSize     = LL_I2C_OWNADDRESS1_7BIT;
+  I2C_InitStruct->OwnAddrSize = LL_I2C_OWNADDRESS1_7BIT;
 }
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 #endif /* I2C1 || I2C2 || I2C3 || I2C4 */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 #endif /* USE_FULL_LL_DRIVER */

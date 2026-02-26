@@ -9,11 +9,10 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/ux_api.h"
 #include "../include/ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -54,22 +51,22 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_utility_string_length_check       Check C string and return     */
 /*                                          its length if null-terminated */
-/*    _ux_utility_memory_compare            Memory compare                */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    _ux_utility_memory_compare            Memory compare                */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -77,79 +74,82 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_stack_class_unregister(UCHAR *class_name,
-                        UINT (*class_entry_function)(struct UX_SLAVE_CLASS_COMMAND_STRUCT *))
-{
+UINT _ux_device_stack_class_unregister(
+    UCHAR *class_name,
+    UINT (*class_entry_function)(struct UX_SLAVE_CLASS_COMMAND_STRUCT *)) {
 
-UX_SLAVE_CLASS              *class_inst;
-UINT                        status;
-UX_SLAVE_CLASS_COMMAND      command;
+  UX_SLAVE_CLASS *class_inst;
+  UINT status;
+  UX_SLAVE_CLASS_COMMAND command;
 #if !defined(UX_NAME_REFERENCED_BY_POINTER)
-UINT                        class_name_length =  0;
+  UINT class_name_length = 0;
 #endif
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
-ULONG                       class_index;
+  ULONG class_index;
 #endif
 
-
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_CLASS_UNREGISTER, class_name, 0, 0, 0, UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_CLASS_UNREGISTER, class_name, 0,
+                          0, 0, UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
 
 #if !defined(UX_NAME_REFERENCED_BY_POINTER)
-    /* Get the length of the class name (exclude null-terminator).  */
-    status =  _ux_utility_string_length_check(class_name, &class_name_length, UX_MAX_CLASS_NAME_LENGTH);
-    if (status)
-        return(status);
+  /* Get the length of the class name (exclude null-terminator).  */
+  status = _ux_utility_string_length_check(class_name, &class_name_length,
+                                           UX_MAX_CLASS_NAME_LENGTH);
+  if (status)
+    return (status);
 #endif
 
-    class_inst =  _ux_system_slave -> ux_system_slave_class_array;
+  class_inst = _ux_system_slave->ux_system_slave_class_array;
 
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
-    /* We need to parse the class table to find the right class.  */
-    for (class_index = 0; class_index < _ux_system_slave -> ux_system_slave_max_class; class_index++)
-    {
+  /* We need to parse the class table to find the right class.  */
+  for (class_index = 0;
+       class_index < _ux_system_slave->ux_system_slave_max_class;
+       class_index++) {
 #endif
 
-        /* Check if this class is the right one.  */
-        if (class_inst -> ux_slave_class_status == UX_USED)
-        {
+    /* Check if this class is the right one.  */
+    if (class_inst->ux_slave_class_status == UX_USED) {
 
-            /* We have found a used container with a  class. Compare the name (include null-terminator).  */
-            if (ux_utility_name_match(class_inst -> ux_slave_class_name, class_name, class_name_length + 1))
-            {
-                        
-                /* Build all the fields of the Class Command to uninitialize the class.  */
-                command.ux_slave_class_command_request    =  UX_SLAVE_CLASS_COMMAND_UNINITIALIZE;
-                command.ux_slave_class_command_class_ptr  =  class_inst;
+      /* We have found a used container with a  class. Compare the name (include
+       * null-terminator).  */
+      if (ux_utility_name_match(class_inst->ux_slave_class_name, class_name,
+                                class_name_length + 1)) {
 
-                /* Call the class uninitialization routine.  */
-                status = class_entry_function(&command);
-            
-                /* Check the status.  */
-                if (status != UX_SUCCESS)
-                    return(status);
-            
-                /* Make this class unused now.  */
-                class_inst -> ux_slave_class_status = UX_UNUSED;
-            
-                /* Erase the instance of the class.  */
-                class_inst -> ux_slave_class_instance = UX_NULL;
+        /* Build all the fields of the Class Command to uninitialize the class.
+         */
+        command.ux_slave_class_command_request =
+            UX_SLAVE_CLASS_COMMAND_UNINITIALIZE;
+        command.ux_slave_class_command_class_ptr = class_inst;
 
-                /* Return successful completion.  */
-                return(UX_SUCCESS);
-            }
-        }
+        /* Call the class uninitialization routine.  */
+        status = class_entry_function(&command);
+
+        /* Check the status.  */
+        if (status != UX_SUCCESS)
+          return (status);
+
+        /* Make this class unused now.  */
+        class_inst->ux_slave_class_status = UX_UNUSED;
+
+        /* Erase the instance of the class.  */
+        class_inst->ux_slave_class_instance = UX_NULL;
+
+        /* Return successful completion.  */
+        return (UX_SUCCESS);
+      }
+    }
 
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
-        /* Move to the next class.  */
-        class_inst ++;
-    }    
+    /* Move to the next class.  */
+    class_inst++;
+  }
 #endif
 
-    /* No class match.  */
-    return(UX_NO_CLASS_MATCH);
+  /* No class match.  */
+  return (UX_NO_CLASS_MATCH);
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -190,14 +190,14 @@ ULONG                       class_index;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT  _uxe_device_stack_class_unregister(UCHAR *class_name,
-                        UINT (*class_entry_function)(struct UX_SLAVE_CLASS_COMMAND_STRUCT *))
-{
+UINT _uxe_device_stack_class_unregister(
+    UCHAR *class_name,
+    UINT (*class_entry_function)(struct UX_SLAVE_CLASS_COMMAND_STRUCT *)) {
 
-    /* Sanity checks.  */
-    if ((class_name == UX_NULL) || (class_entry_function == UX_NULL))
-        return(UX_INVALID_PARAMETER);
+  /* Sanity checks.  */
+  if ((class_name == UX_NULL) || (class_entry_function == UX_NULL))
+    return (UX_INVALID_PARAMETER);
 
-    /* Invoke unregister function.  */
-    return(_ux_device_stack_class_unregister(class_name, class_entry_function));
+  /* Invoke unregister function.  */
+  return (_ux_device_stack_class_unregister(class_name, class_entry_function));
 }

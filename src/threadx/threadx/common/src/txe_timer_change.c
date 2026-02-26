@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_initialize.h"
 #include "../include/tx_thread.h"
 #include "../include/tx_timer.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -76,51 +73,43 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_timer_change(TX_TIMER *timer_ptr, ULONG initial_ticks, ULONG reschedule_ticks)
-{
+UINT _txe_timer_change(TX_TIMER *timer_ptr, ULONG initial_ticks,
+                       ULONG reschedule_ticks) {
 
-UINT    status;
+  UINT status;
 
+  /* Check for an invalid timer pointer.  */
+  if (timer_ptr == TX_NULL) {
 
-    /* Check for an invalid timer pointer.  */
-    if (timer_ptr == TX_NULL)
-    {
+    /* Timer pointer is invalid, return appropriate error code.  */
+    status = TX_TIMER_ERROR;
+  }
 
-        /* Timer pointer is invalid, return appropriate error code.  */
-        status =  TX_TIMER_ERROR;
-    }
+  /* Now check for invalid timer ID.  */
+  else if (timer_ptr->tx_timer_id != TX_TIMER_ID) {
 
-    /* Now check for invalid timer ID.  */
-    else if (timer_ptr -> tx_timer_id != TX_TIMER_ID)
-    {
+    /* Timer pointer is invalid, return appropriate error code.  */
+    status = TX_TIMER_ERROR;
+  }
 
-        /* Timer pointer is invalid, return appropriate error code.  */
-        status =  TX_TIMER_ERROR;
-    }
+  /* Check for an illegal initial tick value.  */
+  else if (initial_ticks == ((ULONG)0)) {
 
-    /* Check for an illegal initial tick value.  */
-    else if (initial_ticks == ((ULONG) 0))
-    {
+    /* Invalid initial tick value, return appropriate error code.  */
+    status = TX_TICK_ERROR;
+  }
 
-        /* Invalid initial tick value, return appropriate error code.  */
-        status =  TX_TICK_ERROR;
-    }
+  /* Check for invalid caller of this function.  */
+  else if (TX_THREAD_GET_SYSTEM_STATE() >= TX_INITIALIZE_IN_PROGRESS) {
 
-    /* Check for invalid caller of this function.  */
-    else if (TX_THREAD_GET_SYSTEM_STATE() >= TX_INITIALIZE_IN_PROGRESS)
-    {
+    /* Invalid caller of this function, return appropriate error code.  */
+    status = TX_CALLER_ERROR;
+  } else {
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status =  TX_CALLER_ERROR;
-    }
-    else
-    {
+    /* Call actual application timer function.  */
+    status = _tx_timer_change(timer_ptr, initial_ticks, reschedule_ticks);
+  }
 
-        /* Call actual application timer function.  */
-        status =  _tx_timer_change(timer_ptr, initial_ticks, reschedule_ticks);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

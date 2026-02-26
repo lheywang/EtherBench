@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_utility.h"
-
 
 #ifdef FX_ENABLE_EXFAT
 /**************************************************************************/
@@ -74,181 +71,164 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fx_utility_absolute_path_get(CHAR *base_path, CHAR *new_path, CHAR *absolute_path)
-{
+UINT _fx_utility_absolute_path_get(CHAR *base_path, CHAR *new_path,
+                                   CHAR *absolute_path) {
 
-UINT length;
-UINT absolute_position;
-UINT i;
+  UINT length;
+  UINT absolute_position;
+  UINT i;
 
+  /* Check if we got null pointers.  */
+  if (!base_path || !new_path || !absolute_path) {
 
-    /* Check if we got null pointers.  */
-    if (!base_path || !new_path || !absolute_path)
-    {
+    /* Return error.  */
+    return (FX_INVALID_PATH);
+  }
 
-        /* Return error.  */
-        return(FX_INVALID_PATH);
+  /* Is the new path starts from root?  */
+  if ((new_path[0] == '\\') || (new_path[0] == '/')) {
+
+    /* Yes, set the absolute path to root.  */
+    absolute_path[0] = '\\';
+    absolute_path[1] = 0;
+    new_path++;
+  } else {
+
+    /* Initialize the absolute path with the base path.  */
+    i = 0;
+    while ((base_path[i]) && (i < FX_MAXIMUM_PATH)) {
+
+      /* Copy a character.  */
+      absolute_path[i] = base_path[i];
+
+      /* Move to next character.  */
+      i++;
     }
 
-    /* Is the new path starts from root?  */
-    if ((new_path[0] == '\\') || (new_path[0] == '/'))
-    {
+    /* Is the absolute path still NULL?  */
+    if ((absolute_path[0] == 0) || (i == 0)) {
 
-        /* Yes, set the absolute path to root.  */
-        absolute_path[0] = '\\';
-        absolute_path[1] = 0;
-        new_path++;
+      /* Yes, set the absolute path to root.  */
+      absolute_path[0] = '\\';
+      absolute_path[1] = 0;
     }
-    else
-    {
+  }
 
-        /* Initialize the absolute path with the base path.  */
-        i =  0;
-        while ((base_path[i]) && (i < FX_MAXIMUM_PATH))
-        {
+  /* Loop to add new path to the absolute path.  */
+  while ((length = _fx_utility_token_length_get(new_path)) > 0) {
 
-            /* Copy a character.  */
-            absolute_path[i] =  base_path[i];
-
-            /* Move to next character.  */
-            i++;
-        }
-
-        /* Is the absolute path still NULL?  */
-        if ((absolute_path[0] == 0) || (i == 0))
-        {
-
-            /* Yes, set the absolute path to root.  */
-            absolute_path[0] = '\\';
-            absolute_path[1] = 0;
-        }
+    /* Check if the path is too long.  */
+    if ((new_path[length] != 0) && (new_path[length] != '\\') &&
+        (new_path[length] != '/')) {
+      /* The path is too long, return error.  */
+      return (FX_INVALID_PATH);
     }
 
-    /* Loop to add new path to the absolute path.  */
-    while ((length = _fx_utility_token_length_get(new_path)) > 0)
-    {
+    /* Check if we have a current directory mark.  */
+    if ((length == 1) && (new_path[0] == '.')) {
 
-        /* Check if the path is too long.  */
-        if ((new_path[length] != 0) && (new_path[length] != '\\') && (new_path[length] != '/'))
-        {
-            /* The path is too long, return error.  */
-            return(FX_INVALID_PATH);
+      /* The same directory, just skip it.  */
+    }
+    /* Do we have a parent directory mark?  */
+    else if ((length == 2) && (new_path[0] == '.') && (new_path[1] == '.')) {
+
+      /* Yes, we need to move the absolute path to the parent directory.  */
+      /* Check absolute path length.  */
+      absolute_position =
+          _fx_utility_string_length_get(absolute_path, FX_MAXIMUM_PATH);
+      if ((absolute_position < 2) || (absolute_path[absolute_position] != 0)) {
+
+        /* No parent directory left in the absolute path, or invalid path
+         * length, return error.  */
+        return (FX_INVALID_PATH);
+      }
+
+      /* Move to the last character of the absolute path.  */
+      absolute_position--;
+
+      /* Check if we have a directory separator.  */
+      if ((absolute_path[absolute_position] == '\\') ||
+          (absolute_path[absolute_position] == '/')) {
+
+        /* Remove the separator.  */
+        absolute_path[absolute_position] = 0;
+        absolute_position--;
+      }
+
+      /* Loop to clear the character backward until a seprator or string
+       * exhaust.  */
+      while ((absolute_path[absolute_position] != '\\') &&
+             (absolute_path[absolute_position] != '/') &&
+             (absolute_position > 0)) {
+
+        /* Remove one character.  */
+        absolute_path[absolute_position] = 0;
+        absolute_position--;
+      }
+
+      /* Do we have somthing left in the path?  */
+      if (absolute_position > 1) {
+
+        /* Yes, remove the last separator.  */
+        absolute_path[absolute_position] = 0;
+      }
+    } else {
+
+      /* Normal directory, add it.  */
+      absolute_position =
+          _fx_utility_string_length_get(absolute_path, FX_MAXIMUM_PATH);
+
+      /* Check if the path is too long.  */
+      if (absolute_path[absolute_position] != 0) {
+
+        /* The path is too long, return error.  */
+        return (FX_INVALID_PATH);
+      }
+
+      /* Check if we have something in the path.  */
+      if (absolute_position) {
+
+        /* Do we have a separator in the last character?  */
+        if ((absolute_path[absolute_position - 1] != '\\') &&
+            (absolute_path[absolute_position - 1] != '/')) {
+
+          /* No, add a directory separator to the path string.  */
+          absolute_path[absolute_position] = '\\';
+          absolute_position++;
         }
+      }
 
-        /* Check if we have a current directory mark.  */
-        if ((length == 1) && (new_path[0] == '.'))
-        {
+      /* Loop to copy the new path to the absolute path.  */
+      i = 0;
+      while ((absolute_position < FX_MAXIMUM_PATH) && (i < length)) {
 
-            /* The same directory, just skip it.  */
-        }
-        /* Do we have a parent directory mark?  */
-        else if ((length == 2) && (new_path[0] == '.') && (new_path[1] == '.'))
-        {
+        /* Copy one character.  */
+        absolute_path[absolute_position++] = new_path[i++];
+      }
 
-            /* Yes, we need to move the absolute path to the parent directory.  */
-            /* Check absolute path length.  */
-            absolute_position = _fx_utility_string_length_get(absolute_path, FX_MAXIMUM_PATH);
-            if ((absolute_position < 2) || (absolute_path[absolute_position] != 0))
-            {
+      /* Check if we have not exceed the maximum length.  */
+      if (absolute_position < FX_MAXIMUM_PATH) {
 
-                /* No parent directory left in the absolute path, or invalid path length, return error.  */
-                return(FX_INVALID_PATH);
-            }
+        /* Terminate the string.  */
+        absolute_path[absolute_position] = 0;
+      } else {
 
-            /* Move to the last character of the absolute path.  */
-            absolute_position--;
-
-            /* Check if we have a directory separator.  */
-            if ((absolute_path[absolute_position] == '\\') || (absolute_path[absolute_position] == '/'))
-            {
-
-                /* Remove the separator.  */
-                absolute_path[absolute_position] = 0;
-                absolute_position--;
-            }
-
-            /* Loop to clear the character backward until a seprator or string exhaust.  */
-            while ((absolute_path[absolute_position] != '\\') && (absolute_path[absolute_position] != '/') && (absolute_position > 0))
-            {
-
-                /* Remove one character.  */
-                absolute_path[absolute_position] = 0;
-                absolute_position--;
-            }
-
-            /* Do we have somthing left in the path?  */
-            if (absolute_position > 1)
-            {
-
-                /* Yes, remove the last separator.  */
-                absolute_path[absolute_position] = 0;
-            }
-        }
-        else
-        {
-
-            /* Normal directory, add it.  */
-            absolute_position = _fx_utility_string_length_get(absolute_path, FX_MAXIMUM_PATH);
-
-            /* Check if the path is too long.  */
-            if (absolute_path[absolute_position] != 0)
-            {
-
-                /* The path is too long, return error.  */
-                return(FX_INVALID_PATH);
-            }
-
-            /* Check if we have something in the path.  */
-            if (absolute_position)
-            {
-
-                /* Do we have a separator in the last character?  */
-                if ((absolute_path[absolute_position - 1] != '\\') && (absolute_path[absolute_position - 1] != '/'))
-                {
-
-                    /* No, add a directory separator to the path string.  */
-                    absolute_path[absolute_position] = '\\';
-                    absolute_position++;
-                }
-            }
-
-            /* Loop to copy the new path to the absolute path.  */
-            i = 0;
-            while ((absolute_position < FX_MAXIMUM_PATH) && (i < length))
-            {
-
-                /* Copy one character.  */
-                absolute_path[absolute_position++] = new_path[i++];
-            }
-
-            /* Check if we have not exceed the maximum length.  */
-            if (absolute_position < FX_MAXIMUM_PATH)
-            {
-
-                /* Terminate the string.  */
-                absolute_path[absolute_position] = 0;
-            }
-            else
-            {
-
-                /* The path is too long, return error.  */
-                return(FX_INVALID_PATH);
-            }
-        }
-
-        /* Move to the next component.  */
-        new_path += length;
-
-        /* Is the next component starts with a separator?  */
-        if ((new_path[0] == '\\') || (new_path[0] == '/'))
-        {
-
-            /* Yes, skip it.  */
-            new_path++;
-        }
+        /* The path is too long, return error.  */
+        return (FX_INVALID_PATH);
+      }
     }
 
-    return(FX_SUCCESS);
+    /* Move to the next component.  */
+    new_path += length;
+
+    /* Is the next component starts with a separator?  */
+    if ((new_path[0] == '\\') || (new_path[0] == '/')) {
+
+      /* Yes, skip it.  */
+      new_path++;
+    }
+  }
+
+  return (FX_SUCCESS);
 }
 #endif /* FX_ENABLE_EXFAT */
-

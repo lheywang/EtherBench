@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_byte_pool.h"
-
 
 #ifndef TX_INLINE_INITIALIZATION
 
@@ -35,52 +32,43 @@
 
 /* Define the head pointer of the created byte pool list.  */
 
-TX_BYTE_POOL *   _tx_byte_pool_created_ptr;
-
+TX_BYTE_POOL *_tx_byte_pool_created_ptr;
 
 /* Define the variable that holds the number of created byte pools. */
 
-ULONG            _tx_byte_pool_created_count;
-
+ULONG _tx_byte_pool_created_count;
 
 #ifdef TX_BYTE_POOL_ENABLE_PERFORMANCE_INFO
 
 /* Define the total number of allocates.  */
 
-ULONG            _tx_byte_pool_performance_allocate_count;
-
+ULONG _tx_byte_pool_performance_allocate_count;
 
 /* Define the total number of releases.  */
 
-ULONG            _tx_byte_pool_performance_release_count;
-
+ULONG _tx_byte_pool_performance_release_count;
 
 /* Define the total number of adjacent memory fragment merges.  */
 
-ULONG            _tx_byte_pool_performance_merge_count;
-
+ULONG _tx_byte_pool_performance_merge_count;
 
 /* Define the total number of memory fragment splits.  */
 
-ULONG            _tx_byte_pool_performance_split_count;
-
+ULONG _tx_byte_pool_performance_split_count;
 
 /* Define the total number of memory fragments searched during allocation.  */
 
-ULONG            _tx_byte_pool_performance_search_count;
-
+ULONG _tx_byte_pool_performance_search_count;
 
 /* Define the total number of byte pool suspensions.  */
 
-ULONG            _tx_byte_pool_performance_suspension_count;
-
+ULONG _tx_byte_pool_performance_suspension_count;
 
 /* Define the total number of byte pool timeouts.  */
 
-ULONG            _tx_byte_pool_performance_timeout_count;
+ULONG _tx_byte_pool_performance_timeout_count;
 
 #endif
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -125,26 +113,25 @@ ULONG            _tx_byte_pool_performance_timeout_count;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _tx_byte_pool_initialize(VOID)
-{
+VOID _tx_byte_pool_initialize(VOID) {
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-    /* Initialize the head pointer of the created byte pools list and the
-       number of byte pools created.  */
-    _tx_byte_pool_created_ptr =        TX_NULL;
-    _tx_byte_pool_created_count =      TX_EMPTY;
+  /* Initialize the head pointer of the created byte pools list and the
+     number of byte pools created.  */
+  _tx_byte_pool_created_ptr = TX_NULL;
+  _tx_byte_pool_created_count = TX_EMPTY;
 
 #ifdef TX_BYTE_POOL_ENABLE_PERFORMANCE_INFO
 
-    /* Initialize byte pool performance counters.  */
-    _tx_byte_pool_performance_allocate_count =    ((ULONG) 0);
-    _tx_byte_pool_performance_release_count =     ((ULONG) 0);
-    _tx_byte_pool_performance_merge_count =       ((ULONG) 0);
-    _tx_byte_pool_performance_split_count =       ((ULONG) 0);
-    _tx_byte_pool_performance_search_count =      ((ULONG) 0);
-    _tx_byte_pool_performance_suspension_count =  ((ULONG) 0);
-    _tx_byte_pool_performance_timeout_count =     ((ULONG) 0);
+  /* Initialize byte pool performance counters.  */
+  _tx_byte_pool_performance_allocate_count = ((ULONG)0);
+  _tx_byte_pool_performance_release_count = ((ULONG)0);
+  _tx_byte_pool_performance_merge_count = ((ULONG)0);
+  _tx_byte_pool_performance_split_count = ((ULONG)0);
+  _tx_byte_pool_performance_search_count = ((ULONG)0);
+  _tx_byte_pool_performance_suspension_count = ((ULONG)0);
+  _tx_byte_pool_performance_timeout_count = ((ULONG)0);
 #endif
 #endif
 }

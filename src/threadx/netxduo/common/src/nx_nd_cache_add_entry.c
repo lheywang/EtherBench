@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -30,7 +28,6 @@
 #include "../include/nx_nd_cache.h"
 
 #ifdef FEATURE_NX_IPV6
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -97,129 +94,133 @@
 
 UINT _nx_nd_cache_add_entry(NX_IP *ip_ptr, ULONG *dest_ip,
                             NXD_IPV6_ADDRESS *iface_address,
-                            ND_CACHE_ENTRY **nd_cache_entry)
-{
+                            ND_CACHE_ENTRY **nd_cache_entry) {
 
-UINT i;
-UINT index;
-UINT first_available;
+  UINT i;
+  UINT index;
+  UINT first_available;
 #ifndef NX_DISABLE_IPV6_PURGE_UNUSED_CACHE_ENTRIES
-UINT stale_timer_ticks;
-UINT timer_ticks_left;
+  UINT stale_timer_ticks;
+  UINT timer_ticks_left;
 #endif
 
-    NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_ptr);
 
-    /* Set the found slot past the end of the table. If a match or available
-       slot found, this will have a lower value. */
-    first_available = NX_IPV6_NEIGHBOR_CACHE_SIZE;
+  /* Set the found slot past the end of the table. If a match or available
+     slot found, this will have a lower value. */
+  first_available = NX_IPV6_NEIGHBOR_CACHE_SIZE;
 
-    /* Initialize the return value. */
-    *nd_cache_entry = NX_NULL;
+  /* Initialize the return value. */
+  *nd_cache_entry = NX_NULL;
 
-    /* Compute a simple hash based on the destination IP address. */
-    index = (UINT)((dest_ip[0] + dest_ip[1] + dest_ip[2] + dest_ip[3]) %
-                   (NX_IPV6_NEIGHBOR_CACHE_SIZE));
-
-#ifndef NX_DISABLE_IPV6_PURGE_UNUSED_CACHE_ENTRIES
-
-    /* Set the lowest possible timer ticks left to compare to. */
-    stale_timer_ticks = 0;
-
-    /* Start out at a very high number of remaining ticks to compare to. */
-    timer_ticks_left = 0xFFFFFFFF;
-#endif
-
-    /* Loop through all the entries. */
-    for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++, index++)
-    {
-
-        /* Check for overflow */
-        if (index == NX_IPV6_NEIGHBOR_CACHE_SIZE)
-        {
-
-            /* Start back at the first table entry. */
-            index = 0;
-        }
-
-        /* Is the current entry available? */
-        if (ip_ptr -> nx_ipv6_nd_cache[index].nx_nd_cache_nd_status == ND_CACHE_STATE_INVALID)
-        {
-
-            /* There is a chance the entry to add does not exist in the table. We create one using the
-               invalid entry. */
-            first_available = index;
-            break;
-        }
+  /* Compute a simple hash based on the destination IP address. */
+  index = (UINT)((dest_ip[0] + dest_ip[1] + dest_ip[2] + dest_ip[3]) %
+                 (NX_IPV6_NEIGHBOR_CACHE_SIZE));
 
 #ifndef NX_DISABLE_IPV6_PURGE_UNUSED_CACHE_ENTRIES
-        /* Skip over routers and static entries. */
-        if (ip_ptr -> nx_ipv6_nd_cache[index].nx_nd_cache_is_router != NX_NULL || ip_ptr -> nx_ipv6_nd_cache[index].nx_nd_cache_is_static)
-        {
-            continue;
-        }
 
-        /* Purging is enabled;
-           Attempt to find a STALE entry and if there is more than one,
-           choose the oldest one e.g. the highest timer ticks elapsed. */
+  /* Set the lowest possible timer ticks left to compare to. */
+  stale_timer_ticks = 0;
 
-        /* Check for stale entries. These are the best candidates for 'recycling.' */
-        if (ip_ptr -> nx_ipv6_nd_cache[index].nx_nd_cache_nd_status == ND_CACHE_STATE_STALE)
-        {
-
-            /* Find the 'Stale' cache entry with the highest timer tick since
-               timer tick is incremented in the Stale state.*/
-            if (ip_ptr -> nx_ipv6_nd_cache[index].nx_nd_cache_timer_tick > stale_timer_ticks)
-            {
-                /* Set this entry as the oldest stale entry. */
-                stale_timer_ticks = (UINT)ip_ptr -> nx_ipv6_nd_cache[index].nx_nd_cache_timer_tick;
-                first_available = index;
-            }
-        }
-        /* Next try finding a REACHABLE entry closest to its cache table expiration date. */
-        else if (stale_timer_ticks == 0 &&
-                 ip_ptr -> nx_ipv6_nd_cache[index].nx_nd_cache_nd_status == ND_CACHE_STATE_REACHABLE)
-        {
-
-            /* Is this entry older that our previous oldest entry? */
-            if (ip_ptr -> nx_ipv6_nd_cache[index].nx_nd_cache_timer_tick < timer_ticks_left)
-            {
-
-                /* Set this entry as the oldest entry using timer ticks left. */
-                timer_ticks_left = (UINT)ip_ptr -> nx_ipv6_nd_cache[index].nx_nd_cache_timer_tick;
-                first_available = index;
-            }
-        }
+  /* Start out at a very high number of remaining ticks to compare to. */
+  timer_ticks_left = 0xFFFFFFFF;
 #endif
+
+  /* Loop through all the entries. */
+  for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++, index++) {
+
+    /* Check for overflow */
+    if (index == NX_IPV6_NEIGHBOR_CACHE_SIZE) {
+
+      /* Start back at the first table entry. */
+      index = 0;
     }
 
-    /* Did not find a available entry. */
-    if (first_available == NX_IPV6_NEIGHBOR_CACHE_SIZE)
-    {
+    /* Is the current entry available? */
+    if (ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_nd_status ==
+        ND_CACHE_STATE_INVALID) {
 
-        /* Return unsuccessful status. */
-        return(NX_NOT_SUCCESSFUL);
+      /* There is a chance the entry to add does not exist in the table. We
+         create one using the invalid entry. */
+      first_available = index;
+      break;
     }
 
-    /* Yes; before we invalidate and delete the entry, we need to
-       clean the nd cache. */
-    _nx_nd_cache_delete_internal(ip_ptr, &ip_ptr -> nx_ipv6_nd_cache[first_available]);
+#ifndef NX_DISABLE_IPV6_PURGE_UNUSED_CACHE_ENTRIES
+    /* Skip over routers and static entries. */
+    if (ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_is_router != NX_NULL ||
+        ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_is_static) {
+      continue;
+    }
 
-    /* Record the IP address. */
-    COPY_IPV6_ADDRESS(dest_ip, ip_ptr -> nx_ipv6_nd_cache[first_available].nx_nd_cache_dest_ip);
+    /* Purging is enabled;
+       Attempt to find a STALE entry and if there is more than one,
+       choose the oldest one e.g. the highest timer ticks elapsed. */
 
-    /* A new entry starts with CREATED status. */
-    ip_ptr -> nx_ipv6_nd_cache[first_available].nx_nd_cache_nd_status = ND_CACHE_STATE_CREATED;
+    /* Check for stale entries. These are the best candidates for 'recycling.'
+     */
+    if (ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_nd_status ==
+        ND_CACHE_STATE_STALE) {
 
-    ip_ptr -> nx_ipv6_nd_cache[first_available].nx_nd_cache_outgoing_address = iface_address;
+      /* Find the 'Stale' cache entry with the highest timer tick since
+         timer tick is incremented in the Stale state.*/
+      if (ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_timer_tick >
+          stale_timer_ticks) {
+        /* Set this entry as the oldest stale entry. */
+        stale_timer_ticks =
+            (UINT)ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_timer_tick;
+        first_available = index;
+      }
+    }
+    /* Next try finding a REACHABLE entry closest to its cache table expiration
+       date. */
+    else if (stale_timer_ticks == 0 &&
+             ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_nd_status ==
+                 ND_CACHE_STATE_REACHABLE) {
 
-    ip_ptr -> nx_ipv6_nd_cache[first_available].nx_nd_cache_interface_ptr = iface_address -> nxd_ipv6_address_attached;
+      /* Is this entry older that our previous oldest entry? */
+      if (ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_timer_tick <
+          timer_ticks_left) {
 
-    /* Release the protection. */
-    *nd_cache_entry = &ip_ptr -> nx_ipv6_nd_cache[first_available];
+        /* Set this entry as the oldest entry using timer ticks left. */
+        timer_ticks_left =
+            (UINT)ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_timer_tick;
+        first_available = index;
+      }
+    }
+#endif
+  }
 
-    return(NX_SUCCESS);
+  /* Did not find a available entry. */
+  if (first_available == NX_IPV6_NEIGHBOR_CACHE_SIZE) {
+
+    /* Return unsuccessful status. */
+    return (NX_NOT_SUCCESSFUL);
+  }
+
+  /* Yes; before we invalidate and delete the entry, we need to
+     clean the nd cache. */
+  _nx_nd_cache_delete_internal(ip_ptr,
+                               &ip_ptr->nx_ipv6_nd_cache[first_available]);
+
+  /* Record the IP address. */
+  COPY_IPV6_ADDRESS(
+      dest_ip, ip_ptr->nx_ipv6_nd_cache[first_available].nx_nd_cache_dest_ip);
+
+  /* A new entry starts with CREATED status. */
+  ip_ptr->nx_ipv6_nd_cache[first_available].nx_nd_cache_nd_status =
+      ND_CACHE_STATE_CREATED;
+
+  ip_ptr->nx_ipv6_nd_cache[first_available].nx_nd_cache_outgoing_address =
+      iface_address;
+
+  ip_ptr->nx_ipv6_nd_cache[first_available].nx_nd_cache_interface_ptr =
+      iface_address->nxd_ipv6_address_attached;
+
+  /* Release the protection. */
+  *nd_cache_entry = &ip_ptr->nx_ipv6_nd_cache[first_available];
+
+  return (NX_SUCCESS);
 }
 
 #endif /* FEATURE_NX_IPV6 */
-

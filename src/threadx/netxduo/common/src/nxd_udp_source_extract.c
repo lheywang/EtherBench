@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_udp.h"
-#include "../include/nx_ipv6.h"
 #include "../include/nx_ipv4.h"
-
+#include "../include/nx_ipv6.h"
+#include "../include/nx_udp.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,71 +72,70 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxd_udp_source_extract(NX_PACKET *packet_ptr, NXD_ADDRESS *ip_address, UINT *port)
-{
+UINT _nxd_udp_source_extract(NX_PACKET *packet_ptr, NXD_ADDRESS *ip_address,
+                             UINT *port) {
 
 #ifdef TX_ENABLE_EVENT_TRACE
-ULONG  ip_address_word3 = 0;
-ULONG  ip_version;
+  ULONG ip_address_word3 = 0;
+  ULONG ip_version;
 #endif
-ULONG *temp_ptr;
+  ULONG *temp_ptr;
 
+  /* Build an address to the current top of the packet.  */
+  /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+   * necessary  */
+  temp_ptr = (ULONG *)packet_ptr->nx_packet_prepend_ptr;
 
-    /* Build an address to the current top of the packet.  */
-    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-    temp_ptr =  (ULONG *)packet_ptr -> nx_packet_prepend_ptr;
+  /* Pickup the source port from the UDP header.  */
+  *port = (UINT)(*(temp_ptr - 2) >> NX_SHIFT_BY_16);
 
-    /* Pickup the source port from the UDP header.  */
-    *port =  (UINT)(*(temp_ptr - 2) >> NX_SHIFT_BY_16);
-
-    /* Determine IPv4 or IPv6 connectivity. */
-    ip_address -> nxd_ip_version = packet_ptr -> nx_packet_ip_version;
+  /* Determine IPv4 or IPv6 connectivity. */
+  ip_address->nxd_ip_version = packet_ptr->nx_packet_ip_version;
 
 #ifndef NX_DISABLE_IPV4
-    if (ip_address -> nxd_ip_version == NX_IP_VERSION_V4)
-    {
+  if (ip_address->nxd_ip_version == NX_IP_VERSION_V4) {
 
     NX_IPV4_HEADER *ipv4_header;
 
-        /* Obtain the IPv4 header. */
-        /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-        ipv4_header = (NX_IPV4_HEADER *)packet_ptr -> nx_packet_ip_header;
+    /* Obtain the IPv4 header. */
+    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+     * necessary  */
+    ipv4_header = (NX_IPV4_HEADER *)packet_ptr->nx_packet_ip_header;
 
-        /* Pickup the source IP address.  */
-        ip_address -> nxd_ip_address.v4 =  ipv4_header -> nx_ip_header_source_ip;
+    /* Pickup the source IP address.  */
+    ip_address->nxd_ip_address.v4 = ipv4_header->nx_ip_header_source_ip;
 
 #ifdef TX_ENABLE_EVENT_TRACE
-        ip_version = NX_IP_VERSION_V4;
-        ip_address_word3 = ip_address -> nxd_ip_address.v4;
+    ip_version = NX_IP_VERSION_V4;
+    ip_address_word3 = ip_address->nxd_ip_address.v4;
 #endif /* TX_ENABLE_EVENT_TRACE */
-    }
+  }
 #endif /* NX_DISABLE_IPV4 */
 #ifdef FEATURE_NX_IPV6
-    if (ip_address -> nxd_ip_version == NX_IP_VERSION_V6)
-    {
+  if (ip_address->nxd_ip_version == NX_IP_VERSION_V6) {
     NX_IPV6_HEADER *ipv6_header;
 
+    /* Obtain the IPv6 header. */
+    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+     * necessary  */
+    ipv6_header = (NX_IPV6_HEADER *)packet_ptr->nx_packet_ip_header;
 
-        /* Obtain the IPv6 header. */
-        /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-        ipv6_header = (NX_IPV6_HEADER *)packet_ptr -> nx_packet_ip_header;
-
-        COPY_IPV6_ADDRESS(ipv6_header -> nx_ip_header_source_ip,
-                          ip_address -> nxd_ip_address.v6);
+    COPY_IPV6_ADDRESS(ipv6_header->nx_ip_header_source_ip,
+                      ip_address->nxd_ip_address.v6);
 
 #ifdef TX_ENABLE_EVENT_TRACE
-        ip_version = NX_IP_VERSION_V6;
-        ip_address_word3 = ip_address -> nxd_ip_address.v6[3];
+    ip_version = NX_IP_VERSION_V6;
+    ip_address_word3 = ip_address->nxd_ip_address.v6[3];
 #endif /* TX_ENABLE_EVENT_TRACE */
-    }
+  }
 #endif /* FEATURE_NX_IPV6 */
 
 #ifdef TX_ENABLE_EVENT_TRACE
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NXD_TRACE_UDP_SOURCE_EXTRACT, packet_ptr, ip_version, ip_address_word3, *port, NX_TRACE_UDP_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NXD_TRACE_UDP_SOURCE_EXTRACT, packet_ptr, ip_version,
+                          ip_address_word3, *port, NX_TRACE_UDP_EVENTS, 0, 0);
 #endif /* TX_ENABLE_EVENT_TRACE */
 
-    return(NX_SUCCESS);
+  return (NX_SUCCESS);
 }
-

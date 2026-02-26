@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_block_pool.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -69,35 +66,28 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_block_pool_prioritize(TX_BLOCK_POOL *pool_ptr)
-{
+UINT _txe_block_pool_prioritize(TX_BLOCK_POOL *pool_ptr) {
 
-UINT    status;
+  UINT status;
 
+  /* Check for an invalid block memory pool pointer.  */
+  if (pool_ptr == TX_NULL) {
 
-    /* Check for an invalid block memory pool pointer.  */
-    if (pool_ptr == TX_NULL)
-    {
+    /* Block memory pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  }
 
-        /* Block memory pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
-    }
+  /* Now check for invalid pool ID.  */
+  else if (pool_ptr->tx_block_pool_id != TX_BLOCK_POOL_ID) {
 
-    /* Now check for invalid pool ID.  */
-    else if (pool_ptr -> tx_block_pool_id != TX_BLOCK_POOL_ID)
-    {
+    /* Block memory pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  } else {
 
-        /* Block memory pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
-    }
-    else
-    {
+    /* Call actual block pool prioritize function.  */
+    status = _tx_block_pool_prioritize(pool_ptr);
+  }
 
-        /* Call actual block pool prioritize function.  */
-        status =  _tx_block_pool_prioritize(pool_ptr);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,20 +21,17 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_ipv6.h"
 #include "../include/nx_icmpv6.h"
+#include "../include/nx_ipv6.h"
 
 #ifdef NX_IPSEC_ENABLE
 #include "nx_ipsec.h"
 #endif /* NX_IPSEC_ENABLE */
 
-
 #ifdef FEATURE_NX_IPV6
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -82,51 +78,51 @@
 /**************************************************************************/
 
 #ifndef NX_DISABLE_IPV6_DAD
-VOID _nx_icmpv6_DAD_failure(NX_IP *ip_ptr, NXD_IPV6_ADDRESS *ipv6_address)
-{
+VOID _nx_icmpv6_DAD_failure(NX_IP *ip_ptr, NXD_IPV6_ADDRESS *ipv6_address) {
 #ifdef NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY
-UINT              interface_index;
-UINT              ipv6_addr_index;
+  UINT interface_index;
+  UINT ipv6_addr_index;
 #endif /* NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY */
-NXD_IPV6_ADDRESS *address_ptr;
+  NXD_IPV6_ADDRESS *address_ptr;
 
-    /* Set the interface to an invalid state. */
-    ipv6_address -> nxd_ipv6_address_state = NX_IPV6_ADDR_STATE_UNKNOWN;
-    ipv6_address -> nxd_ipv6_address_valid = NX_FALSE;
+  /* Set the interface to an invalid state. */
+  ipv6_address->nxd_ipv6_address_state = NX_IPV6_ADDR_STATE_UNKNOWN;
+  ipv6_address->nxd_ipv6_address_valid = NX_FALSE;
 
-    /* Indicate the DAD process is disabled. */
-    ipv6_address -> nxd_ipv6_address_DupAddrDetectTransmit = 0;
+  /* Indicate the DAD process is disabled. */
+  ipv6_address->nxd_ipv6_address_DupAddrDetectTransmit = 0;
 #ifdef NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY
-    if (ip_ptr -> nx_ipv6_address_change_notify)
-    {
-        ipv6_addr_index = (ULONG)ipv6_address -> nxd_ipv6_address_index;
-        interface_index = (ULONG)ipv6_address -> nxd_ipv6_address_attached -> nx_interface_index;
-        ip_ptr -> nx_ipv6_address_change_notify(ip_ptr, NX_IPV6_ADDRESS_DAD_FAILURE, interface_index, ipv6_addr_index, &ipv6_address -> nxd_ipv6_address[0]);
-    }
+  if (ip_ptr->nx_ipv6_address_change_notify) {
+    ipv6_addr_index = (ULONG)ipv6_address->nxd_ipv6_address_index;
+    interface_index =
+        (ULONG)ipv6_address->nxd_ipv6_address_attached->nx_interface_index;
+    ip_ptr->nx_ipv6_address_change_notify(ip_ptr, NX_IPV6_ADDRESS_DAD_FAILURE,
+                                          interface_index, ipv6_addr_index,
+                                          &ipv6_address->nxd_ipv6_address[0]);
+  }
 #else
-    NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_ptr);
 #endif /* NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY */
 
-    /* Remove address from interface. */
-    if (ipv6_address == ipv6_address -> nxd_ipv6_address_attached -> nxd_interface_ipv6_address_list_head)
-    {
-        ipv6_address -> nxd_ipv6_address_attached -> nxd_interface_ipv6_address_list_head = ipv6_address -> nxd_ipv6_address_next;
-    }
-    else
-    {
+  /* Remove address from interface. */
+  if (ipv6_address == ipv6_address->nxd_ipv6_address_attached
+                          ->nxd_interface_ipv6_address_list_head) {
+    ipv6_address->nxd_ipv6_address_attached
+        ->nxd_interface_ipv6_address_list_head =
+        ipv6_address->nxd_ipv6_address_next;
+  } else {
 
-        for (address_ptr = ipv6_address -> nxd_ipv6_address_attached -> nxd_interface_ipv6_address_list_head;
-             address_ptr != NX_NULL;
-             address_ptr = address_ptr -> nxd_ipv6_address_next)
-        {
-            if (address_ptr -> nxd_ipv6_address_next == ipv6_address)
-            {
-                address_ptr -> nxd_ipv6_address_next = ipv6_address -> nxd_ipv6_address_next;
-            }
-        }
+    for (address_ptr = ipv6_address->nxd_ipv6_address_attached
+                           ->nxd_interface_ipv6_address_list_head;
+         address_ptr != NX_NULL;
+         address_ptr = address_ptr->nxd_ipv6_address_next) {
+      if (address_ptr->nxd_ipv6_address_next == ipv6_address) {
+        address_ptr->nxd_ipv6_address_next =
+            ipv6_address->nxd_ipv6_address_next;
+      }
     }
+  }
 }
 
-#endif  /* NX_DISABLE_IPV6_DAD */
-#endif  /* FEATURE_NX_IPV6 */
-
+#endif /* NX_DISABLE_IPV6_DAD */
+#endif /* FEATURE_NX_IPV6 */

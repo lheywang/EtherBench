@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_block_pool.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -78,39 +75,34 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_block_pool_info_get(TX_BLOCK_POOL *pool_ptr, CHAR **name, ULONG *available_blocks,
-                    ULONG *total_blocks, TX_THREAD **first_suspended,
-                    ULONG *suspended_count, TX_BLOCK_POOL **next_pool)
-{
+UINT _txe_block_pool_info_get(TX_BLOCK_POOL *pool_ptr, CHAR **name,
+                              ULONG *available_blocks, ULONG *total_blocks,
+                              TX_THREAD **first_suspended,
+                              ULONG *suspended_count,
+                              TX_BLOCK_POOL **next_pool) {
 
+  UINT status;
 
-UINT    status;
+  /* Check for an invalid block pool pointer.  */
+  if (pool_ptr == TX_NULL) {
 
+    /* Block pool pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  }
 
-    /* Check for an invalid block pool pointer.  */
-    if (pool_ptr == TX_NULL)
-    {
+  /* Now check the pool ID.  */
+  else if (pool_ptr->tx_block_pool_id != TX_BLOCK_POOL_ID) {
 
-        /* Block pool pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
-    }
+    /* Block pool pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  } else {
 
-    /* Now check the pool ID.  */
-    else if (pool_ptr -> tx_block_pool_id != TX_BLOCK_POOL_ID)
-    {
+    /* Otherwise, call the actual block pool information get service.  */
+    status =
+        _tx_block_pool_info_get(pool_ptr, name, available_blocks, total_blocks,
+                                first_suspended, suspended_count, next_pool);
+  }
 
-        /* Block pool pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
-    }
-    else
-    {
-
-        /* Otherwise, call the actual block pool information get service.  */
-        status =  _tx_block_pool_info_get(pool_ptr, name, available_blocks,
-                        total_blocks, first_suspended, suspended_count, next_pool);
-    }
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

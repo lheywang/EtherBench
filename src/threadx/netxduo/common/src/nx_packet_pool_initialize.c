@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,17 +21,14 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Locate NetX global Packet Pool Component data in this file.  */
 
 #define NX_PACKET_POOL_INIT
-
 
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_packet.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,12 +69,10 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID    _nx_packet_pool_initialize(VOID)
-{
+VOID _nx_packet_pool_initialize(VOID) {
 
-    /* Initialize the head pointer of the created packet pools list and the
-       number of packet pools created.  */
-    _nx_packet_pool_created_ptr =        NX_NULL;
-    _nx_packet_pool_created_count =      0;
+  /* Initialize the head pointer of the created packet pools list and the
+     number of packet pools created.  */
+  _nx_packet_pool_created_ptr = NX_NULL;
+  _nx_packet_pool_created_count = 0;
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_file.h"
 
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -70,25 +67,21 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_file_close(FX_FILE *file_ptr)
-{
+UINT _fxe_file_close(FX_FILE *file_ptr) {
 
-UINT status;
+  UINT status;
 
+  /* Check for a null file pointer.  */
+  if (file_ptr == FX_NULL) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a null file pointer.  */
-    if (file_ptr == FX_NULL)
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual file close service.  */
+  status = _fx_file_close(file_ptr);
 
-    /* Call actual file close service.  */
-    status =  _fx_file_close(file_ptr);
-
-    /* Return status to the caller.  */
-    return(status);
+  /* Return status to the caller.  */
+  return (status);
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_file.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -81,10 +78,10 @@
 /*                                                                        */
 /**************************************************************************/
 #ifndef FX_DISABLE_ONE_LINE_FUNCTION
-UINT  _fx_file_relative_seek(FX_FILE *file_ptr, ULONG byte_offset, UINT seek_from)
-{
+UINT _fx_file_relative_seek(FX_FILE *file_ptr, ULONG byte_offset,
+                            UINT seek_from) {
 
-    return(_fx_file_extended_relative_seek(file_ptr, (ULONG64)byte_offset, seek_from));
+  return (_fx_file_extended_relative_seek(file_ptr, (ULONG64)byte_offset,
+                                          seek_from));
 }
 #endif /* FX_DISABLE_ONE_LINE_FUNCTION */
-

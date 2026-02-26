@@ -94,7 +94,6 @@ UINT MX_USBX_Device_Init(void) {
  * @retval none
  */
 VOID app_ux_device_thread_entry(ULONG thread_input) {
-
   TX_PARAMETER_NOT_USED(thread_input);
   UINT status;
 
@@ -132,8 +131,6 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
   );
 
   if (status != UX_SUCCESS) {
-    // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is
-    // wrong)
     while (1) {
       tx_thread_sleep(100);
     }
@@ -147,8 +144,6 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
                                           &cdc_mux_param);
 
   if (status != UX_SUCCESS) {
-    // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is
-    // wrong)
     while (1) {
       tx_thread_sleep(100);
     }
@@ -162,8 +157,6 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
                                           &cdc_term_param);
 
   if (status != UX_SUCCESS) {
-    // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math is
-    // wrong)
     while (1) {
       tx_thread_sleep(100);
     }

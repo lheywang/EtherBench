@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,21 +69,22 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_ip_interface_physical_address_get(NX_IP *ip_ptr, UINT interface_index,
-                                            ULONG *physical_msw, ULONG *physical_lsw)
-{
+UINT _nx_ip_interface_physical_address_get(NX_IP *ip_ptr, UINT interface_index,
+                                           ULONG *physical_msw,
+                                           ULONG *physical_lsw) {
 
-    /* Obtain protection on this IP instance. */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Obtain protection on this IP instance. */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-    /* Get new physical address. */
-    *physical_msw = ip_ptr -> nx_ip_interface[interface_index].nx_interface_physical_address_msw;
-    *physical_lsw = ip_ptr -> nx_ip_interface[interface_index].nx_interface_physical_address_lsw;
+  /* Get new physical address. */
+  *physical_msw = ip_ptr->nx_ip_interface[interface_index]
+                      .nx_interface_physical_address_msw;
+  *physical_lsw = ip_ptr->nx_ip_interface[interface_index]
+                      .nx_interface_physical_address_lsw;
 
-    /* Release the protection. */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+  /* Release the protection. */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    /* Return completion status.  */
-    return(NX_SUCCESS);
+  /* Return completion status.  */
+  return (NX_SUCCESS);
 }
-

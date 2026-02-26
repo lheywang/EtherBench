@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,16 +20,13 @@
 /**************************************************************************/
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 
-
 #ifdef FX_ENABLE_EXFAT
 #include "fx_directory_exFAT.h"
 #include "fx_utility.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,38 +68,34 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-USHORT  _fx_utility_exFAT_name_hash_get(CHAR *name)
-{
+USHORT _fx_utility_exFAT_name_hash_get(CHAR *name) {
 
-USHORT hash;
+  USHORT hash;
 
+  /* Initialize hash to 0. */
+  hash = 0;
 
-    /* Initialize hash to 0. */
-    hash = 0;
+  /* Is there a name?  */
+  if (!name) {
 
-    /* Is there a name?  */
-    if (!name)
-    {
+    /* No, just return 0.  */
+    return (0);
+  }
 
-        /* No, just return 0.  */
-        return(0);
-    }
+  /* Create hash for name.  */
+  while (*name) {
 
-    /* Create hash for name.  */
-    while (*name)
-    {
+    /* Compute hash.  */
+    hash = (USHORT)(((hash >> 1) | (hash << 15)) +
+                    _fx_utility_exFAT_upcase_get((USHORT)*name));
+    hash = (USHORT)((hash >> 1) | (hash << 15));
 
-        /* Compute hash.  */
-        hash = (USHORT)(((hash >> 1) | (hash << 15)) + _fx_utility_exFAT_upcase_get((USHORT)*name));
-        hash = (USHORT)((hash >> 1) | (hash << 15));
+    /* Move to next character of name.  */
+    name++;
+  }
 
-        /* Move to next character of name.  */
-        name++;
-    }
-
-    /* Return the hash.  */
-    return(hash);
+  /* Return the hash.  */
+  return (hash);
 }
 
 #endif /* FX_ENABLE_EXFAT */
-

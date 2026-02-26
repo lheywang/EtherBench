@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -70,37 +67,36 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_ip_fragment_enable(NX_IP *ip_ptr)
-{
+UINT _nx_ip_fragment_enable(NX_IP *ip_ptr) {
 #ifndef NX_DISABLE_FRAGMENTATION
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_FRAGMENT_ENABLE, ip_ptr, 0, 0, 0, NX_TRACE_IP_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_FRAGMENT_ENABLE, ip_ptr, 0, 0, 0,
+                          NX_TRACE_IP_EVENTS, 0, 0);
 
-    /* Disable interrupts temporarily.  */
-    TX_DISABLE
+  /* Disable interrupts temporarily.  */
+  TX_DISABLE
 
-    /* Setup the IP fragment processing routine pointer.  */
-    ip_ptr -> nx_ip_fragment_processing =  _nx_ip_fragment_packet;
+  /* Setup the IP fragment processing routine pointer.  */
+  ip_ptr->nx_ip_fragment_processing = _nx_ip_fragment_packet;
 
-    /* Setup the IP fragment assembly routine pointer.  */
-    ip_ptr -> nx_ip_fragment_assembly =  _nx_ip_fragment_assembly;
+  /* Setup the IP fragment assembly routine pointer.  */
+  ip_ptr->nx_ip_fragment_assembly = _nx_ip_fragment_assembly;
 
-    /* Setup the IP fragment timeout routine pointer.  */
-    ip_ptr -> nx_ip_fragment_timeout_check =  _nx_ip_fragment_timeout_check;
+  /* Setup the IP fragment timeout routine pointer.  */
+  ip_ptr->nx_ip_fragment_timeout_check = _nx_ip_fragment_timeout_check;
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Return success to the caller.  */
-    return(NX_SUCCESS);
+  /* Return success to the caller.  */
+  return (NX_SUCCESS);
 
 #else /* NX_DISABLE_FRAGMENTATION */
-    NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_ptr);
 
-    return(NX_NOT_ENABLED);
+  return (NX_NOT_ENABLED);
 
 #endif /* NX_DISABLE_FRAGMENTATION */
 }
-

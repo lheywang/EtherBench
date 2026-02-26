@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_directory.h"
 
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,25 +69,23 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_directory_rename(FX_MEDIA *media_ptr, CHAR *old_directory_name, CHAR *new_directory_name)
-{
+UINT _fxe_directory_rename(FX_MEDIA *media_ptr, CHAR *old_directory_name,
+                           CHAR *new_directory_name) {
 
-UINT status;
+  UINT status;
 
+  /* Check for a null media pointer.  */
+  if (media_ptr == FX_NULL) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a null media pointer.  */
-    if (media_ptr == FX_NULL)
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual directory rename service.  */
+  status =
+      _fx_directory_rename(media_ptr, old_directory_name, new_directory_name);
 
-    /* Call actual directory rename service.  */
-    status =  _fx_directory_rename(media_ptr, old_directory_name, new_directory_name);
-
-    /* Directory rename is complete, return status.  */
-    return(status);
+  /* Directory rename is complete, return status.  */
+  return (status);
 }
-

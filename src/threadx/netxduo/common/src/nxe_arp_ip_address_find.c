@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,17 +21,15 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_ip.h"
 #include "../include/nx_arp.h"
+#include "../include/nx_ip.h"
 
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -78,47 +75,43 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_arp_ip_address_find(NX_IP *ip_ptr, ULONG *ip_address,
-                               ULONG physical_msw, ULONG physical_lsw)
-{
+UINT _nxe_arp_ip_address_find(NX_IP *ip_ptr, ULONG *ip_address,
+                              ULONG physical_msw, ULONG physical_lsw) {
 
 #ifndef NX_DISABLE_IPV4
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
+      (ip_address == NX_NULL)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID) || (ip_address == NX_NULL))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid physical address.  */
+  if ((physical_msw | physical_lsw) == 0) {
+    return (NX_INVALID_PARAMETERS);
+  }
 
-    /* Check for invalid physical address.  */
-    if ((physical_msw | physical_lsw) == 0)
-    {
-        return(NX_INVALID_PARAMETERS);
-    }
+  /* Check to see if ARP is enabled.  */
+  if (!ip_ptr->nx_ip_arp_allocate) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if ARP is enabled.  */
-    if (!ip_ptr -> nx_ip_arp_allocate)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual ARP IP address find function.  */
+  status =
+      _nx_arp_ip_address_find(ip_ptr, ip_address, physical_msw, physical_lsw);
 
-    /* Call actual ARP IP address find function.  */
-    status =  _nx_arp_ip_address_find(ip_ptr, ip_address, physical_msw, physical_lsw);
+  /* Return completion status.  */
+  return (status);
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(ip_address);
+  NX_PARAMETER_NOT_USED(physical_msw);
+  NX_PARAMETER_NOT_USED(physical_lsw);
 
-    /* Return completion status.  */
-    return(status);
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(ip_address);
-    NX_PARAMETER_NOT_USED(physical_msw);
-    NX_PARAMETER_NOT_USED(physical_lsw);
-
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

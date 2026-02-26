@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -84,70 +82,63 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxde_ipv6_address_set(NX_IP *ip_ptr, UINT if_index, NXD_ADDRESS *ip_address, ULONG prefix_length, UINT *address_index)
-{
+UINT _nxde_ipv6_address_set(NX_IP *ip_ptr, UINT if_index,
+                            NXD_ADDRESS *ip_address, ULONG prefix_length,
+                            UINT *address_index) {
 #ifdef FEATURE_NX_IPV6
 
-UINT  status;
-ULONG AddressType;
+  UINT status;
+  ULONG AddressType;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
+  /* Check for invalid IP addresses.  */
+
+  /* (Do not apply to autoconfigured linklocal addresses) */
+  if ((ip_address != NULL) && (prefix_length != 10)) {
+
+    /* A non null IP address must have the version set. */
+    if (ip_address->nxd_ip_version != NX_IP_VERSION_V6) {
+      return (NX_IP_ADDRESS_ERROR);
     }
+  }
 
-    /* Check for invalid IP addresses.  */
+  if ((if_index >= NX_MAX_PHYSICAL_INTERFACES) ||
+      (ip_ptr->nx_ip_interface[if_index].nx_interface_valid != NX_TRUE)) {
+    return (NX_INVALID_INTERFACE);
+  }
 
-    /* (Do not apply to autoconfigured linklocal addresses) */
-    if ((ip_address != NULL) && (prefix_length != 10))
-    {
+  /* Make sure the address is unicast address. */
+  /* Find out the type of the incoming IP address. */
+  if (ip_address) {
+    AddressType = IPv6_Address_Type(ip_address->nxd_ip_address.v6);
 
-        /* A non null IP address must have the version set. */
-        if (ip_address -> nxd_ip_version != NX_IP_VERSION_V6)
-        {
-            return(NX_IP_ADDRESS_ERROR);
-        }
+    if ((AddressType & IPV6_ADDRESS_UNICAST) == 0) {
+      return (NX_IP_ADDRESS_ERROR);
     }
+  }
 
-    if ((if_index >= NX_MAX_PHYSICAL_INTERFACES) ||
-        (ip_ptr -> nx_ip_interface[if_index].nx_interface_valid != NX_TRUE))
-    {
-        return(NX_INVALID_INTERFACE);
-    }
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
+  /* Call actual IP address set function.  */
+  status = _nxd_ipv6_address_set(ip_ptr, if_index, ip_address, prefix_length,
+                                 address_index);
 
-    /* Make sure the address is unicast address. */
-    /* Find out the type of the incoming IP address. */
-    if (ip_address)
-    {
-        AddressType = IPv6_Address_Type(ip_address -> nxd_ip_address.v6);
-
-        if ((AddressType & IPV6_ADDRESS_UNICAST) == 0)
-        {
-            return(NX_IP_ADDRESS_ERROR);
-        }
-    }
-
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
-
-    /* Call actual IP address set function.  */
-    status =  _nxd_ipv6_address_set(ip_ptr, if_index, ip_address, prefix_length, address_index);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(if_index);
-    NX_PARAMETER_NOT_USED(ip_address);
-    NX_PARAMETER_NOT_USED(prefix_length);
-    NX_PARAMETER_NOT_USED(address_index);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(if_index);
+  NX_PARAMETER_NOT_USED(ip_address);
+  NX_PARAMETER_NOT_USED(prefix_length);
+  NX_PARAMETER_NOT_USED(address_index);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }
-

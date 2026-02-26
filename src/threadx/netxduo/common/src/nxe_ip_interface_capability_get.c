@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -77,44 +75,41 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_ip_interface_capability_get(NX_IP *ip_ptr, UINT interface_index, ULONG *interface_capability_flag)
-{
+UINT _nxe_ip_interface_capability_get(NX_IP *ip_ptr, UINT interface_index,
+                                      ULONG *interface_capability_flag) {
 #ifdef NX_ENABLE_INTERFACE_CAPABILITY
 
-UINT status;
+  UINT status;
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid interface index. */
-    if (interface_index >= NX_MAX_PHYSICAL_INTERFACES)
-    {
-        return(NX_INVALID_INTERFACE);
-    }
+  /* Check for invalid interface index. */
+  if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
+    return (NX_INVALID_INTERFACE);
+  }
 
-    /* Check for invalid pointer to the interface capability flag. */
-    if (interface_capability_flag == NX_NULL)
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid pointer to the interface capability flag. */
+  if (interface_capability_flag == NX_NULL) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    status = _nx_ip_interface_capability_get(ip_ptr, interface_index, interface_capability_flag);
+  status = _nx_ip_interface_capability_get(ip_ptr, interface_index,
+                                           interface_capability_flag);
 
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 
-#else /* NX_ENABLE_INTERFACE_CAPABILITY */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(interface_index);
-    NX_PARAMETER_NOT_USED(interface_capability_flag);
+#else  /* NX_ENABLE_INTERFACE_CAPABILITY */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(interface_index);
+  NX_PARAMETER_NOT_USED(interface_capability_flag);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* NX_ENABLE_INTERFACE_CAPABILITY */
 }
-

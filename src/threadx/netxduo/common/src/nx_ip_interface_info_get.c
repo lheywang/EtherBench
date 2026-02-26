@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -82,69 +79,64 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_ip_interface_info_get(NX_IP *ip_ptr, UINT interface_index, CHAR **interface_name,
-                               ULONG *ip_address, ULONG *network_mask, ULONG *mtu_size,
-                               ULONG *physical_address_msw, ULONG *physical_address_lsw)
-{
-NX_INTERFACE *nx_interface;
+UINT _nx_ip_interface_info_get(NX_IP *ip_ptr, UINT interface_index,
+                               CHAR **interface_name, ULONG *ip_address,
+                               ULONG *network_mask, ULONG *mtu_size,
+                               ULONG *physical_address_msw,
+                               ULONG *physical_address_lsw) {
+  NX_INTERFACE *nx_interface;
 
 #ifdef NX_DISABLE_IPV4
-    NX_PARAMETER_NOT_USED(ip_address);
-    NX_PARAMETER_NOT_USED(network_mask);
+  NX_PARAMETER_NOT_USED(ip_address);
+  NX_PARAMETER_NOT_USED(network_mask);
 #endif /* NX_DISABLE_IPV4 */
 
-    nx_interface = &(ip_ptr -> nx_ip_interface[interface_index]);
+  nx_interface = &(ip_ptr->nx_ip_interface[interface_index]);
 
-    if (!nx_interface -> nx_interface_valid)
-    {
-        return(NX_INVALID_INTERFACE);
-    }
+  if (!nx_interface->nx_interface_valid) {
+    return (NX_INVALID_INTERFACE);
+  }
 
-    if (interface_name)
-    {
-        *interface_name = nx_interface -> nx_interface_name;
-    }
+  if (interface_name) {
+    *interface_name = nx_interface->nx_interface_name;
+  }
 
 #ifndef NX_DISABLE_IPV4
-    if (ip_address)
-    {
-        *ip_address = nx_interface -> nx_interface_ip_address;
-    }
+  if (ip_address) {
+    *ip_address = nx_interface->nx_interface_ip_address;
+  }
 
-    if (network_mask)
-    {
-        *network_mask = nx_interface -> nx_interface_ip_network_mask;
-    }
+  if (network_mask) {
+    *network_mask = nx_interface->nx_interface_ip_network_mask;
+  }
 #endif /* !NX_DISABLE_IPV4  */
 
-    if (mtu_size)
-    {
-        *mtu_size = nx_interface -> nx_interface_ip_mtu_size;
-    }
+  if (mtu_size) {
+    *mtu_size = nx_interface->nx_interface_ip_mtu_size;
+  }
 
-    if (physical_address_msw)
-    {
-        *physical_address_msw = nx_interface -> nx_interface_physical_address_msw;
-    }
+  if (physical_address_msw) {
+    *physical_address_msw = nx_interface->nx_interface_physical_address_msw;
+  }
 
-    if (physical_address_lsw)
-    {
-        *physical_address_lsw = nx_interface -> nx_interface_physical_address_lsw;
-    }
+  if (physical_address_lsw) {
+    *physical_address_lsw = nx_interface->nx_interface_physical_address_lsw;
+  }
 
 #ifndef NX_DISABLE_IPV4
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_INTERFACE_INFO_GET, ip_ptr, nx_interface -> nx_interface_ip_address,
-                            nx_interface -> nx_interface_physical_address_msw, nx_interface -> nx_interface_physical_address_lsw,
-                            NX_TRACE_IP_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_INTERFACE_INFO_GET, ip_ptr,
+                          nx_interface->nx_interface_ip_address,
+                          nx_interface->nx_interface_physical_address_msw,
+                          nx_interface->nx_interface_physical_address_lsw,
+                          NX_TRACE_IP_EVENTS, 0, 0);
 #else
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_INTERFACE_INFO_GET, ip_ptr, 0,
-                            nx_interface -> nx_interface_physical_address_msw, nx_interface -> nx_interface_physical_address_lsw,
-                            NX_TRACE_IP_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_INTERFACE_INFO_GET, ip_ptr, 0,
+                          nx_interface->nx_interface_physical_address_msw,
+                          nx_interface->nx_interface_physical_address_lsw,
+                          NX_TRACE_IP_EVENTS, 0, 0);
 #endif /* NX_DISABLE_IPV4 */
 
-
-    return(NX_SUCCESS);
+  return (NX_SUCCESS);
 }
-

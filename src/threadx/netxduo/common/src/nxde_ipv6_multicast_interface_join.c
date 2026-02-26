@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -20,7 +19,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -77,53 +75,51 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxde_ipv6_multicast_interface_join(NX_IP *ip_ptr, NXD_ADDRESS *group_address, UINT interface_index)
-{
+UINT _nxde_ipv6_multicast_interface_join(NX_IP *ip_ptr,
+                                         NXD_ADDRESS *group_address,
+                                         UINT interface_index) {
 
 #if defined(NX_ENABLE_IPV6_MULTICAST) && defined(FEATURE_NX_IPV6)
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
+      (group_address == NX_NULL)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID) || (group_address == NX_NULL))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for invalid input parameter.  */
+  if ((IPv6_Address_Type(group_address->nxd_ip_address.v6) &
+       IPV6_ADDRESS_MULTICAST) != IPV6_ADDRESS_MULTICAST) {
+    return (NX_IP_ADDRESS_ERROR);
+  }
 
-    /* Check for invalid input parameter.  */
-    if ((IPv6_Address_Type(group_address -> nxd_ip_address.v6) & IPV6_ADDRESS_MULTICAST) != IPV6_ADDRESS_MULTICAST)
-    {
-        return(NX_IP_ADDRESS_ERROR);
-    }
+  /* Validate the interface. */
+  if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
+    return (NX_INVALID_INTERFACE);
+  }
 
-    /* Validate the interface. */
-    if (interface_index >= NX_MAX_PHYSICAL_INTERFACES)
-    {
-        return(NX_INVALID_INTERFACE);
-    }
+  /* Validate the interface. */
+  if (ip_ptr->nx_ip_interface[interface_index].nx_interface_valid != NX_TRUE) {
+    return (NX_INVALID_INTERFACE);
+  }
 
-    /* Validate the interface. */
-    if (ip_ptr -> nx_ip_interface[interface_index].nx_interface_valid != NX_TRUE)
-    {
-        return(NX_INVALID_INTERFACE);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual IPv6 enable function.  */
+  status = _nxd_ipv6_multicast_interface_join(ip_ptr, group_address,
+                                              interface_index);
 
-    /* Call actual IPv6 enable function.  */
-    status =  _nxd_ipv6_multicast_interface_join(ip_ptr, group_address, interface_index);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 
 #else /* ! NX_ENABLE_IPV6_MULTICAST */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(group_address);
-    NX_PARAMETER_NOT_USED(interface_index);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(group_address);
+  NX_PARAMETER_NOT_USED(interface_index);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* NX_ENABLE_IPV6_MULTICAST && FEATURE_NX_IPV6 */
 }
-

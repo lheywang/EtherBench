@@ -66,11 +66,14 @@
 
 /* USER CODE END 1 */
 
-/* Define various build options for the FileX port.  The application should either make changes
-   here by commenting or un-commenting the conditional compilation defined OR supply the defines though the compiler's equivalent of the -D option.  */
+/* Define various build options for the FileX port.  The application should
+   either make changes here by commenting or un-commenting the conditional
+   compilation defined OR supply the defines though the compiler's equivalent of
+   the -D option.  */
 
-/* Override various options with default values already assigned in fx_api.h or fx_port.h.
-  Please also refer to fx_port.h for descriptions on each of these options.  */
+/* Override various options with default values already assigned in fx_api.h or
+  fx_port.h. Please also refer to fx_port.h for descriptions on each of these
+  options.  */
 
 /* Defined, the direct read sector update of cache is disabled.  */
 
@@ -107,21 +110,23 @@
 
 /* #define FX_ENABLE_FAULT_TOLERANT */
 
-/* Defines the size in bytes of the bit map used to update the secondary FAT sectors.
-   The larger the value the less unnecessary secondary FAT sector writes.   */
+/* Defines the size in bytes of the bit map used to update the secondary FAT
+   sectors. The larger the value the less unnecessary secondary FAT sector
+   writes.   */
 
 /* #define FX_FAT_MAP_SIZE         128 */
 
-/* Defined, data sector write requests are flushed immediately to the driver.  */
+/* Defined, data sector write requests are flushed immediately to the driver. */
 
 /* #define FX_FAULT_TOLERANT */
 
-/* Define byte offset in boot sector where the cluster number of the Fault Tolerant Log file is.
-   Note that this field (byte 116 to 119) is marked as reserved by FAT 12/16/32/exFAT specification. */
+/* Define byte offset in boot sector where the cluster number of the Fault
+   Tolerant Log file is. Note that this field (byte 116 to 119) is marked as
+   reserved by FAT 12/16/32/exFAT specification. */
 
 /* #define FX_FAULT_TOLERANT_BOOT_INDEX         116 */
 
-/* Defined, data sector write requests are flushed immediately to the driver.  */
+/* Defined, data sector write requests are flushed immediately to the driver. */
 
 /* #define FX_FAULT_TOLERANT_DATA */
 
@@ -136,8 +141,9 @@
 
 /* #define FX_MAX_LONG_NAME_LEN         256 */
 
-/* Defines the maximum number of logical sectors that can be cached by FileX. The cache memory
-   supplied to FileX at fx_media_open determines how many sectors can actually be cached.  */
+/* Defines the maximum number of logical sectors that can be cached by FileX.
+   The cache memory supplied to FileX at fx_media_open determines how many
+   sectors can actually be cached.  */
 
 /* #define FX_MAX_SECTOR_CACHE         256 */
 
@@ -180,9 +186,10 @@
 
 /* #define FX_UPDATE_RATE_IN_SECONDS         10 */
 
-/* Defines the number of ThreadX timer ticks required to achieve the update rate specified by
-   FX_UPDATE_RATE_IN_SECONDS defined previously. By default, the ThreadX timer tick is 10ms,
-   so the default value for this constant is 1000.  */
+/* Defines the number of ThreadX timer ticks required to achieve the update rate
+   specified by FX_UPDATE_RATE_IN_SECONDS defined previously. By default, the
+   ThreadX timer tick is 10ms, so the default value for this constant is 1000.
+ */
 
 /* #define FX_UPDATE_RATE_IN_TICKS         1000 */
 
@@ -218,14 +225,15 @@
 
 /* #define FX_DISABLE_CONSECUTIVE_DETECT */
 
-/* Define bitmap cache size for exFAT. Size should be minimum one sector size and maximum 4096.
-   For applications using multiple media devices with varying sector size, the value should be set to the
-   size of largest sector size. */
+/* Define bitmap cache size for exFAT. Size should be minimum one sector size
+   and maximum 4096. For applications using multiple media devices with varying
+   sector size, the value should be set to the size of largest sector size. */
 
 /* #define FX_EXFAT_MAX_CACHE_SIZE            512 */
 
-/* Define the size of fault tolerant cache, which is used when freeing FAT chain.
-	The FX_FAULT_TOLERANT_CACHE_SIZE is 2 power of FX_FAULT_TOLERANT_CACHE_SIZE_NB_SIZE.  */
+/* Define the size of fault tolerant cache, which is used when freeing FAT
+   chain. The FX_FAULT_TOLERANT_CACHE_SIZE is 2 power of
+   FX_FAULT_TOLERANT_CACHE_SIZE_NB_SIZE.  */
 
 /* #define FX_FAULT_TOLERANT_CACHE_SIZE            1024 */
 

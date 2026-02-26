@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_file.h"
 
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,31 +70,27 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_file_attributes_set(FX_MEDIA *media_ptr, CHAR *file_name, UINT attributes)
-{
+UINT _fxe_file_attributes_set(FX_MEDIA *media_ptr, CHAR *file_name,
+                              UINT attributes) {
 
-UINT status;
+  UINT status;
 
+  /* Check for a null media pointer.  */
+  if (media_ptr == FX_NULL) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a null media pointer.  */
-    if (media_ptr == FX_NULL)
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for invalid attributes.  */
+  if ((INT)attributes & ~(FX_READ_ONLY | FX_HIDDEN | FX_SYSTEM | FX_ARCHIVE)) {
+    return (FX_INVALID_ATTR);
+  }
 
-    /* Check for invalid attributes.  */
-    if ((INT)attributes & ~(FX_READ_ONLY | FX_HIDDEN | FX_SYSTEM | FX_ARCHIVE))
-    {
-        return(FX_INVALID_ATTR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual set attributes service.  */
+  status = _fx_file_attributes_set(media_ptr, file_name, attributes);
 
-    /* Call actual set attributes service.  */
-    status =  _fx_file_attributes_set(media_ptr, file_name, attributes);
-
-    /* File attribute set is complete, return status.  */
-    return(status);
+  /* File attribute set is complete, return status.  */
+  return (status);
 }
-

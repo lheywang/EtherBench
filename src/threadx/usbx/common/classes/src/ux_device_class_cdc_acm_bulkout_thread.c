@@ -21,15 +21,14 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_cdc_acm.h"
 #include "ux_device_stack.h"
 
-
-#if !defined(UX_DEVICE_CLASS_CDC_ACM_TRANSMISSION_DISABLE) && !defined(UX_DEVICE_STANDALONE)
+#if !defined(UX_DEVICE_CLASS_CDC_ACM_TRANSMISSION_DISABLE) &&                  \
+    !defined(UX_DEVICE_STANDALONE)
 /**************************************************************************/
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
@@ -90,89 +89,93 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-VOID  _ux_device_class_cdc_acm_bulkout_thread(ULONG cdc_acm_class)
-{
+VOID _ux_device_class_cdc_acm_bulkout_thread(ULONG cdc_acm_class) {
 
-UX_SLAVE_CLASS_CDC_ACM          *cdc_acm;
-UX_SLAVE_DEVICE                 *device;
-UX_SLAVE_ENDPOINT               *endpoint;
-UX_SLAVE_INTERFACE              *interface_ptr;
-UX_SLAVE_TRANSFER               *transfer_request;
-UINT                            status;
+  UX_SLAVE_CLASS_CDC_ACM *cdc_acm;
+  UX_SLAVE_DEVICE *device;
+  UX_SLAVE_ENDPOINT *endpoint;
+  UX_SLAVE_INTERFACE *interface_ptr;
+  UX_SLAVE_TRANSFER *transfer_request;
+  UINT status;
 
-    /* Cast properly the cdc_acm instance.  */
-    UX_THREAD_EXTENSION_PTR_GET(cdc_acm, UX_SLAVE_CLASS_CDC_ACM, cdc_acm_class)
+  /* Cast properly the cdc_acm instance.  */
+  UX_THREAD_EXTENSION_PTR_GET(cdc_acm, UX_SLAVE_CLASS_CDC_ACM, cdc_acm_class)
 
-    /* Get the pointer to the device.  */
-    device =  &_ux_system_slave -> ux_system_slave_device;
+  /* Get the pointer to the device.  */
+  device = &_ux_system_slave->ux_system_slave_device;
 
-    /* This is the first time we are activated. We need the interface to the class.  */
-    interface_ptr =  cdc_acm -> ux_slave_class_cdc_acm_interface;
+  /* This is the first time we are activated. We need the interface to the
+   * class.  */
+  interface_ptr = cdc_acm->ux_slave_class_cdc_acm_interface;
 
-    /* Locate the endpoints.  */
-    endpoint =  interface_ptr -> ux_slave_interface_first_endpoint;
+  /* Locate the endpoints.  */
+  endpoint = interface_ptr->ux_slave_interface_first_endpoint;
 
-    /* Check the endpoint direction, if OUT we have the correct endpoint.  */
-    if ((endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_OUT)
-    {
+  /* Check the endpoint direction, if OUT we have the correct endpoint.  */
+  if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress &
+       UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_OUT) {
 
-        /* So the next endpoint has to be the OUT endpoint.  */
-        endpoint =  endpoint -> ux_slave_endpoint_next_endpoint;
-    }
+    /* So the next endpoint has to be the OUT endpoint.  */
+    endpoint = endpoint->ux_slave_endpoint_next_endpoint;
+  }
 
-    /* This thread runs forever but can be suspended or resumed by the user application.  */
-    while(1)
-    {
+  /* This thread runs forever but can be suspended or resumed by the user
+   * application.  */
+  while (1) {
 
-        /* Select the transfer request associated with BULK OUT endpoint.   */
-        transfer_request =  &endpoint -> ux_slave_endpoint_transfer_request;
+    /* Select the transfer request associated with BULK OUT endpoint.   */
+    transfer_request = &endpoint->ux_slave_endpoint_transfer_request;
 
-        /* As long as the device is in the CONFIGURED state.  */
-        while (device -> ux_slave_device_state == UX_DEVICE_CONFIGURED)
-        {
+    /* As long as the device is in the CONFIGURED state.  */
+    while (device->ux_slave_device_state == UX_DEVICE_CONFIGURED) {
 
 #if UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1
 
-            /* Use class managed buffer.  */
-            transfer_request -> ux_slave_transfer_request_data_pointer =
-                                UX_DEVICE_CLASS_CDC_ACM_READ_BUFFER(cdc_acm);
+      /* Use class managed buffer.  */
+      transfer_request->ux_slave_transfer_request_data_pointer =
+          UX_DEVICE_CLASS_CDC_ACM_READ_BUFFER(cdc_acm);
 #endif
 
-            /* Send the request to the device controller.  */
-            status =  _ux_device_stack_transfer_request(transfer_request, endpoint -> ux_slave_endpoint_descriptor.wMaxPacketSize,
-                                                                endpoint -> ux_slave_endpoint_descriptor.wMaxPacketSize);
+      /* Send the request to the device controller.  */
+      status = _ux_device_stack_transfer_request(
+          transfer_request,
+          endpoint->ux_slave_endpoint_descriptor.wMaxPacketSize,
+          endpoint->ux_slave_endpoint_descriptor.wMaxPacketSize);
 
-            /* Check the completion code. */
-            if (status == UX_SUCCESS)
-            {
+      /* Check the completion code. */
+      if (status == UX_SUCCESS) {
 
-                /* Check the state of the transfer.  If there is an error, we do not proceed with this report. */
-                if (transfer_request -> ux_slave_transfer_request_completion_code == UX_SUCCESS)
-                {
+        /* Check the state of the transfer.  If there is an error, we do not
+         * proceed with this report. */
+        if (transfer_request->ux_slave_transfer_request_completion_code ==
+            UX_SUCCESS) {
 
-                    /* If there is a callback defined by the application, send the transaction event to it.  */
-                    if (cdc_acm -> ux_device_class_cdc_acm_read_callback != UX_NULL)
+          /* If there is a callback defined by the application, send the
+           * transaction event to it.  */
+          if (cdc_acm->ux_device_class_cdc_acm_read_callback != UX_NULL)
 
-                        /* Callback exists. */
-                        cdc_acm -> ux_device_class_cdc_acm_read_callback(cdc_acm, UX_SUCCESS, transfer_request -> ux_slave_transfer_request_data_pointer,
-                                                                                    transfer_request -> ux_slave_transfer_request_actual_length);
+            /* Callback exists. */
+            cdc_acm->ux_device_class_cdc_acm_read_callback(
+                cdc_acm, UX_SUCCESS,
+                transfer_request->ux_slave_transfer_request_data_pointer,
+                transfer_request->ux_slave_transfer_request_actual_length);
 
-                }
-                else
-                {
+        } else {
 
-                    /* We have an error. If there is a callback defined by the application, send the transaction event to it.  */
-                    if (cdc_acm -> ux_device_class_cdc_acm_read_callback != UX_NULL)
+          /* We have an error. If there is a callback defined by the
+           * application, send the transaction event to it.  */
+          if (cdc_acm->ux_device_class_cdc_acm_read_callback != UX_NULL)
 
-                        /* Callback exists. */
-                        cdc_acm -> ux_device_class_cdc_acm_read_callback(cdc_acm, status, UX_NULL, 0);
-
-                }
-            }
+            /* Callback exists. */
+            cdc_acm->ux_device_class_cdc_acm_read_callback(cdc_acm, status,
+                                                           UX_NULL, 0);
         }
-
-    /* We need to suspend ourselves. We will be resumed by the application if needed.  */
-    _ux_device_thread_suspend(&cdc_acm -> ux_slave_class_cdc_acm_bulkout_thread);
+      }
     }
+
+    /* We need to suspend ourselves. We will be resumed by the application if
+     * needed.  */
+    _ux_device_thread_suspend(&cdc_acm->ux_slave_class_cdc_acm_bulkout_thread);
+  }
 }
 #endif

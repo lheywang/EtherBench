@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_system.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,185 +70,151 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_system_date_set(UINT year, UINT month, UINT day)
-{
+UINT _fxe_system_date_set(UINT year, UINT month, UINT day) {
 
-UINT  status;
+  UINT status;
 
+  /* Check for invalid year.  */
+  if ((year < FX_BASE_YEAR) || (year > FX_MAXIMUM_YEAR)) {
+    return (FX_INVALID_YEAR);
+  }
 
-    /* Check for invalid year.  */
-    if ((year < FX_BASE_YEAR) || (year > FX_MAXIMUM_YEAR))
-    {
-        return(FX_INVALID_YEAR);
+  /* Check for invalid day.  */
+  if (day < 1) {
+    return (FX_INVALID_DAY);
+  }
+
+  /* Check for invalid day.  */
+  switch (month) {
+
+  case 1: {
+
+    /* Check for 31 days.  */
+    if (day > 31) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    /* Check for invalid day.  */
-    if (day < 1)
-    {
-        return(FX_INVALID_DAY);
+  case 2: {
+
+    /* Check for leap year.  */
+    if ((year % 4) == 0) {
+
+      /* Leap year, February has 29 days.  */
+      if (day > 29) {
+        return (FX_INVALID_DAY);
+      }
+    } else {
+
+      /* Otherwise, non-leap year.  February has
+         28 days.  */
+      if (day > 28) {
+        return (FX_INVALID_DAY);
+      }
     }
+    break;
+  }
 
-    /* Check for invalid day.  */
-    switch (month)
-    {
+  case 3: {
 
-    case 1:
-    {
-
-        /* Check for 31 days.  */
-        if (day > 31)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
+    /* Check for 31 days.  */
+    if (day > 31) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    case 2:
-    {
+  case 4: {
 
-        /* Check for leap year.  */
-        if ((year % 4) == 0)
-        {
-
-            /* Leap year, February has 29 days.  */
-            if (day > 29)
-            {
-                return(FX_INVALID_DAY);
-            }
-        }
-        else
-        {
-
-            /* Otherwise, non-leap year.  February has
-               28 days.  */
-            if (day > 28)
-            {
-                return(FX_INVALID_DAY);
-            }
-        }
-        break;
+    /* Check for 30 days.  */
+    if (day > 30) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    case 3:
-    {
+  case 5: {
 
-        /* Check for 31 days.  */
-        if (day > 31)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
+    /* Check for 31 days.  */
+    if (day > 31) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    case 4:
-    {
+  case 6: {
 
-        /* Check for 30 days.  */
-        if (day > 30)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
+    /* Check for 30 days.  */
+    if (day > 30) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    case 5:
-    {
+  case 7: {
 
-        /* Check for 31 days.  */
-        if (day > 31)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
+    /* Check for 31 days.  */
+    if (day > 31) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    case 6:
-    {
+  case 8: {
 
-        /* Check for 30 days.  */
-        if (day > 30)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
+    /* Check for 31 days.  */
+    if (day > 31) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    case 7:
-    {
+  case 9: {
 
-        /* Check for 31 days.  */
-        if (day > 31)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
+    /* Check for 30 days.  */
+    if (day > 30) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    case 8:
-    {
+  case 10: {
 
-        /* Check for 31 days.  */
-        if (day > 31)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
+    /* Check for 31 days.  */
+    if (day > 31) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    case 9:
-    {
+  case 11: {
 
-        /* Check for 30 days.  */
-        if (day > 30)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
+    /* Check for 30 days.  */
+    if (day > 30) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    case 10:
-    {
+  case 12: {
 
-        /* Check for 31 days.  */
-        if (day > 31)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
+    /* Check for 31 days.  */
+    if (day > 31) {
+      return (FX_INVALID_DAY);
     }
+    break;
+  }
 
-    case 11:
-    {
+  default:
 
-        /* Check for 30 days.  */
-        if (day > 30)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
-    }
+    /* Invalid month.  */
+    return (FX_INVALID_MONTH);
+  }
 
-    case 12:
-    {
+  /* Call actual system date set service.  */
+  status = _fx_system_date_set(year, month, day);
 
-        /* Check for 31 days.  */
-        if (day > 31)
-        {
-            return(FX_INVALID_DAY);
-        }
-        break;
-    }
-    
-    default:
-    
-        /* Invalid month.  */
-        return(FX_INVALID_MONTH);
-    }
-
-    /* Call actual system date set service.  */
-    status =  _fx_system_date_set(year, month, day);
-
-    /* Return status.  */
-    return(status);
+  /* Return status.  */
+  return (status);
 }
-

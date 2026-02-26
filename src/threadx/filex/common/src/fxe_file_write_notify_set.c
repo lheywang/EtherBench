@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,15 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_file.h"
 
-
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,23 +70,21 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_file_write_notify_set(FX_FILE *file_ptr, VOID (*file_write_notify)(FX_FILE *file))
-{
-UINT status;
+UINT _fxe_file_write_notify_set(FX_FILE *file_ptr,
+                                VOID (*file_write_notify)(FX_FILE *file)) {
+  UINT status;
 
-    /* Check for invalid input pointers.  */
-    if (file_ptr == FX_NULL)
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for invalid input pointers.  */
+  if (file_ptr == FX_NULL) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Call actual file write notify set service.  */
-    status =  _fx_file_write_notify_set(file_ptr, file_write_notify);
+  /* Call actual file write notify set service.  */
+  status = _fx_file_write_notify_set(file_ptr, file_write_notify);
 
-    /* Return status.  */
-    return(status);
+  /* Return status.  */
+  return (status);
 }
-

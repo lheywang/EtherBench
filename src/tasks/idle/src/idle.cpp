@@ -17,22 +17,18 @@
 #include "idle.h"
 
 // Local library
-#include "main.h"
 #include "app_threadx.h"
+#include "main.h"
 
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
-void idle_task(ULONG arg)
-{
-	/*
-	 * That's just an infinite loop, which blink a led
-	 */
-	while (1)
-	{
-		tx_thread_sleep(50);
-		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-	}
+void idle_task(ULONG arg) {
+  /*
+   * That's just an infinite loop, which blink a led
+   */
+  while (1) {
+    tx_thread_sleep(50);
+    HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+  }
 }
-
-

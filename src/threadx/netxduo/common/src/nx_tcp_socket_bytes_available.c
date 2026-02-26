@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_tcp.h"
 #include "../include/nx_packet.h"
-
+#include "../include/nx_tcp.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,86 +70,78 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_tcp_socket_bytes_available(NX_TCP_SOCKET *socket_ptr, ULONG *bytes_available)
-{
-NX_IP         *ip_ptr;
-NX_PACKET     *packet_ptr;
-UINT           data_size;
-NX_TCP_HEADER *header_ptr;
-UINT           header_length;
-INT            done = 0;
+UINT _nx_tcp_socket_bytes_available(NX_TCP_SOCKET *socket_ptr,
+                                    ULONG *bytes_available) {
+  NX_IP *ip_ptr;
+  NX_PACKET *packet_ptr;
+  UINT data_size;
+  NX_TCP_HEADER *header_ptr;
+  UINT header_length;
+  INT done = 0;
 
-    /* Setup IP pointer. */
-    ip_ptr = socket_ptr -> nx_tcp_socket_ip_ptr;
+  /* Setup IP pointer. */
+  ip_ptr = socket_ptr->nx_tcp_socket_ip_ptr;
 
-    /* Obtain the IP mutex so we can examine the bound port.  */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Obtain the IP mutex so we can examine the bound port.  */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-    *bytes_available = 0;
+  *bytes_available = 0;
 
-
-    /* Make sure the TCP connection has been established. */
-    if ((socket_ptr -> nx_tcp_socket_state <= NX_TCP_LISTEN_STATE) ||
-        (socket_ptr -> nx_tcp_socket_state > NX_TCP_ESTABLISHED))
-    {
-        /* Release protection.  */
-        tx_mutex_put(&(ip_ptr -> nx_ip_protection));
-
-        return(NX_NOT_CONNECTED);
-    }
-
-    packet_ptr = socket_ptr -> nx_tcp_socket_receive_queue_head;
-
-    if (packet_ptr == NX_NULL)
-    {
-
-        /* The receive queue is empty. */
-        /* Release protection.  */
-        tx_mutex_put(&(ip_ptr -> nx_ip_protection));
-
-        return(NX_SUCCESS);
-    }
-
-    /* Loop through all the packets on the queue and find out the total
-       number of bytes in the rx queue that are available to the applciation. */
-    do
-    {
-        /*lint -e{923} suppress cast of ULONG to pointer.  */
-        if (packet_ptr -> nx_packet_queue_next == ((NX_PACKET *)NX_PACKET_READY))
-        {
-
-            /* Compute the size of TCP payload in this packet */
-            /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-            header_ptr =  (NX_TCP_HEADER *)packet_ptr -> nx_packet_prepend_ptr;
-
-            /* Calculate the header size for this packet.  */
-            header_length = (UINT)((header_ptr -> nx_tcp_header_word_3 >> NX_TCP_HEADER_SHIFT) * sizeof(ULONG));
-
-            data_size = (UINT)(packet_ptr -> nx_packet_length - header_length);
-            *bytes_available += data_size;
-
-            if (packet_ptr == socket_ptr -> nx_tcp_socket_receive_queue_tail)
-            {
-                /* Already reached the last packet.  */
-                done = 1;
-            }
-            else
-            {
-                /* Move on to the next packet. */
-                packet_ptr = packet_ptr -> nx_packet_union_next.nx_packet_tcp_queue_next;
-            }
-        }
-        else
-        {
-            /* If the packet has not been acked yet, then just return the
-               amount of bytes available so far. */
-            done = 1;
-        }
-    } while (!done);
-
+  /* Make sure the TCP connection has been established. */
+  if ((socket_ptr->nx_tcp_socket_state <= NX_TCP_LISTEN_STATE) ||
+      (socket_ptr->nx_tcp_socket_state > NX_TCP_ESTABLISHED)) {
     /* Release protection.  */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    return(NX_SUCCESS);
+    return (NX_NOT_CONNECTED);
+  }
+
+  packet_ptr = socket_ptr->nx_tcp_socket_receive_queue_head;
+
+  if (packet_ptr == NX_NULL) {
+
+    /* The receive queue is empty. */
+    /* Release protection.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
+
+    return (NX_SUCCESS);
+  }
+
+  /* Loop through all the packets on the queue and find out the total
+     number of bytes in the rx queue that are available to the applciation. */
+  do {
+    /*lint -e{923} suppress cast of ULONG to pointer.  */
+    if (packet_ptr->nx_packet_queue_next == ((NX_PACKET *)NX_PACKET_READY)) {
+
+      /* Compute the size of TCP payload in this packet */
+      /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+       * necessary  */
+      header_ptr = (NX_TCP_HEADER *)packet_ptr->nx_packet_prepend_ptr;
+
+      /* Calculate the header size for this packet.  */
+      header_length =
+          (UINT)((header_ptr->nx_tcp_header_word_3 >> NX_TCP_HEADER_SHIFT) *
+                 sizeof(ULONG));
+
+      data_size = (UINT)(packet_ptr->nx_packet_length - header_length);
+      *bytes_available += data_size;
+
+      if (packet_ptr == socket_ptr->nx_tcp_socket_receive_queue_tail) {
+        /* Already reached the last packet.  */
+        done = 1;
+      } else {
+        /* Move on to the next packet. */
+        packet_ptr = packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next;
+      }
+    } else {
+      /* If the packet has not been acked yet, then just return the
+         amount of bytes available so far. */
+      done = 1;
+    }
+  } while (!done);
+
+  /* Release protection.  */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+
+  return (NX_SUCCESS);
 }
-

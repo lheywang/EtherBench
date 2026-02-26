@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_igmp.h"
 #include "../include/nx_ipv4.h"
 #include "../include/nx_packet.h"
-
 
 #ifndef NX_DISABLE_IPV4
 /**************************************************************************/
@@ -87,178 +84,175 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_igmp_interface_report_send(NX_IP *ip_ptr, ULONG group_address, UINT interface_index, UINT is_joining)
-{
+UINT _nx_igmp_interface_report_send(NX_IP *ip_ptr, ULONG group_address,
+                                    UINT interface_index, UINT is_joining) {
 
-NX_INTERFACE   *nx_interface;
-UINT            router_alert = 0;
-UINT            status;
-ULONG           checksum;
-ULONG           temp;
-NX_PACKET      *packet_ptr;
-NX_IGMP_HEADER *header_ptr;
-
+  NX_INTERFACE *nx_interface;
+  UINT router_alert = 0;
+  UINT status;
+  ULONG checksum;
+  ULONG temp;
+  NX_PACKET *packet_ptr;
+  NX_IGMP_HEADER *header_ptr;
 
 #ifndef NX_DISABLE_IGMPV2
-    if (ip_ptr -> nx_ip_igmp_router_version == NX_IGMP_HOST_VERSION_2)
-    {
-        router_alert = 4;
-    }
+  if (ip_ptr->nx_ip_igmp_router_version == NX_IGMP_HOST_VERSION_2) {
+    router_alert = 4;
+  }
 #endif
 
-    /* Obtain the IP mutex so we can search the multicast join list.  */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Obtain the IP mutex so we can search the multicast join list.  */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-    nx_interface = &ip_ptr -> nx_ip_interface[interface_index];
+  nx_interface = &ip_ptr->nx_ip_interface[interface_index];
 
-    /* Build an IGMP host response packet and send it!  */
+  /* Build an IGMP host response packet and send it!  */
 
-    /* Allocate a packet to place the IGMP host response message in.  */
+  /* Allocate a packet to place the IGMP host response message in.  */
 #ifdef NX_ENABLE_DUAL_PACKET_POOL
-    /* Allocate from auxiliary packet pool first. */
-    status = _nx_packet_allocate(ip_ptr -> nx_ip_auxiliary_packet_pool, &packet_ptr, (ULONG)(NX_IGMP_PACKET + router_alert + NX_IGMP_HEADER_SIZE), TX_NO_WAIT);
-    if ((status != NX_SUCCESS) && (ip_ptr -> nx_ip_auxiliary_packet_pool != ip_ptr -> nx_ip_default_packet_pool))
+  /* Allocate from auxiliary packet pool first. */
+  status = _nx_packet_allocate(
+      ip_ptr->nx_ip_auxiliary_packet_pool, &packet_ptr,
+      (ULONG)(NX_IGMP_PACKET + router_alert + NX_IGMP_HEADER_SIZE), TX_NO_WAIT);
+  if ((status != NX_SUCCESS) && (ip_ptr->nx_ip_auxiliary_packet_pool !=
+                                 ip_ptr->nx_ip_default_packet_pool))
 #endif /* NX_ENABLE_DUAL_PACKET_POOL */
-    {
-        status = _nx_packet_allocate(ip_ptr -> nx_ip_default_packet_pool, &packet_ptr, (ULONG)(NX_IGMP_PACKET + router_alert + NX_IGMP_HEADER_SIZE), TX_NO_WAIT);
-    }
+  {
+    status = _nx_packet_allocate(
+        ip_ptr->nx_ip_default_packet_pool, &packet_ptr,
+        (ULONG)(NX_IGMP_PACKET + router_alert + NX_IGMP_HEADER_SIZE),
+        TX_NO_WAIT);
+  }
 
-    if (status)
-    {
+  if (status) {
 
-        /* Packet allocation failed. Release the mutex and return error status. */
-        tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+    /* Packet allocation failed. Release the mutex and return error status. */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-        return(status);
-    }
+    return (status);
+  }
 
-    /* Add debug information. */
-    NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
+  /* Add debug information. */
+  NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
 
-    /* Prepare an IGMP response and send on the "all hosts" multicast
-       address.  */
+  /* Prepare an IGMP response and send on the "all hosts" multicast
+     address.  */
 
 #ifndef NX_DISABLE_IGMP_INFO
-    /* Increase the IGMP reports sent count.  */
-    if (is_joining == NX_TRUE)
-    {
-        ip_ptr -> nx_ip_igmp_reports_sent++;
-    }
+  /* Increase the IGMP reports sent count.  */
+  if (is_joining == NX_TRUE) {
+    ip_ptr->nx_ip_igmp_reports_sent++;
+  }
 
 #endif
 
-    /* Calculate the IGMP response message size and store it in the
-       packet header.  */
-    /*lint -e{644} suppress variable might not be initialized, since "packet_ptr" was initialized as long as status is NX_SUCCESS. */
-    packet_ptr -> nx_packet_length =  NX_IGMP_HEADER_SIZE;
+  /* Calculate the IGMP response message size and store it in the
+     packet header.  */
+  /*lint -e{644} suppress variable might not be initialized, since "packet_ptr"
+   * was initialized as long as status is NX_SUCCESS. */
+  packet_ptr->nx_packet_length = NX_IGMP_HEADER_SIZE;
 
-    /* Setup the prepend pointer.  */
-    packet_ptr -> nx_packet_prepend_ptr -= NX_IGMP_HEADER_SIZE;
+  /* Setup the prepend pointer.  */
+  packet_ptr->nx_packet_prepend_ptr -= NX_IGMP_HEADER_SIZE;
 
-    /* Stamp the outgoing interface. */
-    packet_ptr -> nx_packet_address.nx_packet_interface_ptr = nx_interface;
+  /* Stamp the outgoing interface. */
+  packet_ptr->nx_packet_address.nx_packet_interface_ptr = nx_interface;
 
-    /* Build the IGMP host response packet.  */
+  /* Build the IGMP host response packet.  */
 
-    /* Setup the pointer to the message area.  */
-    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is necessary  */
-    header_ptr =  (NX_IGMP_HEADER *)packet_ptr -> nx_packet_prepend_ptr;
+  /* Setup the pointer to the message area.  */
+  /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+   * necessary  */
+  header_ptr = (NX_IGMP_HEADER *)packet_ptr->nx_packet_prepend_ptr;
 
 #ifndef NX_DISABLE_IGMPV2
 
-    /* Build the IGMPv2 response message.  */
+  /* Build the IGMPv2 response message.  */
 
-    /* Is the router using IGMPv1? */
-    if (ip_ptr -> nx_ip_igmp_router_version == NX_IGMP_HOST_VERSION_1)
-    {
+  /* Is the router using IGMPv1? */
+  if (ip_ptr->nx_ip_igmp_router_version == NX_IGMP_HOST_VERSION_1) {
 #endif /* NX_DISABLE_IGMPV2 */
 
-        /* Yes; Set the header fields with the max response time
-           zero and the version/type 0x12. */
-        header_ptr -> nx_igmp_header_word_0 =  (ULONG)(NX_IGMP_VERSION | NX_IGMP_HOST_RESPONSE_TYPE);
-        header_ptr -> nx_igmp_header_word_1 =  group_address;
+    /* Yes; Set the header fields with the max response time
+       zero and the version/type 0x12. */
+    header_ptr->nx_igmp_header_word_0 =
+        (ULONG)(NX_IGMP_VERSION | NX_IGMP_HOST_RESPONSE_TYPE);
+    header_ptr->nx_igmp_header_word_1 = group_address;
 #ifndef NX_DISABLE_IGMPV2
+  }
+  /* The router is running the IGMPv2 (or higher) protocol. */
+  else {
+
+    /* Indicate if the report is a join or leave report. */
+    if (is_joining) {
+
+      header_ptr->nx_igmp_header_word_0 = (ULONG)(NX_IGMP_HOST_V2_JOIN_TYPE);
+    } else {
+      header_ptr->nx_igmp_header_word_0 = (ULONG)(NX_IGMP_HOST_V2_LEAVE_TYPE);
     }
-    /* The router is running the IGMPv2 (or higher) protocol. */
-    else
-    {
 
-        /* Indicate if the report is a join or leave report. */
-        if (is_joining)
-        {
-
-            header_ptr -> nx_igmp_header_word_0 =  (ULONG)(NX_IGMP_HOST_V2_JOIN_TYPE);
-        }
-        else
-        {
-            header_ptr -> nx_igmp_header_word_0 =  (ULONG)(NX_IGMP_HOST_V2_LEAVE_TYPE);
-        }
-
-        header_ptr -> nx_igmp_header_word_1 =  group_address;
-    }
+    header_ptr->nx_igmp_header_word_1 = group_address;
+  }
 #endif /* NX_DISABLE_IGMPV2 */
-
 
 #ifdef NX_ENABLE_INTERFACE_CAPABILITY
-    if (!(packet_ptr -> nx_packet_address.nx_packet_interface_ptr -> nx_interface_capability_flag & NX_INTERFACE_CAPABILITY_IGMP_TX_CHECKSUM))
+  if (!(packet_ptr->nx_packet_address.nx_packet_interface_ptr
+            ->nx_interface_capability_flag &
+        NX_INTERFACE_CAPABILITY_IGMP_TX_CHECKSUM))
 #endif /* NX_ENABLE_INTERFACE_CAPABILITY  */
-    {
+  {
 
-        /* Calculate the checksum.  */
-        temp =      header_ptr -> nx_igmp_header_word_0;
-        checksum =  (temp >> NX_SHIFT_BY_16);
-        checksum += (temp & NX_LOWER_16_MASK);
-        temp =      header_ptr -> nx_igmp_header_word_1;
-        checksum += (temp >> NX_SHIFT_BY_16);
-        checksum += (temp & NX_LOWER_16_MASK);
+    /* Calculate the checksum.  */
+    temp = header_ptr->nx_igmp_header_word_0;
+    checksum = (temp >> NX_SHIFT_BY_16);
+    checksum += (temp & NX_LOWER_16_MASK);
+    temp = header_ptr->nx_igmp_header_word_1;
+    checksum += (temp >> NX_SHIFT_BY_16);
+    checksum += (temp & NX_LOWER_16_MASK);
 
-        /* Add in the carry bits into the checksum.  */
-        checksum = (checksum >> NX_SHIFT_BY_16) + (checksum & NX_LOWER_16_MASK);
+    /* Add in the carry bits into the checksum.  */
+    checksum = (checksum >> NX_SHIFT_BY_16) + (checksum & NX_LOWER_16_MASK);
 
-        /* Do it again in case previous operation generates an overflow.  */
-        checksum = (checksum >> NX_SHIFT_BY_16) + (checksum & NX_LOWER_16_MASK);
+    /* Do it again in case previous operation generates an overflow.  */
+    checksum = (checksum >> NX_SHIFT_BY_16) + (checksum & NX_LOWER_16_MASK);
 
-        /* Place the checksum into the first header word.  */
-        header_ptr -> nx_igmp_header_word_0 =  header_ptr -> nx_igmp_header_word_0 | (~checksum & NX_LOWER_16_MASK);
-    }
+    /* Place the checksum into the first header word.  */
+    header_ptr->nx_igmp_header_word_0 =
+        header_ptr->nx_igmp_header_word_0 | (~checksum & NX_LOWER_16_MASK);
+  }
 #ifdef NX_ENABLE_INTERFACE_CAPABILITY
-    else
-    {
-        packet_ptr -> nx_packet_interface_capability_flag |= NX_INTERFACE_CAPABILITY_IGMP_TX_CHECKSUM;
-    }
+  else {
+    packet_ptr->nx_packet_interface_capability_flag |=
+        NX_INTERFACE_CAPABILITY_IGMP_TX_CHECKSUM;
+  }
 #endif /* NX_ENABLE_INTERFACE_CAPABILITY */
 
-    /* IGMPv2 packets must be IPv4 packets. */
-    packet_ptr -> nx_packet_ip_version = NX_IP_VERSION_V4;
+  /* IGMPv2 packets must be IPv4 packets. */
+  packet_ptr->nx_packet_ip_version = NX_IP_VERSION_V4;
 
-    /* If NX_LITTLE_ENDIAN is defined, the headers need to be swapped.  */
-    NX_CHANGE_ULONG_ENDIAN(header_ptr -> nx_igmp_header_word_0);
-    NX_CHANGE_ULONG_ENDIAN(header_ptr -> nx_igmp_header_word_1);
+  /* If NX_LITTLE_ENDIAN is defined, the headers need to be swapped.  */
+  NX_CHANGE_ULONG_ENDIAN(header_ptr->nx_igmp_header_word_0);
+  NX_CHANGE_ULONG_ENDIAN(header_ptr->nx_igmp_header_word_1);
 
-    /* Send the IGMP response packet out!  */
-    if (is_joining == NX_TRUE)
-    {
+  /* Send the IGMP response packet out!  */
+  if (is_joining == NX_TRUE) {
 
-        /* For JOIN reports, set the packet destination to the group address. */
-        _nx_ip_packet_send(ip_ptr, packet_ptr,
-                           group_address,
-                           NX_IP_NORMAL, NX_IGMP_TTL, NX_IP_IGMP, NX_FRAGMENT_OKAY,
-                           group_address);
-    }
-    else
-    {
+    /* For JOIN reports, set the packet destination to the group address. */
+    _nx_ip_packet_send(ip_ptr, packet_ptr, group_address, NX_IP_NORMAL,
+                       NX_IGMP_TTL, NX_IP_IGMP, NX_FRAGMENT_OKAY,
+                       group_address);
+  } else {
 
-        /* For LEAVE reports, set the destination to ALL ROUTERS as per RFC 2236 Section 3 page 4.*/
-        _nx_ip_packet_send(ip_ptr, packet_ptr,
-                           NX_ALL_ROUTERS_ADDRESS,
-                           NX_IP_NORMAL, NX_IGMP_TTL, NX_IP_IGMP, NX_FRAGMENT_OKAY,
-                           NX_ALL_ROUTERS_ADDRESS);
-    }
+    /* For LEAVE reports, set the destination to ALL ROUTERS as per RFC 2236
+     * Section 3 page 4.*/
+    _nx_ip_packet_send(ip_ptr, packet_ptr, NX_ALL_ROUTERS_ADDRESS, NX_IP_NORMAL,
+                       NX_IGMP_TTL, NX_IP_IGMP, NX_FRAGMENT_OKAY,
+                       NX_ALL_ROUTERS_ADDRESS);
+  }
 
-    /* Release the protection over the IP instance.  */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+  /* Release the protection over the IP instance.  */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    return NX_SUCCESS;
+  return NX_SUCCESS;
 }
 #endif /* NX_DISABLE_IPV4 */
-

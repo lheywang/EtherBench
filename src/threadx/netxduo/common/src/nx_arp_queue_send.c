@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -75,104 +73,105 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_arp_queue_send(NX_IP *ip_ptr, NX_ARP *arp_ptr)
-{
+VOID _nx_arp_queue_send(NX_IP *ip_ptr, NX_ARP *arp_ptr) {
 
-TX_INTERRUPT_SAVE_AREA
-NX_PACKET   *queued_list_head;
-NX_PACKET   *packet_ptr;
-NX_IP_DRIVER driver_request;
+  TX_INTERRUPT_SAVE_AREA
+  NX_PACKET *queued_list_head;
+  NX_PACKET *packet_ptr;
+  NX_IP_DRIVER driver_request;
 
-    /* Initialize the queued list head to NULL.  */
-    queued_list_head =  NX_NULL;
+  /* Initialize the queued list head to NULL.  */
+  queued_list_head = NX_NULL;
 
-    /* Determine if this ARP entry has a packet queued up for sending.  */
+  /* Determine if this ARP entry has a packet queued up for sending.  */
 
-    /* Disable interrupts before checking.  */
-    TX_DISABLE
+  /* Disable interrupts before checking.  */
+  TX_DISABLE
 
-    /* Look at the ARP packet queue pointer.  */
-    if (arp_ptr -> nx_arp_packets_waiting)
-    {
+  /* Look at the ARP packet queue pointer.  */
+  if (arp_ptr->nx_arp_packets_waiting) {
 
-        /* Pickup the packet pointer and clear the ARP queue pointer.  */
-        queued_list_head =  arp_ptr -> nx_arp_packets_waiting;
-        arp_ptr -> nx_arp_packets_waiting =  NX_NULL;
-    }
+    /* Pickup the packet pointer and clear the ARP queue pointer.  */
+    queued_list_head = arp_ptr->nx_arp_packets_waiting;
+    arp_ptr->nx_arp_packets_waiting = NX_NULL;
+  }
 
-    /* Restore previous interrupt posture.  */
-    TX_RESTORE
+  /* Restore previous interrupt posture.  */
+  TX_RESTORE
 
-    /* Are there any packets queued to send?  */
-    while (queued_list_head)
-    {
+  /* Are there any packets queued to send?  */
+  while (queued_list_head) {
 
-        /* Pickup the first entry on the list.  */
-        packet_ptr =  queued_list_head;
+    /* Pickup the first entry on the list.  */
+    packet_ptr = queued_list_head;
 
-        /* Move to the next entry on the ARP packet queue.  */
-        queued_list_head =  queued_list_head -> nx_packet_queue_next;
+    /* Move to the next entry on the ARP packet queue.  */
+    queued_list_head = queued_list_head->nx_packet_queue_next;
 
-        /* Clear the packet's queue next pointer.  */
-        packet_ptr -> nx_packet_queue_next =  NX_NULL;
+    /* Clear the packet's queue next pointer.  */
+    packet_ptr->nx_packet_queue_next = NX_NULL;
 
-        packet_ptr -> nx_packet_address.nx_packet_interface_ptr = arp_ptr -> nx_arp_ip_interface;
+    packet_ptr->nx_packet_address.nx_packet_interface_ptr =
+        arp_ptr->nx_arp_ip_interface;
 
-        /* Build the driver request packet.  */
-        driver_request.nx_ip_driver_physical_address_msw =  arp_ptr -> nx_arp_physical_address_msw;
-        driver_request.nx_ip_driver_physical_address_lsw =  arp_ptr -> nx_arp_physical_address_lsw;
-        driver_request.nx_ip_driver_ptr                  =  ip_ptr;
-        driver_request.nx_ip_driver_command              =  NX_LINK_PACKET_SEND;
-        driver_request.nx_ip_driver_packet               =  packet_ptr;
-        driver_request.nx_ip_driver_interface            =  packet_ptr -> nx_packet_address.nx_packet_interface_ptr;
+    /* Build the driver request packet.  */
+    driver_request.nx_ip_driver_physical_address_msw =
+        arp_ptr->nx_arp_physical_address_msw;
+    driver_request.nx_ip_driver_physical_address_lsw =
+        arp_ptr->nx_arp_physical_address_lsw;
+    driver_request.nx_ip_driver_ptr = ip_ptr;
+    driver_request.nx_ip_driver_command = NX_LINK_PACKET_SEND;
+    driver_request.nx_ip_driver_packet = packet_ptr;
+    driver_request.nx_ip_driver_interface =
+        packet_ptr->nx_packet_address.nx_packet_interface_ptr;
 
-        /* Determine if fragmentation is needed.  */
-        if (packet_ptr -> nx_packet_length > packet_ptr -> nx_packet_address.nx_packet_interface_ptr -> nx_interface_ip_mtu_size)
-        {
+    /* Determine if fragmentation is needed.  */
+    if (packet_ptr->nx_packet_length >
+        packet_ptr->nx_packet_address.nx_packet_interface_ptr
+            ->nx_interface_ip_mtu_size) {
 
 #ifndef NX_DISABLE_FRAGMENTATION
-            /* Fragmentation is needed, call the fragment routine if available. */
-            if (ip_ptr -> nx_ip_fragment_processing)
-            {
+      /* Fragmentation is needed, call the fragment routine if available. */
+      if (ip_ptr->nx_ip_fragment_processing) {
 
-                /* Call the IP fragment processing routine.  */
-                (ip_ptr -> nx_ip_fragment_processing)(&driver_request);
-            }
-            else
-            {
+        /* Call the IP fragment processing routine.  */
+        (ip_ptr->nx_ip_fragment_processing)(&driver_request);
+      } else {
 #endif /* NX_DISABLE_FRAGMENTATION */
 
 #ifndef NX_DISABLE_IP_INFO
 
-                /* Increment the IP send packets dropped count.  */
-                ip_ptr -> nx_ip_send_packets_dropped++;
+        /* Increment the IP send packets dropped count.  */
+        ip_ptr->nx_ip_send_packets_dropped++;
 #endif
 
-                /* Just release the packet.  */
-                _nx_packet_transmit_release(packet_ptr);
+        /* Just release the packet.  */
+        _nx_packet_transmit_release(packet_ptr);
 #ifndef NX_DISABLE_FRAGMENTATION
-            }
+      }
 #endif /* NX_DISABLE_FRAGMENTATION */
-        }
-        else
-        {
+    } else {
 
 #ifndef NX_DISABLE_IP_INFO
 
-            /* Increment the IP packet sent count.  */
-            ip_ptr -> nx_ip_total_packets_sent++;
+      /* Increment the IP packet sent count.  */
+      ip_ptr->nx_ip_total_packets_sent++;
 
-            /* Increment the IP bytes sent count.  */
-            ip_ptr -> nx_ip_total_bytes_sent +=  packet_ptr -> nx_packet_length - (ULONG)sizeof(NX_IPV4_HEADER);
+      /* Increment the IP bytes sent count.  */
+      ip_ptr->nx_ip_total_bytes_sent +=
+          packet_ptr->nx_packet_length - (ULONG)sizeof(NX_IPV4_HEADER);
 #endif
 
-            /* If trace is enabled, insert this event into the trace buffer.  */
-            NX_TRACE_IN_LINE_INSERT(NX_TRACE_INTERNAL_IO_DRIVER_PACKET_SEND, ip_ptr, packet_ptr, packet_ptr -> nx_packet_length, 0, NX_TRACE_INTERNAL_EVENTS, 0, 0);
+      /* If trace is enabled, insert this event into the trace buffer.  */
+      NX_TRACE_IN_LINE_INSERT(NX_TRACE_INTERNAL_IO_DRIVER_PACKET_SEND, ip_ptr,
+                              packet_ptr, packet_ptr->nx_packet_length, 0,
+                              NX_TRACE_INTERNAL_EVENTS, 0, 0);
 
-            /* Send the queued IP packet out on the network via the attached driver.  */
-            (packet_ptr -> nx_packet_address.nx_packet_interface_ptr -> nx_interface_link_driver_entry)(&driver_request);
-        }
+      /* Send the queued IP packet out on the network via the attached driver.
+       */
+      (packet_ptr->nx_packet_address.nx_packet_interface_ptr
+           ->nx_interface_link_driver_entry)(&driver_request);
     }
+  }
 }
 #endif /* !NX_DISABLE_IPV4  */
-

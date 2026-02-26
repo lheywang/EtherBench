@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
-#include "../include/tx_trace.h"
 #include "../include/tx_thread.h"
-
+#include "../include/tx_trace.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -80,86 +77,79 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _tx_thread_info_get(TX_THREAD *thread_ptr, CHAR **name, UINT *state, ULONG *run_count,
-                UINT *priority, UINT *preemption_threshold, ULONG *time_slice,
-                TX_THREAD **next_thread, TX_THREAD **next_suspended_thread)
-{
+UINT _tx_thread_info_get(TX_THREAD *thread_ptr, CHAR **name, UINT *state,
+                         ULONG *run_count, UINT *priority,
+                         UINT *preemption_threshold, ULONG *time_slice,
+                         TX_THREAD **next_thread,
+                         TX_THREAD **next_suspended_thread) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_INFO_GET, thread_ptr,
+                          thread_ptr->tx_thread_state, 0, 0,
+                          TX_TRACE_THREAD_EVENTS)
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_INFO_GET, thread_ptr, thread_ptr -> tx_thread_state, 0, 0, TX_TRACE_THREAD_EVENTS)
+  /* Log this kernel call.  */
+  TX_EL_THREAD_INFO_GET_INSERT
 
-    /* Log this kernel call.  */
-    TX_EL_THREAD_INFO_GET_INSERT
+  /* Retrieve all the pertinent information and return it in the supplied
+     destinations.  */
 
-    /* Retrieve all the pertinent information and return it in the supplied
-       destinations.  */
+  /* Retrieve the name of the thread.  */
+  if (name != TX_NULL) {
 
-    /* Retrieve the name of the thread.  */
-    if (name != TX_NULL)
-    {
+    *name = thread_ptr->tx_thread_name;
+  }
 
-        *name =  thread_ptr -> tx_thread_name;
-    }
+  /* Pickup the thread's current state.  */
+  if (state != TX_NULL) {
 
-    /* Pickup the thread's current state.  */
-    if (state != TX_NULL)
-    {
+    *state = thread_ptr->tx_thread_state;
+  }
 
-        *state =  thread_ptr -> tx_thread_state;
-    }
+  /* Pickup the number of times the thread has been scheduled.  */
+  if (run_count != TX_NULL) {
 
-    /* Pickup the number of times the thread has been scheduled.  */
-    if (run_count != TX_NULL)
-    {
+    *run_count = thread_ptr->tx_thread_run_count;
+  }
 
-        *run_count =  thread_ptr -> tx_thread_run_count;
-    }
+  /* Pickup the thread's priority.  */
+  if (priority != TX_NULL) {
 
-    /* Pickup the thread's priority.  */
-    if (priority != TX_NULL)
-    {
+    *priority = thread_ptr->tx_thread_user_priority;
+  }
 
-        *priority =  thread_ptr -> tx_thread_user_priority;
-    }
+  /* Pickup the thread's preemption-threshold.  */
+  if (preemption_threshold != TX_NULL) {
 
-    /* Pickup the thread's preemption-threshold.  */
-    if (preemption_threshold != TX_NULL)
-    {
+    *preemption_threshold = thread_ptr->tx_thread_user_preempt_threshold;
+  }
 
-        *preemption_threshold =  thread_ptr -> tx_thread_user_preempt_threshold;
-    }
+  /* Pickup the thread's current time-slice.  */
+  if (time_slice != TX_NULL) {
 
-    /* Pickup the thread's current time-slice.  */
-    if (time_slice != TX_NULL)
-    {
+    *time_slice = thread_ptr->tx_thread_time_slice;
+  }
 
-        *time_slice =  thread_ptr -> tx_thread_time_slice;
-    }
+  /* Pickup the next created thread.  */
+  if (next_thread != TX_NULL) {
 
-    /* Pickup the next created thread.  */
-    if (next_thread != TX_NULL)
-    {
+    *next_thread = thread_ptr->tx_thread_created_next;
+  }
 
-        *next_thread =  thread_ptr -> tx_thread_created_next;
-    }
+  /* Pickup the next thread suspended.  */
+  if (next_suspended_thread != TX_NULL) {
 
-    /* Pickup the next thread suspended.  */
-    if (next_suspended_thread != TX_NULL)
-    {
+    *next_suspended_thread = thread_ptr->tx_thread_suspended_next;
+  }
 
-        *next_suspended_thread =  thread_ptr -> tx_thread_suspended_next;
-    }
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Return completion status.  */
-    return(TX_SUCCESS);
+  /* Return completion status.  */
+  return (TX_SUCCESS);
 }
-

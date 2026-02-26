@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_udp.h"
 #include "../include/nx_ip.h"
-
+#include "../include/nx_udp.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,29 +70,27 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_udp_socket_send(NX_UDP_SOCKET *socket_ptr, NX_PACKET *packet_ptr,
-                          ULONG ip_address, UINT port)
-{
+UINT _nx_udp_socket_send(NX_UDP_SOCKET *socket_ptr, NX_PACKET *packet_ptr,
+                         ULONG ip_address, UINT port) {
 #ifndef NX_DISABLE_IPV4
-UINT        status;
+  UINT status;
 
-NXD_ADDRESS dual_ip_address;
+  NXD_ADDRESS dual_ip_address;
 
-    /* build up the IP Address structure. */
-    dual_ip_address.nxd_ip_version = NX_IP_VERSION_V4;
-    dual_ip_address.nxd_ip_address.v4 = ip_address;
+  /* build up the IP Address structure. */
+  dual_ip_address.nxd_ip_version = NX_IP_VERSION_V4;
+  dual_ip_address.nxd_ip_address.v4 = ip_address;
 
-    /* Call the actual udp socket send routine. */
-    status = _nxd_udp_socket_send(socket_ptr, packet_ptr, &dual_ip_address, port);
+  /* Call the actual udp socket send routine. */
+  status = _nxd_udp_socket_send(socket_ptr, packet_ptr, &dual_ip_address, port);
 
-    return(status);
+  return (status);
 #else
-    NX_PARAMETER_NOT_USED(socket_ptr);
-    NX_PARAMETER_NOT_USED(packet_ptr);
-    NX_PARAMETER_NOT_USED(ip_address);
-    NX_PARAMETER_NOT_USED(port);
+  NX_PARAMETER_NOT_USED(socket_ptr);
+  NX_PARAMETER_NOT_USED(packet_ptr);
+  NX_PARAMETER_NOT_USED(ip_address);
+  NX_PARAMETER_NOT_USED(port);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* NX_DISABLE_IPV4 */
 }
-

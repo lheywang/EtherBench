@@ -14,8 +14,8 @@
 // ======================================================================
 // Local libraries
 #include "main.h"
-#include "init.h"
 #include "error_handler.h"
+#include "init.h"
 
 // STD
 #include <stdint.h>
@@ -28,24 +28,24 @@
 // ======================================================================
 // I'll let it, as a remainder, but this does not cause issues (for now ??)
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
-  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
+#warning                                                                       \
+    "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
 // ======================================================================
 //                              MAIN APP
 // ======================================================================
-int main(void)
-{
-	// Initialize the MCU (peripheral only)
-	if (init() != HAL_OK)
-		Error_Handler();
+int main(void) {
+  // Initialize the MCU (peripheral only)
+  if (init() != HAL_OK)
+    Error_Handler();
 
-	// Launch the RTOS
-	MX_ThreadX_Init();
+  // Launch the RTOS
+  MX_ThreadX_Init();
 
-    /*
-     * We shall never get here, and, if we get, which mean critical failure,
-     * we call the Error_Handler() function. (Infinite loop).
-     */
-	Error_Handler();
+  /*
+   * We shall never get here, and, if we get, which mean critical failure,
+   * we call the Error_Handler() function. (Infinite loop).
+   */
+  Error_Handler();
 }

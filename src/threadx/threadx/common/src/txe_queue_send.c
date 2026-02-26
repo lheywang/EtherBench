@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
-#include "../include/tx_timer.h"
-#include "../include/tx_thread.h"
 #include "../include/tx_queue.h"
-
+#include "../include/tx_thread.h"
+#include "../include/tx_timer.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,86 +72,74 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_queue_send(TX_QUEUE *queue_ptr, VOID *source_ptr, ULONG wait_option)
-{
+UINT _txe_queue_send(TX_QUEUE *queue_ptr, VOID *source_ptr, ULONG wait_option) {
 
-UINT        status;
-
-#ifndef TX_TIMER_PROCESS_IN_ISR
-TX_THREAD   *current_thread;
-#endif
-
-
-    /* Default status to success.  */
-    status =  TX_SUCCESS;
-
-    /* Check for an invalid queue pointer.  */
-    if (queue_ptr == TX_NULL)
-    {
-
-        /* Queue pointer is invalid, return appropriate error code.  */
-        status =  TX_QUEUE_ERROR;
-    }
-
-    /* Now check for invalid queue ID.  */
-    else if (queue_ptr -> tx_queue_id != TX_QUEUE_ID)
-    {
-
-        /* Queue pointer is invalid, return appropriate error code.  */
-        status =  TX_QUEUE_ERROR;
-    }
-
-    /* Check for an invalid source for message.  */
-    else if (source_ptr == TX_NULL)
-    {
-
-        /* Null source pointer, return appropriate error.  */
-        status =  TX_PTR_ERROR;
-    }
-    else
-    {
-
-        /* Check for a wait option error.  Only threads are allowed any form of
-           suspension.  */
-        if (wait_option != TX_NO_WAIT)
-        {
-
-            /* Is the call from an ISR or Initialization?  */
-            if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
-            {
-
-                /* A non-thread is trying to suspend, return appropriate error code.  */
-                status =  TX_WAIT_ERROR;
-            }
+  UINT status;
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
-            else
-            {
-
-                /* Pickup thread pointer.  */
-                TX_THREAD_GET_CURRENT(current_thread)
-
-                /* Is the current thread the timer thread?  */
-                if (current_thread == &_tx_timer_thread)
-                {
-
-                    /* A non-thread is trying to suspend, return appropriate error code.  */
-                    status =  TX_WAIT_ERROR;
-                }
-            }
+  TX_THREAD *current_thread;
 #endif
+
+  /* Default status to success.  */
+  status = TX_SUCCESS;
+
+  /* Check for an invalid queue pointer.  */
+  if (queue_ptr == TX_NULL) {
+
+    /* Queue pointer is invalid, return appropriate error code.  */
+    status = TX_QUEUE_ERROR;
+  }
+
+  /* Now check for invalid queue ID.  */
+  else if (queue_ptr->tx_queue_id != TX_QUEUE_ID) {
+
+    /* Queue pointer is invalid, return appropriate error code.  */
+    status = TX_QUEUE_ERROR;
+  }
+
+  /* Check for an invalid source for message.  */
+  else if (source_ptr == TX_NULL) {
+
+    /* Null source pointer, return appropriate error.  */
+    status = TX_PTR_ERROR;
+  } else {
+
+    /* Check for a wait option error.  Only threads are allowed any form of
+       suspension.  */
+    if (wait_option != TX_NO_WAIT) {
+
+      /* Is the call from an ISR or Initialization?  */
+      if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
+
+        /* A non-thread is trying to suspend, return appropriate error code.  */
+        status = TX_WAIT_ERROR;
+      }
+
+#ifndef TX_TIMER_PROCESS_IN_ISR
+      else {
+
+        /* Pickup thread pointer.  */
+        TX_THREAD_GET_CURRENT(current_thread)
+
+        /* Is the current thread the timer thread?  */
+        if (current_thread == &_tx_timer_thread) {
+
+          /* A non-thread is trying to suspend, return appropriate error code.
+           */
+          status = TX_WAIT_ERROR;
         }
+      }
+#endif
     }
+  }
 
-    /* Determine if everything is okay.  */
-    if (status == TX_SUCCESS)
-    {
+  /* Determine if everything is okay.  */
+  if (status == TX_SUCCESS) {
 
-        /* Call actual queue send function.  */
-        status =  _tx_queue_send(queue_ptr, source_ptr, wait_option);
-    }
+    /* Call actual queue send function.  */
+    status = _tx_queue_send(queue_ptr, source_ptr, wait_option);
+  }
 
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

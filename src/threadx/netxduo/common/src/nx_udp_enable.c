@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_udp.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -69,17 +66,16 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_udp_enable(NX_IP *ip_ptr)
-{
+UINT _nx_udp_enable(NX_IP *ip_ptr) {
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_ENABLE, ip_ptr, 0, 0, 0, NX_TRACE_UDP_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_ENABLE, ip_ptr, 0, 0, 0,
+                          NX_TRACE_UDP_EVENTS, 0, 0);
 
-    /* Set the UDP packet receive function in the IP structure to indicate
-       we are ready to receive UDP packets.  */
-    ip_ptr -> nx_ip_udp_packet_receive =  _nx_udp_packet_receive;
+  /* Set the UDP packet receive function in the IP structure to indicate
+     we are ready to receive UDP packets.  */
+  ip_ptr->nx_ip_udp_packet_receive = _nx_udp_packet_receive;
 
-    /* Return successful completion.  */
-    return(NX_SUCCESS);
+  /* Return successful completion.  */
+  return (NX_SUCCESS);
 }
-

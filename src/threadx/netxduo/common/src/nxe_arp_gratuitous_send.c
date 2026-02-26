@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,18 +21,15 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_ip.h"
 #include "../include/nx_arp.h"
-
+#include "../include/nx_ip.h"
 
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,53 +73,47 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_arp_gratuitous_send(NX_IP *ip_ptr, VOID (*response_handler)(NX_IP *ip_ptr, NX_PACKET *packet_ptr))
-{
+UINT _nxe_arp_gratuitous_send(NX_IP *ip_ptr,
+                              VOID (*response_handler)(NX_IP *ip_ptr,
+                                                       NX_PACKET *packet_ptr)) {
 
 #ifndef NX_DISABLE_IPV4
-UINT status;
-UINT i;
+  UINT status;
+  UINT i;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
+  /* Check for invalid IP address.  */
+  for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
+    if (ip_ptr->nx_ip_interface[i].nx_interface_ip_address) {
+      break;
     }
+  }
 
-    /* Check for invalid IP address.  */
-    for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++)
-    {
-        if (ip_ptr -> nx_ip_interface[i].nx_interface_ip_address)
-        {
-            break;
-        }
-    }
+  if (i == NX_MAX_PHYSICAL_INTERFACES) {
+    return (NX_IP_ADDRESS_ERROR);
+  }
 
-    if (i == NX_MAX_PHYSICAL_INTERFACES)
-    {
-        return(NX_IP_ADDRESS_ERROR);
-    }
+  /* Check to see if ARP is enabled.  */
+  if (!ip_ptr->nx_ip_arp_allocate) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if ARP is enabled.  */
-    if (!ip_ptr -> nx_ip_arp_allocate)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual Gratuitous ARP send function.  */
+  status = _nx_arp_gratuitous_send(ip_ptr, response_handler);
 
-    /* Call actual Gratuitous ARP send function.  */
-    status =  _nx_arp_gratuitous_send(ip_ptr, response_handler);
+  /* Return completion status.  */
+  return (status);
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(response_handler);
 
-    /* Return completion status.  */
-    return(status);
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(response_handler);
-
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

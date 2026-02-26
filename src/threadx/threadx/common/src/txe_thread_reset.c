@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
 #include "../include/tx_thread.h"
 #include "../include/tx_timer.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,68 +68,59 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_thread_reset(TX_THREAD *thread_ptr)
-{
+UINT _txe_thread_reset(TX_THREAD *thread_ptr) {
 
-UINT        status;
+  UINT status;
 #ifndef TX_TIMER_PROCESS_IN_ISR
-TX_THREAD   *current_thread;
+  TX_THREAD *current_thread;
 #endif
 
+  /* Default status to success.  */
+  status = TX_SUCCESS;
 
-    /* Default status to success.  */
-    status =  TX_SUCCESS;
+  /* Check for an invalid thread pointer.  */
+  if (thread_ptr == TX_NULL) {
 
-    /* Check for an invalid thread pointer.  */
-    if (thread_ptr == TX_NULL)
-    {
+    /* Thread pointer is invalid, return appropriate error code.  */
+    status = TX_THREAD_ERROR;
+  }
 
-        /* Thread pointer is invalid, return appropriate error code.  */
-        status =  TX_THREAD_ERROR;
-    }
+  /* Now check for an invalid thread ID.  */
+  else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
 
-    /* Now check for an invalid thread ID.  */
-    else if (thread_ptr -> tx_thread_id != TX_THREAD_ID)
-    {
-
-        /* Thread pointer is invalid, return appropriate error code.  */
-        status =  TX_THREAD_ERROR;
-    }
-    else
-    {
+    /* Thread pointer is invalid, return appropriate error code.  */
+    status = TX_THREAD_ERROR;
+  } else {
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-        /* Pickup thread pointer.  */
-        TX_THREAD_GET_CURRENT(current_thread)
+    /* Pickup thread pointer.  */
+    TX_THREAD_GET_CURRENT(current_thread)
 
-        /* Check for invalid caller of this function.  First check for a calling thread.  */
-        if (current_thread == &_tx_timer_thread)
-        {
+    /* Check for invalid caller of this function.  First check for a calling
+     * thread.  */
+    if (current_thread == &_tx_timer_thread) {
 
-            /* Invalid caller of this function, return appropriate error code.  */
-            status =  TX_CALLER_ERROR;
-        }
+      /* Invalid caller of this function, return appropriate error code.  */
+      status = TX_CALLER_ERROR;
+    }
 #endif
 
-        /* Check for interrupt or initialization call.  */
-        if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
-        {
+    /* Check for interrupt or initialization call.  */
+    if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-            /* Invalid caller of this function, return appropriate error code.  */
-            status =  TX_CALLER_ERROR;
-        }
+      /* Invalid caller of this function, return appropriate error code.  */
+      status = TX_CALLER_ERROR;
     }
+  }
 
-    /* Determine if everything is okay.  */
-    if (status == TX_SUCCESS)
-    {
+  /* Determine if everything is okay.  */
+  if (status == TX_SUCCESS) {
 
-        /* Call actual thread reset function.  */
-        status =  _tx_thread_reset(thread_ptr);
-    }
+    /* Call actual thread reset function.  */
+    status = _tx_thread_reset(thread_ptr);
+  }
 
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

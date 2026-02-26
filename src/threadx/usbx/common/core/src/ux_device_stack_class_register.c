@@ -9,11 +9,10 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/ux_api.h"
 #include "../include/ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -57,22 +54,22 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_utility_string_length_check       Check C string and return     */
 /*                                          its length if null-terminated */
-/*    _ux_utility_memory_copy               Memory copy                   */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*    _ux_utility_memory_copy               Memory copy                   */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -81,91 +78,95 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_stack_class_register(UCHAR *class_name,
-                        UINT (*class_entry_function)(struct UX_SLAVE_CLASS_COMMAND_STRUCT *),
-                        ULONG configuration_number,
-                        ULONG interface_number,
-                        VOID *parameter)
-{
+UINT _ux_device_stack_class_register(
+    UCHAR *class_name,
+    UINT (*class_entry_function)(struct UX_SLAVE_CLASS_COMMAND_STRUCT *),
+    ULONG configuration_number, ULONG interface_number, VOID *parameter) {
 
-UX_SLAVE_CLASS              *class_inst;
-UINT                        status;
-UX_SLAVE_CLASS_COMMAND      command;
-UINT                        class_name_length =  0;
+  UX_SLAVE_CLASS *class_inst;
+  UINT status;
+  UX_SLAVE_CLASS_COMMAND command;
+  UINT class_name_length = 0;
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
-ULONG                       class_index;
+  ULONG class_index;
 #endif
 
+  /* Get the length of the class name (exclude null-terminator).  */
+  status = _ux_utility_string_length_check(class_name, &class_name_length,
+                                           UX_MAX_CLASS_NAME_LENGTH);
+  if (status)
+    return (status);
 
-    /* Get the length of the class name (exclude null-terminator).  */
-    status =  _ux_utility_string_length_check(class_name, &class_name_length, UX_MAX_CLASS_NAME_LENGTH);
-    if (status)
-        return(status);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_CLASS_REGISTER, class_name,
+                          interface_number, parameter, 0,
+                          UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_CLASS_REGISTER, class_name, interface_number, parameter, 0, UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
-
-    /* Get first class.  */
-    class_inst =  _ux_system_slave -> ux_system_slave_class_array;
+  /* Get first class.  */
+  class_inst = _ux_system_slave->ux_system_slave_class_array;
 
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
-    /* We need to parse the class table to find an empty spot.  */
-    for (class_index = 0; class_index < _ux_system_slave -> ux_system_slave_max_class; class_index++)
-    {
+  /* We need to parse the class table to find an empty spot.  */
+  for (class_index = 0;
+       class_index < _ux_system_slave->ux_system_slave_max_class;
+       class_index++) {
 #endif
 
-        /* Check if this class is already used.  */
-        if (class_inst -> ux_slave_class_status == UX_UNUSED)
-        {
+    /* Check if this class is already used.  */
+    if (class_inst->ux_slave_class_status == UX_UNUSED) {
 
 #if defined(UX_NAME_REFERENCED_BY_POINTER)
-            class_inst -> ux_slave_class_name = (const UCHAR *)class_name;
+      class_inst->ux_slave_class_name = (const UCHAR *)class_name;
 #else
-            /* We have found a free container for the class. Copy the name (with null-terminator).  */
-            _ux_utility_memory_copy(class_inst -> ux_slave_class_name, class_name, class_name_length + 1); /* Use case of memcpy is verified. */
+    /* We have found a free container for the class. Copy the name (with
+     * null-terminator).  */
+    _ux_utility_memory_copy(class_inst->ux_slave_class_name, class_name,
+                            class_name_length +
+                                1); /* Use case of memcpy is verified. */
 #endif
-            
-            /* Memorize the entry function of this class.  */
-            class_inst -> ux_slave_class_entry_function =  class_entry_function;
 
-            /* Memorize the pointer to the application parameter.  */
-            class_inst -> ux_slave_class_interface_parameter =  parameter;
-            
-            /* Memorize the configuration number on which this instance will be called.  */
-            class_inst -> ux_slave_class_configuration_number =  configuration_number;
-            
-            /* Memorize the interface number on which this instance will be called.  */
-            class_inst -> ux_slave_class_interface_number =  interface_number;
-            
-            /* Build all the fields of the Class Command to initialize the class.  */
-            command.ux_slave_class_command_request    =  UX_SLAVE_CLASS_COMMAND_INITIALIZE;
-            command.ux_slave_class_command_parameter  =  parameter;
-            command.ux_slave_class_command_class_ptr  =  class_inst;
+      /* Memorize the entry function of this class.  */
+      class_inst->ux_slave_class_entry_function = class_entry_function;
 
-            /* Call the class initialization routine.  */
-            status = class_entry_function(&command);
-            
-            /* Check the status.  */
-            if (status != UX_SUCCESS)
-                return(status);
-            
-            /* Make this class used now.  */
-            class_inst -> ux_slave_class_status = UX_USED;
+      /* Memorize the pointer to the application parameter.  */
+      class_inst->ux_slave_class_interface_parameter = parameter;
 
-            /* Return successful completion.  */
-            return(UX_SUCCESS);
-        }
+      /* Memorize the configuration number on which this instance will be
+       * called.  */
+      class_inst->ux_slave_class_configuration_number = configuration_number;
+
+      /* Memorize the interface number on which this instance will be called. */
+      class_inst->ux_slave_class_interface_number = interface_number;
+
+      /* Build all the fields of the Class Command to initialize the class.  */
+      command.ux_slave_class_command_request =
+          UX_SLAVE_CLASS_COMMAND_INITIALIZE;
+      command.ux_slave_class_command_parameter = parameter;
+      command.ux_slave_class_command_class_ptr = class_inst;
+
+      /* Call the class initialization routine.  */
+      status = class_entry_function(&command);
+
+      /* Check the status.  */
+      if (status != UX_SUCCESS)
+        return (status);
+
+      /* Make this class used now.  */
+      class_inst->ux_slave_class_status = UX_USED;
+
+      /* Return successful completion.  */
+      return (UX_SUCCESS);
+    }
 
 #if UX_MAX_SLAVE_CLASS_DRIVER > 1
-        /* Move to the next class.  */
-        class_inst ++;
-    }    
+    /* Move to the next class.  */
+    class_inst++;
+  }
 #endif
 
-    /* No more entries in the class table.  */
-    return(UX_MEMORY_INSUFFICIENT);
+  /* No more entries in the class table.  */
+  return (UX_MEMORY_INSUFFICIENT);
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -209,18 +210,17 @@ ULONG                       class_index;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT  _uxe_device_stack_class_register(UCHAR *class_name,
-                        UINT (*class_entry_function)(struct UX_SLAVE_CLASS_COMMAND_STRUCT *),
-                        ULONG configuration_number,
-                        ULONG interface_number,
-                        VOID *parameter)
-{
+UINT _uxe_device_stack_class_register(
+    UCHAR *class_name,
+    UINT (*class_entry_function)(struct UX_SLAVE_CLASS_COMMAND_STRUCT *),
+    ULONG configuration_number, ULONG interface_number, VOID *parameter) {
 
-    /* Sanity checks.  */
-    if ((class_name == UX_NULL) || (class_entry_function == UX_NULL))
-        return(UX_INVALID_PARAMETER);
+  /* Sanity checks.  */
+  if ((class_name == UX_NULL) || (class_entry_function == UX_NULL))
+    return (UX_INVALID_PARAMETER);
 
-    /* Invoke class register function.  */
-    return(_ux_device_stack_class_register(class_name, class_entry_function,
-                            configuration_number, interface_number, parameter));
+  /* Invoke class register function.  */
+  return (_ux_device_stack_class_register(class_name, class_entry_function,
+                                          configuration_number,
+                                          interface_number, parameter));
 }

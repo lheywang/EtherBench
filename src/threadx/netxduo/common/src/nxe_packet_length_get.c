@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_packet.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -70,26 +67,24 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_packet_length_get(NX_PACKET *packet_ptr, ULONG *length)
-{
+UINT _nxe_packet_length_get(NX_PACKET *packet_ptr, ULONG *length) {
 
-UINT status;
+  UINT status;
 
+  /* Simple integrity check on the packet.  */
+  if ((packet_ptr == NX_NULL) ||
+      (packet_ptr->nx_packet_pool_owner == NX_NULL) ||
+      ((packet_ptr->nx_packet_pool_owner)->nx_packet_pool_id !=
+       NX_PACKET_POOL_ID) ||
+      (length == NX_NULL)) {
 
-    /* Simple integrity check on the packet.  */
-    if ((packet_ptr == NX_NULL) || (packet_ptr -> nx_packet_pool_owner == NX_NULL) ||
-        ((packet_ptr -> nx_packet_pool_owner) -> nx_packet_pool_id != NX_PACKET_POOL_ID) ||
-        (length == NX_NULL))
-    {
+    /* Return an error!  */
+    return (NX_PTR_ERROR);
+  }
 
-        /* Return an error!  */
-        return(NX_PTR_ERROR);
-    }
+  /* Call actual packet length get function.  */
+  status = _nx_packet_length_get(packet_ptr, length);
 
-    /* Call actual packet length get function.  */
-    status =  _nx_packet_length_get(packet_ptr, length);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

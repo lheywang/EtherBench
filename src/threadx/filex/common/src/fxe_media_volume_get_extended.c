@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,15 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_media.h"
 
-
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,31 +73,29 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_media_volume_get_extended(FX_MEDIA *media_ptr, CHAR *volume_name, UINT volume_name_buffer_length, UINT volume_source)
-{
+UINT _fxe_media_volume_get_extended(FX_MEDIA *media_ptr, CHAR *volume_name,
+                                    UINT volume_name_buffer_length,
+                                    UINT volume_source) {
 
-UINT status;
+  UINT status;
 
+  /* Check for a NULL media or volume name pointer.  */
+  if ((media_ptr == FX_NULL) || (volume_name == FX_NULL)) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a NULL media or volume name pointer.  */
-    if ((media_ptr == FX_NULL) || (volume_name == FX_NULL))
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for zero length buffer.  */
+  if (volume_name_buffer_length == 0) {
+    return (FX_BUFFER_ERROR);
+  }
 
-    /* Check for zero length buffer.  */
-    if (volume_name_buffer_length == 0)
-    {
-        return(FX_BUFFER_ERROR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual media volume get service.  */
+  status = _fx_media_volume_get_extended(
+      media_ptr, volume_name, volume_name_buffer_length, volume_source);
 
-    /* Call actual media volume get service.  */
-    status =  _fx_media_volume_get_extended(media_ptr, volume_name, volume_name_buffer_length, volume_source);
-
-    /* Return status to the caller.  */
-    return(status);
+  /* Return status to the caller.  */
+  return (status);
 }
-

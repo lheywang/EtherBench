@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
@@ -30,12 +28,10 @@
 #include "fx_utility.h"
 #include "string.h"
 
-
 /* Remove any previous remapping for memory copy when compiling this
    module.  */
 
 #undef _fx_utility_memory_set
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -79,15 +75,12 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _fx_utility_memory_set(UCHAR *dest_ptr, UCHAR value, ULONG size)
-{
+VOID _fx_utility_memory_set(UCHAR *dest_ptr, UCHAR value, ULONG size) {
 
-    /* Loop to set memory.  */
-    while (size--)
-    {
+  /* Loop to set memory.  */
+  while (size--) {
 
-        /* Set byte.  */
-        *dest_ptr++ =  value;
-    }
+    /* Set byte.  */
+    *dest_ptr++ = value;
+  }
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -23,9 +22,8 @@
 #define FX_SOURCE_CODE
 
 #include "fx_api.h"
-#include "fx_utility.h"
 #include "fx_fault_tolerant.h"
-
+#include "fx_utility.h"
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
 /**************************************************************************/
@@ -68,26 +66,27 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_fault_tolerant_read_log_file(FX_MEDIA *media_ptr)
-{
-UINT  status;
-ULONG sectors;
-ULONG start_sector;
+UINT _fx_fault_tolerant_read_log_file(FX_MEDIA *media_ptr) {
+  UINT status;
+  ULONG sectors;
+  ULONG start_sector;
 
-    /* Calculate count of sectors to read. */
-    sectors = media_ptr -> fx_media_fault_tolerant_memory_buffer_size / media_ptr -> fx_media_bytes_per_sector;
+  /* Calculate count of sectors to read. */
+  sectors = media_ptr->fx_media_fault_tolerant_memory_buffer_size /
+            media_ptr->fx_media_bytes_per_sector;
 
-    /* Calculate the start sector of log file. */
-    start_sector = (media_ptr -> fx_media_fault_tolerant_start_cluster - FX_FAT_ENTRY_START) *
-                   media_ptr -> fx_media_sectors_per_cluster +
-                   media_ptr -> fx_media_data_sector_start;
+  /* Calculate the start sector of log file. */
+  start_sector =
+      (media_ptr->fx_media_fault_tolerant_start_cluster - FX_FAT_ENTRY_START) *
+          media_ptr->fx_media_sectors_per_cluster +
+      media_ptr->fx_media_data_sector_start;
 
-    status =  _fx_utility_logical_sector_read(media_ptr, (ULONG64) start_sector,
-                                              media_ptr -> fx_media_fault_tolerant_memory_buffer,
-                                              sectors, FX_DATA_SECTOR);
+  status = _fx_utility_logical_sector_read(
+      media_ptr, (ULONG64)start_sector,
+      media_ptr->fx_media_fault_tolerant_memory_buffer, sectors,
+      FX_DATA_SECTOR);
 
-    /* Return the status.  */
-    return(status);
+  /* Return the status.  */
+  return (status);
 }
 #endif /* FX_ENABLE_FAULT_TOLERANT */
-

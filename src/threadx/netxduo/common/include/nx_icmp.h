@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -58,18 +56,18 @@
 VOID _nx_icmp_packet_receive(NX_IP *ip_ptr, NX_PACKET *packet_ptr);
 VOID _nx_icmp_cleanup(TX_THREAD *thread_ptr NX_CLEANUP_PARAMETER);
 
-UINT _nxd_icmp_ping(NX_IP *ip_ptr, NXD_ADDRESS *ip_address,
-                    CHAR *data_ptr, ULONG data_size,
-                    NX_PACKET **response_ptr, ULONG wait_option);
+UINT _nxd_icmp_ping(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, CHAR *data_ptr,
+                    ULONG data_size, NX_PACKET **response_ptr,
+                    ULONG wait_option);
 UINT _nxd_icmp_source_ping(NX_IP *ip_ptr, NXD_ADDRESS *ip_address,
                            UINT address_index, CHAR *data_ptr, ULONG data_size,
                            NX_PACKET **response_ptr, ULONG wait_option);
 
 UINT _nxd_icmp_enable(NX_IP *ip_ptr);
 
-UINT _nxde_icmp_ping(NX_IP *ip_ptr, NXD_ADDRESS *ip_address,
-                     CHAR *data_ptr, ULONG data_size,
-                     NX_PACKET **response_ptr, ULONG wait_option);
+UINT _nxde_icmp_ping(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, CHAR *data_ptr,
+                     ULONG data_size, NX_PACKET **response_ptr,
+                     ULONG wait_option);
 UINT _nxde_icmp_source_ping(NX_IP *ip_ptr, NXD_ADDRESS *ip_address,
                             UINT address_index, CHAR *data_ptr, ULONG data_size,
                             NX_PACKET **response_ptr, ULONG wait_option);
@@ -79,4 +77,3 @@ UINT _nxde_icmp_enable(NX_IP *ip_ptr);
 #include "../include/nx_icmpv6.h"
 
 #endif
-

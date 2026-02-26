@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -21,7 +20,6 @@
 /**************************************************************************/
 
 #define NX_SOURCE_CODE
-
 
 /* Include necessary system files.  */
 
@@ -64,16 +62,15 @@
 /*  12-31-2023     Yajun Xia                Initial Version 6.4.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_packet_vlan_priority_set(NX_PACKET *packet_ptr, UINT vlan_priority)
-{
+UINT _nx_packet_vlan_priority_set(NX_PACKET *packet_ptr, UINT vlan_priority) {
 #ifdef NX_ENABLE_VLAN
-    packet_ptr -> nx_packet_vlan_priority = (UCHAR)(vlan_priority & 0xFF);
+  packet_ptr->nx_packet_vlan_priority = (UCHAR)(vlan_priority & 0xFF);
 
-    return(NX_SUCCESS);
-#else /* NX_ENABLE_VLAN */
-    NX_PARAMETER_NOT_USED(packet_ptr);
-    NX_PARAMETER_NOT_USED(vlan_priority);
+  return (NX_SUCCESS);
+#else  /* NX_ENABLE_VLAN */
+  NX_PARAMETER_NOT_USED(packet_ptr);
+  NX_PARAMETER_NOT_USED(vlan_priority);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* NX_ENABLE_VLAN */
 }

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -32,7 +30,6 @@
 /* Bring in externs for caller checking code.  */
 NX_CALLER_CHECKING_EXTERNS
 #endif /* FEATURE_NX_IPV6 */
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,31 +72,29 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxde_icmpv6_ra_flag_callback_set(NX_IP *ip_ptr, VOID (*icmpv6_ra_flag_callback)(NX_IP *ip_ptr, UINT ra_flag))
-{
+UINT _nxde_icmpv6_ra_flag_callback_set(
+    NX_IP *ip_ptr,
+    VOID (*icmpv6_ra_flag_callback)(NX_IP *ip_ptr, UINT ra_flag)) {
 #ifdef FEATURE_NX_IPV6
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Call actual IPv6 enable function.  */
+  status = _nxd_icmpv6_ra_flag_callback_set(ip_ptr, icmpv6_ra_flag_callback);
 
-    /* Call actual IPv6 enable function.  */
-    status =  _nxd_icmpv6_ra_flag_callback_set(ip_ptr, icmpv6_ra_flag_callback);
+  /* Return completion status.  */
+  return (status);
+#else  /* !FEATURE_NX_IPV6 */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(icmpv6_ra_flag_callback);
 
-    /* Return completion status.  */
-    return(status);
-#else /* !FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(icmpv6_ra_flag_callback);
-
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* FEATURE_NX_IPV6 */
 }
-

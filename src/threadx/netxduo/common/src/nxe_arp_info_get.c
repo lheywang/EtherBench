@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,18 +21,15 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_ip.h"
 #include "../include/nx_arp.h"
-
+#include "../include/nx_ip.h"
 
 /* Bring in externs for caller checking code.  */
 
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -92,51 +88,47 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxe_arp_info_get(NX_IP *ip_ptr, ULONG *arp_requests_sent, ULONG *arp_requests_received,
-                        ULONG *arp_responses_sent, ULONG *arp_responses_received,
-                        ULONG *arp_dynamic_entries, ULONG *arp_static_entries,
-                        ULONG *arp_aged_entries, ULONG *arp_invalid_messages)
-{
+UINT _nxe_arp_info_get(NX_IP *ip_ptr, ULONG *arp_requests_sent,
+                       ULONG *arp_requests_received, ULONG *arp_responses_sent,
+                       ULONG *arp_responses_received,
+                       ULONG *arp_dynamic_entries, ULONG *arp_static_entries,
+                       ULONG *arp_aged_entries, ULONG *arp_invalid_messages) {
 
 #ifndef NX_DISABLE_IPV4
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check to see if ARP is enabled.  */
+  if (!ip_ptr->nx_ip_arp_allocate) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if ARP is enabled.  */
-    if (!ip_ptr -> nx_ip_arp_allocate)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual ARP information get function.  */
+  status = _nx_arp_info_get(ip_ptr, arp_requests_sent, arp_requests_received,
+                            arp_responses_sent, arp_responses_received,
+                            arp_dynamic_entries, arp_static_entries,
+                            arp_aged_entries, arp_invalid_messages);
 
-    /* Call actual ARP information get function.  */
-    status =  _nx_arp_info_get(ip_ptr, arp_requests_sent, arp_requests_received,
-                               arp_responses_sent, arp_responses_received,
-                               arp_dynamic_entries, arp_static_entries,
-                               arp_aged_entries, arp_invalid_messages);
+  /* Return completion status.  */
+  return (status);
+#else  /* NX_DISABLE_IPV4  */
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(arp_requests_sent);
+  NX_PARAMETER_NOT_USED(arp_requests_received);
+  NX_PARAMETER_NOT_USED(arp_responses_sent);
+  NX_PARAMETER_NOT_USED(arp_responses_received);
+  NX_PARAMETER_NOT_USED(arp_dynamic_entries);
+  NX_PARAMETER_NOT_USED(arp_static_entries);
+  NX_PARAMETER_NOT_USED(arp_aged_entries);
+  NX_PARAMETER_NOT_USED(arp_invalid_messages);
 
-    /* Return completion status.  */
-    return(status);
-#else /* NX_DISABLE_IPV4  */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(arp_requests_sent);
-    NX_PARAMETER_NOT_USED(arp_requests_received);
-    NX_PARAMETER_NOT_USED(arp_responses_sent);
-    NX_PARAMETER_NOT_USED(arp_responses_received);
-    NX_PARAMETER_NOT_USED(arp_dynamic_entries);
-    NX_PARAMETER_NOT_USED(arp_static_entries);
-    NX_PARAMETER_NOT_USED(arp_aged_entries);
-    NX_PARAMETER_NOT_USED(arp_invalid_messages);
-
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }
-

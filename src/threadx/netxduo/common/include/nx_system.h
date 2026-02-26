@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -50,15 +48,12 @@
 #ifndef NX_SYS_H
 #define NX_SYS_H
 
-
-
 /* Define system management function prototypes.  */
 
 VOID _nx_system_initialize(VOID);
 
-
-/* Define error checking shells for API services.  These are only referenced by the
-   application.  */
+/* Define error checking shells for API services.  These are only referenced by
+   the application.  */
 
 /* System management component data declarations follow.  */
 
@@ -73,7 +68,6 @@ VOID _nx_system_initialize(VOID);
 #define SYSTEM_DECLARE extern
 #endif
 /*lint +e767 enable checking for different definitions.  */
-
 
 /* Define the global NetX build options variables. These variables contain a bit
    map representing how the NetX library was built. The following are the bit
@@ -140,17 +134,15 @@ VOID _nx_system_initialize(VOID);
                     15-8                NX_TCP_MAXIMUM_RETRIES
                     7-0                 NX_TCP_MAXIMUM_TX_QUEUE
 
-   Note that values greater than the value that can be represented in the build options
-   bit field are represented as all ones in the bit field. For example, if NX_TCP_ACK_TIMER_RATE
-   is 256, the value in the bits 31-24 of _nx_system_build_options_3 is 0xFF, which is 255
-   decimal.  */
+   Note that values greater than the value that can be represented in the build
+   options bit field are represented as all ones in the bit field. For example,
+   if NX_TCP_ACK_TIMER_RATE is 256, the value in the bits 31-24 of
+   _nx_system_build_options_3 is 0xFF, which is 255 decimal.  */
 
-SYSTEM_DECLARE  ULONG       _nx_system_build_options_1;
-SYSTEM_DECLARE  ULONG       _nx_system_build_options_2;
-SYSTEM_DECLARE  ULONG       _nx_system_build_options_3;
-SYSTEM_DECLARE  ULONG       _nx_system_build_options_4;
-SYSTEM_DECLARE  ULONG       _nx_system_build_options_5;
-
+SYSTEM_DECLARE ULONG _nx_system_build_options_1;
+SYSTEM_DECLARE ULONG _nx_system_build_options_2;
+SYSTEM_DECLARE ULONG _nx_system_build_options_3;
+SYSTEM_DECLARE ULONG _nx_system_build_options_4;
+SYSTEM_DECLARE ULONG _nx_system_build_options_5;
 
 #endif
-

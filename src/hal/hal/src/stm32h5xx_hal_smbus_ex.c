@@ -32,10 +32,12 @@
 
                      ##### How to use this driver #####
   ==============================================================================
-    (#) Configure the enable or disable of SMBUS Wake Up Mode using the functions :
+    (#) Configure the enable or disable of SMBUS Wake Up Mode using the
+  functions :
           (++) HAL_SMBUSEx_EnableWakeUp()
           (++) HAL_SMBUSEx_DisableWakeUp()
-    (#) Configure the enable or disable of fast mode plus driving capability using the functions :
+    (#) Configure the enable or disable of fast mode plus driving capability
+  using the functions :
           (++) HAL_SMBUSEx_ConfigFastModePlus()
   @endverbatim
   */
@@ -44,13 +46,13 @@
 #include "stm32h5xx_hal.h"
 
 /** @addtogroup STM32H5xx_HAL_Driver
-  * @{
-  */
+ * @{
+ */
 
 /** @defgroup SMBUSEx SMBUSEx
-  * @brief SMBUS Extended HAL module driver
-  * @{
-  */
+ * @brief SMBUS Extended HAL module driver
+ * @{
+ */
 
 #ifdef HAL_SMBUS_MODULE_ENABLED
 
@@ -62,8 +64,8 @@
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup SMBUSEx_Exported_Functions SMBUS Extended Exported Functions
-  * @{
-  */
+ * @{
+ */
 
 /** @defgroup SMBUSEx_Exported_Functions_Group2 WakeUp Mode Functions
   * @brief    WakeUp Mode Functions
@@ -80,18 +82,17 @@
   */
 
 /**
-  * @brief  Enable SMBUS wakeup from Stop mode(s).
-  * @param  hsmbus Pointer to a SMBUS_HandleTypeDef structure that contains
-  *                the configuration information for the specified SMBUSx peripheral.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SMBUSEx_EnableWakeUp(SMBUS_HandleTypeDef *hsmbus)
-{
+ * @brief  Enable SMBUS wakeup from Stop mode(s).
+ * @param  hsmbus Pointer to a SMBUS_HandleTypeDef structure that contains
+ *                the configuration information for the specified SMBUSx
+ * peripheral.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SMBUSEx_EnableWakeUp(SMBUS_HandleTypeDef *hsmbus) {
   /* Check the parameters */
   assert_param(IS_I2C_WAKEUP_FROMSTOP_INSTANCE(hsmbus->Instance));
 
-  if (hsmbus->State == HAL_SMBUS_STATE_READY)
-  {
+  if (hsmbus->State == HAL_SMBUS_STATE_READY) {
     /* Process Locked */
     __HAL_LOCK(hsmbus);
 
@@ -111,26 +112,23 @@ HAL_StatusTypeDef HAL_SMBUSEx_EnableWakeUp(SMBUS_HandleTypeDef *hsmbus)
     __HAL_UNLOCK(hsmbus);
 
     return HAL_OK;
-  }
-  else
-  {
+  } else {
     return HAL_BUSY;
   }
 }
 
 /**
-  * @brief  Disable SMBUS wakeup from Stop mode(s).
-  * @param  hsmbus Pointer to a SMBUS_HandleTypeDef structure that contains
-  *                the configuration information for the specified SMBUSx peripheral.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SMBUSEx_DisableWakeUp(SMBUS_HandleTypeDef *hsmbus)
-{
+ * @brief  Disable SMBUS wakeup from Stop mode(s).
+ * @param  hsmbus Pointer to a SMBUS_HandleTypeDef structure that contains
+ *                the configuration information for the specified SMBUSx
+ * peripheral.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SMBUSEx_DisableWakeUp(SMBUS_HandleTypeDef *hsmbus) {
   /* Check the parameters */
   assert_param(IS_I2C_WAKEUP_FROMSTOP_INSTANCE(hsmbus->Instance));
 
-  if (hsmbus->State == HAL_SMBUS_STATE_READY)
-  {
+  if (hsmbus->State == HAL_SMBUS_STATE_READY) {
     /* Process Locked */
     __HAL_LOCK(hsmbus);
 
@@ -150,15 +148,13 @@ HAL_StatusTypeDef HAL_SMBUSEx_DisableWakeUp(SMBUS_HandleTypeDef *hsmbus)
     __HAL_UNLOCK(hsmbus);
 
     return HAL_OK;
-  }
-  else
-  {
+  } else {
     return HAL_BUSY;
   }
 }
 /**
-  * @}
-  */
+ * @}
+ */
 
 /** @defgroup SMBUSEx_Exported_Functions_Group3 Fast Mode Plus Functions
   * @brief    Fast Mode Plus Functions
@@ -175,20 +171,20 @@ HAL_StatusTypeDef HAL_SMBUSEx_DisableWakeUp(SMBUS_HandleTypeDef *hsmbus)
   */
 
 /**
-  * @brief  Configure SMBUS Fast Mode Plus.
-  * @param  hsmbus Pointer to a SMBUS_HandleTypeDef structure that contains
-  *                the configuration information for the specified SMBUSx peripheral.
-  * @param  FastModePlus New state of the Fast Mode Plus.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SMBUSEx_ConfigFastModePlus(SMBUS_HandleTypeDef *hsmbus, uint32_t FastModePlus)
-{
+ * @brief  Configure SMBUS Fast Mode Plus.
+ * @param  hsmbus Pointer to a SMBUS_HandleTypeDef structure that contains
+ *                the configuration information for the specified SMBUSx
+ * peripheral.
+ * @param  FastModePlus New state of the Fast Mode Plus.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SMBUSEx_ConfigFastModePlus(SMBUS_HandleTypeDef *hsmbus,
+                                                 uint32_t FastModePlus) {
   /* Check the parameters */
   assert_param(IS_SMBUS_ALL_INSTANCE(hsmbus->Instance));
   assert_param(IS_SMBUS_FASTMODEPLUS(FastModePlus));
 
-  if (hsmbus->State == HAL_SMBUS_STATE_READY)
-  {
+  if (hsmbus->State == HAL_SMBUS_STATE_READY) {
     /* Process Locked */
     __HAL_LOCK(hsmbus);
 
@@ -197,13 +193,10 @@ HAL_StatusTypeDef HAL_SMBUSEx_ConfigFastModePlus(SMBUS_HandleTypeDef *hsmbus, ui
     /* Disable the selected SMBUS peripheral */
     __HAL_SMBUS_DISABLE(hsmbus);
 
-    if (FastModePlus == SMBUS_FASTMODEPLUS_ENABLE)
-    {
+    if (FastModePlus == SMBUS_FASTMODEPLUS_ENABLE) {
       /* Set SMBUSx FMP bit */
       hsmbus->Instance->CR1 |= (I2C_CR1_FMP);
-    }
-    else
-    {
+    } else {
       /* Reset SMBUSx FMP bit */
       hsmbus->Instance->CR1 &= ~(I2C_CR1_FMP);
     }
@@ -216,30 +209,28 @@ HAL_StatusTypeDef HAL_SMBUSEx_ConfigFastModePlus(SMBUS_HandleTypeDef *hsmbus, ui
     __HAL_UNLOCK(hsmbus);
 
     return HAL_OK;
-  }
-  else
-  {
+  } else {
     return HAL_BUSY;
   }
 }
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 #endif /* HAL_SMBUS_MODULE_ENABLED */
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */

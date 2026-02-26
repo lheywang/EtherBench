@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
-#include "../include/nx_udp.h"
 #include "../include/nx_ip.h"
-
+#include "../include/nx_udp.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,22 +72,21 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_udp_socket_source_send(NX_UDP_SOCKET *socket_ptr, NX_PACKET *packet_ptr,
-                                 ULONG ip_address, UINT port, UINT address_index)
-{
-UINT   status;
-NX_IP *ip_ptr;
+UINT _nx_udp_socket_source_send(NX_UDP_SOCKET *socket_ptr,
+                                NX_PACKET *packet_ptr, ULONG ip_address,
+                                UINT port, UINT address_index) {
+  UINT status;
+  NX_IP *ip_ptr;
 
+  /* Setup the pointer to the associated IP instance.  */
+  ip_ptr = socket_ptr->nx_udp_socket_ip_ptr;
 
-    /* Setup the pointer to the associated IP instance.  */
-    ip_ptr =  socket_ptr -> nx_udp_socket_ip_ptr;
+  /* Store interface information into the packet structure. */
+  packet_ptr->nx_packet_address.nx_packet_interface_ptr =
+      &(ip_ptr->nx_ip_interface[address_index]);
 
-    /* Store interface information into the packet structure. */
-    packet_ptr -> nx_packet_address.nx_packet_interface_ptr = &(ip_ptr -> nx_ip_interface[address_index]);
+  /* Call udp_socket_send service */
+  status = _nx_udp_socket_send(socket_ptr, packet_ptr, ip_address, port);
 
-    /* Call udp_socket_send service */
-    status = _nx_udp_socket_send(socket_ptr, packet_ptr, ip_address, port);
-
-    return(status);
+  return (status);
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_tcp.h"
 #include "tx_thread.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -81,66 +78,65 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID  _nx_tcp_socket_thread_suspend(TX_THREAD **suspension_list_head, VOID (*suspend_cleanup)(TX_THREAD * NX_CLEANUP_PARAMETER), NX_TCP_SOCKET *socket_ptr, TX_MUTEX *mutex_ptr, ULONG wait_option)
-{
+VOID _nx_tcp_socket_thread_suspend(
+    TX_THREAD **suspension_list_head,
+    VOID (*suspend_cleanup)(TX_THREAD *NX_CLEANUP_PARAMETER),
+    NX_TCP_SOCKET *socket_ptr, TX_MUTEX *mutex_ptr, ULONG wait_option) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-TX_THREAD *thread_ptr;
+  TX_THREAD *thread_ptr;
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Pickup thread pointer.  */
+  thread_ptr = _tx_thread_current_ptr;
 
-    /* Pickup thread pointer.  */
-    thread_ptr =  _tx_thread_current_ptr;
+  /* Setup suspension list.  */
+  if (*suspension_list_head) {
 
-    /* Setup suspension list.  */
-    if (*suspension_list_head)
-    {
+    /* This list is not NULL, add current thread to the end. */
+    thread_ptr->tx_thread_suspended_next = *suspension_list_head;
+    thread_ptr->tx_thread_suspended_previous =
+        (*suspension_list_head)->tx_thread_suspended_previous;
+    ((*suspension_list_head)->tx_thread_suspended_previous)
+        ->tx_thread_suspended_next = thread_ptr;
+    (*suspension_list_head)->tx_thread_suspended_previous = thread_ptr;
+  } else {
 
-        /* This list is not NULL, add current thread to the end. */
-        thread_ptr -> tx_thread_suspended_next =      *suspension_list_head;
-        thread_ptr -> tx_thread_suspended_previous =  (*suspension_list_head) -> tx_thread_suspended_previous;
-        ((*suspension_list_head) -> tx_thread_suspended_previous) -> tx_thread_suspended_next =  thread_ptr;
-        (*suspension_list_head) -> tx_thread_suspended_previous =   thread_ptr;
-    }
-    else
-    {
+    /* No other threads are suspended.  Setup the head pointer and
+       just setup this threads pointers to itself.  */
+    *suspension_list_head = thread_ptr;
+    thread_ptr->tx_thread_suspended_next = thread_ptr;
+    thread_ptr->tx_thread_suspended_previous = thread_ptr;
+  }
 
-        /* No other threads are suspended.  Setup the head pointer and
-           just setup this threads pointers to itself.  */
-        *suspension_list_head =  thread_ptr;
-        thread_ptr -> tx_thread_suspended_next =        thread_ptr;
-        thread_ptr -> tx_thread_suspended_previous =    thread_ptr;
-    }
+  /* Setup cleanup routine pointer.  */
+  thread_ptr->tx_thread_suspend_cleanup = suspend_cleanup;
 
-    /* Setup cleanup routine pointer.  */
-    thread_ptr -> tx_thread_suspend_cleanup =  suspend_cleanup;
+  /* Setup cleanup information, i.e. this pool control
+     block.  */
+  thread_ptr->tx_thread_suspend_control_block = (void *)socket_ptr;
 
-    /* Setup cleanup information, i.e. this pool control
-       block.  */
-    thread_ptr -> tx_thread_suspend_control_block =  (void *)socket_ptr;
+  /* Set the state to suspended.  */
+  thread_ptr->tx_thread_state = TX_TCP_IP;
 
-    /* Set the state to suspended.  */
-    thread_ptr -> tx_thread_state =  TX_TCP_IP;
+  /* Set the suspending flag.  */
+  thread_ptr->tx_thread_suspending = TX_TRUE;
 
-    /* Set the suspending flag.  */
-    thread_ptr -> tx_thread_suspending =  TX_TRUE;
+  /* Temporarily disable preemption.  */
+  _tx_thread_preempt_disable++;
 
-    /* Temporarily disable preemption.  */
-    _tx_thread_preempt_disable++;
+  /* Save the timeout value.  */
+  thread_ptr->tx_thread_timer.tx_timer_internal_remaining_ticks = wait_option;
 
-    /* Save the timeout value.  */
-    thread_ptr -> tx_thread_timer.tx_timer_internal_remaining_ticks =  wait_option;
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+  /* Release protection.  */
+  tx_mutex_put(mutex_ptr);
 
-    /* Release protection.  */
-    tx_mutex_put(mutex_ptr);
-
-    /* Call actual thread suspension routine.  */
-    _tx_thread_system_suspend(thread_ptr);
+  /* Call actual thread suspension routine.  */
+  _tx_thread_system_suspend(thread_ptr);
 }
-

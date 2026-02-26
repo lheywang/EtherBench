@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_packet.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -67,30 +64,29 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_packet_pool_low_watermark_set(NX_PACKET_POOL *pool_ptr, ULONG low_watermark)
-{
+UINT _nx_packet_pool_low_watermark_set(NX_PACKET_POOL *pool_ptr,
+                                       ULONG low_watermark) {
 #ifdef NX_ENABLE_LOW_WATERMARK
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-    /* Disable interrupts to get a packet from the pool.  */
-    TX_DISABLE
+  /* Disable interrupts to get a packet from the pool.  */
+  TX_DISABLE
 
-    /* Set low watermark to packet pool. */
-    pool_ptr -> nx_packet_pool_low_watermark = low_watermark;
+  /* Set low watermark to packet pool. */
+  pool_ptr->nx_packet_pool_low_watermark = low_watermark;
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Return completion status.  */
-    return(NX_SUCCESS);
+  /* Return completion status.  */
+  return (NX_SUCCESS);
 
 #else /* !NX_ENABLE_LOW_WATERMARK */
-    NX_PARAMETER_NOT_USED(pool_ptr);
-    NX_PARAMETER_NOT_USED(low_watermark);
+  NX_PARAMETER_NOT_USED(pool_ptr);
+  NX_PARAMETER_NOT_USED(low_watermark);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* NX_ENABLE_LOW_WATERMARK */
 }
-

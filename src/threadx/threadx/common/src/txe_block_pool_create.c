@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,15 +21,13 @@
 
 #define TX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
+#include "../include/tx_block_pool.h"
 #include "../include/tx_initialize.h"
 #include "../include/tx_thread.h"
 #include "../include/tx_timer.h"
-#include "../include/tx_block_pool.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -82,148 +79,132 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _txe_block_pool_create(TX_BLOCK_POOL *pool_ptr, CHAR *name_ptr, ULONG block_size,
-                    VOID *pool_start, ULONG pool_size, UINT pool_control_block_size)
-{
+UINT _txe_block_pool_create(TX_BLOCK_POOL *pool_ptr, CHAR *name_ptr,
+                            ULONG block_size, VOID *pool_start, ULONG pool_size,
+                            UINT pool_control_block_size) {
 
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
-UINT            status;
-ULONG           i;
-TX_BLOCK_POOL   *next_pool;
+  UINT status;
+  ULONG i;
+  TX_BLOCK_POOL *next_pool;
 #ifndef TX_TIMER_PROCESS_IN_ISR
-TX_THREAD       *thread_ptr;
+  TX_THREAD *thread_ptr;
 #endif
 
+  /* Default status to success.  */
+  status = TX_SUCCESS;
 
-    /* Default status to success.  */
-    status =  TX_SUCCESS;
+  /* Check for an invalid pool pointer.  */
+  if (pool_ptr == TX_NULL) {
 
-    /* Check for an invalid pool pointer.  */
-    if (pool_ptr == TX_NULL)
-    {
+    /* Pool pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  }
 
-        /* Pool pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
+  /* Check for invalid control block size.  */
+  else if (pool_control_block_size != (sizeof(TX_BLOCK_POOL))) {
+
+    /* Pool pointer is invalid, return appropriate error code.  */
+    status = TX_POOL_ERROR;
+  } else {
+
+    /* Disable interrupts.  */
+    TX_DISABLE
+
+    /* Increment the preempt disable flag.  */
+    _tx_thread_preempt_disable++;
+
+    /* Restore interrupts.  */
+    TX_RESTORE
+
+    /* Next see if it is already in the created list.  */
+    next_pool = _tx_block_pool_created_ptr;
+    for (i = ((ULONG)0); i < _tx_block_pool_created_count; i++) {
+
+      /* Determine if this block pool matches the pool in the list.  */
+      if (pool_ptr == next_pool) {
+
+        break;
+      } else {
+        /* Move to the next pool.  */
+        next_pool = next_pool->tx_block_pool_created_next;
+      }
     }
 
-    /* Check for invalid control block size.  */
-    else if (pool_control_block_size != (sizeof(TX_BLOCK_POOL)))
-    {
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-        /* Pool pointer is invalid, return appropriate error code.  */
-        status =  TX_POOL_ERROR;
+    /* Decrement the preempt disable flag.  */
+    _tx_thread_preempt_disable--;
+
+    /* Restore interrupts.  */
+    TX_RESTORE
+
+    /* Check for preemption.  */
+    _tx_thread_system_preempt_check();
+
+    /* At this point, check to see if there is a duplicate pool.  */
+    if (pool_ptr == next_pool) {
+
+      /* Pool is already created, return appropriate error code.  */
+      status = TX_POOL_ERROR;
     }
-    else
-    {
 
-        /* Disable interrupts.  */
-        TX_DISABLE
+    /* Check for an invalid starting address.  */
+    else if (pool_start == TX_NULL) {
 
-        /* Increment the preempt disable flag.  */
-        _tx_thread_preempt_disable++;
+      /* Null starting address pointer, return appropriate error.  */
+      status = TX_PTR_ERROR;
+    } else {
 
-        /* Restore interrupts.  */
-        TX_RESTORE
+      /* Check for invalid pool size.  */
+      if ((((block_size / (sizeof(void *))) * (sizeof(void *))) +
+           (sizeof(void *))) >
+          ((pool_size / (sizeof(void *))) * (sizeof(void *)))) {
 
-        /* Next see if it is already in the created list.  */
-        next_pool =   _tx_block_pool_created_ptr;
-        for (i = ((ULONG) 0); i < _tx_block_pool_created_count; i++)
-        {
-
-            /* Determine if this block pool matches the pool in the list.  */
-            if (pool_ptr == next_pool)
-            {
-
-                break;
-            }
-            else
-            {
-                /* Move to the next pool.  */
-                next_pool =  next_pool -> tx_block_pool_created_next;
-            }
-        }
-
-        /* Disable interrupts.  */
-        TX_DISABLE
-
-        /* Decrement the preempt disable flag.  */
-        _tx_thread_preempt_disable--;
-
-        /* Restore interrupts.  */
-        TX_RESTORE
-
-        /* Check for preemption.  */
-        _tx_thread_system_preempt_check();
-
-        /* At this point, check to see if there is a duplicate pool.  */
-        if (pool_ptr == next_pool)
-        {
-
-            /* Pool is already created, return appropriate error code.  */
-            status =  TX_POOL_ERROR;
-        }
-
-        /* Check for an invalid starting address.  */
-        else if (pool_start == TX_NULL)
-        {
-
-            /* Null starting address pointer, return appropriate error.  */
-            status =  TX_PTR_ERROR;
-        }
-        else
-        {
-
-            /* Check for invalid pool size.  */
-            if ((((block_size/(sizeof(void *)))*(sizeof(void *))) + (sizeof(void *))) >
-                                            ((pool_size/(sizeof(void *)))*(sizeof(void *))))
-            {
-
-                /* Not enough memory for one block, return appropriate error.  */
-                status =  TX_SIZE_ERROR;
-            }
-            else
-            {
+        /* Not enough memory for one block, return appropriate error.  */
+        status = TX_SIZE_ERROR;
+      } else {
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-                /* Pickup thread pointer.  */
-                TX_THREAD_GET_CURRENT(thread_ptr)
+        /* Pickup thread pointer.  */
+        TX_THREAD_GET_CURRENT(thread_ptr)
 
-                /* Check for invalid caller of this function.  First check for a calling thread.  */
-                if (thread_ptr == &_tx_timer_thread)
-                {
+        /* Check for invalid caller of this function.  First check for a calling
+         * thread.  */
+        if (thread_ptr == &_tx_timer_thread) {
 
-                    /* Invalid caller of this function, return appropriate error code.  */
-                    status =  TX_CALLER_ERROR;
-                }
+          /* Invalid caller of this function, return appropriate error code.  */
+          status = TX_CALLER_ERROR;
+        }
 #endif
 
-                /* Check for interrupt call.  */
-                if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG) 0))
-                {
+        /* Check for interrupt call.  */
+        if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-                    /* Now, make sure the call is from an interrupt and not initialization.  */
-                    if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS)
-                    {
+          /* Now, make sure the call is from an interrupt and not
+           * initialization.  */
+          if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS) {
 
-                        /* Invalid caller of this function, return appropriate error code.  */
-                        status =  TX_CALLER_ERROR;
-                    }
-                }
-            }
+            /* Invalid caller of this function, return appropriate error code.
+             */
+            status = TX_CALLER_ERROR;
+          }
         }
+      }
     }
+  }
 
-    /* Determine if everything is okay.  */
-    if (status == TX_SUCCESS)
-    {
+  /* Determine if everything is okay.  */
+  if (status == TX_SUCCESS) {
 
-        /* Call actual block pool create function.  */
-        status =  _tx_block_pool_create(pool_ptr, name_ptr, block_size, pool_start, pool_size);
-    }
+    /* Call actual block pool create function.  */
+    status = _tx_block_pool_create(pool_ptr, name_ptr, block_size, pool_start,
+                                   pool_size);
+  }
 
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

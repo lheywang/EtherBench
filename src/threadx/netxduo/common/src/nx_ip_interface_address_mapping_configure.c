@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,19 +72,20 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_ip_interface_address_mapping_configure(NX_IP *ip_ptr, UINT interface_index, UINT mapping_needed)
-{
+UINT _nx_ip_interface_address_mapping_configure(NX_IP *ip_ptr,
+                                                UINT interface_index,
+                                                UINT mapping_needed) {
 
-    /* Get mutex protection.  */
-    tx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);
+  /* Get mutex protection.  */
+  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-    /* Set mapping needed. */
-    ip_ptr -> nx_ip_interface[interface_index].nx_interface_address_mapping_needed = (UCHAR)mapping_needed;
+  /* Set mapping needed. */
+  ip_ptr->nx_ip_interface[interface_index].nx_interface_address_mapping_needed =
+      (UCHAR)mapping_needed;
 
-    /* Release mutex protection.  */
-    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+  /* Release mutex protection.  */
+  tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    /* Return completion status.  */
-    return(NX_SUCCESS);
+  /* Return completion status.  */
+  return (NX_SUCCESS);
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,7 +21,6 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -30,7 +28,6 @@
 
 /* Bring in externs for caller checking code.  */
 NX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -78,38 +75,33 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxde_tcp_socket_peer_info_get(NX_TCP_SOCKET *socket_ptr,
-                                     NXD_ADDRESS *peer_ip_address,
-                                     ULONG *peer_port)
-{
+UINT _nxde_tcp_socket_peer_info_get(NX_TCP_SOCKET *socket_ptr,
+                                    NXD_ADDRESS *peer_ip_address,
+                                    ULONG *peer_port) {
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers.  */
+  if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers.  */
-    if ((socket_ptr == NX_NULL) || (socket_ptr -> nx_tcp_socket_id != NX_TCP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  if ((peer_ip_address == NX_NULL) || (peer_port == NX_NULL)) {
+    return (NX_PTR_ERROR);
+  }
 
-    if ((peer_ip_address == NX_NULL) || (peer_port == NX_NULL))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Check to see if TCP is enabled.  */
+  if (!(socket_ptr->nx_tcp_socket_ip_ptr)->nx_ip_tcp_packet_receive) {
+    return (NX_NOT_ENABLED);
+  }
 
-    /* Check to see if TCP is enabled.  */
-    if (!(socket_ptr -> nx_tcp_socket_ip_ptr) -> nx_ip_tcp_packet_receive)
-    {
-        return(NX_NOT_ENABLED);
-    }
+  /* Check for appropriate caller.  */
+  NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_THREADS_ONLY_CALLER_CHECKING
+  /* Call actual TCP socket MSS get function.  */
+  status =
+      _nxd_tcp_socket_peer_info_get(socket_ptr, peer_ip_address, peer_port);
 
-    /* Call actual TCP socket MSS get function.  */
-    status =  _nxd_tcp_socket_peer_info_get(socket_ptr, peer_ip_address, peer_port);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 }
-

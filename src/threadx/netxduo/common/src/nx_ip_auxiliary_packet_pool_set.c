@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_ip.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,38 +71,34 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_ip_auxiliary_packet_pool_set(NX_IP *ip_ptr, NX_PACKET_POOL *auxiliary_pool)
-{
+UINT _nx_ip_auxiliary_packet_pool_set(NX_IP *ip_ptr,
+                                      NX_PACKET_POOL *auxiliary_pool) {
 
 #ifdef NX_ENABLE_DUAL_PACKET_POOL
-TX_INTERRUPT_SAVE_AREA
+  TX_INTERRUPT_SAVE_AREA
 
+  /* Disable interrupts.  */
+  TX_DISABLE
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+  /* Choose a packet pool with smaller payload size as auxiliary packet pool. */
+  if (auxiliary_pool->nx_packet_pool_payload_size >
+      ip_ptr->nx_ip_default_packet_pool->nx_packet_pool_payload_size) {
+    ip_ptr->nx_ip_default_packet_pool = auxiliary_pool;
+  } else {
+    ip_ptr->nx_ip_auxiliary_packet_pool = auxiliary_pool;
+  }
 
-    /* Choose a packet pool with smaller payload size as auxiliary packet pool. */
-    if (auxiliary_pool -> nx_packet_pool_payload_size > ip_ptr -> nx_ip_default_packet_pool -> nx_packet_pool_payload_size)
-    {
-        ip_ptr -> nx_ip_default_packet_pool = auxiliary_pool;
-    }
-    else
-    {
-        ip_ptr -> nx_ip_auxiliary_packet_pool = auxiliary_pool;
-    }
+  /* Restore interrupts.  */
+  TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Return success to the caller.  */
-    return(NX_SUCCESS);
+  /* Return success to the caller.  */
+  return (NX_SUCCESS);
 
 #else /* !NX_ENABLE_DUAL_PACKET_POOL */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(auxiliary_pool);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(auxiliary_pool);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* NX_ENABLE_DUAL_PACKET_POOL */
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,14 +21,12 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_file.h"
 
 FX_CALLER_CHECKING_EXTERNS
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,25 +68,21 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_file_extended_truncate(FX_FILE *file_ptr, ULONG64 size)
-{
+UINT _fxe_file_extended_truncate(FX_FILE *file_ptr, ULONG64 size) {
 
-UINT status;
+  UINT status;
 
+  /* Check for a null file pointer.  */
+  if (file_ptr == FX_NULL) {
+    return (FX_PTR_ERROR);
+  }
 
-    /* Check for a null file pointer.  */
-    if (file_ptr == FX_NULL)
-    {
-        return(FX_PTR_ERROR);
-    }
+  /* Check for a valid caller.  */
+  FX_CALLER_CHECKING_CODE
 
-    /* Check for a valid caller.  */
-    FX_CALLER_CHECKING_CODE
+  /* Call actual file truncate service.  */
+  status = _fx_file_extended_truncate(file_ptr, size);
 
-    /* Call actual file truncate service.  */
-    status =  _fx_file_extended_truncate(file_ptr, size);
-
-    /* Truncate is complete, return status.  */
-    return(status);
+  /* Truncate is complete, return status.  */
+  return (status);
 }
-

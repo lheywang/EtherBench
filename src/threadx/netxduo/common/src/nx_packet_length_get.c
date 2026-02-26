@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
 #include "../include/nx_packet.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -69,16 +66,15 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nx_packet_length_get(NX_PACKET *packet_ptr, ULONG *length)
-{
+UINT _nx_packet_length_get(NX_PACKET *packet_ptr, ULONG *length) {
 
-    /* Return the length of the packet.  */
-    *length =  packet_ptr -> nx_packet_length;
+  /* Return the length of the packet.  */
+  *length = packet_ptr->nx_packet_length;
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_PACKET_LENGTH_GET, packet_ptr, *length, 0, 0, NX_TRACE_PACKET_EVENTS, 0, 0);
+  /* If trace is enabled, insert this event into the trace buffer.  */
+  NX_TRACE_IN_LINE_INSERT(NX_TRACE_PACKET_LENGTH_GET, packet_ptr, *length, 0, 0,
+                          NX_TRACE_PACKET_EVENTS, 0, 0);
 
-    /* Return completion status.  */
-    return(NX_SUCCESS);
+  /* Return completion status.  */
+  return (NX_SUCCESS);
 }
-

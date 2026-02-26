@@ -19,7 +19,6 @@
 /**************************************************************************/
 #define NX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "../include/nx_api.h"
@@ -31,7 +30,6 @@
 /* Bring in externs for caller checking code.  */
 NX_CALLER_CHECKING_EXTERNS
 #endif /* FEATURE_NX_IPV6 */
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -85,54 +83,52 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _nxde_ipv6_default_router_entry_get(NX_IP *ip_ptr, UINT interface_index, UINT entry_index,
-                                          NXD_ADDRESS *router_addr, ULONG *router_lifetime,
-                                          ULONG *prefix_length, ULONG *configuration_method)
-{
+UINT _nxde_ipv6_default_router_entry_get(NX_IP *ip_ptr, UINT interface_index,
+                                         UINT entry_index,
+                                         NXD_ADDRESS *router_addr,
+                                         ULONG *router_lifetime,
+                                         ULONG *prefix_length,
+                                         ULONG *configuration_method) {
 #ifdef FEATURE_NX_IPV6
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid input pointers. */
+  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    return (NX_PTR_ERROR);
+  }
 
-    /* Check for invalid input pointers. */
-    if ((ip_ptr == NX_NULL) || (ip_ptr -> nx_ip_id != NX_IP_ID))
-    {
-        return(NX_PTR_ERROR);
-    }
+  /* Validate the interface. */
+  if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
+    return (NX_INVALID_INTERFACE);
+  }
 
-    /* Validate the interface. */
-    if (interface_index >= NX_MAX_PHYSICAL_INTERFACES)
-    {
-        return(NX_INVALID_INTERFACE);
-    }
+  /* Validate the interface. */
+  if (entry_index >= NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE) {
+    return (NX_INVALID_INTERFACE);
+  }
 
-    /* Validate the interface. */
-    if (entry_index >= NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE)
-    {
-        return(NX_INVALID_INTERFACE);
-    }
+  /* Check for appropriate caller.  */
+  NX_INIT_AND_THREADS_CALLER_CHECKING
 
-    /* Check for appropriate caller.  */
-    NX_INIT_AND_THREADS_CALLER_CHECKING
+  /* Call actual IPv6 default router entry get function.  */
+  status = _nxd_ipv6_default_router_entry_get(
+      ip_ptr, interface_index, entry_index, router_addr, router_lifetime,
+      prefix_length, configuration_method);
 
-    /* Call actual IPv6 default router entry get function.  */
-    status = _nxd_ipv6_default_router_entry_get(ip_ptr, interface_index, entry_index, router_addr,
-                                                router_lifetime, prefix_length, configuration_method);
-
-    /* Return completion status.  */
-    return(status);
+  /* Return completion status.  */
+  return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(interface_index);
-    NX_PARAMETER_NOT_USED(entry_index);
-    NX_PARAMETER_NOT_USED(router_addr);
-    NX_PARAMETER_NOT_USED(router_lifetime);
-    NX_PARAMETER_NOT_USED(prefix_length);
-    NX_PARAMETER_NOT_USED(configuration_method);
+  NX_PARAMETER_NOT_USED(ip_ptr);
+  NX_PARAMETER_NOT_USED(interface_index);
+  NX_PARAMETER_NOT_USED(entry_index);
+  NX_PARAMETER_NOT_USED(router_addr);
+  NX_PARAMETER_NOT_USED(router_lifetime);
+  NX_PARAMETER_NOT_USED(prefix_length);
+  NX_PARAMETER_NOT_USED(configuration_method);
 
-    return(NX_NOT_SUPPORTED);
+  return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }
-

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define FX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "fx_api.h"
 #include "fx_system.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,34 +70,28 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _fxe_system_time_set(UINT hour, UINT minute, UINT second)
-{
+UINT _fxe_system_time_set(UINT hour, UINT minute, UINT second) {
 
-UINT status;
+  UINT status;
 
+  /* Check for invalid hour.  */
+  if (hour > FX_MAXIMUM_HOUR) {
+    return (FX_INVALID_HOUR);
+  }
 
-    /* Check for invalid hour.  */
-    if (hour > FX_MAXIMUM_HOUR)
-    {
-        return(FX_INVALID_HOUR);
-    }
+  /* Check for invalid minute.  */
+  if (minute > FX_MAXIMUM_MINUTE) {
+    return (FX_INVALID_MINUTE);
+  }
 
-    /* Check for invalid minute.  */
-    if (minute > FX_MAXIMUM_MINUTE)
-    {
-        return(FX_INVALID_MINUTE);
-    }
+  /* Check for invalid second.  */
+  if (second > FX_MAXIMUM_SECOND) {
+    return (FX_INVALID_SECOND);
+  }
 
-    /* Check for invalid second.  */
-    if (second > FX_MAXIMUM_SECOND)
-    {
-        return(FX_INVALID_SECOND);
-    }
+  /* Call the actual set system time service.  */
+  status = _fx_system_time_set(hour, minute, second);
 
-    /* Call the actual set system time service.  */
-    status =  _fx_system_time_set(hour, minute, second);
-
-    /* Return status.  */
-    return(status);
+  /* Return status.  */
+  return (status);
 }
-
