@@ -31,7 +31,9 @@ const uint8_t device_descriptor[] = {DESC_DEV_BYTES};
 // ======================================================================
 // 3. MASTER CONFIGURATION ARRAY
 // ======================================================================
-const uint8_t configuration_descriptor[] = {
+const uint8_t configuration_descriptor[CONFIG_LEN] = {
+    DESC_DEV_BYTES,
+
     // --- Header ---
     0x09,                                 /* bLength (9 bytes) */
     0x02,                                 /* bDescriptorType (Configuration) */

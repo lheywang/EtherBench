@@ -28,6 +28,7 @@
 #define TOTAL_LEN                                                              \
   (SIZE_HEADER + DESC_CMSIS_LEN + DESC_CDC_MUX_LEN + DESC_MSC_LEN +            \
    DESC_CDC_TRM_LEN)
+#define CONFIG_LEN (TOTAL_LEN + DESC_DEV_LEN)
 
 // ======================================================================
 // DEVICE DESCRIPTOR

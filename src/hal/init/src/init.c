@@ -50,6 +50,7 @@ uint32_t init(void) {
   // Then, call the different peripherals inits :
   MX_GPIO_Init();
   MX_USART3_UART_Init();
+
   MX_USB_PCD_Init();
 
   // Computation peripherals init

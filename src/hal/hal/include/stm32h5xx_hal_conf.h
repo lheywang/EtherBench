@@ -273,7 +273,7 @@ extern "C" {
 #define USE_HAL_OTFDEC_REGISTER_CALLBACKS                                      \
   0U /* OTFDEC register callback disabled    */
 #define USE_HAL_PCD_REGISTER_CALLBACKS                                         \
-  0U /* PCD register callback disabled       */
+  1U /* PCD register callback disabled       */
 #define USE_HAL_PKA_REGISTER_CALLBACKS                                         \
   0U /* PKA register callback disabled       */
 #define USE_HAL_RAMCFG_REGISTER_CALLBACKS                                      \

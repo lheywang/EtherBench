@@ -36,6 +36,7 @@
 
 // OS
 #include "tx_byte_pool.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,6 +98,15 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
   TX_PARAMETER_NOT_USED(thread_input);
   UINT status;
 
+  if (configuration_descriptor[0] != 0x12) {
+    while (1)
+      ;
+  }
+  if (configuration_descriptor[1] != 0x01) {
+    while (1)
+      ;
+  }
+
   /*
    * Initialize the USB system, and all the dedicated memory structs.
    */
@@ -116,19 +126,28 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
       ;
   }
 
-  // Finally, enable the USB peripheral.
-  HAL_PCD_Start(&hpcd_USB_DRD_FS);
+  // Re-apply PMA here, after dcd init
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x00, PCD_SNG_BUF, 0x18);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x80, PCD_SNG_BUF, 0x58);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x81, PCD_SNG_BUF, 0x98);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x02, PCD_SNG_BUF, 0xD8);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x82, PCD_SNG_BUF, 0x118);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x83, PCD_SNG_BUF, 0x158);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x04, PCD_SNG_BUF, 0x198);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x84, PCD_SNG_BUF, 0x1D8);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x05, PCD_SNG_BUF, 0x218);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x85, PCD_SNG_BUF, 0x258);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x06, PCD_SNG_BUF, 0x298);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x86, PCD_SNG_BUF, 0x2D8);
 
   /*
    * Launch the USB stack init
    */
   status = ux_device_stack_initialize(
-      (UCHAR *)device_descriptor, DEVICE_DESCRIPTOR_LEN,
-      (UCHAR *)configuration_descriptor, CONFIGURATION_DESCRIPTOR_LEN,
-      (UCHAR *)string_framework, STRING_FRAMEWORK_LEN,
-      (UCHAR *)language_id_framework, LANGUAGE_ID_FRAMEWORK_LEN,
-      UX_NULL // No custom control endpoint handler needed
-  );
+      (UCHAR *)configuration_descriptor, CONFIG_LEN,
+      (UCHAR *)configuration_descriptor, CONFIG_LEN, (UCHAR *)string_framework,
+      STRING_FRAMEWORK_LEN, (UCHAR *)language_id_framework,
+      LANGUAGE_ID_FRAMEWORK_LEN, UX_NULL);
 
   if (status != UX_SUCCESS) {
     while (1) {
@@ -199,44 +218,54 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
 
   /*
   status = ux_device_stack_class_register(
-          (UCHAR *)"ux_device_class_storage",
-          ux_device_class_storage_entry,
-          1,  // Configuration 1
-          4,  // Interface 4
-          &storage_param
+                  (UCHAR *)"ux_device_class_storage",
+                  ux_device_class_storage_entry,
+                  1,  // Configuration 1
+                  4,  // Interface 4
+                  &storage_param
   );
   */
 
   /*
   if (status != UX_SUCCESS) {
-          // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math
-  is wrong) while (1)
-          {
-                  tx_thread_sleep(100);
-          }
+                  // Initialization failed! (Usually means your
+  CONFIG_DESC_LENGTH math is wrong) while (1)
+                  {
+                                  tx_thread_sleep(100);
+                  }
   }
   */
 
   /*
   // Register CDC 1
   status = ux_device_stack_class_register(
-          (UCHAR *)"ux_device_class_cdc_acm",
-          ux_device_class_cdc_acm_entry,
-          1,  // Configuration 1
-          0,  // Interface 0
-          &cdc_mux_param
+                  (UCHAR *)"ux_device_class_cdc_acm",
+                  ux_device_class_cdc_acm_entry,
+                  1,  // Configuration 1
+                  0,  // Interface 0
+                  &cdc_mux_param
   );
   */
 
   /*
   if (status != UX_SUCCESS) {
-          // Initialization failed! (Usually means your CONFIG_DESC_LENGTH math
-  is wrong) while (1)
-          {
-                  tx_thread_sleep(100);
-          }
+                  // Initialization failed! (Usually means your
+  CONFIG_DESC_LENGTH math is wrong) while (1)
+                  {
+                                  tx_thread_sleep(100);
+                  }
   }
   */
+
+  /*
+   * Let other tasks run, if they need a bit of init.
+   */
+  tx_thread_sleep(10);
+
+  /*
+   * Enable the pull up (trigger enumeration) only at the end.
+   */
+  HAL_PCD_Start(&hpcd_USB_DRD_FS);
 
   while (1) {
     // The USB hardware interrupts handle the heavy lifting.

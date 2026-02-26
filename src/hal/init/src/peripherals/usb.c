@@ -31,6 +31,14 @@ PCD_HandleTypeDef hpcd_USB_DRD_FS;
 void MX_USB_PCD_Init(void) {
 
   /* USER CODE BEGIN USB_Init 0 */
+  // Init the USB alternate functions
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_12;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF10_USB; // Very important!
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* USER CODE END USB_Init 0 */
 
@@ -52,18 +60,35 @@ void MX_USB_PCD_Init(void) {
     Error_Handler();
   }
 
-  /* USER CODE BEGIN USB_Init 2 */
-  HAL_NVIC_SetPriority(USB_DRD_FS_IRQn, 0, 0); // USB needs very high priority!
-  HAL_NVIC_EnableIRQ(USB_DRD_FS_IRQn);
+  // Existing (keep these)
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x00, PCD_SNG_BUF, 0x18);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x80, PCD_SNG_BUF, 0x58);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x81, PCD_SNG_BUF,
+                      0x98); // CDC1 interrupt IN
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x02, PCD_SNG_BUF,
+                      0xD8); // CDC1 data OUT
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x82, PCD_SNG_BUF,
+                      0x118); // CDC1 data IN
 
-  // Init the USB alternate functions
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_12;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF10_USB; // Very important!
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  // Add these for CDC2 (terminal)
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x83, PCD_SNG_BUF,
+                      0x158); // CDC2 interrupt IN
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x04, PCD_SNG_BUF,
+                      0x198); // CDC2 data OUT
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x84, PCD_SNG_BUF,
+                      0x1D8); // CDC2 data IN
+
+  // Add these for MSC
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x05, PCD_SNG_BUF, 0x218); // MSC OUT
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x85, PCD_SNG_BUF, 0x258); // MSC IN
+
+  // Add these for CMSIS-DAP
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x06, PCD_SNG_BUF, 0x298); // CMSIS OUT
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x86, PCD_SNG_BUF, 0x2D8); // CMSIS IN
+
+  /* USER CODE BEGIN USB_Init 2 */
+  HAL_NVIC_SetPriority(USB_DRD_FS_IRQn, 15, 0); // USB needs very high priority!
+  HAL_NVIC_EnableIRQ(USB_DRD_FS_IRQn);
 
   /* USER CODE END USB_Init 2 */
 }

@@ -12,7 +12,7 @@
             "device": "STM32H563ZI",
             "interface": "swd",
             "v1": false,
-            "svdFile": "${workspaceFolder}/stm32h563.svd",
+            "svdFile": "${workspaceFolder}/STM32H563.svd",
             "preLaunchTask": "CMake: build",
             "serverArgs": [
                 "-m",
