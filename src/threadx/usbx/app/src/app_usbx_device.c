@@ -56,7 +56,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_DRD_FS;
-
+extern void MX_USB_PCD_Init();
+extern void HAL_PWREx_EnableVddUSB();
 static TX_THREAD ux_device_app_thread;
 
 /* USER CODE BEGIN PV */
@@ -69,6 +70,7 @@ UX_SLAVE_CLASS_CDC_ACM *terminal_instance;
 
 /* Private function prototypes -----------------------------------------------*/
 static VOID app_ux_device_thread_entry(ULONG thread_input);
+static UINT USBD_ChangeFunction(ULONG Device_State);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -80,6 +82,45 @@ static VOID app_ux_device_thread_entry(ULONG thread_input);
  */
 
 UINT MX_USBX_Device_Init(void) {
+
+	/*
+	   * Initialize the USB system, and all the dedicated memory structs.
+	   */
+	  UINT status = ux_system_initialize(ux_memory, UX_SYSTEM_MEM_SIZE, UX_NULL, 0);
+	  if (status != UX_SUCCESS) {
+	    while (1)
+	      ;
+	  }
+
+
+	  /*
+	   * Launch the USB stack init
+	   */
+	  status = ux_device_stack_initialize(
+	      (UCHAR *)configuration_descriptor, CONFIG_LEN,
+	      (UCHAR *)configuration_descriptor, CONFIG_LEN, (UCHAR *)string_framework,
+	      STRING_FRAMEWORK_LEN, (UCHAR *)language_id_framework,
+	      LANGUAGE_ID_FRAMEWORK_LEN, USBD_ChangeFunction);
+
+	  if (status != UX_SUCCESS) {
+	    while (1) {
+	      tx_thread_sleep(100);
+	    }
+	  }
+
+	  UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_mux_param = {0};
+	    status = ux_device_stack_class_register((UCHAR *)"ux_device_class_cdc_acm",
+	                                            ux_device_class_cdc_acm_entry,
+	                                            1, // Configuration 1
+	                                            0, // Interface 0
+	                                            &cdc_mux_param);
+
+	    if (status != UX_SUCCESS) {
+	      while (1) {
+	        tx_thread_sleep(100);
+	      }
+	    }
+
   /* Create the device application main thread */
   UINT ret = tx_thread_create(&ux_device_app_thread, UX_DEVICE_APP_THREAD_NAME,
                               app_ux_device_thread_entry, 0, usbx_thread_stack,
@@ -98,23 +139,15 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
   TX_PARAMETER_NOT_USED(thread_input);
   UINT status;
 
-  if (configuration_descriptor[0] != 0x12) {
-    while (1)
-      ;
-  }
-  if (configuration_descriptor[1] != 0x01) {
-    while (1)
-      ;
-  }
+  MX_USB_PCD_Init();
 
-  /*
-   * Initialize the USB system, and all the dedicated memory structs.
-   */
-  status = ux_system_initialize(ux_memory, UX_SYSTEM_MEM_SIZE, UX_NULL, 0);
-  if (status != UX_SUCCESS) {
-    while (1)
-      ;
-  }
+  HAL_PWREx_EnableVddUSB();
+
+
+
+  // Re-apply PMA here, after dcd init
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x00, PCD_SNG_BUF, 0x40);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x80, PCD_SNG_BUF, 0x80);
 
   /*
    * Turn ON the USB peripheral.
@@ -126,140 +159,7 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
       ;
   }
 
-  // Re-apply PMA here, after dcd init
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x00, PCD_SNG_BUF, 0x18);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x80, PCD_SNG_BUF, 0x58);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x81, PCD_SNG_BUF, 0x98);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x02, PCD_SNG_BUF, 0xD8);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x82, PCD_SNG_BUF, 0x118);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x83, PCD_SNG_BUF, 0x158);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x04, PCD_SNG_BUF, 0x198);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x84, PCD_SNG_BUF, 0x1D8);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x05, PCD_SNG_BUF, 0x218);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x85, PCD_SNG_BUF, 0x258);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x06, PCD_SNG_BUF, 0x298);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x86, PCD_SNG_BUF, 0x2D8);
 
-  /*
-   * Launch the USB stack init
-   */
-  status = ux_device_stack_initialize(
-      (UCHAR *)configuration_descriptor, CONFIG_LEN,
-      (UCHAR *)configuration_descriptor, CONFIG_LEN, (UCHAR *)string_framework,
-      STRING_FRAMEWORK_LEN, (UCHAR *)language_id_framework,
-      LANGUAGE_ID_FRAMEWORK_LEN, UX_NULL);
-
-  if (status != UX_SUCCESS) {
-    while (1) {
-      tx_thread_sleep(100);
-    }
-  }
-
-  UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_mux_param = {0};
-  status = ux_device_stack_class_register((UCHAR *)"ux_device_class_cdc_acm",
-                                          ux_device_class_cdc_acm_entry,
-                                          1, // Configuration 1
-                                          0, // Interface 0
-                                          &cdc_mux_param);
-
-  if (status != UX_SUCCESS) {
-    while (1) {
-      tx_thread_sleep(100);
-    }
-  }
-
-  UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_term_param = {0};
-  status = ux_device_stack_class_register((UCHAR *)"ux_device_class_cdc_acm",
-                                          ux_device_class_cdc_acm_entry,
-                                          1, // Configuration 1
-                                          2, // Interface 2
-                                          &cdc_term_param);
-
-  if (status != UX_SUCCESS) {
-    while (1) {
-      tx_thread_sleep(100);
-    }
-  }
-
-  UX_SLAVE_CLASS_STORAGE_PARAMETER storage_param = {0};
-  storage_param.ux_slave_class_storage_parameter_number_lun = 2;
-
-  // LUN 0: QSPI (256MB)
-  storage_param.ux_slave_class_storage_parameter_lun[0]
-      .ux_slave_class_storage_media_last_lba = 524287;
-  storage_param.ux_slave_class_storage_parameter_lun[0]
-      .ux_slave_class_storage_media_block_length = 512;
-  storage_param.ux_slave_class_storage_parameter_lun[0]
-      .ux_slave_class_storage_media_type = 0;
-  storage_param.ux_slave_class_storage_parameter_lun[0]
-      .ux_slave_class_storage_media_removable_flag = 0x80;
-  storage_param.ux_slave_class_storage_parameter_lun[0]
-      .ux_slave_class_storage_media_read = msc_read;
-  storage_param.ux_slave_class_storage_parameter_lun[0]
-      .ux_slave_class_storage_media_write = msc_write;
-  storage_param.ux_slave_class_storage_parameter_lun[0]
-      .ux_slave_class_storage_media_status = msc_status;
-
-  // LUN 1: SD Card (32GB)
-  storage_param.ux_slave_class_storage_parameter_lun[1]
-      .ux_slave_class_storage_media_last_lba = 62500000;
-  storage_param.ux_slave_class_storage_parameter_lun[1]
-      .ux_slave_class_storage_media_block_length = 512;
-  storage_param.ux_slave_class_storage_parameter_lun[1]
-      .ux_slave_class_storage_media_type = 0;
-  storage_param.ux_slave_class_storage_parameter_lun[1]
-      .ux_slave_class_storage_media_removable_flag = 0x80;
-  storage_param.ux_slave_class_storage_parameter_lun[1]
-      .ux_slave_class_storage_media_read = msc_read;
-  storage_param.ux_slave_class_storage_parameter_lun[1]
-      .ux_slave_class_storage_media_write = msc_write;
-  storage_param.ux_slave_class_storage_parameter_lun[1]
-      .ux_slave_class_storage_media_status = msc_status;
-
-  /*
-  status = ux_device_stack_class_register(
-                  (UCHAR *)"ux_device_class_storage",
-                  ux_device_class_storage_entry,
-                  1,  // Configuration 1
-                  4,  // Interface 4
-                  &storage_param
-  );
-  */
-
-  /*
-  if (status != UX_SUCCESS) {
-                  // Initialization failed! (Usually means your
-  CONFIG_DESC_LENGTH math is wrong) while (1)
-                  {
-                                  tx_thread_sleep(100);
-                  }
-  }
-  */
-
-  /*
-  // Register CDC 1
-  status = ux_device_stack_class_register(
-                  (UCHAR *)"ux_device_class_cdc_acm",
-                  ux_device_class_cdc_acm_entry,
-                  1,  // Configuration 1
-                  0,  // Interface 0
-                  &cdc_mux_param
-  );
-  */
-
-  /*
-  if (status != UX_SUCCESS) {
-                  // Initialization failed! (Usually means your
-  CONFIG_DESC_LENGTH math is wrong) while (1)
-                  {
-                                  tx_thread_sleep(100);
-                  }
-  }
-  */
-
-  /*
-   * Let other tasks run, if they need a bit of init.
-   */
   tx_thread_sleep(10);
 
   /*
@@ -271,12 +171,95 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
     // The USB hardware interrupts handle the heavy lifting.
     // This thread just sleeps, or we can use it later for background USB
     // events.
-    tx_thread_sleep(100);
   }
 
   /* USER CODE END app_ux_device_thread_entry */
+  return;
 }
 
+static UINT USBD_ChangeFunction(ULONG Device_State)
+{
+   UINT status = UX_SUCCESS;
+
+  /* USER CODE BEGIN USBD_ChangeFunction0 */
+
+  /* USER CODE END USBD_ChangeFunction0 */
+
+  switch (Device_State)
+  {
+    case UX_DEVICE_ATTACHED:
+
+      /* USER CODE BEGIN UX_DEVICE_ATTACHED */
+
+      /* USER CODE END UX_DEVICE_ATTACHED */
+
+      break;
+
+    case UX_DEVICE_REMOVED:
+
+      /* USER CODE BEGIN UX_DEVICE_REMOVED */
+
+      /* USER CODE END UX_DEVICE_REMOVED */
+
+      break;
+
+    case UX_DCD_STM32_DEVICE_CONNECTED:
+
+      /* USER CODE BEGIN UX_DCD_STM32_DEVICE_CONNECTED */
+
+      /* USER CODE END UX_DCD_STM32_DEVICE_CONNECTED */
+
+      break;
+
+    case UX_DCD_STM32_DEVICE_DISCONNECTED:
+
+      /* USER CODE BEGIN UX_DCD_STM32_DEVICE_DISCONNECTED */
+
+      /* USER CODE END UX_DCD_STM32_DEVICE_DISCONNECTED */
+
+      break;
+
+    case UX_DCD_STM32_DEVICE_SUSPENDED:
+
+      /* USER CODE BEGIN UX_DCD_STM32_DEVICE_SUSPENDED */
+
+      /* USER CODE END UX_DCD_STM32_DEVICE_SUSPENDED */
+
+      break;
+
+    case UX_DCD_STM32_DEVICE_RESUMED:
+
+      /* USER CODE BEGIN UX_DCD_STM32_DEVICE_RESUMED */
+
+      /* USER CODE END UX_DCD_STM32_DEVICE_RESUMED */
+
+      break;
+
+    case UX_DCD_STM32_SOF_RECEIVED:
+
+      /* USER CODE BEGIN UX_DCD_STM32_SOF_RECEIVED */
+
+      /* USER CODE END UX_DCD_STM32_SOF_RECEIVED */
+
+      break;
+
+    default:
+
+      /* USER CODE BEGIN DEFAULT */
+
+      /* USER CODE END DEFAULT */
+
+      break;
+
+  }
+
+  /* USER CODE BEGIN USBD_ChangeFunction1 */
+
+  /* USER CODE END USBD_ChangeFunction1 */
+
+  return status;
+}
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
+

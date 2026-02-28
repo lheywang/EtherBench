@@ -45,7 +45,7 @@ const uint8_t configuration_descriptor[CONFIG_LEN] = {
     0xFF,                                 /* bMaxPower (255 * 2 mA = 500 mA)*/
 
     // --- Interfaces pasted sequentially ---
-    DESC_CDC_MUX_BYTES, DESC_CDC_TRM_BYTES, DESC_MSC_BYTES, DESC_CMSIS_BYTES};
+    DESC_CDC_MUX_BYTES};/*DESC_CDC_TRM_BYTES, DESC_MSC_BYTES, DESC_CMSIS_BYTES};*/
 
 // ======================================================================
 // STRINGS & LANGUAGE ID

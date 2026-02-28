@@ -51,8 +51,6 @@ uint32_t init(void) {
   MX_GPIO_Init();
   MX_USART3_UART_Init();
 
-  MX_USB_PCD_Init();
-
   // Computation peripherals init
   MX_CORDIC_Init();
   MX_FMAC_Init();

@@ -19,32 +19,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usb.h"
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
+#include <string.h>
 
 PCD_HandleTypeDef hpcd_USB_DRD_FS;
 
-/* USB init function */
-
 void MX_USB_PCD_Init(void) {
-
-  /* USER CODE BEGIN USB_Init 0 */
-  // Init the USB alternate functions
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_12;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF10_USB; // Very important!
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /* USER CODE END USB_Init 0 */
-
   /* USER CODE BEGIN USB_Init 1 */
+  memset(&hpcd_USB_DRD_FS, 0, sizeof(hpcd_USB_DRD_FS));
 
-  /* USER CODE END USB_Init 1 */
   hpcd_USB_DRD_FS.Instance = USB_DRD_FS;
   hpcd_USB_DRD_FS.Init.dev_endpoints = 8;
   hpcd_USB_DRD_FS.Init.speed = USBD_FS_SPEED;
@@ -53,86 +35,53 @@ void MX_USB_PCD_Init(void) {
   hpcd_USB_DRD_FS.Init.low_power_enable = DISABLE;
   hpcd_USB_DRD_FS.Init.lpm_enable = DISABLE;
   hpcd_USB_DRD_FS.Init.battery_charging_enable = DISABLE;
-  hpcd_USB_DRD_FS.Init.vbus_sensing_enable = DISABLE;
+  hpcd_USB_DRD_FS.Init.vbus_sensing_enable = DISABLE; // Essentiel !
   hpcd_USB_DRD_FS.Init.bulk_doublebuffer_enable = DISABLE;
   hpcd_USB_DRD_FS.Init.iso_singlebuffer_enable = DISABLE;
+
+  // L'appel à HAL_PCD_Init va automatiquement appeler HAL_PCD_MspInit ci-dessous !
   if (HAL_PCD_Init(&hpcd_USB_DRD_FS) != HAL_OK) {
     Error_Handler();
   }
 
-  // Existing (keep these)
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x00, PCD_SNG_BUF, 0x18);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x80, PCD_SNG_BUF, 0x58);
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x81, PCD_SNG_BUF,
-                      0x98); // CDC1 interrupt IN
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x02, PCD_SNG_BUF,
-                      0xD8); // CDC1 data OUT
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x82, PCD_SNG_BUF,
-                      0x118); // CDC1 data IN
+  // Configuration de la RAM USB (PMA)
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x00, PCD_SNG_BUF, 0x40);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x80, PCD_SNG_BUF, 0x80);
 
-  // Add these for CDC2 (terminal)
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x83, PCD_SNG_BUF,
-                      0x158); // CDC2 interrupt IN
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x04, PCD_SNG_BUF,
-                      0x198); // CDC2 data OUT
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x84, PCD_SNG_BUF,
-                      0x1D8); // CDC2 data IN
-
-  // Add these for MSC
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x05, PCD_SNG_BUF, 0x218); // MSC OUT
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x85, PCD_SNG_BUF, 0x258); // MSC IN
-
-  // Add these for CMSIS-DAP
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x06, PCD_SNG_BUF, 0x298); // CMSIS OUT
-  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x86, PCD_SNG_BUF, 0x2D8); // CMSIS IN
-
-  /* USER CODE BEGIN USB_Init 2 */
-  HAL_NVIC_SetPriority(USB_DRD_FS_IRQn, 15, 0); // USB needs very high priority!
+  /* Armer l'interruption NVIC */
+  HAL_NVIC_SetPriority(USB_DRD_FS_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(USB_DRD_FS_IRQn);
-
-  /* USER CODE END USB_Init 2 */
 }
 
 void HAL_PCD_MspInit(PCD_HandleTypeDef *pcdHandle) {
-
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
   if (pcdHandle->Instance == USB_DRD_FS) {
-    /* USER CODE BEGIN USB_DRD_FS_MspInit 0 */
+    /* 1. Activer l'horloge de l'alimentation */
+    // __HAL_RCC_PWR_CLK_ENABLE();
 
-    /* USER CODE END USB_DRD_FS_MspInit 0 */
-
-    /** Initializes the peripherals clock
-     */
-    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
-    PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK) {
-      Error_Handler();
-    }
-
-    /* Enable VDDUSB */
+    /* 2. Activer VDDUSB et ATTENDRE QU'IL SOIT PRET */
     HAL_PWREx_EnableVddUSB();
-    /* USB_DRD_FS clock enable */
+    // VITAL : Attendre que la tension monte (10ms suffisent)
+    HAL_Delay(10);
+
+    /* 3. Activer le port GPIOA */
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+
+    /* 4. Activer l'horloge USB */
     __HAL_RCC_USB_CLK_ENABLE();
-    /* USER CODE BEGIN USB_DRD_FS_MspInit 1 */
-    HAL_Delay(20);
-    /* USER CODE END USB_DRD_FS_MspInit 1 */
+
+    /* 5. FORCER UN RESET MATÉRIEL DU CŒUR USB */
+    __HAL_RCC_USB_FORCE_RESET();
+    HAL_Delay(2);
+    __HAL_RCC_USB_RELEASE_RESET();
+
+    /* 6. Configurer les GPIOs */
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_12;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    // Essayons une vitesse normale. Parfois VERY_HIGH crée des rebonds (ringing) sur les PHY embarquées
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF10_USB;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
   }
 }
-
-void HAL_PCD_MspDeInit(PCD_HandleTypeDef *pcdHandle) {
-
-  if (pcdHandle->Instance == USB_DRD_FS) {
-    /* USER CODE BEGIN USB_DRD_FS_MspDeInit 0 */
-
-    /* USER CODE END USB_DRD_FS_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __HAL_RCC_USB_CLK_DISABLE();
-    /* USER CODE BEGIN USB_DRD_FS_MspDeInit 1 */
-
-    /* USER CODE END USB_DRD_FS_MspDeInit 1 */
-  }
-}
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */

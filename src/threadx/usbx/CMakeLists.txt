@@ -13,7 +13,31 @@ set(SOURCES
 
 # Common USBX core
 list(APPEND SOURCES
-	    common/core/src/ux_device_stack_alternate_setting_get.c
+    common/core/src/ux_dcd_sim_slave_address_set.c
+    common/core/src/ux_dcd_sim_slave_endpoint_create.c
+    common/core/src/ux_dcd_sim_slave_endpoint_destroy.c
+    common/core/src/ux_dcd_sim_slave_endpoint_reset.c
+    common/core/src/ux_dcd_sim_slave_endpoint_stall.c
+    common/core/src/ux_dcd_sim_slave_endpoint_status.c
+    common/core/src/ux_dcd_sim_slave_frame_number_get.c
+    common/core/src/ux_dcd_sim_slave_function.c
+    common/core/src/ux_dcd_sim_slave_initialize.c
+    common/core/src/ux_dcd_sim_slave_initialize_complete.c
+    common/core/src/ux_dcd_sim_slave_state_change.c
+    common/core/src/ux_dcd_sim_slave_transfer_abort.c
+    common/core/src/ux_dcd_sim_slave_transfer_request.c
+    common/core/src/ux_dcd_sim_slave_transfer_run.c
+    common/core/src/ux_device_class_dpump_activate.c
+    common/core/src/ux_device_class_dpump_change.c
+    common/core/src/ux_device_class_dpump_deactivate.c
+    common/core/src/ux_device_class_dpump_entry.c
+    common/core/src/ux_device_class_dpump_initialize.c
+    common/core/src/ux_device_class_dpump_read.c
+    common/core/src/ux_device_class_dpump_read_run.c
+    common/core/src/ux_device_class_dpump_thread.c
+    common/core/src/ux_device_class_dpump_write.c
+    common/core/src/ux_device_class_dpump_write_run.c
+    common/core/src/ux_device_stack_alternate_setting_get.c
     common/core/src/ux_device_stack_alternate_setting_set.c
     common/core/src/ux_device_stack_class_register.c
     common/core/src/ux_device_stack_class_unregister.c
@@ -33,13 +57,125 @@ list(APPEND SOURCES
     common/core/src/ux_device_stack_interface_start.c
     common/core/src/ux_device_stack_microsoft_extension_register.c
     common/core/src/ux_device_stack_set_feature.c
+    common/core/src/ux_device_stack_tasks_run.c
     common/core/src/ux_device_stack_transfer_abort.c
     common/core/src/ux_device_stack_transfer_all_request_abort.c
     common/core/src/ux_device_stack_transfer_request.c
+    common/core/src/ux_device_stack_transfer_run.c
     common/core/src/ux_device_stack_uninitialize.c
+    common/core/src/ux_hcd_sim_host_asynch_queue_process.c
+    common/core/src/ux_hcd_sim_host_asynch_schedule.c
+    common/core/src/ux_hcd_sim_host_asynchronous_endpoint_create.c
+    common/core/src/ux_hcd_sim_host_asynchronous_endpoint_destroy.c
+    common/core/src/ux_hcd_sim_host_controller_disable.c
+    common/core/src/ux_hcd_sim_host_ed_obtain.c
+    common/core/src/ux_hcd_sim_host_ed_td_clean.c
+    common/core/src/ux_hcd_sim_host_endpoint_reset.c
+    common/core/src/ux_hcd_sim_host_entry.c
+    common/core/src/ux_hcd_sim_host_frame_number_get.c
+    common/core/src/ux_hcd_sim_host_frame_number_set.c
+    common/core/src/ux_hcd_sim_host_initialize.c
+    common/core/src/ux_hcd_sim_host_interrupt_endpoint_create.c
+    common/core/src/ux_hcd_sim_host_iso_queue_process.c
+    common/core/src/ux_hcd_sim_host_iso_schedule.c
+    common/core/src/ux_hcd_sim_host_isochronous_endpoint_create.c
+    common/core/src/ux_hcd_sim_host_isochronous_td_obtain.c
+    common/core/src/ux_hcd_sim_host_least_traffic_list_get.c
+    common/core/src/ux_hcd_sim_host_periodic_endpoint_destroy.c
+    common/core/src/ux_hcd_sim_host_periodic_schedule.c
+    common/core/src/ux_hcd_sim_host_periodic_tree_create.c
+    common/core/src/ux_hcd_sim_host_port_reset.c
+    common/core/src/ux_hcd_sim_host_port_status_get.c
+    common/core/src/ux_hcd_sim_host_regular_td_obtain.c
+    common/core/src/ux_hcd_sim_host_request_bulk_transfer.c
+    common/core/src/ux_hcd_sim_host_request_control_transfer.c
+    common/core/src/ux_hcd_sim_host_request_interupt_transfer.c
+    common/core/src/ux_hcd_sim_host_request_isochronous_transfer.c
+    common/core/src/ux_hcd_sim_host_request_transfer.c
+    common/core/src/ux_hcd_sim_host_timer_function.c
+    common/core/src/ux_hcd_sim_host_transaction_schedule.c
+    common/core/src/ux_hcd_sim_host_transfer_abort.c
+    common/core/src/ux_hcd_sim_host_transfer_run.c
+    common/core/src/ux_hcd_sim_host_uninitialize.c
+    common/core/src/ux_host_class_dpump_activate.c
+    common/core/src/ux_host_class_dpump_configure.c
+    common/core/src/ux_host_class_dpump_deactivate.c
+    common/core/src/ux_host_class_dpump_endpoints_get.c
+    common/core/src/ux_host_class_dpump_entry.c
+    common/core/src/ux_host_class_dpump_ioctl.c
+    common/core/src/ux_host_class_dpump_read.c
+    common/core/src/ux_host_class_dpump_write.c
+    common/core/src/ux_host_stack_bandwidth_check.c
+    common/core/src/ux_host_stack_bandwidth_claim.c
+    common/core/src/ux_host_stack_bandwidth_release.c
+    common/core/src/ux_host_stack_class_call.c
+    common/core/src/ux_host_stack_class_device_scan.c
+    common/core/src/ux_host_stack_class_get.c
+    common/core/src/ux_host_stack_class_instance_create.c
+    common/core/src/ux_host_stack_class_instance_destroy.c
+    common/core/src/ux_host_stack_class_instance_get.c
+    common/core/src/ux_host_stack_class_instance_verify.c
+    common/core/src/ux_host_stack_class_interface_scan.c
+    common/core/src/ux_host_stack_class_register.c
+    common/core/src/ux_host_stack_class_unregister.c
+    common/core/src/ux_host_stack_configuration_descriptor_parse.c
+    common/core/src/ux_host_stack_configuration_enumerate.c
+    common/core/src/ux_host_stack_configuration_instance_create.c
+    common/core/src/ux_host_stack_configuration_instance_delete.c
+    common/core/src/ux_host_stack_configuration_interface_get.c
+    common/core/src/ux_host_stack_configuration_interface_scan.c
+    common/core/src/ux_host_stack_configuration_set.c
+    common/core/src/ux_host_stack_delay_ms.c
+    common/core/src/ux_host_stack_device_address_set.c
+    common/core/src/ux_host_stack_device_configuration_activate.c
+    common/core/src/ux_host_stack_device_configuration_deactivate.c
+    common/core/src/ux_host_stack_device_configuration_get.c
+    common/core/src/ux_host_stack_device_configuration_reset.c
+    common/core/src/ux_host_stack_device_configuration_select.c
+    common/core/src/ux_host_stack_device_descriptor_read.c
+    common/core/src/ux_host_stack_device_get.c
+    common/core/src/ux_host_stack_device_remove.c
+    common/core/src/ux_host_stack_device_resources_free.c
+    common/core/src/ux_host_stack_device_string_get.c
+    common/core/src/ux_host_stack_endpoint_instance_create.c
+    common/core/src/ux_host_stack_endpoint_instance_delete.c
+    common/core/src/ux_host_stack_endpoint_reset.c
+    common/core/src/ux_host_stack_endpoint_transfer_abort.c
+    common/core/src/ux_host_stack_enum_thread_entry.c
+    common/core/src/ux_host_stack_hcd_register.c
+    common/core/src/ux_host_stack_hcd_thread_entry.c
+    common/core/src/ux_host_stack_hcd_transfer_request.c
+    common/core/src/ux_host_stack_hcd_unregister.c
+    common/core/src/ux_host_stack_hnp_polling_thread_entry.c
+    common/core/src/ux_host_stack_initialize.c
+    common/core/src/ux_host_stack_interface_endpoint_get.c
+    common/core/src/ux_host_stack_interface_instance_create.c
+    common/core/src/ux_host_stack_interface_instance_delete.c
+    common/core/src/ux_host_stack_interface_set.c
+    common/core/src/ux_host_stack_interface_setting_select.c
+    common/core/src/ux_host_stack_interfaces_scan.c
+    common/core/src/ux_host_stack_new_configuration_create.c
+    common/core/src/ux_host_stack_new_device_create.c
+    common/core/src/ux_host_stack_new_device_get.c
+    common/core/src/ux_host_stack_new_endpoint_create.c
+    common/core/src/ux_host_stack_new_interface_create.c
+    common/core/src/ux_host_stack_rh_change_process.c
+    common/core/src/ux_host_stack_rh_device_extraction.c
+    common/core/src/ux_host_stack_rh_device_insertion.c
+    common/core/src/ux_host_stack_role_swap.c
+    common/core/src/ux_host_stack_tasks_run.c
+    common/core/src/ux_host_stack_transfer_request.c
+    common/core/src/ux_host_stack_transfer_request_abort.c
+    common/core/src/ux_host_stack_transfer_run.c
+    common/core/src/ux_host_stack_uninitialize.c
     common/core/src/ux_system_error_handler.c
     common/core/src/ux_system_initialize.c
+    common/core/src/ux_system_tasks_run.c
     common/core/src/ux_system_uninitialize.c
+    common/core/src/ux_trace_event_insert.c
+    common/core/src/ux_trace_event_update.c
+    common/core/src/ux_trace_object_register.c
+    common/core/src/ux_trace_object_unregister.c
     common/core/src/ux_utility_debug_callback_register.c
     common/core/src/ux_utility_debug_log.c
     common/core/src/ux_utility_delay_ms.c
@@ -63,6 +199,7 @@ list(APPEND SOURCES
     common/core/src/ux_utility_memory_compare.c
     common/core/src/ux_utility_memory_copy.c
     common/core/src/ux_utility_memory_free.c
+    common/core/src/ux_utility_memory_free_block_best_get.c
     common/core/src/ux_utility_memory_set.c
     common/core/src/ux_utility_mutex_create.c
     common/core/src/ux_utility_mutex_delete.c
@@ -100,7 +237,62 @@ list(APPEND SOURCES
 
 # Add the USB classes
 list(APPEND SOURCES
-common/classes/src/ux_device_class_cdc_acm_activate.c
+    common/classes/src/ux_device_class_audio10_control_process.c
+    common/classes/src/ux_device_class_audio20_control_process.c
+    common/classes/src/ux_device_class_audio_activate.c
+    common/classes/src/ux_device_class_audio_change.c
+    common/classes/src/ux_device_class_audio_control_request.c
+    common/classes/src/ux_device_class_audio_deactivate.c
+    common/classes/src/ux_device_class_audio_entry.c
+    common/classes/src/ux_device_class_audio_feedback_get.c
+    common/classes/src/ux_device_class_audio_feedback_set.c
+    common/classes/src/ux_device_class_audio_feedback_task_function.c
+    common/classes/src/ux_device_class_audio_feedback_thread_entry.c
+    common/classes/src/ux_device_class_audio_frame_write.c
+    common/classes/src/ux_device_class_audio_initialize.c
+    common/classes/src/ux_device_class_audio_interrupt_send.c
+    common/classes/src/ux_device_class_audio_interrupt_task_function.c
+    common/classes/src/ux_device_class_audio_interrupt_thread_entry.c
+    common/classes/src/ux_device_class_audio_ioctl.c
+    common/classes/src/ux_device_class_audio_read_frame_free.c
+    common/classes/src/ux_device_class_audio_read_frame_get.c
+    common/classes/src/ux_device_class_audio_read_task_function.c
+    common/classes/src/ux_device_class_audio_read_thread_entry.c
+    common/classes/src/ux_device_class_audio_reception_start.c
+    common/classes/src/ux_device_class_audio_sample_read16.c
+    common/classes/src/ux_device_class_audio_sample_read24.c
+    common/classes/src/ux_device_class_audio_sample_read32.c
+    common/classes/src/ux_device_class_audio_sample_read8.c
+    common/classes/src/ux_device_class_audio_speed_get.c
+    common/classes/src/ux_device_class_audio_stream_get.c
+    common/classes/src/ux_device_class_audio_tasks_run.c
+    common/classes/src/ux_device_class_audio_transmission_start.c
+    common/classes/src/ux_device_class_audio_unitialize.c
+    common/classes/src/ux_device_class_audio_write_frame_commit.c
+    common/classes/src/ux_device_class_audio_write_frame_get.c
+    common/classes/src/ux_device_class_audio_write_task_function.c
+    common/classes/src/ux_device_class_audio_write_thread_entry.c
+    common/classes/src/ux_device_class_ccid_activate.c
+    common/classes/src/ux_device_class_ccid_auto_seq_done.c
+    common/classes/src/ux_device_class_ccid_auto_seq_start.c
+    common/classes/src/ux_device_class_ccid_control_abort.c
+    common/classes/src/ux_device_class_ccid_control_request.c
+    common/classes/src/ux_device_class_ccid_deactivate.c
+    common/classes/src/ux_device_class_ccid_entry.c
+    common/classes/src/ux_device_class_ccid_hardware_error.c
+    common/classes/src/ux_device_class_ccid_icc_insert.c
+    common/classes/src/ux_device_class_ccid_icc_remove.c
+    common/classes/src/ux_device_class_ccid_initialize.c
+    common/classes/src/ux_device_class_ccid_notify_task_run.c
+    common/classes/src/ux_device_class_ccid_notify_thread_entry.c
+    common/classes/src/ux_device_class_ccid_response.c
+    common/classes/src/ux_device_class_ccid_runner_task_run.c
+    common/classes/src/ux_device_class_ccid_runner_thread_entry.c
+    common/classes/src/ux_device_class_ccid_tasks_run.c
+    common/classes/src/ux_device_class_ccid_thread_entry.c
+    common/classes/src/ux_device_class_ccid_time_extension.c
+    common/classes/src/ux_device_class_ccid_uninitialize.c
+    common/classes/src/ux_device_class_cdc_acm_activate.c
     common/classes/src/ux_device_class_cdc_acm_bulkin_thread.c
     common/classes/src/ux_device_class_cdc_acm_bulkout_thread.c
     common/classes/src/ux_device_class_cdc_acm_control_request.c
@@ -109,9 +301,113 @@ common/classes/src/ux_device_class_cdc_acm_activate.c
     common/classes/src/ux_device_class_cdc_acm_initialize.c
     common/classes/src/ux_device_class_cdc_acm_ioctl.c
     common/classes/src/ux_device_class_cdc_acm_read.c
+    common/classes/src/ux_device_class_cdc_acm_read_run.c
+    common/classes/src/ux_device_class_cdc_acm_tasks_run.c
     common/classes/src/ux_device_class_cdc_acm_unitialize.c
     common/classes/src/ux_device_class_cdc_acm_write.c
+    common/classes/src/ux_device_class_cdc_acm_write_run.c
     common/classes/src/ux_device_class_cdc_acm_write_with_callback.c
+    common/classes/src/ux_device_class_cdc_ecm_activate.c
+    common/classes/src/ux_device_class_cdc_ecm_bulkin_thread.c
+    common/classes/src/ux_device_class_cdc_ecm_bulkout_thread.c
+    common/classes/src/ux_device_class_cdc_ecm_change.c
+    common/classes/src/ux_device_class_cdc_ecm_control_request.c
+    common/classes/src/ux_device_class_cdc_ecm_deactivate.c
+    common/classes/src/ux_device_class_cdc_ecm_entry.c
+    common/classes/src/ux_device_class_cdc_ecm_initialize.c
+    common/classes/src/ux_device_class_cdc_ecm_interrupt_thread.c
+    common/classes/src/ux_device_class_cdc_ecm_uninitialize.c
+    common/classes/src/ux_device_class_cdc_ecm_write.c
+    common/classes/src/ux_device_class_dfu_activate.c
+    common/classes/src/ux_device_class_dfu_control_request.c
+    common/classes/src/ux_device_class_dfu_deactivate.c
+    common/classes/src/ux_device_class_dfu_entry.c
+    common/classes/src/ux_device_class_dfu_initialize.c
+    common/classes/src/ux_device_class_dfu_state_get.c
+    common/classes/src/ux_device_class_dfu_state_sync.c
+    common/classes/src/ux_device_class_dfu_tasks_run.c
+    common/classes/src/ux_device_class_dfu_thread.c
+    common/classes/src/ux_device_class_hid_activate.c
+    common/classes/src/ux_device_class_hid_control_request.c
+    common/classes/src/ux_device_class_hid_deactivate.c
+    common/classes/src/ux_device_class_hid_descriptor_send.c
+    common/classes/src/ux_device_class_hid_entry.c
+    common/classes/src/ux_device_class_hid_event_get.c
+    common/classes/src/ux_device_class_hid_event_set.c
+    common/classes/src/ux_device_class_hid_initialize.c
+    common/classes/src/ux_device_class_hid_interrupt_thread.c
+    common/classes/src/ux_device_class_hid_read.c
+    common/classes/src/ux_device_class_hid_read_run.c
+    common/classes/src/ux_device_class_hid_receiver_event_free.c
+    common/classes/src/ux_device_class_hid_receiver_event_get.c
+    common/classes/src/ux_device_class_hid_receiver_initialize.c
+    common/classes/src/ux_device_class_hid_receiver_tasks_run.c
+    common/classes/src/ux_device_class_hid_receiver_thread.c
+    common/classes/src/ux_device_class_hid_receiver_uninitialize.c
+    common/classes/src/ux_device_class_hid_report_get.c
+    common/classes/src/ux_device_class_hid_report_set.c
+    common/classes/src/ux_device_class_hid_tasks_run.c
+    common/classes/src/ux_device_class_hid_uninitialize.c
+    common/classes/src/ux_device_class_pima_activate.c
+    common/classes/src/ux_device_class_pima_control_request.c
+    common/classes/src/ux_device_class_pima_data.c
+    common/classes/src/ux_device_class_pima_deactivate.c
+    common/classes/src/ux_device_class_pima_device_info_send.c
+    common/classes/src/ux_device_class_pima_device_prop_desc_get.c
+    common/classes/src/ux_device_class_pima_device_prop_value_get.c
+    common/classes/src/ux_device_class_pima_device_prop_value_set.c
+    common/classes/src/ux_device_class_pima_device_reset.c
+    common/classes/src/ux_device_class_pima_entry.c
+    common/classes/src/ux_device_class_pima_event_get.c
+    common/classes/src/ux_device_class_pima_event_set.c
+    common/classes/src/ux_device_class_pima_initialize.c
+    common/classes/src/ux_device_class_pima_interrupt_thread.c
+    common/classes/src/ux_device_class_pima_object_add.c
+    common/classes/src/ux_device_class_pima_object_data_get.c
+    common/classes/src/ux_device_class_pima_object_data_send.c
+    common/classes/src/ux_device_class_pima_object_delete.c
+    common/classes/src/ux_device_class_pima_object_handles_send.c
+    common/classes/src/ux_device_class_pima_object_info_get.c
+    common/classes/src/ux_device_class_pima_object_info_send.c
+    common/classes/src/ux_device_class_pima_object_prop_desc_get.c
+    common/classes/src/ux_device_class_pima_object_prop_value_get.c
+    common/classes/src/ux_device_class_pima_object_prop_value_set.c
+    common/classes/src/ux_device_class_pima_object_props_supported_get.c
+    common/classes/src/ux_device_class_pima_object_references_get.c
+    common/classes/src/ux_device_class_pima_object_references_set.c
+    common/classes/src/ux_device_class_pima_objects_number_send.c
+    common/classes/src/ux_device_class_pima_partial_object_data_get.c
+    common/classes/src/ux_device_class_pima_response_send.c
+    common/classes/src/ux_device_class_pima_storage_format.c
+    common/classes/src/ux_device_class_pima_storage_id_send.c
+    common/classes/src/ux_device_class_pima_storage_info_get.c
+    common/classes/src/ux_device_class_pima_thread.c
+    common/classes/src/ux_device_class_printer_activate.c
+    common/classes/src/ux_device_class_printer_control_request.c
+    common/classes/src/ux_device_class_printer_deactivate.c
+    common/classes/src/ux_device_class_printer_entry.c
+    common/classes/src/ux_device_class_printer_initialize.c
+    common/classes/src/ux_device_class_printer_ioctl.c
+    common/classes/src/ux_device_class_printer_read.c
+    common/classes/src/ux_device_class_printer_read_run.c
+    common/classes/src/ux_device_class_printer_soft_reset.c
+    common/classes/src/ux_device_class_printer_uninitialize.c
+    common/classes/src/ux_device_class_printer_write.c
+    common/classes/src/ux_device_class_printer_write_run.c
+    common/classes/src/ux_device_class_rndis_activate.c
+    common/classes/src/ux_device_class_rndis_bulkin_thread.c
+    common/classes/src/ux_device_class_rndis_bulkout_thread.c
+    common/classes/src/ux_device_class_rndis_control_request.c
+    common/classes/src/ux_device_class_rndis_deactivate.c
+    common/classes/src/ux_device_class_rndis_entry.c
+    common/classes/src/ux_device_class_rndis_initialize.c
+    common/classes/src/ux_device_class_rndis_interrupt_thread.c
+    common/classes/src/ux_device_class_rndis_msg_initialize.c
+    common/classes/src/ux_device_class_rndis_msg_keep_alive.c
+    common/classes/src/ux_device_class_rndis_msg_query.c
+    common/classes/src/ux_device_class_rndis_msg_reset.c
+    common/classes/src/ux_device_class_rndis_msg_set.c
+    common/classes/src/ux_device_class_rndis_write.c
     common/classes/src/ux_device_class_storage_activate.c
     common/classes/src/ux_device_class_storage_control_request.c
     common/classes/src/ux_device_class_storage_csw_send.c
@@ -136,11 +432,33 @@ common/classes/src/ux_device_class_cdc_acm_activate.c
     common/classes/src/ux_device_class_storage_request_sense.c
     common/classes/src/ux_device_class_storage_start_stop.c
     common/classes/src/ux_device_class_storage_synchronize_cache.c
+    common/classes/src/ux_device_class_storage_tasks_run.c
     common/classes/src/ux_device_class_storage_test_ready.c
     common/classes/src/ux_device_class_storage_thread.c
     common/classes/src/ux_device_class_storage_uninitialize.c
     common/classes/src/ux_device_class_storage_verify.c
     common/classes/src/ux_device_class_storage_write.c
+    common/classes/src/ux_device_class_video_activate.c
+    common/classes/src/ux_device_class_video_change.c
+    common/classes/src/ux_device_class_video_control_request.c
+    common/classes/src/ux_device_class_video_deactivate.c
+    common/classes/src/ux_device_class_video_entry.c
+    common/classes/src/ux_device_class_video_initialize.c
+    common/classes/src/ux_device_class_video_ioctl.c
+    common/classes/src/ux_device_class_video_max_payload_get.c
+    common/classes/src/ux_device_class_video_read_payload_free.c
+    common/classes/src/ux_device_class_video_read_payload_get.c
+    common/classes/src/ux_device_class_video_read_task_function.c
+    common/classes/src/ux_device_class_video_read_thread_entry.c
+    common/classes/src/ux_device_class_video_reception_start.c
+    common/classes/src/ux_device_class_video_stream_get.c
+    common/classes/src/ux_device_class_video_tasks_run.c
+    common/classes/src/ux_device_class_video_transmission_start.c
+    common/classes/src/ux_device_class_video_uninitialize.c
+    common/classes/src/ux_device_class_video_write_payload_commit.c
+    common/classes/src/ux_device_class_video_write_payload_get.c
+    common/classes/src/ux_device_class_video_write_task_function.c
+    common/classes/src/ux_device_class_video_write_thread_entry.c
 )
 
 list(APPEND SOURCES
@@ -173,7 +491,7 @@ list(APPEND SOURCES
 add_library(USBX OBJECT ${SOURCES})
 
 # Link against the OS kernel and the HAL 
-target_link_libraries(USBX HAL THREADX_OS)
+target_link_libraries(USBX HAL THREADX_OS NETXDUO)
 
 # Adding the include folder
 target_include_directories(USBX PUBLIC 

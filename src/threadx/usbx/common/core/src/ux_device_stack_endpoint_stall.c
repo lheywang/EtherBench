@@ -9,10 +9,11 @@
 /*                                                                        */
 /**************************************************************************/
 
+
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */
-/** USBX Component                                                        */
+/**                                                                       */ 
+/** USBX Component                                                        */ 
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -21,10 +22,12 @@
 
 #define UX_SOURCE_CODE
 
+
 /* Include necessary system files.  */
 
-#include "../include/ux_api.h"
-#include "../include/ux_device_stack.h"
+#include "ux_api.h"
+#include "ux_device_stack.h"
+
 
 /**************************************************************************/
 /*                                                                        */
@@ -47,20 +50,20 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */
+/*    Completion Status                                                   */ 
 /*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    (ux_slave_dcd_function)               DCD dispatch function         */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application                                                         */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
-/*    DATE              NAME                      DESCRIPTION             */
-/*                                                                        */
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    (ux_slave_dcd_function)               DCD dispatch function         */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application                                                         */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
+/*    DATE              NAME                      DESCRIPTION             */ 
+/*                                                                        */ 
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            used UX prefix to refer to  */
@@ -72,46 +75,47 @@
 /*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_stack_endpoint_stall(UX_SLAVE_ENDPOINT *endpoint) {
+UINT  _ux_device_stack_endpoint_stall(UX_SLAVE_ENDPOINT *endpoint)
+{
 
-  UX_INTERRUPT_SAVE_AREA
+UX_INTERRUPT_SAVE_AREA
 
-  UX_SLAVE_DCD *dcd;
-  UINT status;
+UX_SLAVE_DCD        *dcd;
+UINT                status;
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_ENDPOINT_STALL, endpoint, 0, 0,
-                          0, UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_ENDPOINT_STALL, endpoint, 0, 0, 0, UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
 
-  /* Get the pointer to the DCD.  */
-  dcd = &_ux_system_slave->ux_system_slave_dcd;
+    /* Get the pointer to the DCD.  */
+    dcd =  &_ux_system_slave -> ux_system_slave_dcd;
 
-  /* Assume device is in an invalid state here in order to reduce code in
-     following section where interrupts are disabled.  */
-  status = UX_ERROR;
+    /* Assume device is in an invalid state here in order to reduce code in following 
+       section where interrupts are disabled.  */
+    status =  UX_ERROR;
 
-  /* Ensure we don't change the endpoint's state after disconnection routine
-     resets it.  */
-  UX_DISABLE
+    /* Ensure we don't change the endpoint's state after disconnection routine
+       resets it.  */
+    UX_DISABLE
 
-  /* Check if the device is in a valid state; as soon as the device is out
-     of the RESET state, transfers occur and thus endpoints may be stalled. */
-  if (_ux_system_slave->ux_system_slave_device.ux_slave_device_state !=
-          UX_DEVICE_RESET &&
-      endpoint->ux_slave_endpoint_state != UX_ENDPOINT_HALTED) {
+    /* Check if the device is in a valid state; as soon as the device is out 
+       of the RESET state, transfers occur and thus endpoints may be stalled. */
+    if (_ux_system_slave -> ux_system_slave_device.ux_slave_device_state != UX_DEVICE_RESET &&
+        endpoint -> ux_slave_endpoint_state != UX_ENDPOINT_HALTED)
+    {
 
-    /* Stall the endpoint.  */
-    status = dcd->ux_slave_dcd_function(dcd, UX_DCD_STALL_ENDPOINT, endpoint);
+        /* Stall the endpoint.  */
+        status =  dcd -> ux_slave_dcd_function(dcd, UX_DCD_STALL_ENDPOINT, endpoint);
 
-    /* Mark the endpoint state.  */
-    if ((endpoint->ux_slave_endpoint_descriptor.bmAttributes &
-         UX_MASK_ENDPOINT_TYPE) != UX_CONTROL_ENDPOINT)
-      endpoint->ux_slave_endpoint_state = UX_ENDPOINT_HALTED;
-  }
+        /* Mark the endpoint state.  */
+        if ((endpoint -> ux_slave_endpoint_descriptor.bmAttributes & UX_MASK_ENDPOINT_TYPE) !=
+            UX_CONTROL_ENDPOINT)
+            endpoint -> ux_slave_endpoint_state =  UX_ENDPOINT_HALTED;
+    }
 
-  /* Restore interrupts.  */
-  UX_RESTORE
+    /* Restore interrupts.  */
+    UX_RESTORE
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return(status);       
 }
+

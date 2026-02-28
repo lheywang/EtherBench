@@ -9,6 +9,7 @@
 /*                                                                        */
 /**************************************************************************/
 
+
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,11 +20,13 @@
 /**************************************************************************/
 /**************************************************************************/
 
+
 /* Include necessary system files.  */
 
 #define UX_SOURCE_CODE
 
-#include "../include/ux_api.h"
+#include "ux_api.h"
+
 
 #if !defined(UX_STANDALONE)
 #include "tx_thread.h"
@@ -72,10 +75,12 @@
 /*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
-UX_THREAD *_ux_utility_thread_identify(VOID) {
+UX_THREAD *_ux_utility_thread_identify(VOID)
+{
 
-  /* If we're under interrupt, the thread returned by tx_thread_identify
-      is the thread running prior to the ISR. Instead, we set it to null.  */
-  return (UX_THREAD_GET_SYSTEM_STATE() ? UX_NULL : tx_thread_identify());
+
+    /* If we're under interrupt, the thread returned by tx_thread_identify
+        is the thread running prior to the ISR. Instead, we set it to null.  */
+    return(UX_THREAD_GET_SYSTEM_STATE() ? UX_NULL : tx_thread_identify());
 }
 #endif

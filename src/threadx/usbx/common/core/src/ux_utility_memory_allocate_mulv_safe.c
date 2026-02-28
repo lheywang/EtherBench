@@ -9,6 +9,7 @@
 /*                                                                        */
 /**************************************************************************/
 
+
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -23,7 +24,8 @@
 
 #define UX_SOURCE_CODE
 
-#include "../include/ux_api.h"
+#include "ux_api.h"
+
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,9 +76,7 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID *_ux_utility_memory_allocate_mulv_safe(ULONG align, ULONG cache,
-                                            ULONG size_mul_v0,
-                                            ULONG size_mul_v1) {
-  return UX_UTILITY_MEMORY_ALLOCATE_MULV_SAFE(align, cache, size_mul_v0,
-                                              size_mul_v1);
+VOID* _ux_utility_memory_allocate_mulv_safe(ULONG align,ULONG cache,ULONG size_mul_v0,ULONG size_mul_v1)
+{
+    return UX_UTILITY_MEMORY_ALLOCATE_MULV_SAFE(align, cache, size_mul_v0, size_mul_v1);
 }

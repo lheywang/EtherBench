@@ -9,10 +9,11 @@
 /*                                                                        */
 /**************************************************************************/
 
+
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */
-/** USBX Component                                                        */
+/**                                                                       */ 
+/** USBX Component                                                        */ 
 /**                                                                       */
 /**   Device Stack                                                        */
 /**                                                                       */
@@ -21,10 +22,12 @@
 
 #define UX_SOURCE_CODE
 
+
 /* Include necessary system files.  */
 
-#include "../include/ux_api.h"
-#include "../include/ux_device_stack.h"
+#include "ux_api.h"
+#include "ux_device_stack.h"
+
 
 /**************************************************************************/
 /*                                                                        */
@@ -52,21 +55,21 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */
+/*    Completion Status                                                   */ 
 /*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _ux_utility_semaphore_put             Put semaphore                 */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application                                                         */
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _ux_utility_semaphore_put             Put semaphore                 */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application                                                         */ 
 /*    Device Stack                                                        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
-/*    DATE              NAME                      DESCRIPTION             */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
+/*    DATE              NAME                      DESCRIPTION             */ 
+/*                                                                        */ 
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            used UX prefix to refer to  */
@@ -79,58 +82,54 @@
 /*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_stack_transfer_abort(UX_SLAVE_TRANSFER *transfer_request,
-                                     ULONG completion_code) {
+UINT  _ux_device_stack_transfer_abort(UX_SLAVE_TRANSFER *transfer_request, ULONG completion_code)
+{
 
-  UX_INTERRUPT_SAVE_AREA
+UX_INTERRUPT_SAVE_AREA
 
-  UX_SLAVE_DCD *dcd;
+UX_SLAVE_DCD    *dcd;
 
-  UX_PARAMETER_NOT_USED(completion_code);
+    UX_PARAMETER_NOT_USED(completion_code);
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_TRANSFER_ABORT,
-                          transfer_request, completion_code, 0, 0,
-                          UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_STACK_TRANSFER_ABORT, transfer_request, completion_code, 0, 0, UX_TRACE_DEVICE_STACK_EVENTS, 0, 0)
 
-  /* Get the pointer to the DCD.  */
-  dcd = &_ux_system_slave->ux_system_slave_dcd;
+    /* Get the pointer to the DCD.  */
+    dcd =  &_ux_system_slave -> ux_system_slave_dcd;
 
-  /* Sets the completion code due to bus reset.  */
-  transfer_request->ux_slave_transfer_request_completion_code = completion_code;
+    /* Sets the completion code due to bus reset.  */
+    transfer_request -> ux_slave_transfer_request_completion_code = completion_code;
 
-  /* Ensure we're not preempted by the transfer completion ISR.  */
-  UX_DISABLE
+    /* Ensure we're not preempted by the transfer completion ISR.  */
+    UX_DISABLE
 
-  /* It's possible the transfer already completed. Ensure it hasn't before doing
-   * the abort.  */
-  if (transfer_request->ux_slave_transfer_request_status ==
-      UX_TRANSFER_STATUS_PENDING) {
+    /* It's possible the transfer already completed. Ensure it hasn't before doing the abort.  */
+    if (transfer_request -> ux_slave_transfer_request_status == UX_TRANSFER_STATUS_PENDING)
+    {
 
-    /* Call the DCD if necessary for cleaning up the pending transfer.  */
-    dcd->ux_slave_dcd_function(dcd, UX_DCD_TRANSFER_ABORT,
-                               (VOID *)transfer_request);
+        /* Call the DCD if necessary for cleaning up the pending transfer.  */
+        dcd -> ux_slave_dcd_function(dcd, UX_DCD_TRANSFER_ABORT, (VOID *) transfer_request);
 
-    /* Restore interrupts. Note that the transfer request should not be modified
-     * now.  */
-    UX_RESTORE
+        /* Restore interrupts. Note that the transfer request should not be modified now.  */
+        UX_RESTORE
 
-    /* We need to set the completion code for the transfer to aborted. Note
-       that the transfer request function cannot simultaneously modify this
-       because if the transfer was pending, then the transfer's thread is
-       currently waiting for it to complete.  */
-    transfer_request->ux_slave_transfer_request_status =
-        UX_TRANSFER_STATUS_ABORT;
+        /* We need to set the completion code for the transfer to aborted. Note
+           that the transfer request function cannot simultaneously modify this 
+           because if the transfer was pending, then the transfer's thread is 
+           currently waiting for it to complete.  */
+        transfer_request -> ux_slave_transfer_request_status =  UX_TRANSFER_STATUS_ABORT;
 
-    /* Wake up the device driver who is waiting on the semaphore.  */
-    _ux_device_semaphore_put(
-        &transfer_request->ux_slave_transfer_request_semaphore);
-  } else {
+        /* Wake up the device driver who is waiting on the semaphore.  */
+        _ux_device_semaphore_put(&transfer_request -> ux_slave_transfer_request_semaphore);
+    }
+    else
+    {
 
-    /* Restore interrupts.  */
-    UX_RESTORE
-  }
+        /* Restore interrupts.  */
+        UX_RESTORE
+    }
 
-  /* This function never fails.  */
-  return (UX_SUCCESS);
+    /* This function never fails.  */
+    return(UX_SUCCESS);       
 }
+
