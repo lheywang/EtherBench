@@ -307,17 +307,6 @@ list(APPEND SOURCES
     common/classes/src/ux_device_class_cdc_acm_write.c
     common/classes/src/ux_device_class_cdc_acm_write_run.c
     common/classes/src/ux_device_class_cdc_acm_write_with_callback.c
-    common/classes/src/ux_device_class_cdc_ecm_activate.c
-    common/classes/src/ux_device_class_cdc_ecm_bulkin_thread.c
-    common/classes/src/ux_device_class_cdc_ecm_bulkout_thread.c
-    common/classes/src/ux_device_class_cdc_ecm_change.c
-    common/classes/src/ux_device_class_cdc_ecm_control_request.c
-    common/classes/src/ux_device_class_cdc_ecm_deactivate.c
-    common/classes/src/ux_device_class_cdc_ecm_entry.c
-    common/classes/src/ux_device_class_cdc_ecm_initialize.c
-    common/classes/src/ux_device_class_cdc_ecm_interrupt_thread.c
-    common/classes/src/ux_device_class_cdc_ecm_uninitialize.c
-    common/classes/src/ux_device_class_cdc_ecm_write.c
     common/classes/src/ux_device_class_dfu_activate.c
     common/classes/src/ux_device_class_dfu_control_request.c
     common/classes/src/ux_device_class_dfu_deactivate.c
@@ -394,20 +383,6 @@ list(APPEND SOURCES
     common/classes/src/ux_device_class_printer_uninitialize.c
     common/classes/src/ux_device_class_printer_write.c
     common/classes/src/ux_device_class_printer_write_run.c
-    common/classes/src/ux_device_class_rndis_activate.c
-    common/classes/src/ux_device_class_rndis_bulkin_thread.c
-    common/classes/src/ux_device_class_rndis_bulkout_thread.c
-    common/classes/src/ux_device_class_rndis_control_request.c
-    common/classes/src/ux_device_class_rndis_deactivate.c
-    common/classes/src/ux_device_class_rndis_entry.c
-    common/classes/src/ux_device_class_rndis_initialize.c
-    common/classes/src/ux_device_class_rndis_interrupt_thread.c
-    common/classes/src/ux_device_class_rndis_msg_initialize.c
-    common/classes/src/ux_device_class_rndis_msg_keep_alive.c
-    common/classes/src/ux_device_class_rndis_msg_query.c
-    common/classes/src/ux_device_class_rndis_msg_reset.c
-    common/classes/src/ux_device_class_rndis_msg_set.c
-    common/classes/src/ux_device_class_rndis_write.c
     common/classes/src/ux_device_class_storage_activate.c
     common/classes/src/ux_device_class_storage_control_request.c
     common/classes/src/ux_device_class_storage_csw_send.c
@@ -491,7 +466,7 @@ list(APPEND SOURCES
 add_library(USBX OBJECT ${SOURCES})
 
 # Link against the OS kernel and the HAL 
-target_link_libraries(USBX HAL THREADX_OS NETXDUO)
+target_link_libraries(USBX HAL THREADX_OS)
 
 # Adding the include folder
 target_include_directories(USBX PUBLIC 

@@ -100,6 +100,13 @@ void SystemClock_Config(void)
 
   HAL_RCCEx_CRSConfig(&RCC_CRSInitStruct);
 
+  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
+  PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK) {
+    Error_Handler();
+  }
+
   /** Configure the programming delay
   */
   __HAL_FLASH_SET_PROGRAM_DELAY(FLASH_PROGRAMMING_DELAY_2);
