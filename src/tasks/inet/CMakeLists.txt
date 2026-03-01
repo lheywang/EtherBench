@@ -8,7 +8,7 @@
 
 # Set sources
 set(SOURCES 
-	src/inet.cpp
+	src/task_inet.cpp
 )
 
 # Creating the library

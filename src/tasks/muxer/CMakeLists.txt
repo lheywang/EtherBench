@@ -8,7 +8,7 @@
 
 # Set sources
 set(SOURCES 
-	src/muxer.cpp
+	src/task_muxer.cpp
 )
 
 # Creating the library

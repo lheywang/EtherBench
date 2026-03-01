@@ -8,7 +8,7 @@
 
 # Set sources
 set(SOURCES 
-	src/hardware.cpp
+	src/task_hardware.cpp
 )
 
 # Creating the library
