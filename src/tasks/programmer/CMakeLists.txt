@@ -1,6 +1,6 @@
 #############################################################################################################################
-# file:  tasks/inet/CMakeLists.txt
-# brief: User network task build
+# file:  tasks/programmer/CMakeLists.txt
+# brief: CMSIS programmer, in between others programming function.
 # 
 # author : l.heywang <leonard.heywang@proton.me>
 # date : 20/02/2026

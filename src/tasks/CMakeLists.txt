@@ -12,6 +12,7 @@ add_subdirectory(files)
 add_subdirectory(hardware)
 add_subdirectory(inet)
 add_subdirectory(leds)
+add_subdirectory(logger)
 add_subdirectory(muxer)
 add_subdirectory(programmer)
 add_subdirectory(usb)
@@ -26,6 +27,7 @@ target_sources(TASKS INTERFACE
     $<TARGET_OBJECTS:HARDWARE>
     $<TARGET_OBJECTS:INET>
     $<TARGET_OBJECTS:LEDS>
+    $<TARGET_OBJECTS:LOGGER>
     $<TARGET_OBJECTS:MUXER>
     $<TARGET_OBJECTS:PROGRAMMER>
     $<TARGET_OBJECTS:USB>
@@ -37,6 +39,7 @@ target_link_libraries(TASKS INTERFACE
 	HARDWARE
 	INET
 	LEDS
+	LOGGER
 	MUXER
 	PROGRAMMER
 	USB

@@ -26,13 +26,23 @@
 // STD
 #include <stdint.h>
 
-#include "../../tasks/leds/include/task_leds.h"
+#include "task_leds.h"
+#include "logger.h"
 
 // ======================================================================
 //                              MEMORY AREAS
 // ======================================================================
+/*
+ * Leds
+ */
 TX_THREAD leds_thread;
 uint8_t leds_stack[IDLE_STACK_SIZE];
+
+/*
+ * Logger
+ */
+TX_THREAD logger_thread;
+uint8_t logger_stack[LOGGER_STACK_SIZE];
 
 // ======================================================================
 //                              FUNCTIONS
@@ -48,7 +58,33 @@ uint32_t launcher(void) {
   /*
    * Creating the idle task
    */
-  tx_thread_create(&leds_thread, "Idle blink", leds_task, 0, leds_stack,
-                   IDLE_STACK_SIZE, 31, 31, TX_NO_TIME_SLICE, TX_AUTO_START);
+  tx_thread_create(&leds_thread,
+		  	  	  "Leds control",
+				  leds_task,
+				  0,
+				  leds_stack,
+                  IDLE_STACK_SIZE,
+				  31,
+				  31,
+				  TX_NO_TIME_SLICE,
+				  TX_AUTO_START
+  );
+
+  tx_thread_create(&logger_thread,
+		  	  "Deferred Logger",
+			  logger_task,
+			  0,
+			  logger_stack,
+			  LOGGER_STACK_SIZE,
+			  31,
+			  31,
+			  TX_NO_TIME_SLICE,
+			  TX_AUTO_START
+  );
+
+  tx_thread_sleep(20);
+
+  LOG("Booted HAL, %d", HAL_OK);
+
   return 0;
 }

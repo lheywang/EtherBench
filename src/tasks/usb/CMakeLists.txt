@@ -1,6 +1,6 @@
 #############################################################################################################################
-# file:  tasks/vcom/CMakeLists.txt
-# brief: Tasks responsible for virtual com ports handling.
+# file:  tasks/usb/CMakeLists.txt
+# brief: USB IO handling task.
 # 
 # author : l.heywang <leonard.heywang@proton.me>
 # date : 20/02/2026

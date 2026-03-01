@@ -1,6 +1,6 @@
 #############################################################################################################################
-# file:  tasks/inet/CMakeLists.txt
-# brief: User network task build
+# file:  tasks/controller/CMakeLists.txt
+# brief: Main command parser and controller build logic
 # 
 # author : l.heywang <leonard.heywang@proton.me>
 # date : 20/02/2026

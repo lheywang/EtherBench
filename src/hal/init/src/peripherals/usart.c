@@ -62,7 +62,10 @@ void MX_USART3_UART_Init(void) {
   if (HAL_UARTEx_DisableFifoMode(&huart3) != HAL_OK) {
     Error_Handler();
   }
+
   /* USER CODE BEGIN USART3_Init 2 */
+  HAL_NVIC_SetPriority(USART3_IRQn, 12, 0);
+  HAL_NVIC_EnableIRQ(USART3_IRQn);
 
   /* USER CODE END USART3_Init 2 */
 }

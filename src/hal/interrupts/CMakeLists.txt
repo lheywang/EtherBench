@@ -11,6 +11,7 @@ set(SOURCES
 	src/stm32h5xx_it.c
 	src/hal_it.c
 	src/error_handler.c
+	src/it.c
 )
 
 # Creating the library
