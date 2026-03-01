@@ -23,7 +23,7 @@
       0x02, /* Number of interfaces */                                         \
       0x02, /* Class (Communication) */                                        \
       0x02, /* Subclass (ACM)*/                                                \
-      0x01, /* Protocol (AT Commands) */                                       \
+      0x00, /* Protocol (None) */                                       		\
       0x00, /* */                                                              \
                                                                                \
       /* ---- */ /* Interface 0 Descriptor (CONTROL) */ /* ---- */             \
@@ -34,7 +34,7 @@
       0x01, /* bNumEndpoints */                                                \
       0x02, /* bInterfaceClass */                                              \
       0x02, /* bInterfaceSubClass */                                           \
-      0x01, /* bInterfaceProtocol */                                           \
+      0x00, /* bInterfaceProtocol */                                           \
       0x00, /* String index */ /* ---- */ /* CDC HEADER */ /* ---- */          \
       0x05, 0x24, 0x00, 0x10, 0x01, 0x05, 0x24, 0x01, 0x00, 0x01, 0x04, 0x24,  \
       0x02, 0x02, 0x05, 0x24, 0x06, 0x00, 0x01, /* EP1 INTERRUPT CONTROL */    \
@@ -43,7 +43,7 @@
       0x81,       /* Endpoint address + direction */                           \
       0x03,       /* Endpoint type (interrupt) */                              \
       0x08, 0x00, /* Data size (8 Bytes, LE) */                                \
-      0xFF,       /* Polling interval (255 ms) */                              \
+      0x20,       /* Polling interval (32 ms) */                              \
                                                                                \
       /* ---- */ /* Interface 1 Descriptor (DATA XFER) */ /* ---- */ /* EP2    \
                                                                         DATA   \

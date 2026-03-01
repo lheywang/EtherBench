@@ -66,6 +66,8 @@ static __attribute__((
 static __attribute__((aligned(8))) uint8_t ux_memory[UX_SYSTEM_MEM_SIZE];
 UX_SLAVE_CLASS_CDC_ACM *serial_instance;
 UX_SLAVE_CLASS_CDC_ACM *terminal_instance;
+
+UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_mux_param = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -108,7 +110,6 @@ UINT MX_USBX_Device_Init(void) {
 	    }
 	  }
 
-	  UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_mux_param = {0};
 	    status = ux_device_stack_class_register((UCHAR *)"ux_device_class_cdc_acm",
 	                                            ux_device_class_cdc_acm_entry,
 	                                            1, // Configuration 1
@@ -139,15 +140,29 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
   TX_PARAMETER_NOT_USED(thread_input);
   UINT status;
 
+  HAL_PWREx_EnableVddUSB();
+
+  tx_thread_sleep(2);
+
   MX_USB_PCD_Init();
 
-  HAL_PWREx_EnableVddUSB();
+
 
 
 
   // Re-apply PMA here, after dcd init
   HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x00, PCD_SNG_BUF, 0x40);
   HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x80, PCD_SNG_BUF, 0x80);
+
+  // --- Mémoire pour l'Interface CDC ---
+	// EP1 IN (0x81) : Commandes / Interruption
+	HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x81, PCD_SNG_BUF, 0xC0);
+
+	// EP2 OUT (0x02) : Réception des données (RX)
+	HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x02, PCD_SNG_BUF, 0x100);
+
+	// EP2 IN (0x82) : Envoi des données (TX)
+	HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x82, PCD_SNG_BUF, 0x140);
 
   /*
    * Turn ON the USB peripheral.
@@ -171,6 +186,7 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
     // The USB hardware interrupts handle the heavy lifting.
     // This thread just sleeps, or we can use it later for background USB
     // events.
+	tx_thread_sleep(10);
   }
 
   /* USER CODE END app_ux_device_thread_entry */

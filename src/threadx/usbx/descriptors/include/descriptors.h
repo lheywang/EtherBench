@@ -67,9 +67,9 @@ extern const uint8_t string_framework[];
 #endif
 
 #ifndef LANGUAGE_ID_FRAMEWORK_LEN
-#define LANGUAGE_ID_FRAMEWORK_LEN (4)
+#define LANGUAGE_ID_FRAMEWORK_LEN (2)
 #endif
 
 #ifndef STRING_FRAMEWORK_LEN
-#define STRING_FRAMEWORK_LEN (67)
+#define STRING_FRAMEWORK_LEN (71)
 #endif
