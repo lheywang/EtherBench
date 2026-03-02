@@ -1,4 +1,4 @@
-/* USER CODE BEGIN Header */
+
 /**
  ******************************************************************************
  * @file    gpdma.c
@@ -16,36 +16,32 @@
  *
  ******************************************************************************
  */
-/* USER CODE END Header */
+
 /* Includes ------------------------------------------------------------------*/
 #include "gpdma.h"
+#include "stm32h563xx.h"
+#include "stm32h5xx_hal_dma.h"
 
-/* USER CODE BEGIN 0 */
+#include <string.h>
 
-/* USER CODE END 0 */
+DMA_HandleTypeDef hdma_usart3_tx;
 
-/* GPDMA2 init function */
+void MX_GPDMA1_Init(void) {
+
+    /* Peripheral clock enable */
+    __HAL_RCC_GPDMA1_CLK_ENABLE();
+
+    /* GPDMA2 interrupt Init */
+    HAL_NVIC_SetPriority(GPDMA1_Channel0_IRQn, 8, 0);
+    HAL_NVIC_EnableIRQ(GPDMA1_Channel0_IRQn);
+}
+
 void MX_GPDMA2_Init(void) {
-
-    /* USER CODE BEGIN GPDMA2_Init 0 */
-
-    /* USER CODE END GPDMA2_Init 0 */
 
     /* Peripheral clock enable */
     __HAL_RCC_GPDMA2_CLK_ENABLE();
 
     /* GPDMA2 interrupt Init */
-    HAL_NVIC_SetPriority(GPDMA2_Channel0_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(GPDMA2_Channel0_IRQn);
-
-    /* USER CODE BEGIN GPDMA2_Init 1 */
-
-    /* USER CODE END GPDMA2_Init 1 */
-    /* USER CODE BEGIN GPDMA2_Init 2 */
-
-    /* USER CODE END GPDMA2_Init 2 */
+    // HAL_NVIC_SetPriority(GPDMA2_Channel0_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(GPDMA2_Channel0_IRQn);
 }
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */

@@ -28,19 +28,10 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
+extern DMA_HandleTypeDef hdma_usart3_tx;
 
 void MX_GPDMA2_Init(void);
-
-/* USER CODE BEGIN Prototypes */
-
-/* USER CODE END Prototypes */
+void MX_GPDMA1_Init(void);
 
 #ifdef __cplusplus
 }

@@ -22,6 +22,7 @@
 #include "cordic.h"
 #include "dcache.h"
 #include "fmac.h"
+#include "gpdma.h"
 #include "gpio.h"
 #include "icache.h"
 #include "rcc.h"
@@ -42,6 +43,9 @@ uint32_t init(void) {
 
     // Initialize the clocks
     SystemClock_Config();
+
+    // Initialize DMA
+    MX_GPDMA1_Init();
 
     // Initialize Cortex M33 :
     MX_DCACHE1_Init();
