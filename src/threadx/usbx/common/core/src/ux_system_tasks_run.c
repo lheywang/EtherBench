@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -25,10 +24,9 @@
 #define UX_SOURCE_CODE
 
 #include "ux_api.h"
-#include "ux_system.h"
-#include "ux_host_stack.h"
 #include "ux_device_stack.h"
-
+#include "ux_host_stack.h"
+#include "ux_system.h"
 
 #if defined(UX_STANDALONE) || defined(UX_HOST_STANDALONE) || defined(UX_DEVICE_STANDALONE) || defined(UX_OTG_STANDALONE)
 /**************************************************************************/
@@ -72,8 +70,7 @@
 /*  01-31-2022     Chaoqiong Xiao           Initial Version 6.1.10        */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_system_tasks_run(VOID)
-{
+UINT _ux_system_tasks_run(VOID) {
 #if defined(UX_DEVICE_STANDALONE) && !defined(UX_HOST_SIDE_ONLY)
     _ux_device_stack_tasks_run();
 #endif
@@ -84,7 +81,7 @@ UINT _ux_system_tasks_run(VOID)
     _ux_otg_tasks_run();
 #endif
 
-   /* Return code not used now.  */
-   return(0);
+    /* Return code not used now.  */
+    return (0);
 }
 #endif

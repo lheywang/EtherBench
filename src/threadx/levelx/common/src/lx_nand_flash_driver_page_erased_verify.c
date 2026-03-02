@@ -78,21 +78,19 @@
 /*                                            resulting in version 6.2.1 */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_driver_page_erased_verify(LX_NAND_FLASH *nand_flash,
-                                              ULONG block, ULONG page) {
+UINT _lx_nand_flash_driver_page_erased_verify(LX_NAND_FLASH *nand_flash, ULONG block, ULONG page) {
 
-  UINT status;
+    UINT status;
 
-  /* Increment the page erased verify count.  */
-  nand_flash->lx_nand_flash_diagnostic_page_erased_verifies++;
+    /* Increment the page erased verify count.  */
+    nand_flash->lx_nand_flash_diagnostic_page_erased_verifies++;
 
-  /* Call driver page erased verify function.  */
+    /* Call driver page erased verify function.  */
 #ifdef LX_NAND_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-  status = (nand_flash->lx_nand_flash_driver_page_erased_verify)(nand_flash,
-                                                                 block, page);
+    status = (nand_flash->lx_nand_flash_driver_page_erased_verify)(nand_flash, block, page);
 #else
-  status = (nand_flash->lx_nand_flash_driver_page_erased_verify)(block, page);
+    status = (nand_flash->lx_nand_flash_driver_page_erased_verify)(block, page);
 #endif
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }

@@ -80,57 +80,54 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxd_nd_cache_ip_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address,
-                                   ULONG physical_msw, ULONG physical_lsw,
+UINT _nxd_nd_cache_ip_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, ULONG physical_msw, ULONG physical_lsw,
                                    UINT *interface_index) {
 #ifdef FEATURE_NX_IPV6
 
-  ND_CACHE_ENTRY *entry;
+    ND_CACHE_ENTRY *entry;
 
-  /* Find ND entry according to the given MAC address. */
-  /* Obtain the protection. */
-  tx_mutex_get(&ip_ptr->nx_ip_protection, TX_WAIT_FOREVER);
+    /* Find ND entry according to the given MAC address. */
+    /* Obtain the protection. */
+    tx_mutex_get(&ip_ptr->nx_ip_protection, TX_WAIT_FOREVER);
 
-  if (_nx_nd_cache_find_entry_by_mac_addr(ip_ptr, physical_msw, physical_lsw,
-                                          &entry) != NX_SUCCESS) {
+    if (_nx_nd_cache_find_entry_by_mac_addr(ip_ptr, physical_msw, physical_lsw, &entry) != NX_SUCCESS) {
+
+        /* Release the protection. */
+        tx_mutex_put(&ip_ptr->nx_ip_protection);
+
+        /* No such MAC address found in cache table. */
+        return (NX_ENTRY_NOT_FOUND);
+    }
+
+    /* Copy the IP address and version from the cache entry into the address
+     * structure. */
+    ip_address->nxd_ip_version = NX_IP_VERSION_V6;
+
+    /*lint -e{644} suppress variable might not be initialized, since "entry" was
+     * initialized as long as previous call is NX_SUCCESS. */
+    COPY_IPV6_ADDRESS(entry->nx_nd_cache_dest_ip, ip_address->nxd_ip_address.v6);
+
+    /* If trace is enabled, insert this event into the trace buffer. */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_ND_CACHE_IP_ADDRESS_FIND, ip_ptr, ip_address->nxd_ip_address.v6[3], physical_msw,
+                            physical_lsw, NX_TRACE_ARP_EVENTS, 0, 0);
+
+    /* Get the interface_index.  */
+    *interface_index = entry->nx_nd_cache_interface_ptr->nx_interface_index;
 
     /* Release the protection. */
     tx_mutex_put(&ip_ptr->nx_ip_protection);
 
-    /* No such MAC address found in cache table. */
-    return (NX_ENTRY_NOT_FOUND);
-  }
-
-  /* Copy the IP address and version from the cache entry into the address
-   * structure. */
-  ip_address->nxd_ip_version = NX_IP_VERSION_V6;
-
-  /*lint -e{644} suppress variable might not be initialized, since "entry" was
-   * initialized as long as previous call is NX_SUCCESS. */
-  COPY_IPV6_ADDRESS(entry->nx_nd_cache_dest_ip, ip_address->nxd_ip_address.v6);
-
-  /* If trace is enabled, insert this event into the trace buffer. */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_ND_CACHE_IP_ADDRESS_FIND, ip_ptr,
-                          ip_address->nxd_ip_address.v6[3], physical_msw,
-                          physical_lsw, NX_TRACE_ARP_EVENTS, 0, 0);
-
-  /* Get the interface_index.  */
-  *interface_index = entry->nx_nd_cache_interface_ptr->nx_interface_index;
-
-  /* Release the protection. */
-  tx_mutex_put(&ip_ptr->nx_ip_protection);
-
-  /* Successful completion*/
-  return (NX_SUCCESS);
+    /* Successful completion*/
+    return (NX_SUCCESS);
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(ip_address);
-  NX_PARAMETER_NOT_USED(physical_msw);
-  NX_PARAMETER_NOT_USED(physical_lsw);
-  NX_PARAMETER_NOT_USED(interface_index);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_address);
+    NX_PARAMETER_NOT_USED(physical_msw);
+    NX_PARAMETER_NOT_USED(physical_lsw);
+    NX_PARAMETER_NOT_USED(interface_index);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

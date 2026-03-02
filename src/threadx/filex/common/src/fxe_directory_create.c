@@ -70,19 +70,19 @@ FX_CALLER_CHECKING_EXTERNS
 /**************************************************************************/
 UINT _fxe_directory_create(FX_MEDIA *media_ptr, CHAR *directory_name) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null media pointer.  */
-  if (media_ptr == FX_NULL) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null media pointer.  */
+    if (media_ptr == FX_NULL) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual directory create service.  */
-  status = _fx_directory_create(media_ptr, directory_name);
+    /* Call actual directory create service.  */
+    status = _fx_directory_create(media_ptr, directory_name);
 
-  /* Directory create is complete, return status.  */
-  return (status);
+    /* Directory create is complete, return status.  */
+    return (status);
 }

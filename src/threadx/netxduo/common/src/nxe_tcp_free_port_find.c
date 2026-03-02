@@ -76,30 +76,29 @@ NX_CALLER_CHECKING_EXTERNS
 /**************************************************************************/
 UINT _nxe_tcp_free_port_find(NX_IP *ip_ptr, UINT port, UINT *free_port_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
-      (free_port_ptr == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) || (free_port_ptr == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check to see if TCP is enabled.  */
-  if (!ip_ptr->nx_ip_tcp_packet_receive) {
-    return (NX_NOT_ENABLED);
-  }
+    /* Check to see if TCP is enabled.  */
+    if (!ip_ptr->nx_ip_tcp_packet_receive) {
+        return (NX_NOT_ENABLED);
+    }
 
-  /* Check for an invalid port.  */
-  if (((ULONG)port) > (ULONG)NX_MAX_PORT) {
-    return (NX_INVALID_PORT);
-  }
+    /* Check for an invalid port.  */
+    if (((ULONG)port) > (ULONG)NX_MAX_PORT) {
+        return (NX_INVALID_PORT);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call actual TCP free port find function.  */
-  status = _nx_tcp_free_port_find(ip_ptr, port, free_port_ptr);
+    /* Call actual TCP free port find function.  */
+    status = _nx_tcp_free_port_find(ip_ptr, port, free_port_ptr);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

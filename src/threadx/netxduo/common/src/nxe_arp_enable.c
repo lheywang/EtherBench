@@ -73,41 +73,39 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_arp_enable(NX_IP *ip_ptr, VOID *arp_cache_memory,
-                     ULONG arp_cache_size) {
+UINT _nxe_arp_enable(NX_IP *ip_ptr, VOID *arp_cache_memory, ULONG arp_cache_size) {
 
 #ifndef NX_DISABLE_IPV4
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
-      (arp_cache_memory == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) || (arp_cache_memory == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check to see if ARP is already enabled.  */
-  if (ip_ptr->nx_ip_arp_allocate) {
-    return (NX_ALREADY_ENABLED);
-  }
+    /* Check to see if ARP is already enabled.  */
+    if (ip_ptr->nx_ip_arp_allocate) {
+        return (NX_ALREADY_ENABLED);
+    }
 
-  /* Check for invalid ARP cache size.  */
-  if (arp_cache_size < sizeof(NX_ARP)) {
-    return (NX_SIZE_ERROR);
-  }
+    /* Check for invalid ARP cache size.  */
+    if (arp_cache_size < sizeof(NX_ARP)) {
+        return (NX_SIZE_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call actual ARP enable function.  */
-  status = _nx_arp_enable(ip_ptr, arp_cache_memory, arp_cache_size);
+    /* Call actual ARP enable function.  */
+    status = _nx_arp_enable(ip_ptr, arp_cache_memory, arp_cache_size);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(arp_cache_memory);
-  NX_PARAMETER_NOT_USED(arp_cache_size);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(arp_cache_memory);
+    NX_PARAMETER_NOT_USED(arp_cache_size);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

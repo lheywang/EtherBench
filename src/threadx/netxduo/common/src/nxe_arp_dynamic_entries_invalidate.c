@@ -74,29 +74,29 @@ NX_CALLER_CHECKING_EXTERNS
 UINT _nxe_arp_dynamic_entries_invalidate(NX_IP *ip_ptr) {
 
 #ifndef NX_DISABLE_IPV4
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check to see if ARP is enabled.  */
-  if (!ip_ptr->nx_ip_arp_allocate) {
-    return (NX_NOT_ENABLED);
-  }
+    /* Check to see if ARP is enabled.  */
+    if (!ip_ptr->nx_ip_arp_allocate) {
+        return (NX_NOT_ENABLED);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call actual invalidate ARP dynamic entries function.  */
-  status = _nx_arp_dynamic_entries_invalidate(ip_ptr);
+    /* Call actual invalidate ARP dynamic entries function.  */
+    status = _nx_arp_dynamic_entries_invalidate(ip_ptr);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_ptr);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

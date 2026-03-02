@@ -73,32 +73,29 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_tcp_socket_window_update_notify_set(
-    NX_TCP_SOCKET *socket_ptr,
-    VOID (*tcp_socket_window_update_notify)(NX_TCP_SOCKET *socket_ptr)) {
-  TX_INTERRUPT_SAVE_AREA
+UINT _nx_tcp_socket_window_update_notify_set(NX_TCP_SOCKET *socket_ptr,
+                                             VOID (*tcp_socket_window_update_notify)(NX_TCP_SOCKET *socket_ptr)) {
+    TX_INTERRUPT_SAVE_AREA
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_TCP_SOCKET_WINDOW_UPDATE_NOTIFY_SET,
-                          socket_ptr, 0, 0, 0, NX_TRACE_TCP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_TCP_SOCKET_WINDOW_UPDATE_NOTIFY_SET, socket_ptr, 0, 0, 0, NX_TRACE_TCP_EVENTS, 0,
+                            0);
 
-  /* Get mutex protection.  */
-  tx_mutex_get(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection),
-               TX_WAIT_FOREVER);
+    /* Get mutex protection.  */
+    tx_mutex_get(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Setup the receive notify function pointer.  */
-  socket_ptr->nx_tcp_socket_window_update_notify =
-      tcp_socket_window_update_notify;
+    /* Setup the receive notify function pointer.  */
+    socket_ptr->nx_tcp_socket_window_update_notify = tcp_socket_window_update_notify;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Release protection.  */
-  tx_mutex_put(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection));
+    /* Release protection.  */
+    tx_mutex_put(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection));
 
-  /* Return successful completion.  */
-  return (NX_SUCCESS);
+    /* Return successful completion.  */
+    return (NX_SUCCESS);
 }

@@ -72,77 +72,76 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_tcp_mss_option_get(UCHAR *option_ptr, ULONG option_area_size,
-                            ULONG *mss) {
+UINT _nx_tcp_mss_option_get(UCHAR *option_ptr, ULONG option_area_size, ULONG *mss) {
 
-  ULONG option_length;
+    ULONG option_length;
 
-  /* Initialize the value.  */
-  *mss = 0;
+    /* Initialize the value.  */
+    *mss = 0;
 
-  /* Loop through the option area looking for the MSS.  */
-  while (option_area_size >= 4) {
+    /* Loop through the option area looking for the MSS.  */
+    while (option_area_size >= 4) {
 
-    /* Is the current character the MSS type?  */
-    if (*option_ptr == NX_TCP_MSS_KIND) {
+        /* Is the current character the MSS type?  */
+        if (*option_ptr == NX_TCP_MSS_KIND) {
 
-      /* Yes, we found it!  */
+            /* Yes, we found it!  */
 
-      /* Move the pointer forward by one.  */
-      option_ptr++;
+            /* Move the pointer forward by one.  */
+            option_ptr++;
 
-      /* Check the option length, if option length is not equal to 4, return
-       * NX_FALSE.  */
-      if (*option_ptr++ != 4) {
-        return (NX_FALSE);
-      }
+            /* Check the option length, if option length is not equal to 4, return
+             * NX_FALSE.  */
+            if (*option_ptr++ != 4) {
+                return (NX_FALSE);
+            }
 
-      /* Build the mss size.  */
-      *mss = (ULONG)*option_ptr++;
+            /* Build the mss size.  */
+            *mss = (ULONG)*option_ptr++;
 
-      /* Get the LSB of the MSS.  */
-      *mss = (*mss << 8) | (ULONG)*option_ptr;
+            /* Get the LSB of the MSS.  */
+            *mss = (*mss << 8) | (ULONG)*option_ptr;
 
-      /* Finished, get out of the loop!  */
-      break;
+            /* Finished, get out of the loop!  */
+            break;
+        }
+
+        /* Otherwise, process relative to the option type.  */
+
+        /* Check for end of list.  */
+        if (*option_ptr == NX_TCP_EOL_KIND) {
+
+            /* Yes, end of list, get out!  */
+            break;
+        }
+
+        /* Check for NOP.  */
+        if (*option_ptr++ == NX_TCP_NOP_KIND) {
+
+            /* One character option!  */
+            option_area_size--;
+        } else {
+
+            /* Derive the option length.  */
+            option_length = ((ULONG)*option_ptr);
+
+            /* Return when option length is invalid. */
+            if (option_length == 0) {
+                return (NX_FALSE);
+            }
+
+            /* Move the option pointer forward.  */
+            option_ptr = option_ptr + (option_length - 1);
+
+            /* Determine if this is greater than the option area size.  */
+            if (option_length > option_area_size) {
+                return (NX_FALSE);
+            } else {
+                option_area_size = option_area_size - option_length;
+            }
+        }
     }
 
-    /* Otherwise, process relative to the option type.  */
-
-    /* Check for end of list.  */
-    if (*option_ptr == NX_TCP_EOL_KIND) {
-
-      /* Yes, end of list, get out!  */
-      break;
-    }
-
-    /* Check for NOP.  */
-    if (*option_ptr++ == NX_TCP_NOP_KIND) {
-
-      /* One character option!  */
-      option_area_size--;
-    } else {
-
-      /* Derive the option length.  */
-      option_length = ((ULONG)*option_ptr);
-
-      /* Return when option length is invalid. */
-      if (option_length == 0) {
-        return (NX_FALSE);
-      }
-
-      /* Move the option pointer forward.  */
-      option_ptr = option_ptr + (option_length - 1);
-
-      /* Determine if this is greater than the option area size.  */
-      if (option_length > option_area_size) {
-        return (NX_FALSE);
-      } else {
-        option_area_size = option_area_size - option_length;
-      }
-    }
-  }
-
-  /* Return.  */
-  return (NX_TRUE);
+    /* Return.  */
+    return (NX_TRUE);
 }

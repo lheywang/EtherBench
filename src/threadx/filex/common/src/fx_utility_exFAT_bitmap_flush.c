@@ -71,39 +71,36 @@
 /**************************************************************************/
 UINT _fx_utility_exFAT_bitmap_flush(FX_MEDIA *media_ptr) {
 
-  /* Check if the bitmap cache is dirty.  */
-  if (FX_TRUE == media_ptr->fx_media_exfat_bitmap_cache_dirty) {
+    /* Check if the bitmap cache is dirty.  */
+    if (FX_TRUE == media_ptr->fx_media_exfat_bitmap_cache_dirty) {
 
-    /* Write cached exFAT bitmap.  */
-    media_ptr->fx_media_driver_request = FX_DRIVER_WRITE;
-    media_ptr->fx_media_driver_status = FX_IO_ERROR;
-    media_ptr->fx_media_driver_buffer =
-        (UCHAR *)media_ptr->fx_media_exfat_bitmap_cache;
-    media_ptr->fx_media_driver_sectors =
-        media_ptr->fx_media_exfat_bitmap_cache_size_in_sectors;
+        /* Write cached exFAT bitmap.  */
+        media_ptr->fx_media_driver_request = FX_DRIVER_WRITE;
+        media_ptr->fx_media_driver_status = FX_IO_ERROR;
+        media_ptr->fx_media_driver_buffer = (UCHAR *)media_ptr->fx_media_exfat_bitmap_cache;
+        media_ptr->fx_media_driver_sectors = media_ptr->fx_media_exfat_bitmap_cache_size_in_sectors;
 
-    media_ptr->fx_media_driver_logical_sector =
-        media_ptr->fx_media_exfat_bitmap_start_sector +
-        ((media_ptr->fx_media_exfat_bitmap_cache_start_cluster -
-          FX_FAT_ENTRY_START) >>
-         media_ptr->fx_media_exfat_bitmap_clusters_per_sector_shift);
+        media_ptr->fx_media_driver_logical_sector =
+            media_ptr->fx_media_exfat_bitmap_start_sector +
+            ((media_ptr->fx_media_exfat_bitmap_cache_start_cluster - FX_FAT_ENTRY_START) >>
+             media_ptr->fx_media_exfat_bitmap_clusters_per_sector_shift);
 
-    /* Invoke the driver to write the bitmap sectors.  */
-    (media_ptr->fx_media_driver_entry)(media_ptr);
+        /* Invoke the driver to write the bitmap sectors.  */
+        (media_ptr->fx_media_driver_entry)(media_ptr);
 
-    /* Determine if the write was successful.  */
-    if (media_ptr->fx_media_driver_status == FX_SUCCESS) {
+        /* Determine if the write was successful.  */
+        if (media_ptr->fx_media_driver_status == FX_SUCCESS) {
 
-      /* Set bitmap cache dirty flag to false.  */
-      media_ptr->fx_media_exfat_bitmap_cache_dirty = FX_FALSE;
+            /* Set bitmap cache dirty flag to false.  */
+            media_ptr->fx_media_exfat_bitmap_cache_dirty = FX_FALSE;
+        }
+    } else {
+
+        /* Initialize return status to success.  */
+        media_ptr->fx_media_driver_status = FX_SUCCESS;
     }
-  } else {
 
-    /* Initialize return status to success.  */
-    media_ptr->fx_media_driver_status = FX_SUCCESS;
-  }
-
-  return (media_ptr->fx_media_driver_status);
+    return (media_ptr->fx_media_driver_status);
 }
 
 #endif /* FX_ENABLE_EXFAT */

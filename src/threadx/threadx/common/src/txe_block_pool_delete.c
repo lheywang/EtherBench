@@ -72,64 +72,64 @@
 /**************************************************************************/
 UINT _txe_block_pool_delete(TX_BLOCK_POOL *pool_ptr) {
 
-  UINT status;
+    UINT status;
 #ifndef TX_TIMER_PROCESS_IN_ISR
-  TX_THREAD *thread_ptr;
+    TX_THREAD *thread_ptr;
 #endif
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-  /* Default status to success.  */
-  status = TX_SUCCESS;
+    /* Default status to success.  */
+    status = TX_SUCCESS;
 #endif
 
-  /* Check for an invalid pool pointer.  */
-  if (pool_ptr == TX_NULL) {
+    /* Check for an invalid pool pointer.  */
+    if (pool_ptr == TX_NULL) {
 
-    /* Pool pointer is invalid, return appropriate error code.  */
-    status = TX_POOL_ERROR;
-  }
-
-  /* Now check the pool ID.  */
-  else if (pool_ptr->tx_block_pool_id != TX_BLOCK_POOL_ID) {
-
-    /* Pool pointer is invalid, return appropriate error code.  */
-    status = TX_POOL_ERROR;
-  }
-
-  /* Check for invalid caller of this function.  */
-
-  /* Is the call from an ISR or initialization?  */
-  else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
-
-    /* Invalid caller of this function, return appropriate error code.  */
-    status = TX_CALLER_ERROR;
-  } else {
-
-#ifndef TX_TIMER_PROCESS_IN_ISR
-
-    /* Pickup thread pointer.  */
-    TX_THREAD_GET_CURRENT(thread_ptr)
-
-    /* Is the call from the system timer thread?  */
-    if (thread_ptr == &_tx_timer_thread) {
-
-      /* Invalid caller of this function, return appropriate error code.  */
-      status = TX_CALLER_ERROR;
+        /* Pool pointer is invalid, return appropriate error code.  */
+        status = TX_POOL_ERROR;
     }
 
-    /* Determine if everything is okay.  */
-    if (status == TX_SUCCESS) {
-#endif
+    /* Now check the pool ID.  */
+    else if (pool_ptr->tx_block_pool_id != TX_BLOCK_POOL_ID) {
 
-      /* Call actual block pool delete function.  */
-      status = _tx_block_pool_delete(pool_ptr);
+        /* Pool pointer is invalid, return appropriate error code.  */
+        status = TX_POOL_ERROR;
+    }
+
+    /* Check for invalid caller of this function.  */
+
+    /* Is the call from an ISR or initialization?  */
+    else if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
+
+        /* Invalid caller of this function, return appropriate error code.  */
+        status = TX_CALLER_ERROR;
+    } else {
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
-    }
-#endif
-  }
 
-  /* Return completion status.  */
-  return (status);
+        /* Pickup thread pointer.  */
+        TX_THREAD_GET_CURRENT(thread_ptr)
+
+        /* Is the call from the system timer thread?  */
+        if (thread_ptr == &_tx_timer_thread) {
+
+            /* Invalid caller of this function, return appropriate error code.  */
+            status = TX_CALLER_ERROR;
+        }
+
+        /* Determine if everything is okay.  */
+        if (status == TX_SUCCESS) {
+#endif
+
+            /* Call actual block pool delete function.  */
+            status = _tx_block_pool_delete(pool_ptr);
+
+#ifndef TX_TIMER_PROCESS_IN_ISR
+        }
+#endif
+    }
+
+    /* Return completion status.  */
+    return (status);
 }

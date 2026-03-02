@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_printer.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -81,35 +79,33 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_printer_uninitialize(UX_SLAVE_CLASS_COMMAND *command)
-{
+UINT _ux_device_class_printer_uninitialize(UX_SLAVE_CLASS_COMMAND *command) {
 
-UX_DEVICE_CLASS_PRINTER     *printer;
-UX_SLAVE_CLASS              *class_ptr;
+    UX_DEVICE_CLASS_PRINTER *printer;
+    UX_SLAVE_CLASS *class_ptr;
 
     /* Get the class container.  */
-    class_ptr =  command -> ux_slave_class_command_class_ptr;
+    class_ptr = command->ux_slave_class_command_class_ptr;
 
     /* Get the class instance in the container.  */
-    printer = (UX_DEVICE_CLASS_PRINTER *) class_ptr -> ux_slave_class_instance;
+    printer = (UX_DEVICE_CLASS_PRINTER *)class_ptr->ux_slave_class_instance;
 
     /* Sanity check.  */
-    if (printer != UX_NULL)
-    {
+    if (printer != UX_NULL) {
 #if !defined(UX_DEVICE_STANDALONE)
         /* Delete the IN endpoint mutex.  */
-        _ux_device_mutex_delete(&printer -> ux_device_class_printer_endpoint_in_mutex);
+        _ux_device_mutex_delete(&printer->ux_device_class_printer_endpoint_in_mutex);
 
         /* Out Mutex. */
-        _ux_device_mutex_delete(&printer -> ux_device_class_printer_endpoint_out_mutex);
+        _ux_device_mutex_delete(&printer->ux_device_class_printer_endpoint_out_mutex);
 #endif
         /* Free the resources.  */
 #if defined(UX_DEVICE_CLASS_PRINTER_OWN_ENDPOINT_BUFFER)
-        _ux_utility_memory_free(printer -> ux_device_class_printer_endpoint_buffer);
+        _ux_utility_memory_free(printer->ux_device_class_printer_endpoint_buffer);
 #endif
         _ux_utility_memory_free(printer);
     }
 
     /* Return completion status.  */
-    return(UX_SUCCESS);
+    return (UX_SUCCESS);
 }

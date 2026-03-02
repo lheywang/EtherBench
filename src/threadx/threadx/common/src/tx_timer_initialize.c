@@ -96,9 +96,8 @@ UINT _tx_timer_priority;
 /* Define the system timer thread's stack.   The default size is defined
    in tx_port.h.  */
 
-ULONG _tx_timer_thread_stack_area[(((UINT)TX_TIMER_THREAD_STACK_SIZE) +
-                                   ((sizeof(ULONG)) - ((UINT)1))) /
-                                  (sizeof(ULONG))];
+ULONG
+_tx_timer_thread_stack_area[(((UINT)TX_TIMER_THREAD_STACK_SIZE) + ((sizeof(ULONG)) - ((UINT)1))) / (sizeof(ULONG))];
 
 #else
 
@@ -184,100 +183,98 @@ ULONG _tx_timer_time_slice;
 VOID _tx_timer_initialize(VOID) {
 #ifndef TX_NO_TIMER
 #ifndef TX_TIMER_PROCESS_IN_ISR
-  UINT status;
+    UINT status;
 #endif
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-  /* Initialize the system clock to 0.  */
-  _tx_timer_system_clock = ((ULONG)0);
+    /* Initialize the system clock to 0.  */
+    _tx_timer_system_clock = ((ULONG)0);
 
-  /* Initialize the time-slice value to 0 to make sure it is disabled.  */
-  _tx_timer_time_slice = ((ULONG)0);
+    /* Initialize the time-slice value to 0 to make sure it is disabled.  */
+    _tx_timer_time_slice = ((ULONG)0);
 
-  /* Clear the expired flags.  */
-  _tx_timer_expired_time_slice = TX_FALSE;
-  _tx_timer_expired = TX_FALSE;
+    /* Clear the expired flags.  */
+    _tx_timer_expired_time_slice = TX_FALSE;
+    _tx_timer_expired = TX_FALSE;
 
-  /* Set the currently expired timer being processed pointer to NULL.  */
-  _tx_timer_expired_timer_ptr = TX_NULL;
+    /* Set the currently expired timer being processed pointer to NULL.  */
+    _tx_timer_expired_timer_ptr = TX_NULL;
 
-  /* Initialize the thread and application timer management control structures.
-   */
+    /* Initialize the thread and application timer management control structures.
+     */
 
-  /* First, initialize the timer list.  */
-  TX_MEMSET(&_tx_timer_list[0], 0, (sizeof(_tx_timer_list)));
+    /* First, initialize the timer list.  */
+    TX_MEMSET(&_tx_timer_list[0], 0, (sizeof(_tx_timer_list)));
 #endif
 
-  /* Initialize all of the list pointers.  */
-  _tx_timer_list_start = &_tx_timer_list[0];
-  _tx_timer_current_ptr = &_tx_timer_list[0];
+    /* Initialize all of the list pointers.  */
+    _tx_timer_list_start = &_tx_timer_list[0];
+    _tx_timer_current_ptr = &_tx_timer_list[0];
 
-  /* Set the timer list end pointer to one past the actual timer list.  This is
-     done to make the timer interrupt handling in assembly language a little
-     easier.  */
-  _tx_timer_list_end = &_tx_timer_list[TX_TIMER_ENTRIES - ((ULONG)1)];
-  _tx_timer_list_end = TX_TIMER_POINTER_ADD(_tx_timer_list_end, ((ULONG)1));
+    /* Set the timer list end pointer to one past the actual timer list.  This is
+       done to make the timer interrupt handling in assembly language a little
+       easier.  */
+    _tx_timer_list_end = &_tx_timer_list[TX_TIMER_ENTRIES - ((ULONG)1)];
+    _tx_timer_list_end = TX_TIMER_POINTER_ADD(_tx_timer_list_end, ((ULONG)1));
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-  /* Setup the variables associated with the system timer thread's stack and
-     priority.  */
-  _tx_timer_stack_start = (VOID *)&_tx_timer_thread_stack_area[0];
-  _tx_timer_stack_size = ((ULONG)TX_TIMER_THREAD_STACK_SIZE);
-  _tx_timer_priority = ((UINT)TX_TIMER_THREAD_PRIORITY);
+    /* Setup the variables associated with the system timer thread's stack and
+       priority.  */
+    _tx_timer_stack_start = (VOID *)&_tx_timer_thread_stack_area[0];
+    _tx_timer_stack_size = ((ULONG)TX_TIMER_THREAD_STACK_SIZE);
+    _tx_timer_priority = ((UINT)TX_TIMER_THREAD_PRIORITY);
 
-  /* Create the system timer thread.  This thread processes all of the timer
-     expirations and reschedules.  Its stack and priority are defined in the
-     low-level initialization component.  */
-  do {
+    /* Create the system timer thread.  This thread processes all of the timer
+       expirations and reschedules.  Its stack and priority are defined in the
+       low-level initialization component.  */
+    do {
 
-    /* Create the system timer thread.  */
-    status = _tx_thread_create(
-        &_tx_timer_thread,
-        TX_CONST_CHAR_TO_CHAR_POINTER_CONVERT("System Timer Thread"),
-        _tx_timer_thread_entry, ((ULONG)TX_TIMER_ID), _tx_timer_stack_start,
-        _tx_timer_stack_size, _tx_timer_priority, _tx_timer_priority,
-        TX_NO_TIME_SLICE, TX_DONT_START);
+        /* Create the system timer thread.  */
+        status =
+            _tx_thread_create(&_tx_timer_thread, TX_CONST_CHAR_TO_CHAR_POINTER_CONVERT("System Timer Thread"),
+                              _tx_timer_thread_entry, ((ULONG)TX_TIMER_ID), _tx_timer_stack_start, _tx_timer_stack_size,
+                              _tx_timer_priority, _tx_timer_priority, TX_NO_TIME_SLICE, TX_DONT_START);
 
 #ifdef TX_SAFETY_CRITICAL
 
-    /* Check return from thread create - if an error is detected throw an
-     * exception.  */
-    if (status != TX_SUCCESS) {
+        /* Check return from thread create - if an error is detected throw an
+         * exception.  */
+        if (status != TX_SUCCESS) {
 
-      /* Raise safety critical exception.  */
-      TX_SAFETY_CRITICAL_EXCEPTION(__FILE__, __LINE__, status);
-    }
+            /* Raise safety critical exception.  */
+            TX_SAFETY_CRITICAL_EXCEPTION(__FILE__, __LINE__, status);
+        }
 #endif
 
-    /* Define timer initialize extension.  */
-    TX_TIMER_INITIALIZE_EXTENSION(status)
+        /* Define timer initialize extension.  */
+        TX_TIMER_INITIALIZE_EXTENSION(status)
 
-  } while (status != TX_SUCCESS);
+    } while (status != TX_SUCCESS);
 
 #else
 
-  /* Clear the timer interrupt processing active flag.  */
-  _tx_timer_processing_active = TX_FALSE;
+    /* Clear the timer interrupt processing active flag.  */
+    _tx_timer_processing_active = TX_FALSE;
 #endif
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-  /* Initialize the head pointer of the created application timer list.  */
-  _tx_timer_created_ptr = TX_NULL;
+    /* Initialize the head pointer of the created application timer list.  */
+    _tx_timer_created_ptr = TX_NULL;
 
-  /* Set the created count to zero.  */
-  _tx_timer_created_count = TX_EMPTY;
+    /* Set the created count to zero.  */
+    _tx_timer_created_count = TX_EMPTY;
 
 #ifdef TX_TIMER_ENABLE_PERFORMANCE_INFO
 
-  /* Initialize timer performance counters.  */
-  _tx_timer_performance_activate_count = ((ULONG)0);
-  _tx_timer_performance_reactivate_count = ((ULONG)0);
-  _tx_timer_performance_deactivate_count = ((ULONG)0);
-  _tx_timer_performance_expiration_count = ((ULONG)0);
-  _tx_timer_performance__expiration_adjust_count = ((ULONG)0);
+    /* Initialize timer performance counters.  */
+    _tx_timer_performance_activate_count = ((ULONG)0);
+    _tx_timer_performance_reactivate_count = ((ULONG)0);
+    _tx_timer_performance_deactivate_count = ((ULONG)0);
+    _tx_timer_performance_expiration_count = ((ULONG)0);
+    _tx_timer_performance__expiration_adjust_count = ((ULONG)0);
 #endif
 #endif
 #endif

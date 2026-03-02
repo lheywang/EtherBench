@@ -72,24 +72,24 @@ NX_CALLER_CHECKING_EXTERNS
 /**************************************************************************/
 UINT _nxe_udp_enable(NX_IP *ip_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check to see if UDP is enabled.  */
-  if (ip_ptr->nx_ip_udp_packet_receive) {
-    return (NX_ALREADY_ENABLED);
-  }
+    /* Check to see if UDP is enabled.  */
+    if (ip_ptr->nx_ip_udp_packet_receive) {
+        return (NX_ALREADY_ENABLED);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_NOT_ISR_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_NOT_ISR_CALLER_CHECKING
 
-  /* Call actual UDP enable function.  */
-  status = _nx_udp_enable(ip_ptr);
+    /* Call actual UDP enable function.  */
+    status = _nx_udp_enable(ip_ptr);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

@@ -70,22 +70,20 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_dcd_stm32_endpoint_stall(UX_DCD_STM32 *dcd_stm32,
-                                  UX_SLAVE_ENDPOINT *endpoint) {
+UINT _ux_dcd_stm32_endpoint_stall(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_ENDPOINT *endpoint) {
 
-  UX_DCD_STM32_ED *ed;
+    UX_DCD_STM32_ED *ed;
 
-  /* Get the physical endpoint address in the endpoint container.  */
-  ed = (UX_DCD_STM32_ED *)endpoint->ux_slave_endpoint_ed;
+    /* Get the physical endpoint address in the endpoint container.  */
+    ed = (UX_DCD_STM32_ED *)endpoint->ux_slave_endpoint_ed;
 
-  /* Set the endpoint to stall.  */
-  ed->ux_dcd_stm32_ed_status |= UX_DCD_STM32_ED_STATUS_STALLED;
+    /* Set the endpoint to stall.  */
+    ed->ux_dcd_stm32_ed_status |= UX_DCD_STM32_ED_STATUS_STALLED;
 
-  /* Stall the endpoint.  */
-  HAL_PCD_EP_SetStall(dcd_stm32->pcd_handle,
-                      endpoint->ux_slave_endpoint_descriptor.bEndpointAddress |
-                          ed->ux_dcd_stm32_ed_direction);
+    /* Stall the endpoint.  */
+    HAL_PCD_EP_SetStall(dcd_stm32->pcd_handle,
+                        endpoint->ux_slave_endpoint_descriptor.bEndpointAddress | ed->ux_dcd_stm32_ed_direction);
 
-  /* This function never fails.  */
-  return (UX_SUCCESS);
+    /* This function never fails.  */
+    return (UX_SUCCESS);
 }

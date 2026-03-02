@@ -75,38 +75,37 @@
 /**************************************************************************/
 UINT _nxd_nd_cache_entry_delete(NX_IP *ip_ptr, ULONG *dest_ip) {
 #ifdef FEATURE_NX_IPV6
-  UINT status;
-  ND_CACHE_ENTRY *entry;
+    UINT status;
+    ND_CACHE_ENTRY *entry;
 
-  /* Obtain the protection. */
-  tx_mutex_get(&ip_ptr->nx_ip_protection, TX_WAIT_FOREVER);
+    /* Obtain the protection. */
+    tx_mutex_get(&ip_ptr->nx_ip_protection, TX_WAIT_FOREVER);
 
-  /* If trace is enabled, insert this event into the trace buffer. */
-  NX_TRACE_IN_LINE_INSERT(NXD_TRACE_ND_CACHE_DELETE, dest_ip[3], 0, 0, 0,
-                          NX_TRACE_ARP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer. */
+    NX_TRACE_IN_LINE_INSERT(NXD_TRACE_ND_CACHE_DELETE, dest_ip[3], 0, 0, 0, NX_TRACE_ARP_EVENTS, 0, 0);
 
-  /* If not found in the ND cache return an error status. */
-  if (_nx_nd_cache_find_entry(ip_ptr, dest_ip, &entry) != NX_SUCCESS) {
+    /* If not found in the ND cache return an error status. */
+    if (_nx_nd_cache_find_entry(ip_ptr, dest_ip, &entry) != NX_SUCCESS) {
+
+        /* Release the protection. */
+        tx_mutex_put(&ip_ptr->nx_ip_protection);
+        return (NX_ENTRY_NOT_FOUND);
+    }
+
+    /*lint -e{644} suppress variable might not be initialized, since "entry" was
+     * initialized as long as previous call is NX_SUCCESS. */
+    status = _nx_nd_cache_delete_internal(ip_ptr, entry);
 
     /* Release the protection. */
     tx_mutex_put(&ip_ptr->nx_ip_protection);
-    return (NX_ENTRY_NOT_FOUND);
-  }
 
-  /*lint -e{644} suppress variable might not be initialized, since "entry" was
-   * initialized as long as previous call is NX_SUCCESS. */
-  status = _nx_nd_cache_delete_internal(ip_ptr, entry);
-
-  /* Release the protection. */
-  tx_mutex_put(&ip_ptr->nx_ip_protection);
-
-  return (status);
+    return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(dest_ip);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(dest_ip);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

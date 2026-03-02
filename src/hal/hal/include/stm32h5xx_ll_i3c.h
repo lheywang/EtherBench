@@ -57,48 +57,46 @@ extern "C" {
  * @{
  */
 typedef struct {
-  uint32_t SDAHoldTime; /*!< Specifies the I3C SDA hold time.
-                             This parameter must be a value of @ref
-                           I3C_LL_EC_SDA_HOLD_TIME                   */
+    uint32_t SDAHoldTime; /*!< Specifies the I3C SDA hold time.
+                               This parameter must be a value of @ref
+                             I3C_LL_EC_SDA_HOLD_TIME                   */
 
-  uint32_t
-      WaitTime; /*!< Specifies the time that the main and the new controllers
-                   should wait before issuing a start. This parameter must be a
-                   value of @ref I3C_LL_EC_OWN_ACTIVITY_STATE              */
+    uint32_t WaitTime; /*!< Specifies the time that the main and the new controllers
+                          should wait before issuing a start. This parameter must be a
+                          value of @ref I3C_LL_EC_OWN_ACTIVITY_STATE              */
 
-  uint8_t SCLPPLowDuration; /*!< Specifies the I3C SCL low duration in number of
-                               kernel clock cycles in I3C push-pull phases. This
-                               parameter must be a number between Min_Data=0 and
-                               Max_Data=0xFF.            */
+    uint8_t SCLPPLowDuration; /*!< Specifies the I3C SCL low duration in number of
+                                 kernel clock cycles in I3C push-pull phases. This
+                                 parameter must be a number between Min_Data=0 and
+                                 Max_Data=0xFF.            */
 
-  uint8_t SCLI3CHighDuration; /*!< Specifies the I3C SCL high duration in number
-                                 of kernel clock cycles, used for I3C messages
-                                 for I3C open-drain and push pull phases. This
-                                 parameter must be a number between Min_Data=0
-                                 and Max_Data=0xFF.            */
+    uint8_t SCLI3CHighDuration; /*!< Specifies the I3C SCL high duration in number
+                                   of kernel clock cycles, used for I3C messages
+                                   for I3C open-drain and push pull phases. This
+                                   parameter must be a number between Min_Data=0
+                                   and Max_Data=0xFF.            */
 
-  uint8_t SCLODLowDuration; /*!< Specifies the I3C SCL low duration in number of
-                               kernel clock cycles in open-drain phases, used
-                               for legacy I2C commands and for I3C open-drain
-                               phases. This parameter must be a number between
-                               Min_Data=0 and Max_Data=0xFF.            */
+    uint8_t SCLODLowDuration; /*!< Specifies the I3C SCL low duration in number of
+                                 kernel clock cycles in open-drain phases, used
+                                 for legacy I2C commands and for I3C open-drain
+                                 phases. This parameter must be a number between
+                                 Min_Data=0 and Max_Data=0xFF.            */
 
-  uint8_t SCLI2CHighDuration; /*!< Specifies the I3C SCL high duration in number
-                                 of kernel clock cycles, used for legacy I2C
-                                 commands. This parameter must be a number
-                                 between Min_Data=0 and Max_Data=0xFF. */
+    uint8_t SCLI2CHighDuration; /*!< Specifies the I3C SCL high duration in number
+                                   of kernel clock cycles, used for legacy I2C
+                                   commands. This parameter must be a number
+                                   between Min_Data=0 and Max_Data=0xFF. */
 
-  uint8_t BusFreeDuration; /*!< Specifies the I3C controller duration in number
-                              of kernel clock cycles, after a stop and before a
-                              start. This parameter must be a number between
-                              Min_Data=0 and Max_Data=0xFF.            */
+    uint8_t BusFreeDuration; /*!< Specifies the I3C controller duration in number
+                                of kernel clock cycles, after a stop and before a
+                                start. This parameter must be a number between
+                                Min_Data=0 and Max_Data=0xFF.            */
 
-  uint8_t
-      BusIdleDuration; /*!< Specifies the I3C controller duration in number of
-                          kernel clock cycles to be elapsed, after that both SDA
-                          and SCL are continuously high and stable before
-                          issuing a hot-join event. This parameter must be a
-                          number between Min_Data=0 and Max_Data=0xFF. */
+    uint8_t BusIdleDuration; /*!< Specifies the I3C controller duration in number of
+                                kernel clock cycles to be elapsed, after that both SDA
+                                and SCL are continuously high and stable before
+                                issuing a hot-join event. This parameter must be a
+                                number between Min_Data=0 and Max_Data=0xFF. */
 } LL_I3C_CtrlBusConfTypeDef;
 /**
  * @}
@@ -110,11 +108,10 @@ typedef struct {
  * @{
  */
 typedef struct {
-  uint8_t
-      BusAvailableDuration; /*!< Specifies the I3C target duration in number of
-                               kernel clock cycles, when the SDA and the SCL are
-                               high for at least taval. This parameter must be a
-                               number between Min_Data=0 and Max_Data=0xFF. */
+    uint8_t BusAvailableDuration; /*!< Specifies the I3C target duration in number of
+                                     kernel clock cycles, when the SDA and the SCL are
+                                     high for at least taval. This parameter must be a
+                                     number between Min_Data=0 and Max_Data=0xFF. */
 } LL_I3C_TgtBusConfTypeDef;
 /**
  * @}
@@ -126,14 +123,12 @@ typedef struct {
  * @{
  */
 typedef struct {
-  LL_I3C_CtrlBusConfTypeDef
-      CtrlBusCharacteristic; /*!< Specifies the I3C controller bus
-                                characteristic configuration when Controller
-                                mode                                          */
+    LL_I3C_CtrlBusConfTypeDef CtrlBusCharacteristic; /*!< Specifies the I3C controller bus
+                                                        characteristic configuration when Controller
+                                                        mode                                          */
 
-  LL_I3C_TgtBusConfTypeDef
-      TgtBusCharacteristic; /*!< Specifies the I3C target bus characteristic
-                               configuration when Target mode */
+    LL_I3C_TgtBusConfTypeDef TgtBusCharacteristic; /*!< Specifies the I3C target bus characteristic
+                                                      configuration when Target mode */
 
 } LL_I3C_InitTypeDef;
 /**
@@ -224,8 +219,7 @@ typedef struct {
  * @{
  */
 #define LL_I3C_MODE_CONTROLLER I3C_CFGR_CRINIT /*!< I3C Controller mode */
-#define LL_I3C_MODE_TARGET                                                     \
-  0x00000000U /*!< I3C Target (Controller capable) mode */
+#define LL_I3C_MODE_TARGET 0x00000000U         /*!< I3C Target (Controller capable) mode */
 /**
  * @}
  */
@@ -233,24 +227,24 @@ typedef struct {
 /** @defgroup I3C_LL_EC_DMA_REG_DATA DMA Register Data
  * @{
  */
-#define LL_I3C_DMA_REG_DATA_TRANSMIT_BYTE                                      \
-  0x00000000U /*!< Get address of data register used                           \
-                   for transmission in Byte */
-#define LL_I3C_DMA_REG_DATA_RECEIVE_BYTE                                       \
-  0x00000001U /*!< Get address of data register used                           \
-                   for reception in Byte */
-#define LL_I3C_DMA_REG_DATA_TRANSMIT_WORD                                      \
-  0x00000002U /*!< Get address of data register used for                       \
-                   transmission in Word */
-#define LL_I3C_DMA_REG_DATA_RECEIVE_WORD                                       \
-  0x00000003U /*!< Get address of data register used                           \
-                   for reception in Word */
-#define LL_I3C_DMA_REG_STATUS                                                  \
-  0x00000004U /*!< Get address of status register used                         \
-                   for transfer status in Word */
-#define LL_I3C_DMA_REG_CONTROL                                                 \
-  0x00000005U /*!< Get address of control register used                        \
-                   for transfer control in Word */
+#define LL_I3C_DMA_REG_DATA_TRANSMIT_BYTE                                                                              \
+    0x00000000U /*!< Get address of data register used                                                                 \
+                     for transmission in Byte */
+#define LL_I3C_DMA_REG_DATA_RECEIVE_BYTE                                                                               \
+    0x00000001U /*!< Get address of data register used                                                                 \
+                     for reception in Byte */
+#define LL_I3C_DMA_REG_DATA_TRANSMIT_WORD                                                                              \
+    0x00000002U /*!< Get address of data register used for                                                             \
+                     transmission in Word */
+#define LL_I3C_DMA_REG_DATA_RECEIVE_WORD                                                                               \
+    0x00000003U /*!< Get address of data register used                                                                 \
+                     for reception in Word */
+#define LL_I3C_DMA_REG_STATUS                                                                                          \
+    0x00000004U /*!< Get address of status register used                                                               \
+                     for transfer status in Word */
+#define LL_I3C_DMA_REG_CONTROL                                                                                         \
+    0x00000005U /*!< Get address of control register used                                                              \
+                     for transfer control in Word */
 /**
  * @}
  */
@@ -297,10 +291,8 @@ typedef struct {
 /** @defgroup I3C_LL_EC_SDA_HOLD_TIME SDA HOLD TIME 0
  * @{
  */
-#define LL_I3C_SDA_HOLD_TIME_0_5                                               \
-  0x00000000U /*!< SDA hold time is 0.5 x ti3cclk */
-#define LL_I3C_SDA_HOLD_TIME_1_5                                               \
-  I3C_TIMINGR1_SDA_HD /*!< SDA hold time is 1.5 x ti3cclk */
+#define LL_I3C_SDA_HOLD_TIME_0_5 0x00000000U         /*!< SDA hold time is 0.5 x ti3cclk */
+#define LL_I3C_SDA_HOLD_TIME_1_5 I3C_TIMINGR1_SDA_HD /*!< SDA hold time is 1.5 x ti3cclk */
 /**
  * @}
  */
@@ -314,8 +306,7 @@ typedef struct {
 /*!< Own Controller Activity state 1 */
 #define LL_I3C_OWN_ACTIVITY_STATE_2 I3C_TIMINGR1_ASNCR_1
 /*!< Own Controller Activity state 2 */
-#define LL_I3C_OWN_ACTIVITY_STATE_3                                            \
-  (I3C_TIMINGR1_ASNCR_1 | I3C_TIMINGR1_ASNCR_0)
+#define LL_I3C_OWN_ACTIVITY_STATE_3 (I3C_TIMINGR1_ASNCR_1 | I3C_TIMINGR1_ASNCR_0)
 /*!< Own Controller Activity state 3 */
 /**
  * @}
@@ -333,11 +324,10 @@ typedef struct {
 /** @defgroup I3C_LL_EC_IBI_NO_ADDITIONAL IBI NO ADDITIONAL
  * @{
  */
-#define LL_I3C_IBI_NO_ADDITIONAL_DATA                                          \
-  0x00000000U /*!< No data byte follows the accepted IBI */
-#define LL_I3C_IBI_ADDITIONAL_DATA                                             \
-  I3C_BCR_BCR2 /*!< A Mandatory Data Byte (MDB)                                \
-                    follows the accepted IBI */
+#define LL_I3C_IBI_NO_ADDITIONAL_DATA 0x00000000U /*!< No data byte follows the accepted IBI */
+#define LL_I3C_IBI_ADDITIONAL_DATA                                                                                     \
+    I3C_BCR_BCR2 /*!< A Mandatory Data Byte (MDB)                                                                      \
+                      follows the accepted IBI */
 /**
  * @}
  */
@@ -345,10 +335,8 @@ typedef struct {
 /** @defgroup I3C_LL_EC_MAX_DATA_SPEED_LIMITATION MAX DATA SPEED LIMITATION
  * @{
  */
-#define LL_I3C_NO_DATA_SPEED_LIMITATION                                        \
-  0x00000000U /*!< No max data speed limitation */
-#define LL_I3C_MAX_DATA_SPEED_LIMITATION                                       \
-  I3C_BCR_BCR0 /*!< Max data speed limitation */
+#define LL_I3C_NO_DATA_SPEED_LIMITATION 0x00000000U   /*!< No max data speed limitation */
+#define LL_I3C_MAX_DATA_SPEED_LIMITATION I3C_BCR_BCR0 /*!< Max data speed limitation */
 /**
  * @}
  */
@@ -367,10 +355,8 @@ typedef struct {
 /** @defgroup I3C_LL_EC_HANDOFF_GRP_ADDR_NOT HANDOFF GRP ADDR NOT
  * @{
  */
-#define LL_I3C_HANDOFF_GRP_ADDR_NOT_SUPPORTED                                  \
-  0x00000000U /*!< Group Address Handoff is not supported */
-#define LL_I3C_HANDOFF_GRP_ADDR_SUPPORTED                                      \
-  I3C_CRCAPR_CAPGRP /*!< Group Address Handoff is supported     */
+#define LL_I3C_HANDOFF_GRP_ADDR_NOT_SUPPORTED 0x00000000U   /*!< Group Address Handoff is not supported */
+#define LL_I3C_HANDOFF_GRP_ADDR_SUPPORTED I3C_CRCAPR_CAPGRP /*!< Group Address Handoff is supported     */
 /**
  * @}
  */
@@ -398,8 +384,7 @@ typedef struct {
 #define LL_I3C_HANDOFF_ACTIVITY_STATE_2 I3C_GETMXDSR_HOFFAS_1
 /*!< Indicates that will act according to Activity State 2 after controllership
  * handoff */
-#define LL_I3C_HANDOFF_ACTIVITY_STATE_3                                        \
-  (I3C_GETMXDSR_HOFFAS_1 | I3C_GETMXDSR_HOFFAS_0)
+#define LL_I3C_HANDOFF_ACTIVITY_STATE_3 (I3C_GETMXDSR_HOFFAS_1 | I3C_GETMXDSR_HOFFAS_0)
 /*!< Indicates that will act according to Activity State 3 after controllership
  * handoff */
 /**
@@ -427,10 +412,8 @@ typedef struct {
 /** @defgroup I3C_LL_EC_GETMXDS_TSCO GETMXDS TSCO
  * @{
  */
-#define LL_I3C_TURNAROUND_TIME_TSCO_LESS_12NS                                  \
-  0x00000000U /*!< clock-to-data turnaround time tSCO <= 12ns */
-#define LL_I3C_TURNAROUND_TIME_TSCO_GREATER_12NS                               \
-  I3C_GETMXDSR_TSCO /*!< clock-to-data turnaround time tSCO > 12ns  */
+#define LL_I3C_TURNAROUND_TIME_TSCO_LESS_12NS 0x00000000U          /*!< clock-to-data turnaround time tSCO <= 12ns */
+#define LL_I3C_TURNAROUND_TIME_TSCO_GREATER_12NS I3C_GETMXDSR_TSCO /*!< clock-to-data turnaround time tSCO > 12ns  */
 /**
  * @}
  */
@@ -505,11 +488,9 @@ typedef struct {
 /** @defgroup I3C_LL_EC_TARGET_MTYPE_HOT TARGET MTYPE HOT
  * @{
  */
-#define LL_I3C_TARGET_MTYPE_HOT_JOIN I3C_CR_MTYPE_3 /*!< Hot Join*/
-#define LL_I3C_TARGET_MTYPE_CONTROLLER_ROLE_REQ                                \
-  (I3C_CR_MTYPE_3 | I3C_CR_MTYPE_0) /*!< Controller-role Request */
-#define LL_I3C_TARGET_MTYPE_IBI                                                \
-  (I3C_CR_MTYPE_3 | I3C_CR_MTYPE_1) /*!< In Band Interrupt (IBI) */
+#define LL_I3C_TARGET_MTYPE_HOT_JOIN I3C_CR_MTYPE_3                               /*!< Hot Join*/
+#define LL_I3C_TARGET_MTYPE_CONTROLLER_ROLE_REQ (I3C_CR_MTYPE_3 | I3C_CR_MTYPE_0) /*!< Controller-role Request */
+#define LL_I3C_TARGET_MTYPE_IBI (I3C_CR_MTYPE_3 | I3C_CR_MTYPE_1)                 /*!< In Band Interrupt (IBI) */
 /**
  * @}
  */
@@ -517,10 +498,8 @@ typedef struct {
 /** @defgroup I3C_LL_EC_MESSAGE MESSAGE
  * @{
  */
-#define LL_I3C_MESSAGE_ERROR                                                   \
-  0x00000000U /*!< An error has been detected in the message */
-#define LL_I3C_MESSAGE_SUCCESS                                                 \
-  I3C_SR_OK /*!< The message ended with success       */
+#define LL_I3C_MESSAGE_ERROR 0x00000000U /*!< An error has been detected in the message */
+#define LL_I3C_MESSAGE_SUCCESS I3C_SR_OK /*!< The message ended with success       */
 /**
  * @}
  */
@@ -528,9 +507,8 @@ typedef struct {
 /** @defgroup I3C_LL_EC_MESSAGE_DIRECTION MESSAGE DIRECTION
  * @{
  */
-#define LL_I3C_MESSAGE_DIRECTION_WRITE                                         \
-  0x00000000U /*!< Write data or command      */
-#define LL_I3C_MESSAGE_DIRECTION_READ I3C_SR_DIR /*!< Read data       */
+#define LL_I3C_MESSAGE_DIRECTION_WRITE 0x00000000U /*!< Write data or command      */
+#define LL_I3C_MESSAGE_DIRECTION_READ I3C_SR_DIR   /*!< Read data       */
 /**
  * @}
  */
@@ -561,18 +539,15 @@ typedef struct {
 /*!< Target detected an invalid CCC Code    */
 #define LL_I3C_TARGET_ERROR_TE2 (I3C_SER_CODERR_3 | I3C_SER_CODERR_1)
 /*!< Target detected an invalid write data    */
-#define LL_I3C_TARGET_ERROR_TE3                                                \
-  (I3C_SER_CODERR_3 | I3C_SER_CODERR_1 | I3C_SER_CODERR_0)
+#define LL_I3C_TARGET_ERROR_TE3 (I3C_SER_CODERR_3 | I3C_SER_CODERR_1 | I3C_SER_CODERR_0)
 /*!< Target detected an invalid assigned address during Dynamic Address
  * Assignment procedure    */
 #define LL_I3C_TARGET_ERROR_TE4 (I3C_SER_CODERR_3 | I3C_SER_CODERR_2)
 /*!< Target detected 7'h7E missing after Restart during Dynamic Address
  * Assignment procedure    */
-#define LL_I3C_TARGET_ERROR_TE5                                                \
-  (I3C_SER_CODERR_3 | I3C_SER_CODERR_2 | I3C_SER_CODERR_0)
+#define LL_I3C_TARGET_ERROR_TE5 (I3C_SER_CODERR_3 | I3C_SER_CODERR_2 | I3C_SER_CODERR_0)
 /*!< Target detected an illegally formatted CCC     */
-#define LL_I3C_TARGET_ERROR_TE6                                                \
-  (I3C_SER_CODERR_3 | I3C_SER_CODERR_2 | I3C_SER_CODERR_1)
+#define LL_I3C_TARGET_ERROR_TE6 (I3C_SER_CODERR_3 | I3C_SER_CODERR_2 | I3C_SER_CODERR_1)
 /*!< Target detected that transmitted data on the bus is different than expected
  */
 /**
@@ -641,9 +616,7 @@ typedef struct {
  * @retval The value of BCR Return value between Min_Data=0x00 and
  * Max_Data=0xFF.
  */
-#define LL_I3C_GET_BCR(__PAYLOAD__)                                            \
-  (((uint32_t)((uint64_t)(__PAYLOAD__) >> LL_I3C_BCR_IN_PAYLOAD_SHIFT)) &      \
-   I3C_BCR_BCR)
+#define LL_I3C_GET_BCR(__PAYLOAD__) (((uint32_t)((uint64_t)(__PAYLOAD__) >> LL_I3C_BCR_IN_PAYLOAD_SHIFT)) & I3C_BCR_BCR)
 
 /** @brief  Check IBI request capabilities.
  * @param  __BCR__ specifies the Bus Characteristics capabilities retrieve
@@ -651,10 +624,8 @@ typedef struct {
  * Min_Data=0x00 and Max_Data=0xFF.
  * @retval Value of @ref I3C_LL_EC_IBI_CAPABILITY.
  */
-#define LL_I3C_GET_IBI_CAPABLE(__BCR__)                                        \
-  (((((__BCR__) & I3C_BCR_BCR1_Msk) >> I3C_BCR_BCR1_Pos) == 1U)                \
-       ? LL_I3C_IBI_CAPABILITY                                                 \
-       : LL_I3C_IBI_NO_CAPABILITY)
+#define LL_I3C_GET_IBI_CAPABLE(__BCR__)                                                                                \
+    (((((__BCR__) & I3C_BCR_BCR1_Msk) >> I3C_BCR_BCR1_Pos) == 1U) ? LL_I3C_IBI_CAPABILITY : LL_I3C_IBI_NO_CAPABILITY)
 
 /** @brief  Check IBI additional data byte capabilities.
  * @param  __BCR__ specifies the Bus Characteristics capabilities retrieve
@@ -662,10 +633,8 @@ typedef struct {
  * Min_Data=0x00 and Max_Data=0xFF.
  * @retval Value of @ref I3C_LL_EC_IBI_ADDITIONAL_DATA.
  */
-#define LL_I3C_GET_IBI_PAYLOAD(__BCR__)                                        \
-  (((((__BCR__) & I3C_BCR_BCR2_Msk) >> I3C_BCR_BCR2_Pos) == 1U)                \
-       ? LL_I3C_IBI_DATA_ENABLE                                                \
-       : LL_I3C_IBI_DATA_DISABLE)
+#define LL_I3C_GET_IBI_PAYLOAD(__BCR__)                                                                                \
+    (((((__BCR__) & I3C_BCR_BCR2_Msk) >> I3C_BCR_BCR2_Pos) == 1U) ? LL_I3C_IBI_DATA_ENABLE : LL_I3C_IBI_DATA_DISABLE)
 
 /** @brief  Check Controller role request capabilities.
  * @param  __BCR__ specifies the Bus Characteristics capabilities retrieve
@@ -673,10 +642,8 @@ typedef struct {
  * Min_Data=0x00 and Max_Data=0xFF.
  * @retval Value of @ref I3C_LL_EC_CR_CAPABILITY.
  */
-#define LL_I3C_GET_CR_CAPABLE(__BCR__)                                         \
-  (((((__BCR__) & I3C_BCR_BCR6_Msk) >> I3C_BCR_BCR6_Pos) == 1U)                \
-       ? LL_I3C_CR_CAPABILITY                                                  \
-       : LL_I3C_CR_NO_CAPABILITY)
+#define LL_I3C_GET_CR_CAPABLE(__BCR__)                                                                                 \
+    (((((__BCR__) & I3C_BCR_BCR6_Msk) >> I3C_BCR_BCR6_Pos) == 1U) ? LL_I3C_CR_CAPABILITY : LL_I3C_CR_NO_CAPABILITY)
 
 /**
  * @brief  Write a value in I3C register
@@ -685,8 +652,7 @@ typedef struct {
  * @param  __VALUE__ Value to be written in the register
  * @retval None
  */
-#define LL_I3C_WriteReg(__INSTANCE__, __REG__, __VALUE__)                      \
-  WRITE_REG(__INSTANCE__->__REG__, (__VALUE__))
+#define LL_I3C_WriteReg(__INSTANCE__, __REG__, __VALUE__) WRITE_REG(__INSTANCE__->__REG__, (__VALUE__))
 
 /**
  * @brief  Read a value in I3C register
@@ -718,9 +684,7 @@ typedef struct {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_Enable(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_EN);
-}
+__STATIC_INLINE void LL_I3C_Enable(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_EN); }
 
 /**
  * @brief  Disable I3C peripheral (EN = 0).
@@ -731,9 +695,7 @@ __STATIC_INLINE void LL_I3C_Enable(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_Disable(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_EN);
-}
+__STATIC_INLINE void LL_I3C_Disable(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_EN); }
 
 /**
  * @brief  Check if the I3C peripheral is enabled or disabled.
@@ -742,7 +704,7 @@ __STATIC_INLINE void LL_I3C_Disable(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabled(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_EN) == (I3C_CFGR_EN)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_EN) == (I3C_CFGR_EN)) ? 1UL : 0UL);
 }
 
 /**
@@ -754,9 +716,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabled(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledReset(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->DEVR0, I3C_DEVR0_RSTVAL) == (I3C_DEVR0_RSTVAL))
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(I3Cx->DEVR0, I3C_DEVR0_RSTVAL) == (I3C_DEVR0_RSTVAL)) ? 1UL : 0UL);
 }
 
 /**
@@ -769,9 +729,8 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledReset(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_MODE_TARGET
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetMode(I3C_TypeDef *I3Cx,
-                                    uint32_t PeripheralMode) {
-  MODIFY_REG(I3Cx->CFGR, I3C_CFGR_CRINIT, PeripheralMode);
+__STATIC_INLINE void LL_I3C_SetMode(I3C_TypeDef *I3Cx, uint32_t PeripheralMode) {
+    MODIFY_REG(I3Cx->CFGR, I3C_CFGR_CRINIT, PeripheralMode);
 }
 
 /**
@@ -783,9 +742,7 @@ __STATIC_INLINE void LL_I3C_SetMode(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_MODE_TARGET
  */
 __STATIC_INLINE uint32_t LL_I3C_GetMode(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)((READ_BIT(I3Cx->CFGR, I3C_CFGR_CRINIT) == (I3C_CFGR_CRINIT))
-                        ? 1UL
-                        : 0UL);
+    return (uint32_t)((READ_BIT(I3Cx->CFGR, I3C_CFGR_CRINIT) == (I3C_CFGR_CRINIT)) ? 1UL : 0UL);
 }
 
 /**
@@ -796,9 +753,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetMode(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableArbitrationHeader(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_NOARBH);
-}
+__STATIC_INLINE void LL_I3C_EnableArbitrationHeader(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_NOARBH); }
 
 /**
  * @brief  Target address is sent directly after a Start in case of legacy I2C
@@ -808,9 +763,7 @@ __STATIC_INLINE void LL_I3C_EnableArbitrationHeader(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableArbitrationHeader(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_NOARBH);
-}
+__STATIC_INLINE void LL_I3C_DisableArbitrationHeader(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_NOARBH); }
 
 /**
  * @brief  Check if the arbitration header is enabled of disabled.
@@ -818,10 +771,8 @@ __STATIC_INLINE void LL_I3C_DisableArbitrationHeader(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t
-LL_I3C_IsEnabledArbitrationHeader(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_NOARBH) == (I3C_CFGR_NOARBH)) ? 0UL
-                                                                       : 1UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledArbitrationHeader(const I3C_TypeDef *I3Cx) {
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_NOARBH) == (I3C_CFGR_NOARBH)) ? 0UL : 1UL);
 }
 
 /**
@@ -832,9 +783,7 @@ LL_I3C_IsEnabledArbitrationHeader(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableResetPattern(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_RSTPTRN);
-}
+__STATIC_INLINE void LL_I3C_EnableResetPattern(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_RSTPTRN); }
 
 /**
  * @brief  A single STOP is emitted at the end of a frame.
@@ -843,9 +792,7 @@ __STATIC_INLINE void LL_I3C_EnableResetPattern(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableResetPattern(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_RSTPTRN);
-}
+__STATIC_INLINE void LL_I3C_DisableResetPattern(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_RSTPTRN); }
 
 /**
  * @brief  Check if Reset Pattern is enabled of disabled.
@@ -854,8 +801,7 @@ __STATIC_INLINE void LL_I3C_DisableResetPattern(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledResetPattern(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_RSTPTRN) == (I3C_CFGR_RSTPTRN)) ? 1UL
-                                                                         : 0UL);
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_RSTPTRN) == (I3C_CFGR_RSTPTRN)) ? 1UL : 0UL);
 }
 
 /**
@@ -866,9 +812,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledResetPattern(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableExitPattern(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_EXITPTRN);
-}
+__STATIC_INLINE void LL_I3C_EnableExitPattern(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_EXITPTRN); }
 
 /**
  * @brief  An Exit Pattern is not sent after header (MTYPE = header).
@@ -877,9 +821,7 @@ __STATIC_INLINE void LL_I3C_EnableExitPattern(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableExitPattern(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_EXITPTRN);
-}
+__STATIC_INLINE void LL_I3C_DisableExitPattern(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_EXITPTRN); }
 
 /**
  * @brief  Check if Exit Pattern is enabled or disabled.
@@ -888,9 +830,7 @@ __STATIC_INLINE void LL_I3C_DisableExitPattern(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledExitPattern(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_EXITPTRN) == (I3C_CFGR_EXITPTRN))
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_EXITPTRN) == (I3C_CFGR_EXITPTRN)) ? 1UL : 0UL);
 }
 
 /**
@@ -901,9 +841,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledExitPattern(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableHighKeeperSDA(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_HKSDAEN);
-}
+__STATIC_INLINE void LL_I3C_EnableHighKeeperSDA(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_HKSDAEN); }
 
 /**
  * @brief  High Keeper is disabled.
@@ -912,9 +850,7 @@ __STATIC_INLINE void LL_I3C_EnableHighKeeperSDA(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableHighKeeperSDA(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_HKSDAEN);
-}
+__STATIC_INLINE void LL_I3C_DisableHighKeeperSDA(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_HKSDAEN); }
 
 /**
  * @brief  Check if High Keeper is enabled or disabled.
@@ -922,10 +858,8 @@ __STATIC_INLINE void LL_I3C_DisableHighKeeperSDA(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t
-LL_I3C_IsEnabledHighKeeperSDA(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_HKSDAEN) == (I3C_CFGR_HKSDAEN)) ? 1UL
-                                                                         : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledHighKeeperSDA(const I3C_TypeDef *I3Cx) {
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_HKSDAEN) == (I3C_CFGR_HKSDAEN)) ? 1UL : 0UL);
 }
 
 /**
@@ -936,9 +870,7 @@ LL_I3C_IsEnabledHighKeeperSDA(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableHJAck(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_HJACK);
-}
+__STATIC_INLINE void LL_I3C_EnableHJAck(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_HJACK); }
 
 /**
  * @brief  Hot Join Request is Nacked. Current frame on the bus is continued.
@@ -948,9 +880,7 @@ __STATIC_INLINE void LL_I3C_EnableHJAck(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableHJAck(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_HJACK);
-}
+__STATIC_INLINE void LL_I3C_DisableHJAck(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_HJACK); }
 
 /**
  * @brief  Check if Hot Join Request Acknowledgement is enabled or disabled.
@@ -959,8 +889,7 @@ __STATIC_INLINE void LL_I3C_DisableHJAck(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledHJAck(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_HJACK) == (I3C_CFGR_HJACK)) ? 1UL
-                                                                     : 0UL);
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_HJACK) == (I3C_CFGR_HJACK)) ? 1UL : 0UL);
 }
 
 /**
@@ -981,31 +910,30 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledHJAck(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_DMA_REG_CONTROL
  * @retval Address of data register
  */
-__STATIC_INLINE uint32_t LL_I3C_DMA_GetRegAddr(const I3C_TypeDef *I3Cx,
-                                               uint32_t Direction) {
-  register uint32_t data_reg_addr;
+__STATIC_INLINE uint32_t LL_I3C_DMA_GetRegAddr(const I3C_TypeDef *I3Cx, uint32_t Direction) {
+    register uint32_t data_reg_addr;
 
-  if (Direction == LL_I3C_DMA_REG_DATA_TRANSMIT_BYTE) {
-    /* return address of TDR register */
-    data_reg_addr = (uint32_t)&(I3Cx->TDR);
-  } else if (Direction == LL_I3C_DMA_REG_DATA_RECEIVE_BYTE) {
-    /* return address of RDR register */
-    data_reg_addr = (uint32_t)&(I3Cx->RDR);
-  } else if (Direction == LL_I3C_DMA_REG_DATA_TRANSMIT_WORD) {
-    /* return address of TDWR register */
-    data_reg_addr = (uint32_t)&(I3Cx->TDWR);
-  } else if (Direction == LL_I3C_DMA_REG_DATA_RECEIVE_WORD) {
-    /* return address of RDWR register */
-    data_reg_addr = (uint32_t)&(I3Cx->RDWR);
-  } else if (Direction == LL_I3C_DMA_REG_STATUS) {
-    /* return address of SR register */
-    data_reg_addr = (uint32_t)&(I3Cx->SR);
-  } else {
-    /* return address of CR register */
-    data_reg_addr = (uint32_t)&(I3Cx->CR);
-  }
+    if (Direction == LL_I3C_DMA_REG_DATA_TRANSMIT_BYTE) {
+        /* return address of TDR register */
+        data_reg_addr = (uint32_t)&(I3Cx->TDR);
+    } else if (Direction == LL_I3C_DMA_REG_DATA_RECEIVE_BYTE) {
+        /* return address of RDR register */
+        data_reg_addr = (uint32_t)&(I3Cx->RDR);
+    } else if (Direction == LL_I3C_DMA_REG_DATA_TRANSMIT_WORD) {
+        /* return address of TDWR register */
+        data_reg_addr = (uint32_t)&(I3Cx->TDWR);
+    } else if (Direction == LL_I3C_DMA_REG_DATA_RECEIVE_WORD) {
+        /* return address of RDWR register */
+        data_reg_addr = (uint32_t)&(I3Cx->RDWR);
+    } else if (Direction == LL_I3C_DMA_REG_STATUS) {
+        /* return address of SR register */
+        data_reg_addr = (uint32_t)&(I3Cx->SR);
+    } else {
+        /* return address of CR register */
+        data_reg_addr = (uint32_t)&(I3Cx->CR);
+    }
 
-  return data_reg_addr;
+    return data_reg_addr;
 }
 
 /**
@@ -1014,9 +942,7 @@ __STATIC_INLINE uint32_t LL_I3C_DMA_GetRegAddr(const I3C_TypeDef *I3Cx,
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableDMAReq_RX(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_RXDMAEN);
-}
+__STATIC_INLINE void LL_I3C_EnableDMAReq_RX(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_RXDMAEN); }
 
 /**
  * @brief  Disable DMA FIFO reception requests.
@@ -1024,9 +950,7 @@ __STATIC_INLINE void LL_I3C_EnableDMAReq_RX(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableDMAReq_RX(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_RXDMAEN);
-}
+__STATIC_INLINE void LL_I3C_DisableDMAReq_RX(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_RXDMAEN); }
 
 /**
  * @brief  Check if DMA FIFO reception requests are enabled or disabled.
@@ -1035,8 +959,7 @@ __STATIC_INLINE void LL_I3C_DisableDMAReq_RX(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledDMAReq_RX(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_RXDMAEN) == (I3C_CFGR_RXDMAEN)) ? 1UL
-                                                                         : 0UL);
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_RXDMAEN) == (I3C_CFGR_RXDMAEN)) ? 1UL : 0UL);
 }
 
 /**
@@ -1048,9 +971,8 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledDMAReq_RX(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_RXFIFO_THRESHOLD_4_4
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetRxFIFOThreshold(I3C_TypeDef *I3Cx,
-                                               uint32_t RxFIFOThreshold) {
-  MODIFY_REG(I3Cx->CFGR, I3C_CFGR_RXTHRES, RxFIFOThreshold);
+__STATIC_INLINE void LL_I3C_SetRxFIFOThreshold(I3C_TypeDef *I3Cx, uint32_t RxFIFOThreshold) {
+    MODIFY_REG(I3Cx->CFGR, I3C_CFGR_RXTHRES, RxFIFOThreshold);
 }
 
 /**
@@ -1062,7 +984,7 @@ __STATIC_INLINE void LL_I3C_SetRxFIFOThreshold(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_RXFIFO_THRESHOLD_4_4
  */
 __STATIC_INLINE uint32_t LL_I3C_GetRxFIFOThreshold(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->CFGR, I3C_CFGR_RXTHRES));
+    return (uint32_t)(READ_BIT(I3Cx->CFGR, I3C_CFGR_RXTHRES));
 }
 
 /**
@@ -1071,9 +993,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetRxFIFOThreshold(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableDMAReq_TX(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_TXDMAEN);
-}
+__STATIC_INLINE void LL_I3C_EnableDMAReq_TX(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_TXDMAEN); }
 
 /**
  * @brief  Disable DMA FIFO transmission requests.
@@ -1081,9 +1001,7 @@ __STATIC_INLINE void LL_I3C_EnableDMAReq_TX(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableDMAReq_TX(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_TXDMAEN);
-}
+__STATIC_INLINE void LL_I3C_DisableDMAReq_TX(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_TXDMAEN); }
 
 /**
  * @brief  Check if DMA FIFO transmission requests are enabled or disabled.
@@ -1092,8 +1010,7 @@ __STATIC_INLINE void LL_I3C_DisableDMAReq_TX(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledDMAReq_TX(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_TXDMAEN) == (I3C_CFGR_TXDMAEN)) ? 1UL
-                                                                         : 0UL);
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_TXDMAEN) == (I3C_CFGR_TXDMAEN)) ? 1UL : 0UL);
 }
 
 /**
@@ -1105,9 +1022,8 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledDMAReq_TX(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_TXFIFO_THRESHOLD_4_4
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetTxFIFOThreshold(I3C_TypeDef *I3Cx,
-                                               uint32_t TxFIFOThreshold) {
-  MODIFY_REG(I3Cx->CFGR, I3C_CFGR_TXTHRES, TxFIFOThreshold);
+__STATIC_INLINE void LL_I3C_SetTxFIFOThreshold(I3C_TypeDef *I3Cx, uint32_t TxFIFOThreshold) {
+    MODIFY_REG(I3Cx->CFGR, I3C_CFGR_TXTHRES, TxFIFOThreshold);
 }
 
 /**
@@ -1120,7 +1036,7 @@ __STATIC_INLINE void LL_I3C_SetTxFIFOThreshold(I3C_TypeDef *I3Cx,
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_GetTxFIFOThreshold(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->CFGR, I3C_CFGR_TXTHRES));
+    return (uint32_t)(READ_BIT(I3Cx->CFGR, I3C_CFGR_TXTHRES));
 }
 
 /**
@@ -1129,9 +1045,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetTxFIFOThreshold(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableDMAReq_Status(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_SDMAEN);
-}
+__STATIC_INLINE void LL_I3C_EnableDMAReq_Status(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_SDMAEN); }
 
 /**
  * @brief  Disable DMA FIFO Status requests.
@@ -1139,9 +1053,7 @@ __STATIC_INLINE void LL_I3C_EnableDMAReq_Status(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableDMAReq_Status(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_SDMAEN);
-}
+__STATIC_INLINE void LL_I3C_DisableDMAReq_Status(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_SDMAEN); }
 
 /**
  * @brief  Check if DMA FIFO Status requests are enabled or disabled.
@@ -1149,10 +1061,8 @@ __STATIC_INLINE void LL_I3C_DisableDMAReq_Status(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t
-LL_I3C_IsEnabledDMAReq_Status(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_SDMAEN) == (I3C_CFGR_SDMAEN)) ? 1UL
-                                                                       : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledDMAReq_Status(const I3C_TypeDef *I3Cx) {
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_SDMAEN) == (I3C_CFGR_SDMAEN)) ? 1UL : 0UL);
 }
 
 /**
@@ -1163,9 +1073,7 @@ LL_I3C_IsEnabledDMAReq_Status(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableStatusFIFO(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_SMODE);
-}
+__STATIC_INLINE void LL_I3C_EnableStatusFIFO(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_SMODE); }
 
 /**
  * @brief  Disable the Status FIFO Threshold.
@@ -1173,9 +1081,7 @@ __STATIC_INLINE void LL_I3C_EnableStatusFIFO(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableStatusFIFO(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_SMODE);
-}
+__STATIC_INLINE void LL_I3C_DisableStatusFIFO(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_SMODE); }
 
 /**
  * @brief  Check if the Status FIFO Threshold is enabled or disabled.
@@ -1184,8 +1090,7 @@ __STATIC_INLINE void LL_I3C_DisableStatusFIFO(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledStatusFIFO(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_SMODE) == (I3C_CFGR_SMODE)) ? 1UL
-                                                                     : 0UL);
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_SMODE) == (I3C_CFGR_SMODE)) ? 1UL : 0UL);
 }
 
 /**
@@ -1197,9 +1102,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledStatusFIFO(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableControlFIFO(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_TMODE);
-}
+__STATIC_INLINE void LL_I3C_EnableControlFIFO(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_TMODE); }
 
 /**
  * @brief  Disable the Control and Transmit FIFO preloaded before starting a
@@ -1208,9 +1111,7 @@ __STATIC_INLINE void LL_I3C_EnableControlFIFO(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableControlFIFO(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_TMODE);
-}
+__STATIC_INLINE void LL_I3C_DisableControlFIFO(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_TMODE); }
 
 /**
  * @brief  Check if the Control and Transmit FIFO preloaded is enabled or
@@ -1220,8 +1121,7 @@ __STATIC_INLINE void LL_I3C_DisableControlFIFO(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledControlFIFO(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_TMODE) == (I3C_CFGR_TMODE)) ? 1UL
-                                                                     : 0UL);
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_TMODE) == (I3C_CFGR_TMODE)) ? 1UL : 0UL);
 }
 
 /**
@@ -1230,9 +1130,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledControlFIFO(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableDMAReq_Control(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_CDMAEN);
-}
+__STATIC_INLINE void LL_I3C_EnableDMAReq_Control(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_CDMAEN); }
 
 /**
  * @brief  Disable DMA FIFO Control word transfer requests.
@@ -1240,9 +1138,7 @@ __STATIC_INLINE void LL_I3C_EnableDMAReq_Control(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableDMAReq_Control(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_CDMAEN);
-}
+__STATIC_INLINE void LL_I3C_DisableDMAReq_Control(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->CFGR, I3C_CFGR_CDMAEN); }
 
 /**
  * @brief  Check if DMA FIFO Control word transfer requests are enabled or
@@ -1251,10 +1147,8 @@ __STATIC_INLINE void LL_I3C_DisableDMAReq_Control(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t
-LL_I3C_IsEnabledDMAReq_Control(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_CDMAEN) == (I3C_CFGR_CDMAEN)) ? 1UL
-                                                                       : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledDMAReq_Control(const I3C_TypeDef *I3Cx) {
+    return ((READ_BIT(I3Cx->CFGR, I3C_CFGR_CDMAEN) == (I3C_CFGR_CDMAEN)) ? 1UL : 0UL);
 }
 
 /**
@@ -1263,9 +1157,7 @@ LL_I3C_IsEnabledDMAReq_Control(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableOwnDynAddress(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->DEVR0, I3C_DEVR0_DAVAL);
-}
+__STATIC_INLINE void LL_I3C_EnableOwnDynAddress(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->DEVR0, I3C_DEVR0_DAVAL); }
 
 /**
  * @brief  Set Own Dynamic Address as Not-Valid.
@@ -1273,9 +1165,7 @@ __STATIC_INLINE void LL_I3C_EnableOwnDynAddress(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableOwnDynAddress(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->DEVR0, I3C_DEVR0_DAVAL);
-}
+__STATIC_INLINE void LL_I3C_DisableOwnDynAddress(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->DEVR0, I3C_DEVR0_DAVAL); }
 
 /**
  * @brief  Check if Own Dynamic address is Valid or Not-Valid.
@@ -1283,10 +1173,8 @@ __STATIC_INLINE void LL_I3C_DisableOwnDynAddress(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t
-LL_I3C_IsEnabledOwnDynAddress(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->DEVR0, I3C_DEVR0_DAVAL) == (I3C_DEVR0_DAVAL)) ? 1UL
-                                                                        : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledOwnDynAddress(const I3C_TypeDef *I3Cx) {
+    return ((READ_BIT(I3Cx->DEVR0, I3C_DEVR0_DAVAL) == (I3C_DEVR0_DAVAL)) ? 1UL : 0UL);
 }
 
 /**
@@ -1299,10 +1187,8 @@ LL_I3C_IsEnabledOwnDynAddress(const I3C_TypeDef *I3Cx) {
  * and Max_Data=0x7F
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetOwnDynamicAddress(I3C_TypeDef *I3Cx,
-                                                 uint32_t OwnDynamicAddress) {
-  MODIFY_REG(I3Cx->DEVR0, I3C_DEVR0_DA,
-             (OwnDynamicAddress << I3C_DEVR0_DA_Pos));
+__STATIC_INLINE void LL_I3C_SetOwnDynamicAddress(I3C_TypeDef *I3Cx, uint32_t OwnDynamicAddress) {
+    MODIFY_REG(I3Cx->DEVR0, I3C_DEVR0_DA, (OwnDynamicAddress << I3C_DEVR0_DA_Pos));
 }
 
 /**
@@ -1312,7 +1198,7 @@ __STATIC_INLINE void LL_I3C_SetOwnDynamicAddress(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 and Max_Data=0x7F
  */
 __STATIC_INLINE uint8_t LL_I3C_GetOwnDynamicAddress(const I3C_TypeDef *I3Cx) {
-  return (uint8_t)(READ_BIT(I3Cx->DEVR0, I3C_DEVR0_DA) >> I3C_DEVR0_DA_Pos);
+    return (uint8_t)(READ_BIT(I3Cx->DEVR0, I3C_DEVR0_DA) >> I3C_DEVR0_DA_Pos);
 }
 
 /**
@@ -1323,9 +1209,7 @@ __STATIC_INLINE uint8_t LL_I3C_GetOwnDynamicAddress(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIBI(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->DEVR0, I3C_DEVR0_IBIEN);
-}
+__STATIC_INLINE void LL_I3C_EnableIBI(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->DEVR0, I3C_DEVR0_IBIEN); }
 
 /**
  * @brief  Set IBI procedure not-allowed (when the I3C is acting as target).
@@ -1335,9 +1219,7 @@ __STATIC_INLINE void LL_I3C_EnableIBI(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIBI(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->DEVR0, I3C_DEVR0_IBIEN);
-}
+__STATIC_INLINE void LL_I3C_DisableIBI(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->DEVR0, I3C_DEVR0_IBIEN); }
 
 /**
  * @brief  Check if IBI procedure is allowed or not allowed.
@@ -1346,8 +1228,7 @@ __STATIC_INLINE void LL_I3C_DisableIBI(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIBI(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->DEVR0, I3C_DEVR0_IBIEN) == (I3C_DEVR0_IBIEN)) ? 1UL
-                                                                        : 0UL);
+    return ((READ_BIT(I3Cx->DEVR0, I3C_DEVR0_IBIEN) == (I3C_DEVR0_IBIEN)) ? 1UL : 0UL);
 }
 
 /**
@@ -1359,9 +1240,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIBI(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableControllerRoleReq(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->DEVR0, I3C_DEVR0_CREN);
-}
+__STATIC_INLINE void LL_I3C_EnableControllerRoleReq(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->DEVR0, I3C_DEVR0_CREN); }
 
 /**
  * @brief  Set Controller-role Request as not-allowed (when the I3C is acting as
@@ -1372,9 +1251,7 @@ __STATIC_INLINE void LL_I3C_EnableControllerRoleReq(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableControllerRoleReq(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->DEVR0, I3C_DEVR0_CREN);
-}
+__STATIC_INLINE void LL_I3C_DisableControllerRoleReq(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->DEVR0, I3C_DEVR0_CREN); }
 
 /**
  * @brief  Check if Controller-role Request is allowed or not-allowed.
@@ -1382,10 +1259,8 @@ __STATIC_INLINE void LL_I3C_DisableControllerRoleReq(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t
-LL_I3C_IsEnabledControllerRoleReq(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->DEVR0, I3C_DEVR0_CREN) == (I3C_DEVR0_CREN)) ? 1UL
-                                                                      : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledControllerRoleReq(const I3C_TypeDef *I3Cx) {
+    return ((READ_BIT(I3Cx->DEVR0, I3C_DEVR0_CREN) == (I3C_DEVR0_CREN)) ? 1UL : 0UL);
 }
 
 /**
@@ -1396,9 +1271,7 @@ LL_I3C_IsEnabledControllerRoleReq(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableHotJoin(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->DEVR0, I3C_DEVR0_HJEN);
-}
+__STATIC_INLINE void LL_I3C_EnableHotJoin(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->DEVR0, I3C_DEVR0_HJEN); }
 
 /**
  * @brief  Set Hot Join as not-allowed (when the I3C is acting as target).
@@ -1408,9 +1281,7 @@ __STATIC_INLINE void LL_I3C_EnableHotJoin(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableHotJoin(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->DEVR0, I3C_DEVR0_HJEN);
-}
+__STATIC_INLINE void LL_I3C_DisableHotJoin(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->DEVR0, I3C_DEVR0_HJEN); }
 
 /**
  * @brief  Check if Hot Join is allowed or not-allowed.
@@ -1419,8 +1290,7 @@ __STATIC_INLINE void LL_I3C_DisableHotJoin(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledHotJoin(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->DEVR0, I3C_DEVR0_HJEN) == (I3C_DEVR0_HJEN)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->DEVR0, I3C_DEVR0_HJEN) == (I3C_DEVR0_HJEN)) ? 1UL : 0UL);
 }
 
 /**
@@ -1432,9 +1302,8 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledHotJoin(const I3C_TypeDef *I3Cx) {
  * Max_Data=0xFFFF
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetMaxReadLength(I3C_TypeDef *I3Cx,
-                                             uint16_t MaxReadLength) {
-  MODIFY_REG(I3Cx->MAXRLR, I3C_MAXRLR_MRL, MaxReadLength);
+__STATIC_INLINE void LL_I3C_SetMaxReadLength(I3C_TypeDef *I3Cx, uint16_t MaxReadLength) {
+    MODIFY_REG(I3Cx->MAXRLR, I3C_MAXRLR_MRL, MaxReadLength);
 }
 
 /**
@@ -1444,7 +1313,7 @@ __STATIC_INLINE void LL_I3C_SetMaxReadLength(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0x0 and Max_Data=0xFFFFF
  */
 __STATIC_INLINE uint32_t LL_I3C_GetMaxReadLength(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->MAXRLR, I3C_MAXRLR_MRL));
+    return (uint32_t)(READ_BIT(I3Cx->MAXRLR, I3C_MAXRLR_MRL));
 }
 
 /**
@@ -1460,9 +1329,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetMaxReadLength(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_PAYLOAD_4_BYTES
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ConfigNbIBIAddData(I3C_TypeDef *I3Cx,
-                                               uint32_t NbIBIAddData) {
-  MODIFY_REG(I3Cx->MAXRLR, I3C_MAXRLR_IBIP, NbIBIAddData);
+__STATIC_INLINE void LL_I3C_ConfigNbIBIAddData(I3C_TypeDef *I3Cx, uint32_t NbIBIAddData) {
+    MODIFY_REG(I3Cx->MAXRLR, I3C_MAXRLR_IBIP, NbIBIAddData);
 }
 
 /**
@@ -1478,7 +1346,7 @@ __STATIC_INLINE void LL_I3C_ConfigNbIBIAddData(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_PAYLOAD_4_BYTES
  */
 __STATIC_INLINE uint32_t LL_I3C_GetConfigNbIBIAddData(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->MAXRLR, I3C_MAXRLR_IBIP));
+    return (uint32_t)(READ_BIT(I3Cx->MAXRLR, I3C_MAXRLR_IBIP));
 }
 
 /**
@@ -1490,9 +1358,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetConfigNbIBIAddData(const I3C_TypeDef *I3Cx) {
  * and Max_Data=0xFFFF
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetMaxWriteLength(I3C_TypeDef *I3Cx,
-                                              uint16_t MaxWriteLength) {
-  MODIFY_REG(I3Cx->MAXWLR, I3C_MAXWLR_MWL, MaxWriteLength);
+__STATIC_INLINE void LL_I3C_SetMaxWriteLength(I3C_TypeDef *I3Cx, uint16_t MaxWriteLength) {
+    MODIFY_REG(I3Cx->MAXWLR, I3C_MAXWLR_MWL, MaxWriteLength);
 }
 
 /**
@@ -1502,7 +1369,7 @@ __STATIC_INLINE void LL_I3C_SetMaxWriteLength(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0x0 and Max_Data=0xFFFFF
  */
 __STATIC_INLINE uint32_t LL_I3C_GetMaxWriteLength(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->MAXWLR, I3C_MAXWLR_MWL));
+    return (uint32_t)(READ_BIT(I3Cx->MAXWLR, I3C_MAXWLR_MWL));
 }
 
 /**
@@ -1516,9 +1383,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetMaxWriteLength(const I3C_TypeDef *I3Cx) {
  * Max_Data=0xFFFFFFFF.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ConfigClockWaveForm(I3C_TypeDef *I3Cx,
-                                                uint32_t ClockWaveForm) {
-  WRITE_REG(I3Cx->TIMINGR0, ClockWaveForm);
+__STATIC_INLINE void LL_I3C_ConfigClockWaveForm(I3C_TypeDef *I3Cx, uint32_t ClockWaveForm) {
+    WRITE_REG(I3Cx->TIMINGR0, ClockWaveForm);
 }
 
 /**
@@ -1528,7 +1394,7 @@ __STATIC_INLINE void LL_I3C_ConfigClockWaveForm(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 and Max_Data=0xFFFFFFFF.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetClockWaveForm(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_REG(I3Cx->TIMINGR0));
+    return (uint32_t)(READ_REG(I3Cx->TIMINGR0));
 }
 
 /**
@@ -1542,10 +1408,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetClockWaveForm(const I3C_TypeDef *I3Cx) {
  * and Max_Data=0xFF.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetPeriodClockLowPP(I3C_TypeDef *I3Cx,
-                                                uint32_t PeriodClockLowPP) {
-  MODIFY_REG(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLL_PP,
-             (PeriodClockLowPP << I3C_TIMINGR0_SCLL_PP_Pos));
+__STATIC_INLINE void LL_I3C_SetPeriodClockLowPP(I3C_TypeDef *I3Cx, uint32_t PeriodClockLowPP) {
+    MODIFY_REG(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLL_PP, (PeriodClockLowPP << I3C_TIMINGR0_SCLL_PP_Pos));
 }
 
 /**
@@ -1555,8 +1419,7 @@ __STATIC_INLINE void LL_I3C_SetPeriodClockLowPP(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 and Max_Data=0xFF.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetPeriodClockLowPP(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLL_PP) >>
-                    I3C_TIMINGR0_SCLL_PP_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLL_PP) >> I3C_TIMINGR0_SCLL_PP_Pos);
 }
 
 /**
@@ -1571,10 +1434,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetPeriodClockLowPP(const I3C_TypeDef *I3Cx) {
  * and Max_Data=0xFF.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetPeriodClockHighI3C(I3C_TypeDef *I3Cx,
-                                                  uint32_t PeriodClockHighI3C) {
-  MODIFY_REG(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLH_I3C,
-             (PeriodClockHighI3C << I3C_TIMINGR0_SCLH_I3C_Pos));
+__STATIC_INLINE void LL_I3C_SetPeriodClockHighI3C(I3C_TypeDef *I3Cx, uint32_t PeriodClockHighI3C) {
+    MODIFY_REG(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLH_I3C, (PeriodClockHighI3C << I3C_TIMINGR0_SCLH_I3C_Pos));
 }
 
 /**
@@ -1585,8 +1446,7 @@ __STATIC_INLINE void LL_I3C_SetPeriodClockHighI3C(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 and Max_Data=0xFF.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetPeriodClockHighI3C(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLH_I3C) >>
-                    I3C_TIMINGR0_SCLH_I3C_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLH_I3C) >> I3C_TIMINGR0_SCLH_I3C_Pos);
 }
 
 /**
@@ -1600,10 +1460,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetPeriodClockHighI3C(const I3C_TypeDef *I3Cx) {
  * and Max_Data=0xFF.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetPeriodClockLowOD(I3C_TypeDef *I3Cx,
-                                                uint32_t PeriodClockLowOD) {
-  MODIFY_REG(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLL_OD,
-             (PeriodClockLowOD << I3C_TIMINGR0_SCLL_OD_Pos));
+__STATIC_INLINE void LL_I3C_SetPeriodClockLowOD(I3C_TypeDef *I3Cx, uint32_t PeriodClockLowOD) {
+    MODIFY_REG(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLL_OD, (PeriodClockLowOD << I3C_TIMINGR0_SCLL_OD_Pos));
 }
 
 /**
@@ -1613,8 +1471,7 @@ __STATIC_INLINE void LL_I3C_SetPeriodClockLowOD(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 and Max_Data=0xFF.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetPeriodClockLowOD(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLL_OD) >>
-                    I3C_TIMINGR0_SCLL_OD_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLL_OD) >> I3C_TIMINGR0_SCLL_OD_Pos);
 }
 
 /**
@@ -1628,10 +1485,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetPeriodClockLowOD(const I3C_TypeDef *I3Cx) {
  * and Max_Data=0xFF.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetPeriodClockHighI2C(I3C_TypeDef *I3Cx,
-                                                  uint32_t PeriodClockHighI2C) {
-  MODIFY_REG(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLH_I2C,
-             PeriodClockHighI2C << I3C_TIMINGR0_SCLH_I2C_Pos);
+__STATIC_INLINE void LL_I3C_SetPeriodClockHighI2C(I3C_TypeDef *I3Cx, uint32_t PeriodClockHighI2C) {
+    MODIFY_REG(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLH_I2C, PeriodClockHighI2C << I3C_TIMINGR0_SCLH_I2C_Pos);
 }
 
 /**
@@ -1641,8 +1496,7 @@ __STATIC_INLINE void LL_I3C_SetPeriodClockHighI2C(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 and Max_Data=0xFF.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetPeriodClockHighI2C(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLH_I2C) >>
-                    I3C_TIMINGR0_SCLH_I2C_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->TIMINGR0, I3C_TIMINGR0_SCLH_I2C) >> I3C_TIMINGR0_SCLH_I2C_Pos);
 }
 
 /**
@@ -1654,9 +1508,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetPeriodClockHighI2C(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_SDA_HOLD_TIME_1_5
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetDataHoldTime(I3C_TypeDef *I3Cx,
-                                            uint32_t DataHoldTime) {
-  MODIFY_REG(I3Cx->TIMINGR1, I3C_TIMINGR1_SDA_HD, DataHoldTime);
+__STATIC_INLINE void LL_I3C_SetDataHoldTime(I3C_TypeDef *I3Cx, uint32_t DataHoldTime) {
+    MODIFY_REG(I3Cx->TIMINGR1, I3C_TIMINGR1_SDA_HD, DataHoldTime);
 }
 
 /**
@@ -1668,7 +1521,7 @@ __STATIC_INLINE void LL_I3C_SetDataHoldTime(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_SDA_HOLD_TIME_1_5
  */
 __STATIC_INLINE uint32_t LL_I3C_GetDataHoldTime(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->TIMINGR1, I3C_TIMINGR1_SDA_HD));
+    return (uint32_t)(READ_BIT(I3Cx->TIMINGR1, I3C_TIMINGR1_SDA_HD));
 }
 
 /**
@@ -1682,10 +1535,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetDataHoldTime(const I3C_TypeDef *I3Cx) {
  * Max_Data=0xFF.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetAvalTiming(I3C_TypeDef *I3Cx,
-                                          uint32_t AvalTiming) {
-  MODIFY_REG(I3Cx->TIMINGR1, I3C_TIMINGR1_AVAL,
-             (AvalTiming << I3C_TIMINGR1_AVAL_Pos));
+__STATIC_INLINE void LL_I3C_SetAvalTiming(I3C_TypeDef *I3Cx, uint32_t AvalTiming) {
+    MODIFY_REG(I3Cx->TIMINGR1, I3C_TIMINGR1_AVAL, (AvalTiming << I3C_TIMINGR1_AVAL_Pos));
 }
 
 /**
@@ -1695,8 +1546,7 @@ __STATIC_INLINE void LL_I3C_SetAvalTiming(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 and Max_Data=0xFF.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetAvalTiming(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->TIMINGR1, I3C_TIMINGR1_AVAL) >>
-                    I3C_TIMINGR1_AVAL_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->TIMINGR1, I3C_TIMINGR1_AVAL) >> I3C_TIMINGR1_AVAL_Pos);
 }
 
 /**
@@ -1710,10 +1560,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetAvalTiming(const I3C_TypeDef *I3Cx) {
  * Max_Data=0x3F.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetFreeTiming(I3C_TypeDef *I3Cx,
-                                          uint32_t FreeTiming) {
-  MODIFY_REG(I3Cx->TIMINGR1, I3C_TIMINGR1_FREE,
-             (FreeTiming << I3C_TIMINGR1_FREE_Pos));
+__STATIC_INLINE void LL_I3C_SetFreeTiming(I3C_TypeDef *I3Cx, uint32_t FreeTiming) {
+    MODIFY_REG(I3Cx->TIMINGR1, I3C_TIMINGR1_FREE, (FreeTiming << I3C_TIMINGR1_FREE_Pos));
 }
 
 /**
@@ -1723,8 +1571,7 @@ __STATIC_INLINE void LL_I3C_SetFreeTiming(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 and Max_Data=0x3F.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetFreeTiming(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->TIMINGR1, I3C_TIMINGR1_FREE) >>
-                    I3C_TIMINGR1_FREE_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->TIMINGR1, I3C_TIMINGR1_FREE) >> I3C_TIMINGR1_FREE_Pos);
 }
 
 /**
@@ -1741,10 +1588,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetFreeTiming(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_OWN_ACTIVITY_STATE_3
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_SetControllerActivityState(I3C_TypeDef *I3Cx,
-                                  uint32_t ControllerActivityState) {
-  MODIFY_REG(I3Cx->TIMINGR1, I3C_TIMINGR1_ASNCR, ControllerActivityState);
+__STATIC_INLINE void LL_I3C_SetControllerActivityState(I3C_TypeDef *I3Cx, uint32_t ControllerActivityState) {
+    MODIFY_REG(I3Cx->TIMINGR1, I3C_TIMINGR1_ASNCR, ControllerActivityState);
 }
 
 /**
@@ -1759,9 +1604,8 @@ LL_I3C_SetControllerActivityState(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_OWN_ACTIVITY_STATE_2
  *         @arg @ref LL_I3C_OWN_ACTIVITY_STATE_3
  */
-__STATIC_INLINE uint32_t
-LL_I3C_GetControllerActivityState(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->TIMINGR1, I3C_TIMINGR1_ASNCR));
+__STATIC_INLINE uint32_t LL_I3C_GetControllerActivityState(const I3C_TypeDef *I3Cx) {
+    return (uint32_t)(READ_BIT(I3Cx->TIMINGR1, I3C_TIMINGR1_ASNCR));
 }
 
 /**
@@ -1779,10 +1623,8 @@ LL_I3C_GetControllerActivityState(const I3C_TypeDef *I3Cx) {
  * Min_Data=0 and Max_Data=0x107F03FF.
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_SetCtrlBusCharacteristic(I3C_TypeDef *I3Cx,
-                                uint32_t CtrlBusCharacteristic) {
-  WRITE_REG(I3Cx->TIMINGR1, CtrlBusCharacteristic);
+__STATIC_INLINE void LL_I3C_SetCtrlBusCharacteristic(I3C_TypeDef *I3Cx, uint32_t CtrlBusCharacteristic) {
+    WRITE_REG(I3Cx->TIMINGR1, CtrlBusCharacteristic);
 }
 
 /**
@@ -1795,9 +1637,8 @@ LL_I3C_SetCtrlBusCharacteristic(I3C_TypeDef *I3Cx,
  * @param  I3Cx I3C Instance.
  * @retval Value between Min_Data=0 and Max_Data=0x107F03FF.
  */
-__STATIC_INLINE uint32_t
-LL_I3C_GetCtrlBusCharacteristic(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_REG(I3Cx->TIMINGR1));
+__STATIC_INLINE uint32_t LL_I3C_GetCtrlBusCharacteristic(const I3C_TypeDef *I3Cx) {
+    return (uint32_t)(READ_REG(I3Cx->TIMINGR1));
 }
 
 /**
@@ -1811,11 +1652,8 @@ LL_I3C_GetCtrlBusCharacteristic(const I3C_TypeDef *I3Cx) {
  * Min_Data=0 and Max_Data=0xFF.
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_SetTgtBusCharacteristic(I3C_TypeDef *I3Cx,
-                               uint32_t TgtBusCharacteristic) {
-  MODIFY_REG(I3Cx->TIMINGR1, I3C_TIMINGR1_AVAL,
-             (TgtBusCharacteristic & I3C_TIMINGR1_AVAL));
+__STATIC_INLINE void LL_I3C_SetTgtBusCharacteristic(I3C_TypeDef *I3Cx, uint32_t TgtBusCharacteristic) {
+    MODIFY_REG(I3Cx->TIMINGR1, I3C_TIMINGR1_AVAL, (TgtBusCharacteristic & I3C_TIMINGR1_AVAL));
 }
 
 /**
@@ -1824,9 +1662,8 @@ LL_I3C_SetTgtBusCharacteristic(I3C_TypeDef *I3Cx,
  * @param  I3Cx I3C Instance.
  * @retval Value between Min_Data=0 and Max_Data=0xFF.
  */
-__STATIC_INLINE uint32_t
-LL_I3C_GetTgtBusCharacteristic(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->TIMINGR1, I3C_TIMINGR1_AVAL));
+__STATIC_INLINE uint32_t LL_I3C_GetTgtBusCharacteristic(const I3C_TypeDef *I3Cx) {
+    return (uint32_t)(READ_BIT(I3Cx->TIMINGR1, I3C_TIMINGR1_AVAL));
 }
 
 /**
@@ -1840,10 +1677,8 @@ LL_I3C_GetTgtBusCharacteristic(const I3C_TypeDef *I3Cx) {
  * and Max_Data=0xFF.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetStallTime(I3C_TypeDef *I3Cx,
-                                         uint32_t ControllerStallTime) {
-  MODIFY_REG(I3Cx->TIMINGR2, I3C_TIMINGR2_STALL,
-             (ControllerStallTime << I3C_TIMINGR2_STALL_Pos));
+__STATIC_INLINE void LL_I3C_SetStallTime(I3C_TypeDef *I3Cx, uint32_t ControllerStallTime) {
+    MODIFY_REG(I3Cx->TIMINGR2, I3C_TIMINGR2_STALL, (ControllerStallTime << I3C_TIMINGR2_STALL_Pos));
 }
 
 /**
@@ -1853,7 +1688,7 @@ __STATIC_INLINE void LL_I3C_SetStallTime(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 and Max_Data=0xFF.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetStallTime(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALL));
+    return (uint32_t)(READ_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALL));
 }
 
 /**
@@ -1863,9 +1698,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetStallTime(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableStallACK(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLA);
-}
+__STATIC_INLINE void LL_I3C_EnableStallACK(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLA); }
 
 /**
  * @brief  Disable stall on ACK bit (controller mode).
@@ -1874,9 +1707,7 @@ __STATIC_INLINE void LL_I3C_EnableStallACK(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableStallACK(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLA);
-}
+__STATIC_INLINE void LL_I3C_DisableStallACK(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLA); }
 
 /**
  * @brief  Check if stall on ACK bit is enabled or disabled (controller mode).
@@ -1885,10 +1716,7 @@ __STATIC_INLINE void LL_I3C_DisableStallACK(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledStallACK(const I3C_TypeDef *I3Cx) {
-  return (
-      (READ_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLA) == (I3C_TIMINGR2_STALLA))
-          ? 1UL
-          : 0UL);
+    return ((READ_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLA) == (I3C_TIMINGR2_STALLA)) ? 1UL : 0UL);
 }
 
 /**
@@ -1898,9 +1726,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledStallACK(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableStallParityCCC(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLC);
-}
+__STATIC_INLINE void LL_I3C_EnableStallParityCCC(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLC); }
 
 /**
  * @brief  Disable stall on Parity bit of Command Code byte (controller mode).
@@ -1909,9 +1735,7 @@ __STATIC_INLINE void LL_I3C_EnableStallParityCCC(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableStallParityCCC(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLC);
-}
+__STATIC_INLINE void LL_I3C_DisableStallParityCCC(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLC); }
 
 /**
  * @brief  Check if stall on Parity bit of Command Code byte is enabled or
@@ -1920,12 +1744,8 @@ __STATIC_INLINE void LL_I3C_DisableStallParityCCC(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t
-LL_I3C_IsEnabledStallParityCCC(const I3C_TypeDef *I3Cx) {
-  return (
-      (READ_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLC) == (I3C_TIMINGR2_STALLC))
-          ? 1UL
-          : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledStallParityCCC(const I3C_TypeDef *I3Cx) {
+    return ((READ_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLC) == (I3C_TIMINGR2_STALLC)) ? 1UL : 0UL);
 }
 
 /**
@@ -1935,9 +1755,7 @@ LL_I3C_IsEnabledStallParityCCC(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableStallParityData(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLD);
-}
+__STATIC_INLINE void LL_I3C_EnableStallParityData(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLD); }
 
 /**
  * @brief  Disable stall on Parity bit of Data bytes (controller mode).
@@ -1947,7 +1765,7 @@ __STATIC_INLINE void LL_I3C_EnableStallParityData(I3C_TypeDef *I3Cx) {
  * @retval None
  */
 __STATIC_INLINE void LL_I3C_DisableStallParityData(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLD);
+    CLEAR_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLD);
 }
 
 /**
@@ -1957,12 +1775,8 @@ __STATIC_INLINE void LL_I3C_DisableStallParityData(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t
-LL_I3C_IsEnabledStallParityData(const I3C_TypeDef *I3Cx) {
-  return (
-      (READ_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLD) == (I3C_TIMINGR2_STALLD))
-          ? 1UL
-          : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledStallParityData(const I3C_TypeDef *I3Cx) {
+    return ((READ_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLD) == (I3C_TIMINGR2_STALLD)) ? 1UL : 0UL);
 }
 
 /**
@@ -1972,9 +1786,7 @@ LL_I3C_IsEnabledStallParityData(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableStallTbit(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLT);
-}
+__STATIC_INLINE void LL_I3C_EnableStallTbit(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLT); }
 
 /**
  * @brief  Disable stall on T bit (controller mode).
@@ -1983,9 +1795,7 @@ __STATIC_INLINE void LL_I3C_EnableStallTbit(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableStallTbit(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLT);
-}
+__STATIC_INLINE void LL_I3C_DisableStallTbit(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLT); }
 
 /**
  * @brief  Check if stall on T bit is enabled or disabled (controller mode).
@@ -1994,10 +1804,7 @@ __STATIC_INLINE void LL_I3C_DisableStallTbit(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledStallTbit(const I3C_TypeDef *I3Cx) {
-  return (
-      (READ_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLT) == (I3C_TIMINGR2_STALLT))
-          ? 1UL
-          : 0UL);
+    return ((READ_BIT(I3Cx->TIMINGR2, I3C_TIMINGR2_STALLT) == (I3C_TIMINGR2_STALLT)) ? 1UL : 0UL);
 }
 
 /**
@@ -2012,10 +1819,8 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledStallTbit(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_DEVICE_ROLE_AS_CONTROLLER
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_SetDeviceCapabilityOnBus(I3C_TypeDef *I3Cx,
-                                uint32_t DeviceCapabilityOnBus) {
-  MODIFY_REG(I3Cx->BCR, I3C_BCR_BCR6, DeviceCapabilityOnBus);
+__STATIC_INLINE void LL_I3C_SetDeviceCapabilityOnBus(I3C_TypeDef *I3Cx, uint32_t DeviceCapabilityOnBus) {
+    MODIFY_REG(I3Cx->BCR, I3C_BCR_BCR6, DeviceCapabilityOnBus);
 }
 
 /**
@@ -2027,9 +1832,8 @@ LL_I3C_SetDeviceCapabilityOnBus(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_DEVICE_ROLE_AS_TARGET
  *         @arg @ref LL_I3C_DEVICE_ROLE_AS_CONTROLLER
  */
-__STATIC_INLINE uint32_t
-LL_I3C_GetDeviceCapabilityOnBus(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->BCR, I3C_BCR_BCR6));
+__STATIC_INLINE uint32_t LL_I3C_GetDeviceCapabilityOnBus(const I3C_TypeDef *I3Cx) {
+    return (uint32_t)(READ_BIT(I3Cx->BCR, I3C_BCR_BCR6));
 }
 
 /**
@@ -2043,9 +1847,8 @@ LL_I3C_GetDeviceCapabilityOnBus(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_IBI_ADDITIONAL_DATA
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetDeviceIBIPayload(I3C_TypeDef *I3Cx,
-                                                uint32_t DeviceIBIPayload) {
-  MODIFY_REG(I3Cx->BCR, I3C_BCR_BCR2, DeviceIBIPayload);
+__STATIC_INLINE void LL_I3C_SetDeviceIBIPayload(I3C_TypeDef *I3Cx, uint32_t DeviceIBIPayload) {
+    MODIFY_REG(I3Cx->BCR, I3C_BCR_BCR2, DeviceIBIPayload);
 }
 
 /**
@@ -2057,7 +1860,7 @@ __STATIC_INLINE void LL_I3C_SetDeviceIBIPayload(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_IBI_ADDITIONAL_DATA
  */
 __STATIC_INLINE uint32_t LL_I3C_GetDeviceIBIPayload(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->BCR, I3C_BCR_BCR2));
+    return (uint32_t)(READ_BIT(I3Cx->BCR, I3C_BCR_BCR2));
 }
 
 /**
@@ -2072,9 +1875,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetDeviceIBIPayload(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_MAX_DATA_SPEED_LIMITATION
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_SetDataSpeedLimitation(I3C_TypeDef *I3Cx, uint32_t DataSpeedLimitation) {
-  MODIFY_REG(I3Cx->BCR, I3C_BCR_BCR0, DataSpeedLimitation);
+__STATIC_INLINE void LL_I3C_SetDataSpeedLimitation(I3C_TypeDef *I3Cx, uint32_t DataSpeedLimitation) {
+    MODIFY_REG(I3Cx->BCR, I3C_BCR_BCR0, DataSpeedLimitation);
 }
 
 /**
@@ -2086,9 +1888,8 @@ LL_I3C_SetDataSpeedLimitation(I3C_TypeDef *I3Cx, uint32_t DataSpeedLimitation) {
  *         @arg @ref LL_I3C_NO_DATA_SPEED_LIMITATION
  *         @arg @ref LL_I3C_MAX_DATA_SPEED_LIMITATION
  */
-__STATIC_INLINE uint32_t
-LL_I3C_GetDataSpeedLimitation(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->BCR, I3C_BCR_BCR0));
+__STATIC_INLINE uint32_t LL_I3C_GetDataSpeedLimitation(const I3C_TypeDef *I3Cx) {
+    return (uint32_t)(READ_BIT(I3Cx->BCR, I3C_BCR_BCR0));
 }
 
 /**
@@ -2102,10 +1903,8 @@ LL_I3C_GetDataSpeedLimitation(const I3C_TypeDef *I3Cx) {
  * Min_Data=0 and Max_Data=0xFF.
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_SetDeviceCharacteristics(I3C_TypeDef *I3Cx,
-                                uint32_t DeviceCharacteristics) {
-  MODIFY_REG(I3Cx->DCR, I3C_DCR_DCR, DeviceCharacteristics);
+__STATIC_INLINE void LL_I3C_SetDeviceCharacteristics(I3C_TypeDef *I3Cx, uint32_t DeviceCharacteristics) {
+    MODIFY_REG(I3Cx->DCR, I3C_DCR_DCR, DeviceCharacteristics);
 }
 
 /**
@@ -2116,9 +1915,8 @@ LL_I3C_SetDeviceCharacteristics(I3C_TypeDef *I3Cx,
  * @param  I3Cx I3C Instance.
  * @retval Value between Min_Data=0 and Max_Data=0xFF.
  */
-__STATIC_INLINE uint32_t
-LL_I3C_GetDeviceCharacteristics(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->DCR, I3C_DCR_DCR));
+__STATIC_INLINE uint32_t LL_I3C_GetDeviceCharacteristics(const I3C_TypeDef *I3Cx) {
+    return (uint32_t)(READ_BIT(I3Cx->DCR, I3C_DCR_DCR));
 }
 
 /**
@@ -2131,9 +1929,8 @@ LL_I3C_GetDeviceCharacteristics(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_MDB_PENDING_READ_NOTIFICATION
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetPendingReadMDB(I3C_TypeDef *I3Cx,
-                                              uint32_t PendingReadMDB) {
-  MODIFY_REG(I3Cx->GETCAPR, I3C_GETCAPR_CAPPEND, PendingReadMDB);
+__STATIC_INLINE void LL_I3C_SetPendingReadMDB(I3C_TypeDef *I3Cx, uint32_t PendingReadMDB) {
+    MODIFY_REG(I3Cx->GETCAPR, I3C_GETCAPR_CAPPEND, PendingReadMDB);
 }
 
 /**
@@ -2145,7 +1942,7 @@ __STATIC_INLINE void LL_I3C_SetPendingReadMDB(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_MDB_PENDING_READ_NOTIFICATION
  */
 __STATIC_INLINE uint32_t LL_I3C_GetPendingReadMDB(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->GETCAPR, I3C_GETCAPR_CAPPEND));
+    return (uint32_t)(READ_BIT(I3Cx->GETCAPR, I3C_GETCAPR_CAPPEND));
 }
 
 /**
@@ -2159,10 +1956,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetPendingReadMDB(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_HANDOFF_GRP_ADDR_SUPPORTED
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_SetGrpAddrHandoffSupport(I3C_TypeDef *I3Cx,
-                                uint32_t GrpAddrHandoffSupport) {
-  MODIFY_REG(I3Cx->CRCAPR, I3C_CRCAPR_CAPGRP, GrpAddrHandoffSupport);
+__STATIC_INLINE void LL_I3C_SetGrpAddrHandoffSupport(I3C_TypeDef *I3Cx, uint32_t GrpAddrHandoffSupport) {
+    MODIFY_REG(I3Cx->CRCAPR, I3C_CRCAPR_CAPGRP, GrpAddrHandoffSupport);
 }
 
 /**
@@ -2173,9 +1968,8 @@ LL_I3C_SetGrpAddrHandoffSupport(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_HANDOFF_GRP_ADDR_NOT_SUPPORTED
  *         @arg @ref LL_I3C_HANDOFF_GRP_ADDR_SUPPORTED
  */
-__STATIC_INLINE uint32_t
-LL_I3C_GetGrpAddrHandoffSupport(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->CRCAPR, I3C_CRCAPR_CAPGRP));
+__STATIC_INLINE uint32_t LL_I3C_GetGrpAddrHandoffSupport(const I3C_TypeDef *I3Cx) {
+    return (uint32_t)(READ_BIT(I3Cx->CRCAPR, I3C_CRCAPR_CAPGRP));
 }
 
 /**
@@ -2189,10 +1983,8 @@ LL_I3C_GetGrpAddrHandoffSupport(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_HANDOFF_DELAYED
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_SetControllerHandoffDelayed(I3C_TypeDef *I3Cx,
-                                   uint32_t ControllerHandoffDelayed) {
-  MODIFY_REG(I3Cx->CRCAPR, I3C_CRCAPR_CAPDHOFF, ControllerHandoffDelayed);
+__STATIC_INLINE void LL_I3C_SetControllerHandoffDelayed(I3C_TypeDef *I3Cx, uint32_t ControllerHandoffDelayed) {
+    MODIFY_REG(I3Cx->CRCAPR, I3C_CRCAPR_CAPDHOFF, ControllerHandoffDelayed);
 }
 
 /**
@@ -2203,9 +1995,8 @@ LL_I3C_SetControllerHandoffDelayed(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_HANDOFF_NOT_DELAYED
  *         @arg @ref LL_I3C_HANDOFF_DELAYED
  */
-__STATIC_INLINE uint32_t
-LL_I3C_GetControllerHandoffDelayed(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->CRCAPR, I3C_CRCAPR_CAPDHOFF));
+__STATIC_INLINE uint32_t LL_I3C_GetControllerHandoffDelayed(const I3C_TypeDef *I3Cx) {
+    return (uint32_t)(READ_BIT(I3Cx->CRCAPR, I3C_CRCAPR_CAPDHOFF));
 }
 
 /**
@@ -2221,10 +2012,8 @@ LL_I3C_GetControllerHandoffDelayed(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_HANDOFF_ACTIVITY_STATE_3
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_SetHandoffActivityState(I3C_TypeDef *I3Cx,
-                               uint32_t HandoffActivityState) {
-  MODIFY_REG(I3Cx->GETMXDSR, I3C_GETMXDSR_HOFFAS, HandoffActivityState);
+__STATIC_INLINE void LL_I3C_SetHandoffActivityState(I3C_TypeDef *I3Cx, uint32_t HandoffActivityState) {
+    MODIFY_REG(I3Cx->GETMXDSR, I3C_GETMXDSR_HOFFAS, HandoffActivityState);
 }
 
 /**
@@ -2237,9 +2026,8 @@ LL_I3C_SetHandoffActivityState(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_HANDOFF_ACTIVITY_STATE_2
  *         @arg @ref LL_I3C_HANDOFF_ACTIVITY_STATE_3
  */
-__STATIC_INLINE uint32_t
-LL_I3C_GetHandoffActivityState(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->GETMXDSR, I3C_GETMXDSR_HOFFAS));
+__STATIC_INLINE uint32_t LL_I3C_GetHandoffActivityState(const I3C_TypeDef *I3Cx) {
+    return (uint32_t)(READ_BIT(I3Cx->GETMXDSR, I3C_GETMXDSR_HOFFAS));
 }
 
 /**
@@ -2254,9 +2042,8 @@ LL_I3C_GetHandoffActivityState(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_GETMXDS_FORMAT_2_MSB
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetMaxDataSpeedFormat(I3C_TypeDef *I3Cx,
-                                                  uint32_t MaxDataSpeedFormat) {
-  MODIFY_REG(I3Cx->GETMXDSR, I3C_GETMXDSR_FMT, MaxDataSpeedFormat);
+__STATIC_INLINE void LL_I3C_SetMaxDataSpeedFormat(I3C_TypeDef *I3Cx, uint32_t MaxDataSpeedFormat) {
+    MODIFY_REG(I3Cx->GETMXDSR, I3C_GETMXDSR_FMT, MaxDataSpeedFormat);
 }
 
 /**
@@ -2270,7 +2057,7 @@ __STATIC_INLINE void LL_I3C_SetMaxDataSpeedFormat(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_GETMXDS_FORMAT_2_MSB
  */
 __STATIC_INLINE uint32_t LL_I3C_GetMaxDataSpeedFormat(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->GETMXDSR, I3C_GETMXDSR_FMT));
+    return (uint32_t)(READ_BIT(I3Cx->GETMXDSR, I3C_GETMXDSR_FMT));
 }
 
 /**
@@ -2283,11 +2070,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetMaxDataSpeedFormat(const I3C_TypeDef *I3Cx) {
  * Min_Data=0 and Max_Data=0xF.
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_SetMiddleByteTurnAround(I3C_TypeDef *I3Cx,
-                               uint32_t MiddleByteTurnAround) {
-  MODIFY_REG(I3Cx->GETMXDSR, I3C_GETMXDSR_RDTURN,
-             (MiddleByteTurnAround << I3C_GETMXDSR_RDTURN_Pos));
+__STATIC_INLINE void LL_I3C_SetMiddleByteTurnAround(I3C_TypeDef *I3Cx, uint32_t MiddleByteTurnAround) {
+    MODIFY_REG(I3Cx->GETMXDSR, I3C_GETMXDSR_RDTURN, (MiddleByteTurnAround << I3C_GETMXDSR_RDTURN_Pos));
 }
 
 /**
@@ -2297,9 +2081,8 @@ LL_I3C_SetMiddleByteTurnAround(I3C_TypeDef *I3Cx,
  * @param  I3Cx I3C Instance.
  * @retval Value between Min_Data=0 and Max_Data=0xF.
  */
-__STATIC_INLINE uint32_t
-LL_I3C_GetMiddleByteTurnAround(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->GETMXDSR, I3C_GETMXDSR_RDTURN));
+__STATIC_INLINE uint32_t LL_I3C_GetMiddleByteTurnAround(const I3C_TypeDef *I3Cx) {
+    return (uint32_t)(READ_BIT(I3Cx->GETMXDSR, I3C_GETMXDSR_RDTURN));
 }
 
 /**
@@ -2312,9 +2095,8 @@ LL_I3C_GetMiddleByteTurnAround(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_TURNAROUND_TIME_TSCO_GREATER_12NS
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetDataTurnAroundTime(I3C_TypeDef *I3Cx,
-                                                  uint32_t DataTurnAroundTime) {
-  MODIFY_REG(I3Cx->GETMXDSR, I3C_GETMXDSR_TSCO, DataTurnAroundTime);
+__STATIC_INLINE void LL_I3C_SetDataTurnAroundTime(I3C_TypeDef *I3Cx, uint32_t DataTurnAroundTime) {
+    MODIFY_REG(I3Cx->GETMXDSR, I3C_GETMXDSR_TSCO, DataTurnAroundTime);
 }
 
 /**
@@ -2326,7 +2108,7 @@ __STATIC_INLINE void LL_I3C_SetDataTurnAroundTime(I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_TURNAROUND_TIME_TSCO_GREATER_12NS
  */
 __STATIC_INLINE uint32_t LL_I3C_GetDataTurnAroundTime(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->GETMXDSR, I3C_GETMXDSR_TSCO));
+    return (uint32_t)(READ_BIT(I3Cx->GETMXDSR, I3C_GETMXDSR_TSCO));
 }
 
 /**
@@ -2338,10 +2120,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetDataTurnAroundTime(const I3C_TypeDef *I3Cx) {
  * Max_Data=0xF.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetMIPIInstanceID(I3C_TypeDef *I3Cx,
-                                              uint32_t MIPIInstanceID) {
-  MODIFY_REG(I3Cx->EPIDR, I3C_EPIDR_MIPIID,
-             (MIPIInstanceID << I3C_EPIDR_MIPIID_Pos));
+__STATIC_INLINE void LL_I3C_SetMIPIInstanceID(I3C_TypeDef *I3Cx, uint32_t MIPIInstanceID) {
+    MODIFY_REG(I3Cx->EPIDR, I3C_EPIDR_MIPIID, (MIPIInstanceID << I3C_EPIDR_MIPIID_Pos));
 }
 
 /**
@@ -2351,8 +2131,7 @@ __STATIC_INLINE void LL_I3C_SetMIPIInstanceID(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 and Max_Data=0xF.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetMIPIInstanceID(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->EPIDR, I3C_EPIDR_MIPIID) >>
-                    I3C_EPIDR_MIPIID_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->EPIDR, I3C_EPIDR_MIPIID) >> I3C_EPIDR_MIPIID_Pos);
 }
 
 /**
@@ -2362,8 +2141,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetMIPIInstanceID(const I3C_TypeDef *I3Cx) {
  * @retval Value between Min_Data=0x0 and Max_Data=0x1
  */
 __STATIC_INLINE uint32_t LL_I3C_GetIDTypeSelector(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->EPIDR, I3C_EPIDR_IDTSEL) >>
-                    I3C_EPIDR_IDTSEL_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->EPIDR, I3C_EPIDR_IDTSEL) >> I3C_EPIDR_IDTSEL_Pos);
 }
 
 /**
@@ -2373,8 +2151,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetIDTypeSelector(const I3C_TypeDef *I3Cx) {
  * @retval Value between Min_Data=0 and Max_Data=0x7FFF.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetMIPIManufacturerID(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->EPIDR, I3C_EPIDR_MIPIMID) >>
-                    I3C_EPIDR_MIPIMID_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->EPIDR, I3C_EPIDR_MIPIMID) >> I3C_EPIDR_MIPIMID_Pos);
 }
 
 /**
@@ -2391,9 +2168,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetMIPIManufacturerID(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_RequestRxFIFOFlush(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_RXFLUSH);
-}
+__STATIC_INLINE void LL_I3C_RequestRxFIFOFlush(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_RXFLUSH); }
 
 /**
  * @brief  Request a transmission Data FIFO Flush.
@@ -2401,9 +2176,7 @@ __STATIC_INLINE void LL_I3C_RequestRxFIFOFlush(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_RequestTxFIFOFlush(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_TXFLUSH);
-}
+__STATIC_INLINE void LL_I3C_RequestTxFIFOFlush(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_TXFLUSH); }
 
 /**
  * @brief  Request a Status Data FIFO Flush.
@@ -2411,9 +2184,7 @@ __STATIC_INLINE void LL_I3C_RequestTxFIFOFlush(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_RequestStatusFIFOFlush(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_SFLUSH);
-}
+__STATIC_INLINE void LL_I3C_RequestStatusFIFOFlush(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_SFLUSH); }
 
 /**
  * @brief  Get Activity state of Controller on the I3C Bus (Target only).
@@ -2426,7 +2197,7 @@ __STATIC_INLINE void LL_I3C_RequestStatusFIFOFlush(I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_BUS_ACTIVITY_STATE_3
  */
 __STATIC_INLINE uint32_t LL_I3C_GetActivityState(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->DEVR0, I3C_DEVR0_AS));
+    return (uint32_t)(READ_BIT(I3Cx->DEVR0, I3C_DEVR0_AS));
 }
 
 /**
@@ -2439,7 +2210,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetActivityState(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_RESET_ACTION_FULL
  */
 __STATIC_INLINE uint32_t LL_I3C_GetResetAction(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->DEVR0, I3C_DEVR0_RSTACT));
+    return (uint32_t)(READ_BIT(I3Cx->DEVR0, I3C_DEVR0_RSTACT));
 }
 
 /**
@@ -2448,9 +2219,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetResetAction(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_RequestControlFIFOFlush(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_CFLUSH);
-}
+__STATIC_INLINE void LL_I3C_RequestControlFIFOFlush(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_CFLUSH); }
 
 /**
  * @brief  Request a Transfer start.
@@ -2460,9 +2229,7 @@ __STATIC_INLINE void LL_I3C_RequestControlFIFOFlush(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_RequestTransfer(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->CFGR, I3C_CFGR_TSFSET);
-}
+__STATIC_INLINE void LL_I3C_RequestTransfer(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->CFGR, I3C_CFGR_TSFSET); }
 
 /**
  * @brief  Handles I3C Message content on the I3C Bus as Controller.
@@ -2492,14 +2259,10 @@ __STATIC_INLINE void LL_I3C_RequestTransfer(I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_GENERATE_RESTART
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_ControllerHandleMessage(I3C_TypeDef *I3Cx, uint32_t TargetAddr,
-                               uint32_t TransferSize, uint32_t Direction,
-                               uint32_t MessageType, uint32_t EndMode) {
-  WRITE_REG(I3Cx->CR, ((TargetAddr << I3C_CR_ADD_Pos) | TransferSize |
-                       Direction | MessageType | EndMode) &
-                          (I3C_CR_ADD | I3C_CR_DCNT | I3C_CR_RNW |
-                           I3C_CR_MTYPE | I3C_CR_MEND));
+__STATIC_INLINE void LL_I3C_ControllerHandleMessage(I3C_TypeDef *I3Cx, uint32_t TargetAddr, uint32_t TransferSize,
+                                                    uint32_t Direction, uint32_t MessageType, uint32_t EndMode) {
+    WRITE_REG(I3Cx->CR, ((TargetAddr << I3C_CR_ADD_Pos) | TransferSize | Direction | MessageType | EndMode) &
+                            (I3C_CR_ADD | I3C_CR_DCNT | I3C_CR_RNW | I3C_CR_MTYPE | I3C_CR_MEND));
 }
 
 /**
@@ -2520,14 +2283,10 @@ LL_I3C_ControllerHandleMessage(I3C_TypeDef *I3Cx, uint32_t TargetAddr,
  *         @arg @ref LL_I3C_GENERATE_RESTART
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ControllerHandleCCC(I3C_TypeDef *I3Cx,
-                                                uint32_t CCCValue,
-                                                uint32_t AddByteSize,
+__STATIC_INLINE void LL_I3C_ControllerHandleCCC(I3C_TypeDef *I3Cx, uint32_t CCCValue, uint32_t AddByteSize,
                                                 uint32_t EndMode) {
-  WRITE_REG(I3Cx->CR,
-            ((CCCValue << I3C_CR_CCC_Pos) | AddByteSize | EndMode |
-             LL_I3C_CONTROLLER_MTYPE_CCC) &
-                (I3C_CR_CCC | I3C_CR_DCNT | I3C_CR_MTYPE | I3C_CR_MEND));
+    WRITE_REG(I3Cx->CR, ((CCCValue << I3C_CR_CCC_Pos) | AddByteSize | EndMode | LL_I3C_CONTROLLER_MTYPE_CCC) &
+                            (I3C_CR_CCC | I3C_CR_DCNT | I3C_CR_MTYPE | I3C_CR_MEND));
 }
 
 /**
@@ -2544,10 +2303,8 @@ __STATIC_INLINE void LL_I3C_ControllerHandleCCC(I3C_TypeDef *I3Cx,
  * Max_Data=65535.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_TargetHandleMessage(I3C_TypeDef *I3Cx,
-                                                uint32_t MessageType,
-                                                uint32_t IBISize) {
-  WRITE_REG(I3Cx->CR, (MessageType | IBISize) & (I3C_CR_DCNT | I3C_CR_MTYPE));
+__STATIC_INLINE void LL_I3C_TargetHandleMessage(I3C_TypeDef *I3Cx, uint32_t MessageType, uint32_t IBISize) {
+    WRITE_REG(I3Cx->CR, (MessageType | IBISize) & (I3C_CR_DCNT | I3C_CR_MTYPE));
 }
 
 /**
@@ -2565,7 +2322,7 @@ __STATIC_INLINE void LL_I3C_TargetHandleMessage(I3C_TypeDef *I3Cx,
  * @retval Value between Min_Data=0 to Max_Data=0xFF
  */
 __STATIC_INLINE uint8_t LL_I3C_ReceiveData8(const I3C_TypeDef *I3Cx) {
-  return (uint8_t)(READ_BIT(I3Cx->RDR, I3C_RDR_RDB0));
+    return (uint8_t)(READ_BIT(I3Cx->RDR, I3C_RDR_RDB0));
 }
 
 /**
@@ -2576,9 +2333,7 @@ __STATIC_INLINE uint8_t LL_I3C_ReceiveData8(const I3C_TypeDef *I3Cx) {
  * Max_Data=0xFF.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_TransmitData8(I3C_TypeDef *I3Cx, uint8_t Data) {
-  WRITE_REG(I3Cx->TDR, Data);
-}
+__STATIC_INLINE void LL_I3C_TransmitData8(I3C_TypeDef *I3Cx, uint8_t Data) { WRITE_REG(I3Cx->TDR, Data); }
 
 /**
  * @brief  Read Receive Data Word register.
@@ -2589,9 +2344,7 @@ __STATIC_INLINE void LL_I3C_TransmitData8(I3C_TypeDef *I3Cx, uint8_t Data) {
  * @param  I3Cx I3C Instance.
  * @retval Value between Min_Data=0 to Max_Data=0xFFFFFFFF
  */
-__STATIC_INLINE uint32_t LL_I3C_ReceiveData32(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_REG(I3Cx->RDWR));
-}
+__STATIC_INLINE uint32_t LL_I3C_ReceiveData32(const I3C_TypeDef *I3Cx) { return (uint32_t)(READ_REG(I3Cx->RDWR)); }
 
 /**
  * @brief  Write in Transmit Data Word Register.
@@ -2604,9 +2357,7 @@ __STATIC_INLINE uint32_t LL_I3C_ReceiveData32(const I3C_TypeDef *I3Cx) {
  * Max_Data=0xFFFFFFFF.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_TransmitData32(I3C_TypeDef *I3Cx, uint32_t Data) {
-  WRITE_REG(I3Cx->TDWR, Data);
-}
+__STATIC_INLINE void LL_I3C_TransmitData32(I3C_TypeDef *I3Cx, uint32_t Data) { WRITE_REG(I3Cx->TDWR, Data); }
 
 /**
  * @brief  Configure the IBI data payload to be sent during IBI (target mode).
@@ -2619,9 +2370,8 @@ __STATIC_INLINE void LL_I3C_TransmitData32(I3C_TypeDef *I3Cx, uint32_t Data) {
  * Max_Data=0xFFFFFFFF
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetIBIPayload(I3C_TypeDef *I3Cx,
-                                          uint32_t OwnIBIPayload) {
-  WRITE_REG(I3Cx->IBIDR, OwnIBIPayload);
+__STATIC_INLINE void LL_I3C_SetIBIPayload(I3C_TypeDef *I3Cx, uint32_t OwnIBIPayload) {
+    WRITE_REG(I3Cx->IBIDR, OwnIBIPayload);
 }
 
 /**
@@ -2634,9 +2384,7 @@ __STATIC_INLINE void LL_I3C_SetIBIPayload(I3C_TypeDef *I3Cx,
  * @param  I3Cx I3C Instance.
  * @retval Value between Min_Data=0 to Max_Data=0xFFFFFFFF
  */
-__STATIC_INLINE uint32_t LL_I3C_GetIBIPayload(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_REG(I3Cx->IBIDR));
-}
+__STATIC_INLINE uint32_t LL_I3C_GetIBIPayload(const I3C_TypeDef *I3Cx) { return (uint32_t)(READ_REG(I3Cx->IBIDR)); }
 
 /**
  * @brief  Get the number of data bytes received when reading IBI data
@@ -2646,7 +2394,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetIBIPayload(const I3C_TypeDef *I3Cx) {
  * @retval Value between Min_Data=0 to Max_Data=0x7
  */
 __STATIC_INLINE uint32_t LL_I3C_GetNbIBIAddData(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->RMR, I3C_RMR_IBIRDCNT));
+    return (uint32_t)(READ_BIT(I3Cx->RMR, I3C_RMR_IBIRDCNT));
 }
 
 /**
@@ -2657,7 +2405,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetNbIBIAddData(const I3C_TypeDef *I3Cx) {
  * @retval Value between Min_Data=0 to Max_Data=0x3F
  */
 __STATIC_INLINE uint32_t LL_I3C_GetIBITargetAddr(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->RMR, I3C_RMR_RADD) >> I3C_RMR_RADD_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->RMR, I3C_RMR_RADD) >> I3C_RMR_RADD_Pos);
 }
 
 /**
@@ -2671,10 +2419,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetIBITargetAddr(const I3C_TypeDef *I3Cx) {
  * Max_Data=0xFFFF
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ConfigTxPreload(I3C_TypeDef *I3Cx,
-                                            uint16_t TxDataCount) {
-  MODIFY_REG(I3Cx->TGTTDR, (I3C_TGTTDR_PRELOAD | I3C_TGTTDR_TGTTDCNT),
-             (I3C_TGTTDR_PRELOAD | TxDataCount));
+__STATIC_INLINE void LL_I3C_ConfigTxPreload(I3C_TypeDef *I3Cx, uint16_t TxDataCount) {
+    MODIFY_REG(I3Cx->TGTTDR, (I3C_TGTTDR_PRELOAD | I3C_TGTTDR_TGTTDCNT), (I3C_TGTTDR_PRELOAD | TxDataCount));
 }
 
 /**
@@ -2688,9 +2434,7 @@ __STATIC_INLINE void LL_I3C_ConfigTxPreload(I3C_TypeDef *I3Cx,
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveTxPreload(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->TGTTDR, I3C_TGTTDR_PRELOAD) == (I3C_TGTTDR_PRELOAD))
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(I3Cx->TGTTDR, I3C_TGTTDR_PRELOAD) == (I3C_TGTTDR_PRELOAD)) ? 1UL : 0UL);
 }
 
 /**
@@ -2702,7 +2446,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveTxPreload(const I3C_TypeDef *I3Cx) {
  * @retval Value between Min_Data=0 to Max_Data=0xFFFF
  */
 __STATIC_INLINE uint16_t LL_I3C_GetTxPreloadDataCount(const I3C_TypeDef *I3Cx) {
-  return (uint16_t)(READ_BIT(I3Cx->TGTTDR, I3C_TGTTDR_TGTTDCNT));
+    return (uint16_t)(READ_BIT(I3Cx->TGTTDR, I3C_TGTTDR_TGTTDCNT));
 }
 
 /**
@@ -2718,7 +2462,7 @@ __STATIC_INLINE uint16_t LL_I3C_GetTxPreloadDataCount(const I3C_TypeDef *I3Cx) {
  * @retval Value between Min_Data=0 to Max_Data=0xFFFF
  */
 __STATIC_INLINE uint32_t LL_I3C_GetXferDataCount(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->SR, I3C_SR_XDCNT));
+    return (uint32_t)(READ_BIT(I3Cx->SR, I3C_SR_XDCNT));
 }
 
 /**
@@ -2727,9 +2471,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetXferDataCount(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t
-LL_I3C_IsTargetAbortPrivateRead(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->SR, I3C_SR_ABT) == (I3C_SR_ABT)) ? 1UL : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsTargetAbortPrivateRead(const I3C_TypeDef *I3Cx) {
+    return ((READ_BIT(I3Cx->SR, I3C_SR_ABT) == (I3C_SR_ABT)) ? 1UL : 0UL);
 }
 
 /**
@@ -2741,7 +2484,7 @@ LL_I3C_IsTargetAbortPrivateRead(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_MESSAGE_DIRECTION_READ
  */
 __STATIC_INLINE uint32_t LL_I3C_GetMessageDirection(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->SR, I3C_SR_DIR));
+    return (uint32_t)(READ_BIT(I3Cx->SR, I3C_SR_DIR));
 }
 
 /**
@@ -2752,7 +2495,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetMessageDirection(const I3C_TypeDef *I3Cx) {
  * hardware counter value.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetMessageIdentifier(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->SR, I3C_SR_MID));
+    return (uint32_t)(READ_BIT(I3Cx->SR, I3C_SR_MID));
 }
 
 /**
@@ -2773,7 +2516,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetMessageIdentifier(const I3C_TypeDef *I3Cx) {
  *         @arg @ref LL_I3C_TARGET_ERROR_TE6
  */
 __STATIC_INLINE uint32_t LL_I3C_GetMessageErrorCode(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->SER, I3C_SER_CODERR));
+    return (uint32_t)(READ_BIT(I3Cx->SER, I3C_SER_CODERR));
 }
 
 /**
@@ -2783,7 +2526,7 @@ __STATIC_INLINE uint32_t LL_I3C_GetMessageErrorCode(const I3C_TypeDef *I3Cx) {
  * @retval Value between Min_Data=0 to Max_Data=0xFF.
  */
 __STATIC_INLINE uint32_t LL_I3C_GetReceiveCommandCode(const I3C_TypeDef *I3Cx) {
-  return (uint32_t)(READ_BIT(I3Cx->RMR, I3C_RMR_RCODE) >> I3C_RMR_RCODE_Pos);
+    return (uint32_t)(READ_BIT(I3Cx->RMR, I3C_RMR_RCODE) >> I3C_RMR_RCODE_Pos);
 }
 
 /**
@@ -2803,11 +2546,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetReceiveCommandCode(const I3C_TypeDef *I3Cx) {
  * @param  DynamicAddr Value between Min_Data=0 to Max_Data=0x7F
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_SetTargetDynamicAddress(I3C_TypeDef *I3Cx,
-                                                    uint32_t TargetId,
-                                                    uint32_t DynamicAddr) {
-  MODIFY_REG(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_DA,
-             (DynamicAddr << I3C_DEVRX_DA_Pos));
+__STATIC_INLINE void LL_I3C_SetTargetDynamicAddress(I3C_TypeDef *I3Cx, uint32_t TargetId, uint32_t DynamicAddr) {
+    MODIFY_REG(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_DA, (DynamicAddr << I3C_DEVRX_DA_Pos));
 }
 
 /**
@@ -2818,10 +2558,8 @@ __STATIC_INLINE void LL_I3C_SetTargetDynamicAddress(I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval Value between Min_Data=0 to Max_Data=0x7F
  */
-__STATIC_INLINE uint32_t LL_I3C_GetTargetDynamicAddress(const I3C_TypeDef *I3Cx,
-                                                        uint32_t TargetId) {
-  return (uint32_t)((READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_DA)) >>
-                    I3C_DEVRX_DA_Pos);
+__STATIC_INLINE uint32_t LL_I3C_GetTargetDynamicAddress(const I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    return (uint32_t)((READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_DA)) >> I3C_DEVRX_DA_Pos);
 }
 
 /**
@@ -2835,9 +2573,8 @@ __STATIC_INLINE uint32_t LL_I3C_GetTargetDynamicAddress(const I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableTargetIBIAck(I3C_TypeDef *I3Cx,
-                                               uint32_t TargetId) {
-  SET_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIACK);
+__STATIC_INLINE void LL_I3C_EnableTargetIBIAck(I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    SET_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIACK);
 }
 
 /**
@@ -2848,9 +2585,8 @@ __STATIC_INLINE void LL_I3C_EnableTargetIBIAck(I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableTargetIBIAck(I3C_TypeDef *I3Cx,
-                                                uint32_t TargetId) {
-  CLEAR_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIACK);
+__STATIC_INLINE void LL_I3C_DisableTargetIBIAck(I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    CLEAR_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIACK);
 }
 
 /**
@@ -2863,12 +2599,8 @@ __STATIC_INLINE void LL_I3C_DisableTargetIBIAck(I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t LL_I3C_IsEnabledTargetIBIAck(const I3C_TypeDef *I3Cx,
-                                                      uint32_t TargetId) {
-  return ((READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIACK) ==
-           I3C_DEVRX_IBIACK)
-              ? 1UL
-              : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledTargetIBIAck(const I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    return ((READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIACK) == I3C_DEVRX_IBIACK) ? 1UL : 0UL);
 }
 
 /**
@@ -2883,9 +2615,8 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledTargetIBIAck(const I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableTargetCRAck(I3C_TypeDef *I3Cx,
-                                              uint32_t TargetId) {
-  SET_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_CRACK);
+__STATIC_INLINE void LL_I3C_EnableTargetCRAck(I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    SET_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_CRACK);
 }
 
 /**
@@ -2897,9 +2628,8 @@ __STATIC_INLINE void LL_I3C_EnableTargetCRAck(I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableTargetCRAck(I3C_TypeDef *I3Cx,
-                                               uint32_t TargetId) {
-  CLEAR_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_CRACK);
+__STATIC_INLINE void LL_I3C_DisableTargetCRAck(I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    CLEAR_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_CRACK);
 }
 
 /**
@@ -2913,12 +2643,8 @@ __STATIC_INLINE void LL_I3C_DisableTargetCRAck(I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t LL_I3C_IsEnabledTargetCRAck(const I3C_TypeDef *I3Cx,
-                                                     uint32_t TargetId) {
-  return (
-      (READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_CRACK) == I3C_DEVRX_CRACK)
-          ? 1UL
-          : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledTargetCRAck(const I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    return ((READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_CRACK) == I3C_DEVRX_CRACK) ? 1UL : 0UL);
 }
 
 /**
@@ -2930,9 +2656,8 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledTargetCRAck(const I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIBIAddData(I3C_TypeDef *I3Cx,
-                                             uint32_t TargetId) {
-  SET_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIDEN);
+__STATIC_INLINE void LL_I3C_EnableIBIAddData(I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    SET_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIDEN);
 }
 
 /**
@@ -2944,9 +2669,8 @@ __STATIC_INLINE void LL_I3C_EnableIBIAddData(I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIBIAddData(I3C_TypeDef *I3Cx,
-                                              uint32_t TargetId) {
-  CLEAR_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIDEN);
+__STATIC_INLINE void LL_I3C_DisableIBIAddData(I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    CLEAR_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIDEN);
 }
 
 /**
@@ -2959,12 +2683,8 @@ __STATIC_INLINE void LL_I3C_DisableIBIAddData(I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t LL_I3C_IsEnabledIBIAddData(const I3C_TypeDef *I3Cx,
-                                                    uint32_t TargetId) {
-  return ((READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIDEN) ==
-           I3C_DEVRX_IBIDEN)
-              ? 1UL
-              : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsEnabledIBIAddData(const I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    return ((READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_IBIDEN) == I3C_DEVRX_IBIDEN) ? 1UL : 0UL);
 }
 
 /**
@@ -2979,9 +2699,8 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIBIAddData(const I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableFrameSuspend(I3C_TypeDef *I3Cx,
-                                               uint32_t TargetId) {
-  SET_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_SUSP);
+__STATIC_INLINE void LL_I3C_EnableFrameSuspend(I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    SET_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_SUSP);
 }
 
 /**
@@ -2994,9 +2713,8 @@ __STATIC_INLINE void LL_I3C_EnableFrameSuspend(I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableFrameSuspend(I3C_TypeDef *I3Cx,
-                                                uint32_t TargetId) {
-  CLEAR_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_SUSP);
+__STATIC_INLINE void LL_I3C_DisableFrameSuspend(I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    CLEAR_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_SUSP);
 }
 
 /**
@@ -3010,12 +2728,8 @@ __STATIC_INLINE void LL_I3C_DisableFrameSuspend(I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t LL_I3C_IsFrameMustBeSuspended(const I3C_TypeDef *I3Cx,
-                                                       uint32_t TargetId) {
-  return (
-      (READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_SUSP) == I3C_DEVRX_SUSP)
-          ? 1UL
-          : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsFrameMustBeSuspended(const I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    return ((READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_SUSP) == I3C_DEVRX_SUSP) ? 1UL : 0UL);
 }
 
 /**
@@ -3030,11 +2744,8 @@ __STATIC_INLINE uint32_t LL_I3C_IsFrameMustBeSuspended(const I3C_TypeDef *I3Cx,
  * Max_Data=4
  * @retval State of bit (1 or 0).
  */
-__STATIC_INLINE uint32_t LL_I3C_IsAllowedPayloadUpdate(const I3C_TypeDef *I3Cx,
-                                                       uint32_t TargetId) {
-  return ((READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_DIS) != I3C_DEVRX_DIS)
-              ? 1UL
-              : 0UL);
+__STATIC_INLINE uint32_t LL_I3C_IsAllowedPayloadUpdate(const I3C_TypeDef *I3Cx, uint32_t TargetId) {
+    return ((READ_BIT(I3Cx->DEVRX[TargetId - 1U], I3C_DEVRX_DIS) != I3C_DEVRX_DIS) ? 1UL : 0UL);
 }
 
 /**
@@ -3062,14 +2773,10 @@ __STATIC_INLINE uint32_t LL_I3C_IsAllowedPayloadUpdate(const I3C_TypeDef *I3Cx,
  *         @arg @ref LL_I3C_CR_NO_CAPABILITY
  * @retval None
  */
-__STATIC_INLINE void
-LL_I3C_ConfigDeviceCapabilities(I3C_TypeDef *I3Cx, uint32_t TargetId,
-                                uint32_t DynamicAddr, uint32_t IBIAck,
-                                uint32_t IBIAddData, uint32_t CRAck) {
-  MODIFY_REG(
-      I3Cx->DEVRX[TargetId - 1U],
-      (I3C_DEVRX_DA | I3C_DEVRX_IBIACK | I3C_DEVRX_CRACK | I3C_DEVRX_IBIDEN),
-      ((DynamicAddr << I3C_DEVRX_DA_Pos) | IBIAck | IBIAddData | CRAck));
+__STATIC_INLINE void LL_I3C_ConfigDeviceCapabilities(I3C_TypeDef *I3Cx, uint32_t TargetId, uint32_t DynamicAddr,
+                                                     uint32_t IBIAck, uint32_t IBIAddData, uint32_t CRAck) {
+    MODIFY_REG(I3Cx->DEVRX[TargetId - 1U], (I3C_DEVRX_DA | I3C_DEVRX_IBIACK | I3C_DEVRX_CRACK | I3C_DEVRX_IBIDEN),
+               ((DynamicAddr << I3C_DEVRX_DA_Pos) | IBIAck | IBIAddData | CRAck));
 }
 /**
  * @}
@@ -3088,7 +2795,7 @@ LL_I3C_ConfigDeviceCapabilities(I3C_TypeDef *I3Cx, uint32_t TargetId,
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_CFE(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_CFEF) == (I3C_EVR_CFEF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_CFEF) == (I3C_EVR_CFEF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3100,7 +2807,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_CFE(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_TXFE(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_TXFEF) == (I3C_EVR_TXFEF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_TXFEF) == (I3C_EVR_TXFEF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3114,7 +2821,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_TXFE(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_CFNF(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_CFNFF) == (I3C_EVR_CFNFF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_CFNFF) == (I3C_EVR_CFNFF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3127,7 +2834,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_CFNF(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_SFNE(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_SFNEF) == (I3C_EVR_SFNEF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_SFNEF) == (I3C_EVR_SFNEF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3141,8 +2848,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_SFNE(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_TXFNF(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_TXFNFF) == (I3C_EVR_TXFNFF)) ? 1UL
-                                                                    : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_TXFNFF) == (I3C_EVR_TXFNFF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3154,8 +2860,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_TXFNF(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_RXFNE(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_RXFNEF) == (I3C_EVR_RXFNEF)) ? 1UL
-                                                                    : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_RXFNEF) == (I3C_EVR_RXFNEF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3167,8 +2872,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_RXFNE(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_RXLAST(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_RXLASTF) == (I3C_EVR_RXLASTF)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_RXLASTF) == (I3C_EVR_RXLASTF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3180,8 +2884,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_RXLAST(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_TXLAST(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_TXLASTF) == (I3C_EVR_TXLASTF)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_TXLASTF) == (I3C_EVR_TXLASTF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3193,7 +2896,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_TXLAST(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_FC(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_FCF) == (I3C_EVR_FCF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_FCF) == (I3C_EVR_FCF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3206,9 +2909,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_FC(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_RXTGTEND(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_RXTGTENDF) == (I3C_EVR_RXTGTENDF))
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_RXTGTENDF) == (I3C_EVR_RXTGTENDF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3220,7 +2921,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_RXTGTEND(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_ERR(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_ERRF) == (I3C_EVR_ERRF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_ERRF) == (I3C_EVR_ERRF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3232,7 +2933,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_ERR(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_IBI(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_IBIF) == (I3C_EVR_IBIF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_IBIF) == (I3C_EVR_IBIF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3244,8 +2945,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_IBI(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_IBIEND(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_IBIENDF) == (I3C_EVR_IBIENDF)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_IBIENDF) == (I3C_EVR_IBIENDF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3257,7 +2957,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_IBIEND(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_CR(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_CRF) == (I3C_EVR_CRF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_CRF) == (I3C_EVR_CRF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3269,8 +2969,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_CR(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_CRUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_CRUPDF) == (I3C_EVR_CRUPDF)) ? 1UL
-                                                                    : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_CRUPDF) == (I3C_EVR_CRUPDF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3282,7 +2981,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_CRUPD(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_HJ(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_HJF) == (I3C_EVR_HJF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_HJF) == (I3C_EVR_HJF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3295,7 +2994,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_HJ(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_WKP(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_WKPF) == (I3C_EVR_WKPF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_WKPF) == (I3C_EVR_WKPF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3307,7 +3006,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_WKP(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_GET(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_GETF) == (I3C_EVR_GETF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_GETF) == (I3C_EVR_GETF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3319,7 +3018,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_GET(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_STA(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_STAF) == (I3C_EVR_STAF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_STAF) == (I3C_EVR_STAF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3331,8 +3030,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_STA(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_DAUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_DAUPDF) == (I3C_EVR_DAUPDF)) ? 1UL
-                                                                    : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_DAUPDF) == (I3C_EVR_DAUPDF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3344,8 +3042,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_DAUPD(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_MWLUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_MWLUPDF) == (I3C_EVR_MWLUPDF)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_MWLUPDF) == (I3C_EVR_MWLUPDF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3357,8 +3054,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_MWLUPD(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_MRLUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_MRLUPDF) == (I3C_EVR_MRLUPDF)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_MRLUPDF) == (I3C_EVR_MRLUPDF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3370,7 +3066,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_MRLUPD(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_RST(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_RSTF) == (I3C_EVR_RSTF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_RSTF) == (I3C_EVR_RSTF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3382,8 +3078,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_RST(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_ASUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_ASUPDF) == (I3C_EVR_ASUPDF)) ? 1UL
-                                                                    : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_ASUPDF) == (I3C_EVR_ASUPDF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3395,8 +3090,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_ASUPD(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_INTUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_INTUPDF) == (I3C_EVR_INTUPDF)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_INTUPDF) == (I3C_EVR_INTUPDF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3408,7 +3102,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_INTUPD(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_DEF(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_DEFF) == (I3C_EVR_DEFF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_DEFF) == (I3C_EVR_DEFF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3420,7 +3114,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_DEF(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_GRP(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->EVR, I3C_EVR_GRPF) == (I3C_EVR_GRPF)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->EVR, I3C_EVR_GRPF) == (I3C_EVR_GRPF)) ? 1UL : 0UL);
 }
 
 /**
@@ -3432,7 +3126,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_GRP(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_PERR(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->SER, I3C_SER_PERR) == (I3C_SER_PERR)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->SER, I3C_SER_PERR) == (I3C_SER_PERR)) ? 1UL : 0UL);
 }
 
 /**
@@ -3445,7 +3139,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_PERR(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_STALL(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->SER, I3C_SER_STALL) == (I3C_SER_STALL)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->SER, I3C_SER_STALL) == (I3C_SER_STALL)) ? 1UL : 0UL);
 }
 
 /**
@@ -3457,7 +3151,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_STALL(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_DOVR(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->SER, I3C_SER_DOVR) == (I3C_SER_DOVR)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->SER, I3C_SER_DOVR) == (I3C_SER_DOVR)) ? 1UL : 0UL);
 }
 
 /**
@@ -3469,7 +3163,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_DOVR(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_COVR(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->SER, I3C_SER_COVR) == (I3C_SER_COVR)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->SER, I3C_SER_COVR) == (I3C_SER_COVR)) ? 1UL : 0UL);
 }
 
 /**
@@ -3481,7 +3175,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_COVR(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_ANACK(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->SER, I3C_SER_ANACK) == (I3C_SER_ANACK)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->SER, I3C_SER_ANACK) == (I3C_SER_ANACK)) ? 1UL : 0UL);
 }
 
 /**
@@ -3493,7 +3187,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_ANACK(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_DNACK(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->SER, I3C_SER_DNACK) == (I3C_SER_DNACK)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->SER, I3C_SER_DNACK) == (I3C_SER_DNACK)) ? 1UL : 0UL);
 }
 
 /**
@@ -3506,7 +3200,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_DNACK(const I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_DERR(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->SER, I3C_SER_DERR) == (I3C_SER_DERR)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->SER, I3C_SER_DERR) == (I3C_SER_DERR)) ? 1UL : 0UL);
 }
 
 /**
@@ -3523,9 +3217,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsActiveFlag_DERR(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_CFNF(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_CFNFIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_CFNF(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_CFNFIE); }
 
 /**
  * @brief  Disable Control FIFO Not Full interrupt.
@@ -3533,9 +3225,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_CFNF(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_CFNF(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_CFNFIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_CFNF(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_CFNFIE); }
 
 /**
  * @brief  Check if Control FIFO Not Full interrupt is enabled or disabled.
@@ -3544,8 +3234,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_CFNF(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_CFNF(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_CFNFIE) == (I3C_IER_CFNFIE)) ? 1UL
-                                                                    : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_CFNFIE) == (I3C_IER_CFNFIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3554,9 +3243,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_CFNF(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_SFNE(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_SFNEIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_SFNE(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_SFNEIE); }
 
 /**
  * @brief  Disable Status FIFO Not Empty interrupt.
@@ -3564,9 +3251,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_SFNE(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_SFNE(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_SFNEIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_SFNE(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_SFNEIE); }
 
 /**
  * @brief  Check if Status FIFO Not Empty interrupt is enabled or disabled.
@@ -3575,8 +3260,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_SFNE(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_SFNE(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_SFNEIE) == (I3C_IER_SFNEIE)) ? 1UL
-                                                                    : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_SFNEIE) == (I3C_IER_SFNEIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3585,9 +3269,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_SFNE(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_TXFNF(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_TXFNFIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_TXFNF(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_TXFNFIE); }
 
 /**
  * @brief  Disable Transmit FIFO Not Full interrupt.
@@ -3595,9 +3277,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_TXFNF(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_TXFNF(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_TXFNFIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_TXFNF(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_TXFNFIE); }
 
 /**
  * @brief  Check if Transmit FIFO Not Full interrupt is enabled or disabled.
@@ -3606,8 +3286,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_TXFNF(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_TXFNF(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_TXFNFIE) == (I3C_IER_TXFNFIE)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_TXFNFIE) == (I3C_IER_TXFNFIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3616,9 +3295,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_TXFNF(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_RXFNE(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_RXFNEIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_RXFNE(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_RXFNEIE); }
 
 /**
  * @brief  Disable Receive FIFO Not Empty interrupt.
@@ -3626,9 +3303,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_RXFNE(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_RXFNE(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_RXFNEIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_RXFNE(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_RXFNEIE); }
 
 /**
  * @brief  Check if Receive FIFO Not Empty interrupt is enabled or disabled.
@@ -3637,8 +3312,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_RXFNE(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_RXFNE(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_RXFNEIE) == (I3C_IER_RXFNEIE)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_RXFNEIE) == (I3C_IER_RXFNEIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3647,9 +3321,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_RXFNE(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_FC(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_FCIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_FC(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_FCIE); }
 
 /**
  * @brief  Disable Frame Complete interrupt.
@@ -3657,9 +3329,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_FC(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_FC(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_FCIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_FC(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_FCIE); }
 
 /**
  * @brief  Check if Frame Complete interrupt is enabled or disabled.
@@ -3668,7 +3338,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_FC(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_FC(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_FCIE) == (I3C_IER_FCIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_FCIE) == (I3C_IER_FCIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3677,9 +3347,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_FC(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_RXTGTEND(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_RXTGTENDIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_RXTGTEND(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_RXTGTENDIE); }
 
 /**
  * @brief  Disable Reception Target End interrupt.
@@ -3687,9 +3355,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_RXTGTEND(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_RXTGTEND(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_RXTGTENDIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_RXTGTEND(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_RXTGTENDIE); }
 
 /**
  * @brief  Check if Reception Target End interrupt is enabled or disabled.
@@ -3698,9 +3364,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_RXTGTEND(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_RXTGTEND(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_RXTGTENDIE) == (I3C_IER_RXTGTENDIE))
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_RXTGTENDIE) == (I3C_IER_RXTGTENDIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3709,9 +3373,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_RXTGTEND(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_ERR(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_ERRIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_ERR(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_ERRIE); }
 
 /**
  * @brief  Disable Error interrupt.
@@ -3719,9 +3381,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_ERR(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_ERR(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_ERRIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_ERR(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_ERRIE); }
 
 /**
  * @brief  Check if Error interrupt is enabled or disabled.
@@ -3730,7 +3390,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_ERR(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_ERR(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_ERRIE) == (I3C_IER_ERRIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_ERRIE) == (I3C_IER_ERRIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3739,9 +3399,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_ERR(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_IBI(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_IBIIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_IBI(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_IBIIE); }
 
 /**
  * @brief  Disable IBI interrupt.
@@ -3749,9 +3407,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_IBI(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_IBI(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_IBIIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_IBI(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_IBIIE); }
 
 /**
  * @brief  Check if IBI interrupt is enabled or disabled.
@@ -3760,7 +3416,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_IBI(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_IBI(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_IBIIE) == (I3C_IER_IBIIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_IBIIE) == (I3C_IER_IBIIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3769,9 +3425,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_IBI(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_IBIEND(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_IBIENDIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_IBIEND(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_IBIENDIE); }
 
 /**
  * @brief  Disable IBI End interrupt.
@@ -3779,9 +3433,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_IBIEND(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_IBIEND(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_IBIENDIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_IBIEND(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_IBIENDIE); }
 
 /**
  * @brief  Check if IBI End interrupt is enabled or disabled.
@@ -3790,8 +3442,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_IBIEND(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_IBIEND(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_IBIENDIE) == (I3C_IER_IBIENDIE)) ? 1UL
-                                                                        : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_IBIENDIE) == (I3C_IER_IBIENDIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3800,9 +3451,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_IBIEND(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_CR(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_CRIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_CR(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_CRIE); }
 
 /**
  * @brief  Disable Controller-role interrupt.
@@ -3810,9 +3459,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_CR(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_CR(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_CRIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_CR(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_CRIE); }
 
 /**
  * @brief  Check if Controller-role interrupt is enabled or disabled.
@@ -3821,7 +3468,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_CR(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_CR(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_CRIE) == (I3C_IER_CRIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_CRIE) == (I3C_IER_CRIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3830,9 +3477,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_CR(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_CRUPD(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_CRUPDIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_CRUPD(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_CRUPDIE); }
 
 /**
  * @brief  Disable Controller-role Update interrupt.
@@ -3840,9 +3485,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_CRUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_CRUPD(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_CRUPDIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_CRUPD(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_CRUPDIE); }
 
 /**
  * @brief  Check if Controller-role Update interrupt is enabled or disabled.
@@ -3851,8 +3494,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_CRUPD(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_CRUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_CRUPDIE) == (I3C_IER_CRUPDIE)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_CRUPDIE) == (I3C_IER_CRUPDIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3861,9 +3503,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_CRUPD(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_HJ(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_HJIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_HJ(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_HJIE); }
 
 /**
  * @brief  Disable Hot Join interrupt.
@@ -3871,9 +3511,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_HJ(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_HJ(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_HJIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_HJ(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_HJIE); }
 
 /**
  * @brief  Check if Hot Join interrupt is enabled or disabled.
@@ -3882,7 +3520,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_HJ(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_HJ(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_HJIE) == (I3C_IER_HJIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_HJIE) == (I3C_IER_HJIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3891,9 +3529,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_HJ(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_WKP(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_WKPIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_WKP(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_WKPIE); }
 
 /**
  * @brief  Disable Wake Up interrupt.
@@ -3901,9 +3537,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_WKP(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_WKP(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_WKPIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_WKP(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_WKPIE); }
 
 /**
  * @brief  Check if Wake Up is enabled or disabled.
@@ -3912,7 +3546,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_WKP(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_WKP(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_WKPIE) == (I3C_IER_WKPIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_WKPIE) == (I3C_IER_WKPIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3921,9 +3555,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_WKP(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_GET(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_GETIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_GET(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_GETIE); }
 
 /**
  * @brief  Disable Get Command interrupt.
@@ -3931,9 +3563,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_GET(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_GET(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_GETIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_GET(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_GETIE); }
 
 /**
  * @brief  Check if Get Command is enabled or disabled.
@@ -3942,7 +3572,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_GET(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_GET(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_GETIE) == (I3C_IER_GETIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_GETIE) == (I3C_IER_GETIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3951,9 +3581,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_GET(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_STA(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_STAIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_STA(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_STAIE); }
 
 /**
  * @brief  Disable Get Status interrupt.
@@ -3961,9 +3589,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_STA(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_STA(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_STAIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_STA(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_STAIE); }
 
 /**
  * @brief  Check if Get Status interrupt is enabled or disabled.
@@ -3972,7 +3598,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_STA(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_STA(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_STAIE) == (I3C_IER_STAIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_STAIE) == (I3C_IER_STAIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -3981,9 +3607,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_STA(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_DAUPD(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_DAUPDIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_DAUPD(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_DAUPDIE); }
 
 /**
  * @brief  Disable Dynamic Address Update interrupt.
@@ -3991,9 +3615,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_DAUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_DAUPD(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_DAUPDIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_DAUPD(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_DAUPDIE); }
 
 /**
  * @brief  Check if Dynamic Address Update interrupt is enabled or disabled.
@@ -4002,8 +3624,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_DAUPD(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_DAUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_DAUPDIE) == (I3C_IER_DAUPDIE)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_DAUPDIE) == (I3C_IER_DAUPDIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -4012,9 +3633,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_DAUPD(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_MWLUPD(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_MWLUPDIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_MWLUPD(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_MWLUPDIE); }
 
 /**
  * @brief  Disable Max Write Length Update interrupt.
@@ -4022,9 +3641,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_MWLUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_MWLUPD(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_MWLUPDIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_MWLUPD(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_MWLUPDIE); }
 
 /**
  * @brief  Check if Max Write Length Update interrupt is enabled or disabled.
@@ -4033,8 +3650,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_MWLUPD(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_MWLUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_MWLUPDIE) == (I3C_IER_MWLUPDIE)) ? 1UL
-                                                                        : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_MWLUPDIE) == (I3C_IER_MWLUPDIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -4043,9 +3659,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_MWLUPD(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_MRLUPD(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_MRLUPDIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_MRLUPD(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_MRLUPDIE); }
 
 /**
  * @brief  Disable Max Read Length Update interrupt.
@@ -4053,9 +3667,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_MRLUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_MRLUPD(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_MRLUPDIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_MRLUPD(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_MRLUPDIE); }
 
 /**
  * @brief  Check if Max Read Length Update interrupt is enabled or disabled.
@@ -4064,8 +3676,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_MRLUPD(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_MRLUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_MRLUPDIE) == (I3C_IER_MRLUPDIE)) ? 1UL
-                                                                        : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_MRLUPDIE) == (I3C_IER_MRLUPDIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -4074,9 +3685,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_MRLUPD(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_RST(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_RSTIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_RST(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_RSTIE); }
 
 /**
  * @brief  Disable Reset interrupt.
@@ -4084,9 +3693,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_RST(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_RST(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_RSTIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_RST(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_RSTIE); }
 
 /**
  * @brief  Check if Reset interrupt is enabled or disabled.
@@ -4095,7 +3702,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_RST(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_RST(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_RSTIE) == (I3C_IER_RSTIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_RSTIE) == (I3C_IER_RSTIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -4104,9 +3711,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_RST(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_ASUPD(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_ASUPDIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_ASUPD(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_ASUPDIE); }
 
 /**
  * @brief  Disable Activity State Update interrupt.
@@ -4114,9 +3719,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_ASUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_ASUPD(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_ASUPDIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_ASUPD(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_ASUPDIE); }
 
 /**
  * @brief  Check if Activity State Update interrupt is enabled or disabled.
@@ -4125,8 +3728,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_ASUPD(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_ASUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_ASUPDIE) == (I3C_IER_ASUPDIE)) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_ASUPDIE) == (I3C_IER_ASUPDIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -4135,9 +3737,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_ASUPD(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_INTUPD(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_INTUPDIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_INTUPD(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_INTUPDIE); }
 
 /**
  * @brief  Disable Interrupt Update interrupt.
@@ -4145,9 +3745,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_INTUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_INTUPD(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_INTUPDIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_INTUPD(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_INTUPDIE); }
 
 /**
  * @brief  Check if Interrupt Update interrupt is enabled or disabled.
@@ -4156,8 +3754,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_INTUPD(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_INTUPD(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_INTUPDIE) == (I3C_IER_INTUPDIE)) ? 1UL
-                                                                        : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_INTUPDIE) == (I3C_IER_INTUPDIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -4166,9 +3763,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_INTUPD(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_DEF(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_DEFIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_DEF(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_DEFIE); }
 
 /**
  * @brief  Disable Define List Target interrupt.
@@ -4176,9 +3771,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_DEF(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_DEF(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_DEFIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_DEF(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_DEFIE); }
 
 /**
  * @brief  Check if Define List Target interrupt is enabled or disabled.
@@ -4187,7 +3780,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_DEF(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_DEF(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_DEFIE) == (I3C_IER_DEFIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_DEFIE) == (I3C_IER_DEFIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -4196,9 +3789,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_DEF(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_EnableIT_GRP(I3C_TypeDef *I3Cx) {
-  SET_BIT(I3Cx->IER, I3C_IER_GRPIE);
-}
+__STATIC_INLINE void LL_I3C_EnableIT_GRP(I3C_TypeDef *I3Cx) { SET_BIT(I3Cx->IER, I3C_IER_GRPIE); }
 
 /**
  * @brief  Disable Define List Group Addresses interrupt.
@@ -4206,9 +3797,7 @@ __STATIC_INLINE void LL_I3C_EnableIT_GRP(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_DisableIT_GRP(I3C_TypeDef *I3Cx) {
-  CLEAR_BIT(I3Cx->IER, I3C_IER_GRPIE);
-}
+__STATIC_INLINE void LL_I3C_DisableIT_GRP(I3C_TypeDef *I3Cx) { CLEAR_BIT(I3Cx->IER, I3C_IER_GRPIE); }
 
 /**
  * @brief  Check if Define List Group Addresses interrupt is enabled or
@@ -4218,7 +3807,7 @@ __STATIC_INLINE void LL_I3C_DisableIT_GRP(I3C_TypeDef *I3Cx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_GRP(const I3C_TypeDef *I3Cx) {
-  return ((READ_BIT(I3Cx->IER, I3C_IER_GRPIE) == (I3C_IER_GRPIE)) ? 1UL : 0UL);
+    return ((READ_BIT(I3Cx->IER, I3C_IER_GRPIE) == (I3C_IER_GRPIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -4235,9 +3824,7 @@ __STATIC_INLINE uint32_t LL_I3C_IsEnabledIT_GRP(const I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_FC(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CFCF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_FC(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CFCF); }
 
 /**
  * @brief  Clear Reception Target End flag (controller mode).
@@ -4245,9 +3832,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_FC(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_RXTGTEND(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CRXTGTENDF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_RXTGTEND(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CRXTGTENDF); }
 
 /**
  * @brief  Clear Error flag (controller and target mode).
@@ -4255,9 +3840,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_RXTGTEND(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_ERR(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CERRF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_ERR(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CERRF); }
 
 /**
  * @brief  Clear IBI flag (controller mode).
@@ -4265,9 +3848,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_ERR(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_IBI(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CIBIF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_IBI(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CIBIF); }
 
 /**
  * @brief  Clear IBI End flag (target mode).
@@ -4275,9 +3856,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_IBI(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_IBIEND(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CIBIENDF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_IBIEND(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CIBIENDF); }
 
 /**
  * @brief  Clear Controller-role Request flag (controller mode).
@@ -4285,9 +3864,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_IBIEND(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_CR(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CCRF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_CR(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CCRF); }
 
 /**
  * @brief  Clear Controller-role Request Update flag (target mode).
@@ -4295,9 +3872,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_CR(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_CRUPD(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CCRUPDF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_CRUPD(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CCRUPDF); }
 
 /**
  * @brief  Clear Hot Join flag (controller mode).
@@ -4305,9 +3880,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_CRUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_HJ(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CHJF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_HJ(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CHJF); }
 
 /**
  * @brief  Clear Wake Up flag (target mode).
@@ -4315,9 +3888,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_HJ(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_WKP(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CWKPF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_WKP(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CWKPF); }
 
 /**
  * @brief  Clear Get flag (target mode).
@@ -4325,9 +3896,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_WKP(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_GET(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CGETF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_GET(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CGETF); }
 
 /**
  * @brief  Clear Get Status flag (target mode).
@@ -4335,9 +3904,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_GET(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_STA(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CSTAF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_STA(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CSTAF); }
 
 /**
  * @brief  Clear Dynamic Address Update flag (target mode).
@@ -4345,9 +3912,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_STA(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_DAUPD(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CDAUPDF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_DAUPD(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CDAUPDF); }
 
 /**
  * @brief  Clear Max Write Length flag (target mode).
@@ -4355,9 +3920,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_DAUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_MWLUPD(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CMWLUPDF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_MWLUPD(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CMWLUPDF); }
 
 /**
  * @brief  Clear Max Read Length flag (target mode).
@@ -4365,9 +3928,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_MWLUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_MRLUPD(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CMRLUPDF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_MRLUPD(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CMRLUPDF); }
 
 /**
  * @brief  Clear Reset flag (target mode).
@@ -4375,9 +3936,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_MRLUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_RST(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CRSTF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_RST(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CRSTF); }
 
 /**
  * @brief  Clear Active State flag (target mode).
@@ -4385,9 +3944,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_RST(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_ASUPD(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CASUPDF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_ASUPD(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CASUPDF); }
 
 /**
  * @brief  Clear Interrupt Update flag (target mode).
@@ -4395,9 +3952,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_ASUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_INTUPD(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CINTUPDF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_INTUPD(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CINTUPDF); }
 
 /**
  * @brief  Clear Define List Targets flag (target mode).
@@ -4405,9 +3960,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_INTUPD(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_DEF(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CDEFF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_DEF(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CDEFF); }
 
 /**
  * @brief  Clear Define List Group Addresses flag.
@@ -4415,9 +3968,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_DEF(I3C_TypeDef *I3Cx) {
  * @param  I3Cx I3C Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_I3C_ClearFlag_GRP(I3C_TypeDef *I3Cx) {
-  WRITE_REG(I3Cx->CEVR, I3C_CEVR_CGRPF);
-}
+__STATIC_INLINE void LL_I3C_ClearFlag_GRP(I3C_TypeDef *I3Cx) { WRITE_REG(I3Cx->CEVR, I3C_CEVR_CGRPF); }
 
 /**
  * @}
@@ -4428,8 +3979,7 @@ __STATIC_INLINE void LL_I3C_ClearFlag_GRP(I3C_TypeDef *I3Cx) {
  * @{
  */
 
-ErrorStatus LL_I3C_Init(I3C_TypeDef *I3Cx, LL_I3C_InitTypeDef *I3C_InitStruct,
-                        uint32_t Mode);
+ErrorStatus LL_I3C_Init(I3C_TypeDef *I3Cx, LL_I3C_InitTypeDef *I3C_InitStruct, uint32_t Mode);
 ErrorStatus LL_I3C_DeInit(const I3C_TypeDef *I3Cx);
 void LL_I3C_StructInit(LL_I3C_InitTypeDef *I3C_InitStruct);
 

@@ -53,13 +53,13 @@
  *          - ERROR   : not applicable.
  */
 ErrorStatus LL_PWR_DeInit(void) {
-  /* Clear PWR low power flags */
-  LL_PWR_ClearFlag_STOP();
+    /* Clear PWR low power flags */
+    LL_PWR_ClearFlag_STOP();
 
-  /* Clear PWR wake up flags */
-  LL_PWR_ClearFlag_WU();
+    /* Clear PWR wake up flags */
+    LL_PWR_ClearFlag_WU();
 
-  return SUCCESS;
+    return SUCCESS;
 }
 
 /**

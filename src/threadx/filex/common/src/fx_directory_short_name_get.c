@@ -73,10 +73,8 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_directory_short_name_get(FX_MEDIA *media_ptr, CHAR *long_file_name,
-                                  CHAR *short_file_name) {
+UINT _fx_directory_short_name_get(FX_MEDIA *media_ptr, CHAR *long_file_name, CHAR *short_file_name) {
 
-  /* Call the extended version with maximum short name length.  */
-  return (_fx_directory_short_name_get_extended(
-      media_ptr, long_file_name, short_file_name, FX_MAX_SHORT_NAME_LEN));
+    /* Call the extended version with maximum short name length.  */
+    return (_fx_directory_short_name_get_extended(media_ptr, long_file_name, short_file_name, FX_MAX_SHORT_NAME_LEN));
 }

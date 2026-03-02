@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_ccid.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -67,36 +65,34 @@
 /*  04-25-2022     Chaoqiong Xiao           Initial Version 6.1.11        */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_ccid_deactivate(UX_SLAVE_CLASS_COMMAND *command)
-{
+UINT _ux_device_class_ccid_deactivate(UX_SLAVE_CLASS_COMMAND *command) {
 
-UX_DEVICE_CLASS_CCID        *ccid;
-UX_SLAVE_CLASS              *ccid_class;
-UX_SLAVE_ENDPOINT           *endpoint;
+    UX_DEVICE_CLASS_CCID *ccid;
+    UX_SLAVE_CLASS *ccid_class;
+    UX_SLAVE_ENDPOINT *endpoint;
 
     /* Get the class container.  */
-    ccid_class =  command -> ux_slave_class_command_class_ptr;
+    ccid_class = command->ux_slave_class_command_class_ptr;
 
     /* Get the class instance in the container.  */
-    ccid = (UX_DEVICE_CLASS_CCID *) ccid_class -> ux_slave_class_instance;
+    ccid = (UX_DEVICE_CLASS_CCID *)ccid_class->ux_slave_class_instance;
 
     /* Terminate the transactions pending on the endpoints.  */
-    endpoint = ccid -> ux_device_class_ccid_endpoint_out;
+    endpoint = ccid->ux_device_class_ccid_endpoint_out;
     _ux_device_stack_transfer_all_request_abort(endpoint, UX_TRANSFER_BUS_RESET);
 
-    endpoint = ccid -> ux_device_class_ccid_endpoint_in;
+    endpoint = ccid->ux_device_class_ccid_endpoint_in;
     _ux_device_stack_transfer_all_request_abort(endpoint, UX_TRANSFER_BUS_RESET);
 
-    endpoint = ccid -> ux_device_class_ccid_endpoint_notify;
+    endpoint = ccid->ux_device_class_ccid_endpoint_notify;
     if (endpoint)
         _ux_device_stack_transfer_all_request_abort(endpoint, UX_TRANSFER_BUS_RESET);
 
     /* If there is a deactivate function call it.  */
-    if (ccid -> ux_device_class_ccid_parameter.ux_device_class_ccid_instance_deactivate != UX_NULL)
-    {
+    if (ccid->ux_device_class_ccid_parameter.ux_device_class_ccid_instance_deactivate != UX_NULL) {
 
         /* Invoke the application.  */
-        ccid -> ux_device_class_ccid_parameter.ux_device_class_ccid_instance_deactivate(ccid);
+        ccid->ux_device_class_ccid_parameter.ux_device_class_ccid_instance_deactivate(ccid);
     }
 
     /* If trace is enabled, insert this event into the trace buffer.  */
@@ -106,5 +102,5 @@ UX_SLAVE_ENDPOINT           *endpoint;
     UX_TRACE_OBJECT_UNREGISTER(ccid);
 
     /* Return completion status.  */
-    return(UX_SUCCESS);
+    return (UX_SUCCESS);
 }

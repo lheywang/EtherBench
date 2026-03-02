@@ -74,36 +74,34 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_tcp_socket_queue_depth_notify_set(
-    NX_TCP_SOCKET *socket_ptr,
-    VOID (*tcp_socket_queue_depth_notify)(NX_TCP_SOCKET *socket_ptr)) {
+UINT _nx_tcp_socket_queue_depth_notify_set(NX_TCP_SOCKET *socket_ptr,
+                                           VOID (*tcp_socket_queue_depth_notify)(NX_TCP_SOCKET *socket_ptr)) {
 #ifdef NX_ENABLE_TCP_QUEUE_DEPTH_UPDATE_NOTIFY
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Get mutex protection.  */
-  tx_mutex_get(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection),
-               TX_WAIT_FOREVER);
+    /* Get mutex protection.  */
+    tx_mutex_get(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Setup the receive notify function pointer.  */
-  socket_ptr->nx_tcp_socket_queue_depth_notify = tcp_socket_queue_depth_notify;
+    /* Setup the receive notify function pointer.  */
+    socket_ptr->nx_tcp_socket_queue_depth_notify = tcp_socket_queue_depth_notify;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Release protection.  */
-  tx_mutex_put(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection));
+    /* Release protection.  */
+    tx_mutex_put(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection));
 
-  /* Return successful completion.  */
-  return (NX_SUCCESS);
+    /* Return successful completion.  */
+    return (NX_SUCCESS);
 
 #else /* !NX_ENABLE_TCP_QUEUE_DEPTH_UPDATE_NOTIFY */
-  NX_PARAMETER_NOT_USED(socket_ptr);
-  NX_PARAMETER_NOT_USED(tcp_socket_queue_depth_notify);
+    NX_PARAMETER_NOT_USED(socket_ptr);
+    NX_PARAMETER_NOT_USED(tcp_socket_queue_depth_notify);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /*   NX_ENABLE_TCP_QUEUE_DEPTH_UPDATE_NOTIFY      */
 }

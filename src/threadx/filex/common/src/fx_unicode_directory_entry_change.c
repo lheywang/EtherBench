@@ -75,298 +75,284 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_unicode_directory_entry_change(FX_MEDIA *media_ptr,
-                                        FX_DIR_ENTRY *entry_ptr,
-                                        UCHAR *unicode_name,
+UINT _fx_unicode_directory_entry_change(FX_MEDIA *media_ptr, FX_DIR_ENTRY *entry_ptr, UCHAR *unicode_name,
                                         ULONG unicode_name_length) {
 
-  UCHAR *work_ptr, *sector_base_ptr;
-  UINT status;
-  UINT i, j, k, u, card, lfn_entries;
-  UCHAR eof_marker;
-  ULONG logical_sector, relative_sector;
-  ULONG byte_offset;
-  ULONG cluster, next_cluster;
+    UCHAR *work_ptr, *sector_base_ptr;
+    UINT status;
+    UINT i, j, k, u, card, lfn_entries;
+    UCHAR eof_marker;
+    ULONG logical_sector, relative_sector;
+    ULONG byte_offset;
+    ULONG cluster, next_cluster;
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
-  UCHAR *changed_ptr;
-  UINT changed_size;
-  ULONG changed_offset;
+    UCHAR *changed_ptr;
+    UINT changed_size;
+    ULONG changed_offset;
 #endif /* FX_ENABLE_FAULT_TOLERANT */
 
 #ifndef FX_MEDIA_STATISTICS_DISABLE
 
-  /* Increment the number of directory entry write requests.  */
-  media_ptr->fx_media_directory_entry_writes++;
+    /* Increment the number of directory entry write requests.  */
+    media_ptr->fx_media_directory_entry_writes++;
 #endif
 
-  /* Pickup the byte offset of the entry.  */
-  byte_offset = entry_ptr->fx_dir_entry_byte_offset;
+    /* Pickup the byte offset of the entry.  */
+    byte_offset = entry_ptr->fx_dir_entry_byte_offset;
 
-  /* Pickup the logical sector of the entry.  */
-  logical_sector = (ULONG)entry_ptr->fx_dir_entry_log_sector;
+    /* Pickup the logical sector of the entry.  */
+    logical_sector = (ULONG)entry_ptr->fx_dir_entry_log_sector;
 
-  /* Figure out where what cluster we are in.  */
-  if (logical_sector >= (ULONG)(media_ptr->fx_media_data_sector_start)) {
+    /* Figure out where what cluster we are in.  */
+    if (logical_sector >= (ULONG)(media_ptr->fx_media_data_sector_start)) {
 
-    /* Calculate the cluster that this logical sector is in.  */
-    cluster = (logical_sector - media_ptr->fx_media_data_sector_start) /
-                  (media_ptr->fx_media_sectors_per_cluster) +
-              FX_FAT_ENTRY_START;
+        /* Calculate the cluster that this logical sector is in.  */
+        cluster = (logical_sector - media_ptr->fx_media_data_sector_start) / (media_ptr->fx_media_sectors_per_cluster) +
+                  FX_FAT_ENTRY_START;
 
-    /* Calculate the relative cluster.  */
-    relative_sector =
-        logical_sector - (((ULONG)media_ptr->fx_media_data_sector_start) +
-                          (((ULONG)cluster - FX_FAT_ENTRY_START) *
-                           ((ULONG)media_ptr->fx_media_sectors_per_cluster)));
-  } else {
+        /* Calculate the relative cluster.  */
+        relative_sector = logical_sector -
+                          (((ULONG)media_ptr->fx_media_data_sector_start) +
+                           (((ULONG)cluster - FX_FAT_ENTRY_START) * ((ULONG)media_ptr->fx_media_sectors_per_cluster)));
+    } else {
 
-    /* Clear the cluster and the relative sector.  */
-    cluster = 0;
-    relative_sector = 0;
-  }
+        /* Clear the cluster and the relative sector.  */
+        cluster = 0;
+        relative_sector = 0;
+    }
 
-  /* Read the logical directory sector.  */
-  status = _fx_utility_logical_sector_read(
-      media_ptr, (ULONG64)entry_ptr->fx_dir_entry_log_sector,
-      media_ptr->fx_media_memory_buffer, ((ULONG)1), FX_DIRECTORY_SECTOR);
+    /* Read the logical directory sector.  */
+    status = _fx_utility_logical_sector_read(media_ptr, (ULONG64)entry_ptr->fx_dir_entry_log_sector,
+                                             media_ptr->fx_media_memory_buffer, ((ULONG)1), FX_DIRECTORY_SECTOR);
 
-  /* Determine if an error occurred.  */
-  if (status != FX_SUCCESS) {
+    /* Determine if an error occurred.  */
+    if (status != FX_SUCCESS) {
 
-    /* Return the error status.  */
-    return (status);
-  }
+        /* Return the error status.  */
+        return (status);
+    }
 
-  /* Setup a pointer into the buffer.  */
-  sector_base_ptr = (UCHAR *)media_ptr->fx_media_memory_buffer;
-  work_ptr = sector_base_ptr + (UINT)entry_ptr->fx_dir_entry_byte_offset;
+    /* Setup a pointer into the buffer.  */
+    sector_base_ptr = (UCHAR *)media_ptr->fx_media_memory_buffer;
+    work_ptr = sector_base_ptr + (UINT)entry_ptr->fx_dir_entry_byte_offset;
 
-  /* Initialize the unicode index.  */
-  u = 0;
+    /* Initialize the unicode index.  */
+    u = 0;
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
-  /* Initialize data for fault tolerant. */
-  changed_ptr = work_ptr;
-  changed_size = 0;
-  changed_offset = entry_ptr->fx_dir_entry_byte_offset;
+    /* Initialize data for fault tolerant. */
+    changed_ptr = work_ptr;
+    changed_size = 0;
+    changed_offset = entry_ptr->fx_dir_entry_byte_offset;
 #endif /* FX_ENABLE_FAULT_TOLERANT */
 
-  /* Check for a valid long name.  */
-  if ((0x40 & (*work_ptr))) {
+    /* Check for a valid long name.  */
+    if ((0x40 & (*work_ptr))) {
 
-    /* Get the lower 5 bit containing the cardinality.  */
-    card = (*work_ptr & (UCHAR)0x1f);
-    lfn_entries = card;
+        /* Get the lower 5 bit containing the cardinality.  */
+        card = (*work_ptr & (UCHAR)0x1f);
+        lfn_entries = card;
 
-    /* Loop through the file name.  */
-    for (j = 0; j < lfn_entries; j++) {
+        /* Loop through the file name.  */
+        for (j = 0; j < lfn_entries; j++) {
 
-      /* Clear the eof marker.  */
-      eof_marker = 0;
+            /* Clear the eof marker.  */
+            eof_marker = 0;
 
-      /* Loop through file name fields.  */
-      for (i = 1, k = (26 * (card - 1)) & 0xFFFFFFFF; i < FX_DIR_ENTRY_SIZE;
-           i += 2) {
+            /* Loop through file name fields.  */
+            for (i = 1, k = (26 * (card - 1)) & 0xFFFFFFFF; i < FX_DIR_ENTRY_SIZE; i += 2) {
 
-        /* Process relative to specific fields.  */
-        if ((i == 11) || (i == 26)) {
-          continue;
-        }
+                /* Process relative to specific fields.  */
+                if ((i == 11) || (i == 26)) {
+                    continue;
+                }
 
-        if (i == 13) {
-          i = 12;
-          continue;
-        }
+                if (i == 13) {
+                    i = 12;
+                    continue;
+                }
 
-        /* Determine if the EOF marker is present.  */
-        if (eof_marker) {
+                /* Determine if the EOF marker is present.  */
+                if (eof_marker) {
 
-          work_ptr[i] = eof_marker;
-          work_ptr[i + 1] = eof_marker;
-        } else if (k < (unicode_name_length * 2)) {
+                    work_ptr[i] = eof_marker;
+                    work_ptr[i + 1] = eof_marker;
+                } else if (k < (unicode_name_length * 2)) {
 
-          work_ptr[i] = unicode_name[k];
-          work_ptr[i + 1] = unicode_name[k + 1];
-          u = u + 2;
-        } else if (k == (unicode_name_length * 2)) {
+                    work_ptr[i] = unicode_name[k];
+                    work_ptr[i + 1] = unicode_name[k + 1];
+                    u = u + 2;
+                } else if (k == (unicode_name_length * 2)) {
 
-          work_ptr[i] = 0;
-          work_ptr[i + 1] = 0;
+                    work_ptr[i] = 0;
+                    work_ptr[i + 1] = 0;
 
-          /* end of name, pad with 0xff.  */
-          eof_marker = (UCHAR)0xff;
-        }
+                    /* end of name, pad with 0xff.  */
+                    eof_marker = (UCHAR)0xff;
+                }
 
-        k = k + 2;
-      }
+                k = k + 2;
+            }
 
-      /* Decrement the card.  */
-      card--;
+            /* Decrement the card.  */
+            card--;
 
-      /* Setup pointers for the name write.  */
-      work_ptr += FX_DIR_ENTRY_SIZE;
-      byte_offset += FX_DIR_ENTRY_SIZE;
+            /* Setup pointers for the name write.  */
+            work_ptr += FX_DIR_ENTRY_SIZE;
+            byte_offset += FX_DIR_ENTRY_SIZE;
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
-      /* Update changed_size. */
-      changed_size += FX_DIR_ENTRY_SIZE;
+            /* Update changed_size. */
+            changed_size += FX_DIR_ENTRY_SIZE;
 #endif /* FX_ENABLE_FAULT_TOLERANT */
 
-      /* Determine if the write is within the current sector.   */
-      if (byte_offset >= media_ptr->fx_media_bytes_per_sector) {
+            /* Determine if the write is within the current sector.   */
+            if (byte_offset >= media_ptr->fx_media_bytes_per_sector) {
 #ifdef FX_ENABLE_FAULT_TOLERANT
-        if (media_ptr->fx_media_fault_tolerant_enabled) {
+                if (media_ptr->fx_media_fault_tolerant_enabled) {
 
-          /* Redirect this request to log file. */
-          status = _fx_fault_tolerant_add_dir_log(
-              media_ptr, (ULONG64)logical_sector, changed_offset, changed_ptr,
-              changed_size);
-        } else {
+                    /* Redirect this request to log file. */
+                    status = _fx_fault_tolerant_add_dir_log(media_ptr, (ULONG64)logical_sector, changed_offset,
+                                                            changed_ptr, changed_size);
+                } else {
 
-          /* Write the current sector out.  */
-          status = _fx_utility_logical_sector_write(
-              media_ptr, (ULONG64)logical_sector, sector_base_ptr, ((ULONG)1),
-              FX_DIRECTORY_SECTOR);
-        }
+                    /* Write the current sector out.  */
+                    status = _fx_utility_logical_sector_write(media_ptr, (ULONG64)logical_sector, sector_base_ptr,
+                                                              ((ULONG)1), FX_DIRECTORY_SECTOR);
+                }
 
-        /* Determine if an error occurred.  */
-        if (status != FX_SUCCESS) {
+                /* Determine if an error occurred.  */
+                if (status != FX_SUCCESS) {
 
-          /* Return the error status.  */
-          return (status);
-        }
+                    /* Return the error status.  */
+                    return (status);
+                }
 #else  /* FX_ENABLE_FAULT_TOLERANT */
 
-        /* Write the current sector out.  */
-        /* Note: Since the sector is in the cache after a sector read, therefore
-           _fx_utility_logical_sector_write always returns success when
-           FX_ENABLE_FAULT_TOLERANT is not defined.  In other words, the
-           checking on the return value is needed only when
-           FX_ENABLE_FAULT_TOLERANT is defined. */
-        _fx_utility_logical_sector_write(media_ptr, (ULONG64)logical_sector,
-                                         sector_base_ptr, ((ULONG)1),
-                                         FX_DIRECTORY_SECTOR);
+                /* Write the current sector out.  */
+                /* Note: Since the sector is in the cache after a sector read, therefore
+                   _fx_utility_logical_sector_write always returns success when
+                   FX_ENABLE_FAULT_TOLERANT is not defined.  In other words, the
+                   checking on the return value is needed only when
+                   FX_ENABLE_FAULT_TOLERANT is defined. */
+                _fx_utility_logical_sector_write(media_ptr, (ULONG64)logical_sector, sector_base_ptr, ((ULONG)1),
+                                                 FX_DIRECTORY_SECTOR);
 #endif /* FX_ENABLE_FAULT_TOLERANT */
 
-        /* Determine if we are in the root directory.  */
-        if (logical_sector >= (ULONG)(media_ptr->fx_media_data_sector_start)) {
+                /* Determine if we are in the root directory.  */
+                if (logical_sector >= (ULONG)(media_ptr->fx_media_data_sector_start)) {
 
-          /* Determine the next sector of the directory entry.  */
-          if (relative_sector < (media_ptr->fx_media_sectors_per_cluster - 1)) {
+                    /* Determine the next sector of the directory entry.  */
+                    if (relative_sector < (media_ptr->fx_media_sectors_per_cluster - 1)) {
 
-            /* More sectors in this cluster.  */
+                        /* More sectors in this cluster.  */
 
-            /* Simply increment the logical sector.  */
-            logical_sector++;
+                        /* Simply increment the logical sector.  */
+                        logical_sector++;
 
-            /* Increment the relative sector.  */
-            relative_sector++;
-          } else {
+                        /* Increment the relative sector.  */
+                        relative_sector++;
+                    } else {
 
-            /* We need to move to the next cluster.  */
+                        /* We need to move to the next cluster.  */
 
-            /* Pickup the next cluster.  */
-            status =
-                _fx_utility_FAT_entry_read(media_ptr, cluster, &next_cluster);
+                        /* Pickup the next cluster.  */
+                        status = _fx_utility_FAT_entry_read(media_ptr, cluster, &next_cluster);
 
-            /* Check for I/O error.  */
-            if (status != FX_SUCCESS) {
+                        /* Check for I/O error.  */
+                        if (status != FX_SUCCESS) {
 
-              /* Return error code.  */
-              return (status);
-            }
+                            /* Return error code.  */
+                            return (status);
+                        }
 
-            /* Copy next cluster to the current cluster.  */
-            cluster = next_cluster;
+                        /* Copy next cluster to the current cluster.  */
+                        cluster = next_cluster;
 
-            /* Check the value of the new cluster - it must be a valid cluster
-               number or something is really wrong!  */
-            if ((cluster < FX_FAT_ENTRY_START) ||
-                (cluster > media_ptr->fx_media_fat_reserved)) {
+                        /* Check the value of the new cluster - it must be a valid cluster
+                           number or something is really wrong!  */
+                        if ((cluster < FX_FAT_ENTRY_START) || (cluster > media_ptr->fx_media_fat_reserved)) {
 
-              /* Send error message back to caller.  */
-              return (FX_FILE_CORRUPT);
-            }
+                            /* Send error message back to caller.  */
+                            return (FX_FILE_CORRUPT);
+                        }
 
-            /* Setup the relative sector (this is zero for subsequent cluster.
-             */
-            relative_sector = 0;
+                        /* Setup the relative sector (this is zero for subsequent cluster.
+                         */
+                        relative_sector = 0;
 
-            /* Calculate the next logical sector.  */
-            logical_sector = ((ULONG)media_ptr->fx_media_data_sector_start) +
-                             (((ULONG)cluster - FX_FAT_ENTRY_START) *
-                              ((ULONG)media_ptr->fx_media_sectors_per_cluster));
-          }
-        } else {
+                        /* Calculate the next logical sector.  */
+                        logical_sector =
+                            ((ULONG)media_ptr->fx_media_data_sector_start) +
+                            (((ULONG)cluster - FX_FAT_ENTRY_START) * ((ULONG)media_ptr->fx_media_sectors_per_cluster));
+                    }
+                } else {
 
-          /* Increment the logical sector.  */
-          logical_sector++;
+                    /* Increment the logical sector.  */
+                    logical_sector++;
 
-          /* Determine if the logical sector is valid.  */
-          if (logical_sector >=
-              (ULONG)(media_ptr->fx_media_data_sector_start)) {
+                    /* Determine if the logical sector is valid.  */
+                    if (logical_sector >= (ULONG)(media_ptr->fx_media_data_sector_start)) {
 
-            /* We have exceeded the root directory.  */
+                        /* We have exceeded the root directory.  */
 
-            /* Send error message back to caller.  */
-            return (FX_FILE_CORRUPT);
-          }
-        }
+                        /* Send error message back to caller.  */
+                        return (FX_FILE_CORRUPT);
+                    }
+                }
 
-        /* Read the next logical sector.  */
-        status = _fx_utility_logical_sector_read(
-            media_ptr, (ULONG64)logical_sector,
-            media_ptr->fx_media_memory_buffer, ((ULONG)1), FX_DIRECTORY_SECTOR);
+                /* Read the next logical sector.  */
+                status =
+                    _fx_utility_logical_sector_read(media_ptr, (ULONG64)logical_sector,
+                                                    media_ptr->fx_media_memory_buffer, ((ULONG)1), FX_DIRECTORY_SECTOR);
 
-        /* Determine if an error occurred.  */
-        if (status != FX_SUCCESS) {
+                /* Determine if an error occurred.  */
+                if (status != FX_SUCCESS) {
 
-          /* Return the error status.  */
-          return (status);
-        }
+                    /* Return the error status.  */
+                    return (status);
+                }
 
-        /* Move to the next sector buffer.  */
-        sector_base_ptr = media_ptr->fx_media_memory_buffer;
+                /* Move to the next sector buffer.  */
+                sector_base_ptr = media_ptr->fx_media_memory_buffer;
 
-        /* Setup new buffer pointers.  */
-        byte_offset = 0;
-        work_ptr = sector_base_ptr;
+                /* Setup new buffer pointers.  */
+                byte_offset = 0;
+                work_ptr = sector_base_ptr;
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
-        /* Initialize data for fault tolerant. */
-        changed_ptr = work_ptr;
-        changed_size = 0;
-        changed_offset = 0;
+                /* Initialize data for fault tolerant. */
+                changed_ptr = work_ptr;
+                changed_size = 0;
+                changed_offset = 0;
 #endif /* FX_ENABLE_FAULT_TOLERANT */
-      }
+            }
+        }
     }
-  }
 
-  /* Check for an error!  */
-  if (u != (unicode_name_length * 2)) {
+    /* Check for an error!  */
+    if (u != (unicode_name_length * 2)) {
 
-    /* Return an error!  */
-    return (FX_FILE_CORRUPT);
-  }
+        /* Return an error!  */
+        return (FX_FILE_CORRUPT);
+    }
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
-  if (media_ptr->fx_media_fault_tolerant_enabled) {
+    if (media_ptr->fx_media_fault_tolerant_enabled) {
 
-    /* Redirect this request to log file. */
-    status = _fx_fault_tolerant_add_dir_log(media_ptr, (ULONG64)logical_sector,
-                                            changed_offset, changed_ptr,
-                                            changed_size);
-  } else {
+        /* Redirect this request to log file. */
+        status = _fx_fault_tolerant_add_dir_log(media_ptr, (ULONG64)logical_sector, changed_offset, changed_ptr,
+                                                changed_size);
+    } else {
 #endif /* FX_ENABLE_FAULT_TOLERANT */
 
-    /* Write the directory sector to the media.  */
-    status = _fx_utility_logical_sector_write(
-        media_ptr, (ULONG64)logical_sector, sector_base_ptr, ((ULONG)1),
-        FX_DIRECTORY_SECTOR);
+        /* Write the directory sector to the media.  */
+        status = _fx_utility_logical_sector_write(media_ptr, (ULONG64)logical_sector, sector_base_ptr, ((ULONG)1),
+                                                  FX_DIRECTORY_SECTOR);
 #ifdef FX_ENABLE_FAULT_TOLERANT
-  }
+    }
 #endif /* FX_ENABLE_FAULT_TOLERANT */
 
-  return (status);
+    return (status);
 }

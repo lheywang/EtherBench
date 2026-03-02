@@ -53,10 +53,8 @@ extern "C" {
 /** @defgroup I2CEx_FastModePlus I2C Extended Fast Mode Plus
  * @{
  */
-#define I2C_FASTMODEPLUS_ENABLE                                                \
-  0x00000000U /*!< Enable Fast Mode Plus                        */
-#define I2C_FASTMODEPLUS_DISABLE                                               \
-  0x00000001U /*!< Disable Fast Mode Plus                       */
+#define I2C_FASTMODEPLUS_ENABLE 0x00000000U  /*!< Enable Fast Mode Plus                        */
+#define I2C_FASTMODEPLUS_DISABLE 0x00000001U /*!< Disable Fast Mode Plus                       */
 /**
  * @}
  */
@@ -84,10 +82,8 @@ extern "C" {
  */
 /* Peripheral Control functions
  * ************************************************/
-HAL_StatusTypeDef HAL_I2CEx_ConfigAnalogFilter(I2C_HandleTypeDef *hi2c,
-                                               uint32_t AnalogFilter);
-HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c,
-                                                uint32_t DigitalFilter);
+HAL_StatusTypeDef HAL_I2CEx_ConfigAnalogFilter(I2C_HandleTypeDef *hi2c, uint32_t AnalogFilter);
+HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c, uint32_t DigitalFilter);
 /**
  * @}
  */
@@ -104,8 +100,7 @@ HAL_StatusTypeDef HAL_I2CEx_DisableWakeUp(I2C_HandleTypeDef *hi2c);
 /** @addtogroup I2CEx_Exported_Functions_Group3 Fast Mode Plus Functions
  * @{
  */
-HAL_StatusTypeDef HAL_I2CEx_ConfigFastModePlus(I2C_HandleTypeDef *hi2c,
-                                               uint32_t FastModePlus);
+HAL_StatusTypeDef HAL_I2CEx_ConfigFastModePlus(I2C_HandleTypeDef *hi2c, uint32_t FastModePlus);
 /**
  * @}
  */
@@ -127,15 +122,12 @@ HAL_StatusTypeDef HAL_I2CEx_ConfigFastModePlus(I2C_HandleTypeDef *hi2c,
 /** @defgroup I2CEx_Private_Macro I2C Extended Private Macros
  * @{
  */
-#define IS_I2C_ANALOG_FILTER(FILTER)                                           \
-  (((FILTER) == I2C_ANALOGFILTER_ENABLE) ||                                    \
-   ((FILTER) == I2C_ANALOGFILTER_DISABLE))
+#define IS_I2C_ANALOG_FILTER(FILTER) (((FILTER) == I2C_ANALOGFILTER_ENABLE) || ((FILTER) == I2C_ANALOGFILTER_DISABLE))
 
 #define IS_I2C_DIGITAL_FILTER(FILTER) ((FILTER) <= 0x0000000FU)
 
-#define IS_I2C_FASTMODEPLUS(__CONFIG__)                                        \
-  (((__CONFIG__) == (I2C_FASTMODEPLUS_ENABLE)) ||                              \
-   ((__CONFIG__) == (I2C_FASTMODEPLUS_DISABLE)))
+#define IS_I2C_FASTMODEPLUS(__CONFIG__)                                                                                \
+    (((__CONFIG__) == (I2C_FASTMODEPLUS_ENABLE)) || ((__CONFIG__) == (I2C_FASTMODEPLUS_DISABLE)))
 /**
  * @}
  */

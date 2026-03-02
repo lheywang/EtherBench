@@ -76,27 +76,27 @@
  *          - ERROR: ucpd registers are not de-initialized
  */
 ErrorStatus LL_UCPD_DeInit(UCPD_TypeDef *UCPDx) {
-  ErrorStatus status = ERROR;
+    ErrorStatus status = ERROR;
 
-  /* Check the parameters */
-  assert_param(IS_UCPD_ALL_INSTANCE(UCPDx));
+    /* Check the parameters */
+    assert_param(IS_UCPD_ALL_INSTANCE(UCPDx));
 
-  LL_UCPD_Disable(UCPDx);
+    LL_UCPD_Disable(UCPDx);
 
-  if (UCPD1 == UCPDx) {
-    /* Force reset of ucpd clock */
-    LL_APB1_GRP2_ForceReset(LL_APB1_GRP2_PERIPH_UCPD1);
+    if (UCPD1 == UCPDx) {
+        /* Force reset of ucpd clock */
+        LL_APB1_GRP2_ForceReset(LL_APB1_GRP2_PERIPH_UCPD1);
 
-    /* Release reset of ucpd clock */
-    LL_APB1_GRP2_ReleaseReset(LL_APB1_GRP2_PERIPH_UCPD1);
+        /* Release reset of ucpd clock */
+        LL_APB1_GRP2_ReleaseReset(LL_APB1_GRP2_PERIPH_UCPD1);
 
-    /* Disable ucpd clock */
-    LL_APB1_GRP2_DisableClock(LL_APB1_GRP2_PERIPH_UCPD1);
+        /* Disable ucpd clock */
+        LL_APB1_GRP2_DisableClock(LL_APB1_GRP2_PERIPH_UCPD1);
 
-    status = SUCCESS;
-  }
+        status = SUCCESS;
+    }
 
-  return status;
+    return status;
 }
 
 /**
@@ -111,28 +111,23 @@ ErrorStatus LL_UCPD_DeInit(UCPD_TypeDef *UCPDx) {
  * contains the configuration information for the UCPD peripheral.
  * @retval An ErrorStatus enumeration value. (Return always SUCCESS)
  */
-ErrorStatus LL_UCPD_Init(UCPD_TypeDef *UCPDx,
-                         const LL_UCPD_InitTypeDef *UCPD_InitStruct) {
-  /* Check the ucpd Instance UCPDx*/
-  assert_param(IS_UCPD_ALL_INSTANCE(UCPDx));
+ErrorStatus LL_UCPD_Init(UCPD_TypeDef *UCPDx, const LL_UCPD_InitTypeDef *UCPD_InitStruct) {
+    /* Check the ucpd Instance UCPDx*/
+    assert_param(IS_UCPD_ALL_INSTANCE(UCPDx));
 
-  if (UCPD1 == UCPDx) {
-    LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_UCPD1);
-  }
+    if (UCPD1 == UCPDx) {
+        LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_UCPD1);
+    }
 
-  LL_UCPD_Disable(UCPDx);
+    LL_UCPD_Disable(UCPDx);
 
-  /*---------------------------- UCPDx CFG1 Configuration
-   * ------------------------*/
-  MODIFY_REG(UCPDx->CFG1,
-             UCPD_CFG1_PSC_UCPDCLK | UCPD_CFG1_TRANSWIN | UCPD_CFG1_IFRGAP |
-                 UCPD_CFG1_HBITCLKDIV,
-             UCPD_InitStruct->psc_ucpdclk |
-                 (UCPD_InitStruct->transwin << UCPD_CFG1_TRANSWIN_Pos) |
-                 (UCPD_InitStruct->IfrGap << UCPD_CFG1_IFRGAP_Pos) |
-                 UCPD_InitStruct->HbitClockDiv);
+    /*---------------------------- UCPDx CFG1 Configuration
+     * ------------------------*/
+    MODIFY_REG(UCPDx->CFG1, UCPD_CFG1_PSC_UCPDCLK | UCPD_CFG1_TRANSWIN | UCPD_CFG1_IFRGAP | UCPD_CFG1_HBITCLKDIV,
+               UCPD_InitStruct->psc_ucpdclk | (UCPD_InitStruct->transwin << UCPD_CFG1_TRANSWIN_Pos) |
+                   (UCPD_InitStruct->IfrGap << UCPD_CFG1_IFRGAP_Pos) | UCPD_InitStruct->HbitClockDiv);
 
-  return SUCCESS;
+    return SUCCESS;
 }
 
 /**
@@ -142,11 +137,11 @@ ErrorStatus LL_UCPD_Init(UCPD_TypeDef *UCPDx,
  * @retval None
  */
 void LL_UCPD_StructInit(LL_UCPD_InitTypeDef *UCPD_InitStruct) {
-  /* Set UCPD_InitStruct fields to default values */
-  UCPD_InitStruct->psc_ucpdclk = LL_UCPD_PSC_DIV2;
-  UCPD_InitStruct->transwin = 0x7;      /* Divide by 8                     */
-  UCPD_InitStruct->IfrGap = 0x10;       /* Divide by 17                    */
-  UCPD_InitStruct->HbitClockDiv = 0x0D; /* Divide by 14 to produce HBITCLK */
+    /* Set UCPD_InitStruct fields to default values */
+    UCPD_InitStruct->psc_ucpdclk = LL_UCPD_PSC_DIV2;
+    UCPD_InitStruct->transwin = 0x7;      /* Divide by 8                     */
+    UCPD_InitStruct->IfrGap = 0x10;       /* Divide by 17                    */
+    UCPD_InitStruct->HbitClockDiv = 0x0D; /* Divide by 14 to produce HBITCLK */
 }
 
 /**

@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_video.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,50 +70,47 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_video_transmission_start(UX_DEVICE_CLASS_VIDEO_STREAM *stream)
-{
+UINT _ux_device_class_video_transmission_start(UX_DEVICE_CLASS_VIDEO_STREAM *stream) {
 
-UX_SLAVE_ENDPOINT           *endpoint;
-UX_SLAVE_DEVICE             *device;
-
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_SLAVE_DEVICE *device;
 
     /* Get the pointer to the device.  */
-    device =  &_ux_system_slave -> ux_system_slave_device;
+    device = &_ux_system_slave->ux_system_slave_device;
 
     /* As long as the device is in the CONFIGURED state.  */
-    if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
-    {
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
 
         /* Cannot proceed with command, the interface is down.  */
-        return(UX_CONFIGURATION_HANDLE_UNKNOWN);
+        return (UX_CONFIGURATION_HANDLE_UNKNOWN);
     }
 
     /* Check if endpoint is available.  */
-    endpoint = stream -> ux_device_class_video_stream_endpoint;
+    endpoint = stream->ux_device_class_video_stream_endpoint;
     if (endpoint == UX_NULL)
-        return(UX_ERROR);
+        return (UX_ERROR);
 
     /* Check if endpoint direction is OK.  */
-    if ((endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) == UX_ENDPOINT_OUT)
-        return(UX_ERROR);
+    if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) == UX_ENDPOINT_OUT)
+        return (UX_ERROR);
 
     /* Check if there is payload to send (underflow).  */
-    if (stream -> ux_device_class_video_stream_transfer_pos -> ux_device_class_video_payload_length == 0)
-        return(UX_BUFFER_OVERFLOW);
+    if (stream->ux_device_class_video_stream_transfer_pos->ux_device_class_video_payload_length == 0)
+        return (UX_BUFFER_OVERFLOW);
 
 #if defined(UX_DEVICE_STANDALONE)
 
     /* Start write task.  */
-    if (stream -> ux_device_class_video_stream_task_state == UX_DEVICE_CLASS_VIDEO_STREAM_RW_STOP)
-        stream -> ux_device_class_video_stream_task_state = UX_DEVICE_CLASS_VIDEO_STREAM_RW_START;
+    if (stream->ux_device_class_video_stream_task_state == UX_DEVICE_CLASS_VIDEO_STREAM_RW_STOP)
+        stream->ux_device_class_video_stream_task_state = UX_DEVICE_CLASS_VIDEO_STREAM_RW_START;
 
 #else
 
     /* Start write thread.  */
-    _ux_device_thread_resume(&stream -> ux_device_class_video_stream_thread);
+    _ux_device_thread_resume(&stream->ux_device_class_video_stream_thread);
 #endif
 
-    return(UX_SUCCESS);
+    return (UX_SUCCESS);
 }
 
 /**************************************************************************/
@@ -158,13 +153,12 @@ UX_SLAVE_DEVICE             *device;
 /*  10-31-2023     Yajun Xia                Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT _uxe_device_class_video_transmission_start(UX_DEVICE_CLASS_VIDEO_STREAM *stream)
-{
+UINT _uxe_device_class_video_transmission_start(UX_DEVICE_CLASS_VIDEO_STREAM *stream) {
 
     /* Sanity check. */
     if (stream == UX_NULL)
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Call the actual video transmission start function.  */
-    return(_ux_device_class_video_transmission_start(stream));
+    return (_ux_device_class_video_transmission_start(stream));
 }

@@ -86,33 +86,29 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_udp_info_get(NX_IP *ip_ptr, ULONG *udp_packets_sent,
-                       ULONG *udp_bytes_sent, ULONG *udp_packets_received,
-                       ULONG *udp_bytes_received, ULONG *udp_invalid_packets,
-                       ULONG *udp_receive_packets_dropped,
+UINT _nxe_udp_info_get(NX_IP *ip_ptr, ULONG *udp_packets_sent, ULONG *udp_bytes_sent, ULONG *udp_packets_received,
+                       ULONG *udp_bytes_received, ULONG *udp_invalid_packets, ULONG *udp_receive_packets_dropped,
                        ULONG *udp_checksum_errors) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check to see if UDP is enabled.  */
-  if (!ip_ptr->nx_ip_udp_packet_receive) {
-    return (NX_NOT_ENABLED);
-  }
+    /* Check to see if UDP is enabled.  */
+    if (!ip_ptr->nx_ip_udp_packet_receive) {
+        return (NX_NOT_ENABLED);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_NOT_ISR_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_NOT_ISR_CALLER_CHECKING
 
-  /* Call actual UDP information get function.  */
-  status = _nx_udp_info_get(ip_ptr, udp_packets_sent, udp_bytes_sent,
-                            udp_packets_received, udp_bytes_received,
-                            udp_invalid_packets, udp_receive_packets_dropped,
-                            udp_checksum_errors);
+    /* Call actual UDP information get function.  */
+    status = _nx_udp_info_get(ip_ptr, udp_packets_sent, udp_bytes_sent, udp_packets_received, udp_bytes_received,
+                              udp_invalid_packets, udp_receive_packets_dropped, udp_checksum_errors);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

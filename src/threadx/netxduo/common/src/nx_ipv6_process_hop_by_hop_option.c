@@ -76,120 +76,111 @@
 /**************************************************************************/
 UINT _nx_ipv6_process_hop_by_hop_option(NX_IP *ip_ptr, NX_PACKET *packet_ptr) {
 
-  INT header_length;
-  UINT offset_base, offset;
-  UINT rv;
-  NX_IPV6_HOP_BY_HOP_OPTION *option;
+    INT header_length;
+    UINT offset_base, offset;
+    UINT rv;
+    NX_IPV6_HOP_BY_HOP_OPTION *option;
 
-  /* Add debug information. */
-  NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
+    /* Add debug information. */
+    NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
 
-  /*  Make sure there's no OOB when reading Hdr Ext Len from the packet buffer.
-   */
-  if ((UINT)(packet_ptr->nx_packet_append_ptr -
-             packet_ptr->nx_packet_prepend_ptr) < 2) {
+    /*  Make sure there's no OOB when reading Hdr Ext Len from the packet buffer.
+     */
+    if ((UINT)(packet_ptr->nx_packet_append_ptr - packet_ptr->nx_packet_prepend_ptr) < 2) {
 
-    /* return an error code. */
-    return (NX_OPTION_HEADER_ERROR);
-  }
+        /* return an error code. */
+        return (NX_OPTION_HEADER_ERROR);
+    }
 
-  /* Read the Hdr Ext Len field. */
-  header_length = *(packet_ptr->nx_packet_prepend_ptr + 1);
+    /* Read the Hdr Ext Len field. */
+    header_length = *(packet_ptr->nx_packet_prepend_ptr + 1);
 
-  /* Calculate the the true header length: (n + 1) * 8 */
-  header_length = (header_length + 1) << 3;
+    /* Calculate the the true header length: (n + 1) * 8 */
+    header_length = (header_length + 1) << 3;
 
-  /* The 1st option starts from the 3rd byte. */
-  offset = 2;
+    /* The 1st option starts from the 3rd byte. */
+    offset = 2;
 
-  /*lint -e{946} -e{947} suppress pointer subtraction, since it is necessary. */
-  /*lint -e{737} suppress loss of sign, since nx_packet_append_ptr is assumed to
-   * be larger than nx_packet_ip_header. */
-  offset_base = (UINT)((ULONG)(packet_ptr->nx_packet_prepend_ptr -
-                               packet_ptr->nx_packet_ip_header) -
-                       (ULONG)sizeof(NX_IPV6_HEADER));
-  header_length = header_length - (INT)offset;
+    /*lint -e{946} -e{947} suppress pointer subtraction, since it is necessary. */
+    /*lint -e{737} suppress loss of sign, since nx_packet_append_ptr is assumed to
+     * be larger than nx_packet_ip_header. */
+    offset_base = (UINT)((ULONG)(packet_ptr->nx_packet_prepend_ptr - packet_ptr->nx_packet_ip_header) -
+                         (ULONG)sizeof(NX_IPV6_HEADER));
+    header_length = header_length - (INT)offset;
 
-  /* Sanity check; does the header length data go past the end of the end of the
-   * packet buffer? */
-  /*lint -e{946} -e{947} suppress pointer subtraction, since it is necessary. */
-  if ((UINT)(packet_ptr->nx_packet_append_ptr -
-             packet_ptr->nx_packet_prepend_ptr) <
-      ((UINT)header_length + offset)) {
+    /* Sanity check; does the header length data go past the end of the end of the
+     * packet buffer? */
+    /*lint -e{946} -e{947} suppress pointer subtraction, since it is necessary. */
+    if ((UINT)(packet_ptr->nx_packet_append_ptr - packet_ptr->nx_packet_prepend_ptr) < ((UINT)header_length + offset)) {
 
-    /* Yes, handle the error as indicated by the option type 2 msb's. */
-    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
-     * necessary  */
-    option = (NX_IPV6_HOP_BY_HOP_OPTION *)(packet_ptr->nx_packet_prepend_ptr +
-                                           offset);
+        /* Yes, handle the error as indicated by the option type 2 msb's. */
+        /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+         * necessary  */
+        option = (NX_IPV6_HOP_BY_HOP_OPTION *)(packet_ptr->nx_packet_prepend_ptr + offset);
 
-    _nx_ipv6_option_error(ip_ptr, packet_ptr,
-                          option->nx_ipv6_hop_by_hop_option_type,
-                          offset_base + offset);
-    return (NX_OPTION_HEADER_ERROR);
-  }
+        _nx_ipv6_option_error(ip_ptr, packet_ptr, option->nx_ipv6_hop_by_hop_option_type, offset_base + offset);
+        return (NX_OPTION_HEADER_ERROR);
+    }
 
-  while (header_length > 0) {
+    while (header_length > 0) {
 
-    /* Get a pointer to the options. */
-    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
-     * necessary  */
-    option = (NX_IPV6_HOP_BY_HOP_OPTION *)(packet_ptr->nx_packet_prepend_ptr +
-                                           offset);
+        /* Get a pointer to the options. */
+        /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+         * necessary  */
+        option = (NX_IPV6_HOP_BY_HOP_OPTION *)(packet_ptr->nx_packet_prepend_ptr + offset);
 
-    switch (option->nx_ipv6_hop_by_hop_option_type) {
+        switch (option->nx_ipv6_hop_by_hop_option_type) {
 
-    case 0:
+        case 0:
 
-      /* Pad1 option.  This option indicates the size of the padding is one.
-         So we skip one byte. */
-      offset++;
-      header_length--;
-      break;
+            /* Pad1 option.  This option indicates the size of the padding is one.
+               So we skip one byte. */
+            offset++;
+            header_length--;
+            break;
 
-    case 1:
+        case 1:
 
-      /* PadN option. Skip N+2 bytes. */
-      offset += ((UINT)(option->nx_ipv6_hop_by_hop_length) + 2);
-      header_length -= ((INT)(option->nx_ipv6_hop_by_hop_length) + 2);
-      break;
+            /* PadN option. Skip N+2 bytes. */
+            offset += ((UINT)(option->nx_ipv6_hop_by_hop_length) + 2);
+            header_length -= ((INT)(option->nx_ipv6_hop_by_hop_length) + 2);
+            break;
 
 #ifdef NX_ENABLE_THREAD
-    case 109:
+        case 109:
 
-      /* RFC 7731.  */
+            /* RFC 7731.  */
 
-      /* Skip N+2 bytes.  */
-      offset += ((UINT)(option->nx_ipv6_hop_by_hop_length) + 2);
-      header_length -= ((INT)(option->nx_ipv6_hop_by_hop_length) + 2);
-      break;
+            /* Skip N+2 bytes.  */
+            offset += ((UINT)(option->nx_ipv6_hop_by_hop_length) + 2);
+            header_length -= ((INT)(option->nx_ipv6_hop_by_hop_length) + 2);
+            break;
 #endif /* NX_ENABLE_THREAD  */
 
-    default:
+        default:
 
-      /* Unknown option.  */
-      rv = _nx_ipv6_option_error(ip_ptr, packet_ptr,
-                                 option->nx_ipv6_hop_by_hop_option_type,
-                                 offset_base + offset);
+            /* Unknown option.  */
+            rv =
+                _nx_ipv6_option_error(ip_ptr, packet_ptr, option->nx_ipv6_hop_by_hop_option_type, offset_base + offset);
 
-      /* If no errors, just skip this option and move onto the next option.*/
-      if (rv == NX_SUCCESS) {
+            /* If no errors, just skip this option and move onto the next option.*/
+            if (rv == NX_SUCCESS) {
 
-        /* Skip this option and continue processing the rest of the header. */
-        offset += ((UINT)(option->nx_ipv6_hop_by_hop_length) + 2);
-        header_length -= ((INT)(option->nx_ipv6_hop_by_hop_length) + 2);
-        break;
-      } else {
+                /* Skip this option and continue processing the rest of the header. */
+                offset += ((UINT)(option->nx_ipv6_hop_by_hop_length) + 2);
+                header_length -= ((INT)(option->nx_ipv6_hop_by_hop_length) + 2);
+                break;
+            } else {
 
-        /* Return value indicates an error status: we need to drop the entire
-         * packet. */
-        return (rv); /* Drop this packet. */
-      }
+                /* Return value indicates an error status: we need to drop the entire
+                 * packet. */
+                return (rv); /* Drop this packet. */
+            }
+        }
     }
-  }
 
-  /* Successful processing of option header. */
-  return (NX_SUCCESS);
+    /* Successful processing of option header. */
+    return (NX_SUCCESS);
 }
 
 #endif /*  FEATURE_NX_IPV6 */

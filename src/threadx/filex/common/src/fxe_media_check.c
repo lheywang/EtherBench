@@ -108,24 +108,23 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_media_check(FX_MEDIA *media_ptr, UCHAR *scratch_memory_ptr,
-                      ULONG scratch_memory_size, ULONG error_correction_option,
-                      ULONG *errors_detected) {
+UINT _fxe_media_check(FX_MEDIA *media_ptr, UCHAR *scratch_memory_ptr, ULONG scratch_memory_size,
+                      ULONG error_correction_option, ULONG *errors_detected) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a NULL media or scratch pointer.  */
-  if ((media_ptr == FX_NULL) || (scratch_memory_ptr == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a NULL media or scratch pointer.  */
+    if ((media_ptr == FX_NULL) || (scratch_memory_ptr == FX_NULL)) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual media check service.  */
-  status = _fx_media_check(media_ptr, scratch_memory_ptr, scratch_memory_size,
-                           error_correction_option, errors_detected);
+    /* Call actual media check service.  */
+    status =
+        _fx_media_check(media_ptr, scratch_memory_ptr, scratch_memory_size, error_correction_option, errors_detected);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

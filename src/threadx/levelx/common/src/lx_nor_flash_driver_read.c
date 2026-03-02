@@ -78,152 +78,141 @@
 /*                                            resulting in version 6.2.1 */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nor_flash_driver_read(LX_NOR_FLASH *nor_flash, ULONG *flash_address,
-                               ULONG *destination, ULONG words) {
+UINT _lx_nor_flash_driver_read(LX_NOR_FLASH *nor_flash, ULONG *flash_address, ULONG *destination, ULONG words) {
 #ifndef LX_NOR_DISABLE_EXTENDED_CACHE
 
-  UINT status;
-  UINT i;
-  ULONG *cache_entry_start;
-  ULONG *cache_entry_end;
-  ULONG cache_offset;
-  UINT least_used_cache_entry;
+    UINT status;
+    UINT i;
+    ULONG *cache_entry_start;
+    ULONG *cache_entry_end;
+    ULONG cache_offset;
+    UINT least_used_cache_entry;
 
-  /* Is the request a whole sector or a partial sector.  */
-  if ((words == 1) && (nor_flash->lx_nor_flash_extended_cache_entries)) {
+    /* Is the request a whole sector or a partial sector.  */
+    if ((words == 1) && (nor_flash->lx_nor_flash_extended_cache_entries)) {
 
-    /* One word request, which implies that it is a NOR flash metadata read.  */
+        /* One word request, which implies that it is a NOR flash metadata read.  */
 
-    /* Initialize the least used cache entry.  */
-    least_used_cache_entry = 0;
+        /* Initialize the least used cache entry.  */
+        least_used_cache_entry = 0;
 
-    do {
+        do {
 
-      /* Loop through the cache entries to see if there is a sector in cache. */
-      for (i = 0; i < nor_flash->lx_nor_flash_extended_cache_entries; i++) {
+            /* Loop through the cache entries to see if there is a sector in cache. */
+            for (i = 0; i < nor_flash->lx_nor_flash_extended_cache_entries; i++) {
 
-        /* Search through the cache to find the entry.  */
+                /* Search through the cache to find the entry.  */
 
-        /* Determine the cache entry addresses.  */
-        cache_entry_start =
-            nor_flash->lx_nor_flash_extended_cache[i]
-                .lx_nor_flash_extended_cache_entry_sector_address;
-        cache_entry_end = cache_entry_start + LX_NOR_SECTOR_SIZE;
+                /* Determine the cache entry addresses.  */
+                cache_entry_start =
+                    nor_flash->lx_nor_flash_extended_cache[i].lx_nor_flash_extended_cache_entry_sector_address;
+                cache_entry_end = cache_entry_start + LX_NOR_SECTOR_SIZE;
 
-        /* Determine if the flash address in in the cache entry.  */
-        if ((cache_entry_start) && (flash_address >= cache_entry_start) &&
-            (flash_address < cache_entry_end)) {
+                /* Determine if the flash address in in the cache entry.  */
+                if ((cache_entry_start) && (flash_address >= cache_entry_start) && (flash_address < cache_entry_end)) {
 
-          /* Yes, we found the entry.  */
+                    /* Yes, we found the entry.  */
 
-          /* Increment the accessed count.  */
-          nor_flash->lx_nor_flash_extended_cache[i]
-              .lx_nor_flash_extended_cache_entry_access_count++;
+                    /* Increment the accessed count.  */
+                    nor_flash->lx_nor_flash_extended_cache[i].lx_nor_flash_extended_cache_entry_access_count++;
 
-          /* Calculate the offset into the cache entry.  */
-          cache_offset = (ULONG)(flash_address - cache_entry_start);
+                    /* Calculate the offset into the cache entry.  */
+                    cache_offset = (ULONG)(flash_address - cache_entry_start);
 
-          /* Copy the word from the cache.  */
-          *destination =
-              *(nor_flash->lx_nor_flash_extended_cache[i]
-                    .lx_nor_flash_extended_cache_entry_sector_memory +
-                cache_offset);
+                    /* Copy the word from the cache.  */
+                    *destination =
+                        *(nor_flash->lx_nor_flash_extended_cache[i].lx_nor_flash_extended_cache_entry_sector_memory +
+                          cache_offset);
 
-          /* Increment the number of cache hits.  */
-          nor_flash->lx_nor_flash_extended_cache_hits++;
+                    /* Increment the number of cache hits.  */
+                    nor_flash->lx_nor_flash_extended_cache_hits++;
 
-          /* Return success.  */
-          return (LX_SUCCESS);
-        } else {
+                    /* Return success.  */
+                    return (LX_SUCCESS);
+                } else {
 
-          /* Determine if we have a new least used sector.  */
-          if (i != least_used_cache_entry) {
+                    /* Determine if we have a new least used sector.  */
+                    if (i != least_used_cache_entry) {
 
-            /* Determine if this entry has a smaller accessed count.  */
-            if (nor_flash->lx_nor_flash_extended_cache[i]
-                    .lx_nor_flash_extended_cache_entry_access_count <
-                nor_flash->lx_nor_flash_extended_cache[least_used_cache_entry]
-                    .lx_nor_flash_extended_cache_entry_access_count) {
+                        /* Determine if this entry has a smaller accessed count.  */
+                        if (nor_flash->lx_nor_flash_extended_cache[i].lx_nor_flash_extended_cache_entry_access_count <
+                            nor_flash->lx_nor_flash_extended_cache[least_used_cache_entry]
+                                .lx_nor_flash_extended_cache_entry_access_count) {
 
-              /* New least used entry.  */
-              least_used_cache_entry = i;
+                            /* New least used entry.  */
+                            least_used_cache_entry = i;
+                        }
+                    }
+                }
             }
-          }
-        }
-      }
 
-      /* Now read in the sector into the cache.  */
-      cache_offset =
-          (ULONG)(flash_address - nor_flash->lx_nor_flash_base_address);
-      cache_offset = cache_offset & ~((ULONG)(LX_NOR_SECTOR_SIZE - 1));
-      cache_entry_start = nor_flash->lx_nor_flash_base_address + cache_offset;
+            /* Now read in the sector into the cache.  */
+            cache_offset = (ULONG)(flash_address - nor_flash->lx_nor_flash_base_address);
+            cache_offset = cache_offset & ~((ULONG)(LX_NOR_SECTOR_SIZE - 1));
+            cache_entry_start = nor_flash->lx_nor_flash_base_address + cache_offset;
 
-      /* Call the actual driver read function.  */
+            /* Call the actual driver read function.  */
 #ifdef LX_NOR_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-      status = (nor_flash->lx_nor_flash_driver_read)(
-          nor_flash, cache_entry_start,
-          nor_flash->lx_nor_flash_extended_cache[least_used_cache_entry]
-              .lx_nor_flash_extended_cache_entry_sector_memory,
-          LX_NOR_SECTOR_SIZE);
+            status =
+                (nor_flash->lx_nor_flash_driver_read)(nor_flash, cache_entry_start,
+                                                      nor_flash->lx_nor_flash_extended_cache[least_used_cache_entry]
+                                                          .lx_nor_flash_extended_cache_entry_sector_memory,
+                                                      LX_NOR_SECTOR_SIZE);
 #else
-      status = (nor_flash->lx_nor_flash_driver_read)(
-          cache_entry_start,
-          nor_flash->lx_nor_flash_extended_cache[least_used_cache_entry]
-              .lx_nor_flash_extended_cache_entry_sector_memory,
-          LX_NOR_SECTOR_SIZE);
+            status =
+                (nor_flash->lx_nor_flash_driver_read)(cache_entry_start,
+                                                      nor_flash->lx_nor_flash_extended_cache[least_used_cache_entry]
+                                                          .lx_nor_flash_extended_cache_entry_sector_memory,
+                                                      LX_NOR_SECTOR_SIZE);
 #endif
 
-      /* Determine if there was an error.  */
-      if (status != LX_SUCCESS) {
+            /* Determine if there was an error.  */
+            if (status != LX_SUCCESS) {
 
-        /* Return the error to the caller.  */
+                /* Return the error to the caller.  */
+                return (status);
+            }
+
+            /* Setup the cache entry.  */
+            nor_flash->lx_nor_flash_extended_cache[least_used_cache_entry]
+                .lx_nor_flash_extended_cache_entry_sector_address = cache_entry_start;
+            nor_flash->lx_nor_flash_extended_cache[least_used_cache_entry]
+                .lx_nor_flash_extended_cache_entry_access_count = 0;
+
+            /* Increment the number of cache misses.  */
+            nor_flash->lx_nor_flash_extended_cache_misses++;
+
+            /* Decrement the number of cache hits, so that the increment that will
+             * happen next will be cancelled out.  */
+            nor_flash->lx_nor_flash_extended_cache_hits--;
+
+        } while (status == LX_SUCCESS);
+
+        /* Return success.  */
+        return (LX_SUCCESS);
+    } else {
+
+        /* Call the actual driver read function.  */
+#ifdef LX_NOR_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
+        status = (nor_flash->lx_nor_flash_driver_read)(nor_flash, flash_address, destination, words);
+#else
+        status = (nor_flash->lx_nor_flash_driver_read)(flash_address, destination, words);
+#endif
+
+        /* Return completion status.  */
         return (status);
-      }
-
-      /* Setup the cache entry.  */
-      nor_flash->lx_nor_flash_extended_cache[least_used_cache_entry]
-          .lx_nor_flash_extended_cache_entry_sector_address = cache_entry_start;
-      nor_flash->lx_nor_flash_extended_cache[least_used_cache_entry]
-          .lx_nor_flash_extended_cache_entry_access_count = 0;
-
-      /* Increment the number of cache misses.  */
-      nor_flash->lx_nor_flash_extended_cache_misses++;
-
-      /* Decrement the number of cache hits, so that the increment that will
-       * happen next will be cancelled out.  */
-      nor_flash->lx_nor_flash_extended_cache_hits--;
-
-    } while (status == LX_SUCCESS);
-
-    /* Return success.  */
-    return (LX_SUCCESS);
-  } else {
+    }
+#else
+    UINT status;
 
     /* Call the actual driver read function.  */
 #ifdef LX_NOR_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-    status = (nor_flash->lx_nor_flash_driver_read)(nor_flash, flash_address,
-                                                   destination, words);
+    status = (nor_flash->lx_nor_flash_driver_read)(nor_flash, flash_address, destination, words);
 #else
-    status = (nor_flash->lx_nor_flash_driver_read)(flash_address, destination,
-                                                   words);
+    status = (nor_flash->lx_nor_flash_driver_read)(flash_address, destination, words);
 #endif
 
     /* Return completion status.  */
     return (status);
-  }
-#else
-  UINT status;
-
-  /* Call the actual driver read function.  */
-#ifdef LX_NOR_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-  status = (nor_flash->lx_nor_flash_driver_read)(nor_flash, flash_address,
-                                                 destination, words);
-#else
-  status =
-      (nor_flash->lx_nor_flash_driver_read)(flash_address, destination, words);
-#endif
-
-  /* Return completion status.  */
-  return (status);
 #endif
 }

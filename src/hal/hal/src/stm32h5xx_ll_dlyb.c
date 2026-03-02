@@ -61,10 +61,8 @@
  * @{
  */
 
-#if defined(HAL_SD_MODULE_ENABLED) || defined(HAL_OSPI_MODULE_ENABLED) ||      \
-    defined(HAL_XSPI_MODULE_ENABLED)
-#if defined(DLYB_SDMMC1) || defined(DLYB_SDMMC2) || defined(DLYB_OCTOSPI1) ||  \
-    defined(DLYB_OCTOSPI2)
+#if defined(HAL_SD_MODULE_ENABLED) || defined(HAL_OSPI_MODULE_ENABLED) || defined(HAL_XSPI_MODULE_ENABLED)
+#if defined(DLYB_SDMMC1) || defined(DLYB_SDMMC2) || defined(DLYB_OCTOSPI1) || defined(DLYB_OCTOSPI2)
 
 /**
   @cond 0
@@ -111,18 +109,17 @@
  *          - ERROR: the Delay value is not set.
  */
 void LL_DLYB_SetDelay(DLYB_TypeDef *DLYBx, LL_DLYB_CfgTypeDef *pdlyb_cfg) {
-  /* Check the DelayBlock instance */
-  assert_param(IS_DLYB_ALL_INSTANCE(DLYBx));
+    /* Check the DelayBlock instance */
+    assert_param(IS_DLYB_ALL_INSTANCE(DLYBx));
 
-  /* Enable the length sampling */
-  SET_BIT(DLYBx->CR, DLYB_CR_SEN);
+    /* Enable the length sampling */
+    SET_BIT(DLYBx->CR, DLYB_CR_SEN);
 
-  /* Update the UNIT and SEL field */
-  DLYBx->CFGR =
-      (pdlyb_cfg->PhaseSel) | ((pdlyb_cfg->Units) << DLYB_CFGR_UNIT_Pos);
+    /* Update the UNIT and SEL field */
+    DLYBx->CFGR = (pdlyb_cfg->PhaseSel) | ((pdlyb_cfg->Units) << DLYB_CFGR_UNIT_Pos);
 
-  /* Disable the length sampling */
-  CLEAR_BIT(DLYBx->CR, DLYB_CR_SEN);
+    /* Disable the length sampling */
+    CLEAR_BIT(DLYBx->CR, DLYB_CR_SEN);
 }
 
 /**
@@ -134,12 +131,12 @@ void LL_DLYB_SetDelay(DLYB_TypeDef *DLYBx, LL_DLYB_CfgTypeDef *pdlyb_cfg) {
  *          - ERROR: the Delay value is not received.
  */
 void LL_DLYB_GetDelay(DLYB_TypeDef *DLYBx, LL_DLYB_CfgTypeDef *pdlyb_cfg) {
-  /* Check the DelayBlock instance */
-  assert_param(IS_DLYB_ALL_INSTANCE(DLYBx));
+    /* Check the DelayBlock instance */
+    assert_param(IS_DLYB_ALL_INSTANCE(DLYBx));
 
-  /* Fill the DelayBlock configuration structure with SEL and UNIT value */
-  pdlyb_cfg->Units = ((DLYBx->CFGR & DLYB_CFGR_UNIT) >> DLYB_CFGR_UNIT_Pos);
-  pdlyb_cfg->PhaseSel = (DLYBx->CFGR & DLYB_CFGR_SEL);
+    /* Fill the DelayBlock configuration structure with SEL and UNIT value */
+    pdlyb_cfg->Units = ((DLYBx->CFGR & DLYB_CFGR_UNIT) >> DLYB_CFGR_UNIT_Pos);
+    pdlyb_cfg->PhaseSel = (DLYBx->CFGR & DLYB_CFGR_SEL);
 }
 
 /**
@@ -150,67 +147,65 @@ void LL_DLYB_GetDelay(DLYB_TypeDef *DLYBx, LL_DLYB_CfgTypeDef *pdlyb_cfg) {
  *          - SUCCESS: there is a valid period detected and stored in pdlyb_cfg.
  *          - ERROR: there is no valid period detected.
  */
-uint32_t LL_DLYB_GetClockPeriod(DLYB_TypeDef *DLYBx,
-                                LL_DLYB_CfgTypeDef *pdlyb_cfg) {
-  uint32_t i = 0U;
-  uint32_t nb;
-  uint32_t lng;
-  uint32_t tickstart;
+uint32_t LL_DLYB_GetClockPeriod(DLYB_TypeDef *DLYBx, LL_DLYB_CfgTypeDef *pdlyb_cfg) {
+    uint32_t i = 0U;
+    uint32_t nb;
+    uint32_t lng;
+    uint32_t tickstart;
 
-  /* Check the DelayBlock instance */
-  assert_param(IS_DLYB_ALL_INSTANCE(DLYBx));
+    /* Check the DelayBlock instance */
+    assert_param(IS_DLYB_ALL_INSTANCE(DLYBx));
 
-  /* Enable the length sampling */
-  SET_BIT(DLYBx->CR, DLYB_CR_SEN);
+    /* Enable the length sampling */
+    SET_BIT(DLYBx->CR, DLYB_CR_SEN);
 
-  /* Delay line length detection */
-  while (i < DLYB_MAX_UNIT) {
-    /* Set the Delay of the UNIT(s)*/
-    DLYBx->CFGR = DLYB_MAX_SELECT | (i << DLYB_CFGR_UNIT_Pos);
+    /* Delay line length detection */
+    while (i < DLYB_MAX_UNIT) {
+        /* Set the Delay of the UNIT(s)*/
+        DLYBx->CFGR = DLYB_MAX_SELECT | (i << DLYB_CFGR_UNIT_Pos);
 
-    /* Waiting for a LNG valid value */
-    tickstart = HAL_GetTick();
-    while ((DLYBx->CFGR & DLYB_CFGR_LNGF) == 0U) {
-      if ((HAL_GetTick() - tickstart) >= DLYB_TIMEOUT) {
-        /* New check to avoid false timeout detection in case of preemption */
-        if ((DLYBx->CFGR & DLYB_CFGR_LNGF) == 0U) {
-          return (uint32_t)HAL_TIMEOUT;
+        /* Waiting for a LNG valid value */
+        tickstart = HAL_GetTick();
+        while ((DLYBx->CFGR & DLYB_CFGR_LNGF) == 0U) {
+            if ((HAL_GetTick() - tickstart) >= DLYB_TIMEOUT) {
+                /* New check to avoid false timeout detection in case of preemption */
+                if ((DLYBx->CFGR & DLYB_CFGR_LNGF) == 0U) {
+                    return (uint32_t)HAL_TIMEOUT;
+                }
+            }
         }
-      }
+
+        if ((DLYBx->CFGR & DLYB_LNG_10_0_MASK) != 0U) {
+            if ((DLYBx->CFGR & (DLYB_CFGR_LNG_11 | DLYB_CFGR_LNG_10)) != DLYB_LNG_11_10_MASK) {
+                /* Delay line length is configured to one input clock period*/
+                break;
+            }
+        }
+        i++;
     }
 
-    if ((DLYBx->CFGR & DLYB_LNG_10_0_MASK) != 0U) {
-      if ((DLYBx->CFGR & (DLYB_CFGR_LNG_11 | DLYB_CFGR_LNG_10)) !=
-          DLYB_LNG_11_10_MASK) {
-        /* Delay line length is configured to one input clock period*/
-        break;
-      }
+    if (DLYB_MAX_UNIT != i) {
+        /* Determine how many unit delays (nb) span one input clock period */
+        lng = (DLYBx->CFGR & DLYB_CFGR_LNG) >> 16U;
+        nb = 10U;
+        while ((nb > 0U) && ((lng >> nb) == 0U)) {
+            nb--;
+        }
+        if (nb != 0U) {
+            pdlyb_cfg->PhaseSel = nb;
+            pdlyb_cfg->Units = i;
+
+            /* Disable the length sampling */
+            DLYBx->CR = DLYB_CR_SEN;
+
+            return (uint32_t)SUCCESS;
+        }
     }
-    i++;
-  }
 
-  if (DLYB_MAX_UNIT != i) {
-    /* Determine how many unit delays (nb) span one input clock period */
-    lng = (DLYBx->CFGR & DLYB_CFGR_LNG) >> 16U;
-    nb = 10U;
-    while ((nb > 0U) && ((lng >> nb) == 0U)) {
-      nb--;
-    }
-    if (nb != 0U) {
-      pdlyb_cfg->PhaseSel = nb;
-      pdlyb_cfg->Units = i;
+    /* Disable the length sampling */
+    DLYBx->CR = DLYB_CR_SEN;
 
-      /* Disable the length sampling */
-      DLYBx->CR = DLYB_CR_SEN;
-
-      return (uint32_t)SUCCESS;
-    }
-  }
-
-  /* Disable the length sampling */
-  DLYBx->CR = DLYB_CR_SEN;
-
-  return (uint32_t)ERROR;
+    return (uint32_t)ERROR;
 }
 
 /**
@@ -225,7 +220,7 @@ uint32_t LL_DLYB_GetClockPeriod(DLYB_TypeDef *DLYBx,
  * @}
  */
 #endif /* DLYB_SDMMC1 || DLYB_SDMMC2 || DLYB_OCTOSPI1 || DLYB_OCTOSPI2 */
-#endif /* HAL_SD_MODULE_ENABLED || HAL_OSPI_MODULE_ENABLED ||                  \
+#endif /* HAL_SD_MODULE_ENABLED || HAL_OSPI_MODULE_ENABLED ||                                                          \
           HAL_XSPI_MODULE_ENABLED */
 
 /**

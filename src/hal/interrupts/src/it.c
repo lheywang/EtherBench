@@ -13,15 +13,12 @@
 
 #include "main.h"
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-	/*
-	 * Check which instance did trigger the interrupt
-	 */
-	if (huart->Instance == USART3)
-	{
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
+    /*
+     * Check which instance did trigger the interrupt
+     */
+    if (huart->Instance == USART3) {
+    }
 
-	}
-
-	return;
+    return;
 }

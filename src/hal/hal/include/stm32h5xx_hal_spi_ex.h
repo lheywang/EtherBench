@@ -74,14 +74,11 @@ extern "C" {
  */
 HAL_StatusTypeDef HAL_SPIEx_FlushRxFifo(const SPI_HandleTypeDef *hspi);
 HAL_StatusTypeDef HAL_SPIEx_EnableLockConfiguration(SPI_HandleTypeDef *hspi);
-HAL_StatusTypeDef HAL_SPIEx_ConfigureUnderrun(SPI_HandleTypeDef *hspi,
-                                              uint32_t UnderrunDetection,
+HAL_StatusTypeDef HAL_SPIEx_ConfigureUnderrun(SPI_HandleTypeDef *hspi, uint32_t UnderrunDetection,
                                               uint32_t UnderrunBehaviour);
 #if defined(SPI_CFG1_DRDS)
-HAL_StatusTypeDef
-HAL_SPIEx_EnableDelayReadDataSampling(SPI_HandleTypeDef *hspi);
-HAL_StatusTypeDef
-HAL_SPIEx_DisableDelayReadDataSampling(SPI_HandleTypeDef *hspi);
+HAL_StatusTypeDef HAL_SPIEx_EnableDelayReadDataSampling(SPI_HandleTypeDef *hspi);
+HAL_StatusTypeDef HAL_SPIEx_DisableDelayReadDataSampling(SPI_HandleTypeDef *hspi);
 #endif /* SPI_CFG1_DRDS */
 /**
  * @}

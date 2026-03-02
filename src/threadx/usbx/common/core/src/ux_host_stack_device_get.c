@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -20,14 +19,12 @@
 /**************************************************************************/
 /**************************************************************************/
 
-
 /* Include necessary system files.  */
 
 #define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -75,20 +72,18 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_host_stack_device_get(ULONG device_index, UX_DEVICE **device)
-{
+UINT _ux_host_stack_device_get(ULONG device_index, UX_DEVICE **device) {
 
-UX_DEVICE   *current_device;
+    UX_DEVICE *current_device;
 #if UX_MAX_DEVICES > 1
-ULONG       current_device_index;
+    ULONG current_device_index;
 #endif
 
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_DEVICE_GET, device_index, 0, 0, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
 
     /* Check if the device index is still within the limits.  */
-    if (device_index >= UX_SYSTEM_HOST_MAX_DEVICES_GET())
-    {
+    if (device_index >= UX_SYSTEM_HOST_MAX_DEVICES_GET()) {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_ENUMERATOR, UX_DEVICE_HANDLE_UNKNOWN);
@@ -96,32 +91,29 @@ ULONG       current_device_index;
         /* If trace is enabled, insert this event into the trace buffer.  */
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_DEVICE_HANDLE_UNKNOWN, device, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
-        return(UX_DEVICE_HANDLE_UNKNOWN);
+        return (UX_DEVICE_HANDLE_UNKNOWN);
     }
 
 #if UX_MAX_DEVICES > 1
 
     /* Start with the first device.  */
-    current_device =        _ux_system_host -> ux_system_host_device_array;
-    current_device_index =  0;
+    current_device = _ux_system_host->ux_system_host_device_array;
+    current_device_index = 0;
 
     /* Search the list until the end.  */
-    while (current_device_index < _ux_system_host -> ux_system_host_max_devices)
-    {
+    while (current_device_index < _ux_system_host->ux_system_host_max_devices) {
 
         /* Check to see if this device is existing.  */
-        if (current_device -> ux_device_handle != UX_UNUSED)
-        {
+        if (current_device->ux_device_handle != UX_UNUSED) {
 
             /* Have we reached the index we are looking for?  */
-            if (device_index == current_device_index)
-            {
+            if (device_index == current_device_index) {
 
                 /* Yes, return the device pointer.  */
-                *device =  current_device;
+                *device = current_device;
 
                 /* Return successful completion.  */
-                return(UX_SUCCESS);
+                return (UX_SUCCESS);
             }
         }
 
@@ -134,11 +126,10 @@ ULONG       current_device_index;
 #else
 
     /* Only one device, just check if it's used.  */
-    current_device = _ux_system_host -> ux_system_host_device_array;
-    if (current_device -> ux_device_handle != UX_UNUSED)
-    {
+    current_device = _ux_system_host->ux_system_host_device_array;
+    if (current_device->ux_device_handle != UX_UNUSED) {
         *device = current_device;
-        return(UX_SUCCESS);
+        return (UX_SUCCESS);
     }
 #endif
 
@@ -146,9 +137,8 @@ ULONG       current_device_index;
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_DEVICE_HANDLE_UNKNOWN, device, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
     /* Return error.  */
-    return(UX_DEVICE_HANDLE_UNKNOWN);
+    return (UX_DEVICE_HANDLE_UNKNOWN);
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -188,13 +178,12 @@ ULONG       current_device_index;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT  _uxe_host_stack_device_get(ULONG device_index, UX_DEVICE **device)
-{
+UINT _uxe_host_stack_device_get(ULONG device_index, UX_DEVICE **device) {
 
     /* Sanity check.  */
     if (device == UX_NULL)
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Invoke device get function.  */
-    return(_ux_host_stack_device_get(device_index, device));
+    return (_ux_host_stack_device_get(device_index, device));
 }

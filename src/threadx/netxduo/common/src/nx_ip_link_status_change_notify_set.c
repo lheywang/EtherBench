@@ -71,21 +71,20 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_ip_link_status_change_notify_set(
-    NX_IP *ip_ptr,
-    VOID (*link_status_change_notify)(NX_IP *ip_ptr, UINT interface_index,
-                                      UINT link_up)) {
-  TX_INTERRUPT_SAVE_AREA
+UINT _nx_ip_link_status_change_notify_set(NX_IP *ip_ptr,
+                                          VOID (*link_status_change_notify)(NX_IP *ip_ptr, UINT interface_index,
+                                                                            UINT link_up)) {
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Setup the link status change callback function pointer.  */
-  ip_ptr->nx_ip_link_status_change_callback = link_status_change_notify;
+    /* Setup the link status change callback function pointer.  */
+    ip_ptr->nx_ip_link_status_change_callback = link_status_change_notify;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Return successful completion.  */
-  return (NX_SUCCESS);
+    /* Return successful completion.  */
+    return (NX_SUCCESS);
 }

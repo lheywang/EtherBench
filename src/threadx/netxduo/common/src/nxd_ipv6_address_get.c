@@ -81,87 +81,81 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxd_ipv6_address_get(NX_IP *ip_ptr, UINT address_index,
-                           NXD_ADDRESS *ip_address, ULONG *prefix_length,
+UINT _nxd_ipv6_address_get(NX_IP *ip_ptr, UINT address_index, NXD_ADDRESS *ip_address, ULONG *prefix_length,
                            UINT *interface_index) {
 #ifdef FEATURE_NX_IPV6
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  UINT status;
-  NXD_IPV6_ADDRESS *interface_ipv6_address_next;
+    UINT status;
+    NXD_IPV6_ADDRESS *interface_ipv6_address_next;
 #ifdef TX_ENABLE_EVENT_TRACE
-  ULONG ip_address_lsw;
+    ULONG ip_address_lsw;
 #endif /* TX_ENABLE_EVENT_TRACE */
 
-  status = NX_SUCCESS;
+    status = NX_SUCCESS;
 
-  /* Get mutex protection.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Get mutex protection.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Get the ip address.  */
-  interface_ipv6_address_next = &ip_ptr->nx_ipv6_address[address_index];
+    /* Get the ip address.  */
+    interface_ipv6_address_next = &ip_ptr->nx_ipv6_address[address_index];
 
-  /* Check if this is a valid IP address. */
-  if (interface_ipv6_address_next->nxd_ipv6_address_state !=
-      NX_IPV6_ADDR_STATE_VALID) {
+    /* Check if this is a valid IP address. */
+    if (interface_ipv6_address_next->nxd_ipv6_address_state != NX_IPV6_ADDR_STATE_VALID) {
 
-    /* No, the address is not validated yet. */
+        /* No, the address is not validated yet. */
 
-    /* Zero out the return values. */
-    *prefix_length = 0;
-    SET_UNSPECIFIED_ADDRESS(ip_address->nxd_ip_address.v6);
+        /* Zero out the return values. */
+        *prefix_length = 0;
+        SET_UNSPECIFIED_ADDRESS(ip_address->nxd_ip_address.v6);
 
-    /* Return the error status. */
-    status = NX_NO_INTERFACE_ADDRESS;
-  } else {
+        /* Return the error status. */
+        status = NX_NO_INTERFACE_ADDRESS;
+    } else {
 
-    /* Record the interface index.  */
-    *interface_index = (UINT)ip_ptr->nx_ipv6_address[address_index]
-                           .nxd_ipv6_address_attached->nx_interface_index;
+        /* Record the interface index.  */
+        *interface_index = (UINT)ip_ptr->nx_ipv6_address[address_index].nxd_ipv6_address_attached->nx_interface_index;
 
-    /* We have a valid address. Mark with the IPv6 stamp. */
-    ip_address->nxd_ip_version = NX_IP_VERSION_V6;
+        /* We have a valid address. Mark with the IPv6 stamp. */
+        ip_address->nxd_ip_version = NX_IP_VERSION_V6;
 
-    /* Copy interface IP address from the address entry in the IP address table
-     * into the return address structure. */
-    COPY_IPV6_ADDRESS(interface_ipv6_address_next->nxd_ipv6_address,
-                      ip_address->nxd_ip_address.v6);
+        /* Copy interface IP address from the address entry in the IP address table
+         * into the return address structure. */
+        COPY_IPV6_ADDRESS(interface_ipv6_address_next->nxd_ipv6_address, ip_address->nxd_ip_address.v6);
 
-    /* Copy interface IP address prefix length from the address entry in the IP
-     * address table into the return prefix length. */
-    *prefix_length =
-        interface_ipv6_address_next->nxd_ipv6_address_prefix_length;
-  }
+        /* Copy interface IP address prefix length from the address entry in the IP
+         * address table into the return prefix length. */
+        *prefix_length = interface_ipv6_address_next->nxd_ipv6_address_prefix_length;
+    }
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Release mutex protection.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release mutex protection.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
 #ifdef TX_ENABLE_EVENT_TRACE
-  ip_address_lsw = ip_address->nxd_ip_address.v6[3];
+    ip_address_lsw = ip_address->nxd_ip_address.v6[3];
 
-  /* If trace is enabled, insert this info into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IPV6_INTERFACE_ADDRESS_GET, ip_ptr,
-                          ip_address_lsw, *prefix_length, address_index,
-                          NX_TRACE_IP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this info into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IPV6_INTERFACE_ADDRESS_GET, ip_ptr, ip_address_lsw, *prefix_length, address_index,
+                            NX_TRACE_IP_EVENTS, 0, 0);
 #endif /* TX_ENABLE_EVENT_TRACE */
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(address_index);
-  NX_PARAMETER_NOT_USED(ip_address);
-  NX_PARAMETER_NOT_USED(prefix_length);
-  NX_PARAMETER_NOT_USED(interface_index);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(address_index);
+    NX_PARAMETER_NOT_USED(ip_address);
+    NX_PARAMETER_NOT_USED(prefix_length);
+    NX_PARAMETER_NOT_USED(interface_index);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

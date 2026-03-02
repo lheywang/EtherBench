@@ -71,81 +71,77 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_utility_exFAT_bitmap_free_cluster_find(FX_MEDIA *media_ptr,
-                                                ULONG search_start_cluster,
-                                                ULONG *free_cluster) {
+UINT _fx_utility_exFAT_bitmap_free_cluster_find(FX_MEDIA *media_ptr, ULONG search_start_cluster, ULONG *free_cluster) {
 
-  UINT status;
-  UCHAR cluster_state;
-  ULONG cluster = search_start_cluster;
+    UINT status;
+    UCHAR cluster_state;
+    ULONG cluster = search_start_cluster;
 
-  /* Search for a free cluster.  */
-  while (cluster < media_ptr->fx_media_total_clusters + FX_FAT_ENTRY_START) {
+    /* Search for a free cluster.  */
+    while (cluster < media_ptr->fx_media_total_clusters + FX_FAT_ENTRY_START) {
 
-    /* Get the cluster state.  */
-    status =
-        _fx_utility_exFAT_cluster_state_get(media_ptr, cluster, &cluster_state);
+        /* Get the cluster state.  */
+        status = _fx_utility_exFAT_cluster_state_get(media_ptr, cluster, &cluster_state);
 
-    /* Check the status of the state get.  */
-    if (status != FX_SUCCESS) {
+        /* Check the status of the state get.  */
+        if (status != FX_SUCCESS) {
 
-      /* Media error or out of total clusters number - stop searching.  */
-      return (status);
+            /* Media error or out of total clusters number - stop searching.  */
+            return (status);
+        }
+
+        /* Is this cluster free?  */
+        if (cluster_state == FX_EXFAT_BITMAP_CLUSTER_FREE) {
+
+            /* Yes, finished the search.  */
+
+            /* Return the cluster.  */
+            *free_cluster = cluster;
+
+            /* Return success.  */
+            return (FX_SUCCESS);
+        }
+
+        /* Move to next cluster.  */
+        cluster++;
     }
 
-    /* Is this cluster free?  */
-    if (cluster_state == FX_EXFAT_BITMAP_CLUSTER_FREE) {
+    /* See if there is anything to search in the beginning.  */
+    if (search_start_cluster > FX_FAT_ENTRY_START) {
 
-      /* Yes, finished the search.  */
+        /* Start at the beginning.  */
+        cluster = FX_FAT_ENTRY_START;
 
-      /* Return the cluster.  */
-      *free_cluster = cluster;
+        /* Loop to search clusters.  */
+        while (cluster < search_start_cluster) {
 
-      /* Return success.  */
-      return (FX_SUCCESS);
+            /* Get the cluster state.  */
+            status = _fx_utility_exFAT_cluster_state_get(media_ptr, cluster, &cluster_state);
+            if (status != FX_SUCCESS) {
+
+                /* Media error or out of total clusters number - stop searching.  */
+                return (status);
+            }
+
+            /* Is this cluster free?  */
+            if (cluster_state == FX_EXFAT_BITMAP_CLUSTER_FREE) {
+
+                /* Yes, finished the search.  */
+
+                /* Return the cluster.  */
+                *free_cluster = cluster;
+
+                /* Return success.  */
+                return (FX_SUCCESS);
+            }
+
+            /* Move to the next cluster.  */
+            cluster++;
+        }
     }
 
-    /* Move to next cluster.  */
-    cluster++;
-  }
-
-  /* See if there is anything to search in the beginning.  */
-  if (search_start_cluster > FX_FAT_ENTRY_START) {
-
-    /* Start at the beginning.  */
-    cluster = FX_FAT_ENTRY_START;
-
-    /* Loop to search clusters.  */
-    while (cluster < search_start_cluster) {
-
-      /* Get the cluster state.  */
-      status = _fx_utility_exFAT_cluster_state_get(media_ptr, cluster,
-                                                   &cluster_state);
-      if (status != FX_SUCCESS) {
-
-        /* Media error or out of total clusters number - stop searching.  */
-        return (status);
-      }
-
-      /* Is this cluster free?  */
-      if (cluster_state == FX_EXFAT_BITMAP_CLUSTER_FREE) {
-
-        /* Yes, finished the search.  */
-
-        /* Return the cluster.  */
-        *free_cluster = cluster;
-
-        /* Return success.  */
-        return (FX_SUCCESS);
-      }
-
-      /* Move to the next cluster.  */
-      cluster++;
-    }
-  }
-
-  /* No more free clusters, return error.  */
-  return (FX_NO_MORE_SPACE);
+    /* No more free clusters, return error.  */
+    return (FX_NO_MORE_SPACE);
 }
 
 #endif /* FX_ENABLE_EXFAT */

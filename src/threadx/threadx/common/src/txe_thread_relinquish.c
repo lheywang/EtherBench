@@ -68,19 +68,19 @@
 /**************************************************************************/
 VOID _txe_thread_relinquish(VOID) {
 
-  TX_THREAD *current_thread;
+    TX_THREAD *current_thread;
 
-  /* Pickup thread pointer.  */
-  TX_THREAD_GET_CURRENT(current_thread)
+    /* Pickup thread pointer.  */
+    TX_THREAD_GET_CURRENT(current_thread)
 
-  /* Make sure a thread is executing.  */
-  if (current_thread != TX_NULL) {
+    /* Make sure a thread is executing.  */
+    if (current_thread != TX_NULL) {
 
-    /* Now make sure the call is not from an ISR or Initialization.  */
-    if (TX_THREAD_GET_SYSTEM_STATE() == ((ULONG)0)) {
+        /* Now make sure the call is not from an ISR or Initialization.  */
+        if (TX_THREAD_GET_SYSTEM_STATE() == ((ULONG)0)) {
 
-      /* Okay to call the real relinquish function.  */
-      _tx_thread_relinquish();
+            /* Okay to call the real relinquish function.  */
+            _tx_thread_relinquish();
+        }
     }
-  }
 }

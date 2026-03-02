@@ -72,7 +72,7 @@
 /**************************************************************************/
 VOID _nx_ip_initialize(VOID) {
 
-  /* Initialize the created IP instance variables.  */
-  _nx_ip_created_ptr = NX_NULL;
-  _nx_ip_created_count = 0;
+    /* Initialize the created IP instance variables.  */
+    _nx_ip_created_ptr = NX_NULL;
+    _nx_ip_created_count = 0;
 }

@@ -35,8 +35,7 @@ extern "C" {
 #include "stm32h5xx_ll_i3c.h"
 #endif /* USE_FULL_LL_DRIVER */
 
-#if (defined(USE_HAL_DRIVER) && defined(HAL_I3C_MODULE_ENABLED)) ||            \
-    defined(USE_FULL_LL_DRIVER)
+#if (defined(USE_HAL_DRIVER) && defined(HAL_I3C_MODULE_ENABLED)) || defined(USE_FULL_LL_DRIVER)
 /** @addtogroup STM32H5xx_UTIL_Driver
  * @{
  */
@@ -56,21 +55,21 @@ extern "C" {
  * @{
  */
 typedef struct {
-  uint32_t clockSrcFreq; /*!< Specifies the I3C clock source (in Hz). */
+    uint32_t clockSrcFreq; /*!< Specifies the I3C clock source (in Hz). */
 
-  uint32_t i3cPPFreq; /*!< Specifies the I3C required bus clock for Push-Pull
-                         phase (in Hz).                        */
+    uint32_t i3cPPFreq; /*!< Specifies the I3C required bus clock for Push-Pull
+                           phase (in Hz).                        */
 
-  uint32_t i2cODFreq; /*!< Specifies I2C required bus clock for Open-Drain phase
-                         (in Hz).                           */
+    uint32_t i2cODFreq; /*!< Specifies I2C required bus clock for Open-Drain phase
+                           (in Hz).                           */
 
-  uint32_t dutyCycle; /*!< Specifies the I3C duty cycle for Pure I3C bus or I2C
-                         duty cycle for Mixed bus in percent This parameter must
-                         be a value less than or equal to 50 percent. */
+    uint32_t dutyCycle; /*!< Specifies the I3C duty cycle for Pure I3C bus or I2C
+                           duty cycle for Mixed bus in percent This parameter must
+                           be a value less than or equal to 50 percent. */
 
-  uint32_t busType; /*!< Specifies the Bus configuration type.
-                         This parameter must be a value of @ref
-                       I3C_UTIL_EC_BUS_TYPE                              */
+    uint32_t busType; /*!< Specifies the Bus configuration type.
+                           This parameter must be a value of @ref
+                         I3C_UTIL_EC_BUS_TYPE                              */
 } I3C_CtrlTimingTypeDef;
 /**
  * @}
@@ -82,7 +81,7 @@ typedef struct {
  * @{
  */
 typedef struct {
-  uint32_t clockSrcFreq; /*!< Specifies the I3C clock source (in Hz). */
+    uint32_t clockSrcFreq; /*!< Specifies the I3C clock source (in Hz). */
 } I3C_TgtTimingTypeDef;
 /**
  * @}
@@ -123,8 +122,7 @@ typedef struct {
  */
 ErrorStatus I3C_CtrlTimingComputation(const I3C_CtrlTimingTypeDef *pInputTiming,
                                       LL_I3C_CtrlBusConfTypeDef *pOutputConfig);
-ErrorStatus I3C_TgtTimingComputation(const I3C_TgtTimingTypeDef *pInputTiming,
-                                     LL_I3C_TgtBusConfTypeDef *pOutputConfig);
+ErrorStatus I3C_TgtTimingComputation(const I3C_TgtTimingTypeDef *pInputTiming, LL_I3C_TgtBusConfTypeDef *pOutputConfig);
 /**
  * @}
  */
@@ -140,7 +138,7 @@ ErrorStatus I3C_TgtTimingComputation(const I3C_TgtTimingTypeDef *pInputTiming,
  * @}
  */
 
-#endif /* (defined(USE_HAL_DRIVER) && defined(HAL_I3C_MODULE_ENABLED)) ||      \
+#endif /* (defined(USE_HAL_DRIVER) && defined(HAL_I3C_MODULE_ENABLED)) ||                                              \
           defined(USE_FULL_LL_DRIVER) */
 #ifdef __cplusplus
 }

@@ -78,20 +78,20 @@
 /**************************************************************************/
 VOID _lx_nor_flash_system_error(LX_NOR_FLASH *nor_flash, UINT error_code) {
 
-  /* Increment the system error counter.  */
-  nor_flash->lx_nor_flash_diagnostic_system_errors++;
+    /* Increment the system error counter.  */
+    nor_flash->lx_nor_flash_diagnostic_system_errors++;
 
-  /* Save the most recent system error code.  */
-  nor_flash->lx_nor_flash_diagnostic_system_error = error_code;
+    /* Save the most recent system error code.  */
+    nor_flash->lx_nor_flash_diagnostic_system_error = error_code;
 
-  /* Determine if the driver has setup a system error handler.  */
-  if (nor_flash->lx_nor_flash_driver_system_error) {
+    /* Determine if the driver has setup a system error handler.  */
+    if (nor_flash->lx_nor_flash_driver_system_error) {
 
-    /* Yes, call the driver's system error handler.  */
+        /* Yes, call the driver's system error handler.  */
 #ifdef LX_NOR_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-    (nor_flash->lx_nor_flash_driver_system_error)(nor_flash, error_code);
+        (nor_flash->lx_nor_flash_driver_system_error)(nor_flash, error_code);
 #else
-    (nor_flash->lx_nor_flash_driver_system_error)(error_code);
+        (nor_flash->lx_nor_flash_driver_system_error)(error_code);
 #endif
-  }
+    }
 }

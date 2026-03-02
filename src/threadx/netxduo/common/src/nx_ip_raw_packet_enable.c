@@ -69,16 +69,15 @@
 /**************************************************************************/
 UINT _nx_ip_raw_packet_enable(NX_IP *ip_ptr) {
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_RAW_PACKET_ENABLE, ip_ptr, 0, 0, 0,
-                          NX_TRACE_IP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_RAW_PACKET_ENABLE, ip_ptr, 0, 0, 0, NX_TRACE_IP_EVENTS, 0, 0);
 
-  /* Enable raw IP packet sending/receiving.  */
-  ip_ptr->nx_ip_raw_ip_processing = _nx_ip_raw_packet_processing;
+    /* Enable raw IP packet sending/receiving.  */
+    ip_ptr->nx_ip_raw_ip_processing = _nx_ip_raw_packet_processing;
 
-  /* Set the raw packet receive queue max. */
-  ip_ptr->nx_ip_raw_received_packet_max = NX_IP_RAW_MAX_QUEUE_DEPTH;
+    /* Set the raw packet receive queue max. */
+    ip_ptr->nx_ip_raw_received_packet_max = NX_IP_RAW_MAX_QUEUE_DEPTH;
 
-  /* Return a successful status!  */
-  return (NX_SUCCESS);
+    /* Return a successful status!  */
+    return (NX_SUCCESS);
 }

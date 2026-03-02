@@ -68,29 +68,27 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxd_icmpv6_ra_flag_callback_set(
-    NX_IP *ip_ptr,
-    VOID (*icmpv6_ra_flag_callback)(NX_IP *ip_ptr, UINT ra_flag)) {
+UINT _nxd_icmpv6_ra_flag_callback_set(NX_IP *ip_ptr, VOID (*icmpv6_ra_flag_callback)(NX_IP *ip_ptr, UINT ra_flag)) {
 
 #ifdef FEATURE_NX_IPV6
-  /* Get mutex protection.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Get mutex protection.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Setup the IP address change callback function and the additional
-   * information pointers. */
-  ip_ptr->nx_icmpv6_ra_flag_callback = icmpv6_ra_flag_callback;
+    /* Setup the IP address change callback function and the additional
+     * information pointers. */
+    ip_ptr->nx_icmpv6_ra_flag_callback = icmpv6_ra_flag_callback;
 
-  /* Release mutex protection.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release mutex protection.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /* Return completion status.  */
-  return (NX_SUCCESS);
+    /* Return completion status.  */
+    return (NX_SUCCESS);
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(icmpv6_ra_flag_callback);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(icmpv6_ra_flag_callback);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

@@ -74,33 +74,28 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_ip_status_check(NX_IP *ip_ptr, ULONG needed_status,
-                          ULONG *actual_status, ULONG wait_option) {
+UINT _nxe_ip_status_check(NX_IP *ip_ptr, ULONG needed_status, ULONG *actual_status, ULONG wait_option) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
-      (actual_status == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) || (actual_status == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for valid options.  */
-  if (needed_status &
-      ~(NX_IP_INITIALIZE_DONE | NX_IP_ADDRESS_RESOLVED | NX_IP_LINK_ENABLED |
-        NX_IP_ARP_ENABLED | NX_IP_UDP_ENABLED | NX_IP_TCP_ENABLED |
-        NX_IP_IGMP_ENABLED | NX_IP_RARP_COMPLETE |
-        NX_IP_INTERFACE_LINK_ENABLED)) {
-    return (NX_OPTION_ERROR);
-  }
+    /* Check for valid options.  */
+    if (needed_status &
+        ~(NX_IP_INITIALIZE_DONE | NX_IP_ADDRESS_RESOLVED | NX_IP_LINK_ENABLED | NX_IP_ARP_ENABLED | NX_IP_UDP_ENABLED |
+          NX_IP_TCP_ENABLED | NX_IP_IGMP_ENABLED | NX_IP_RARP_COMPLETE | NX_IP_INTERFACE_LINK_ENABLED)) {
+        return (NX_OPTION_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call actual IP status check function.  */
-  status =
-      _nx_ip_status_check(ip_ptr, needed_status, actual_status, wait_option);
+    /* Call actual IP status check function.  */
+    status = _nx_ip_status_check(ip_ptr, needed_status, actual_status, wait_option);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

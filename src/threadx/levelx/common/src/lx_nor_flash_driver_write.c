@@ -78,75 +78,70 @@
 /*                                            resulting in version 6.2.1 */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nor_flash_driver_write(LX_NOR_FLASH *nor_flash, ULONG *flash_address,
-                                ULONG *source, ULONG words) {
+UINT _lx_nor_flash_driver_write(LX_NOR_FLASH *nor_flash, ULONG *flash_address, ULONG *source, ULONG words) {
 
 #ifndef LX_NOR_DISABLE_EXTENDED_CACHE
 
-  UINT status;
-  UINT i;
-  ULONG *cache_entry_start;
-  ULONG *cache_entry_end;
-  ULONG cache_offset;
+    UINT status;
+    UINT i;
+    ULONG *cache_entry_start;
+    ULONG *cache_entry_end;
+    ULONG cache_offset;
 
-  /* Is the request a whole sector or a partial sector.  */
-  if ((words == 1) && (nor_flash->lx_nor_flash_extended_cache_entries)) {
+    /* Is the request a whole sector or a partial sector.  */
+    if ((words == 1) && (nor_flash->lx_nor_flash_extended_cache_entries)) {
 
-    /* One word request, which implies that it is a NOR flash metadata write. */
+        /* One word request, which implies that it is a NOR flash metadata write. */
 
-    /* Loop through the cache entries to see if there is a sector in cache.  */
-    for (i = 0; i < nor_flash->lx_nor_flash_extended_cache_entries; i++) {
+        /* Loop through the cache entries to see if there is a sector in cache.  */
+        for (i = 0; i < nor_flash->lx_nor_flash_extended_cache_entries; i++) {
 
-      /* Search through the cache to see if there is a cache entry.  */
+            /* Search through the cache to see if there is a cache entry.  */
 
-      /* Determine the cache entry addresses.  */
-      cache_entry_start = nor_flash->lx_nor_flash_extended_cache[i]
-                              .lx_nor_flash_extended_cache_entry_sector_address;
-      cache_entry_end = cache_entry_start + LX_NOR_SECTOR_SIZE;
+            /* Determine the cache entry addresses.  */
+            cache_entry_start =
+                nor_flash->lx_nor_flash_extended_cache[i].lx_nor_flash_extended_cache_entry_sector_address;
+            cache_entry_end = cache_entry_start + LX_NOR_SECTOR_SIZE;
 
-      /* Determine if the flash address in in the cache entry.  */
-      if ((cache_entry_start) && (flash_address >= cache_entry_start) &&
-          (flash_address < cache_entry_end)) {
+            /* Determine if the flash address in in the cache entry.  */
+            if ((cache_entry_start) && (flash_address >= cache_entry_start) && (flash_address < cache_entry_end)) {
 
-        /* Yes, we found the entry.  */
+                /* Yes, we found the entry.  */
 
-        /* Calculate the offset into the cache entry.  */
-        cache_offset = (ULONG)(flash_address - cache_entry_start);
+                /* Calculate the offset into the cache entry.  */
+                cache_offset = (ULONG)(flash_address - cache_entry_start);
 
-        /* Copy the word into the cache.  */
-        *(nor_flash->lx_nor_flash_extended_cache[i]
-              .lx_nor_flash_extended_cache_entry_sector_memory +
-          cache_offset) = *source;
+                /* Copy the word into the cache.  */
+                *(nor_flash->lx_nor_flash_extended_cache[i].lx_nor_flash_extended_cache_entry_sector_memory +
+                  cache_offset) = *source;
 
-        /* Get out of the loop.  */
-        break;
-      }
+                /* Get out of the loop.  */
+                break;
+            }
+        }
     }
-  }
 
-  /* In any case, call the actual driver write function.  */
+    /* In any case, call the actual driver write function.  */
 #ifdef LX_NOR_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-  status = (nor_flash->lx_nor_flash_driver_write)(nor_flash, flash_address,
-                                                  source, words);
+    status = (nor_flash->lx_nor_flash_driver_write)(nor_flash, flash_address, source, words);
 #else
-  status = (nor_flash->lx_nor_flash_driver_write)(flash_address, source, words);
+    status = (nor_flash->lx_nor_flash_driver_write)(flash_address, source, words);
 #endif
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 
 #else
-  UINT status;
+    UINT status;
 
-  /* Call the actual driver write function.  */
+    /* Call the actual driver write function.  */
 #ifdef LX_NOR_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-  status = (nor_flash->lx_nor_flash_driver_write)(nor_flash, flash_address,
-                                                  source, words);
+    status = (nor_flash->lx_nor_flash_driver_write)(nor_flash, flash_address, source, words);
 #else
-  status = (nor_flash->lx_nor_flash_driver_write)(flash_address, source, words);
+    status = (nor_flash->lx_nor_flash_driver_write)(flash_address, source, words);
 #endif
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 #endif
 }

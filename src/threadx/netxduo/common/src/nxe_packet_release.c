@@ -69,45 +69,43 @@
 /**************************************************************************/
 UINT _nxe_packet_release(NX_PACKET **packet_ptr_ptr) {
 
-  UINT status;
-  NX_PACKET *packet_ptr;
+    UINT status;
+    NX_PACKET *packet_ptr;
 
-  /* Setup packet pointer.  */
-  packet_ptr = *packet_ptr_ptr;
+    /* Setup packet pointer.  */
+    packet_ptr = *packet_ptr_ptr;
 
-  /* Simple integrity check on the packet.  */
-  if ((packet_ptr == NX_NULL) ||
-      (packet_ptr->nx_packet_pool_owner == NX_NULL) ||
-      ((packet_ptr->nx_packet_pool_owner)->nx_packet_pool_id !=
-       NX_PACKET_POOL_ID)) {
+    /* Simple integrity check on the packet.  */
+    if ((packet_ptr == NX_NULL) || (packet_ptr->nx_packet_pool_owner == NX_NULL) ||
+        ((packet_ptr->nx_packet_pool_owner)->nx_packet_pool_id != NX_PACKET_POOL_ID)) {
 
-    return (NX_PTR_ERROR);
-  }
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for an invalid packet prepend pointer.  */
-  /*lint -e{946} suppress pointer subtraction, since it is necessary. */
-  if (packet_ptr->nx_packet_prepend_ptr < packet_ptr->nx_packet_data_start) {
-    return (NX_UNDERFLOW);
-  }
+    /* Check for an invalid packet prepend pointer.  */
+    /*lint -e{946} suppress pointer subtraction, since it is necessary. */
+    if (packet_ptr->nx_packet_prepend_ptr < packet_ptr->nx_packet_data_start) {
+        return (NX_UNDERFLOW);
+    }
 
-  /* Check for an invalid packet append pointer.  */
-  /*lint -e{946} suppress pointer subtraction, since it is necessary. */
-  if (packet_ptr->nx_packet_append_ptr > packet_ptr->nx_packet_data_end) {
-    return (NX_OVERFLOW);
-  }
+    /* Check for an invalid packet append pointer.  */
+    /*lint -e{946} suppress pointer subtraction, since it is necessary. */
+    if (packet_ptr->nx_packet_append_ptr > packet_ptr->nx_packet_data_end) {
+        return (NX_OVERFLOW);
+    }
 
-  /* Call actual packet release function.  */
-  status = _nx_packet_release(packet_ptr);
+    /* Call actual packet release function.  */
+    status = _nx_packet_release(packet_ptr);
 
-  /* Determine if the packet release was successful.  */
-  if (status == NX_SUCCESS) {
+    /* Determine if the packet release was successful.  */
+    if (status == NX_SUCCESS) {
 
-    /* Yes, now clear the application's packet pointer so it can't be
-       accidentally used again by the application.  This is only done when error
-       checking is enabled.  */
-    *packet_ptr_ptr = NX_NULL;
-  }
+        /* Yes, now clear the application's packet pointer so it can't be
+           accidentally used again by the application.  This is only done when error
+           checking is enabled.  */
+        *packet_ptr_ptr = NX_NULL;
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

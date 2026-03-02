@@ -95,185 +95,166 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_cdc_acm_read(UX_SLAVE_CLASS_CDC_ACM *cdc_acm,
-                                   UCHAR *buffer, ULONG requested_length,
+UINT _ux_device_class_cdc_acm_read(UX_SLAVE_CLASS_CDC_ACM *cdc_acm, UCHAR *buffer, ULONG requested_length,
                                    ULONG *actual_length) {
 
-  UX_SLAVE_ENDPOINT *endpoint;
-  UX_SLAVE_DEVICE *device;
-  UX_SLAVE_INTERFACE *interface_ptr;
-  UX_SLAVE_TRANSFER *transfer_request;
-  UINT status = UX_SUCCESS;
-  ULONG local_requested_length;
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_SLAVE_DEVICE *device;
+    UX_SLAVE_INTERFACE *interface_ptr;
+    UX_SLAVE_TRANSFER *transfer_request;
+    UINT status = UX_SUCCESS;
+    ULONG local_requested_length;
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_CDC_ACM_READ, cdc_acm, buffer,
-                          requested_length, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0,
-                          0)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_CDC_ACM_READ, cdc_acm, buffer, requested_length, 0,
+                            UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
 #ifndef UX_DEVICE_CLASS_CDC_ACM_TRANSMISSION_DISABLE
 
-  /* Check if current cdc-acm is using callback or not. We cannot use direct
-   * reads with callback on.  */
-  if (cdc_acm->ux_slave_class_cdc_acm_transmission_status == UX_TRUE)
+    /* Check if current cdc-acm is using callback or not. We cannot use direct
+     * reads with callback on.  */
+    if (cdc_acm->ux_slave_class_cdc_acm_transmission_status == UX_TRUE)
 
-    /* Not allowed. */
-    return (UX_ERROR);
+        /* Not allowed. */
+        return (UX_ERROR);
 #endif
 
-  /* Get the pointer to the device.  */
-  device = &_ux_system_slave->ux_system_slave_device;
+    /* Get the pointer to the device.  */
+    device = &_ux_system_slave->ux_system_slave_device;
 
-  /* As long as the device is in the CONFIGURED state.  */
-  if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
+    /* As long as the device is in the CONFIGURED state.  */
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
 
-    /* Error trap. */
-    _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS,
-                             UX_CONFIGURATION_HANDLE_UNKNOWN);
+        /* Error trap. */
+        _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_CONFIGURATION_HANDLE_UNKNOWN);
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONFIGURATION_HANDLE_UNKNOWN,
-                            device, 0, 0, UX_TRACE_ERRORS, 0, 0)
+        /* If trace is enabled, insert this event into the trace buffer.  */
+        UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONFIGURATION_HANDLE_UNKNOWN, device, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
-    /* Cannot proceed with command, the interface is down.  */
-    return (UX_CONFIGURATION_HANDLE_UNKNOWN);
-  }
+        /* Cannot proceed with command, the interface is down.  */
+        return (UX_CONFIGURATION_HANDLE_UNKNOWN);
+    }
 
-  /* This is the first time we are activated. We need the interface to the
-   * class.  */
-  interface_ptr = cdc_acm->ux_slave_class_cdc_acm_interface;
+    /* This is the first time we are activated. We need the interface to the
+     * class.  */
+    interface_ptr = cdc_acm->ux_slave_class_cdc_acm_interface;
 
-  /* Locate the endpoints.  */
-  endpoint = interface_ptr->ux_slave_interface_first_endpoint;
+    /* Locate the endpoints.  */
+    endpoint = interface_ptr->ux_slave_interface_first_endpoint;
 
-  /* Check the endpoint direction, if OUT we have the correct endpoint.  */
-  if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress &
-       UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_OUT) {
+    /* Check the endpoint direction, if OUT we have the correct endpoint.  */
+    if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_OUT) {
 
-    /* So the next endpoint has to be the OUT endpoint.  */
-    endpoint = endpoint->ux_slave_endpoint_next_endpoint;
-  }
+        /* So the next endpoint has to be the OUT endpoint.  */
+        endpoint = endpoint->ux_slave_endpoint_next_endpoint;
+    }
 
-  /* Protect this thread.  */
-  _ux_device_mutex_on(&cdc_acm->ux_slave_class_cdc_acm_endpoint_out_mutex);
+    /* Protect this thread.  */
+    _ux_device_mutex_on(&cdc_acm->ux_slave_class_cdc_acm_endpoint_out_mutex);
 
-  /* All CDC readings are on the endpoint OUT, from the host.  */
-  transfer_request = &endpoint->ux_slave_endpoint_transfer_request;
+    /* All CDC readings are on the endpoint OUT, from the host.  */
+    transfer_request = &endpoint->ux_slave_endpoint_transfer_request;
 
 #if UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1
 #if !defined(UX_DEVICE_CLASS_CDC_ACM_ZERO_COPY)
-  transfer_request->ux_slave_transfer_request_data_pointer =
-      UX_DEVICE_CLASS_CDC_ACM_READ_BUFFER(cdc_acm);
+    transfer_request->ux_slave_transfer_request_data_pointer = UX_DEVICE_CLASS_CDC_ACM_READ_BUFFER(cdc_acm);
 #else
-  transfer_request->ux_slave_transfer_request_data_pointer = buffer;
+    transfer_request->ux_slave_transfer_request_data_pointer = buffer;
 #endif
 #endif
 
-#if (UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1) &&                                  \
-    defined(UX_DEVICE_CLASS_CDC_ACM_ZERO_COPY)
+#if (UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1) && defined(UX_DEVICE_CLASS_CDC_ACM_ZERO_COPY)
 
-  /* Check if device is configured.  */
-  if (device->ux_slave_device_state == UX_DEVICE_CONFIGURED) {
+    /* Check if device is configured.  */
+    if (device->ux_slave_device_state == UX_DEVICE_CONFIGURED) {
 
-    /* Issue the transfer request.  */
-    local_requested_length = requested_length;
-    status = _ux_device_stack_transfer_request(
-        transfer_request, requested_length, local_requested_length);
-    *actual_length = transfer_request->ux_slave_transfer_request_actual_length;
-  }
-
-#else
-
-  /* Reset the actual length.  */
-  *actual_length = 0;
-
-  /* Check if we need more transactions.  */
-  while (device->ux_slave_device_state == UX_DEVICE_CONFIGURED &&
-         requested_length != 0) {
-
-    /* Check if we have enough in the local buffer.  */
-    if (requested_length >
-        endpoint->ux_slave_endpoint_descriptor.wMaxPacketSize)
-
-      /* We have too much to transfer.  */
-      local_requested_length =
-          endpoint->ux_slave_endpoint_descriptor.wMaxPacketSize;
-
-    else
-
-      /* We can proceed with the demanded length.  */
-      local_requested_length = requested_length;
-
-    /* Send the request to the device controller.  */
-    status = _ux_device_stack_transfer_request(
-        transfer_request, local_requested_length, local_requested_length);
-
-    /* Check the status */
-    if (status == UX_SUCCESS) {
-
-      /* We need to copy the buffer locally.  */
-      _ux_utility_memory_copy(
-          buffer, transfer_request->ux_slave_transfer_request_data_pointer,
-          transfer_request
-              ->ux_slave_transfer_request_actual_length); /* Use case of memcpy
-                                                             is verified. */
-
-      /* Next buffer address.  */
-      buffer += transfer_request->ux_slave_transfer_request_actual_length;
-
-      /* Set the length actually received. */
-      *actual_length +=
-          transfer_request->ux_slave_transfer_request_actual_length;
-
-      /* Decrement what left has to be done.  */
-      requested_length -=
-          transfer_request->ux_slave_transfer_request_actual_length;
-
-      /* Is this a short packet or a ZLP indicating we are done with this
-       * transfer ?  */
-      if (transfer_request->ux_slave_transfer_request_actual_length <
-          endpoint->ux_slave_endpoint_descriptor.wMaxPacketSize) {
-
-        /* We are done.  */
-        /* Free Mutex resource.  */
-        _ux_device_mutex_off(
-            &cdc_acm->ux_slave_class_cdc_acm_endpoint_out_mutex);
-
-        /* Return with success.  */
-        return (UX_SUCCESS);
-      }
-    } else {
-
-      /* Free Mutex resource.  */
-      _ux_device_mutex_off(&cdc_acm->ux_slave_class_cdc_acm_endpoint_out_mutex);
-
-      /* We got an error.  */
-      return (status);
+        /* Issue the transfer request.  */
+        local_requested_length = requested_length;
+        status = _ux_device_stack_transfer_request(transfer_request, requested_length, local_requested_length);
+        *actual_length = transfer_request->ux_slave_transfer_request_actual_length;
     }
-  }
+
+#else
+
+    /* Reset the actual length.  */
+    *actual_length = 0;
+
+    /* Check if we need more transactions.  */
+    while (device->ux_slave_device_state == UX_DEVICE_CONFIGURED && requested_length != 0) {
+
+        /* Check if we have enough in the local buffer.  */
+        if (requested_length > endpoint->ux_slave_endpoint_descriptor.wMaxPacketSize)
+
+            /* We have too much to transfer.  */
+            local_requested_length = endpoint->ux_slave_endpoint_descriptor.wMaxPacketSize;
+
+        else
+
+            /* We can proceed with the demanded length.  */
+            local_requested_length = requested_length;
+
+        /* Send the request to the device controller.  */
+        status = _ux_device_stack_transfer_request(transfer_request, local_requested_length, local_requested_length);
+
+        /* Check the status */
+        if (status == UX_SUCCESS) {
+
+            /* We need to copy the buffer locally.  */
+            _ux_utility_memory_copy(buffer, transfer_request->ux_slave_transfer_request_data_pointer,
+                                    transfer_request->ux_slave_transfer_request_actual_length); /* Use case of memcpy
+                                                                                                   is verified. */
+
+            /* Next buffer address.  */
+            buffer += transfer_request->ux_slave_transfer_request_actual_length;
+
+            /* Set the length actually received. */
+            *actual_length += transfer_request->ux_slave_transfer_request_actual_length;
+
+            /* Decrement what left has to be done.  */
+            requested_length -= transfer_request->ux_slave_transfer_request_actual_length;
+
+            /* Is this a short packet or a ZLP indicating we are done with this
+             * transfer ?  */
+            if (transfer_request->ux_slave_transfer_request_actual_length <
+                endpoint->ux_slave_endpoint_descriptor.wMaxPacketSize) {
+
+                /* We are done.  */
+                /* Free Mutex resource.  */
+                _ux_device_mutex_off(&cdc_acm->ux_slave_class_cdc_acm_endpoint_out_mutex);
+
+                /* Return with success.  */
+                return (UX_SUCCESS);
+            }
+        } else {
+
+            /* Free Mutex resource.  */
+            _ux_device_mutex_off(&cdc_acm->ux_slave_class_cdc_acm_endpoint_out_mutex);
+
+            /* We got an error.  */
+            return (status);
+        }
+    }
 
 #endif
 
-  /* Free Mutex resource.  */
-  _ux_device_mutex_off(&cdc_acm->ux_slave_class_cdc_acm_endpoint_out_mutex);
+    /* Free Mutex resource.  */
+    _ux_device_mutex_off(&cdc_acm->ux_slave_class_cdc_acm_endpoint_out_mutex);
 
-  /* Check why we got here, either completion or device was extracted.  */
-  if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
+    /* Check why we got here, either completion or device was extracted.  */
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
 
-    /* Error trap. */
-    _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS,
-                             UX_TRANSFER_NO_ANSWER);
+        /* Error trap. */
+        _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_TRANSFER_NO_ANSWER);
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_TRANSFER_NO_ANSWER,
-                            transfer_request, 0, 0, UX_TRACE_ERRORS, 0, 0)
+        /* If trace is enabled, insert this event into the trace buffer.  */
+        UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_TRANSFER_NO_ANSWER, transfer_request, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
-    /* Device must have been extracted.  */
-    return (UX_TRANSFER_NO_ANSWER);
-  } else
+        /* Device must have been extracted.  */
+        return (UX_TRANSFER_NO_ANSWER);
+    } else
 
-    /* Simply return the last transaction result.  */
-    return (status);
+        /* Simply return the last transaction result.  */
+        return (status);
 }
 
 /**************************************************************************/
@@ -319,18 +300,15 @@ UINT _ux_device_class_cdc_acm_read(UX_SLAVE_CLASS_CDC_ACM *cdc_acm,
 /*  10-31-2023     Yajun Xia                Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT _uxe_device_class_cdc_acm_read(UX_SLAVE_CLASS_CDC_ACM *cdc_acm,
-                                    UCHAR *buffer, ULONG requested_length,
+UINT _uxe_device_class_cdc_acm_read(UX_SLAVE_CLASS_CDC_ACM *cdc_acm, UCHAR *buffer, ULONG requested_length,
                                     ULONG *actual_length) {
 
-  /* Sanity checks.  */
-  if ((cdc_acm == UX_NULL) || ((buffer == UX_NULL) && (requested_length > 0)) ||
-      (actual_length == UX_NULL)) {
-    return (UX_INVALID_PARAMETER);
-  }
+    /* Sanity checks.  */
+    if ((cdc_acm == UX_NULL) || ((buffer == UX_NULL) && (requested_length > 0)) || (actual_length == UX_NULL)) {
+        return (UX_INVALID_PARAMETER);
+    }
 
-  return (_ux_device_class_cdc_acm_read(cdc_acm, buffer, requested_length,
-                                        actual_length));
+    return (_ux_device_class_cdc_acm_read(cdc_acm, buffer, requested_length, actual_length));
 }
 
 #endif

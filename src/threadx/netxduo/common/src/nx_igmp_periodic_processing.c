@@ -69,66 +69,59 @@
 /**************************************************************************/
 VOID _nx_igmp_periodic_processing(NX_IP *ip_ptr) {
 
-  UINT i;
-  UINT status;
-  UINT sent_count = 0;
-  NX_INTERFACE *interface_ptr;
-  UINT interface_index;
+    UINT i;
+    UINT status;
+    UINT sent_count = 0;
+    NX_INTERFACE *interface_ptr;
+    UINT interface_index;
 
-  /* Search the multicast join list for pending IGMP responses.  */
-  for (i = 0; i < NX_MAX_MULTICAST_GROUPS; i++) {
+    /* Search the multicast join list for pending IGMP responses.  */
+    for (i = 0; i < NX_MAX_MULTICAST_GROUPS; i++) {
 
-    /* Determine if the specified entry is active.  */
-    if (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list) {
+        /* Determine if the specified entry is active.  */
+        if (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list) {
 
-      /* Now determine if a response is pending.  */
-      if ((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time >
-           0) &&
-          (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time !=
-           NX_WAIT_FOREVER)) {
+            /* Now determine if a response is pending.  */
+            if ((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time > 0) &&
+                (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time != NX_WAIT_FOREVER)) {
 
-        /* Yes, it is active.  Decrement and check for expiration.  */
-        ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time--;
+                /* Yes, it is active.  Decrement and check for expiration.  */
+                ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time--;
 
-        /* We don't want to decrement a join group if we cannot send it. Check
-           if we've already sent a packet on this periodic. */
-        if ((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time ==
-             0) &&
-            (sent_count > 0)) {
+                /* We don't want to decrement a join group if we cannot send it. Check
+                   if we've already sent a packet on this periodic. */
+                if ((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time == 0) && (sent_count > 0)) {
 
-          /* Restore the timeout to 1 second because we cannot send on this
-           * periodic; we've already sent out a packet. */
-          ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time = 1;
+                    /* Restore the timeout to 1 second because we cannot send on this
+                     * periodic; we've already sent out a packet. */
+                    ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time = 1;
+                }
+
+                /* Has time expired and have we not sent an IGMP report in this period?
+                 */
+                if (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time == 0) {
+
+                    /* Yes, time has expired and we have not yet sent a packet out on this
+                     * periodic. */
+
+                    /* Build and send the join report packet. */
+                    interface_ptr = ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_interface_list;
+
+                    interface_index = (UINT)interface_ptr->nx_interface_index;
+
+                    /* Build a IGMP host response packet for a join report and send it! */
+                    status = _nx_igmp_interface_report_send(
+                        ip_ptr, ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list, interface_index,
+                        NX_TRUE);
+
+                    if (status == NX_SUCCESS) {
+
+                        /* Update the sent count. Only one report sent per IP periodic. */
+                        sent_count++;
+                    }
+                }
+            }
         }
-
-        /* Has time expired and have we not sent an IGMP report in this period?
-         */
-        if (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time ==
-            0) {
-
-          /* Yes, time has expired and we have not yet sent a packet out on this
-           * periodic. */
-
-          /* Build and send the join report packet. */
-          interface_ptr = ip_ptr->nx_ipv4_multicast_entry[i]
-                              .nx_ipv4_multicast_join_interface_list;
-
-          interface_index = (UINT)interface_ptr->nx_interface_index;
-
-          /* Build a IGMP host response packet for a join report and send it! */
-          status = _nx_igmp_interface_report_send(
-              ip_ptr,
-              ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list,
-              interface_index, NX_TRUE);
-
-          if (status == NX_SUCCESS) {
-
-            /* Update the sent count. Only one report sent per IP periodic. */
-            sent_count++;
-          }
-        }
-      }
     }
-  }
 }
 #endif /* !NX_DISABLE_IPV4  */

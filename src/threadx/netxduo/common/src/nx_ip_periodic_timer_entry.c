@@ -72,11 +72,11 @@
 /**************************************************************************/
 VOID _nx_ip_periodic_timer_entry(ULONG ip_address) {
 
-  NX_IP *ip_ptr;
+    NX_IP *ip_ptr;
 
-  /* Setup IP pointer.  */
-  NX_TIMER_EXTENSION_PTR_GET(ip_ptr, NX_IP, ip_address)
+    /* Setup IP pointer.  */
+    NX_TIMER_EXTENSION_PTR_GET(ip_ptr, NX_IP, ip_address)
 
-  /* Wakeup this IP's helper thread.  */
-  tx_event_flags_set(&(ip_ptr->nx_ip_events), NX_IP_PERIODIC_EVENT, TX_OR);
+    /* Wakeup this IP's helper thread.  */
+    tx_event_flags_set(&(ip_ptr->nx_ip_events), NX_IP_PERIODIC_EVENT, TX_OR);
 }

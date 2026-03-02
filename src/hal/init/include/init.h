@@ -4,9 +4,9 @@
  * @brief   Header file for the global MCU initialization. Depends on the ST HAL library.
  * @version 0.1
  * @date    2026-02-21
- * 
+ *
  * @copyright Copyright (c) 2026
- * 
+ *
  */
 
 #pragma once
@@ -21,11 +21,10 @@
 // ======================================================================
 
 /**
- * @brief   Init the system with the parameters defined into the functions, 
+ * @brief   Init the system with the parameters defined into the functions,
  *          and the default values defined into the ST HAL library, by
  *          CubeMX.
- * 
- * @return uint32_t 
+ *
+ * @return uint32_t
  */
 uint32_t init(void);
-

@@ -9,11 +9,10 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Slave Simulator Controller Driver                                   */
 /**                                                                       */
@@ -26,7 +25,6 @@
 
 #include "ux_api.h"
 #include "ux_dcd_sim_slave.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -52,29 +50,29 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_dcd_sim_slave_address_set         Set address                   */
 /*    _ux_dcd_sim_slave_endpoint_create     Create endpoint               */
 /*    _ux_dcd_sim_slave_endpoint_destroy    Destroy endpoint              */
 /*    _ux_dcd_sim_slave_endpoint_reset      Reset endpoint                */
 /*    _ux_dcd_sim_slave_endpoint_stall      Stall endpoint                */
-/*    _ux_dcd_sim_slave_endpoint_status     Get endpoint status           */ 
+/*    _ux_dcd_sim_slave_endpoint_status     Get endpoint status           */
 /*    _ux_dcd_sim_slave_frame_number_get    Get frame number              */
 /*    _ux_dcd_sim_slave_state_change        Change state                  */
 /*    _ux_dcd_sim_slave_transfer_abort      Abort transfer                */
 /*    _ux_dcd_sim_slave_transfer_request    Request transfer              */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Device Stack                                                   */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Device Stack                                                   */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -83,16 +81,13 @@
 /*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
-UINT   _ux_dcd_sim_slave_function(UX_SLAVE_DCD *dcd, UINT function, VOID *parameter)
-{
+UINT _ux_dcd_sim_slave_function(UX_SLAVE_DCD *dcd, UINT function, VOID *parameter) {
 
-UINT                    status;
-UX_DCD_SIM_SLAVE        *dcd_sim_slave;
-                                                        
+    UINT status;
+    UX_DCD_SIM_SLAVE *dcd_sim_slave;
 
     /* Check the status of the controller.  */
-    if (dcd -> ux_slave_dcd_status == UX_UNUSED)
-    {
+    if (dcd->ux_slave_dcd_status == UX_UNUSED) {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_DCD, UX_CONTROLLER_UNKNOWN);
@@ -100,71 +95,70 @@ UX_DCD_SIM_SLAVE        *dcd_sim_slave;
         /* If trace is enabled, insert this event into the trace buffer.  */
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONTROLLER_UNKNOWN, 0, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
-        return(UX_CONTROLLER_UNKNOWN);
+        return (UX_CONTROLLER_UNKNOWN);
     }
-            
+
     /* Get the pointer to the Slave simulation DCD.  */
-    dcd_sim_slave =  (UX_DCD_SIM_SLAVE *) dcd -> ux_slave_dcd_controller_hardware;
+    dcd_sim_slave = (UX_DCD_SIM_SLAVE *)dcd->ux_slave_dcd_controller_hardware;
 
     /* Look at the function and route it.  */
-    switch(function)
-    {
+    switch (function) {
 
     case UX_DCD_GET_FRAME_NUMBER:
-            
-        status =  _ux_dcd_sim_slave_frame_number_get(dcd_sim_slave, (ULONG *) parameter);
+
+        status = _ux_dcd_sim_slave_frame_number_get(dcd_sim_slave, (ULONG *)parameter);
         break;
 
 #if defined(UX_DEVICE_STANDALONE)
     case UX_DCD_TRANSFER_RUN:
 
-        status =  _ux_dcd_sim_slave_transfer_run(dcd_sim_slave, (UX_SLAVE_TRANSFER *) parameter);
+        status = _ux_dcd_sim_slave_transfer_run(dcd_sim_slave, (UX_SLAVE_TRANSFER *)parameter);
         break;
 #else
     case UX_DCD_TRANSFER_REQUEST:
 
-        status =  _ux_dcd_sim_slave_transfer_request(dcd_sim_slave, (UX_SLAVE_TRANSFER *) parameter);
+        status = _ux_dcd_sim_slave_transfer_request(dcd_sim_slave, (UX_SLAVE_TRANSFER *)parameter);
         break;
 #endif
 
     case UX_DCD_TRANSFER_ABORT:
 
-        status =  _ux_dcd_sim_slave_transfer_abort(dcd_sim_slave, (UX_SLAVE_TRANSFER *) parameter);
+        status = _ux_dcd_sim_slave_transfer_abort(dcd_sim_slave, (UX_SLAVE_TRANSFER *)parameter);
         break;
 
     case UX_DCD_CREATE_ENDPOINT:
 
-        status =  _ux_dcd_sim_slave_endpoint_create(dcd_sim_slave, parameter);
+        status = _ux_dcd_sim_slave_endpoint_create(dcd_sim_slave, parameter);
         break;
 
     case UX_DCD_DESTROY_ENDPOINT:
 
-        status =  _ux_dcd_sim_slave_endpoint_destroy(dcd_sim_slave, parameter);
+        status = _ux_dcd_sim_slave_endpoint_destroy(dcd_sim_slave, parameter);
         break;
 
     case UX_DCD_RESET_ENDPOINT:
 
-        status =  _ux_dcd_sim_slave_endpoint_reset(dcd_sim_slave, parameter);
+        status = _ux_dcd_sim_slave_endpoint_reset(dcd_sim_slave, parameter);
         break;
 
     case UX_DCD_STALL_ENDPOINT:
 
-        status =  _ux_dcd_sim_slave_endpoint_stall(dcd_sim_slave, parameter);
+        status = _ux_dcd_sim_slave_endpoint_stall(dcd_sim_slave, parameter);
         break;
 
     case UX_DCD_SET_DEVICE_ADDRESS:
 
-        status =  _ux_dcd_sim_slave_address_set(dcd_sim_slave, (ULONG) (ALIGN_TYPE) parameter);
+        status = _ux_dcd_sim_slave_address_set(dcd_sim_slave, (ULONG)(ALIGN_TYPE)parameter);
         break;
 
     case UX_DCD_CHANGE_STATE:
 
-        status =  _ux_dcd_sim_slave_state_change(dcd_sim_slave, (ULONG) (ALIGN_TYPE)  parameter);
+        status = _ux_dcd_sim_slave_state_change(dcd_sim_slave, (ULONG)(ALIGN_TYPE)parameter);
         break;
 
     case UX_DCD_ENDPOINT_STATUS:
 
-        status =  _ux_dcd_sim_slave_endpoint_status(dcd_sim_slave, (ULONG) (ALIGN_TYPE) parameter);
+        status = _ux_dcd_sim_slave_endpoint_status(dcd_sim_slave, (ULONG)(ALIGN_TYPE)parameter);
         break;
 
     case UX_DCD_ISR_PENDING:
@@ -181,9 +175,8 @@ UX_DCD_SIM_SLAVE        *dcd_sim_slave;
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_FUNCTION_NOT_SUPPORTED, 0, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
         status = UX_FUNCTION_NOT_SUPPORTED;
-    }        
+    }
 
     /* Return completion status.  */
-    return(status);
+    return (status);
 }
-

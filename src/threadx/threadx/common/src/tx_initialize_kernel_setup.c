@@ -72,26 +72,26 @@
 /**************************************************************************/
 VOID _tx_initialize_kernel_setup(VOID) {
 
-  /* Ensure that the system state variable is set to indicate
-     initialization is in progress.  Note that this variable is
-     later used to represent interrupt nesting.  */
-  _tx_thread_system_state = TX_INITIALIZE_IN_PROGRESS;
+    /* Ensure that the system state variable is set to indicate
+       initialization is in progress.  Note that this variable is
+       later used to represent interrupt nesting.  */
+    _tx_thread_system_state = TX_INITIALIZE_IN_PROGRESS;
 
-  /* Call any port specific preprocessing.  */
-  TX_PORT_SPECIFIC_PRE_INITIALIZATION
+    /* Call any port specific preprocessing.  */
+    TX_PORT_SPECIFIC_PRE_INITIALIZATION
 
-  /* Invoke the low-level initialization to handle all processor specific
-     initialization issues.  */
-  _tx_initialize_low_level();
+    /* Invoke the low-level initialization to handle all processor specific
+       initialization issues.  */
+    _tx_initialize_low_level();
 
-  /* Invoke the high-level initialization to exercise all of the
-     ThreadX components and the application's initialization
-     function.  */
-  _tx_initialize_high_level();
+    /* Invoke the high-level initialization to exercise all of the
+       ThreadX components and the application's initialization
+       function.  */
+    _tx_initialize_high_level();
 
-  /* Call any port specific post-processing.  */
-  TX_PORT_SPECIFIC_POST_INITIALIZATION
+    /* Call any port specific post-processing.  */
+    TX_PORT_SPECIFIC_POST_INITIALIZATION
 
-  /* Set the system state to indicate initialization is almost done.  */
-  _tx_thread_system_state = TX_INITIALIZE_ALMOST_DONE;
+    /* Set the system state to indicate initialization is almost done.  */
+    _tx_thread_system_state = TX_INITIALIZE_ALMOST_DONE;
 }

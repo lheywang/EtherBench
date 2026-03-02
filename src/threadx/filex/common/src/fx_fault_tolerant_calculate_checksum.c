@@ -73,26 +73,26 @@
 /*                                                                        */
 /**************************************************************************/
 USHORT _fx_fault_tolerant_calculate_checksum(UCHAR *data, UINT len) {
-  ULONG checksum = 0;
-  ULONG long_value;
+    ULONG checksum = 0;
+    ULONG long_value;
 
-  while (len >= 4) {
+    while (len >= 4) {
 
-    /* Read first long value. */
-    long_value = _fx_utility_32_unsigned_read(data);
+        /* Read first long value. */
+        long_value = _fx_utility_32_unsigned_read(data);
 
-    /* Calculate checksum. */
-    checksum += (long_value >> 16) + (long_value & 0xFFFF);
+        /* Calculate checksum. */
+        checksum += (long_value >> 16) + (long_value & 0xFFFF);
 
-    /* Decrease length. */
-    len -= sizeof(ULONG);
-    data += sizeof(ULONG);
-  }
+        /* Decrease length. */
+        len -= sizeof(ULONG);
+        data += sizeof(ULONG);
+    }
 
-  /* Trim high 16 bits of checksum. */
-  checksum = (checksum & 0xFFFF) + (checksum >> 16);
-  checksum = (checksum & 0xFFFF) + (checksum >> 16);
+    /* Trim high 16 bits of checksum. */
+    checksum = (checksum & 0xFFFF) + (checksum >> 16);
+    checksum = (checksum & 0xFFFF) + (checksum >> 16);
 
-  return ((USHORT)((~checksum) & 0xFFFF));
+    return ((USHORT)((~checksum) & 0xFFFF));
 }
 #endif /* FX_ENABLE_FAULT_TOLERANT */

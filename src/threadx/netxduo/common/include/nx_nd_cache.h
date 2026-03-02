@@ -104,8 +104,7 @@
 UINT _nx_nd_cache_interface_entries_delete(NX_IP *ip_ptr, UINT index);
 
 /* Add en entry to the cache. */
-UINT _nx_nd_cache_add(NX_IP *ip_ptr, ULONG *dest_ip, NX_INTERFACE *if_index,
-                      CHAR *mac, INT IsStatic, INT status,
+UINT _nx_nd_cache_add(NX_IP *ip_ptr, ULONG *dest_ip, NX_INTERFACE *if_index, CHAR *mac, INT IsStatic, INT status,
                       NXD_IPV6_ADDRESS *nxd_interface, ND_CACHE_ENTRY **entry);
 
 /* Delete an entry based on IP address. */
@@ -115,19 +114,14 @@ UINT _nx_nd_cache_delete_internal(NX_IP *ip_ptr, ND_CACHE_ENTRY *entry);
 VOID _nx_nd_cache_fast_periodic_update(NX_IP *ip_ptr);
 
 /* Find cache entry based on neighbor IP address. */
-UINT _nx_nd_cache_find_entry(NX_IP *ip_ptr, ULONG *dest_ip,
-                             ND_CACHE_ENTRY **entry);
+UINT _nx_nd_cache_find_entry(NX_IP *ip_ptr, ULONG *dest_ip, ND_CACHE_ENTRY **entry);
 
 /* Find cache entry based on neighbor IP address.  If not found, create new
  * entry. */
-UINT _nx_nd_cache_add_entry(NX_IP *ip_ptr, ULONG *dest_ip,
-                            NXD_IPV6_ADDRESS *nxd_address,
-                            ND_CACHE_ENTRY **entry);
+UINT _nx_nd_cache_add_entry(NX_IP *ip_ptr, ULONG *dest_ip, NXD_IPV6_ADDRESS *nxd_address, ND_CACHE_ENTRY **entry);
 
 /* Find cache entry based on LLA. */
-UINT _nx_nd_cache_find_entry_by_mac_addr(NX_IP *ip_ptr, ULONG physical_msw,
-                                         ULONG physical_lsw,
-                                         ND_CACHE_ENTRY **entry);
+UINT _nx_nd_cache_find_entry_by_mac_addr(NX_IP *ip_ptr, ULONG physical_msw, ULONG physical_lsw, ND_CACHE_ENTRY **entry);
 
 /* The real function that invalidates the whole cache. */
 VOID _nxd_nd_cache_invalidate_internal(NX_IP *ip_ptr);
@@ -144,28 +138,21 @@ UINT _nxd_nd_cache_entry_delete(NX_IP *ip_ptr, ULONG *dest_ip);
 UINT _nxde_nd_cache_entry_delete(NX_IP *ip_ptr, ULONG *dest_ip);
 
 /* Create an IPv6-MAC mapping to the ND cache entry. */
-UINT _nxd_nd_cache_entry_set(NX_IP *ip_ptr, ULONG *dest_ip, UINT if_index,
-                             CHAR *mac);
-UINT _nxde_nd_cache_entry_set(NX_IP *ip_ptr, ULONG *dest_ip, UINT if_index,
-                              CHAR *mac);
+UINT _nxd_nd_cache_entry_set(NX_IP *ip_ptr, ULONG *dest_ip, UINT if_index, CHAR *mac);
+UINT _nxde_nd_cache_entry_set(NX_IP *ip_ptr, ULONG *dest_ip, UINT if_index, CHAR *mac);
 
 /* Invalidate the whole cache. */
 UINT _nxd_nd_cache_invalidate(NX_IP *ip_ptr);
 UINT _nxde_nd_cache_invalidate(NX_IP *ip_ptr);
 
-UINT _nxd_nd_cache_ip_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address,
-                                   ULONG physical_msw, ULONG physical_lsw,
+UINT _nxd_nd_cache_ip_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, ULONG physical_msw, ULONG physical_lsw,
                                    UINT *if_index);
-UINT _nxde_nd_cache_ip_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address,
-                                    ULONG physical_msw, ULONG physical_lsw,
+UINT _nxde_nd_cache_ip_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, ULONG physical_msw, ULONG physical_lsw,
                                     UINT *if_index);
 
-UINT _nxd_nd_cache_hardware_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address,
-                                         ULONG *physical_msw,
+UINT _nxd_nd_cache_hardware_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, ULONG *physical_msw,
                                          ULONG *physical_lsw, UINT *if_index);
-UINT _nxde_nd_cache_hardware_address_find(NX_IP *ip_ptr,
-                                          NXD_ADDRESS *ip_address,
-                                          ULONG *physical_msw,
+UINT _nxde_nd_cache_hardware_address_find(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, ULONG *physical_msw,
                                           ULONG *physical_lsw, UINT *if_index);
 
 #endif /* NX_ND_CACHE_H */

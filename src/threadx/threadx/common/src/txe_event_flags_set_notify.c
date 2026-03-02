@@ -69,30 +69,29 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _txe_event_flags_set_notify(
-    TX_EVENT_FLAGS_GROUP *group_ptr,
-    VOID (*events_set_notify)(TX_EVENT_FLAGS_GROUP *notify_group_ptr)) {
+UINT _txe_event_flags_set_notify(TX_EVENT_FLAGS_GROUP *group_ptr,
+                                 VOID (*events_set_notify)(TX_EVENT_FLAGS_GROUP *notify_group_ptr)) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid group pointer.  */
-  if (group_ptr == TX_NULL) {
+    /* Check for an invalid group pointer.  */
+    if (group_ptr == TX_NULL) {
 
-    /* Event flags group pointer is invalid, return appropriate error code.  */
-    status = TX_GROUP_ERROR;
-  }
+        /* Event flags group pointer is invalid, return appropriate error code.  */
+        status = TX_GROUP_ERROR;
+    }
 
-  /* Now check for invalid event group ID.  */
-  else if (group_ptr->tx_event_flags_group_id != TX_EVENT_FLAGS_ID) {
+    /* Now check for invalid event group ID.  */
+    else if (group_ptr->tx_event_flags_group_id != TX_EVENT_FLAGS_ID) {
 
-    /* Event flags group pointer is invalid, return appropriate error code.  */
-    status = TX_GROUP_ERROR;
-  } else {
+        /* Event flags group pointer is invalid, return appropriate error code.  */
+        status = TX_GROUP_ERROR;
+    } else {
 
-    /* Call actual event flags set notify function.  */
-    status = _tx_event_flags_set_notify(group_ptr, events_set_notify);
-  }
+        /* Call actual event flags set notify function.  */
+        status = _tx_event_flags_set_notify(group_ptr, events_set_notify);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

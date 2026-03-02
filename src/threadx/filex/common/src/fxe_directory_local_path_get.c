@@ -69,19 +69,18 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_directory_local_path_get(FX_MEDIA *media_ptr,
-                                   CHAR **return_path_name) {
+UINT _fxe_directory_local_path_get(FX_MEDIA *media_ptr, CHAR **return_path_name) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null media pointer or null destination for the default path. */
-  if ((media_ptr == FX_NULL) || (return_path_name == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null media pointer or null destination for the default path. */
+    if ((media_ptr == FX_NULL) || (return_path_name == FX_NULL)) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Call actual local path get service.  */
-  status = _fx_directory_local_path_get(media_ptr, return_path_name);
+    /* Call actual local path get service.  */
+    status = _fx_directory_local_path_get(media_ptr, return_path_name);
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }

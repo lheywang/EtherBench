@@ -40,8 +40,7 @@ extern "C" {
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
-#define LL_EXTI_REGISTER_PINPOS_SHFT                                           \
-  16U /*!< Define used to shift pin position in EXTICR register */
+#define LL_EXTI_REGISTER_PINPOS_SHFT 16U /*!< Define used to shift pin position in EXTICR register */
 
 /* Private Macros ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER)
@@ -59,24 +58,22 @@ extern "C" {
  */
 typedef struct {
 
-  uint32_t Line_0_31; /*!< Specifies the EXTI lines to be enabled or disabled
-                         for Lines in range 0 to 31 This parameter can be any
-                         combination of @ref EXTI_LL_EC_LINE */
+    uint32_t Line_0_31; /*!< Specifies the EXTI lines to be enabled or disabled
+                           for Lines in range 0 to 31 This parameter can be any
+                           combination of @ref EXTI_LL_EC_LINE */
 
-  uint32_t Line_32_63; /*!< Specifies the EXTI lines to be enabled or disabled
-                          for Lines in range 32 to 63 This parameter can be any
-                          combination of @ref EXTI_LL_EC_LINE */
+    uint32_t Line_32_63; /*!< Specifies the EXTI lines to be enabled or disabled
+                            for Lines in range 32 to 63 This parameter can be any
+                            combination of @ref EXTI_LL_EC_LINE */
 
-  FunctionalState
-      LineCommand; /*!< Specifies the new state of the selected EXTI lines.
-                        This parameter can be set either to ENABLE or DISABLE */
+    FunctionalState LineCommand; /*!< Specifies the new state of the selected EXTI lines.
+                                      This parameter can be set either to ENABLE or DISABLE */
 
-  uint8_t Mode; /*!< Specifies the mode for the EXTI lines.
-                     This parameter can be a value of @ref EXTI_LL_EC_MODE. */
+    uint8_t Mode; /*!< Specifies the mode for the EXTI lines.
+                       This parameter can be a value of @ref EXTI_LL_EC_MODE. */
 
-  uint8_t
-      Trigger; /*!< Specifies the trigger signal active edge for the EXTI lines.
-                    This parameter can be a value of @ref EXTI_LL_EC_TRIGGER. */
+    uint8_t Trigger; /*!< Specifies the trigger signal active edge for the EXTI lines.
+                          This parameter can be a value of @ref EXTI_LL_EC_TRIGGER. */
 } LL_EXTI_InitTypeDef;
 
 /**
@@ -132,10 +129,9 @@ typedef struct {
 #define LL_EXTI_LINE_30 EXTI_IMR1_IM30 /*!< Extended line 30 */
 #endif                                 /* EXTI_IMR1_IM30 */
 #if defined(EXTI_IMR1_IM31)
-#define LL_EXTI_LINE_31 EXTI_IMR1_IM31 /*!< Extended line 31 */
-#endif                                 /* EXTI_IMR1_IM31 */
-#define LL_EXTI_LINE_ALL_0_31                                                  \
-  EXTI_IMR1_IM /*!< All Extended line not reserved */
+#define LL_EXTI_LINE_31 EXTI_IMR1_IM31     /*!< Extended line 31 */
+#endif                                     /* EXTI_IMR1_IM31 */
+#define LL_EXTI_LINE_ALL_0_31 EXTI_IMR1_IM /*!< All Extended line not reserved */
 
 #if defined(EXTI_IMR2_IM32)
 #define LL_EXTI_LINE_32 EXTI_IMR2_IM32 /*!< Extended line 32 */
@@ -209,25 +205,20 @@ typedef struct {
 /** @defgroup SYSTEM_LL_EC_EXTI_PORT EXTI EXTI PORT
  * @{
  */
-#define LL_EXTI_EXTI_PORTA 0U                   /*!< EXTI PORT A */
-#define LL_EXTI_EXTI_PORTB EXTI_EXTICR1_EXTI0_0 /*!< EXTI PORT B */
-#define LL_EXTI_EXTI_PORTC EXTI_EXTICR1_EXTI0_1 /*!< EXTI PORT C */
-#define LL_EXTI_EXTI_PORTD                                                     \
-  (EXTI_EXTICR1_EXTI0_1 | EXTI_EXTICR1_EXTI0_0) /*!< EXTI PORT D */
+#define LL_EXTI_EXTI_PORTA 0U                                            /*!< EXTI PORT A */
+#define LL_EXTI_EXTI_PORTB EXTI_EXTICR1_EXTI0_0                          /*!< EXTI PORT B */
+#define LL_EXTI_EXTI_PORTC EXTI_EXTICR1_EXTI0_1                          /*!< EXTI PORT C */
+#define LL_EXTI_EXTI_PORTD (EXTI_EXTICR1_EXTI0_1 | EXTI_EXTICR1_EXTI0_0) /*!< EXTI PORT D */
 #if defined(GPIOE)
 #define LL_EXTI_EXTI_PORTE EXTI_EXTICR1_EXTI0_2 /*!< EXTI PORT E */
 #endif                                          /* GPIO E */
 #if defined(GPIOF)
-#define LL_EXTI_EXTI_PORTF                                                     \
-  (EXTI_EXTICR1_EXTI0_2 | EXTI_EXTICR1_EXTI0_0) /*!< EXTI PORT F */
-#endif                                          /* GPIO F */
+#define LL_EXTI_EXTI_PORTF (EXTI_EXTICR1_EXTI0_2 | EXTI_EXTICR1_EXTI0_0) /*!< EXTI PORT F */
+#endif                                                                   /* GPIO F */
 #if defined(GPIOG)
-#define LL_EXTI_EXTI_PORTG                                                     \
-  (EXTI_EXTICR1_EXTI0_2 | EXTI_EXTICR1_EXTI0_1) /*!< EXTI PORT G */
-#endif                                          /* GPIO G */
-#define LL_EXTI_EXTI_PORTH                                                     \
-  (EXTI_EXTICR1_EXTI0_2 | EXTI_EXTICR1_EXTI0_1 |                               \
-   EXTI_EXTICR1_EXTI0_0) /*!< EXTI PORT H */
+#define LL_EXTI_EXTI_PORTG (EXTI_EXTICR1_EXTI0_2 | EXTI_EXTICR1_EXTI0_1)                        /*!< EXTI PORT G */
+#endif                                                                                          /* GPIO G */
+#define LL_EXTI_EXTI_PORTH (EXTI_EXTICR1_EXTI0_2 | EXTI_EXTICR1_EXTI0_1 | EXTI_EXTICR1_EXTI0_0) /*!< EXTI PORT H */
 #if defined(GPIOI)
 #define LL_EXTI_EXTI_PORTI EXTI_EXTICR1_EXTI0_3 /*!< EXTI PORT I */
 #endif                                          /* GPIO I */
@@ -239,54 +230,22 @@ typedef struct {
 /** @defgroup SYSTEM_LL_EC_EXTI_LINE EXTI EXTI LINE
  * @{
  */
-#define LL_EXTI_EXTI_LINE0                                                     \
-  ((0U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                      \
-   0U) /*!< EXTI_POSITION_0  | EXTICR[0] */
-#define LL_EXTI_EXTI_LINE1                                                     \
-  ((8U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                      \
-   0U) /*!< EXTI_POSITION_8  | EXTICR[0] */
-#define LL_EXTI_EXTI_LINE2                                                     \
-  ((16U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                     \
-   0U) /*!< EXTI_POSITION_16 | EXTICR[0] */
-#define LL_EXTI_EXTI_LINE3                                                     \
-  ((24U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                     \
-   0U) /*!< EXTI_POSITION_24 | EXTICR[0] */
-#define LL_EXTI_EXTI_LINE4                                                     \
-  ((0U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                      \
-   1U) /*!< EXTI_POSITION_0  | EXTICR[1] */
-#define LL_EXTI_EXTI_LINE5                                                     \
-  ((8U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                      \
-   1U) /*!< EXTI_POSITION_8  | EXTICR[1] */
-#define LL_EXTI_EXTI_LINE6                                                     \
-  ((16U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                     \
-   1U) /*!< EXTI_POSITION_16 | EXTICR[1] */
-#define LL_EXTI_EXTI_LINE7                                                     \
-  ((24U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                     \
-   1U) /*!< EXTI_POSITION_24 | EXTICR[1] */
-#define LL_EXTI_EXTI_LINE8                                                     \
-  ((0U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                      \
-   2U) /*!< EXTI_POSITION_0  | EXTICR[2] */
-#define LL_EXTI_EXTI_LINE9                                                     \
-  ((8U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                      \
-   2U) /*!< EXTI_POSITION_8  | EXTICR[2] */
-#define LL_EXTI_EXTI_LINE10                                                    \
-  ((16U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                     \
-   2U) /*!< EXTI_POSITION_16 | EXTICR[2] */
-#define LL_EXTI_EXTI_LINE11                                                    \
-  ((24U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                     \
-   2U) /*!< EXTI_POSITION_24 | EXTICR[2] */
-#define LL_EXTI_EXTI_LINE12                                                    \
-  ((0U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                      \
-   3U) /*!< EXTI_POSITION_0  | EXTICR[3] */
-#define LL_EXTI_EXTI_LINE13                                                    \
-  ((8U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                      \
-   3U) /*!< EXTI_POSITION_8  | EXTICR[3] */
-#define LL_EXTI_EXTI_LINE14                                                    \
-  ((16U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                     \
-   3U) /*!< EXTI_POSITION_16 | EXTICR[3] */
-#define LL_EXTI_EXTI_LINE15                                                    \
-  ((24U << LL_EXTI_REGISTER_PINPOS_SHFT) |                                     \
-   3U) /*!< EXTI_POSITION_24 | EXTICR[3] */
+#define LL_EXTI_EXTI_LINE0 ((0U << LL_EXTI_REGISTER_PINPOS_SHFT) | 0U)   /*!< EXTI_POSITION_0  | EXTICR[0] */
+#define LL_EXTI_EXTI_LINE1 ((8U << LL_EXTI_REGISTER_PINPOS_SHFT) | 0U)   /*!< EXTI_POSITION_8  | EXTICR[0] */
+#define LL_EXTI_EXTI_LINE2 ((16U << LL_EXTI_REGISTER_PINPOS_SHFT) | 0U)  /*!< EXTI_POSITION_16 | EXTICR[0] */
+#define LL_EXTI_EXTI_LINE3 ((24U << LL_EXTI_REGISTER_PINPOS_SHFT) | 0U)  /*!< EXTI_POSITION_24 | EXTICR[0] */
+#define LL_EXTI_EXTI_LINE4 ((0U << LL_EXTI_REGISTER_PINPOS_SHFT) | 1U)   /*!< EXTI_POSITION_0  | EXTICR[1] */
+#define LL_EXTI_EXTI_LINE5 ((8U << LL_EXTI_REGISTER_PINPOS_SHFT) | 1U)   /*!< EXTI_POSITION_8  | EXTICR[1] */
+#define LL_EXTI_EXTI_LINE6 ((16U << LL_EXTI_REGISTER_PINPOS_SHFT) | 1U)  /*!< EXTI_POSITION_16 | EXTICR[1] */
+#define LL_EXTI_EXTI_LINE7 ((24U << LL_EXTI_REGISTER_PINPOS_SHFT) | 1U)  /*!< EXTI_POSITION_24 | EXTICR[1] */
+#define LL_EXTI_EXTI_LINE8 ((0U << LL_EXTI_REGISTER_PINPOS_SHFT) | 2U)   /*!< EXTI_POSITION_0  | EXTICR[2] */
+#define LL_EXTI_EXTI_LINE9 ((8U << LL_EXTI_REGISTER_PINPOS_SHFT) | 2U)   /*!< EXTI_POSITION_8  | EXTICR[2] */
+#define LL_EXTI_EXTI_LINE10 ((16U << LL_EXTI_REGISTER_PINPOS_SHFT) | 2U) /*!< EXTI_POSITION_16 | EXTICR[2] */
+#define LL_EXTI_EXTI_LINE11 ((24U << LL_EXTI_REGISTER_PINPOS_SHFT) | 2U) /*!< EXTI_POSITION_24 | EXTICR[2] */
+#define LL_EXTI_EXTI_LINE12 ((0U << LL_EXTI_REGISTER_PINPOS_SHFT) | 3U)  /*!< EXTI_POSITION_0  | EXTICR[3] */
+#define LL_EXTI_EXTI_LINE13 ((8U << LL_EXTI_REGISTER_PINPOS_SHFT) | 3U)  /*!< EXTI_POSITION_8  | EXTICR[3] */
+#define LL_EXTI_EXTI_LINE14 ((16U << LL_EXTI_REGISTER_PINPOS_SHFT) | 3U) /*!< EXTI_POSITION_16 | EXTICR[3] */
+#define LL_EXTI_EXTI_LINE15 ((24U << LL_EXTI_REGISTER_PINPOS_SHFT) | 3U) /*!< EXTI_POSITION_24 | EXTICR[3] */
 /**
  * @}
  */
@@ -308,11 +267,10 @@ typedef struct {
 /** @defgroup EXTI_LL_EC_TRIGGER Edge Trigger
  * @{
  */
-#define LL_EXTI_TRIGGER_NONE ((uint8_t)0x00U)    /*!< No Trigger Mode */
-#define LL_EXTI_TRIGGER_RISING ((uint8_t)0x01U)  /*!< Trigger Rising Mode */
-#define LL_EXTI_TRIGGER_FALLING ((uint8_t)0x02U) /*!< Trigger Falling Mode */
-#define LL_EXTI_TRIGGER_RISING_FALLING                                         \
-  ((uint8_t)0x03U) /*!< Trigger Rising & Falling Mode */
+#define LL_EXTI_TRIGGER_NONE ((uint8_t)0x00U)           /*!< No Trigger Mode */
+#define LL_EXTI_TRIGGER_RISING ((uint8_t)0x01U)         /*!< Trigger Rising Mode */
+#define LL_EXTI_TRIGGER_FALLING ((uint8_t)0x02U)        /*!< Trigger Falling Mode */
+#define LL_EXTI_TRIGGER_RISING_FALLING ((uint8_t)0x03U) /*!< Trigger Rising & Falling Mode */
 
 /**
  * @}
@@ -339,8 +297,7 @@ typedef struct {
  * @param  __VALUE__ Value to be written in the register
  * @retval None
  */
-#define LL_EXTI_WriteReg(__REG__, __VALUE__)                                   \
-  WRITE_REG(EXTI->__REG__, (__VALUE__))
+#define LL_EXTI_WriteReg(__REG__, __VALUE__) WRITE_REG(EXTI->__REG__, (__VALUE__))
 
 /**
  * @brief  Read a value in EXTI register
@@ -407,9 +364,7 @@ typedef struct {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnableIT_0_31(uint32_t ExtiLine) {
-  SET_BIT(EXTI->IMR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnableIT_0_31(uint32_t ExtiLine) { SET_BIT(EXTI->IMR1, ExtiLine); }
 
 /**
  * @brief  Enable ExtiLine Interrupt request for Lines in range 32 to 63
@@ -447,9 +402,7 @@ __STATIC_INLINE void LL_EXTI_EnableIT_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnableIT_32_63(uint32_t ExtiLine) {
-  SET_BIT(EXTI->IMR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnableIT_32_63(uint32_t ExtiLine) { SET_BIT(EXTI->IMR2, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Interrupt request for Lines in range 0 to 31
@@ -494,9 +447,7 @@ __STATIC_INLINE void LL_EXTI_EnableIT_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisableIT_0_31(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->IMR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisableIT_0_31(uint32_t ExtiLine) { CLEAR_BIT(EXTI->IMR1, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Interrupt request for Lines in range 32 to 63
@@ -534,9 +485,7 @@ __STATIC_INLINE void LL_EXTI_DisableIT_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisableIT_32_63(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->IMR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisableIT_32_63(uint32_t ExtiLine) { CLEAR_BIT(EXTI->IMR2, ExtiLine); }
 
 /**
  * @brief  Indicate if ExtiLine Interrupt request is enabled for Lines in range
@@ -583,7 +532,7 @@ __STATIC_INLINE void LL_EXTI_DisableIT_32_63(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledIT_0_31(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->IMR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->IMR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 /**
@@ -624,7 +573,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledIT_0_31(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledIT_32_63(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->IMR2, ExtiLine) == (ExtiLine)) ? 1U : 0U);
+    return ((READ_BIT(EXTI->IMR2, ExtiLine) == (ExtiLine)) ? 1U : 0U);
 }
 
 /**
@@ -675,9 +624,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledIT_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnableEvent_0_31(uint32_t ExtiLine) {
-  SET_BIT(EXTI->EMR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnableEvent_0_31(uint32_t ExtiLine) { SET_BIT(EXTI->EMR1, ExtiLine); }
 
 /**
  * @brief  Enable ExtiLine Event request for Lines in range 32 to 63
@@ -715,9 +662,7 @@ __STATIC_INLINE void LL_EXTI_EnableEvent_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnableEvent_32_63(uint32_t ExtiLine) {
-  SET_BIT(EXTI->EMR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnableEvent_32_63(uint32_t ExtiLine) { SET_BIT(EXTI->EMR2, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Event request for Lines in range 0 to 31
@@ -759,9 +704,7 @@ __STATIC_INLINE void LL_EXTI_EnableEvent_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisableEvent_0_31(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->EMR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisableEvent_0_31(uint32_t ExtiLine) { CLEAR_BIT(EXTI->EMR1, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Event request for Lines in range 32 to 63
@@ -798,9 +741,7 @@ __STATIC_INLINE void LL_EXTI_DisableEvent_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisableEvent_32_63(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->EMR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisableEvent_32_63(uint32_t ExtiLine) { CLEAR_BIT(EXTI->EMR2, ExtiLine); }
 
 /**
  * @brief  Indicate if ExtiLine Event request is enabled for Lines in range 0 to
@@ -844,7 +785,7 @@ __STATIC_INLINE void LL_EXTI_DisableEvent_32_63(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledEvent_0_31(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->EMR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->EMR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 /**
@@ -884,7 +825,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledEvent_0_31(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledEvent_32_63(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->EMR2, ExtiLine) == (ExtiLine)) ? 1U : 0U);
+    return ((READ_BIT(EXTI->EMR2, ExtiLine) == (ExtiLine)) ? 1U : 0U);
 }
 
 /**
@@ -926,9 +867,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledEvent_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnableRisingTrig_0_31(uint32_t ExtiLine) {
-  SET_BIT(EXTI->RTSR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnableRisingTrig_0_31(uint32_t ExtiLine) { SET_BIT(EXTI->RTSR1, ExtiLine); }
 
 /**
  * @brief  Enable ExtiLine Rising Edge Trigger for Lines in range 32 to 63
@@ -946,9 +885,7 @@ __STATIC_INLINE void LL_EXTI_EnableRisingTrig_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnableRisingTrig_32_63(uint32_t ExtiLine) {
-  SET_BIT(EXTI->RTSR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnableRisingTrig_32_63(uint32_t ExtiLine) { SET_BIT(EXTI->RTSR2, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Rising Edge Trigger for Lines in range 0 to 31
@@ -981,9 +918,7 @@ __STATIC_INLINE void LL_EXTI_EnableRisingTrig_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisableRisingTrig_0_31(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->RTSR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisableRisingTrig_0_31(uint32_t ExtiLine) { CLEAR_BIT(EXTI->RTSR1, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Rising Edge Trigger for Lines in range 32 to 63
@@ -1003,9 +938,7 @@ __STATIC_INLINE void LL_EXTI_DisableRisingTrig_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisableRisingTrig_32_63(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->RTSR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisableRisingTrig_32_63(uint32_t ExtiLine) { CLEAR_BIT(EXTI->RTSR2, ExtiLine); }
 
 /**
  * @brief  Check if rising edge trigger is enabled for Lines in range 0 to 31
@@ -1032,7 +965,7 @@ __STATIC_INLINE void LL_EXTI_DisableRisingTrig_32_63(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledRisingTrig_0_31(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->RTSR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->RTSR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 /**
@@ -1048,7 +981,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledRisingTrig_0_31(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledRisingTrig_32_63(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->RTSR2, ExtiLine) == (ExtiLine)) ? 1U : 0U);
+    return ((READ_BIT(EXTI->RTSR2, ExtiLine) == (ExtiLine)) ? 1U : 0U);
 }
 
 /**
@@ -1090,9 +1023,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledRisingTrig_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnableFallingTrig_0_31(uint32_t ExtiLine) {
-  SET_BIT(EXTI->FTSR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnableFallingTrig_0_31(uint32_t ExtiLine) { SET_BIT(EXTI->FTSR1, ExtiLine); }
 
 /**
  * @brief  Enable ExtiLine Falling Edge Trigger for Lines in range 32 to 63
@@ -1112,9 +1043,7 @@ __STATIC_INLINE void LL_EXTI_EnableFallingTrig_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnableFallingTrig_32_63(uint32_t ExtiLine) {
-  SET_BIT(EXTI->FTSR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnableFallingTrig_32_63(uint32_t ExtiLine) { SET_BIT(EXTI->FTSR2, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Falling Edge Trigger for Lines in range 0 to 31
@@ -1146,9 +1075,7 @@ __STATIC_INLINE void LL_EXTI_EnableFallingTrig_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisableFallingTrig_0_31(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->FTSR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisableFallingTrig_0_31(uint32_t ExtiLine) { CLEAR_BIT(EXTI->FTSR1, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Falling Edge Trigger for Lines in range 32 to 63
@@ -1167,9 +1094,7 @@ __STATIC_INLINE void LL_EXTI_DisableFallingTrig_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisableFallingTrig_32_63(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->FTSR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisableFallingTrig_32_63(uint32_t ExtiLine) { CLEAR_BIT(EXTI->FTSR2, ExtiLine); }
 
 /**
  * @brief  Check if falling edge trigger is enabled for Lines in range 0 to 31
@@ -1196,7 +1121,7 @@ __STATIC_INLINE void LL_EXTI_DisableFallingTrig_32_63(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledFallingTrig_0_31(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->FTSR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->FTSR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 /**
@@ -1211,7 +1136,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledFallingTrig_0_31(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledFallingTrig_32_63(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->FTSR2, ExtiLine) == (ExtiLine)) ? 1U : 0U);
+    return ((READ_BIT(EXTI->FTSR2, ExtiLine) == (ExtiLine)) ? 1U : 0U);
 }
 
 /**
@@ -1252,9 +1177,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledFallingTrig_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_GenerateSWI_0_31(uint32_t ExtiLine) {
-  SET_BIT(EXTI->SWIER1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_GenerateSWI_0_31(uint32_t ExtiLine) { SET_BIT(EXTI->SWIER1, ExtiLine); }
 
 /**
  * @brief  Generate a software Interrupt Event for Lines in range 32 to 63
@@ -1272,9 +1195,7 @@ __STATIC_INLINE void LL_EXTI_GenerateSWI_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_GenerateSWI_32_63(uint32_t ExtiLine) {
-  SET_BIT(EXTI->SWIER2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_GenerateSWI_32_63(uint32_t ExtiLine) { SET_BIT(EXTI->SWIER2, ExtiLine); }
 
 /**
  * @}
@@ -1312,7 +1233,7 @@ __STATIC_INLINE void LL_EXTI_GenerateSWI_32_63(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsActiveFallingFlag_0_31(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->FPR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->FPR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 /**
@@ -1330,7 +1251,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsActiveFallingFlag_0_31(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsActiveFallingFlag_32_63(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->FPR2, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->FPR2, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 /**
@@ -1361,7 +1282,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsActiveFallingFlag_32_63(uint32_t ExtiLine) {
  * interrupt
  */
 __STATIC_INLINE uint32_t LL_EXTI_ReadFallingFlag_0_31(uint32_t ExtiLine) {
-  return (uint32_t)(READ_BIT(EXTI->FPR1, ExtiLine));
+    return (uint32_t)(READ_BIT(EXTI->FPR1, ExtiLine));
 }
 
 /**
@@ -1379,7 +1300,7 @@ __STATIC_INLINE uint32_t LL_EXTI_ReadFallingFlag_0_31(uint32_t ExtiLine) {
  * interrupt
  */
 __STATIC_INLINE uint32_t LL_EXTI_ReadFallingFlag_32_63(uint32_t ExtiLine) {
-  return (uint32_t)(READ_BIT(EXTI->FPR2, ExtiLine));
+    return (uint32_t)(READ_BIT(EXTI->FPR2, ExtiLine));
 }
 
 /**
@@ -1408,9 +1329,7 @@ __STATIC_INLINE uint32_t LL_EXTI_ReadFallingFlag_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_ClearFallingFlag_0_31(uint32_t ExtiLine) {
-  WRITE_REG(EXTI->FPR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_ClearFallingFlag_0_31(uint32_t ExtiLine) { WRITE_REG(EXTI->FPR1, ExtiLine); }
 
 /**
  * @brief  Clear ExtLine Falling Flags  for Lines in range 32 to 63
@@ -1425,9 +1344,7 @@ __STATIC_INLINE void LL_EXTI_ClearFallingFlag_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_ClearFallingFlag_32_63(uint32_t ExtiLine) {
-  WRITE_REG(EXTI->FPR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_ClearFallingFlag_32_63(uint32_t ExtiLine) { WRITE_REG(EXTI->FPR2, ExtiLine); }
 
 /**
  * @brief  Check if the ExtLine Rising Flag is set or not for Lines in range 0
@@ -1457,7 +1374,7 @@ __STATIC_INLINE void LL_EXTI_ClearFallingFlag_32_63(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsActiveRisingFlag_0_31(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->RPR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->RPR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 /**
@@ -1475,7 +1392,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsActiveRisingFlag_0_31(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsActiveRisingFlag_32_63(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->RPR2, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->RPR2, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 /**
@@ -1506,7 +1423,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsActiveRisingFlag_32_63(uint32_t ExtiLine) {
  * interrupt
  */
 __STATIC_INLINE uint32_t LL_EXTI_ReadRisingFlag_0_31(uint32_t ExtiLine) {
-  return (uint32_t)(READ_BIT(EXTI->RPR1, ExtiLine));
+    return (uint32_t)(READ_BIT(EXTI->RPR1, ExtiLine));
 }
 
 /**
@@ -1524,7 +1441,7 @@ __STATIC_INLINE uint32_t LL_EXTI_ReadRisingFlag_0_31(uint32_t ExtiLine) {
  * interrupt
  */
 __STATIC_INLINE uint32_t LL_EXTI_ReadRisingFlag_32_63(uint32_t ExtiLine) {
-  return (uint32_t)(READ_BIT(EXTI->RPR2, ExtiLine));
+    return (uint32_t)(READ_BIT(EXTI->RPR2, ExtiLine));
 }
 
 /**
@@ -1553,9 +1470,7 @@ __STATIC_INLINE uint32_t LL_EXTI_ReadRisingFlag_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_ClearRisingFlag_0_31(uint32_t ExtiLine) {
-  WRITE_REG(EXTI->RPR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_ClearRisingFlag_0_31(uint32_t ExtiLine) { WRITE_REG(EXTI->RPR1, ExtiLine); }
 
 /**
  * @brief  Clear ExtLine Rising Flags  for Lines in range 32 to 63
@@ -1570,9 +1485,7 @@ __STATIC_INLINE void LL_EXTI_ClearRisingFlag_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_ClearRisingFlag_32_63(uint32_t ExtiLine) {
-  WRITE_REG(EXTI->RPR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_ClearRisingFlag_32_63(uint32_t ExtiLine) { WRITE_REG(EXTI->RPR2, ExtiLine); }
 
 /**
  * @}
@@ -1631,9 +1544,8 @@ __STATIC_INLINE void LL_EXTI_ClearRisingFlag_32_63(uint32_t ExtiLine) {
  * @retval None
  */
 __STATIC_INLINE void LL_EXTI_SetEXTISource(uint32_t Port, uint32_t Line) {
-  MODIFY_REG(EXTI->EXTICR[Line & 0x03U],
-             EXTI_EXTICR1_EXTI0 << (Line >> LL_EXTI_REGISTER_PINPOS_SHFT),
-             Port << (Line >> LL_EXTI_REGISTER_PINPOS_SHFT));
+    MODIFY_REG(EXTI->EXTICR[Line & 0x03U], EXTI_EXTICR1_EXTI0 << (Line >> LL_EXTI_REGISTER_PINPOS_SHFT),
+               Port << (Line >> LL_EXTI_REGISTER_PINPOS_SHFT));
 }
 
 /**
@@ -1685,10 +1597,9 @@ __STATIC_INLINE void LL_EXTI_SetEXTISource(uint32_t Port, uint32_t Line) {
  *         (*) value not defined in all devices
  */
 __STATIC_INLINE uint32_t LL_EXTI_GetEXTISource(uint32_t Line) {
-  return (uint32_t)(READ_BIT(EXTI->EXTICR[Line & 0x03U],
-                             (EXTI_EXTICR1_EXTI0
-                              << (Line >> LL_EXTI_REGISTER_PINPOS_SHFT))) >>
-                    (Line >> LL_EXTI_REGISTER_PINPOS_SHFT));
+    return (uint32_t)(READ_BIT(EXTI->EXTICR[Line & 0x03U],
+                               (EXTI_EXTICR1_EXTI0 << (Line >> LL_EXTI_REGISTER_PINPOS_SHFT))) >>
+                      (Line >> LL_EXTI_REGISTER_PINPOS_SHFT));
 }
 /**
  * @}
@@ -1740,9 +1651,7 @@ __STATIC_INLINE uint32_t LL_EXTI_GetEXTISource(uint32_t Line) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnableSecure_0_31(uint32_t ExtiLine) {
-  SET_BIT(EXTI->SECCFGR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnableSecure_0_31(uint32_t ExtiLine) { SET_BIT(EXTI->SECCFGR1, ExtiLine); }
 
 /**
  * @brief  Enable ExtiLine Secure attribute for Lines in range 32 to 63
@@ -1778,9 +1687,7 @@ __STATIC_INLINE void LL_EXTI_EnableSecure_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnableSecure_32_63(uint32_t ExtiLine) {
-  SET_BIT(EXTI->SECCFGR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnableSecure_32_63(uint32_t ExtiLine) { SET_BIT(EXTI->SECCFGR2, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Secure attribute for Lines in range 0 to 31
@@ -1822,9 +1729,7 @@ __STATIC_INLINE void LL_EXTI_EnableSecure_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisableSecure_0_31(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->SECCFGR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisableSecure_0_31(uint32_t ExtiLine) { CLEAR_BIT(EXTI->SECCFGR1, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Secure attribute for Lines in range 32 to 63
@@ -1860,9 +1765,7 @@ __STATIC_INLINE void LL_EXTI_DisableSecure_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisableSecure_32_63(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->SECCFGR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisableSecure_32_63(uint32_t ExtiLine) { CLEAR_BIT(EXTI->SECCFGR2, ExtiLine); }
 
 #endif /* __ARM_FEATURE_CMSE */
 
@@ -1909,7 +1812,7 @@ __STATIC_INLINE void LL_EXTI_DisableSecure_32_63(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledSecure_0_31(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->SECCFGR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->SECCFGR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 /**
@@ -1948,7 +1851,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledSecure_0_31(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledSecure_32_63(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->SECCFGR2, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->SECCFGR2, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 #endif /* EXTI_SECENR1_SEC0 */
 
@@ -2000,9 +1903,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledSecure_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnablePrivilege_0_31(uint32_t ExtiLine) {
-  SET_BIT(EXTI->PRIVCFGR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnablePrivilege_0_31(uint32_t ExtiLine) { SET_BIT(EXTI->PRIVCFGR1, ExtiLine); }
 
 /**
  * @brief  Enable ExtiLine Privilege attribute for Lines in range 32 to 63
@@ -2038,9 +1939,7 @@ __STATIC_INLINE void LL_EXTI_EnablePrivilege_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_EnablePrivilege_32_63(uint32_t ExtiLine) {
-  SET_BIT(EXTI->PRIVCFGR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_EnablePrivilege_32_63(uint32_t ExtiLine) { SET_BIT(EXTI->PRIVCFGR2, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Privilege attribute for Lines in range 0 to 31
@@ -2082,9 +1981,7 @@ __STATIC_INLINE void LL_EXTI_EnablePrivilege_32_63(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisablePrivilege_0_31(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->PRIVCFGR1, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisablePrivilege_0_31(uint32_t ExtiLine) { CLEAR_BIT(EXTI->PRIVCFGR1, ExtiLine); }
 
 /**
  * @brief  Disable ExtiLine Privilege attribute for Lines in range 32 to 63
@@ -2120,9 +2017,7 @@ __STATIC_INLINE void LL_EXTI_DisablePrivilege_0_31(uint32_t ExtiLine) {
  * @note   Please check each device line mapping for EXTI Line availability
  * @retval None
  */
-__STATIC_INLINE void LL_EXTI_DisablePrivilege_32_63(uint32_t ExtiLine) {
-  CLEAR_BIT(EXTI->PRIVCFGR2, ExtiLine);
-}
+__STATIC_INLINE void LL_EXTI_DisablePrivilege_32_63(uint32_t ExtiLine) { CLEAR_BIT(EXTI->PRIVCFGR2, ExtiLine); }
 
 /**
  * @brief  Indicate if ExtiLine Privilege attribute is enabled for Lines in
@@ -2166,7 +2061,7 @@ __STATIC_INLINE void LL_EXTI_DisablePrivilege_32_63(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledPrivilege_0_31(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->PRIVCFGR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->PRIVCFGR1, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 /**
@@ -2205,7 +2100,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledPrivilege_0_31(uint32_t ExtiLine) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledPrivilege_32_63(uint32_t ExtiLine) {
-  return ((READ_BIT(EXTI->PRIVCFGR2, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
+    return ((READ_BIT(EXTI->PRIVCFGR2, ExtiLine) == (ExtiLine)) ? 1UL : 0UL);
 }
 
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
@@ -2214,9 +2109,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledPrivilege_32_63(uint32_t ExtiLine) {
  * @rmtoll LOCKR           LOCK         LL_EXTI_EnableLockAttribute
  * @retval None.
  */
-__STATIC_INLINE void LL_EXTI_EnableLockAttribute(void) {
-  SET_BIT(EXTI->LOCKR, EXTI_LOCKR_LOCK);
-}
+__STATIC_INLINE void LL_EXTI_EnableLockAttribute(void) { SET_BIT(EXTI->LOCKR, EXTI_LOCKR_LOCK); }
 
 /**
  * @brief Check if EXTI attributes are locked.
@@ -2224,8 +2117,7 @@ __STATIC_INLINE void LL_EXTI_EnableLockAttribute(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_EXTI_IsEnabledLockAttribute(void) {
-  return ((READ_BIT(EXTI->LOCKR, EXTI_LOCKR_LOCK) == EXTI_LOCKR_LOCK) ? 1UL
-                                                                      : 0UL);
+    return ((READ_BIT(EXTI->LOCKR, EXTI_LOCKR_LOCK) == EXTI_LOCKR_LOCK) ? 1UL : 0UL);
 }
 #endif /* defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 /**

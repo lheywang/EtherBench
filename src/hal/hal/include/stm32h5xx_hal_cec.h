@@ -46,90 +46,88 @@ extern "C" {
  * @brief CEC Init Structure definition
  */
 typedef struct {
-  uint32_t SignalFreeTime; /*!< Set SFT field, specifies the Signal Free Time.
-                                It can be one of CEC_Signal_Free_Time
-                                and belongs to the set {0,...,7} where
-                                0x0 is the default configuration
-                                else means 0.5 + (SignalFreeTime - 1) nominal
-                              data bit periods */
+    uint32_t SignalFreeTime; /*!< Set SFT field, specifies the Signal Free Time.
+                                  It can be one of CEC_Signal_Free_Time
+                                  and belongs to the set {0,...,7} where
+                                  0x0 is the default configuration
+                                  else means 0.5 + (SignalFreeTime - 1) nominal
+                                data bit periods */
 
-  uint32_t Tolerance; /*!< Set RXTOL bit, specifies the tolerance accepted on
-                         the received waveforms, it can be a value of
-                         CEC_Tolerance : it is either CEC_STANDARD_TOLERANCE or
-                         CEC_EXTENDED_TOLERANCE */
+    uint32_t Tolerance; /*!< Set RXTOL bit, specifies the tolerance accepted on
+                           the received waveforms, it can be a value of
+                           CEC_Tolerance : it is either CEC_STANDARD_TOLERANCE or
+                           CEC_EXTENDED_TOLERANCE */
 
-  uint32_t BRERxStop; /*!< Set BRESTP bit CEC_BRERxStop : specifies whether or
-                         not a Bit Rising Error stops the reception.
-                           CEC_NO_RX_STOP_ON_BRE: reception is not stopped.
-                           CEC_RX_STOP_ON_BRE:    reception is stopped. */
+    uint32_t BRERxStop; /*!< Set BRESTP bit CEC_BRERxStop : specifies whether or
+                           not a Bit Rising Error stops the reception.
+                             CEC_NO_RX_STOP_ON_BRE: reception is not stopped.
+                             CEC_RX_STOP_ON_BRE:    reception is stopped. */
 
-  uint32_t BREErrorBitGen; /*!< Set BREGEN bit CEC_BREErrorBitGen : specifies
-                              whether or not an Error-Bit is generated on the
-                                CEC line upon Bit Rising Error detection.
-                                CEC_BRE_ERRORBIT_NO_GENERATION: no error-bit
-                              generation. CEC_BRE_ERRORBIT_GENERATION: error-bit
-                              generation if BRESTP is set. */
+    uint32_t BREErrorBitGen; /*!< Set BREGEN bit CEC_BREErrorBitGen : specifies
+                                whether or not an Error-Bit is generated on the
+                                  CEC line upon Bit Rising Error detection.
+                                  CEC_BRE_ERRORBIT_NO_GENERATION: no error-bit
+                                generation. CEC_BRE_ERRORBIT_GENERATION: error-bit
+                                generation if BRESTP is set. */
 
-  uint32_t LBPEErrorBitGen; /*!< Set LBPEGEN bit CEC_LBPEErrorBitGen : specifies
-                               whether or not an Error-Bit is generated on the
-                                 CEC line upon Long Bit Period Error detection.
-                                 CEC_LBPE_ERRORBIT_NO_GENERATION:  no error-bit
-                               generation. CEC_LBPE_ERRORBIT_GENERATION:
-                               error-bit generation. */
+    uint32_t LBPEErrorBitGen; /*!< Set LBPEGEN bit CEC_LBPEErrorBitGen : specifies
+                                 whether or not an Error-Bit is generated on the
+                                   CEC line upon Long Bit Period Error detection.
+                                   CEC_LBPE_ERRORBIT_NO_GENERATION:  no error-bit
+                                 generation. CEC_LBPE_ERRORBIT_GENERATION:
+                                 error-bit generation. */
 
-  uint32_t
-      BroadcastMsgNoErrorBitGen; /*!< Set BRDNOGEN bit
-                                    CEC_BroadCastMsgErrorBitGen : allows to
-                                    avoid an Error-Bit generation on the CEC
-                                    line upon an error detected on a broadcast
-                                    message.
+    uint32_t BroadcastMsgNoErrorBitGen; /*!< Set BRDNOGEN bit
+                                           CEC_BroadCastMsgErrorBitGen : allows to
+                                           avoid an Error-Bit generation on the CEC
+                                           line upon an error detected on a broadcast
+                                           message.
 
-                                      It supersedes BREGEN and LBPEGEN bits for
-                                    a broadcast message error handling. It can
-                                    take two values:
+                                             It supersedes BREGEN and LBPEGEN bits for
+                                           a broadcast message error handling. It can
+                                           take two values:
 
-                                      1) CEC_BROADCASTERROR_ERRORBIT_GENERATION.
-                                         a) BRE detection: error-bit generation
-                                    on the CEC line if BRESTP=CEC_RX_STOP_ON_BRE
-                                    and BREGEN=CEC_BRE_ERRORBIT_NO_GENERATION.
-                                         b) LBPE detection: error-bit generation
-                                    on the CEC line if
-                                    LBPGEN=CEC_LBPE_ERRORBIT_NO_GENERATION.
+                                             1) CEC_BROADCASTERROR_ERRORBIT_GENERATION.
+                                                a) BRE detection: error-bit generation
+                                           on the CEC line if BRESTP=CEC_RX_STOP_ON_BRE
+                                           and BREGEN=CEC_BRE_ERRORBIT_NO_GENERATION.
+                                                b) LBPE detection: error-bit generation
+                                           on the CEC line if
+                                           LBPGEN=CEC_LBPE_ERRORBIT_NO_GENERATION.
 
-                                      2)
-                                    CEC_BROADCASTERROR_NO_ERRORBIT_GENERATION.
-                                         no error-bit generation in case neither
-                                    a) nor b) are satisfied. Additionally, there
-                                    is no error-bit generation in case of Short
-                                    Bit Period Error detection in a broadcast
-                                    message while LSTN bit is set. */
+                                             2)
+                                           CEC_BROADCASTERROR_NO_ERRORBIT_GENERATION.
+                                                no error-bit generation in case neither
+                                           a) nor b) are satisfied. Additionally, there
+                                           is no error-bit generation in case of Short
+                                           Bit Period Error detection in a broadcast
+                                           message while LSTN bit is set. */
 
-  uint32_t
-      SignalFreeTimeOption; /*!< Set SFTOP bit CEC_SFT_Option : specifies when
-                               SFT timer starts. CEC_SFT_START_ON_TXSOM SFT:
-                               timer starts when TXSOM is set by software.
-                                 CEC_SFT_START_ON_TX_RX_END:  SFT timer starts
-                               automatically at the end of message
-                               transmission/reception. */
+    uint32_t SignalFreeTimeOption; /*!< Set SFTOP bit CEC_SFT_Option : specifies when
+                                      SFT timer starts. CEC_SFT_START_ON_TXSOM SFT:
+                                      timer starts when TXSOM is set by software.
+                                        CEC_SFT_START_ON_TX_RX_END:  SFT timer starts
+                                      automatically at the end of message
+                                      transmission/reception. */
 
-  uint32_t ListenMode; /*!< Set LSTN bit CEC_Listening_Mode : specifies device
-                          listening mode. It can take two values:
+    uint32_t ListenMode; /*!< Set LSTN bit CEC_Listening_Mode : specifies device
+                            listening mode. It can take two values:
 
-                            CEC_REDUCED_LISTENING_MODE: CEC peripheral receives
-                          only message addressed to its own address (OAR).
-                          Messages addressed to different destination are
-                          ignored. Broadcast messages are always received.
+                              CEC_REDUCED_LISTENING_MODE: CEC peripheral receives
+                            only message addressed to its own address (OAR).
+                            Messages addressed to different destination are
+                            ignored. Broadcast messages are always received.
 
-                            CEC_FULL_LISTENING_MODE: CEC peripheral receives
-                          messages addressed to its own address (OAR) with
-                          positive acknowledge. Messages addressed to different
-                          destination are received, but without interfering with
-                          the CEC bus: no acknowledge sent.  */
+                              CEC_FULL_LISTENING_MODE: CEC peripheral receives
+                            messages addressed to its own address (OAR) with
+                            positive acknowledge. Messages addressed to different
+                            destination are received, but without interfering with
+                            the CEC bus: no acknowledge sent.  */
 
-  uint16_t OwnAddress; /*!< Own addresses configuration
-                            This parameter can be a value of CEC_OWN_ADDRESS */
+    uint16_t OwnAddress; /*!< Own addresses configuration
+                              This parameter can be a value of CEC_OWN_ADDRESS */
 
-  uint8_t *RxBuffer; /*!< CEC Rx buffer pointer */
+    uint8_t *RxBuffer; /*!< CEC Rx buffer pointer */
 
 } CEC_InitTypeDef;
 
@@ -187,43 +185,36 @@ typedef struct __CEC_HandleTypeDef
 typedef struct
 #endif /* USE_HAL_CEC_REGISTER_CALLBACKS */
 {
-  CEC_TypeDef *Instance; /*!< CEC registers base address */
+    CEC_TypeDef *Instance; /*!< CEC registers base address */
 
-  CEC_InitTypeDef Init; /*!< CEC communication parameters */
+    CEC_InitTypeDef Init; /*!< CEC communication parameters */
 
-  const uint8_t *pTxBuffPtr; /*!< Pointer to CEC Tx transfer Buffer */
+    const uint8_t *pTxBuffPtr; /*!< Pointer to CEC Tx transfer Buffer */
 
-  uint16_t TxXferCount; /*!< CEC Tx Transfer Counter */
+    uint16_t TxXferCount; /*!< CEC Tx Transfer Counter */
 
-  uint16_t RxXferSize; /*!< CEC Rx Transfer size, 0: header received only */
+    uint16_t RxXferSize; /*!< CEC Rx Transfer size, 0: header received only */
 
-  HAL_LockTypeDef Lock; /*!< Locking object */
+    HAL_LockTypeDef Lock; /*!< Locking object */
 
-  HAL_CEC_StateTypeDef
-      gState; /*!< CEC state information related to global Handle management
-                   and also related to Tx operations.
-                   This parameter can be a value of HAL_CEC_StateTypeDef      */
+    HAL_CEC_StateTypeDef gState; /*!< CEC state information related to global Handle management
+                                      and also related to Tx operations.
+                                      This parameter can be a value of HAL_CEC_StateTypeDef      */
 
-  HAL_CEC_StateTypeDef
-      RxState; /*!< CEC state information related to Rx operations.
-                    This parameter can be a value of HAL_CEC_StateTypeDef */
+    HAL_CEC_StateTypeDef RxState; /*!< CEC state information related to Rx operations.
+                                       This parameter can be a value of HAL_CEC_StateTypeDef */
 
-  uint32_t ErrorCode; /*!< For errors handling purposes, copy of ISR register
-                           in case error is reported */
+    uint32_t ErrorCode; /*!< For errors handling purposes, copy of ISR register
+                             in case error is reported */
 
 #if (USE_HAL_CEC_REGISTER_CALLBACKS == 1)
-  void (*TxCpltCallback)(struct __CEC_HandleTypeDef
-                             *hcec); /*!< CEC Tx Transfer completed callback  */
-  void (*RxCpltCallback)(
-      struct __CEC_HandleTypeDef *hcec,
-      uint32_t RxFrameSize); /*!< CEC Rx Transfer completed callback  */
-  void (*ErrorCallback)(
-      struct __CEC_HandleTypeDef *hcec); /*!< CEC error callback */
+    void (*TxCpltCallback)(struct __CEC_HandleTypeDef *hcec); /*!< CEC Tx Transfer completed callback  */
+    void (*RxCpltCallback)(struct __CEC_HandleTypeDef *hcec,
+                           uint32_t RxFrameSize);            /*!< CEC Rx Transfer completed callback  */
+    void (*ErrorCallback)(struct __CEC_HandleTypeDef *hcec); /*!< CEC error callback */
 
-  void (*MspInitCallback)(
-      struct __CEC_HandleTypeDef *hcec); /*!< CEC Msp Init callback */
-  void (*MspDeInitCallback)(
-      struct __CEC_HandleTypeDef *hcec); /*!< CEC Msp DeInit callback */
+    void (*MspInitCallback)(struct __CEC_HandleTypeDef *hcec);   /*!< CEC Msp Init callback */
+    void (*MspDeInitCallback)(struct __CEC_HandleTypeDef *hcec); /*!< CEC Msp DeInit callback */
 
 #endif /* (USE_HAL_CEC_REGISTER_CALLBACKS) */
 } CEC_HandleTypeDef;
@@ -233,23 +224,20 @@ typedef struct
  * @brief  HAL CEC Callback ID enumeration definition
  */
 typedef enum {
-  HAL_CEC_TX_CPLT_CB_ID = 0x00U,  /*!< CEC Tx Transfer completed callback ID  */
-  HAL_CEC_RX_CPLT_CB_ID = 0x01U,  /*!< CEC Rx Transfer completed callback ID  */
-  HAL_CEC_ERROR_CB_ID = 0x02U,    /*!< CEC error callback ID                  */
-  HAL_CEC_MSPINIT_CB_ID = 0x03U,  /*!< CEC Msp Init callback ID               */
-  HAL_CEC_MSPDEINIT_CB_ID = 0x04U /*!< CEC Msp DeInit callback ID             */
+    HAL_CEC_TX_CPLT_CB_ID = 0x00U,  /*!< CEC Tx Transfer completed callback ID  */
+    HAL_CEC_RX_CPLT_CB_ID = 0x01U,  /*!< CEC Rx Transfer completed callback ID  */
+    HAL_CEC_ERROR_CB_ID = 0x02U,    /*!< CEC error callback ID                  */
+    HAL_CEC_MSPINIT_CB_ID = 0x03U,  /*!< CEC Msp Init callback ID               */
+    HAL_CEC_MSPDEINIT_CB_ID = 0x04U /*!< CEC Msp DeInit callback ID             */
 } HAL_CEC_CallbackIDTypeDef;
 
 /**
  * @brief  HAL CEC Callback pointer definition
  */
-typedef void (*pCEC_CallbackTypeDef)(
-    CEC_HandleTypeDef *hcec); /*!< pointer to an CEC callback function */
-typedef void (*pCEC_RxCallbackTypeDef)(
-    CEC_HandleTypeDef *hcec,
-    uint32_t RxFrameSize); /*!< pointer to an Rx Transfer
-                              completed callback function */
-#endif                     /* USE_HAL_CEC_REGISTER_CALLBACKS */
+typedef void (*pCEC_CallbackTypeDef)(CEC_HandleTypeDef *hcec); /*!< pointer to an CEC callback function */
+typedef void (*pCEC_RxCallbackTypeDef)(CEC_HandleTypeDef *hcec, uint32_t RxFrameSize); /*!< pointer to an Rx Transfer
+                                                                                          completed callback function */
+#endif /* USE_HAL_CEC_REGISTER_CALLBACKS */
 /**
  * @}
  */
@@ -261,50 +249,44 @@ typedef void (*pCEC_RxCallbackTypeDef)(
 /** @defgroup CEC_State_Definition CEC State Code Definition
  * @{
  */
-#define HAL_CEC_STATE_RESET                                                    \
-  ((uint32_t)0x00000000) /*!< Peripheral is not yet Initialized                \
-                              Value is allowed for gState and RxState  */
-#define HAL_CEC_STATE_READY                                                    \
-  ((uint32_t)0x00000020) /*!< Peripheral Initialized and ready for use         \
-                              Value is allowed for gState and RxState  */
-#define HAL_CEC_STATE_BUSY                                                     \
-  ((uint32_t)0x00000024) /*!< an internal process is ongoing                   \
-                              Value is allowed for gState only         */
-#define HAL_CEC_STATE_BUSY_RX                                                  \
-  ((uint32_t)0x00000022) /*!< Data Reception process is ongoing                \
-                              Value is allowed for RxState only        */
-#define HAL_CEC_STATE_BUSY_TX                                                  \
-  ((uint32_t)0x00000021) /*!< Data Transmission process is ongoing             \
-                              Value is allowed for gState only         */
-#define HAL_CEC_STATE_BUSY_RX_TX                                               \
-  ((uint32_t)0x00000023) /*!< an internal process is ongoing                   \
-                              Value is allowed for gState only         */
-#define HAL_CEC_STATE_ERROR                                                    \
-  ((uint32_t)0x00000050) /*!< Error Value is allowed for gState only   */
+#define HAL_CEC_STATE_RESET                                                                                            \
+    ((uint32_t)0x00000000) /*!< Peripheral is not yet Initialized                                                      \
+                                Value is allowed for gState and RxState  */
+#define HAL_CEC_STATE_READY                                                                                            \
+    ((uint32_t)0x00000020) /*!< Peripheral Initialized and ready for use                                               \
+                                Value is allowed for gState and RxState  */
+#define HAL_CEC_STATE_BUSY                                                                                             \
+    ((uint32_t)0x00000024) /*!< an internal process is ongoing                                                         \
+                                Value is allowed for gState only         */
+#define HAL_CEC_STATE_BUSY_RX                                                                                          \
+    ((uint32_t)0x00000022) /*!< Data Reception process is ongoing                                                      \
+                                Value is allowed for RxState only        */
+#define HAL_CEC_STATE_BUSY_TX                                                                                          \
+    ((uint32_t)0x00000021) /*!< Data Transmission process is ongoing                                                   \
+                                Value is allowed for gState only         */
+#define HAL_CEC_STATE_BUSY_RX_TX                                                                                       \
+    ((uint32_t)0x00000023)                         /*!< an internal process is ongoing                                 \
+                                                        Value is allowed for gState only         */
+#define HAL_CEC_STATE_ERROR ((uint32_t)0x00000050) /*!< Error Value is allowed for gState only   */
 /**
  * @}
  */
 /** @defgroup CEC_Error_Code CEC Error Code
  * @{
  */
-#define HAL_CEC_ERROR_NONE                                                     \
-  (uint32_t)0x0000U                       /*!< no error                      */
-#define HAL_CEC_ERROR_RXOVR CEC_ISR_RXOVR /*!< CEC Rx-Overrun */
-#define HAL_CEC_ERROR_BRE CEC_ISR_BRE     /*!< CEC Rx Bit Rising Error       */
-#define HAL_CEC_ERROR_SBPE CEC_ISR_SBPE   /*!< CEC Rx Short Bit period Error */
-#define HAL_CEC_ERROR_LBPE CEC_ISR_LBPE   /*!< CEC Rx Long Bit period Error  */
-#define HAL_CEC_ERROR_RXACKE                                                   \
-  CEC_ISR_RXACKE /*!< CEC Rx Missing Acknowledge    */
-#define HAL_CEC_ERROR_ARBLST                                                   \
-  CEC_ISR_ARBLST                          /*!< CEC Arbitration Lost          */
-#define HAL_CEC_ERROR_TXUDR CEC_ISR_TXUDR /*!< CEC Tx-Buffer Underrun */
-#define HAL_CEC_ERROR_TXERR CEC_ISR_TXERR /*!< CEC Tx-Error */
-#define HAL_CEC_ERROR_TXACKE                                                   \
-  CEC_ISR_TXACKE /*!< CEC Tx Missing Acknowledge    */
+#define HAL_CEC_ERROR_NONE (uint32_t)0x0000U /*!< no error                      */
+#define HAL_CEC_ERROR_RXOVR CEC_ISR_RXOVR    /*!< CEC Rx-Overrun */
+#define HAL_CEC_ERROR_BRE CEC_ISR_BRE        /*!< CEC Rx Bit Rising Error       */
+#define HAL_CEC_ERROR_SBPE CEC_ISR_SBPE      /*!< CEC Rx Short Bit period Error */
+#define HAL_CEC_ERROR_LBPE CEC_ISR_LBPE      /*!< CEC Rx Long Bit period Error  */
+#define HAL_CEC_ERROR_RXACKE CEC_ISR_RXACKE  /*!< CEC Rx Missing Acknowledge    */
+#define HAL_CEC_ERROR_ARBLST CEC_ISR_ARBLST  /*!< CEC Arbitration Lost          */
+#define HAL_CEC_ERROR_TXUDR CEC_ISR_TXUDR    /*!< CEC Tx-Buffer Underrun */
+#define HAL_CEC_ERROR_TXERR CEC_ISR_TXERR    /*!< CEC Tx-Error */
+#define HAL_CEC_ERROR_TXACKE CEC_ISR_TXACKE  /*!< CEC Tx Missing Acknowledge    */
 #if (USE_HAL_CEC_REGISTER_CALLBACKS == 1)
-#define HAL_CEC_ERROR_INVALID_CALLBACK                                         \
-  ((uint32_t)0x00002000U) /*!< Invalid Callback Error  */
-#endif                    /* USE_HAL_CEC_REGISTER_CALLBACKS */
+#define HAL_CEC_ERROR_INVALID_CALLBACK ((uint32_t)0x00002000U) /*!< Invalid Callback Error  */
+#endif                                                         /* USE_HAL_CEC_REGISTER_CALLBACKS */
 /**
  * @}
  */
@@ -474,10 +456,9 @@ typedef void (*pCEC_RxCallbackTypeDef)(
 /** @defgroup CEC_ALL_ERROR CEC all RX or TX errors flags
  * @{
  */
-#define CEC_ISR_ALL_ERROR                                                      \
-  ((uint32_t)CEC_ISR_RXOVR | CEC_ISR_BRE | CEC_ISR_SBPE | CEC_ISR_LBPE |       \
-   CEC_ISR_RXACKE | CEC_ISR_ARBLST | CEC_ISR_TXUDR | CEC_ISR_TXERR |           \
-   CEC_ISR_TXACKE)
+#define CEC_ISR_ALL_ERROR                                                                                              \
+    ((uint32_t)CEC_ISR_RXOVR | CEC_ISR_BRE | CEC_ISR_SBPE | CEC_ISR_LBPE | CEC_ISR_RXACKE | CEC_ISR_ARBLST |           \
+     CEC_ISR_TXUDR | CEC_ISR_TXERR | CEC_ISR_TXACKE)
 /**
  * @}
  */
@@ -485,9 +466,8 @@ typedef void (*pCEC_RxCallbackTypeDef)(
 /** @defgroup CEC_IER_ALL_RX CEC all RX errors interrupts enabling flag
  * @{
  */
-#define CEC_IER_RX_ALL_ERR                                                     \
-  ((uint32_t)CEC_IER_RXACKEIE | CEC_IER_LBPEIE | CEC_IER_SBPEIE |              \
-   CEC_IER_BREIE | CEC_IER_RXOVRIE)
+#define CEC_IER_RX_ALL_ERR                                                                                             \
+    ((uint32_t)CEC_IER_RXACKEIE | CEC_IER_LBPEIE | CEC_IER_SBPEIE | CEC_IER_BREIE | CEC_IER_RXOVRIE)
 /**
  * @}
  */
@@ -495,9 +475,7 @@ typedef void (*pCEC_RxCallbackTypeDef)(
 /** @defgroup CEC_IER_ALL_TX CEC all TX errors interrupts enabling flag
  * @{
  */
-#define CEC_IER_TX_ALL_ERR                                                     \
-  ((uint32_t)CEC_IER_TXACKEIE | CEC_IER_TXERRIE | CEC_IER_TXUDRIE |            \
-   CEC_IER_ARBLSTIE)
+#define CEC_IER_TX_ALL_ERR ((uint32_t)CEC_IER_TXACKEIE | CEC_IER_TXERRIE | CEC_IER_TXUDRIE | CEC_IER_ARBLSTIE)
 /**
  * @}
  */
@@ -516,19 +494,19 @@ typedef void (*pCEC_RxCallbackTypeDef)(
  * @retval None
  */
 #if (USE_HAL_CEC_REGISTER_CALLBACKS == 1)
-#define __HAL_CEC_RESET_HANDLE_STATE(__HANDLE__)                               \
-  do {                                                                         \
-    (__HANDLE__)->gState = HAL_CEC_STATE_RESET;                                \
-    (__HANDLE__)->RxState = HAL_CEC_STATE_RESET;                               \
-    (__HANDLE__)->MspInitCallback = NULL;                                      \
-    (__HANDLE__)->MspDeInitCallback = NULL;                                    \
-  } while (0)
+#define __HAL_CEC_RESET_HANDLE_STATE(__HANDLE__)                                                                       \
+    do {                                                                                                               \
+        (__HANDLE__)->gState = HAL_CEC_STATE_RESET;                                                                    \
+        (__HANDLE__)->RxState = HAL_CEC_STATE_RESET;                                                                   \
+        (__HANDLE__)->MspInitCallback = NULL;                                                                          \
+        (__HANDLE__)->MspDeInitCallback = NULL;                                                                        \
+    } while (0)
 #else
-#define __HAL_CEC_RESET_HANDLE_STATE(__HANDLE__)                               \
-  do {                                                                         \
-    (__HANDLE__)->gState = HAL_CEC_STATE_RESET;                                \
-    (__HANDLE__)->RxState = HAL_CEC_STATE_RESET;                               \
-  } while (0)
+#define __HAL_CEC_RESET_HANDLE_STATE(__HANDLE__)                                                                       \
+    do {                                                                                                               \
+        (__HANDLE__)->gState = HAL_CEC_STATE_RESET;                                                                    \
+        (__HANDLE__)->RxState = HAL_CEC_STATE_RESET;                                                                   \
+    } while (0)
 #endif /* USE_HAL_CEC_REGISTER_CALLBACKS */
 /** @brief  Checks whether or not the specified CEC interrupt flag is set.
  * @param  __HANDLE__ specifies the CEC Handle.
@@ -549,8 +527,7 @@ typedef void (*pCEC_RxCallbackTypeDef)(
  *            @arg CEC_FLAG_RXBR: Rx-Byte Received.
  * @retval ITStatus
  */
-#define __HAL_CEC_GET_FLAG(__HANDLE__, __FLAG__)                               \
-  ((__HANDLE__)->Instance->ISR & (__FLAG__))
+#define __HAL_CEC_GET_FLAG(__HANDLE__, __FLAG__) ((__HANDLE__)->Instance->ISR & (__FLAG__))
 
 /** @brief  Clears the interrupt or status flag when raised (write at 1)
  * @param  __HANDLE__ specifies the CEC Handle.
@@ -572,8 +549,7 @@ typedef void (*pCEC_RxCallbackTypeDef)(
  *            @arg CEC_FLAG_RXBR: Rx-Byte Received.
  * @retval none
  */
-#define __HAL_CEC_CLEAR_FLAG(__HANDLE__, __FLAG__)                             \
-  ((__HANDLE__)->Instance->ISR |= (__FLAG__))
+#define __HAL_CEC_CLEAR_FLAG(__HANDLE__, __FLAG__) ((__HANDLE__)->Instance->ISR |= (__FLAG__))
 
 /** @brief  Enables the specified CEC interrupt.
  * @param  __HANDLE__ specifies the CEC Handle.
@@ -594,8 +570,7 @@ typedef void (*pCEC_RxCallbackTypeDef)(
  *            @arg CEC_IT_RXBR: Rx-Byte Received IT Enable
  * @retval none
  */
-#define __HAL_CEC_ENABLE_IT(__HANDLE__, __INTERRUPT__)                         \
-  ((__HANDLE__)->Instance->IER |= (__INTERRUPT__))
+#define __HAL_CEC_ENABLE_IT(__HANDLE__, __INTERRUPT__) ((__HANDLE__)->Instance->IER |= (__INTERRUPT__))
 
 /** @brief  Disables the specified CEC interrupt.
  * @param  __HANDLE__ specifies the CEC Handle.
@@ -616,8 +591,7 @@ typedef void (*pCEC_RxCallbackTypeDef)(
  *            @arg CEC_IT_RXBR: Rx-Byte Received IT Enable
  * @retval none
  */
-#define __HAL_CEC_DISABLE_IT(__HANDLE__, __INTERRUPT__)                        \
-  ((__HANDLE__)->Instance->IER &= (~(__INTERRUPT__)))
+#define __HAL_CEC_DISABLE_IT(__HANDLE__, __INTERRUPT__) ((__HANDLE__)->Instance->IER &= (~(__INTERRUPT__)))
 
 /** @brief  Checks whether or not the specified CEC interrupt is enabled.
  * @param  __HANDLE__ specifies the CEC Handle.
@@ -638,29 +612,25 @@ typedef void (*pCEC_RxCallbackTypeDef)(
  *            @arg CEC_IT_RXBR: Rx-Byte Received IT Enable
  * @retval FlagStatus
  */
-#define __HAL_CEC_GET_IT_SOURCE(__HANDLE__, __INTERRUPT__)                     \
-  ((__HANDLE__)->Instance->IER & (__INTERRUPT__))
+#define __HAL_CEC_GET_IT_SOURCE(__HANDLE__, __INTERRUPT__) ((__HANDLE__)->Instance->IER & (__INTERRUPT__))
 
 /** @brief  Enables the CEC device
  * @param  __HANDLE__ specifies the CEC Handle.
  * @retval none
  */
-#define __HAL_CEC_ENABLE(__HANDLE__)                                           \
-  ((__HANDLE__)->Instance->CR |= CEC_CR_CECEN)
+#define __HAL_CEC_ENABLE(__HANDLE__) ((__HANDLE__)->Instance->CR |= CEC_CR_CECEN)
 
 /** @brief  Disables the CEC device
  * @param  __HANDLE__ specifies the CEC Handle.
  * @retval none
  */
-#define __HAL_CEC_DISABLE(__HANDLE__)                                          \
-  ((__HANDLE__)->Instance->CR &= ~CEC_CR_CECEN)
+#define __HAL_CEC_DISABLE(__HANDLE__) ((__HANDLE__)->Instance->CR &= ~CEC_CR_CECEN)
 
 /** @brief  Set Transmission Start flag
  * @param  __HANDLE__ specifies the CEC Handle.
  * @retval none
  */
-#define __HAL_CEC_FIRST_BYTE_TX_SET(__HANDLE__)                                \
-  ((__HANDLE__)->Instance->CR |= CEC_CR_TXSOM)
+#define __HAL_CEC_FIRST_BYTE_TX_SET(__HANDLE__) ((__HANDLE__)->Instance->CR |= CEC_CR_TXSOM)
 
 /** @brief  Set Transmission End flag
  * @param  __HANDLE__ specifies the CEC Handle.
@@ -668,29 +638,25 @@ typedef void (*pCEC_RxCallbackTypeDef)(
  * If the CEC message consists of only one byte, TXEOM must be set before of
  * TXSOM.
  */
-#define __HAL_CEC_LAST_BYTE_TX_SET(__HANDLE__)                                 \
-  ((__HANDLE__)->Instance->CR |= CEC_CR_TXEOM)
+#define __HAL_CEC_LAST_BYTE_TX_SET(__HANDLE__) ((__HANDLE__)->Instance->CR |= CEC_CR_TXEOM)
 
 /** @brief  Get Transmission Start flag
  * @param  __HANDLE__ specifies the CEC Handle.
  * @retval FlagStatus
  */
-#define __HAL_CEC_GET_TRANSMISSION_START_FLAG(__HANDLE__)                      \
-  ((__HANDLE__)->Instance->CR & CEC_CR_TXSOM)
+#define __HAL_CEC_GET_TRANSMISSION_START_FLAG(__HANDLE__) ((__HANDLE__)->Instance->CR & CEC_CR_TXSOM)
 
 /** @brief  Get Transmission End flag
  * @param  __HANDLE__ specifies the CEC Handle.
  * @retval FlagStatus
  */
-#define __HAL_CEC_GET_TRANSMISSION_END_FLAG(__HANDLE__)                        \
-  ((__HANDLE__)->Instance->CR & CEC_CR_TXEOM)
+#define __HAL_CEC_GET_TRANSMISSION_END_FLAG(__HANDLE__) ((__HANDLE__)->Instance->CR & CEC_CR_TXEOM)
 
 /** @brief  Clear OAR register
  * @param  __HANDLE__ specifies the CEC Handle.
  * @retval none
  */
-#define __HAL_CEC_CLEAR_OAR(__HANDLE__)                                        \
-  CLEAR_BIT((__HANDLE__)->Instance->CFGR, CEC_CFGR_OAR)
+#define __HAL_CEC_CLEAR_OAR(__HANDLE__) CLEAR_BIT((__HANDLE__)->Instance->CFGR, CEC_CFGR_OAR)
 
 /** @brief  Set OAR register (without resetting previously set address in case
  * of multi-address mode) To reset OAR, __HAL_CEC_CLEAR_OAR() needs to be called
@@ -700,8 +666,8 @@ typedef void (*pCEC_RxCallbackTypeDef)(
  * bit position)
  * @retval none
  */
-#define __HAL_CEC_SET_OAR(__HANDLE__, __ADDRESS__)                             \
-  SET_BIT((__HANDLE__)->Instance->CFGR, (__ADDRESS__) << CEC_CFGR_OAR_LSB_POS)
+#define __HAL_CEC_SET_OAR(__HANDLE__, __ADDRESS__)                                                                     \
+    SET_BIT((__HANDLE__)->Instance->CFGR, (__ADDRESS__) << CEC_CFGR_OAR_LSB_POS)
 
 /**
  * @}
@@ -718,22 +684,16 @@ typedef void (*pCEC_RxCallbackTypeDef)(
 /* Initialization and de-initialization functions  ****************************/
 HAL_StatusTypeDef HAL_CEC_Init(CEC_HandleTypeDef *hcec);
 HAL_StatusTypeDef HAL_CEC_DeInit(CEC_HandleTypeDef *hcec);
-HAL_StatusTypeDef HAL_CEC_SetDeviceAddress(CEC_HandleTypeDef *hcec,
-                                           uint16_t CEC_OwnAddress);
+HAL_StatusTypeDef HAL_CEC_SetDeviceAddress(CEC_HandleTypeDef *hcec, uint16_t CEC_OwnAddress);
 void HAL_CEC_MspInit(CEC_HandleTypeDef *hcec);
 void HAL_CEC_MspDeInit(CEC_HandleTypeDef *hcec);
 
 #if (USE_HAL_CEC_REGISTER_CALLBACKS == 1)
-HAL_StatusTypeDef HAL_CEC_RegisterCallback(CEC_HandleTypeDef *hcec,
-                                           HAL_CEC_CallbackIDTypeDef CallbackID,
+HAL_StatusTypeDef HAL_CEC_RegisterCallback(CEC_HandleTypeDef *hcec, HAL_CEC_CallbackIDTypeDef CallbackID,
                                            pCEC_CallbackTypeDef pCallback);
-HAL_StatusTypeDef
-HAL_CEC_UnRegisterCallback(CEC_HandleTypeDef *hcec,
-                           HAL_CEC_CallbackIDTypeDef CallbackID);
+HAL_StatusTypeDef HAL_CEC_UnRegisterCallback(CEC_HandleTypeDef *hcec, HAL_CEC_CallbackIDTypeDef CallbackID);
 
-HAL_StatusTypeDef
-HAL_CEC_RegisterRxCpltCallback(CEC_HandleTypeDef *hcec,
-                               pCEC_RxCallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_CEC_RegisterRxCpltCallback(CEC_HandleTypeDef *hcec, pCEC_RxCallbackTypeDef pCallback);
 HAL_StatusTypeDef HAL_CEC_UnRegisterRxCpltCallback(CEC_HandleTypeDef *hcec);
 #endif /* USE_HAL_CEC_REGISTER_CALLBACKS */
 /**
@@ -744,9 +704,7 @@ HAL_StatusTypeDef HAL_CEC_UnRegisterRxCpltCallback(CEC_HandleTypeDef *hcec);
  * @{
  */
 /* I/O operation functions  ***************************************************/
-HAL_StatusTypeDef HAL_CEC_Transmit_IT(CEC_HandleTypeDef *hcec,
-                                      uint8_t InitiatorAddress,
-                                      uint8_t DestinationAddress,
+HAL_StatusTypeDef HAL_CEC_Transmit_IT(CEC_HandleTypeDef *hcec, uint8_t InitiatorAddress, uint8_t DestinationAddress,
                                       const uint8_t *pData, uint32_t Size);
 uint32_t HAL_CEC_GetLastReceivedFrameSize(const CEC_HandleTypeDef *hcec);
 void HAL_CEC_ChangeRxBuffer(CEC_HandleTypeDef *hcec, uint8_t *Rxbuffer);
@@ -806,33 +764,25 @@ uint32_t HAL_CEC_GetError(const CEC_HandleTypeDef *hcec);
 
 #define IS_CEC_SIGNALFREETIME(__SFT__) ((__SFT__) <= CEC_CFGR_SFT)
 
-#define IS_CEC_TOLERANCE(__RXTOL__)                                            \
-  (((__RXTOL__) == CEC_STANDARD_TOLERANCE) ||                                  \
-   ((__RXTOL__) == CEC_EXTENDED_TOLERANCE))
+#define IS_CEC_TOLERANCE(__RXTOL__) (((__RXTOL__) == CEC_STANDARD_TOLERANCE) || ((__RXTOL__) == CEC_EXTENDED_TOLERANCE))
 
-#define IS_CEC_BRERXSTOP(__BRERXSTOP__)                                        \
-  (((__BRERXSTOP__) == CEC_NO_RX_STOP_ON_BRE) ||                               \
-   ((__BRERXSTOP__) == CEC_RX_STOP_ON_BRE))
+#define IS_CEC_BRERXSTOP(__BRERXSTOP__)                                                                                \
+    (((__BRERXSTOP__) == CEC_NO_RX_STOP_ON_BRE) || ((__BRERXSTOP__) == CEC_RX_STOP_ON_BRE))
 
-#define IS_CEC_BREERRORBITGEN(__ERRORBITGEN__)                                 \
-  (((__ERRORBITGEN__) == CEC_BRE_ERRORBIT_NO_GENERATION) ||                    \
-   ((__ERRORBITGEN__) == CEC_BRE_ERRORBIT_GENERATION))
+#define IS_CEC_BREERRORBITGEN(__ERRORBITGEN__)                                                                         \
+    (((__ERRORBITGEN__) == CEC_BRE_ERRORBIT_NO_GENERATION) || ((__ERRORBITGEN__) == CEC_BRE_ERRORBIT_GENERATION))
 
-#define IS_CEC_LBPEERRORBITGEN(__ERRORBITGEN__)                                \
-  (((__ERRORBITGEN__) == CEC_LBPE_ERRORBIT_NO_GENERATION) ||                   \
-   ((__ERRORBITGEN__) == CEC_LBPE_ERRORBIT_GENERATION))
+#define IS_CEC_LBPEERRORBITGEN(__ERRORBITGEN__)                                                                        \
+    (((__ERRORBITGEN__) == CEC_LBPE_ERRORBIT_NO_GENERATION) || ((__ERRORBITGEN__) == CEC_LBPE_ERRORBIT_GENERATION))
 
-#define IS_CEC_BROADCASTERROR_NO_ERRORBIT_GENERATION(__ERRORBITGEN__)          \
-  (((__ERRORBITGEN__) == CEC_BROADCASTERROR_ERRORBIT_GENERATION) ||            \
-   ((__ERRORBITGEN__) == CEC_BROADCASTERROR_NO_ERRORBIT_GENERATION))
+#define IS_CEC_BROADCASTERROR_NO_ERRORBIT_GENERATION(__ERRORBITGEN__)                                                  \
+    (((__ERRORBITGEN__) == CEC_BROADCASTERROR_ERRORBIT_GENERATION) ||                                                  \
+     ((__ERRORBITGEN__) == CEC_BROADCASTERROR_NO_ERRORBIT_GENERATION))
 
-#define IS_CEC_SFTOP(__SFTOP__)                                                \
-  (((__SFTOP__) == CEC_SFT_START_ON_TXSOM) ||                                  \
-   ((__SFTOP__) == CEC_SFT_START_ON_TX_RX_END))
+#define IS_CEC_SFTOP(__SFTOP__) (((__SFTOP__) == CEC_SFT_START_ON_TXSOM) || ((__SFTOP__) == CEC_SFT_START_ON_TX_RX_END))
 
-#define IS_CEC_LISTENING_MODE(__MODE__)                                        \
-  (((__MODE__) == CEC_REDUCED_LISTENING_MODE) ||                               \
-   ((__MODE__) == CEC_FULL_LISTENING_MODE))
+#define IS_CEC_LISTENING_MODE(__MODE__)                                                                                \
+    (((__MODE__) == CEC_REDUCED_LISTENING_MODE) || ((__MODE__) == CEC_FULL_LISTENING_MODE))
 
 /** @brief Check CEC message size.
  *       The message size is the payload size: without counting the header,

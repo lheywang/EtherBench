@@ -105,18 +105,18 @@ VOID _tx_semaphore_initialize(VOID) {
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-  /* Initialize the head pointer of the created semaphores list and the
-     number of semaphores created.  */
-  _tx_semaphore_created_ptr = TX_NULL;
-  _tx_semaphore_created_count = TX_EMPTY;
+    /* Initialize the head pointer of the created semaphores list and the
+       number of semaphores created.  */
+    _tx_semaphore_created_ptr = TX_NULL;
+    _tx_semaphore_created_count = TX_EMPTY;
 
 #ifdef TX_SEMAPHORE_ENABLE_PERFORMANCE_INFO
 
-  /* Initialize semaphore performance counters.  */
-  _tx_semaphore_performance_put_count = ((ULONG)0);
-  _tx_semaphore_performance_get_count = ((ULONG)0);
-  _tx_semaphore_performance_suspension_count = ((ULONG)0);
-  _tx_semaphore_performance_timeout_count = ((ULONG)0);
+    /* Initialize semaphore performance counters.  */
+    _tx_semaphore_performance_put_count = ((ULONG)0);
+    _tx_semaphore_performance_get_count = ((ULONG)0);
+    _tx_semaphore_performance_suspension_count = ((ULONG)0);
+    _tx_semaphore_performance_timeout_count = ((ULONG)0);
 #endif
 #endif
 }

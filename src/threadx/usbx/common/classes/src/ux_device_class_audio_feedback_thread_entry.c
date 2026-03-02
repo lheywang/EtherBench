@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_audio.h"
 #include "ux_device_stack.h"
-
 
 #if defined(UX_DEVICE_CLASS_AUDIO_FEEDBACK_SUPPORT)
 /**************************************************************************/
@@ -75,44 +73,40 @@
 /*                                            resulting in version 6.2.0  */
 /*                                                                        */
 /**************************************************************************/
-VOID _ux_device_class_audio_feedback_thread_entry(ULONG audio_stream)
-{
+VOID _ux_device_class_audio_feedback_thread_entry(ULONG audio_stream) {
 #if defined(UX_DEVICE_STANDALONE)
     UX_PARAMETER_NOT_USED(audio_stream);
     return;
 #else
-UINT                            status;
-UX_DEVICE_CLASS_AUDIO_STREAM    *stream;
-UX_SLAVE_DEVICE                 *device;
-UX_SLAVE_ENDPOINT               *endpoint;
-UX_SLAVE_TRANSFER               *transfer;
-ULONG                           transfer_length;
-
+    UINT status;
+    UX_DEVICE_CLASS_AUDIO_STREAM *stream;
+    UX_SLAVE_DEVICE *device;
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_SLAVE_TRANSFER *transfer;
+    ULONG transfer_length;
 
     /* Get Audio class stream instance.  */
     UX_THREAD_EXTENSION_PTR_GET(stream, UX_DEVICE_CLASS_AUDIO_STREAM, audio_stream)
 
     /* Get stack device instance.  */
-    device = stream -> ux_device_class_audio_stream_audio -> ux_device_class_audio_device;
+    device = stream->ux_device_class_audio_stream_audio->ux_device_class_audio_device;
 
     /* This thread runs forever but can be suspended or resumed.  */
-    while (1)
-    {
-        while (device -> ux_slave_device_state == UX_DEVICE_CONFIGURED)
-        {
+    while (1) {
+        while (device->ux_slave_device_state == UX_DEVICE_CONFIGURED) {
 
             /* Get endpoint instance.  */
-            endpoint = stream -> ux_device_class_audio_stream_feedback;
+            endpoint = stream->ux_device_class_audio_stream_feedback;
 
             /* Endpoint not available, maybe it's alternate setting 0.  */
             if (endpoint == UX_NULL)
                 break;
 
             /* Get transfer instance.  */
-            transfer = &endpoint -> ux_slave_endpoint_transfer_request;
+            transfer = &endpoint->ux_slave_endpoint_transfer_request;
 
             /* Length is pre-set on interface alternate setting activate.  */
-            transfer_length = transfer -> ux_slave_transfer_request_requested_length;
+            transfer_length = transfer->ux_slave_transfer_request_requested_length;
 
             /* Issue transfer request, thread blocked until transfer done.  */
             status = _ux_device_stack_transfer_request(transfer, transfer_length, transfer_length);
@@ -120,8 +114,7 @@ ULONG                           transfer_length;
             /* Check error.  */
             if (status == UX_TRANSFER_BUS_RESET)
                 continue;
-            if (status != UX_SUCCESS)
-            {
+            if (status != UX_SUCCESS) {
 
                 /* Error notification!  */
                 _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_TRANSFER_ERROR);
@@ -131,8 +124,9 @@ ULONG                           transfer_length;
             /* Transfer done, keep data in transfer buffer.  */
         }
 
-        /* We need to suspend ourselves. We will be resumed by the device enumeration module or when a change of alternate setting happens.  */
-        _ux_utility_thread_suspend(&stream -> ux_device_class_audio_stream_feedback_thread);
+        /* We need to suspend ourselves. We will be resumed by the device enumeration module or when a change of
+         * alternate setting happens.  */
+        _ux_utility_thread_suspend(&stream->ux_device_class_audio_stream_feedback_thread);
     }
 #endif
 }

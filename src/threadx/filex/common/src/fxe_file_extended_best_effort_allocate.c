@@ -71,23 +71,21 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_file_extended_best_effort_allocate(FX_FILE *file_ptr, ULONG64 size,
-                                             ULONG64 *actual_size_allocated) {
+UINT _fxe_file_extended_best_effort_allocate(FX_FILE *file_ptr, ULONG64 size, ULONG64 *actual_size_allocated) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null file pointer.  */
-  if ((file_ptr == FX_NULL) || (actual_size_allocated == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null file pointer.  */
+    if ((file_ptr == FX_NULL) || (actual_size_allocated == FX_NULL)) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual best effort file allocate service.  */
-  status = _fx_file_extended_best_effort_allocate(file_ptr, size,
-                                                  actual_size_allocated);
+    /* Call actual best effort file allocate service.  */
+    status = _fx_file_extended_best_effort_allocate(file_ptr, size, actual_size_allocated);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

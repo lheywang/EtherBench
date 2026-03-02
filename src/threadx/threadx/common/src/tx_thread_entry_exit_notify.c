@@ -71,39 +71,37 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _tx_thread_entry_exit_notify(
-    TX_THREAD *thread_ptr,
-    VOID (*thread_entry_exit_notify)(TX_THREAD *notify_thread_ptr, UINT id)) {
+UINT _tx_thread_entry_exit_notify(TX_THREAD *thread_ptr,
+                                  VOID (*thread_entry_exit_notify)(TX_THREAD *notify_thread_ptr, UINT id)) {
 
 #ifdef TX_DISABLE_NOTIFY_CALLBACKS
 
-  TX_THREAD_NOT_USED(thread_ptr);
-  TX_THREAD_ENTRY_EXIT_NOTIFY_NOT_USED(thread_entry_exit_notify);
+    TX_THREAD_NOT_USED(thread_ptr);
+    TX_THREAD_ENTRY_EXIT_NOTIFY_NOT_USED(thread_entry_exit_notify);
 
-  /* Feature is not enabled, return error.  */
-  return (TX_FEATURE_NOT_ENABLED);
+    /* Feature is not enabled, return error.  */
+    return (TX_FEATURE_NOT_ENABLED);
 #else
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Make entry in event log.  */
-  TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_ENTRY_EXIT_NOTIFY, thread_ptr,
-                          thread_ptr->tx_thread_state, 0, 0,
-                          TX_TRACE_THREAD_EVENTS)
+    /* Make entry in event log.  */
+    TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_ENTRY_EXIT_NOTIFY, thread_ptr, thread_ptr->tx_thread_state, 0, 0,
+                            TX_TRACE_THREAD_EVENTS)
 
-  /* Make entry in event log.  */
-  TX_EL_THREAD_ENTRY_EXIT_NOTIFY_INSERT
+    /* Make entry in event log.  */
+    TX_EL_THREAD_ENTRY_EXIT_NOTIFY_INSERT
 
-  /* Setup thread entry/exit notification callback function.  */
-  thread_ptr->tx_thread_entry_exit_notify = thread_entry_exit_notify;
+    /* Setup thread entry/exit notification callback function.  */
+    thread_ptr->tx_thread_entry_exit_notify = thread_entry_exit_notify;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Return success to caller.  */
-  return (TX_SUCCESS);
+    /* Return success to caller.  */
+    return (TX_SUCCESS);
 #endif
 }

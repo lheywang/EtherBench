@@ -69,44 +69,41 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_udp_socket_bytes_available(NX_UDP_SOCKET *socket_ptr,
-                                    ULONG *bytes_available) {
-  NX_IP *ip_ptr;
-  NX_PACKET *packet_ptr;
-  INT count;
+UINT _nx_udp_socket_bytes_available(NX_UDP_SOCKET *socket_ptr, ULONG *bytes_available) {
+    NX_IP *ip_ptr;
+    NX_PACKET *packet_ptr;
+    INT count;
 
-  /* Setup IP pointer. */
-  ip_ptr = socket_ptr->nx_udp_socket_ip_ptr;
+    /* Setup IP pointer. */
+    ip_ptr = socket_ptr->nx_udp_socket_ip_ptr;
 
-  /* Obtain the IP mutex so we can examine the bound port.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Obtain the IP mutex so we can examine the bound port.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  *bytes_available = 0;
+    *bytes_available = 0;
 
-  /* Determine if the socket is currently bound. */
-  if (!socket_ptr->nx_udp_socket_bound_next) {
-    /* Release mutex */
+    /* Determine if the socket is currently bound. */
+    if (!socket_ptr->nx_udp_socket_bound_next) {
+        /* Release mutex */
+        tx_mutex_put(&(ip_ptr->nx_ip_protection));
+
+        return (NX_NOT_SUCCESSFUL);
+    }
+
+    packet_ptr = socket_ptr->nx_udp_socket_receive_head;
+
+    /* Loop through all the packets on the queue and find out the total
+       number of bytes in the rx queue that are available to the applciation. */
+    for (count = 0; count < (INT)(socket_ptr->nx_udp_socket_receive_count); count++) {
+
+        *bytes_available += (packet_ptr->nx_packet_length - (ULONG)sizeof(NX_UDP_HEADER));
+
+        /* Move on to the next packet. */
+        packet_ptr = packet_ptr->nx_packet_queue_next;
+    }
+
+    /* Release protection.  */
     tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    return (NX_NOT_SUCCESSFUL);
-  }
-
-  packet_ptr = socket_ptr->nx_udp_socket_receive_head;
-
-  /* Loop through all the packets on the queue and find out the total
-     number of bytes in the rx queue that are available to the applciation. */
-  for (count = 0; count < (INT)(socket_ptr->nx_udp_socket_receive_count);
-       count++) {
-
-    *bytes_available +=
-        (packet_ptr->nx_packet_length - (ULONG)sizeof(NX_UDP_HEADER));
-
-    /* Move on to the next packet. */
-    packet_ptr = packet_ptr->nx_packet_queue_next;
-  }
-
-  /* Release protection.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
-
-  return (NX_SUCCESS);
+    return (NX_SUCCESS);
 }

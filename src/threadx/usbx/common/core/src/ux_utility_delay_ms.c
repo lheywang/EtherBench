@@ -9,17 +9,15 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /* Include necessary system files.  */
 
@@ -27,43 +25,42 @@
 
 #include "ux_api.h"
 
-
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_utility_delay_ms                                PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_utility_delay_ms                                PORTABLE C      */
 /*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function causes the calling thread to sleep for the            */ 
-/*    specified number of milliseconds                                    */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    ms_wait                               Number of milliseconds to     */ 
-/*                                            wait for                    */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    tx_thread_sleep                       ThreadX sleep function        */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function causes the calling thread to sleep for the            */
+/*    specified number of milliseconds                                    */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    ms_wait                               Number of milliseconds to     */
+/*                                            wait for                    */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    tx_thread_sleep                       ThreadX sleep function        */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -75,10 +72,9 @@
 /*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
-VOID  _ux_utility_delay_ms(ULONG ms_wait)
-{
+VOID _ux_utility_delay_ms(ULONG ms_wait) {
 
-ULONG   ticks;
+    ULONG ticks;
 
 #if defined(UX_STANDALONE)
 
@@ -86,13 +82,13 @@ ULONG   ticks;
     ticks = _ux_utility_time_get();
 
     /* Wait until timeout.  */
-    while(_ux_utility_time_elapsed(ticks, _ux_utility_time_get()) <
-            UX_MS_TO_TICK_NON_ZERO(ms_wait));
+    while (_ux_utility_time_elapsed(ticks, _ux_utility_time_get()) < UX_MS_TO_TICK_NON_ZERO(ms_wait))
+        ;
 #else
 
     /* translate ms into ticks. */
     ticks = (ULONG)(ms_wait * UX_PERIODIC_RATE) / 1000;
-    
+
     /* For safety add 1 to ticks.  */
     ticks++;
 

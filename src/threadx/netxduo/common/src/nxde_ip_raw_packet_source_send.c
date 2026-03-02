@@ -82,87 +82,80 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxde_ip_raw_packet_source_send(NX_IP *ip_ptr, NX_PACKET *packet_ptr,
-                                     NXD_ADDRESS *destination_ip,
-                                     UINT address_index, ULONG protocol,
-                                     UINT ttl, ULONG tos) {
+UINT _nxde_ip_raw_packet_source_send(NX_IP *ip_ptr, NX_PACKET *packet_ptr, NXD_ADDRESS *destination_ip,
+                                     UINT address_index, ULONG protocol, UINT ttl, ULONG tos) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (packet_ptr == NX_NULL) ||
-      (destination_ip == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (packet_ptr == NX_NULL) || (destination_ip == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Determine if raw IP packet sending/receiving is enabled.  */
-  if (!ip_ptr->nx_ip_raw_ip_processing) {
-    return (NX_NOT_ENABLED);
-  }
+    /* Determine if raw IP packet sending/receiving is enabled.  */
+    if (!ip_ptr->nx_ip_raw_ip_processing) {
+        return (NX_NOT_ENABLED);
+    }
 
-  /* Check that the destination address version is either IPv4 or IPv6. */
-  if ((destination_ip->nxd_ip_version != NX_IP_VERSION_V4) &&
-      (destination_ip->nxd_ip_version != NX_IP_VERSION_V6)) {
-    return (NX_IP_ADDRESS_ERROR);
-  }
+    /* Check that the destination address version is either IPv4 or IPv6. */
+    if ((destination_ip->nxd_ip_version != NX_IP_VERSION_V4) && (destination_ip->nxd_ip_version != NX_IP_VERSION_V6)) {
+        return (NX_IP_ADDRESS_ERROR);
+    }
 
 #ifndef NX_DISABLE_IPV4
-  if (destination_ip->nxd_ip_version == NX_IP_VERSION_V4) {
+    if (destination_ip->nxd_ip_version == NX_IP_VERSION_V4) {
 
-    if (destination_ip->nxd_ip_address.v4 == 0) {
-      return (NX_IP_ADDRESS_ERROR);
-    }
+        if (destination_ip->nxd_ip_address.v4 == 0) {
+            return (NX_IP_ADDRESS_ERROR);
+        }
 
-    /* Check for valid interface. */
-    if (address_index >= NX_MAX_IP_INTERFACES) {
-      return (NX_INVALID_INTERFACE);
-    }
+        /* Check for valid interface. */
+        if (address_index >= NX_MAX_IP_INTERFACES) {
+            return (NX_INVALID_INTERFACE);
+        }
 
-    /* Check for an invalid packet prepend pointer for IPv4 packet.  */
-    /*lint -e{946} suppress pointer subtraction, since it is necessary. */
-    if ((packet_ptr->nx_packet_prepend_ptr - sizeof(NX_IPV4_HEADER)) <
-        packet_ptr->nx_packet_data_start) {
-      return (NX_UNDERFLOW);
+        /* Check for an invalid packet prepend pointer for IPv4 packet.  */
+        /*lint -e{946} suppress pointer subtraction, since it is necessary. */
+        if ((packet_ptr->nx_packet_prepend_ptr - sizeof(NX_IPV4_HEADER)) < packet_ptr->nx_packet_data_start) {
+            return (NX_UNDERFLOW);
+        }
     }
-  }
 #endif /* !NX_DISABLE_IPV4  */
 
 #ifdef FEATURE_NX_IPV6
-  if (destination_ip->nxd_ip_version == NX_IP_VERSION_V6) {
+    if (destination_ip->nxd_ip_version == NX_IP_VERSION_V6) {
 
-    /* destination_ip -> nxd_ip_version == NX_IP_VERSION_V6.  */
-    /* Check for valid destination address. */
-    if (CHECK_UNSPECIFIED_ADDRESS(&destination_ip->nxd_ip_address.v6[0])) {
-      return (NX_IP_ADDRESS_ERROR);
-    }
+        /* destination_ip -> nxd_ip_version == NX_IP_VERSION_V6.  */
+        /* Check for valid destination address. */
+        if (CHECK_UNSPECIFIED_ADDRESS(&destination_ip->nxd_ip_address.v6[0])) {
+            return (NX_IP_ADDRESS_ERROR);
+        }
 
-    /* Check for valid interface. */
-    if (address_index >= (NX_MAX_IPV6_ADDRESSES + NX_LOOPBACK_IPV6_ENABLED)) {
-      return (NX_IP_ADDRESS_ERROR);
-    }
+        /* Check for valid interface. */
+        if (address_index >= (NX_MAX_IPV6_ADDRESSES + NX_LOOPBACK_IPV6_ENABLED)) {
+            return (NX_IP_ADDRESS_ERROR);
+        }
 
-    /* Check for an invalid packet prepend pointer for IPv6 packet.  */
-    /*lint -e{946} suppress pointer subtraction, since it is necessary. */
-    if ((packet_ptr->nx_packet_prepend_ptr - sizeof(NX_IPV6_HEADER)) <
-        packet_ptr->nx_packet_data_start) {
-      return (NX_UNDERFLOW);
+        /* Check for an invalid packet prepend pointer for IPv6 packet.  */
+        /*lint -e{946} suppress pointer subtraction, since it is necessary. */
+        if ((packet_ptr->nx_packet_prepend_ptr - sizeof(NX_IPV6_HEADER)) < packet_ptr->nx_packet_data_start) {
+            return (NX_UNDERFLOW);
+        }
     }
-  }
 #endif /* FEATURE_NX_IPV6 */
 
-  /* Check for an invalid packet append pointer.  */
-  /*lint -e{946} suppress pointer subtraction, since it is necessary. */
-  if (packet_ptr->nx_packet_append_ptr > packet_ptr->nx_packet_data_end) {
-    return (NX_OVERFLOW);
-  }
+    /* Check for an invalid packet append pointer.  */
+    /*lint -e{946} suppress pointer subtraction, since it is necessary. */
+    if (packet_ptr->nx_packet_append_ptr > packet_ptr->nx_packet_data_end) {
+        return (NX_OVERFLOW);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call the actual service. */
-  status = _nxd_ip_raw_packet_source_send(ip_ptr, packet_ptr, destination_ip,
-                                          address_index, protocol, ttl, tos);
+    /* Call the actual service. */
+    status = _nxd_ip_raw_packet_source_send(ip_ptr, packet_ptr, destination_ip, address_index, protocol, ttl, tos);
 
-  /* Return completion status. */
-  return (status);
+    /* Return completion status. */
+    return (status);
 }

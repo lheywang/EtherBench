@@ -71,60 +71,60 @@
 /**************************************************************************/
 UINT _txe_queue_delete(TX_QUEUE *queue_ptr) {
 
-  UINT status;
+    UINT status;
 #ifndef TX_TIMER_PROCESS_IN_ISR
-  TX_THREAD *thread_ptr;
+    TX_THREAD *thread_ptr;
 #endif
 
-  /* Default status to success.  */
-  status = TX_SUCCESS;
+    /* Default status to success.  */
+    status = TX_SUCCESS;
 
-  /* Check for an invalid queue pointer.  */
-  if (queue_ptr == TX_NULL) {
+    /* Check for an invalid queue pointer.  */
+    if (queue_ptr == TX_NULL) {
 
-    /* Queue pointer is invalid, return appropriate error code.  */
-    status = TX_QUEUE_ERROR;
-  }
-
-  /* Now check for a valid queue ID.  */
-  else if (queue_ptr->tx_queue_id != TX_QUEUE_ID) {
-
-    /* Queue pointer is invalid, return appropriate error code.  */
-    status = TX_QUEUE_ERROR;
-  } else {
-
-    /* Check for invalid caller of this function.  */
-
-    /* Is the caller an ISR or Initialization?  */
-    if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
-
-      /* Invalid caller of this function, return appropriate error code.  */
-      status = TX_CALLER_ERROR;
+        /* Queue pointer is invalid, return appropriate error code.  */
+        status = TX_QUEUE_ERROR;
     }
+
+    /* Now check for a valid queue ID.  */
+    else if (queue_ptr->tx_queue_id != TX_QUEUE_ID) {
+
+        /* Queue pointer is invalid, return appropriate error code.  */
+        status = TX_QUEUE_ERROR;
+    } else {
+
+        /* Check for invalid caller of this function.  */
+
+        /* Is the caller an ISR or Initialization?  */
+        if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
+
+            /* Invalid caller of this function, return appropriate error code.  */
+            status = TX_CALLER_ERROR;
+        }
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
-    else {
+        else {
 
-      /* Pickup thread pointer.  */
-      TX_THREAD_GET_CURRENT(thread_ptr)
+            /* Pickup thread pointer.  */
+            TX_THREAD_GET_CURRENT(thread_ptr)
 
-      /* Is the caller the system timer thread?  */
-      if (thread_ptr == &_tx_timer_thread) {
+            /* Is the caller the system timer thread?  */
+            if (thread_ptr == &_tx_timer_thread) {
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status = TX_CALLER_ERROR;
-      }
-    }
+                /* Invalid caller of this function, return appropriate error code.  */
+                status = TX_CALLER_ERROR;
+            }
+        }
 #endif
-  }
+    }
 
-  /* Determine if everything is okay.  */
-  if (status == TX_SUCCESS) {
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
 
-    /* Call actual queue delete function.  */
-    status = _tx_queue_delete(queue_ptr);
-  }
+        /* Call actual queue delete function.  */
+        status = _tx_queue_delete(queue_ptr);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

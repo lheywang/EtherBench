@@ -66,23 +66,17 @@ extern "C" {
 #define NX_HTTP_PROXY_STATE_CONNECTED 3
 
 /* Define HTTP Proxy function prototypes.  */
-UINT _nx_http_proxy_client_enable(NX_IP *ip_ptr, NXD_ADDRESS *proxy_server_ip,
-                                  UINT proxy_server_port, UCHAR *username,
-                                  UINT username_length, UCHAR *password,
-                                  UINT password_length);
-VOID _nx_http_proxy_client_initialize(NX_TCP_SOCKET *socket_ptr,
-                                      NXD_ADDRESS **server_ip,
-                                      UINT *server_port);
+UINT _nx_http_proxy_client_enable(NX_IP *ip_ptr, NXD_ADDRESS *proxy_server_ip, UINT proxy_server_port, UCHAR *username,
+                                  UINT username_length, UCHAR *password, UINT password_length);
+VOID _nx_http_proxy_client_initialize(NX_TCP_SOCKET *socket_ptr, NXD_ADDRESS **server_ip, UINT *server_port);
 UINT _nx_http_proxy_client_connect(NX_TCP_SOCKET *socket_ptr);
 UINT _nx_http_proxy_client_connect_response_process(NX_TCP_SOCKET *socket_ptr);
 VOID _nx_http_proxy_client_cleanup(NX_TCP_SOCKET *socket_ptr);
 
 /* Define error checking shells for API services.  These are only referenced by
    the application.  */
-UINT _nxe_http_proxy_client_enable(NX_IP *ip_ptr, NXD_ADDRESS *proxy_server_ip,
-                                   UINT proxy_server_port, UCHAR *username,
-                                   UINT username_length, UCHAR *password,
-                                   UINT password_length);
+UINT _nxe_http_proxy_client_enable(NX_IP *ip_ptr, NXD_ADDRESS *proxy_server_ip, UINT proxy_server_port, UCHAR *username,
+                                   UINT username_length, UCHAR *password, UINT password_length);
 
 /* Determine if a C++ compiler is being used.  If so, complete the standard
    C conditional started above.  */

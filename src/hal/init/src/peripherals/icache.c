@@ -27,22 +27,22 @@
 /* ICACHE init function */
 void MX_ICACHE_Init(void) {
 
-  /* USER CODE BEGIN ICACHE_Init 0 */
+    /* USER CODE BEGIN ICACHE_Init 0 */
 
-  /* USER CODE END ICACHE_Init 0 */
+    /* USER CODE END ICACHE_Init 0 */
 
-  /* USER CODE BEGIN ICACHE_Init 1 */
+    /* USER CODE BEGIN ICACHE_Init 1 */
 
-  /* USER CODE END ICACHE_Init 1 */
+    /* USER CODE END ICACHE_Init 1 */
 
-  /** Enable instruction cache (default 2-ways set associative cache)
-   */
-  if (HAL_ICACHE_Enable() != HAL_OK) {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN ICACHE_Init 2 */
+    /** Enable instruction cache (default 2-ways set associative cache)
+     */
+    if (HAL_ICACHE_Enable() != HAL_OK) {
+        Error_Handler();
+    }
+    /* USER CODE BEGIN ICACHE_Init 2 */
 
-  /* USER CODE END ICACHE_Init 2 */
+    /* USER CODE END ICACHE_Init 2 */
 }
 
 /* USER CODE BEGIN 1 */

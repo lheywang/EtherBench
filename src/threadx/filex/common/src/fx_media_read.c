@@ -70,56 +70,53 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_media_read(FX_MEDIA *media_ptr, ULONG logical_sector,
-                    VOID *buffer_ptr) {
+UINT _fx_media_read(FX_MEDIA *media_ptr, ULONG logical_sector, VOID *buffer_ptr) {
 
-  UINT status;
+    UINT status;
 
 #ifdef TX_ENABLE_EVENT_TRACE
-  TX_TRACE_BUFFER_ENTRY *trace_event;
-  ULONG trace_timestamp;
+    TX_TRACE_BUFFER_ENTRY *trace_event;
+    ULONG trace_timestamp;
 #endif
 
 #ifndef FX_MEDIA_STATISTICS_DISABLE
 
-  /* Increment the number of times this service has been called.  */
-  media_ptr->fx_media_reads++;
+    /* Increment the number of times this service has been called.  */
+    media_ptr->fx_media_reads++;
 #endif
 
-  /* Check the media to make sure it is open.  */
-  if (media_ptr->fx_media_id != FX_MEDIA_ID) {
+    /* Check the media to make sure it is open.  */
+    if (media_ptr->fx_media_id != FX_MEDIA_ID) {
 
-    /* Return the media not opened error.  */
-    return (FX_MEDIA_NOT_OPEN);
-  }
+        /* Return the media not opened error.  */
+        return (FX_MEDIA_NOT_OPEN);
+    }
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  FX_TRACE_IN_LINE_INSERT(FX_TRACE_MEDIA_READ, media_ptr, logical_sector,
-                          buffer_ptr, 0, FX_TRACE_MEDIA_EVENTS, &trace_event,
-                          &trace_timestamp)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    FX_TRACE_IN_LINE_INSERT(FX_TRACE_MEDIA_READ, media_ptr, logical_sector, buffer_ptr, 0, FX_TRACE_MEDIA_EVENTS,
+                            &trace_event, &trace_timestamp)
 
-  /* Protect against other threads accessing the media.  */
-  FX_PROTECT
+    /* Protect against other threads accessing the media.  */
+    FX_PROTECT
 
-  /* Read the logical sector.  */
-  status =
-      _fx_utility_logical_sector_read(media_ptr, (ULONG64)logical_sector,
-                                      buffer_ptr, ((ULONG)1), FX_DATA_SECTOR);
+    /* Read the logical sector.  */
+    status =
+        _fx_utility_logical_sector_read(media_ptr, (ULONG64)logical_sector, buffer_ptr, ((ULONG)1), FX_DATA_SECTOR);
 
 #ifdef TX_ENABLE_EVENT_TRACE
 
-  /* Check for successful status.  */
-  if (status == FX_SUCCESS) {
+    /* Check for successful status.  */
+    if (status == FX_SUCCESS) {
 
-    /* Update the trace event with the bytes read.  */
-    FX_TRACE_EVENT_UPDATE(trace_event, trace_timestamp, FX_TRACE_MEDIA_READ, 0,
-                          0, 0, media_ptr->fx_media_bytes_per_sector)
-  }
+        /* Update the trace event with the bytes read.  */
+        FX_TRACE_EVENT_UPDATE(trace_event, trace_timestamp, FX_TRACE_MEDIA_READ, 0, 0, 0,
+                              media_ptr->fx_media_bytes_per_sector)
+    }
 #endif
 
-  /* Release media protection.  */
-  FX_UNPROTECT
+    /* Release media protection.  */
+    FX_UNPROTECT
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

@@ -69,22 +69,21 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_file_rename(FX_MEDIA *media_ptr, CHAR *old_file_name,
-                      CHAR *new_file_name) {
+UINT _fxe_file_rename(FX_MEDIA *media_ptr, CHAR *old_file_name, CHAR *new_file_name) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null media pointer.  */
-  if (media_ptr == FX_NULL) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null media pointer.  */
+    if (media_ptr == FX_NULL) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual file rename service.  */
-  status = _fx_file_rename(media_ptr, old_file_name, new_file_name);
+    /* Call actual file rename service.  */
+    status = _fx_file_rename(media_ptr, old_file_name, new_file_name);
 
-  /* File rename is complete, return status.  */
-  return (status);
+    /* File rename is complete, return status.  */
+    return (status);
 }

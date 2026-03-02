@@ -94,90 +94,75 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_storage_csw_send(UX_SLAVE_CLASS_STORAGE *storage,
-                                       ULONG lun,
-                                       UX_SLAVE_ENDPOINT *endpoint_in,
+UINT _ux_device_class_storage_csw_send(UX_SLAVE_CLASS_STORAGE *storage, ULONG lun, UX_SLAVE_ENDPOINT *endpoint_in,
                                        UCHAR csw_status) {
 
-  UINT status = UX_SUCCESS;
-  UX_SLAVE_TRANSFER *transfer_request;
-  UCHAR *csw_buffer;
+    UINT status = UX_SUCCESS;
+    UX_SLAVE_TRANSFER *transfer_request;
+    UCHAR *csw_buffer;
 
-  UX_PARAMETER_NOT_USED(csw_status);
-  UX_PARAMETER_NOT_USED(lun);
+    UX_PARAMETER_NOT_USED(csw_status);
+    UX_PARAMETER_NOT_USED(lun);
 
-  /* Build option check.  */
-  UX_ASSERT(UX_SLAVE_REQUEST_DATA_MAX_LENGTH >=
-            UX_SLAVE_CLASS_STORAGE_CSW_LENGTH);
+    /* Build option check.  */
+    UX_ASSERT(UX_SLAVE_REQUEST_DATA_MAX_LENGTH >= UX_SLAVE_CLASS_STORAGE_CSW_LENGTH);
 
 #if defined(UX_DEVICE_STANDALONE)
 
-  /* Reset transfer request buffer pointers.  */
-  storage->ux_device_class_storage_ep_out->ux_slave_endpoint_transfer_request
-      .ux_slave_transfer_request_data_pointer =
-      storage->ux_device_class_storage_buffer[0];
-  storage->ux_device_class_storage_ep_in->ux_slave_endpoint_transfer_request
-      .ux_slave_transfer_request_data_pointer =
-      storage->ux_device_class_storage_buffer[1];
+    /* Reset transfer request buffer pointers.  */
+    storage->ux_device_class_storage_ep_out->ux_slave_endpoint_transfer_request.ux_slave_transfer_request_data_pointer =
+        storage->ux_device_class_storage_buffer[0];
+    storage->ux_device_class_storage_ep_in->ux_slave_endpoint_transfer_request.ux_slave_transfer_request_data_pointer =
+        storage->ux_device_class_storage_buffer[1];
 #endif
 
-  /* If CSW skipped, just return.  */
-  if (UX_DEVICE_CLASS_STORAGE_CSW_SKIP(
-          &storage->ux_slave_class_storage_csw_status))
-    return (UX_SUCCESS);
+    /* If CSW skipped, just return.  */
+    if (UX_DEVICE_CLASS_STORAGE_CSW_SKIP(&storage->ux_slave_class_storage_csw_status))
+        return (UX_SUCCESS);
 
-  /* Obtain the pointer to the transfer request.  */
-  transfer_request = &endpoint_in->ux_slave_endpoint_transfer_request;
+    /* Obtain the pointer to the transfer request.  */
+    transfer_request = &endpoint_in->ux_slave_endpoint_transfer_request;
 
-  /* Get CSW buffer pointer.  */
-  csw_buffer = transfer_request->ux_slave_transfer_request_data_pointer;
+    /* Get CSW buffer pointer.  */
+    csw_buffer = transfer_request->ux_slave_transfer_request_data_pointer;
 
-  /* Ensure it is cleaned.  */
-  _ux_utility_memory_set(
-      csw_buffer, 0,
-      UX_SLAVE_CLASS_STORAGE_CSW_LENGTH); /* Use case of memset is verified. */
+    /* Ensure it is cleaned.  */
+    _ux_utility_memory_set(csw_buffer, 0, UX_SLAVE_CLASS_STORAGE_CSW_LENGTH); /* Use case of memset is verified. */
 
-  /* Store the signature of the CSW.  */
-  _ux_utility_long_put(&csw_buffer[UX_SLAVE_CLASS_STORAGE_CSW_SIGNATURE],
-                       UX_SLAVE_CLASS_STORAGE_CSW_SIGNATURE_MASK);
+    /* Store the signature of the CSW.  */
+    _ux_utility_long_put(&csw_buffer[UX_SLAVE_CLASS_STORAGE_CSW_SIGNATURE], UX_SLAVE_CLASS_STORAGE_CSW_SIGNATURE_MASK);
 
-  /* Store the SCSI tag from the CBW.  */
-  _ux_utility_long_put(&csw_buffer[UX_SLAVE_CLASS_STORAGE_CSW_TAG],
-                       storage->ux_slave_class_storage_scsi_tag);
+    /* Store the SCSI tag from the CBW.  */
+    _ux_utility_long_put(&csw_buffer[UX_SLAVE_CLASS_STORAGE_CSW_TAG], storage->ux_slave_class_storage_scsi_tag);
 
-  /* Store the dCSWDataResidue.  */
-  _ux_utility_long_put(&csw_buffer[UX_SLAVE_CLASS_STORAGE_CSW_DATA_RESIDUE],
-                       storage->ux_slave_class_storage_csw_residue);
+    /* Store the dCSWDataResidue.  */
+    _ux_utility_long_put(&csw_buffer[UX_SLAVE_CLASS_STORAGE_CSW_DATA_RESIDUE],
+                         storage->ux_slave_class_storage_csw_residue);
 
-  /* Store the status of the previous operation.  */
-  csw_buffer[UX_SLAVE_CLASS_STORAGE_CSW_STATUS] =
-      (UCHAR)storage->ux_slave_class_storage_csw_status;
+    /* Store the status of the previous operation.  */
+    csw_buffer[UX_SLAVE_CLASS_STORAGE_CSW_STATUS] = (UCHAR)storage->ux_slave_class_storage_csw_status;
 
 #if defined(UX_DEVICE_STANDALONE)
 
-  /* Next: Transfer (CSW).  */
-  storage->ux_device_class_storage_cmd_state = UX_DEVICE_CLASS_STORAGE_CMD_CSW;
-  storage->ux_device_class_storage_state =
-      UX_DEVICE_CLASS_STORAGE_STATE_TRANS_START;
-  storage->ux_device_class_storage_transfer = transfer_request;
+    /* Next: Transfer (CSW).  */
+    storage->ux_device_class_storage_cmd_state = UX_DEVICE_CLASS_STORAGE_CMD_CSW;
+    storage->ux_device_class_storage_state = UX_DEVICE_CLASS_STORAGE_STATE_TRANS_START;
+    storage->ux_device_class_storage_transfer = transfer_request;
 
-  storage->ux_device_class_storage_device_length =
-      UX_SLAVE_CLASS_STORAGE_CSW_LENGTH;
-  storage->ux_device_class_storage_data_length =
-      UX_SLAVE_CLASS_STORAGE_CSW_LENGTH;
-  storage->ux_device_class_storage_data_count = 0;
+    storage->ux_device_class_storage_device_length = UX_SLAVE_CLASS_STORAGE_CSW_LENGTH;
+    storage->ux_device_class_storage_data_length = UX_SLAVE_CLASS_STORAGE_CSW_LENGTH;
+    storage->ux_device_class_storage_data_count = 0;
 
 #else
 
-  /* We may be in a special state machine condition where the endpoint is
-     stalled waiting for a CLEAR_FEATURE.  We will wait until the host clears
-     the endpoint. The transfer_request function does that.  */
-  /* Send the CSW back to the host.  */
-  status = _ux_device_stack_transfer_request(transfer_request,
-                                             UX_SLAVE_CLASS_STORAGE_CSW_LENGTH,
-                                             UX_SLAVE_CLASS_STORAGE_CSW_LENGTH);
+    /* We may be in a special state machine condition where the endpoint is
+       stalled waiting for a CLEAR_FEATURE.  We will wait until the host clears
+       the endpoint. The transfer_request function does that.  */
+    /* Send the CSW back to the host.  */
+    status = _ux_device_stack_transfer_request(transfer_request, UX_SLAVE_CLASS_STORAGE_CSW_LENGTH,
+                                               UX_SLAVE_CLASS_STORAGE_CSW_LENGTH);
 #endif
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

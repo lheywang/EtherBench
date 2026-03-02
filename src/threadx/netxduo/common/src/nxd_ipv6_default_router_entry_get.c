@@ -82,92 +82,85 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxd_ipv6_default_router_entry_get(NX_IP *ip_ptr, UINT interface_index,
-                                        UINT entry_index,
-                                        NXD_ADDRESS *router_addr,
-                                        ULONG *router_lifetime,
-                                        ULONG *prefix_length,
-                                        ULONG *configuration_method) {
+UINT _nxd_ipv6_default_router_entry_get(NX_IP *ip_ptr, UINT interface_index, UINT entry_index, NXD_ADDRESS *router_addr,
+                                        ULONG *router_lifetime, ULONG *prefix_length, ULONG *configuration_method) {
 #ifdef FEATURE_NX_IPV6
 
-  UINT status;
-  UINT i;
-  NX_IPV6_DEFAULT_ROUTER_ENTRY *rt_entry;
+    UINT status;
+    UINT i;
+    NX_IPV6_DEFAULT_ROUTER_ENTRY *rt_entry;
 
-  /* Obtain protection on this IP instance for access into the router table. */
+    /* Obtain protection on this IP instance for access into the router table. */
 
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Initialize the return value to be NX_NOT_FOUND.  Once the router address is
-     set, the return value is set to NX_SUCCESS. */
-  status = NX_NOT_FOUND;
+    /* Initialize the return value to be NX_NOT_FOUND.  Once the router address is
+       set, the return value is set to NX_SUCCESS. */
+    status = NX_NOT_FOUND;
 
-  for (i = 0; i < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE; i++) {
+    for (i = 0; i < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE; i++) {
 
-    rt_entry = &ip_ptr->nx_ipv6_default_router_table[i];
-    /* Skip invalid entries. */
-    if (rt_entry->nx_ipv6_default_router_entry_flag == 0) {
-      continue;
-    }
-
-    /* Match the interface. */
-    if (rt_entry->nx_ipv6_default_router_entry_interface_ptr
-            ->nx_interface_index != (UCHAR)interface_index) {
-      continue;
-    }
-
-    /* Match the entry index */
-    if (entry_index > 0) {
-      entry_index--;
-    } else {
-
-      if (router_addr) {
-        router_addr->nxd_ip_version = NX_IP_VERSION_V6;
-
-        COPY_IPV6_ADDRESS(
-            &(rt_entry->nx_ipv6_default_router_entry_router_address[0]),
-            &router_addr->nxd_ip_address.v6[0]);
-      }
-
-      if (router_lifetime) {
-        *router_lifetime = rt_entry->nx_ipv6_default_router_entry_life_time;
-      }
-
-      if (prefix_length) {
-        if ((rt_entry->nx_ipv6_default_router_entry_router_address[0] &
-             (UINT)0xFFC00000) == (UINT)0xFE800000) {
-          *prefix_length = 10;
-        } else {
-          *prefix_length = 64;
+        rt_entry = &ip_ptr->nx_ipv6_default_router_table[i];
+        /* Skip invalid entries. */
+        if (rt_entry->nx_ipv6_default_router_entry_flag == 0) {
+            continue;
         }
-      }
 
-      if (configuration_method) {
-        *configuration_method = (rt_entry->nx_ipv6_default_router_entry_flag &
-                                 (UCHAR)(~NX_IPV6_ROUTE_TYPE_VALID));
-      }
+        /* Match the interface. */
+        if (rt_entry->nx_ipv6_default_router_entry_interface_ptr->nx_interface_index != (UCHAR)interface_index) {
+            continue;
+        }
 
-      status = NX_SUCCESS;
+        /* Match the entry index */
+        if (entry_index > 0) {
+            entry_index--;
+        } else {
 
-      break;
+            if (router_addr) {
+                router_addr->nxd_ip_version = NX_IP_VERSION_V6;
+
+                COPY_IPV6_ADDRESS(&(rt_entry->nx_ipv6_default_router_entry_router_address[0]),
+                                  &router_addr->nxd_ip_address.v6[0]);
+            }
+
+            if (router_lifetime) {
+                *router_lifetime = rt_entry->nx_ipv6_default_router_entry_life_time;
+            }
+
+            if (prefix_length) {
+                if ((rt_entry->nx_ipv6_default_router_entry_router_address[0] & (UINT)0xFFC00000) == (UINT)0xFE800000) {
+                    *prefix_length = 10;
+                } else {
+                    *prefix_length = 64;
+                }
+            }
+
+            if (configuration_method) {
+                *configuration_method =
+                    (rt_entry->nx_ipv6_default_router_entry_flag & (UCHAR)(~NX_IPV6_ROUTE_TYPE_VALID));
+            }
+
+            status = NX_SUCCESS;
+
+            break;
+        }
     }
-  }
 
-  /* Release the mutex.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release the mutex.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  return (status);
+    return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(interface_index);
-  NX_PARAMETER_NOT_USED(entry_index);
-  NX_PARAMETER_NOT_USED(router_addr);
-  NX_PARAMETER_NOT_USED(router_lifetime);
-  NX_PARAMETER_NOT_USED(prefix_length);
-  NX_PARAMETER_NOT_USED(configuration_method);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(interface_index);
+    NX_PARAMETER_NOT_USED(entry_index);
+    NX_PARAMETER_NOT_USED(router_addr);
+    NX_PARAMETER_NOT_USED(router_lifetime);
+    NX_PARAMETER_NOT_USED(prefix_length);
+    NX_PARAMETER_NOT_USED(configuration_method);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

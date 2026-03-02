@@ -85,30 +85,27 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                                                        */
 /**************************************************************************/
 
-UINT _nxe_ip_interface_info_get(NX_IP *ip_ptr, UINT interface_index,
-                                CHAR **interface_name, ULONG *ip_address,
-                                ULONG *network_mask, ULONG *mtu_size,
-                                ULONG *physical_address_msw,
+UINT _nxe_ip_interface_info_get(NX_IP *ip_ptr, UINT interface_index, CHAR **interface_name, ULONG *ip_address,
+                                ULONG *network_mask, ULONG *mtu_size, ULONG *physical_address_msw,
                                 ULONG *physical_address_lsw) {
-  UINT status;
+    UINT status;
 
-  if (ip_ptr == NX_NULL) {
-    return (NX_PTR_ERROR);
-  }
+    if (ip_ptr == NX_NULL) {
+        return (NX_PTR_ERROR);
+    }
 
-  if (ip_ptr->nx_ip_id != NX_IP_ID) {
-    return (NX_PTR_ERROR);
-  }
+    if (ip_ptr->nx_ip_id != NX_IP_ID) {
+        return (NX_PTR_ERROR);
+    }
 
-  if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
-    return (NX_INVALID_INTERFACE);
-  }
+    if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
+        return (NX_INVALID_INTERFACE);
+    }
 
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  status = _nx_ip_interface_info_get(
-      ip_ptr, interface_index, interface_name, ip_address, network_mask,
-      mtu_size, physical_address_msw, physical_address_lsw);
+    status = _nx_ip_interface_info_get(ip_ptr, interface_index, interface_name, ip_address, network_mask, mtu_size,
+                                       physical_address_msw, physical_address_lsw);
 
-  return (status);
+    return (status);
 }

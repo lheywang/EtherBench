@@ -72,108 +72,104 @@
 /**************************************************************************/
 UINT _fx_media_abort(FX_MEDIA *media_ptr) {
 
-  FX_INT_SAVE_AREA
-  ULONG open_count;
-  FX_FILE *file_ptr;
+    FX_INT_SAVE_AREA
+    ULONG open_count;
+    FX_FILE *file_ptr;
 
 #ifndef FX_MEDIA_STATISTICS_DISABLE
 
-  /* Increment the number of times this service has been called.  */
-  media_ptr->fx_media_aborts++;
+    /* Increment the number of times this service has been called.  */
+    media_ptr->fx_media_aborts++;
 #endif
 
-  /* Check the media to make sure it is open.  */
-  if (media_ptr->fx_media_id != FX_MEDIA_ID) {
+    /* Check the media to make sure it is open.  */
+    if (media_ptr->fx_media_id != FX_MEDIA_ID) {
 
-    /* Return the media not opened error.  */
-    return (FX_MEDIA_NOT_OPEN);
-  }
-
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  FX_TRACE_IN_LINE_INSERT(FX_TRACE_MEDIA_ABORT, media_ptr, 0, 0, 0,
-                          FX_TRACE_MEDIA_EVENTS, 0, 0)
-
-  /* Protect against other threads accessing the media.  */
-  FX_PROTECT
-
-  /* Loop through the media's open files.  */
-  open_count = media_ptr->fx_media_opened_file_count;
-  file_ptr = media_ptr->fx_media_opened_file_list;
-  while (open_count) {
-
-    /* Mark the file as aborted.  */
-    file_ptr->fx_file_id = FX_FILE_ABORTED_ID;
-
-    /* Adjust the pointer and decrement the file opened count.  */
-    file_ptr = file_ptr->fx_file_opened_next;
-    open_count--;
-  }
-
-  /* Build the "abort" I/O driver request.  */
-  media_ptr->fx_media_driver_request = FX_DRIVER_ABORT;
-  media_ptr->fx_media_driver_status = FX_IO_ERROR;
-
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  FX_TRACE_IN_LINE_INSERT(FX_TRACE_INTERNAL_IO_DRIVER_ABORT, media_ptr, 0, 0, 0,
-                          FX_TRACE_INTERNAL_EVENTS, 0, 0)
-
-  /* Call the specified I/O driver with the abort request.  */
-  (media_ptr->fx_media_driver_entry)(media_ptr);
-
-  /* Now remove this media from the open list.  */
-
-  /* Lockout interrupts for media removal.  */
-  FX_DISABLE_INTS
-
-  /* See if the media is the only one on the media opened list.  */
-  if (_fx_system_media_opened_count == ((ULONG)1)) {
-
-    /* Only opened media, just set the opened list to NULL.  */
-    _fx_system_media_opened_ptr = FX_NULL;
-  } else {
-
-    /* Otherwise, not the only opened media, link-up the neighbors.  */
-    (media_ptr->fx_media_opened_next)->fx_media_opened_previous =
-        media_ptr->fx_media_opened_previous;
-    (media_ptr->fx_media_opened_previous)->fx_media_opened_next =
-        media_ptr->fx_media_opened_next;
-
-    /* See if we have to update the opened list head pointer.  */
-    if (_fx_system_media_opened_ptr == media_ptr) {
-
-      /* Yes, move the head pointer to the next opened media. */
-      _fx_system_media_opened_ptr = media_ptr->fx_media_opened_next;
+        /* Return the media not opened error.  */
+        return (FX_MEDIA_NOT_OPEN);
     }
-  }
 
-  /* Decrement the opened media counter.  */
-  _fx_system_media_opened_count--;
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    FX_TRACE_IN_LINE_INSERT(FX_TRACE_MEDIA_ABORT, media_ptr, 0, 0, 0, FX_TRACE_MEDIA_EVENTS, 0, 0)
 
-  /* Finally, Indicate that this media is aborted.  */
-  media_ptr->fx_media_id = FX_MEDIA_ABORTED_ID;
+    /* Protect against other threads accessing the media.  */
+    FX_PROTECT
 
-  /* Restore interrupt posture.  */
-  FX_RESTORE_INTS
+    /* Loop through the media's open files.  */
+    open_count = media_ptr->fx_media_opened_file_count;
+    file_ptr = media_ptr->fx_media_opened_file_list;
+    while (open_count) {
 
-  /* Delete the media protection structure if FX_SINGLE_THREAD is not
-     defined.  */
+        /* Mark the file as aborted.  */
+        file_ptr->fx_file_id = FX_FILE_ABORTED_ID;
+
+        /* Adjust the pointer and decrement the file opened count.  */
+        file_ptr = file_ptr->fx_file_opened_next;
+        open_count--;
+    }
+
+    /* Build the "abort" I/O driver request.  */
+    media_ptr->fx_media_driver_request = FX_DRIVER_ABORT;
+    media_ptr->fx_media_driver_status = FX_IO_ERROR;
+
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    FX_TRACE_IN_LINE_INSERT(FX_TRACE_INTERNAL_IO_DRIVER_ABORT, media_ptr, 0, 0, 0, FX_TRACE_INTERNAL_EVENTS, 0, 0)
+
+    /* Call the specified I/O driver with the abort request.  */
+    (media_ptr->fx_media_driver_entry)(media_ptr);
+
+    /* Now remove this media from the open list.  */
+
+    /* Lockout interrupts for media removal.  */
+    FX_DISABLE_INTS
+
+    /* See if the media is the only one on the media opened list.  */
+    if (_fx_system_media_opened_count == ((ULONG)1)) {
+
+        /* Only opened media, just set the opened list to NULL.  */
+        _fx_system_media_opened_ptr = FX_NULL;
+    } else {
+
+        /* Otherwise, not the only opened media, link-up the neighbors.  */
+        (media_ptr->fx_media_opened_next)->fx_media_opened_previous = media_ptr->fx_media_opened_previous;
+        (media_ptr->fx_media_opened_previous)->fx_media_opened_next = media_ptr->fx_media_opened_next;
+
+        /* See if we have to update the opened list head pointer.  */
+        if (_fx_system_media_opened_ptr == media_ptr) {
+
+            /* Yes, move the head pointer to the next opened media. */
+            _fx_system_media_opened_ptr = media_ptr->fx_media_opened_next;
+        }
+    }
+
+    /* Decrement the opened media counter.  */
+    _fx_system_media_opened_count--;
+
+    /* Finally, Indicate that this media is aborted.  */
+    media_ptr->fx_media_id = FX_MEDIA_ABORTED_ID;
+
+    /* Restore interrupt posture.  */
+    FX_RESTORE_INTS
+
+    /* Delete the media protection structure if FX_SINGLE_THREAD is not
+       defined.  */
 #ifndef FX_SINGLE_THREAD
 
 #ifndef FX_DONT_CREATE_MUTEX
 
-  /* Note that the protection is never released. The mutex delete
-     service will handle all threads waiting access to this media
-     control block.  */
-  tx_mutex_delete(&(media_ptr->fx_media_protect));
+    /* Note that the protection is never released. The mutex delete
+       service will handle all threads waiting access to this media
+       control block.  */
+    tx_mutex_delete(&(media_ptr->fx_media_protect));
 #endif
 #endif
 
 #ifdef FX_DONT_CREATE_MUTEX
 
-  /* Release media protection.  */
-  FX_UNPROTECT
+    /* Release media protection.  */
+    FX_UNPROTECT
 #endif
 
-  /* Return status to the caller.  */
-  return (FX_SUCCESS);
+    /* Return status to the caller.  */
+    return (FX_SUCCESS);
 }

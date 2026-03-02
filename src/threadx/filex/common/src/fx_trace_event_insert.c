@@ -78,62 +78,59 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID _fx_trace_event_insert(ULONG event_id, ULONG info_field_1,
-                            ULONG info_field_2, ULONG info_field_3,
-                            ULONG info_field_4, ULONG filter,
-                            TX_TRACE_BUFFER_ENTRY **current_event,
+VOID _fx_trace_event_insert(ULONG event_id, ULONG info_field_1, ULONG info_field_2, ULONG info_field_3,
+                            ULONG info_field_4, ULONG filter, TX_TRACE_BUFFER_ENTRY **current_event,
                             ULONG *current_timestamp) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  TX_TRACE_BUFFER_ENTRY *event;
-  ULONG timestamp;
+    TX_TRACE_BUFFER_ENTRY *event;
+    ULONG timestamp;
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Pickup the current event.  */
-  event = _tx_trace_buffer_current_ptr;
+    /* Pickup the current event.  */
+    event = _tx_trace_buffer_current_ptr;
 
-  /* Insert this event into the trace buffer.  */
-  TX_TRACE_IN_LINE_INSERT(event_id, info_field_1, info_field_2, info_field_3,
-                          info_field_4, filter);
+    /* Insert this event into the trace buffer.  */
+    TX_TRACE_IN_LINE_INSERT(event_id, info_field_1, info_field_2, info_field_3, info_field_4, filter);
 
-  /* Initialize the timestamp to 0.  */
-  timestamp = 0;
+    /* Initialize the timestamp to 0.  */
+    timestamp = 0;
 
-  /* Determine if the event was inserted.  */
-  if (event) {
+    /* Determine if the event was inserted.  */
+    if (event) {
 
-    /* Was the event inserted?  */
-    if (event->tx_trace_buffer_entry_event_id == event_id) {
+        /* Was the event inserted?  */
+        if (event->tx_trace_buffer_entry_event_id == event_id) {
 
-      /* Yes, the event was inserted in the event trace so pickup the timestamp.
-       */
-      timestamp = event->tx_trace_buffer_entry_time_stamp;
-    } else {
+            /* Yes, the event was inserted in the event trace so pickup the timestamp.
+             */
+            timestamp = event->tx_trace_buffer_entry_time_stamp;
+        } else {
 
-      /* Event was not inserted, simply set the event pointer to NULL.  */
-      event = FX_NULL;
+            /* Event was not inserted, simply set the event pointer to NULL.  */
+            event = FX_NULL;
+        }
     }
-  }
 
-  /* Now determine if the caller requested the current event.  */
-  if (current_event) {
+    /* Now determine if the caller requested the current event.  */
+    if (current_event) {
 
-    /* Yes, return the event pointer of potential subsequent update.  */
-    *current_event = event;
-  }
+        /* Yes, return the event pointer of potential subsequent update.  */
+        *current_event = event;
+    }
 
-  /* Now determine if the current timestamp was requested.  */
-  if (current_timestamp) {
+    /* Now determine if the current timestamp was requested.  */
+    if (current_timestamp) {
 
-    /* Yes, return the current timestamp.  */
-    *current_timestamp = timestamp;
-  }
+        /* Yes, return the current timestamp.  */
+        *current_timestamp = timestamp;
+    }
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 }
 
 #endif /* TX_ENABLE_EVENT_TRACE */

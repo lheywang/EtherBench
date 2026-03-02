@@ -75,29 +75,29 @@ NX_CALLER_CHECKING_EXTERNS
 /**************************************************************************/
 UINT _nxe_tcp_server_socket_unlisten(NX_IP *ip_ptr, UINT port) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check to see if TCP is enabled.  */
-  if (!ip_ptr->nx_ip_tcp_packet_receive) {
-    return (NX_NOT_ENABLED);
-  }
+    /* Check to see if TCP is enabled.  */
+    if (!ip_ptr->nx_ip_tcp_packet_receive) {
+        return (NX_NOT_ENABLED);
+    }
 
-  /* Check for an invalid port.  */
-  if ((!port) || (((ULONG)port) > (ULONG)NX_MAX_PORT)) {
-    return (NX_INVALID_PORT);
-  }
+    /* Check for an invalid port.  */
+    if ((!port) || (((ULONG)port) > (ULONG)NX_MAX_PORT)) {
+        return (NX_INVALID_PORT);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call actual TCP server socket unlisten function.  */
-  status = _nx_tcp_server_socket_unlisten(ip_ptr, port);
+    /* Call actual TCP server socket unlisten function.  */
+    status = _nx_tcp_server_socket_unlisten(ip_ptr, port);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

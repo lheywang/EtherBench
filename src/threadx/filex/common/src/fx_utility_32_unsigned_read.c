@@ -69,14 +69,12 @@
 /**************************************************************************/
 ULONG _fx_utility_32_unsigned_read(UCHAR *source_ptr) {
 
-  ULONG value;
+    ULONG value;
 
-  /* Pickup the UINT from the destination with endian-awareness.  */
-  value = ((((ULONG) * (source_ptr + 3)) & 0xFF) << 24) |
-          ((((ULONG) * (source_ptr + 2)) & 0xFF) << 16) |
-          ((((ULONG) * (source_ptr + 1)) & 0xFF) << 8) |
-          (((ULONG) * (source_ptr)) & 0xFF);
+    /* Pickup the UINT from the destination with endian-awareness.  */
+    value = ((((ULONG) * (source_ptr + 3)) & 0xFF) << 24) | ((((ULONG) * (source_ptr + 2)) & 0xFF) << 16) |
+            ((((ULONG) * (source_ptr + 1)) & 0xFF) << 8) | (((ULONG) * (source_ptr)) & 0xFF);
 
-  /* Return value to caller.  */
-  return (value);
+    /* Return value to caller.  */
+    return (value);
 }

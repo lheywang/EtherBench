@@ -45,21 +45,19 @@ extern "C" {
  * @brief  WWDG Init structure definition
  */
 typedef struct {
-  uint32_t
-      Prescaler; /*!< Specifies the prescaler value of the WWDG.
-                      This parameter can be a value of @ref WWDG_Prescaler */
+    uint32_t Prescaler; /*!< Specifies the prescaler value of the WWDG.
+                             This parameter can be a value of @ref WWDG_Prescaler */
 
-  uint32_t Window; /*!< Specifies the WWDG window value to be compared to the
-                      downcounter. This parameter must be a number Min_Data =
-                      0x40 and Max_Data = 0x7F */
+    uint32_t Window; /*!< Specifies the WWDG window value to be compared to the
+                        downcounter. This parameter must be a number Min_Data =
+                        0x40 and Max_Data = 0x7F */
 
-  uint32_t Counter; /*!< Specifies the WWDG free-running downcounter  value.
-                         This parameter must be a number between Min_Data = 0x40
-                       and Max_Data = 0x7F */
+    uint32_t Counter; /*!< Specifies the WWDG free-running downcounter  value.
+                           This parameter must be a number between Min_Data = 0x40
+                         and Max_Data = 0x7F */
 
-  uint32_t
-      EWIMode; /*!< Specifies if WWDG Early Wakeup Interrupt is enable or not.
-                    This parameter can be a value of @ref WWDG_EWI_Mode */
+    uint32_t EWIMode; /*!< Specifies if WWDG Early Wakeup Interrupt is enable or not.
+                           This parameter can be a value of @ref WWDG_EWI_Mode */
 
 } WWDG_InitTypeDef;
 
@@ -72,17 +70,15 @@ typedef struct __WWDG_HandleTypeDef
 typedef struct
 #endif /* USE_HAL_WWDG_REGISTER_CALLBACKS */
 {
-  WWDG_TypeDef *Instance; /*!< Register base address */
+    WWDG_TypeDef *Instance; /*!< Register base address */
 
-  WWDG_InitTypeDef Init; /*!< WWDG required parameters */
+    WWDG_InitTypeDef Init; /*!< WWDG required parameters */
 
 #if (USE_HAL_WWDG_REGISTER_CALLBACKS == 1)
-  void (*EwiCallback)(struct __WWDG_HandleTypeDef
-                          *hwwdg); /*!< WWDG Early WakeUp Interrupt callback */
+    void (*EwiCallback)(struct __WWDG_HandleTypeDef *hwwdg); /*!< WWDG Early WakeUp Interrupt callback */
 
-  void (*MspInitCallback)(
-      struct __WWDG_HandleTypeDef *hwwdg); /*!< WWDG Msp Init callback */
-#endif                                     /* USE_HAL_WWDG_REGISTER_CALLBACKS */
+    void (*MspInitCallback)(struct __WWDG_HandleTypeDef *hwwdg); /*!< WWDG Msp Init callback */
+#endif                                                           /* USE_HAL_WWDG_REGISTER_CALLBACKS */
 } WWDG_HandleTypeDef;
 
 #if (USE_HAL_WWDG_REGISTER_CALLBACKS == 1)
@@ -90,16 +86,14 @@ typedef struct
  * @brief  HAL WWDG common Callback ID enumeration definition
  */
 typedef enum {
-  HAL_WWDG_EWI_CB_ID = 0x00U,     /*!< WWDG EWI callback ID */
-  HAL_WWDG_MSPINIT_CB_ID = 0x01U, /*!< WWDG MspInit callback ID */
+    HAL_WWDG_EWI_CB_ID = 0x00U,     /*!< WWDG EWI callback ID */
+    HAL_WWDG_MSPINIT_CB_ID = 0x01U, /*!< WWDG MspInit callback ID */
 } HAL_WWDG_CallbackIDTypeDef;
 
 /**
  * @brief  HAL WWDG Callback pointer definition
  */
-typedef void (*pWWDG_CallbackTypeDef)(
-    WWDG_HandleTypeDef
-        *hppp); /*!< pointer to a WWDG common callback functions */
+typedef void (*pWWDG_CallbackTypeDef)(WWDG_HandleTypeDef *hppp); /*!< pointer to a WWDG common callback functions */
 
 #endif /* USE_HAL_WWDG_REGISTER_CALLBACKS */
 /**
@@ -132,26 +126,16 @@ typedef void (*pWWDG_CallbackTypeDef)(
 /** @defgroup WWDG_Prescaler WWDG Prescaler
  * @{
  */
-#define WWDG_PRESCALER_1                                                       \
-  0x00000000u /*!< WWDG counter clock = (PCLK1/4096)/1                         \
-               */
-#define WWDG_PRESCALER_2                                                       \
-  WWDG_CFR_WDGTB_0 /*!< WWDG counter clock = (PCLK1/4096)/2 */
-#define WWDG_PRESCALER_4                                                       \
-  WWDG_CFR_WDGTB_1 /*!< WWDG counter clock = (PCLK1/4096)/4 */
-#define WWDG_PRESCALER_8                                                       \
-  (WWDG_CFR_WDGTB_1 |                                                          \
-   WWDG_CFR_WDGTB_0) /*!< WWDG counter clock = (PCLK1/4096)/8 */
-#define WWDG_PRESCALER_16                                                      \
-  WWDG_CFR_WDGTB_2 /*!< WWDG counter clock = (PCLK1/4096)/16 */
-#define WWDG_PRESCALER_32                                                      \
-  (WWDG_CFR_WDGTB_2 |                                                          \
-   WWDG_CFR_WDGTB_0) /*!< WWDG counter clock = (PCLK1/4096)/32 */
-#define WWDG_PRESCALER_64                                                      \
-  (WWDG_CFR_WDGTB_2 |                                                          \
-   WWDG_CFR_WDGTB_1) /*!< WWDG counter clock = (PCLK1/4096)/64 */
-#define WWDG_PRESCALER_128                                                     \
-  WWDG_CFR_WDGTB /*!< WWDG counter clock = (PCLK1/4096)/128 */
+#define WWDG_PRESCALER_1                                                                                               \
+    0x00000000u                                                 /*!< WWDG counter clock = (PCLK1/4096)/1               \
+                                                                 */
+#define WWDG_PRESCALER_2 WWDG_CFR_WDGTB_0                       /*!< WWDG counter clock = (PCLK1/4096)/2 */
+#define WWDG_PRESCALER_4 WWDG_CFR_WDGTB_1                       /*!< WWDG counter clock = (PCLK1/4096)/4 */
+#define WWDG_PRESCALER_8 (WWDG_CFR_WDGTB_1 | WWDG_CFR_WDGTB_0)  /*!< WWDG counter clock = (PCLK1/4096)/8 */
+#define WWDG_PRESCALER_16 WWDG_CFR_WDGTB_2                      /*!< WWDG counter clock = (PCLK1/4096)/16 */
+#define WWDG_PRESCALER_32 (WWDG_CFR_WDGTB_2 | WWDG_CFR_WDGTB_0) /*!< WWDG counter clock = (PCLK1/4096)/32 */
+#define WWDG_PRESCALER_64 (WWDG_CFR_WDGTB_2 | WWDG_CFR_WDGTB_1) /*!< WWDG counter clock = (PCLK1/4096)/64 */
+#define WWDG_PRESCALER_128 WWDG_CFR_WDGTB                       /*!< WWDG counter clock = (PCLK1/4096)/128 */
 /**
  * @}
  */
@@ -174,24 +158,17 @@ typedef void (*pWWDG_CallbackTypeDef)(
 /** @defgroup WWDG_Private_Macros WWDG Private Macros
  * @{
  */
-#define IS_WWDG_PRESCALER(__PRESCALER__)                                       \
-  (((__PRESCALER__) == WWDG_PRESCALER_1) ||                                    \
-   ((__PRESCALER__) == WWDG_PRESCALER_2) ||                                    \
-   ((__PRESCALER__) == WWDG_PRESCALER_4) ||                                    \
-   ((__PRESCALER__) == WWDG_PRESCALER_8) ||                                    \
-   ((__PRESCALER__) == WWDG_PRESCALER_16) ||                                   \
-   ((__PRESCALER__) == WWDG_PRESCALER_32) ||                                   \
-   ((__PRESCALER__) == WWDG_PRESCALER_64) ||                                   \
-   ((__PRESCALER__) == WWDG_PRESCALER_128))
+#define IS_WWDG_PRESCALER(__PRESCALER__)                                                                               \
+    (((__PRESCALER__) == WWDG_PRESCALER_1) || ((__PRESCALER__) == WWDG_PRESCALER_2) ||                                 \
+     ((__PRESCALER__) == WWDG_PRESCALER_4) || ((__PRESCALER__) == WWDG_PRESCALER_8) ||                                 \
+     ((__PRESCALER__) == WWDG_PRESCALER_16) || ((__PRESCALER__) == WWDG_PRESCALER_32) ||                               \
+     ((__PRESCALER__) == WWDG_PRESCALER_64) || ((__PRESCALER__) == WWDG_PRESCALER_128))
 
-#define IS_WWDG_WINDOW(__WINDOW__)                                             \
-  (((__WINDOW__) >= WWDG_CFR_W_6) && ((__WINDOW__) <= WWDG_CFR_W))
+#define IS_WWDG_WINDOW(__WINDOW__) (((__WINDOW__) >= WWDG_CFR_W_6) && ((__WINDOW__) <= WWDG_CFR_W))
 
-#define IS_WWDG_COUNTER(__COUNTER__)                                           \
-  (((__COUNTER__) >= WWDG_CR_T_6) && ((__COUNTER__) <= WWDG_CR_T))
+#define IS_WWDG_COUNTER(__COUNTER__) (((__COUNTER__) >= WWDG_CR_T_6) && ((__COUNTER__) <= WWDG_CR_T))
 
-#define IS_WWDG_EWI_MODE(__MODE__)                                             \
-  (((__MODE__) == WWDG_EWI_ENABLE) || ((__MODE__) == WWDG_EWI_DISABLE))
+#define IS_WWDG_EWI_MODE(__MODE__) (((__MODE__) == WWDG_EWI_ENABLE) || ((__MODE__) == WWDG_EWI_DISABLE))
 /**
  * @}
  */
@@ -208,8 +185,7 @@ typedef void (*pWWDG_CallbackTypeDef)(
  * @param  __HANDLE__  WWDG handle
  * @retval None
  */
-#define __HAL_WWDG_ENABLE(__HANDLE__)                                          \
-  SET_BIT((__HANDLE__)->Instance->CR, WWDG_CR_WDGA)
+#define __HAL_WWDG_ENABLE(__HANDLE__) SET_BIT((__HANDLE__)->Instance->CR, WWDG_CR_WDGA)
 
 /**
  * @brief  Enable the WWDG early wakeup interrupt.
@@ -221,8 +197,7 @@ typedef void (*pWWDG_CallbackTypeDef)(
  * reset.
  * @retval None
  */
-#define __HAL_WWDG_ENABLE_IT(__HANDLE__, __INTERRUPT__)                        \
-  SET_BIT((__HANDLE__)->Instance->CFR, (__INTERRUPT__))
+#define __HAL_WWDG_ENABLE_IT(__HANDLE__, __INTERRUPT__) SET_BIT((__HANDLE__)->Instance->CFR, (__INTERRUPT__))
 
 /**
  * @brief  Check whether the selected WWDG interrupt has occurred or not.
@@ -232,8 +207,7 @@ typedef void (*pWWDG_CallbackTypeDef)(
  *            @arg WWDG_FLAG_EWIF: Early wakeup interrupt IT
  * @retval The new state of WWDG_FLAG (SET or RESET).
  */
-#define __HAL_WWDG_GET_IT(__HANDLE__, __INTERRUPT__)                           \
-  __HAL_WWDG_GET_FLAG((__HANDLE__), (__INTERRUPT__))
+#define __HAL_WWDG_GET_IT(__HANDLE__, __INTERRUPT__) __HAL_WWDG_GET_FLAG((__HANDLE__), (__INTERRUPT__))
 
 /** @brief  Clear the WWDG interrupt pending bits.
  *         bits to clear the selected interrupt pending bits.
@@ -242,8 +216,7 @@ typedef void (*pWWDG_CallbackTypeDef)(
  *         This parameter can be one of the following values:
  *            @arg WWDG_FLAG_EWIF: Early wakeup interrupt flag
  */
-#define __HAL_WWDG_CLEAR_IT(__HANDLE__, __INTERRUPT__)                         \
-  __HAL_WWDG_CLEAR_FLAG((__HANDLE__), (__INTERRUPT__))
+#define __HAL_WWDG_CLEAR_IT(__HANDLE__, __INTERRUPT__) __HAL_WWDG_CLEAR_FLAG((__HANDLE__), (__INTERRUPT__))
 
 /**
  * @brief  Check whether the specified WWDG flag is set or not.
@@ -253,8 +226,7 @@ typedef void (*pWWDG_CallbackTypeDef)(
  *            @arg WWDG_FLAG_EWIF: Early wakeup interrupt flag
  * @retval The new state of WWDG_FLAG (SET or RESET).
  */
-#define __HAL_WWDG_GET_FLAG(__HANDLE__, __FLAG__)                              \
-  (((__HANDLE__)->Instance->SR & (__FLAG__)) == (__FLAG__))
+#define __HAL_WWDG_GET_FLAG(__HANDLE__, __FLAG__) (((__HANDLE__)->Instance->SR & (__FLAG__)) == (__FLAG__))
 
 /**
  * @brief  Clear the WWDG's pending flags.
@@ -264,8 +236,7 @@ typedef void (*pWWDG_CallbackTypeDef)(
  *            @arg WWDG_FLAG_EWIF: Early wakeup interrupt flag
  * @retval None
  */
-#define __HAL_WWDG_CLEAR_FLAG(__HANDLE__, __FLAG__)                            \
-  ((__HANDLE__)->Instance->SR = ~(__FLAG__))
+#define __HAL_WWDG_CLEAR_FLAG(__HANDLE__, __FLAG__) ((__HANDLE__)->Instance->SR = ~(__FLAG__))
 
 /** @brief  Check whether the specified WWDG interrupt source is enabled or not.
  * @param  __HANDLE__  WWDG Handle.
@@ -274,8 +245,8 @@ typedef void (*pWWDG_CallbackTypeDef)(
  *            @arg WWDG_IT_EWI: Early Wakeup Interrupt
  * @retval state of __INTERRUPT__ (TRUE or FALSE).
  */
-#define __HAL_WWDG_GET_IT_SOURCE(__HANDLE__, __INTERRUPT__)                    \
-  (((__HANDLE__)->Instance->CFR & (__INTERRUPT__)) == (__INTERRUPT__))
+#define __HAL_WWDG_GET_IT_SOURCE(__HANDLE__, __INTERRUPT__)                                                            \
+    (((__HANDLE__)->Instance->CFR & (__INTERRUPT__)) == (__INTERRUPT__))
 
 /**
  * @}
@@ -296,13 +267,9 @@ HAL_StatusTypeDef HAL_WWDG_Init(WWDG_HandleTypeDef *hwwdg);
 void HAL_WWDG_MspInit(WWDG_HandleTypeDef *hwwdg);
 /* Callbacks Register/UnRegister functions  ***********************************/
 #if (USE_HAL_WWDG_REGISTER_CALLBACKS == 1)
-HAL_StatusTypeDef
-HAL_WWDG_RegisterCallback(WWDG_HandleTypeDef *hwwdg,
-                          HAL_WWDG_CallbackIDTypeDef CallbackID,
-                          pWWDG_CallbackTypeDef pCallback);
-HAL_StatusTypeDef
-HAL_WWDG_UnRegisterCallback(WWDG_HandleTypeDef *hwwdg,
-                            HAL_WWDG_CallbackIDTypeDef CallbackID);
+HAL_StatusTypeDef HAL_WWDG_RegisterCallback(WWDG_HandleTypeDef *hwwdg, HAL_WWDG_CallbackIDTypeDef CallbackID,
+                                            pWWDG_CallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_WWDG_UnRegisterCallback(WWDG_HandleTypeDef *hwwdg, HAL_WWDG_CallbackIDTypeDef CallbackID);
 #endif /* USE_HAL_WWDG_REGISTER_CALLBACKS */
 
 /**

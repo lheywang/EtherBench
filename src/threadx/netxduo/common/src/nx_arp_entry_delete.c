@@ -73,87 +73,86 @@
 UINT _nx_arp_entry_delete(NX_IP *ip_ptr, ULONG ip_address) {
 
 #ifndef NX_DISABLE_IPV4
-  UINT status;
-  NX_ARP *arp_ptr;
-  NX_ARP *arp_list_head;
-  NX_ARP *search_ptr;
-  UINT index;
+    UINT status;
+    NX_ARP *arp_ptr;
+    NX_ARP *arp_list_head;
+    NX_ARP *search_ptr;
+    UINT index;
 
-  /* Obtain protection on this IP instance for access into the ARP static  list.
-   */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Obtain protection on this IP instance for access into the ARP static  list.
+     */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Search the static list for a matching IP and hardware mapping.
-     Compute the index that will tell us which linked list of ARP addresses to
-     search, since we don't care if it is a static or dynamic entry. Search that
-     linked list pointed in the IP ARP table.  */
+    /* Search the static list for a matching IP and hardware mapping.
+       Compute the index that will tell us which linked list of ARP addresses to
+       search, since we don't care if it is a static or dynamic entry. Search that
+       linked list pointed in the IP ARP table.  */
 
-  /* Calculate the hash index for the specified IP address.  */
-  index = (UINT)((ip_address + (ip_address >> 8)) & NX_ARP_TABLE_MASK);
+    /* Calculate the hash index for the specified IP address.  */
+    index = (UINT)((ip_address + (ip_address >> 8)) & NX_ARP_TABLE_MASK);
 
-  /* Pickup the head pointer of the ARP entries for this IP instance.  */
-  arp_list_head = ip_ptr->nx_ip_arp_table[index];
+    /* Pickup the head pointer of the ARP entries for this IP instance.  */
+    arp_list_head = ip_ptr->nx_ip_arp_table[index];
 
-  /* Search the ARP list for the same IP address.  */
-  search_ptr = arp_list_head;
-  arp_ptr = NX_NULL;
+    /* Search the ARP list for the same IP address.  */
+    search_ptr = arp_list_head;
+    arp_ptr = NX_NULL;
 
-  while (search_ptr) {
+    while (search_ptr) {
 
-    /* Determine if we have a match.  */
-    if (search_ptr->nx_arp_ip_address == ip_address) {
+        /* Determine if we have a match.  */
+        if (search_ptr->nx_arp_ip_address == ip_address) {
 
-      /* Yes, the IP address matches, setup the ARP entry pointer.  */
-      arp_ptr = search_ptr;
+            /* Yes, the IP address matches, setup the ARP entry pointer.  */
+            arp_ptr = search_ptr;
 
-      /* Get out of the loop.  */
-      break;
+            /* Get out of the loop.  */
+            break;
+        }
+
+        /* Move to the next entry in the active list.  */
+        search_ptr = search_ptr->nx_arp_active_next;
+
+        /* Determine if the search pointer is back at the head of
+           the list.  */
+        if (search_ptr == arp_list_head) {
+
+            /* End of the ARP list, end the search.  */
+            break;
+        }
     }
 
-    /* Move to the next entry in the active list.  */
-    search_ptr = search_ptr->nx_arp_active_next;
+    /* Determine if we didn't find an ARP entry matching the input IP address. */
+    if (arp_ptr == NX_NULL) {
 
-    /* Determine if the search pointer is back at the head of
-       the list.  */
-    if (search_ptr == arp_list_head) {
+        /* Release the protection on the ARP list.  */
+        tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-      /* End of the ARP list, end the search.  */
-      break;
+        /* Return status to the caller.  */
+        return (NX_ENTRY_NOT_FOUND);
     }
-  }
 
-  /* Determine if we didn't find an ARP entry matching the input IP address. */
-  if (arp_ptr == NX_NULL) {
+    /* Determine if this is a static entry. */
+    if (arp_ptr->nx_arp_route_static == NX_TRUE) {
+
+        /* Remove from the static list. */
+        status = _nx_arp_static_entry_delete(ip_ptr, ip_address, arp_ptr->nx_arp_physical_address_msw,
+                                             arp_ptr->nx_arp_physical_address_lsw);
+    } else {
+
+        /* Remove from the dynamic list. */
+        status = _nx_arp_dynamic_entry_delete(ip_ptr, arp_ptr);
+    }
 
     /* Release the protection on the ARP list.  */
     tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
     /* Return status to the caller.  */
-    return (NX_ENTRY_NOT_FOUND);
-  }
-
-  /* Determine if this is a static entry. */
-  if (arp_ptr->nx_arp_route_static == NX_TRUE) {
-
-    /* Remove from the static list. */
-    status = _nx_arp_static_entry_delete(ip_ptr, ip_address,
-                                         arp_ptr->nx_arp_physical_address_msw,
-                                         arp_ptr->nx_arp_physical_address_lsw);
-  } else {
-
-    /* Remove from the dynamic list. */
-    status = _nx_arp_dynamic_entry_delete(ip_ptr, arp_ptr);
-  }
-
-  /* Release the protection on the ARP list.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
-
-  /* Return status to the caller.  */
-  return (status);
+    return (status);
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(ip_address);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_address);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

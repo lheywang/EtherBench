@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_video.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -70,40 +68,35 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_video_ioctl(UX_DEVICE_CLASS_VIDEO *video, ULONG ioctl_function,
-                                    VOID *parameter)
-{
+UINT _ux_device_class_video_ioctl(UX_DEVICE_CLASS_VIDEO *video, ULONG ioctl_function, VOID *parameter) {
 
-UINT                                                status;
-VOID                                                **pptr_parameter;
-
+    UINT status;
+    VOID **pptr_parameter;
 
     /* Let's be optimist ! */
     status = UX_SUCCESS;
 
     /* The command request will tell us what we need to do here.  */
-    switch (ioctl_function)
-    {
+    switch (ioctl_function) {
 
-        case UX_DEVICE_CLASS_VIDEO_IOCTL_GET_ARG:
+    case UX_DEVICE_CLASS_VIDEO_IOCTL_GET_ARG:
 
-            /* Properly cast the parameter pointer.  */
-            pptr_parameter = (VOID **) parameter;
+        /* Properly cast the parameter pointer.  */
+        pptr_parameter = (VOID **)parameter;
 
-            /* Save argument.  */
-            *pptr_parameter = video -> ux_device_class_video_callbacks.ux_device_class_video_arg;
+        /* Save argument.  */
+        *pptr_parameter = video->ux_device_class_video_callbacks.ux_device_class_video_arg;
 
-            break;
+        break;
 
-        default:
+    default:
 
-            /* Function not supported. Return an error.  */
-            status =  UX_FUNCTION_NOT_SUPPORTED;
+        /* Function not supported. Return an error.  */
+        status = UX_FUNCTION_NOT_SUPPORTED;
     }
 
     /* Return status to caller.  */
-    return(status);
-
+    return (status);
 }
 
 /**************************************************************************/
@@ -146,14 +139,12 @@ VOID                                                **pptr_parameter;
 /*  10-31-2023     Yajun Xia                Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT _uxe_device_class_video_ioctl(UX_DEVICE_CLASS_VIDEO *video, ULONG ioctl_function,
-                                    VOID *parameter)
-{
+UINT _uxe_device_class_video_ioctl(UX_DEVICE_CLASS_VIDEO *video, ULONG ioctl_function, VOID *parameter) {
 
     /* Sanity check. */
     if (video == UX_NULL)
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Call the actual video IOCTL function.  */
-    return(_ux_device_class_video_ioctl(video, ioctl_function, parameter));
+    return (_ux_device_class_video_ioctl(video, ioctl_function, parameter));
 }

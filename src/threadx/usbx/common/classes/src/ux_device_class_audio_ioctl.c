@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_audio.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -72,40 +70,35 @@
 /*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_audio_ioctl(UX_DEVICE_CLASS_AUDIO *audio, ULONG ioctl_function,
-                                    VOID *parameter)
-{
+UINT _ux_device_class_audio_ioctl(UX_DEVICE_CLASS_AUDIO *audio, ULONG ioctl_function, VOID *parameter) {
 
-UINT                                                status;
-VOID                                                **pptr_parameter;
-
+    UINT status;
+    VOID **pptr_parameter;
 
     /* Let's be optimist ! */
     status = UX_SUCCESS;
 
     /* The command request will tell us what we need to do here.  */
-    switch (ioctl_function)
-    {
+    switch (ioctl_function) {
 
-        case UX_DEVICE_CLASS_AUDIO_IOCTL_GET_ARG:
+    case UX_DEVICE_CLASS_AUDIO_IOCTL_GET_ARG:
 
-            /* Properly cast the parameter pointer.  */
-            pptr_parameter = (VOID **) parameter;
+        /* Properly cast the parameter pointer.  */
+        pptr_parameter = (VOID **)parameter;
 
-            /* Save argument.  */
-            *pptr_parameter = audio -> ux_device_class_audio_callbacks.ux_device_class_audio_arg;
+        /* Save argument.  */
+        *pptr_parameter = audio->ux_device_class_audio_callbacks.ux_device_class_audio_arg;
 
-            break;
+        break;
 
-        default:
+    default:
 
-            /* Function not supported. Return an error.  */
-            status =  UX_FUNCTION_NOT_SUPPORTED;
+        /* Function not supported. Return an error.  */
+        status = UX_FUNCTION_NOT_SUPPORTED;
     }
 
     /* Return status to caller.  */
-    return(status);
-
+    return (status);
 }
 
 /**************************************************************************/
@@ -148,14 +141,12 @@ VOID                                                **pptr_parameter;
 /*  03-08-2023     Chaoqiong Xiao           Initial Version 6.2.1         */
 /*                                                                        */
 /**************************************************************************/
-UINT _uxe_device_class_audio_ioctl(UX_DEVICE_CLASS_AUDIO *audio, ULONG ioctl_function,
-                                    VOID *parameter)
-{
+UINT _uxe_device_class_audio_ioctl(UX_DEVICE_CLASS_AUDIO *audio, ULONG ioctl_function, VOID *parameter) {
 
     /* Sanity check.  */
     if (audio == UX_NULL)
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Dispatch IOCTL commands.  */
-    return(_ux_device_class_audio_ioctl(audio, ioctl_function, parameter));
+    return (_ux_device_class_audio_ioctl(audio, ioctl_function, parameter));
 }

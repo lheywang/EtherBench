@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_printer.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -85,26 +83,25 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_printer_write(UX_DEVICE_CLASS_PRINTER *printer, UCHAR *buffer,
-                                ULONG requested_length, ULONG *actual_length)
-{
+UINT _ux_device_class_printer_write(UX_DEVICE_CLASS_PRINTER *printer, UCHAR *buffer, ULONG requested_length,
+                                    ULONG *actual_length) {
 
-UX_SLAVE_ENDPOINT           *endpoint;
-UX_SLAVE_DEVICE             *device;
-UX_SLAVE_TRANSFER           *transfer_request;
-ULONG                       local_requested_length;
-ULONG                       local_host_length;
-UINT                        status = 0;
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_SLAVE_DEVICE *device;
+    UX_SLAVE_TRANSFER *transfer_request;
+    ULONG local_requested_length;
+    ULONG local_host_length;
+    UINT status = 0;
 
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_PRINTER_WRITE, printer, buffer, requested_length, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_PRINTER_WRITE, printer, buffer, requested_length, 0,
+                            UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
     /* Get the pointer to the device.  */
-    device =  &_ux_system_slave -> ux_system_slave_device;
+    device = &_ux_system_slave->ux_system_slave_device;
 
     /* As long as the device is in the CONFIGURED state.  */
-    if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
-    {
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_CONFIGURATION_HANDLE_UNKNOWN);
@@ -113,44 +110,42 @@ UINT                        status = 0;
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONFIGURATION_HANDLE_UNKNOWN, device, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
         /* Cannot proceed with command, the interface is down.  */
-        return(UX_CONFIGURATION_HANDLE_UNKNOWN);
+        return (UX_CONFIGURATION_HANDLE_UNKNOWN);
     }
 
     /* Locate the endpoints.  */
-    endpoint = printer -> ux_device_class_printer_endpoint_in;
+    endpoint = printer->ux_device_class_printer_endpoint_in;
 
     /* Check if it's available.  */
     if (endpoint == UX_NULL)
-        return(UX_FUNCTION_NOT_SUPPORTED);
+        return (UX_FUNCTION_NOT_SUPPORTED);
 
     /* Protect this thread.  */
-    _ux_device_mutex_on(&printer -> ux_device_class_printer_endpoint_in_mutex);
+    _ux_device_mutex_on(&printer->ux_device_class_printer_endpoint_in_mutex);
 
     /* We are writing to the IN endpoint.  */
-    transfer_request =  &endpoint -> ux_slave_endpoint_transfer_request;
+    transfer_request = &endpoint->ux_slave_endpoint_transfer_request;
 
     /* Reset the actual length.  */
-    *actual_length =  0;
+    *actual_length = 0;
 
     /* Check if the application forces a 0 length packet.  */
-    if (requested_length == 0)
-    {
+    if (requested_length == 0) {
 
         /* Send the request for 0 byte packet to the device controller.  */
-        status =  _ux_device_stack_transfer_request(transfer_request, 0, 0);
+        status = _ux_device_stack_transfer_request(transfer_request, 0, 0);
 
         /* Free Mutex resource.  */
-        _ux_device_mutex_off(&printer -> ux_device_class_printer_endpoint_in_mutex);
+        _ux_device_mutex_off(&printer->ux_device_class_printer_endpoint_in_mutex);
 
         /* Return the status.  */
-        return(status);
+        return (status);
     }
 
 #if (UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1) && defined(UX_DEVICE_CLASS_PRINTER_ZERO_COPY)
 
     /* Check if device is configured.  */
-    if (device -> ux_slave_device_state == UX_DEVICE_CONFIGURED)
-    {
+    if (device->ux_slave_device_state == UX_DEVICE_CONFIGURED) {
 
 #if defined(UX_DEVICE_CLASS_PRINTER_WRITE_AUTO_ZLP)
 
@@ -162,17 +157,15 @@ UINT                        status = 0;
         local_requested_length = requested_length;
 
         /* Issue the transfer request.  */
-        transfer_request -> ux_slave_transfer_request_data_pointer =  buffer;
+        transfer_request->ux_slave_transfer_request_data_pointer = buffer;
         status = _ux_device_stack_transfer_request(transfer_request, local_requested_length, local_host_length);
-        *actual_length = transfer_request -> ux_slave_transfer_request_actual_length;
+        *actual_length = transfer_request->ux_slave_transfer_request_actual_length;
     }
 #else
 
     /* Check if we need more transactions.  */
     local_host_length = UX_DEVICE_CLASS_PRINTER_WRITE_BUFFER_SIZE;
-    while (device -> ux_slave_device_state == UX_DEVICE_CONFIGURED &&
-            requested_length != 0)
-    {
+    while (device->ux_slave_device_state == UX_DEVICE_CONFIGURED && requested_length != 0) {
 
         /* Check if we have enough in the local buffer.  */
         if (requested_length > UX_DEVICE_CLASS_PRINTER_WRITE_BUFFER_SIZE)
@@ -180,8 +173,7 @@ UINT                        status = 0;
             /* We have too much to transfer.  */
             local_requested_length = UX_DEVICE_CLASS_PRINTER_WRITE_BUFFER_SIZE;
 
-        else
-        {
+        else {
 
             /* We can proceed with the demanded length.  */
             local_requested_length = requested_length;
@@ -199,44 +191,39 @@ UINT                        status = 0;
 
         /* On a out, we copy the buffer to the caller. Not very efficient but it makes the API
             easier.  */
-        _ux_utility_memory_copy(transfer_request -> ux_slave_transfer_request_data_pointer,
-                            buffer, local_requested_length); /* Use case of memcpy is verified. */
+        _ux_utility_memory_copy(transfer_request->ux_slave_transfer_request_data_pointer, buffer,
+                                local_requested_length); /* Use case of memcpy is verified. */
 
         /* Send the request to the device controller.  */
-        status =  _ux_device_stack_transfer_request(transfer_request,
-                                local_requested_length, local_host_length);
+        status = _ux_device_stack_transfer_request(transfer_request, local_requested_length, local_host_length);
 
         /* Check the status */
-        if (status == UX_SUCCESS)
-        {
+        if (status == UX_SUCCESS) {
 
             /* Next buffer address.  */
-            buffer += transfer_request -> ux_slave_transfer_request_actual_length;
+            buffer += transfer_request->ux_slave_transfer_request_actual_length;
 
             /* Set the length actually received. */
-            *actual_length += transfer_request -> ux_slave_transfer_request_actual_length;
+            *actual_length += transfer_request->ux_slave_transfer_request_actual_length;
 
             /* Decrement what left has to be done.  */
-            requested_length -= transfer_request -> ux_slave_transfer_request_actual_length;
-        }
-        else
-        {
+            requested_length -= transfer_request->ux_slave_transfer_request_actual_length;
+        } else {
 
             /* Free Mutex resource.  */
-            _ux_device_mutex_off(&printer -> ux_device_class_printer_endpoint_in_mutex);
+            _ux_device_mutex_off(&printer->ux_device_class_printer_endpoint_in_mutex);
 
             /* We had an error, abort.  */
-            return(status);
+            return (status);
         }
     }
 #endif
 
     /* Free Mutex resource.  */
-    _ux_device_mutex_off(&printer -> ux_device_class_printer_endpoint_in_mutex);
+    _ux_device_mutex_off(&printer->ux_device_class_printer_endpoint_in_mutex);
 
     /* Check why we got here, either completion or device was extracted.  */
-    if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
-    {
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_TRANSFER_NO_ANSWER);
@@ -246,11 +233,10 @@ UINT                        status = 0;
 
         /* Device must have been extracted.  */
         return (UX_TRANSFER_NO_ANSWER);
-    }
-    else
+    } else
 
         /* Simply return the last transaction result.  */
-        return(status);
+        return (status);
 }
 
 /**************************************************************************/
@@ -299,13 +285,11 @@ UINT                        status = 0;
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _uxe_device_class_printer_write(UX_DEVICE_CLASS_PRINTER *printer, UCHAR *buffer,
-                                     ULONG requested_length, ULONG *actual_length)
-{
+UINT _uxe_device_class_printer_write(UX_DEVICE_CLASS_PRINTER *printer, UCHAR *buffer, ULONG requested_length,
+                                     ULONG *actual_length) {
 
     /* Sanity checks.  */
-    if ((printer == UX_NULL) || ((buffer == UX_NULL) && (requested_length > 0)) || (actual_length == UX_NULL))
-    {
+    if ((printer == UX_NULL) || ((buffer == UX_NULL) && (requested_length > 0)) || (actual_length == UX_NULL)) {
         return (UX_INVALID_PARAMETER);
     }
 

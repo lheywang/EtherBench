@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -20,14 +19,12 @@
 /**************************************************************************/
 /**************************************************************************/
 
-
 /* Include necessary system files.  */
 
 #define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -79,54 +76,51 @@
 /*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_host_stack_device_configuration_activate(UX_CONFIGURATION *configuration)
-{
+UINT _ux_host_stack_device_configuration_activate(UX_CONFIGURATION *configuration) {
 #if defined(UX_HOST_STANDALONE)
-UX_INTERRUPT_SAVE_AREA
+    UX_INTERRUPT_SAVE_AREA
 #endif
-UX_DEVICE               *device;
-UINT                    status;
-
+    UX_DEVICE *device;
+    UINT status;
 
     /* Check for validity of the configuration handle.  */
-    if (configuration -> ux_configuration_handle != (ULONG) (ALIGN_TYPE) configuration)
-    {
+    if (configuration->ux_configuration_handle != (ULONG)(ALIGN_TYPE)configuration) {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_ENUMERATOR, UX_CONFIGURATION_HANDLE_UNKNOWN);
 
         /* If trace is enabled, insert this event into the trace buffer.  */
-        UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONFIGURATION_HANDLE_UNKNOWN, configuration, 0, 0, UX_TRACE_ERRORS, 0, 0)
+        UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONFIGURATION_HANDLE_UNKNOWN, configuration, 0, 0, UX_TRACE_ERRORS,
+                                0, 0)
 
-        return(UX_CONFIGURATION_HANDLE_UNKNOWN);
+        return (UX_CONFIGURATION_HANDLE_UNKNOWN);
     }
 
     /* Get the device container for this configuration.  */
-    device =  configuration -> ux_configuration_device;
+    device = configuration->ux_configuration_device;
 
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_DEVICE_CONFIGURATION_ACTIVATE, device, configuration, 0, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_DEVICE_CONFIGURATION_ACTIVATE, device, configuration, 0, 0,
+                            UX_TRACE_HOST_STACK_EVENTS, 0, 0)
 
 #if defined(UX_HOST_STANDALONE)
 
     /* Check device lock.  */
     UX_DISABLE
-    if (device -> ux_device_flags & UX_DEVICE_FLAG_LOCK)
-    {
+    if (device->ux_device_flags & UX_DEVICE_FLAG_LOCK) {
         UX_RESTORE
-        return(UX_BUSY);
+        return (UX_BUSY);
     }
-    device -> ux_device_flags |= UX_DEVICE_FLAG_LOCK;
+    device->ux_device_flags |= UX_DEVICE_FLAG_LOCK;
     UX_RESTORE
 #else
 
     /* Protect the control endpoint semaphore here.  It will be unprotected in the
        transfer request function.  */
-    status =  _ux_host_semaphore_get(&device -> ux_device_protection_semaphore, UX_WAIT_FOREVER);
+    status = _ux_host_semaphore_get(&device->ux_device_protection_semaphore, UX_WAIT_FOREVER);
 
     /* Check for status.  */
-    if (status != UX_SUCCESS)
-    {
+    if (status != UX_SUCCESS) {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_ENUMERATOR, UX_SEMAPHORE_ERROR);
@@ -134,57 +128,51 @@ UINT                    status;
         /* If trace is enabled, insert this event into the trace buffer.  */
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_SEMAPHORE_ERROR, configuration, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
-        return(UX_SEMAPHORE_ERROR);
+        return (UX_SEMAPHORE_ERROR);
     }
 #endif
 
     /* Check for the state of the device . If the device is already configured,
        we need to cancel the existing configuration before enabling this one.   */
-    if (device -> ux_device_state == UX_DEVICE_CONFIGURED)
-    {
+    if (device->ux_device_state == UX_DEVICE_CONFIGURED) {
 
         /* If this configuration is already activated, we are good,
            otherwise report error.  */
-        status = (device -> ux_device_current_configuration == configuration) ?
-                    UX_SUCCESS : UX_ALREADY_ACTIVATED;
+        status = (device->ux_device_current_configuration == configuration) ? UX_SUCCESS : UX_ALREADY_ACTIVATED;
 #if defined(UX_HOST_STANDALONE)
-        device -> ux_device_flags &= ~UX_DEVICE_FLAG_LOCK;
+        device->ux_device_flags &= ~UX_DEVICE_FLAG_LOCK;
 #else
-        _ux_host_semaphore_put(&device -> ux_device_protection_semaphore);
+        _ux_host_semaphore_put(&device->ux_device_protection_semaphore);
 #endif
-        return(status);
+        return (status);
     }
 
     /* Scan and activate the interfaces.  */
-    status =  _ux_host_stack_configuration_interface_scan(configuration);
+    status = _ux_host_stack_configuration_interface_scan(configuration);
 
 #if defined(UX_HOST_STANDALONE)
 
-    if (status == UX_SUCCESS)
-    {
+    if (status == UX_SUCCESS) {
 
         /* Place device enum state: LOCK -> SET_CONFIGURE.  */
-        device -> ux_device_enum_trans =
-            &device -> ux_device_control_endpoint.ux_endpoint_transfer_request;
-        device -> ux_device_enum_state = UX_HOST_STACK_ENUM_TRANS_LOCK_WAIT;
-        device -> ux_device_enum_inst.configuration = configuration;
-        device -> ux_device_enum_next_state = UX_HOST_STACK_ENUM_CONFIG_SET;
+        device->ux_device_enum_trans = &device->ux_device_control_endpoint.ux_endpoint_transfer_request;
+        device->ux_device_enum_state = UX_HOST_STACK_ENUM_TRANS_LOCK_WAIT;
+        device->ux_device_enum_inst.configuration = configuration;
+        device->ux_device_enum_next_state = UX_HOST_STACK_ENUM_CONFIG_SET;
 
         /* Set enumeration flag to process enumeration sequence.  */
-        device -> ux_device_flags |= UX_DEVICE_FLAG_ENUM;
+        device->ux_device_flags |= UX_DEVICE_FLAG_ENUM;
 
         /* Wait until enumeration done and device removed.  */
-        while(device -> ux_device_enum_state != UX_STATE_IDLE)
-        {
+        while (device->ux_device_enum_state != UX_STATE_IDLE) {
             _ux_system_host_tasks_run();
         }
     }
 #endif
 
     /* Return completion status.  */
-    return(status);
+    return (status);
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -225,13 +213,12 @@ UINT                    status;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT  _uxe_host_stack_device_configuration_activate(UX_CONFIGURATION *configuration)
-{
+UINT _uxe_host_stack_device_configuration_activate(UX_CONFIGURATION *configuration) {
 
     /* Sanity check.  */
     if (configuration == UX_NULL)
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Invoke configuration activate function.  */
-    return(_ux_host_stack_device_configuration_activate(configuration));
+    return (_ux_host_stack_device_configuration_activate(configuration));
 }

@@ -80,83 +80,73 @@
 /*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_dcd_stm32_transfer_run(UX_DCD_STM32 *dcd_stm32,
-                                UX_SLAVE_TRANSFER *transfer_request) {
-  UX_INTERRUPT_SAVE_AREA
+UINT _ux_dcd_stm32_transfer_run(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_TRANSFER *transfer_request) {
+    UX_INTERRUPT_SAVE_AREA
 
-  UX_SLAVE_ENDPOINT *endpoint;
-  UX_DCD_STM32_ED *ed;
-  ULONG ed_status;
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_DCD_STM32_ED *ed;
+    ULONG ed_status;
 
-  /* Get the pointer to the logical endpoint from the transfer request.  */
-  endpoint = transfer_request->ux_slave_transfer_request_endpoint;
+    /* Get the pointer to the logical endpoint from the transfer request.  */
+    endpoint = transfer_request->ux_slave_transfer_request_endpoint;
 
-  /* Get the physical endpoint address in the endpoint container.  */
-  ed = (UX_DCD_STM32_ED *)endpoint->ux_slave_endpoint_ed;
+    /* Get the physical endpoint address in the endpoint container.  */
+    ed = (UX_DCD_STM32_ED *)endpoint->ux_slave_endpoint_ed;
 
-  UX_DISABLE
+    UX_DISABLE
 
-  /* Get current ED status.  */
-  ed_status = ed->ux_dcd_stm32_ed_status;
+    /* Get current ED status.  */
+    ed_status = ed->ux_dcd_stm32_ed_status;
 
-  /* Invalid state.  */
-  if (_ux_system_slave->ux_system_slave_device.ux_slave_device_state ==
-      UX_DEVICE_RESET) {
-    transfer_request->ux_slave_transfer_request_completion_code =
-        UX_TRANSFER_BUS_RESET;
-    UX_RESTORE
-    return (UX_STATE_EXIT);
-  }
-
-  /* ED stalled.  */
-  if (ed_status & UX_DCD_STM32_ED_STATUS_STALLED) {
-    transfer_request->ux_slave_transfer_request_completion_code =
-        UX_TRANSFER_STALLED;
-    UX_RESTORE
-    return (UX_STATE_NEXT);
-  }
-
-  /* ED transfer in progress.  */
-  if (ed_status & UX_DCD_STM32_ED_STATUS_TRANSFER) {
-    if (ed_status & UX_DCD_STM32_ED_STATUS_DONE) {
-
-      /* Keep used, stall and task pending bits.  */
-      ed->ux_dcd_stm32_ed_status &=
-          (UX_DCD_STM32_ED_STATUS_USED | UX_DCD_STM32_ED_STATUS_STALLED |
-           UX_DCD_STM32_ED_STATUS_TASK_PENDING);
-      UX_RESTORE
-      return (UX_STATE_NEXT);
+    /* Invalid state.  */
+    if (_ux_system_slave->ux_system_slave_device.ux_slave_device_state == UX_DEVICE_RESET) {
+        transfer_request->ux_slave_transfer_request_completion_code = UX_TRANSFER_BUS_RESET;
+        UX_RESTORE
+        return (UX_STATE_EXIT);
     }
+
+    /* ED stalled.  */
+    if (ed_status & UX_DCD_STM32_ED_STATUS_STALLED) {
+        transfer_request->ux_slave_transfer_request_completion_code = UX_TRANSFER_STALLED;
+        UX_RESTORE
+        return (UX_STATE_NEXT);
+    }
+
+    /* ED transfer in progress.  */
+    if (ed_status & UX_DCD_STM32_ED_STATUS_TRANSFER) {
+        if (ed_status & UX_DCD_STM32_ED_STATUS_DONE) {
+
+            /* Keep used, stall and task pending bits.  */
+            ed->ux_dcd_stm32_ed_status &=
+                (UX_DCD_STM32_ED_STATUS_USED | UX_DCD_STM32_ED_STATUS_STALLED | UX_DCD_STM32_ED_STATUS_TASK_PENDING);
+            UX_RESTORE
+            return (UX_STATE_NEXT);
+        }
+        UX_RESTORE
+        return (UX_STATE_WAIT);
+    }
+
+    /* Start transfer.  */
+    ed->ux_dcd_stm32_ed_status |= UX_DCD_STM32_ED_STATUS_TRANSFER;
+
+    /* Check for transfer direction.  Is this a IN endpoint ? */
+    if (transfer_request->ux_slave_transfer_request_phase == UX_TRANSFER_PHASE_DATA_OUT) {
+
+        /* Transmit data.  */
+        HAL_PCD_EP_Transmit(dcd_stm32->pcd_handle, endpoint->ux_slave_endpoint_descriptor.bEndpointAddress,
+                            transfer_request->ux_slave_transfer_request_data_pointer,
+                            transfer_request->ux_slave_transfer_request_requested_length);
+    } else {
+
+        /* We have a request for a SETUP or OUT Endpoint.  */
+        /* Receive data.  */
+        HAL_PCD_EP_Receive(dcd_stm32->pcd_handle, endpoint->ux_slave_endpoint_descriptor.bEndpointAddress,
+                           transfer_request->ux_slave_transfer_request_data_pointer,
+                           transfer_request->ux_slave_transfer_request_requested_length);
+    }
+
+    /* Return to caller with WAIT.  */
     UX_RESTORE
     return (UX_STATE_WAIT);
-  }
-
-  /* Start transfer.  */
-  ed->ux_dcd_stm32_ed_status |= UX_DCD_STM32_ED_STATUS_TRANSFER;
-
-  /* Check for transfer direction.  Is this a IN endpoint ? */
-  if (transfer_request->ux_slave_transfer_request_phase ==
-      UX_TRANSFER_PHASE_DATA_OUT) {
-
-    /* Transmit data.  */
-    HAL_PCD_EP_Transmit(
-        dcd_stm32->pcd_handle,
-        endpoint->ux_slave_endpoint_descriptor.bEndpointAddress,
-        transfer_request->ux_slave_transfer_request_data_pointer,
-        transfer_request->ux_slave_transfer_request_requested_length);
-  } else {
-
-    /* We have a request for a SETUP or OUT Endpoint.  */
-    /* Receive data.  */
-    HAL_PCD_EP_Receive(
-        dcd_stm32->pcd_handle,
-        endpoint->ux_slave_endpoint_descriptor.bEndpointAddress,
-        transfer_request->ux_slave_transfer_request_data_pointer,
-        transfer_request->ux_slave_transfer_request_requested_length);
-  }
-
-  /* Return to caller with WAIT.  */
-  UX_RESTORE
-  return (UX_STATE_WAIT);
 }
 #endif /* defined(UX_DEVICE_STANDALONE) */

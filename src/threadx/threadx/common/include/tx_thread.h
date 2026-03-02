@@ -123,26 +123,23 @@
    not be called.  */
 
 #ifndef TX_THREAD_SYSTEM_RETURN_CHECK
-#define TX_THREAD_SYSTEM_RETURN_CHECK(c)                                       \
-  (c) = (ULONG)_tx_thread_preempt_disable;                                     \
-  (c) = (c) | TX_THREAD_GET_SYSTEM_STATE();
+#define TX_THREAD_SYSTEM_RETURN_CHECK(c)                                                                               \
+    (c) = (ULONG)_tx_thread_preempt_disable;                                                                           \
+    (c) = (c) | TX_THREAD_GET_SYSTEM_STATE();
 #endif
 
 /* Define the timeout setup macro used in _tx_thread_create.  */
 
 #ifndef TX_THREAD_CREATE_TIMEOUT_SETUP
-#define TX_THREAD_CREATE_TIMEOUT_SETUP(t)                                      \
-  (t)->tx_thread_timer.tx_timer_internal_timeout_function =                    \
-      &(_tx_thread_timeout);                                                   \
-  (t)->tx_thread_timer.tx_timer_internal_timeout_param =                       \
-      TX_POINTER_TO_ULONG_CONVERT((t));
+#define TX_THREAD_CREATE_TIMEOUT_SETUP(t)                                                                              \
+    (t)->tx_thread_timer.tx_timer_internal_timeout_function = &(_tx_thread_timeout);                                   \
+    (t)->tx_thread_timer.tx_timer_internal_timeout_param = TX_POINTER_TO_ULONG_CONVERT((t));
 #endif
 
 /* Define the thread timeout pointer setup macro used in _tx_thread_timeout.  */
 
 #ifndef TX_THREAD_TIMEOUT_POINTER_SETUP
-#define TX_THREAD_TIMEOUT_POINTER_SETUP(t)                                     \
-  (t) = TX_ULONG_TO_THREAD_POINTER_CONVERT(timeout_input);
+#define TX_THREAD_TIMEOUT_POINTER_SETUP(t) (t) = TX_ULONG_TO_THREAD_POINTER_CONVERT(timeout_input);
 #endif
 
 /* Define the lowest bit set macro. Note, that this may be overridden
@@ -150,52 +147,52 @@
    instructions in the architecture.  */
 
 #ifndef TX_LOWEST_SET_BIT_CALCULATE
-#define TX_LOWEST_SET_BIT_CALCULATE(m, b)                                      \
-  (b) = ((ULONG)0);                                                            \
-  (m) = (m) & ((~(m)) + ((ULONG)1));                                           \
-  if ((m) < ((ULONG)0x10)) {                                                   \
-    if ((m) >= ((ULONG)4)) {                                                   \
-      (m) = (m) >> ((ULONG)2);                                                 \
-      (b) = (b) + ((ULONG)2);                                                  \
-    }                                                                          \
-    (b) = (b) + ((m) >> ((ULONG)1));                                           \
-  } else if ((m) < ((ULONG)0x100)) {                                           \
-    (m) = (m) >> ((ULONG)4);                                                   \
-    (b) = (b) + ((ULONG)4);                                                    \
-    if ((m) >= ((ULONG)4)) {                                                   \
-      (m) = (m) >> ((ULONG)2);                                                 \
-      (b) = (b) + ((ULONG)2);                                                  \
-    }                                                                          \
-    (b) = (b) + ((m) >> ((ULONG)1));                                           \
-  } else if ((m) < ((ULONG)0x10000)) {                                         \
-    (m) = (m) >> ((ULONG)8);                                                   \
-    (b) = (b) + ((ULONG)8);                                                    \
-    if ((m) >= ((ULONG)0x10)) {                                                \
-      (m) = (m) >> ((ULONG)4);                                                 \
-      (b) = (b) + ((ULONG)4);                                                  \
-    }                                                                          \
-    if ((m) >= ((ULONG)4)) {                                                   \
-      (m) = (m) >> ((ULONG)2);                                                 \
-      (b) = (b) + ((ULONG)2);                                                  \
-    }                                                                          \
-    (b) = (b) + ((m) >> ((ULONG)1));                                           \
-  } else {                                                                     \
-    (m) = (m) >> ((ULONG)16);                                                  \
-    (b) = (b) + ((ULONG)16);                                                   \
-    if ((m) >= ((ULONG)0x100)) {                                               \
-      (m) = (m) >> ((ULONG)8);                                                 \
-      (b) = (b) + ((ULONG)8);                                                  \
-    }                                                                          \
-    if ((m) >= ((ULONG)16)) {                                                  \
-      (m) = (m) >> ((ULONG)4);                                                 \
-      (b) = (b) + ((ULONG)4);                                                  \
-    }                                                                          \
-    if ((m) >= ((ULONG)4)) {                                                   \
-      (m) = (m) >> ((ULONG)2);                                                 \
-      (b) = (b) + ((ULONG)2);                                                  \
-    }                                                                          \
-    (b) = (b) + ((m) >> ((ULONG)1));                                           \
-  }
+#define TX_LOWEST_SET_BIT_CALCULATE(m, b)                                                                              \
+    (b) = ((ULONG)0);                                                                                                  \
+    (m) = (m) & ((~(m)) + ((ULONG)1));                                                                                 \
+    if ((m) < ((ULONG)0x10)) {                                                                                         \
+        if ((m) >= ((ULONG)4)) {                                                                                       \
+            (m) = (m) >> ((ULONG)2);                                                                                   \
+            (b) = (b) + ((ULONG)2);                                                                                    \
+        }                                                                                                              \
+        (b) = (b) + ((m) >> ((ULONG)1));                                                                               \
+    } else if ((m) < ((ULONG)0x100)) {                                                                                 \
+        (m) = (m) >> ((ULONG)4);                                                                                       \
+        (b) = (b) + ((ULONG)4);                                                                                        \
+        if ((m) >= ((ULONG)4)) {                                                                                       \
+            (m) = (m) >> ((ULONG)2);                                                                                   \
+            (b) = (b) + ((ULONG)2);                                                                                    \
+        }                                                                                                              \
+        (b) = (b) + ((m) >> ((ULONG)1));                                                                               \
+    } else if ((m) < ((ULONG)0x10000)) {                                                                               \
+        (m) = (m) >> ((ULONG)8);                                                                                       \
+        (b) = (b) + ((ULONG)8);                                                                                        \
+        if ((m) >= ((ULONG)0x10)) {                                                                                    \
+            (m) = (m) >> ((ULONG)4);                                                                                   \
+            (b) = (b) + ((ULONG)4);                                                                                    \
+        }                                                                                                              \
+        if ((m) >= ((ULONG)4)) {                                                                                       \
+            (m) = (m) >> ((ULONG)2);                                                                                   \
+            (b) = (b) + ((ULONG)2);                                                                                    \
+        }                                                                                                              \
+        (b) = (b) + ((m) >> ((ULONG)1));                                                                               \
+    } else {                                                                                                           \
+        (m) = (m) >> ((ULONG)16);                                                                                      \
+        (b) = (b) + ((ULONG)16);                                                                                       \
+        if ((m) >= ((ULONG)0x100)) {                                                                                   \
+            (m) = (m) >> ((ULONG)8);                                                                                   \
+            (b) = (b) + ((ULONG)8);                                                                                    \
+        }                                                                                                              \
+        if ((m) >= ((ULONG)16)) {                                                                                      \
+            (m) = (m) >> ((ULONG)4);                                                                                   \
+            (b) = (b) + ((ULONG)4);                                                                                    \
+        }                                                                                                              \
+        if ((m) >= ((ULONG)4)) {                                                                                       \
+            (m) = (m) >> ((ULONG)2);                                                                                   \
+            (b) = (b) + ((ULONG)2);                                                                                    \
+        }                                                                                                              \
+        (b) = (b) + ((m) >> ((ULONG)1));                                                                               \
+    }
 #endif
 
 /* Define the default thread stack checking. This can be overridden by
@@ -204,35 +201,30 @@
    grow from high address to low address.  */
 
 #ifndef TX_THREAD_STACK_CHECK
-#define TX_THREAD_STACK_CHECK(thread_ptr)                                      \
-  {                                                                            \
-    TX_INTERRUPT_SAVE_AREA                                                     \
-    TX_DISABLE                                                                 \
-    if (((thread_ptr)) && ((thread_ptr)->tx_thread_id == TX_THREAD_ID)) {      \
-      if (((ULONG *)(thread_ptr)->tx_thread_stack_ptr) <                       \
-          ((ULONG *)(thread_ptr)->tx_thread_stack_highest_ptr)) {              \
-        (thread_ptr)->tx_thread_stack_highest_ptr =                            \
-            (thread_ptr)->tx_thread_stack_ptr;                                 \
-      }                                                                        \
-      if ((*((ULONG *)(thread_ptr)->tx_thread_stack_start) !=                  \
-           TX_STACK_FILL) ||                                                   \
-          (*((ULONG *)(((UCHAR *)(thread_ptr)->tx_thread_stack_end) + 1)) !=   \
-           TX_STACK_FILL) ||                                                   \
-          (((ULONG *)(thread_ptr)->tx_thread_stack_highest_ptr) <              \
-           ((ULONG *)(thread_ptr)->tx_thread_stack_start))) {                  \
-        TX_RESTORE                                                             \
-        _tx_thread_stack_error_handler((thread_ptr));                          \
-        TX_DISABLE                                                             \
-      }                                                                        \
-      if (*(((ULONG *)(thread_ptr)->tx_thread_stack_highest_ptr) - 1) !=       \
-          TX_STACK_FILL) {                                                     \
-        TX_RESTORE                                                             \
-        _tx_thread_stack_analyze((thread_ptr));                                \
-        TX_DISABLE                                                             \
-      }                                                                        \
-    }                                                                          \
-    TX_RESTORE                                                                 \
-  }
+#define TX_THREAD_STACK_CHECK(thread_ptr)                                                                              \
+    {                                                                                                                  \
+        TX_INTERRUPT_SAVE_AREA                                                                                         \
+        TX_DISABLE                                                                                                     \
+        if (((thread_ptr)) && ((thread_ptr)->tx_thread_id == TX_THREAD_ID)) {                                          \
+            if (((ULONG *)(thread_ptr)->tx_thread_stack_ptr) < ((ULONG *)(thread_ptr)->tx_thread_stack_highest_ptr)) { \
+                (thread_ptr)->tx_thread_stack_highest_ptr = (thread_ptr)->tx_thread_stack_ptr;                         \
+            }                                                                                                          \
+            if ((*((ULONG *)(thread_ptr)->tx_thread_stack_start) != TX_STACK_FILL) ||                                  \
+                (*((ULONG *)(((UCHAR *)(thread_ptr)->tx_thread_stack_end) + 1)) != TX_STACK_FILL) ||                   \
+                (((ULONG *)(thread_ptr)->tx_thread_stack_highest_ptr) <                                                \
+                 ((ULONG *)(thread_ptr)->tx_thread_stack_start))) {                                                    \
+                TX_RESTORE                                                                                             \
+                _tx_thread_stack_error_handler((thread_ptr));                                                          \
+                TX_DISABLE                                                                                             \
+            }                                                                                                          \
+            if (*(((ULONG *)(thread_ptr)->tx_thread_stack_highest_ptr) - 1) != TX_STACK_FILL) {                        \
+                TX_RESTORE                                                                                             \
+                _tx_thread_stack_analyze((thread_ptr));                                                                \
+                TX_DISABLE                                                                                             \
+            }                                                                                                          \
+        }                                                                                                              \
+        TX_RESTORE                                                                                                     \
+    }
 #endif
 
 /* Define default post thread delete macro to whitespace, if it hasn't been
@@ -408,8 +400,7 @@ THREAD_DECLARE VOID (*_tx_thread_mutex_release)(TX_THREAD *thread_ptr);
 
 THREAD_DECLARE ULONG _tx_build_options;
 
-#if defined(TX_ENABLE_STACK_CHECKING) ||                                       \
-    defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
+#if defined(TX_ENABLE_STACK_CHECKING) || defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
 
 /* Define the global function pointer for stack error handling. If a stack error
    is detected and the application has registered a stack error handler, it will
@@ -488,8 +479,7 @@ THREAD_DECLARE ULONG _tx_thread_performance_non_idle_return_count;
    is a circular list, where the index points to the oldest entry.  */
 
 THREAD_DECLARE ULONG _tx_thread_performance__execute_log_index;
-THREAD_DECLARE TX_THREAD
-    *_tx_thread_performance_execute_log[TX_THREAD_EXECUTE_LOG_SIZE];
+THREAD_DECLARE TX_THREAD *_tx_thread_performance_execute_log[TX_THREAD_EXECUTE_LOG_SIZE];
 
 #endif
 

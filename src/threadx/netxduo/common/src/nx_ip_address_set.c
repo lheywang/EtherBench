@@ -73,5 +73,5 @@
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_ip_address_set(NX_IP *ip_ptr, ULONG ip_address, ULONG network_mask) {
-  return (_nx_ip_interface_address_set(ip_ptr, 0, ip_address, network_mask));
+    return (_nx_ip_interface_address_set(ip_ptr, 0, ip_address, network_mask));
 }

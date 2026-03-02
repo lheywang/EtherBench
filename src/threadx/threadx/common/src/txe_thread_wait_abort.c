@@ -68,26 +68,26 @@
 /**************************************************************************/
 UINT _txe_thread_wait_abort(TX_THREAD *thread_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid thread pointer.  */
-  if (thread_ptr == TX_NULL) {
+    /* Check for an invalid thread pointer.  */
+    if (thread_ptr == TX_NULL) {
 
-    /* Thread pointer is invalid, return appropriate error code.  */
-    status = TX_THREAD_ERROR;
-  }
+        /* Thread pointer is invalid, return appropriate error code.  */
+        status = TX_THREAD_ERROR;
+    }
 
-  /* Now check for invalid thread ID.  */
-  else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
+    /* Now check for invalid thread ID.  */
+    else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
 
-    /* Thread pointer is invalid, return appropriate error code.  */
-    status = TX_THREAD_ERROR;
-  } else {
+        /* Thread pointer is invalid, return appropriate error code.  */
+        status = TX_THREAD_ERROR;
+    } else {
 
-    /* Call actual thread wait abort function.  */
-    status = _tx_thread_wait_abort(thread_ptr);
-  }
+        /* Call actual thread wait abort function.  */
+        status = _tx_thread_wait_abort(thread_ptr);
+    }
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

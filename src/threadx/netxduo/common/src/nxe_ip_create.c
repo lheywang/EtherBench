@@ -83,106 +83,98 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_ip_create(NX_IP *ip_ptr, CHAR *name, ULONG ip_address,
-                    ULONG network_mask, NX_PACKET_POOL *default_pool,
-                    VOID (*ip_link_driver)(struct NX_IP_DRIVER_STRUCT *),
-                    VOID *memory_ptr, ULONG memory_size, UINT priority,
-                    UINT ip_control_block_size) {
+UINT _nxe_ip_create(NX_IP *ip_ptr, CHAR *name, ULONG ip_address, ULONG network_mask, NX_PACKET_POOL *default_pool,
+                    VOID (*ip_link_driver)(struct NX_IP_DRIVER_STRUCT *), VOID *memory_ptr, ULONG memory_size,
+                    UINT priority, UINT ip_control_block_size) {
 
-  UINT status;
-  UINT old_threshold = 0;
-  NX_IP *created_ip;
-  ULONG created_count;
-  UCHAR *end_stack;
-  TX_THREAD *current_thread;
+    UINT status;
+    UINT old_threshold = 0;
+    NX_IP *created_ip;
+    ULONG created_count;
+    UCHAR *end_stack;
+    TX_THREAD *current_thread;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (default_pool == NX_NULL) ||
-      (default_pool->nx_packet_pool_id != NX_PACKET_POOL_ID) ||
-      (ip_link_driver == NX_NULL) || (memory_ptr == NX_NULL) ||
-      (ip_control_block_size != (UINT)sizeof(NX_IP))) {
-    return (NX_PTR_ERROR);
-  }
-
-  /* Check for a memory size error.  */
-  if (memory_size < TX_MINIMUM_STACK) {
-    return (NX_SIZE_ERROR);
-  }
-
-  /* Check the priority specified.  */
-  if (priority >= TX_MAX_PRIORITIES) {
-    return (NX_OPTION_ERROR);
-  }
-
-  /* Calculate the end of the stack area.  */
-  end_stack = ((UCHAR *)memory_ptr) + (memory_size - 1);
-
-  /* Pickup current thread pointer.  */
-  current_thread = tx_thread_identify();
-
-  /* Disable preemption temporarily.  */
-  if (current_thread) {
-    tx_thread_preemption_change(current_thread, 0, &old_threshold);
-  }
-
-  /* Loop to check for the IP instance already created.  */
-  created_ip = _nx_ip_created_ptr;
-  created_count = _nx_ip_created_count;
-  while (created_count--) {
-
-    /* Is the new ip already created?  */
-    /*lint -e{946} suppress pointer subtraction, since it is necessary. */
-    if ((ip_ptr == created_ip) ||
-        ((memory_ptr >= created_ip->nx_ip_thread.tx_thread_stack_start) &&
-         (memory_ptr < created_ip->nx_ip_thread.tx_thread_stack_end)) ||
-        ((((VOID *)end_stack) >=
-          created_ip->nx_ip_thread.tx_thread_stack_start) &&
-         (((VOID *)end_stack) <
-          created_ip->nx_ip_thread.tx_thread_stack_end))) {
-
-      /* Restore preemption.  */
-      if (current_thread) {
-
-        /*lint -e{644} suppress variable might not be initialized, since
-         * "old_threshold" was initialized by previous
-         * tx_thread_preemption_change. */
-        tx_thread_preemption_change(current_thread, old_threshold,
-                                    &old_threshold);
-      }
-
-      /* Duplicate ip created, return an error!  */
-      return (NX_PTR_ERROR);
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (default_pool == NX_NULL) || (default_pool->nx_packet_pool_id != NX_PACKET_POOL_ID) ||
+        (ip_link_driver == NX_NULL) || (memory_ptr == NX_NULL) || (ip_control_block_size != (UINT)sizeof(NX_IP))) {
+        return (NX_PTR_ERROR);
     }
 
-    /* Move to next entry.  */
-    created_ip = created_ip->nx_ip_created_next;
-  }
+    /* Check for a memory size error.  */
+    if (memory_size < TX_MINIMUM_STACK) {
+        return (NX_SIZE_ERROR);
+    }
 
-  /* Restore preemption.  */
-  if (current_thread) {
+    /* Check the priority specified.  */
+    if (priority >= TX_MAX_PRIORITIES) {
+        return (NX_OPTION_ERROR);
+    }
 
-    /*lint -e{644} suppress variable might not be initialized, since
-     * "old_threshold" was initialized by previous tx_thread_preemption_change.
-     */
-    tx_thread_preemption_change(current_thread, old_threshold, &old_threshold);
-  }
+    /* Calculate the end of the stack area.  */
+    end_stack = ((UCHAR *)memory_ptr) + (memory_size - 1);
 
-  /* Check for invalid IP address.  Note that Interface with DHCP enabled
-     would start with 0.0.0.0.  Therefore the 0 IP address is allowed. */
-  if ((ip_address != 0) &&
-      ((ip_address & NX_IP_CLASS_A_MASK) != NX_IP_CLASS_A_TYPE) &&
-      ((ip_address & NX_IP_CLASS_B_MASK) != NX_IP_CLASS_B_TYPE) &&
-      ((ip_address & NX_IP_CLASS_C_MASK) != NX_IP_CLASS_C_TYPE)) {
-    return (NX_IP_ADDRESS_ERROR);
-  }
+    /* Pickup current thread pointer.  */
+    current_thread = tx_thread_identify();
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Disable preemption temporarily.  */
+    if (current_thread) {
+        tx_thread_preemption_change(current_thread, 0, &old_threshold);
+    }
 
-  /* Call actual IP instance create function.  */
-  status = _nx_ip_create(ip_ptr, name, ip_address, network_mask, default_pool,
-                         ip_link_driver, memory_ptr, memory_size, priority);
+    /* Loop to check for the IP instance already created.  */
+    created_ip = _nx_ip_created_ptr;
+    created_count = _nx_ip_created_count;
+    while (created_count--) {
 
-  /* Return completion status.  */
-  return (status);
+        /* Is the new ip already created?  */
+        /*lint -e{946} suppress pointer subtraction, since it is necessary. */
+        if ((ip_ptr == created_ip) ||
+            ((memory_ptr >= created_ip->nx_ip_thread.tx_thread_stack_start) &&
+             (memory_ptr < created_ip->nx_ip_thread.tx_thread_stack_end)) ||
+            ((((VOID *)end_stack) >= created_ip->nx_ip_thread.tx_thread_stack_start) &&
+             (((VOID *)end_stack) < created_ip->nx_ip_thread.tx_thread_stack_end))) {
+
+            /* Restore preemption.  */
+            if (current_thread) {
+
+                /*lint -e{644} suppress variable might not be initialized, since
+                 * "old_threshold" was initialized by previous
+                 * tx_thread_preemption_change. */
+                tx_thread_preemption_change(current_thread, old_threshold, &old_threshold);
+            }
+
+            /* Duplicate ip created, return an error!  */
+            return (NX_PTR_ERROR);
+        }
+
+        /* Move to next entry.  */
+        created_ip = created_ip->nx_ip_created_next;
+    }
+
+    /* Restore preemption.  */
+    if (current_thread) {
+
+        /*lint -e{644} suppress variable might not be initialized, since
+         * "old_threshold" was initialized by previous tx_thread_preemption_change.
+         */
+        tx_thread_preemption_change(current_thread, old_threshold, &old_threshold);
+    }
+
+    /* Check for invalid IP address.  Note that Interface with DHCP enabled
+       would start with 0.0.0.0.  Therefore the 0 IP address is allowed. */
+    if ((ip_address != 0) && ((ip_address & NX_IP_CLASS_A_MASK) != NX_IP_CLASS_A_TYPE) &&
+        ((ip_address & NX_IP_CLASS_B_MASK) != NX_IP_CLASS_B_TYPE) &&
+        ((ip_address & NX_IP_CLASS_C_MASK) != NX_IP_CLASS_C_TYPE)) {
+        return (NX_IP_ADDRESS_ERROR);
+    }
+
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
+
+    /* Call actual IP instance create function.  */
+    status = _nx_ip_create(ip_ptr, name, ip_address, network_mask, default_pool, ip_link_driver, memory_ptr,
+                           memory_size, priority);
+
+    /* Return completion status.  */
+    return (status);
 }

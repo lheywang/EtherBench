@@ -71,25 +71,21 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_storage_start_stop(UX_SLAVE_CLASS_STORAGE *storage,
-                                         ULONG lun,
-                                         UX_SLAVE_ENDPOINT *endpoint_in,
-                                         UX_SLAVE_ENDPOINT *endpoint_out,
-                                         UCHAR *cbwcb) {
+UINT _ux_device_class_storage_start_stop(UX_SLAVE_CLASS_STORAGE *storage, ULONG lun, UX_SLAVE_ENDPOINT *endpoint_in,
+                                         UX_SLAVE_ENDPOINT *endpoint_out, UCHAR *cbwcb) {
 
-  UX_PARAMETER_NOT_USED(lun);
-  UX_PARAMETER_NOT_USED(endpoint_in);
-  UX_PARAMETER_NOT_USED(endpoint_out);
-  UX_PARAMETER_NOT_USED(cbwcb);
+    UX_PARAMETER_NOT_USED(lun);
+    UX_PARAMETER_NOT_USED(endpoint_in);
+    UX_PARAMETER_NOT_USED(endpoint_out);
+    UX_PARAMETER_NOT_USED(cbwcb);
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_START_STOP, storage,
-                          lun, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_START_STOP, storage, lun, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS,
+                            0, 0)
 
-  /* We set the CSW with success.  */
-  storage->ux_slave_class_storage_csw_status =
-      UX_SLAVE_CLASS_STORAGE_CSW_PASSED;
+    /* We set the CSW with success.  */
+    storage->ux_slave_class_storage_csw_status = UX_SLAVE_CLASS_STORAGE_CSW_PASSED;
 
-  /* Return successful completion.  */
-  return (UX_SUCCESS);
+    /* Return successful completion.  */
+    return (UX_SUCCESS);
 }

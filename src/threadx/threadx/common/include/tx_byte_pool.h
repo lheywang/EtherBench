@@ -73,20 +73,20 @@
    initialization function.  */
 
 #ifndef TX_BYTE_POOL_ENABLE_PERFORMANCE_INFO
-#define _tx_byte_pool_initialize()                                             \
-  _tx_byte_pool_created_ptr = TX_NULL;                                         \
-  _tx_byte_pool_created_count = TX_EMPTY
+#define _tx_byte_pool_initialize()                                                                                     \
+    _tx_byte_pool_created_ptr = TX_NULL;                                                                               \
+    _tx_byte_pool_created_count = TX_EMPTY
 #else
-#define _tx_byte_pool_initialize()                                             \
-  _tx_byte_pool_created_ptr = TX_NULL;                                         \
-  _tx_byte_pool_created_count = TX_EMPTY;                                      \
-  _tx_byte_pool_performance_allocate_count = ((ULONG)0);                       \
-  _tx_byte_pool_performance_release_count = ((ULONG)0);                        \
-  _tx_byte_pool_performance_merge_count = ((ULONG)0);                          \
-  _tx_byte_pool_performance_split_count = ((ULONG)0);                          \
-  _tx_byte_pool_performance_search_count = ((ULONG)0);                         \
-  _tx_byte_pool_performance_suspension_count = ((ULONG)0);                     \
-  _tx_byte_pool_performance_timeout_count = ((ULONG)0)
+#define _tx_byte_pool_initialize()                                                                                     \
+    _tx_byte_pool_created_ptr = TX_NULL;                                                                               \
+    _tx_byte_pool_created_count = TX_EMPTY;                                                                            \
+    _tx_byte_pool_performance_allocate_count = ((ULONG)0);                                                             \
+    _tx_byte_pool_performance_release_count = ((ULONG)0);                                                              \
+    _tx_byte_pool_performance_merge_count = ((ULONG)0);                                                                \
+    _tx_byte_pool_performance_split_count = ((ULONG)0);                                                                \
+    _tx_byte_pool_performance_search_count = ((ULONG)0);                                                               \
+    _tx_byte_pool_performance_suspension_count = ((ULONG)0);                                                           \
+    _tx_byte_pool_performance_timeout_count = ((ULONG)0)
 #endif
 #define TX_BYTE_POOL_INIT
 #else

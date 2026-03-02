@@ -68,52 +68,46 @@ extern "C" {
 
 #define NX_DRIVER_ERROR 90
 
-#define NX_DRIVER_ETHERNET_HEADER_REMOVE(p)                                    \
-  {                                                                            \
-    p->nx_packet_prepend_ptr =                                                 \
-        p->nx_packet_prepend_ptr + NX_DRIVER_ETHERNET_FRAME_SIZE;              \
-    p->nx_packet_length = p->nx_packet_length - NX_DRIVER_ETHERNET_FRAME_SIZE; \
-  }
+#define NX_DRIVER_ETHERNET_HEADER_REMOVE(p)                                                                            \
+    {                                                                                                                  \
+        p->nx_packet_prepend_ptr = p->nx_packet_prepend_ptr + NX_DRIVER_ETHERNET_FRAME_SIZE;                           \
+        p->nx_packet_length = p->nx_packet_length - NX_DRIVER_ETHERNET_FRAME_SIZE;                                     \
+    }
 
 /**************************************************************************/
 /* Cache maintenance. */
 /**************************************************************************/
 #if defined(__CORTEX_M)
 #if (defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U))
-#define invalidate_cache_by_addr(__ptr__, __size__)                            \
-  SCB_InvalidateDCache_by_Addr((void *)(__ptr__), (int32_t)(__size__))
-#define clean_cache_by_addr(__ptr__, __size__)                                 \
-  SCB_CleanDCache_by_Addr((uint32_t *)(__ptr__), (int32_t)(__size__))
+#define invalidate_cache_by_addr(__ptr__, __size__) SCB_InvalidateDCache_by_Addr((void *)(__ptr__), (int32_t)(__size__))
+#define clean_cache_by_addr(__ptr__, __size__) SCB_CleanDCache_by_Addr((uint32_t *)(__ptr__), (int32_t)(__size__))
 #else
 #define invalidate_cache_by_addr(__ptr__, __size__)
 #define clean_cache_by_addr(__ptr__, __size__)
 #endif
 #else
 #if defined(DATA_CACHE_ENABLE) && (DATA_CACHE_ENABLE == 1U)
-__STATIC_FORCEINLINE void __invalidate_cache_by_addr(uint32_t start,
-                                                     uint32_t size) {
-  uint32_t current = start & ~31U;
-  uint32_t end = (start + size + 31U) & ~31U;
-  while (current < end) {
-    L1C_CleanInvalidateDCacheMVA(
-        (void *)current); /* We clean also because buffers are not 32-byte
-                             aligned and read is done after this anyway. */
-    current += 32U;
-  }
+__STATIC_FORCEINLINE void __invalidate_cache_by_addr(uint32_t start, uint32_t size) {
+    uint32_t current = start & ~31U;
+    uint32_t end = (start + size + 31U) & ~31U;
+    while (current < end) {
+        L1C_CleanInvalidateDCacheMVA((void *)current); /* We clean also because buffers are not 32-byte
+                                                          aligned and read is done after this anyway. */
+        current += 32U;
+    }
 }
 
 __STATIC_FORCEINLINE void __clean_cache_by_addr(uint32_t start, uint32_t size) {
-  uint32_t current = start & ~31U;
-  uint32_t end = (start + size + 31U) & ~31U;
-  while (current < end) {
-    L1C_CleanDCacheMVA((void *)current);
-    current += 32U;
-  }
+    uint32_t current = start & ~31U;
+    uint32_t end = (start + size + 31U) & ~31U;
+    while (current < end) {
+        L1C_CleanDCacheMVA((void *)current);
+        current += 32U;
+    }
 }
-#define invalidate_cache_by_addr(__ptr__, __size__)                            \
-  __invalidate_cache_by_addr((uint32_t)(__ptr__), (uint32_t)(__size__))
-#define clean_cache_by_addr(__ptr__, __size__)                                 \
-  __clean_cache_by_addr((uint32_t)(__ptr__), (uint32_t)(__size__))
+#define invalidate_cache_by_addr(__ptr__, __size__)                                                                    \
+    __invalidate_cache_by_addr((uint32_t)(__ptr__), (uint32_t)(__size__))
+#define clean_cache_by_addr(__ptr__, __size__) __clean_cache_by_addr((uint32_t)(__ptr__), (uint32_t)(__size__))
 #else
 #define invalidate_cache_by_addr(__ptr__, __size__)
 #define clean_cache_by_addr(__ptr__, __size__)
@@ -136,62 +130,57 @@ __STATIC_FORCEINLINE void __clean_cache_by_addr(uint32_t start, uint32_t size) {
 
 /****** DRIVER SPECIFIC ****** End of part/vendor specific constant area!  */
 
-#define NX_DRIVER_CAPABILITY                                                   \
-  (NX_INTERFACE_CAPABILITY_IPV4_TX_CHECKSUM |                                  \
-   NX_INTERFACE_CAPABILITY_IPV4_RX_CHECKSUM |                                  \
-   NX_INTERFACE_CAPABILITY_TCP_TX_CHECKSUM |                                   \
-   NX_INTERFACE_CAPABILITY_TCP_RX_CHECKSUM |                                   \
-   NX_INTERFACE_CAPABILITY_UDP_TX_CHECKSUM |                                   \
-   NX_INTERFACE_CAPABILITY_UDP_RX_CHECKSUM |                                   \
-   NX_INTERFACE_CAPABILITY_ICMPV4_TX_CHECKSUM |                                \
-   NX_INTERFACE_CAPABILITY_ICMPV4_RX_CHECKSUM |                                \
-   NX_INTERFACE_CAPABILITY_ICMPV6_TX_CHECKSUM |                                \
-   NX_INTERFACE_CAPABILITY_ICMPV6_RX_CHECKSUM)
+#define NX_DRIVER_CAPABILITY                                                                                           \
+    (NX_INTERFACE_CAPABILITY_IPV4_TX_CHECKSUM | NX_INTERFACE_CAPABILITY_IPV4_RX_CHECKSUM |                             \
+     NX_INTERFACE_CAPABILITY_TCP_TX_CHECKSUM | NX_INTERFACE_CAPABILITY_TCP_RX_CHECKSUM |                               \
+     NX_INTERFACE_CAPABILITY_UDP_TX_CHECKSUM | NX_INTERFACE_CAPABILITY_UDP_RX_CHECKSUM |                               \
+     NX_INTERFACE_CAPABILITY_ICMPV4_TX_CHECKSUM | NX_INTERFACE_CAPABILITY_ICMPV4_RX_CHECKSUM |                         \
+     NX_INTERFACE_CAPABILITY_ICMPV6_TX_CHECKSUM | NX_INTERFACE_CAPABILITY_ICMPV6_RX_CHECKSUM)
 
 /* Define basic Ethernet driver information typedef. Note that this typedefs is
    designed to be used only in the driver's C file. */
 
 typedef struct NX_DRIVER_INFORMATION_STRUCT {
-  /* NetX IP instance that this driver is attached to.  */
-  NX_IP *nx_driver_information_ip_ptr;
+    /* NetX IP instance that this driver is attached to.  */
+    NX_IP *nx_driver_information_ip_ptr;
 
-  /* Driver's current state.  */
-  ULONG nx_driver_information_state;
+    /* Driver's current state.  */
+    ULONG nx_driver_information_state;
 
-  /* Packet pool used for receiving packets. */
-  NX_PACKET_POOL *nx_driver_information_packet_pool_ptr;
+    /* Packet pool used for receiving packets. */
+    NX_PACKET_POOL *nx_driver_information_packet_pool_ptr;
 
-  /* Define the driver interface association.  */
-  NX_INTERFACE *nx_driver_information_interface;
+    /* Define the driver interface association.  */
+    NX_INTERFACE *nx_driver_information_interface;
 
-  /* Define the deferred event field. This will contain bits representing events
-     deferred from the ISR for processing in the thread context.  */
-  ULONG nx_driver_information_deferred_events;
+    /* Define the deferred event field. This will contain bits representing events
+       deferred from the ISR for processing in the thread context.  */
+    ULONG nx_driver_information_deferred_events;
 
-  /****** DRIVER SPECIFIC ****** Start of part/vendor specific driver
-   * information area.  Include any such constants here!  */
+    /****** DRIVER SPECIFIC ****** Start of part/vendor specific driver
+     * information area.  Include any such constants here!  */
 
-  /* Indices to current receive/transmit descriptors.  */
-  UINT nx_driver_information_receive_current_index;
-  UINT nx_driver_information_transmit_current_index;
+    /* Indices to current receive/transmit descriptors.  */
+    UINT nx_driver_information_receive_current_index;
+    UINT nx_driver_information_transmit_current_index;
 
-  /* Transmit release index.  */
-  UINT nx_driver_information_transmit_release_index;
+    /* Transmit release index.  */
+    UINT nx_driver_information_transmit_release_index;
 
-  /* Define the number of transmit buffers in use.  */
-  UINT nx_driver_information_number_of_transmit_buffers_in_use;
+    /* Define the number of transmit buffers in use.  */
+    UINT nx_driver_information_number_of_transmit_buffers_in_use;
 
-  /* Define the association between buffer descriptors and NetX packets.  */
-  NX_PACKET *nx_driver_information_transmit_packets[NX_DRIVER_TX_DESCRIPTORS];
-  NX_PACKET *nx_driver_information_receive_packets[NX_DRIVER_RX_DESCRIPTORS];
+    /* Define the association between buffer descriptors and NetX packets.  */
+    NX_PACKET *nx_driver_information_transmit_packets[NX_DRIVER_TX_DESCRIPTORS];
+    NX_PACKET *nx_driver_information_receive_packets[NX_DRIVER_RX_DESCRIPTORS];
 
-  /* Define the size of a rx buffer size.  */
-  ULONG nx_driver_information_rx_buffer_size;
+    /* Define the size of a rx buffer size.  */
+    ULONG nx_driver_information_rx_buffer_size;
 
-  ULONG nx_driver_information_multicast_count;
+    ULONG nx_driver_information_multicast_count;
 
-  /****** DRIVER SPECIFIC ****** End of part/vendor specific driver information
-   * area.  */
+    /****** DRIVER SPECIFIC ****** End of part/vendor specific driver information
+     * area.  */
 
 } NX_DRIVER_INFORMATION;
 

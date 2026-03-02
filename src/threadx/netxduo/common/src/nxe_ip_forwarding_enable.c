@@ -74,24 +74,24 @@ NX_CALLER_CHECKING_EXTERNS
 UINT _nxe_ip_forwarding_enable(NX_IP *ip_ptr) {
 
 #ifndef NX_DISABLE_IPV4
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_NOT_ISR_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_NOT_ISR_CALLER_CHECKING
 
-  /* Call actual IP forwarding enable function.  */
-  status = _nx_ip_forwarding_enable(ip_ptr);
+    /* Call actual IP forwarding enable function.  */
+    status = _nx_ip_forwarding_enable(ip_ptr);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 #else
-  NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_ptr);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

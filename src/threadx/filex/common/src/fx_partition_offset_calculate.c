@@ -29,8 +29,8 @@
 /* Define internal data structures.  */
 
 typedef struct FX_MEDIA_PARTITION_STRUCT {
-  ULONG fx_media_part_start;
-  ULONG fx_media_part_size;
+    ULONG fx_media_part_start;
+    ULONG fx_media_part_size;
 } FX_MEDIA_PARTITION;
 
 /* Define internal partition constants. */
@@ -52,16 +52,11 @@ typedef struct FX_MEDIA_PARTITION_STRUCT {
 /* Define function prototypes for the partition table parsing application
    utility.  */
 
-UINT _fx_partition_offset_calculate(void *partition_sector, UINT partition,
-                                    ULONG *partition_start,
+UINT _fx_partition_offset_calculate(void *partition_sector, UINT partition, ULONG *partition_start,
                                     ULONG *partition_size);
-UINT _fx_utility_partition_get(FX_MEDIA_PARTITION *partition_table, UINT *count,
-                               ULONG sector, UCHAR *sector_buffer);
-UINT _fx_partition_offset_calculate_extended(FX_MEDIA *media_ptr,
-                                             void *partition_sector,
-                                             UINT partition,
-                                             ULONG *partition_start,
-                                             ULONG *partition_size);
+UINT _fx_utility_partition_get(FX_MEDIA_PARTITION *partition_table, UINT *count, ULONG sector, UCHAR *sector_buffer);
+UINT _fx_partition_offset_calculate_extended(FX_MEDIA *media_ptr, void *partition_sector, UINT partition,
+                                             ULONG *partition_start, ULONG *partition_size);
 
 /**************************************************************************/
 /*                                                                        */
@@ -125,140 +120,131 @@ UINT _fx_partition_offset_calculate_extended(FX_MEDIA *media_ptr,
 /*                                            resulting in version 6.1.6  */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_partition_offset_calculate(void *partition_sector, UINT partition,
-                                    ULONG *partition_start,
+UINT _fx_partition_offset_calculate(void *partition_sector, UINT partition, ULONG *partition_start,
                                     ULONG *partition_size) {
 
-  FX_MEDIA_PARTITION partition_table[4];
-  UINT count;
-  ULONG64 total_sectors;
-  UCHAR *partition_sector_ptr;
+    FX_MEDIA_PARTITION partition_table[4];
+    UINT count;
+    ULONG64 total_sectors;
+    UCHAR *partition_sector_ptr;
 
-  /* Setup working pointer and initialize count.  */
-  partition_sector_ptr = partition_sector;
-  count = 0;
+    /* Setup working pointer and initialize count.  */
+    partition_sector_ptr = partition_sector;
+    count = 0;
 
-  /* Check for a real boot sector instead of a partition table.  */
-  if ((partition_sector_ptr[0] == 0xe9) ||
-      ((partition_sector_ptr[0] == 0xeb) &&
-       (partition_sector_ptr[2] == 0x90))) {
+    /* Check for a real boot sector instead of a partition table.  */
+    if ((partition_sector_ptr[0] == 0xe9) || ((partition_sector_ptr[0] == 0xeb) && (partition_sector_ptr[2] == 0x90))) {
 
-    /* Yes, a real boot sector could be present.  */
+        /* Yes, a real boot sector could be present.  */
 
-    /* See if there are good values for sectors per FAT.  */
-    if (partition_sector_ptr[0x16] || partition_sector_ptr[0x17] ||
-        partition_sector_ptr[0x24] || partition_sector_ptr[0x25] ||
-        partition_sector_ptr[0x26] || partition_sector_ptr[0x27]) {
+        /* See if there are good values for sectors per FAT.  */
+        if (partition_sector_ptr[0x16] || partition_sector_ptr[0x17] || partition_sector_ptr[0x24] ||
+            partition_sector_ptr[0x25] || partition_sector_ptr[0x26] || partition_sector_ptr[0x27]) {
 
-      /* There are values for sectors per FAT.  */
+            /* There are values for sectors per FAT.  */
 
-      /* Determine if there is a total sector count.  */
-      total_sectors = 0;
+            /* Determine if there is a total sector count.  */
+            total_sectors = 0;
 
-      if (partition_sector_ptr[0x13] || partition_sector_ptr[0x14]) {
+            if (partition_sector_ptr[0x13] || partition_sector_ptr[0x14]) {
 
-        /* Calculate the total sectors, FAT12/16.  */
-        total_sectors = (((ULONG)partition_sector_ptr[0x14]) << 8) |
-                        ((ULONG)partition_sector_ptr[0x13]);
-      } else if (partition_sector_ptr[0x20] || partition_sector_ptr[0x21] ||
-                 partition_sector_ptr[0x22] || partition_sector_ptr[0x23]) {
+                /* Calculate the total sectors, FAT12/16.  */
+                total_sectors = (((ULONG)partition_sector_ptr[0x14]) << 8) | ((ULONG)partition_sector_ptr[0x13]);
+            } else if (partition_sector_ptr[0x20] || partition_sector_ptr[0x21] || partition_sector_ptr[0x22] ||
+                       partition_sector_ptr[0x23]) {
 
-        /* Calculate the total sectors, FAT32.  */
-        total_sectors = (((ULONG)partition_sector_ptr[0x23]) << 24) |
-                        (((ULONG)partition_sector_ptr[0x22]) << 16) |
-                        (((ULONG)partition_sector_ptr[0x21]) << 8) |
-                        ((ULONG)partition_sector_ptr[0x20]);
-      }
+                /* Calculate the total sectors, FAT32.  */
+                total_sectors = (((ULONG)partition_sector_ptr[0x23]) << 24) |
+                                (((ULONG)partition_sector_ptr[0x22]) << 16) |
+                                (((ULONG)partition_sector_ptr[0x21]) << 8) | ((ULONG)partition_sector_ptr[0x20]);
+            }
 
-      /* Determine if there is a total sector count.  */
-      if (total_sectors) {
+            /* Determine if there is a total sector count.  */
+            if (total_sectors) {
 
-        if (partition_start != FX_NULL) {
-          /* Return an offset of 0, size of boot record, and a successful
-           * status.  */
-          *partition_start = 0;
+                if (partition_start != FX_NULL) {
+                    /* Return an offset of 0, size of boot record, and a successful
+                     * status.  */
+                    *partition_start = 0;
+                }
+
+                /* Determine if the total sectors is required.  */
+                if (partition_size != FX_NULL) {
+
+                    /* Return the total sectors.  */
+                    *partition_size = (ULONG)(total_sectors & 0xFFFFFFFF);
+                }
+
+                /* Return success!  */
+                return (FX_SUCCESS);
+            }
         }
-
-        /* Determine if the total sectors is required.  */
-        if (partition_size != FX_NULL) {
-
-          /* Return the total sectors.  */
-          *partition_size = (ULONG)(total_sectors & 0xFFFFFFFF);
-        }
-
-        /* Return success!  */
-        return (FX_SUCCESS);
-      }
-    }
 #ifdef FX_ENABLE_EXFAT
-    /* See if there are good values for sectors per exFAT.  */
-    else if (partition_sector_ptr[0x0b] == 0 &&
-             partition_sector_ptr[0x0c] == 0) {
-      /* There are values for sectors per exFAT.  */
+        /* See if there are good values for sectors per exFAT.  */
+        else if (partition_sector_ptr[0x0b] == 0 && partition_sector_ptr[0x0c] == 0) {
+            /* There are values for sectors per exFAT.  */
 
-      /* Calculate the total sectors.  */
-      total_sectors = _fx_utility_64_unsigned_read(
-          &partition_sector_ptr[FX_EF_VOLUME_LENGTH]);
+            /* Calculate the total sectors.  */
+            total_sectors = _fx_utility_64_unsigned_read(&partition_sector_ptr[FX_EF_VOLUME_LENGTH]);
 
-      /* Determine if there is a total sector count.  */
-      if (total_sectors) {
+            /* Determine if there is a total sector count.  */
+            if (total_sectors) {
 
-        if (partition_start != FX_NULL) {
-          /* Return an offset of 0, size of boot record, and a successful
-           * status.  */
-          *partition_start = 0;
+                if (partition_start != FX_NULL) {
+                    /* Return an offset of 0, size of boot record, and a successful
+                     * status.  */
+                    *partition_start = 0;
+                }
+
+                /* Determine if the total sectors is required.  */
+                if (partition_size != FX_NULL) {
+
+                    if (total_sectors > 0xFFFFFFFF) {
+
+                        /* Overflow. Just return not found. */
+                        return (FX_NOT_FOUND);
+                    }
+
+                    /* Return the total sectors.  */
+                    *partition_size = (ULONG)(total_sectors & 0xFFFFFFFF);
+                }
+
+                /* Return success!  */
+                return (FX_SUCCESS);
+            }
         }
-
-        /* Determine if the total sectors is required.  */
-        if (partition_size != FX_NULL) {
-
-          if (total_sectors > 0xFFFFFFFF) {
-
-            /* Overflow. Just return not found. */
-            return (FX_NOT_FOUND);
-          }
-
-          /* Return the total sectors.  */
-          *partition_size = (ULONG)(total_sectors & 0xFFFFFFFF);
-        }
-
-        /* Return success!  */
-        return (FX_SUCCESS);
-      }
-    }
 #endif /* FX_ENABLE_EXFAT */
-  }
+    }
 
-  /* Check signature to make sure the buffer is valid.  */
-  if ((partition_sector_ptr[510] != 0x55) ||
-      (partition_sector_ptr[511] != 0xAA)) {
+    /* Check signature to make sure the buffer is valid.  */
+    if ((partition_sector_ptr[510] != 0x55) || (partition_sector_ptr[511] != 0xAA)) {
 
-    /* Invalid, return an error.  */
-    return (FX_NOT_FOUND);
-  }
+        /* Invalid, return an error.  */
+        return (FX_NOT_FOUND);
+    }
 
-  /* Not bootable, look for specific partition.  */
-  _fx_utility_partition_get(partition_table, &count, 0, partition_sector_ptr);
+    /* Not bootable, look for specific partition.  */
+    _fx_utility_partition_get(partition_table, &count, 0, partition_sector_ptr);
 
-  /* Determine if return value is valid.  */
-  if (partition >= count) {
+    /* Determine if return value is valid.  */
+    if (partition >= count) {
 
-    /* No, return an error.  */
-    return (FX_NOT_FOUND);
-  }
+        /* No, return an error.  */
+        return (FX_NOT_FOUND);
+    }
 
-  /* Return the partition starting sector, if non-NULL.  */
-  if (partition_start != FX_NULL) {
-    *partition_start = partition_table[partition].fx_media_part_start;
-  }
+    /* Return the partition starting sector, if non-NULL.  */
+    if (partition_start != FX_NULL) {
+        *partition_start = partition_table[partition].fx_media_part_start;
+    }
 
-  /* Return the partition size, if non-NULL.  */
-  if (partition_size != FX_NULL) {
-    *partition_size = partition_table[partition].fx_media_part_size;
-  }
+    /* Return the partition size, if non-NULL.  */
+    if (partition_size != FX_NULL) {
+        *partition_size = partition_table[partition].fx_media_part_size;
+    }
 
-  /* Return successful completion.  */
-  return (FX_SUCCESS);
+    /* Return successful completion.  */
+    return (FX_SUCCESS);
 }
 
 /**************************************************************************/
@@ -307,44 +293,43 @@ UINT _fx_partition_offset_calculate(void *partition_sector, UINT partition,
 /*                                            resulting in version 6.1.6  */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_utility_partition_get(FX_MEDIA_PARTITION *partition_table, UINT *count,
-                               ULONG sector, UCHAR *sector_buffer) {
+UINT _fx_utility_partition_get(FX_MEDIA_PARTITION *partition_table, UINT *count, ULONG sector, UCHAR *sector_buffer) {
 
-  UINT i;
-  ULONG base_sector, value;
+    UINT i;
+    ULONG base_sector, value;
 
-  /* This parameter has not been supported yet. */
-  FX_PARAMETER_NOT_USED(sector);
+    /* This parameter has not been supported yet. */
+    FX_PARAMETER_NOT_USED(sector);
 
-  /* Initialize base sector.  */
-  base_sector = 0;
+    /* Initialize base sector.  */
+    base_sector = 0;
 
-  for (i = 446; i <= 494; i += 16) {
-    if (sector_buffer[i + 4] == 0) /* no partition entry here */
-    {
+    for (i = 446; i <= 494; i += 16) {
+        if (sector_buffer[i + 4] == 0) /* no partition entry here */
+        {
 
-      partition_table[*count].fx_media_part_start = 0;
-      partition_table[*count].fx_media_part_size = 0;
-    } else {
+            partition_table[*count].fx_media_part_start = 0;
+            partition_table[*count].fx_media_part_size = 0;
+        } else {
 
-      value = (ULONG)sector_buffer[i + 8]; /* little endian start value */
-      value = (((ULONG)sector_buffer[i + 9]) << 8) | value;
-      value = (((ULONG)sector_buffer[i + 10]) << 16) | value;
-      value = (((ULONG)sector_buffer[i + 11]) << 24) | value;
-      partition_table[*count].fx_media_part_start = value + base_sector;
+            value = (ULONG)sector_buffer[i + 8]; /* little endian start value */
+            value = (((ULONG)sector_buffer[i + 9]) << 8) | value;
+            value = (((ULONG)sector_buffer[i + 10]) << 16) | value;
+            value = (((ULONG)sector_buffer[i + 11]) << 24) | value;
+            partition_table[*count].fx_media_part_start = value + base_sector;
 
-      value = (ULONG)sector_buffer[i + 12]; /* little endian size value */
-      value = (((ULONG)sector_buffer[i + 13]) << 8) | value;
-      value = (((ULONG)sector_buffer[i + 14]) << 16) | value;
-      value = (((ULONG)sector_buffer[i + 15]) << 24) | value;
-      partition_table[*count].fx_media_part_size = value;
+            value = (ULONG)sector_buffer[i + 12]; /* little endian size value */
+            value = (((ULONG)sector_buffer[i + 13]) << 8) | value;
+            value = (((ULONG)sector_buffer[i + 14]) << 16) | value;
+            value = (((ULONG)sector_buffer[i + 15]) << 24) | value;
+            partition_table[*count].fx_media_part_size = value;
+        }
+
+        (*count)++;
     }
 
-    (*count)++;
-  }
-
-  /* Return success.  */
-  return (FX_SUCCESS);
+    /* Return success.  */
+    return (FX_SUCCESS);
 }
 
 /**************************************************************************/
@@ -407,266 +392,241 @@ UINT _fx_utility_partition_get(FX_MEDIA_PARTITION *partition_table, UINT *count,
 /*  10-31-2022     Xiuwen Cai               Initial Version 6.2.0        */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_partition_offset_calculate_extended(FX_MEDIA *media_ptr,
-                                             void *partition_sector,
-                                             UINT partition,
-                                             ULONG *partition_start,
-                                             ULONG *partition_size) {
+UINT _fx_partition_offset_calculate_extended(FX_MEDIA *media_ptr, void *partition_sector, UINT partition,
+                                             ULONG *partition_start, ULONG *partition_size) {
 
-  ULONG64 total_sectors;
-  UCHAR *partition_sector_ptr;
-  UCHAR partition_type;
-  UINT i;
-  ULONG base_sector;
-  ULONG base_sector_extended;
+    ULONG64 total_sectors;
+    UCHAR *partition_sector_ptr;
+    UCHAR partition_type;
+    UINT i;
+    ULONG base_sector;
+    ULONG base_sector_extended;
 
-  /* Setup working pointer.  */
-  partition_sector_ptr = partition_sector;
+    /* Setup working pointer.  */
+    partition_sector_ptr = partition_sector;
 
-  /* Check for a real boot sector instead of a partition table.  */
-  if ((partition_sector_ptr[0] == 0xe9) ||
-      ((partition_sector_ptr[0] == 0xeb) &&
-       (partition_sector_ptr[2] == 0x90))) {
+    /* Check for a real boot sector instead of a partition table.  */
+    if ((partition_sector_ptr[0] == 0xe9) || ((partition_sector_ptr[0] == 0xeb) && (partition_sector_ptr[2] == 0x90))) {
 
-    /* Yes, a real boot sector could be present.  */
+        /* Yes, a real boot sector could be present.  */
 
-    /* See if there are good values for sectors per FAT.  */
-    if (partition_sector_ptr[0x16] || partition_sector_ptr[0x17] ||
-        partition_sector_ptr[0x24] || partition_sector_ptr[0x25] ||
-        partition_sector_ptr[0x26] || partition_sector_ptr[0x27]) {
+        /* See if there are good values for sectors per FAT.  */
+        if (partition_sector_ptr[0x16] || partition_sector_ptr[0x17] || partition_sector_ptr[0x24] ||
+            partition_sector_ptr[0x25] || partition_sector_ptr[0x26] || partition_sector_ptr[0x27]) {
 
-      /* There are values for sectors per FAT.  */
+            /* There are values for sectors per FAT.  */
 
-      /* Get the total sectors, FAT12/16.  */
-      total_sectors =
-          _fx_utility_16_unsigned_read(&partition_sector_ptr[FX_SECTORS]);
+            /* Get the total sectors, FAT12/16.  */
+            total_sectors = _fx_utility_16_unsigned_read(&partition_sector_ptr[FX_SECTORS]);
 
-      if (total_sectors == 0) {
+            if (total_sectors == 0) {
 
-        /* Get the total sectors, FAT32.  */
-        total_sectors = _fx_utility_32_unsigned_read(
-            &partition_sector_ptr[FX_HUGE_SECTORS]);
-      }
+                /* Get the total sectors, FAT32.  */
+                total_sectors = _fx_utility_32_unsigned_read(&partition_sector_ptr[FX_HUGE_SECTORS]);
+            }
 
-      /* Determine if there is a total sector count.  */
-      if (total_sectors) {
+            /* Determine if there is a total sector count.  */
+            if (total_sectors) {
 
-        if (partition_start != FX_NULL) {
-          /* Return an offset of 0, size of boot record, and a successful
-           * status.  */
-          *partition_start = 0;
+                if (partition_start != FX_NULL) {
+                    /* Return an offset of 0, size of boot record, and a successful
+                     * status.  */
+                    *partition_start = 0;
+                }
+
+                /* Determine if the total sectors is required.  */
+                if (partition_size != FX_NULL) {
+
+                    /* Return the total sectors.  */
+                    *partition_size = (ULONG)(total_sectors & 0xFFFFFFFF);
+                }
+
+                /* Return success!  */
+                return (FX_SUCCESS);
+            }
         }
-
-        /* Determine if the total sectors is required.  */
-        if (partition_size != FX_NULL) {
-
-          /* Return the total sectors.  */
-          *partition_size = (ULONG)(total_sectors & 0xFFFFFFFF);
-        }
-
-        /* Return success!  */
-        return (FX_SUCCESS);
-      }
-    }
 #ifdef FX_ENABLE_EXFAT
-    /* See if there are good values for sectors per exFAT.  */
-    else if (partition_sector_ptr[0x0b] == 0 &&
-             partition_sector_ptr[0x0c] == 0) {
-      /* There are values for sectors per exFAT.  */
+        /* See if there are good values for sectors per exFAT.  */
+        else if (partition_sector_ptr[0x0b] == 0 && partition_sector_ptr[0x0c] == 0) {
+            /* There are values for sectors per exFAT.  */
 
-      /* Calculate the total sectors.  */
-      total_sectors = _fx_utility_64_unsigned_read(
-          &partition_sector_ptr[FX_EF_VOLUME_LENGTH]);
+            /* Calculate the total sectors.  */
+            total_sectors = _fx_utility_64_unsigned_read(&partition_sector_ptr[FX_EF_VOLUME_LENGTH]);
 
-      /* Determine if there is a total sector count.  */
-      if (total_sectors) {
+            /* Determine if there is a total sector count.  */
+            if (total_sectors) {
 
-        if (partition_start != FX_NULL) {
-          /* Return an offset of 0, size of boot record, and a successful
-           * status.  */
-          *partition_start = 0;
+                if (partition_start != FX_NULL) {
+                    /* Return an offset of 0, size of boot record, and a successful
+                     * status.  */
+                    *partition_start = 0;
+                }
+
+                /* Determine if the total sectors is required.  */
+                if (partition_size != FX_NULL) {
+
+                    if (total_sectors > 0xFFFFFFFF) {
+
+                        /* Overflow. Just return not found. */
+                        return (FX_NOT_FOUND);
+                    }
+
+                    /* Return the total sectors.  */
+                    *partition_size = (ULONG)(total_sectors & 0xFFFFFFFF);
+                }
+
+                /* Return success!  */
+                return (FX_SUCCESS);
+            }
         }
-
-        /* Determine if the total sectors is required.  */
-        if (partition_size != FX_NULL) {
-
-          if (total_sectors > 0xFFFFFFFF) {
-
-            /* Overflow. Just return not found. */
-            return (FX_NOT_FOUND);
-          }
-
-          /* Return the total sectors.  */
-          *partition_size = (ULONG)(total_sectors & 0xFFFFFFFF);
-        }
-
-        /* Return success!  */
-        return (FX_SUCCESS);
-      }
-    }
 #endif /* FX_ENABLE_EXFAT */
-  }
-
-  /* Check signature to make sure the buffer is valid.  */
-  if ((partition_sector_ptr[510] != FX_SIG_BYTE_1) ||
-      (partition_sector_ptr[511] != FX_SIG_BYTE_2)) {
-
-    /* Invalid, return an error.  */
-    return (FX_NOT_FOUND);
-  }
-
-  /* Not bootable, look for specific partition.  */
-
-  /* Check if primary partitions are addressed.  */
-  if (partition < 4) {
-
-    /* Get partition type.  */
-    partition_type = partition_sector_ptr[FX_PARTITION_TABLE_OFFSET +
-                                          partition * FX_PARTITION_ENTRY_SIZE +
-                                          FX_PARTITION_TYPE_OFFSET];
-
-    /* Check if there is a vaild partition.  */
-    if (partition_type != FX_PARTITION_TYPE_FREE) {
-
-      /* Return the partition starting sector, if non-NULL.  */
-      if (partition_start != FX_NULL) {
-        *partition_start = _fx_utility_32_unsigned_read(
-            &partition_sector_ptr[FX_PARTITION_TABLE_OFFSET +
-                                  partition * FX_PARTITION_ENTRY_SIZE +
-                                  FX_PARTITION_LBA_OFFSET]);
-      }
-
-      /* Return the partition size, if non-NULL.  */
-      if (partition_size != FX_NULL) {
-        *partition_size = _fx_utility_32_unsigned_read(
-            &partition_sector_ptr[FX_PARTITION_TABLE_OFFSET +
-                                  partition * FX_PARTITION_ENTRY_SIZE +
-                                  FX_PARTITION_SECTORS_OFFSET]);
-      }
-
-      /* Return success!  */
-      return (FX_SUCCESS);
-    } else {
-
-      /* Not partition here.  */
-      return (FX_NOT_FOUND);
     }
-  }
 
-  /* Check for invalid parameter.  */
-  if (partition > FX_MAX_PARTITION_COUNT) {
+    /* Check signature to make sure the buffer is valid.  */
+    if ((partition_sector_ptr[510] != FX_SIG_BYTE_1) || (partition_sector_ptr[511] != FX_SIG_BYTE_2)) {
+
+        /* Invalid, return an error.  */
+        return (FX_NOT_FOUND);
+    }
+
+    /* Not bootable, look for specific partition.  */
+
+    /* Check if primary partitions are addressed.  */
+    if (partition < 4) {
+
+        /* Get partition type.  */
+        partition_type = partition_sector_ptr[FX_PARTITION_TABLE_OFFSET + partition * FX_PARTITION_ENTRY_SIZE +
+                                              FX_PARTITION_TYPE_OFFSET];
+
+        /* Check if there is a vaild partition.  */
+        if (partition_type != FX_PARTITION_TYPE_FREE) {
+
+            /* Return the partition starting sector, if non-NULL.  */
+            if (partition_start != FX_NULL) {
+                *partition_start = _fx_utility_32_unsigned_read(
+                    &partition_sector_ptr[FX_PARTITION_TABLE_OFFSET + partition * FX_PARTITION_ENTRY_SIZE +
+                                          FX_PARTITION_LBA_OFFSET]);
+            }
+
+            /* Return the partition size, if non-NULL.  */
+            if (partition_size != FX_NULL) {
+                *partition_size = _fx_utility_32_unsigned_read(
+                    &partition_sector_ptr[FX_PARTITION_TABLE_OFFSET + partition * FX_PARTITION_ENTRY_SIZE +
+                                          FX_PARTITION_SECTORS_OFFSET]);
+            }
+
+            /* Return success!  */
+            return (FX_SUCCESS);
+        } else {
+
+            /* Not partition here.  */
+            return (FX_NOT_FOUND);
+        }
+    }
+
+    /* Check for invalid parameter.  */
+    if (partition > FX_MAX_PARTITION_COUNT) {
+
+        /* Return error.  */
+        return (FX_NOT_FOUND);
+    }
+
+    base_sector = 0;
+
+    /* Loop to find the extended partition table.  */
+    for (i = FX_PARTITION_TABLE_OFFSET; i <= FX_PARTITION_TABLE_OFFSET + 3 * FX_PARTITION_ENTRY_SIZE;
+         i += FX_PARTITION_ENTRY_SIZE) {
+
+        /* Get partition type.  */
+        partition_type = partition_sector_ptr[i + FX_PARTITION_TYPE_OFFSET];
+        if (partition_type == FX_PARTITION_TYPE_EXTENDED || partition_type == FX_PARTITION_TYPE_EXTENDED_LBA) {
+            base_sector = _fx_utility_32_unsigned_read(&partition_sector_ptr[i + FX_PARTITION_LBA_OFFSET]);
+            break;
+        }
+    }
+
+    if (base_sector == 0) {
+
+        /* No extended partition.  */
+        return (FX_NOT_FOUND);
+    }
+
+    base_sector_extended = base_sector;
+
+    for (i = 4; i <= partition; i++) {
+
+        /* Read the partition sector from the device.  Build the read sector
+            command.  */
+        media_ptr->fx_media_driver_request = FX_DRIVER_READ;
+        media_ptr->fx_media_driver_status = FX_IO_ERROR;
+        media_ptr->fx_media_driver_buffer = partition_sector_ptr;
+        media_ptr->fx_media_driver_logical_sector = base_sector;
+        media_ptr->fx_media_driver_sectors = 1;
+        media_ptr->fx_media_driver_sector_type = FX_UNKNOWN_SECTOR;
+        media_ptr->fx_media_hidden_sectors = 0;
+
+        /* Invoke the driver to read the sector.  */
+        (media_ptr->fx_media_driver_entry)(media_ptr);
+
+        /* Determine if the sector was read correctly. */
+        if (media_ptr->fx_media_driver_status != FX_SUCCESS) {
+
+            /* Return error.  */
+            return (FX_IO_ERROR);
+        }
+
+        /* Check signature to make sure the sector is valid.  */
+        if ((partition_sector_ptr[510] != FX_SIG_BYTE_1) || (partition_sector_ptr[511] != FX_SIG_BYTE_2)) {
+
+            /* Invalid, return an error.  */
+            return (FX_NOT_FOUND);
+        }
+
+        /* Determine if this is the desired partition.  */
+        if (i == partition) {
+
+            /* Get partition type.  */
+            partition_type = partition_sector_ptr[FX_PARTITION_TABLE_OFFSET + FX_PARTITION_TYPE_OFFSET];
+            if (partition_type != FX_PARTITION_TYPE_FREE) {
+
+                /* Return the partition starting sector, if non-NULL.  */
+                if (partition_start != FX_NULL) {
+                    *partition_start = _fx_utility_32_unsigned_read(
+                                           &partition_sector_ptr[FX_PARTITION_TABLE_OFFSET + FX_PARTITION_LBA_OFFSET]) +
+                                       base_sector;
+                }
+
+                /* Return the partition size, if non-NULL.  */
+                if (partition_size != FX_NULL) {
+                    *partition_size = _fx_utility_32_unsigned_read(
+                        &partition_sector_ptr[FX_PARTITION_TABLE_OFFSET + FX_PARTITION_SECTORS_OFFSET]);
+                }
+
+                /* Return success!  */
+                return (FX_SUCCESS);
+            } else {
+                /* Not partition here.  */
+                return (FX_NOT_FOUND);
+            }
+        } else {
+
+            /* Get partition type.  */
+            partition_type =
+                partition_sector_ptr[FX_PARTITION_TABLE_OFFSET + FX_PARTITION_ENTRY_SIZE + FX_PARTITION_TYPE_OFFSET];
+            if (partition_type == FX_PARTITION_TYPE_EXTENDED || partition_type == FX_PARTITION_TYPE_EXTENDED_LBA) {
+
+                /* Update sector number for next partition table.  */
+                base_sector = _fx_utility_32_unsigned_read(
+                                  &partition_sector_ptr[FX_PARTITION_TABLE_OFFSET + FX_PARTITION_ENTRY_SIZE +
+                                                        FX_PARTITION_LBA_OFFSET]) +
+                              base_sector_extended;
+            } else {
+                /* No valid partition, get out of the loop.  */
+                break;
+            }
+        }
+    }
 
     /* Return error.  */
     return (FX_NOT_FOUND);
-  }
-
-  base_sector = 0;
-
-  /* Loop to find the extended partition table.  */
-  for (i = FX_PARTITION_TABLE_OFFSET;
-       i <= FX_PARTITION_TABLE_OFFSET + 3 * FX_PARTITION_ENTRY_SIZE;
-       i += FX_PARTITION_ENTRY_SIZE) {
-
-    /* Get partition type.  */
-    partition_type = partition_sector_ptr[i + FX_PARTITION_TYPE_OFFSET];
-    if (partition_type == FX_PARTITION_TYPE_EXTENDED ||
-        partition_type == FX_PARTITION_TYPE_EXTENDED_LBA) {
-      base_sector = _fx_utility_32_unsigned_read(
-          &partition_sector_ptr[i + FX_PARTITION_LBA_OFFSET]);
-      break;
-    }
-  }
-
-  if (base_sector == 0) {
-
-    /* No extended partition.  */
-    return (FX_NOT_FOUND);
-  }
-
-  base_sector_extended = base_sector;
-
-  for (i = 4; i <= partition; i++) {
-
-    /* Read the partition sector from the device.  Build the read sector
-        command.  */
-    media_ptr->fx_media_driver_request = FX_DRIVER_READ;
-    media_ptr->fx_media_driver_status = FX_IO_ERROR;
-    media_ptr->fx_media_driver_buffer = partition_sector_ptr;
-    media_ptr->fx_media_driver_logical_sector = base_sector;
-    media_ptr->fx_media_driver_sectors = 1;
-    media_ptr->fx_media_driver_sector_type = FX_UNKNOWN_SECTOR;
-    media_ptr->fx_media_hidden_sectors = 0;
-
-    /* Invoke the driver to read the sector.  */
-    (media_ptr->fx_media_driver_entry)(media_ptr);
-
-    /* Determine if the sector was read correctly. */
-    if (media_ptr->fx_media_driver_status != FX_SUCCESS) {
-
-      /* Return error.  */
-      return (FX_IO_ERROR);
-    }
-
-    /* Check signature to make sure the sector is valid.  */
-    if ((partition_sector_ptr[510] != FX_SIG_BYTE_1) ||
-        (partition_sector_ptr[511] != FX_SIG_BYTE_2)) {
-
-      /* Invalid, return an error.  */
-      return (FX_NOT_FOUND);
-    }
-
-    /* Determine if this is the desired partition.  */
-    if (i == partition) {
-
-      /* Get partition type.  */
-      partition_type = partition_sector_ptr[FX_PARTITION_TABLE_OFFSET +
-                                            FX_PARTITION_TYPE_OFFSET];
-      if (partition_type != FX_PARTITION_TYPE_FREE) {
-
-        /* Return the partition starting sector, if non-NULL.  */
-        if (partition_start != FX_NULL) {
-          *partition_start =
-              _fx_utility_32_unsigned_read(
-                  &partition_sector_ptr[FX_PARTITION_TABLE_OFFSET +
-                                        FX_PARTITION_LBA_OFFSET]) +
-              base_sector;
-        }
-
-        /* Return the partition size, if non-NULL.  */
-        if (partition_size != FX_NULL) {
-          *partition_size = _fx_utility_32_unsigned_read(
-              &partition_sector_ptr[FX_PARTITION_TABLE_OFFSET +
-                                    FX_PARTITION_SECTORS_OFFSET]);
-        }
-
-        /* Return success!  */
-        return (FX_SUCCESS);
-      } else {
-        /* Not partition here.  */
-        return (FX_NOT_FOUND);
-      }
-    } else {
-
-      /* Get partition type.  */
-      partition_type = partition_sector_ptr[FX_PARTITION_TABLE_OFFSET +
-                                            FX_PARTITION_ENTRY_SIZE +
-                                            FX_PARTITION_TYPE_OFFSET];
-      if (partition_type == FX_PARTITION_TYPE_EXTENDED ||
-          partition_type == FX_PARTITION_TYPE_EXTENDED_LBA) {
-
-        /* Update sector number for next partition table.  */
-        base_sector = _fx_utility_32_unsigned_read(
-                          &partition_sector_ptr[FX_PARTITION_TABLE_OFFSET +
-                                                FX_PARTITION_ENTRY_SIZE +
-                                                FX_PARTITION_LBA_OFFSET]) +
-                      base_sector_extended;
-      } else {
-        /* No valid partition, get out of the loop.  */
-        break;
-      }
-    }
-  }
-
-  /* Return error.  */
-  return (FX_NOT_FOUND);
 }

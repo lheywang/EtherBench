@@ -49,11 +49,11 @@ extern "C" {
  * @brief  PKA Init structures definition
  */
 typedef struct {
-  uint32_t Mode; /*!< Specifies the PKA operation mode.
-                      This parameter can be a value of @ref PKA_LL_EC_MODE.
+    uint32_t Mode; /*!< Specifies the PKA operation mode.
+                        This parameter can be a value of @ref PKA_LL_EC_MODE.
 
-                      This feature can be modified afterwards using unitary
-                    function @ref LL_PKA_SetMode(). */
+                        This feature can be modified afterwards using unitary
+                      function @ref LL_PKA_SetMode(). */
 } LL_PKA_InitTypeDef;
 
 /**
@@ -101,47 +101,29 @@ typedef struct {
  * @brief    List of operation mode.
  * @{
  */
-#define LL_PKA_MODE_MODULAR_EXP                                                \
-  ((uint32_t)0x00000000U) /*!< modular exponentiation */
-#define LL_PKA_MODE_MONTGOMERY_PARAM                                           \
-  ((uint32_t)0x00000001U) /*!< Compute Montgomery parameter only */
-#define LL_PKA_MODE_MODULAR_EXP_FAST                                           \
-  ((uint32_t)0x00000002U) /*!< modular exponentiation fast mode */
-#define LL_PKA_MODE_MODULAR_EXP_PROTECT                                        \
-  ((uint32_t)0x00000003U) /*!< modular exponentiation protect mode */
-#define LL_PKA_MODE_ECC_MUL                                                    \
-  ((uint32_t)0x00000020U) /*!< compute ECC kP operation */
-#define LL_PKA_MODE_ECC_COMPLETE_ADD                                           \
-  ((uint32_t)0x00000023U) /*!< ECC complete addition */
-#define LL_PKA_MODE_ECDSA_SIGNATURE                                            \
-  ((uint32_t)0x00000024U) /*!< ECDSA signature */
-#define LL_PKA_MODE_ECDSA_VERIFICATION                                         \
-  ((uint32_t)0x00000026U) /*!< ECDSA verification */
-#define LL_PKA_MODE_POINT_CHECK ((uint32_t)0x00000028U) /*!< Point check */
-#define LL_PKA_MODE_RSA_CRT_EXP                                                \
-  ((uint32_t)0x00000007U) /*!< RSA CRT exponentiation */
-#define LL_PKA_MODE_MODULAR_INV                                                \
-  ((uint32_t)0x00000008U) /*!< Modular inversion */
-#define LL_PKA_MODE_ARITHMETIC_ADD                                             \
-  ((uint32_t)0x00000009U) /*!< Arithmetic addition */
-#define LL_PKA_MODE_ARITHMETIC_SUB                                             \
-  ((uint32_t)0x0000000AU) /*!< Arithmetic subtraction */
-#define LL_PKA_MODE_ARITHMETIC_MUL                                             \
-  ((uint32_t)0x0000000BU) /*!< Arithmetic multiplication */
-#define LL_PKA_MODE_COMPARISON ((uint32_t)0x0000000CU) /*!< Comparison */
-#define LL_PKA_MODE_MODULAR_REDUC                                              \
-  ((uint32_t)0x0000000DU) /*!< Modular reduction */
-#define LL_PKA_MODE_MODULAR_ADD                                                \
-  ((uint32_t)0x0000000EU) /*!< Modular addition                                \
-                           */
-#define LL_PKA_MODE_MODULAR_SUB                                                \
-  ((uint32_t)0x0000000FU) /*!< Modular subtraction */
-#define LL_PKA_MODE_MONTGOMERY_MUL                                             \
-  ((uint32_t)0x00000010U) /*!< Montgomery multiplication */
-#define LL_PKA_MODE_DOUBLE_BASE_LADDER                                         \
-  ((uint32_t)0x00000027U) /*!< Double base ladder */
-#define LL_PKA_MODE_ECC_PROJECTIVE_AFF                                         \
-  ((uint32_t)0x0000002FU) /*!< ECC projective to affine */
+#define LL_PKA_MODE_MODULAR_EXP ((uint32_t)0x00000000U)         /*!< modular exponentiation */
+#define LL_PKA_MODE_MONTGOMERY_PARAM ((uint32_t)0x00000001U)    /*!< Compute Montgomery parameter only */
+#define LL_PKA_MODE_MODULAR_EXP_FAST ((uint32_t)0x00000002U)    /*!< modular exponentiation fast mode */
+#define LL_PKA_MODE_MODULAR_EXP_PROTECT ((uint32_t)0x00000003U) /*!< modular exponentiation protect mode */
+#define LL_PKA_MODE_ECC_MUL ((uint32_t)0x00000020U)             /*!< compute ECC kP operation */
+#define LL_PKA_MODE_ECC_COMPLETE_ADD ((uint32_t)0x00000023U)    /*!< ECC complete addition */
+#define LL_PKA_MODE_ECDSA_SIGNATURE ((uint32_t)0x00000024U)     /*!< ECDSA signature */
+#define LL_PKA_MODE_ECDSA_VERIFICATION ((uint32_t)0x00000026U)  /*!< ECDSA verification */
+#define LL_PKA_MODE_POINT_CHECK ((uint32_t)0x00000028U)         /*!< Point check */
+#define LL_PKA_MODE_RSA_CRT_EXP ((uint32_t)0x00000007U)         /*!< RSA CRT exponentiation */
+#define LL_PKA_MODE_MODULAR_INV ((uint32_t)0x00000008U)         /*!< Modular inversion */
+#define LL_PKA_MODE_ARITHMETIC_ADD ((uint32_t)0x00000009U)      /*!< Arithmetic addition */
+#define LL_PKA_MODE_ARITHMETIC_SUB ((uint32_t)0x0000000AU)      /*!< Arithmetic subtraction */
+#define LL_PKA_MODE_ARITHMETIC_MUL ((uint32_t)0x0000000BU)      /*!< Arithmetic multiplication */
+#define LL_PKA_MODE_COMPARISON ((uint32_t)0x0000000CU)          /*!< Comparison */
+#define LL_PKA_MODE_MODULAR_REDUC ((uint32_t)0x0000000DU)       /*!< Modular reduction */
+#define LL_PKA_MODE_MODULAR_ADD                                                                                        \
+    ((uint32_t)0x0000000EU)                                    /*!< Modular addition                                   \
+                                                                */
+#define LL_PKA_MODE_MODULAR_SUB ((uint32_t)0x0000000FU)        /*!< Modular subtraction */
+#define LL_PKA_MODE_MONTGOMERY_MUL ((uint32_t)0x00000010U)     /*!< Montgomery multiplication */
+#define LL_PKA_MODE_DOUBLE_BASE_LADDER ((uint32_t)0x00000027U) /*!< Double base ladder */
+#define LL_PKA_MODE_ECC_PROJECTIVE_AFF ((uint32_t)0x0000002FU) /*!< ECC projective to affine */
 
 /**
  * @}
@@ -167,8 +149,7 @@ typedef struct {
  * @param  __VALUE__ Value to be written in the register
  * @retval None
  */
-#define LL_PKA_WriteReg(__INSTANCE__, __REG__, __VALUE__)                      \
-  WRITE_REG(__INSTANCE__->__REG__, (__VALUE__))
+#define LL_PKA_WriteReg(__INSTANCE__, __REG__, __VALUE__) WRITE_REG(__INSTANCE__->__REG__, (__VALUE__))
 
 /**
  * @brief  Read a value in PKA register
@@ -223,7 +204,7 @@ typedef struct {
  *         @arg @ref LL_PKA_MODE_MODULAR_EXP_FAST
  */
 __STATIC_INLINE void LL_PKA_Config(PKA_TypeDef *PKAx, uint32_t Mode) {
-  MODIFY_REG(PKAx->CR, (PKA_CR_MODE), (Mode << PKA_CR_MODE_Pos));
+    MODIFY_REG(PKAx->CR, (PKA_CR_MODE), (Mode << PKA_CR_MODE_Pos));
 }
 
 /**
@@ -232,9 +213,7 @@ __STATIC_INLINE void LL_PKA_Config(PKA_TypeDef *PKAx, uint32_t Mode) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_Enable(PKA_TypeDef *PKAx) {
-  SET_BIT(PKAx->CR, PKA_CR_EN);
-}
+__STATIC_INLINE void LL_PKA_Enable(PKA_TypeDef *PKAx) { SET_BIT(PKAx->CR, PKA_CR_EN); }
 
 /**
  * @brief  Disable PKA peripheral.
@@ -242,9 +221,7 @@ __STATIC_INLINE void LL_PKA_Enable(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_Disable(PKA_TypeDef *PKAx) {
-  CLEAR_BIT(PKAx->CR, PKA_CR_EN);
-}
+__STATIC_INLINE void LL_PKA_Disable(PKA_TypeDef *PKAx) { CLEAR_BIT(PKAx->CR, PKA_CR_EN); }
 
 /**
  * @brief  Check if the PKA peripheral is enabled or disabled.
@@ -253,7 +230,7 @@ __STATIC_INLINE void LL_PKA_Disable(PKA_TypeDef *PKAx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_PKA_IsEnabled(const PKA_TypeDef *PKAx) {
-  return ((READ_BIT(PKAx->CR, PKA_CR_EN) == (PKA_CR_EN)) ? 1UL : 0UL);
+    return ((READ_BIT(PKAx->CR, PKA_CR_EN) == (PKA_CR_EN)) ? 1UL : 0UL);
 }
 
 /**
@@ -285,7 +262,7 @@ __STATIC_INLINE uint32_t LL_PKA_IsEnabled(const PKA_TypeDef *PKAx) {
  * @retval None
  */
 __STATIC_INLINE void LL_PKA_SetMode(PKA_TypeDef *PKAx, uint32_t Mode) {
-  MODIFY_REG(PKAx->CR, PKA_CR_MODE, Mode << PKA_CR_MODE_Pos);
+    MODIFY_REG(PKAx->CR, PKA_CR_MODE, Mode << PKA_CR_MODE_Pos);
 }
 
 /**
@@ -316,7 +293,7 @@ __STATIC_INLINE void LL_PKA_SetMode(PKA_TypeDef *PKAx, uint32_t Mode) {
  *         @arg @ref LL_PKA_MODE_MODULAR_EXP_FAST
  */
 __STATIC_INLINE uint32_t LL_PKA_GetMode(const PKA_TypeDef *PKAx) {
-  return (uint32_t)(READ_BIT(PKAx->CR, PKA_CR_MODE) >> PKA_CR_MODE_Pos);
+    return (uint32_t)(READ_BIT(PKAx->CR, PKA_CR_MODE) >> PKA_CR_MODE_Pos);
 }
 
 /**
@@ -325,9 +302,7 @@ __STATIC_INLINE uint32_t LL_PKA_GetMode(const PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_Start(PKA_TypeDef *PKAx) {
-  SET_BIT(PKAx->CR, PKA_CR_START);
-}
+__STATIC_INLINE void LL_PKA_Start(PKA_TypeDef *PKAx) { SET_BIT(PKAx->CR, PKA_CR_START); }
 
 /**
  * @}
@@ -343,9 +318,7 @@ __STATIC_INLINE void LL_PKA_Start(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_EnableIT_ADDRERR(PKA_TypeDef *PKAx) {
-  SET_BIT(PKAx->CR, PKA_CR_ADDRERRIE);
-}
+__STATIC_INLINE void LL_PKA_EnableIT_ADDRERR(PKA_TypeDef *PKAx) { SET_BIT(PKAx->CR, PKA_CR_ADDRERRIE); }
 
 /**
  * @brief  Enable RAM error interrupt.
@@ -353,9 +326,7 @@ __STATIC_INLINE void LL_PKA_EnableIT_ADDRERR(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_EnableIT_RAMERR(PKA_TypeDef *PKAx) {
-  SET_BIT(PKAx->CR, PKA_CR_RAMERRIE);
-}
+__STATIC_INLINE void LL_PKA_EnableIT_RAMERR(PKA_TypeDef *PKAx) { SET_BIT(PKAx->CR, PKA_CR_RAMERRIE); }
 
 /**
  * @brief  Enable OPERATION error interrupt.
@@ -363,9 +334,7 @@ __STATIC_INLINE void LL_PKA_EnableIT_RAMERR(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_EnableIT_OPERR(PKA_TypeDef *PKAx) {
-  SET_BIT(PKAx->CR, PKA_CR_OPERRIE);
-}
+__STATIC_INLINE void LL_PKA_EnableIT_OPERR(PKA_TypeDef *PKAx) { SET_BIT(PKAx->CR, PKA_CR_OPERRIE); }
 
 /**
  * @brief  Enable end of operation interrupt.
@@ -373,9 +342,7 @@ __STATIC_INLINE void LL_PKA_EnableIT_OPERR(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_EnableIT_PROCEND(PKA_TypeDef *PKAx) {
-  SET_BIT(PKAx->CR, PKA_CR_PROCENDIE);
-}
+__STATIC_INLINE void LL_PKA_EnableIT_PROCEND(PKA_TypeDef *PKAx) { SET_BIT(PKAx->CR, PKA_CR_PROCENDIE); }
 
 /**
  * @brief  Disable address error interrupt.
@@ -383,9 +350,7 @@ __STATIC_INLINE void LL_PKA_EnableIT_PROCEND(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_DisableIT_ADDERR(PKA_TypeDef *PKAx) {
-  CLEAR_BIT(PKAx->CR, PKA_CR_ADDRERRIE);
-}
+__STATIC_INLINE void LL_PKA_DisableIT_ADDERR(PKA_TypeDef *PKAx) { CLEAR_BIT(PKAx->CR, PKA_CR_ADDRERRIE); }
 
 /**
  * @brief  Disable RAM error interrupt.
@@ -393,9 +358,7 @@ __STATIC_INLINE void LL_PKA_DisableIT_ADDERR(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_DisableIT_RAMERR(PKA_TypeDef *PKAx) {
-  CLEAR_BIT(PKAx->CR, PKA_CR_RAMERRIE);
-}
+__STATIC_INLINE void LL_PKA_DisableIT_RAMERR(PKA_TypeDef *PKAx) { CLEAR_BIT(PKAx->CR, PKA_CR_RAMERRIE); }
 
 /**
  * @brief  Disable End of operation interrupt.
@@ -403,9 +366,7 @@ __STATIC_INLINE void LL_PKA_DisableIT_RAMERR(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_DisableIT_PROCEND(PKA_TypeDef *PKAx) {
-  CLEAR_BIT(PKAx->CR, PKA_CR_PROCENDIE);
-}
+__STATIC_INLINE void LL_PKA_DisableIT_PROCEND(PKA_TypeDef *PKAx) { CLEAR_BIT(PKAx->CR, PKA_CR_PROCENDIE); }
 
 /**
  * @brief  Disable OPERATION error interrupt.
@@ -413,9 +374,7 @@ __STATIC_INLINE void LL_PKA_DisableIT_PROCEND(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_DisableIT_OPERR(PKA_TypeDef *PKAx) {
-  CLEAR_BIT(PKAx->CR, PKA_CR_OPERRIE);
-}
+__STATIC_INLINE void LL_PKA_DisableIT_OPERR(PKA_TypeDef *PKAx) { CLEAR_BIT(PKAx->CR, PKA_CR_OPERRIE); }
 
 /**
  * @brief  Check if address error interrupt is enabled.
@@ -424,8 +383,7 @@ __STATIC_INLINE void LL_PKA_DisableIT_OPERR(PKA_TypeDef *PKAx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_PKA_IsEnabledIT_ADDRERR(const PKA_TypeDef *PKAx) {
-  return ((READ_BIT(PKAx->CR, PKA_CR_ADDRERRIE) == (PKA_CR_ADDRERRIE)) ? 1UL
-                                                                       : 0UL);
+    return ((READ_BIT(PKAx->CR, PKA_CR_ADDRERRIE) == (PKA_CR_ADDRERRIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -435,8 +393,7 @@ __STATIC_INLINE uint32_t LL_PKA_IsEnabledIT_ADDRERR(const PKA_TypeDef *PKAx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_PKA_IsEnabledIT_RAMERR(const PKA_TypeDef *PKAx) {
-  return ((READ_BIT(PKAx->CR, PKA_CR_RAMERRIE) == (PKA_CR_RAMERRIE)) ? 1UL
-                                                                     : 0UL);
+    return ((READ_BIT(PKAx->CR, PKA_CR_RAMERRIE) == (PKA_CR_RAMERRIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -446,7 +403,7 @@ __STATIC_INLINE uint32_t LL_PKA_IsEnabledIT_RAMERR(const PKA_TypeDef *PKAx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_PKA_IsEnabledIT_OPERR(const PKA_TypeDef *PKAx) {
-  return ((READ_BIT(PKAx->CR, PKA_CR_OPERRIE) == (PKA_CR_OPERRIE)) ? 1UL : 0UL);
+    return ((READ_BIT(PKAx->CR, PKA_CR_OPERRIE) == (PKA_CR_OPERRIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -456,8 +413,7 @@ __STATIC_INLINE uint32_t LL_PKA_IsEnabledIT_OPERR(const PKA_TypeDef *PKAx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_PKA_IsEnabledIT_PROCEND(const PKA_TypeDef *PKAx) {
-  return ((READ_BIT(PKAx->CR, PKA_CR_PROCENDIE) == (PKA_CR_PROCENDIE)) ? 1UL
-                                                                       : 0UL);
+    return ((READ_BIT(PKAx->CR, PKA_CR_PROCENDIE) == (PKA_CR_PROCENDIE)) ? 1UL : 0UL);
 }
 
 /**
@@ -475,8 +431,7 @@ __STATIC_INLINE uint32_t LL_PKA_IsEnabledIT_PROCEND(const PKA_TypeDef *PKAx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_PKA_IsActiveFlag_ADDRERR(const PKA_TypeDef *PKAx) {
-  return ((READ_BIT(PKAx->SR, PKA_SR_ADDRERRF) == (PKA_SR_ADDRERRF)) ? 1UL
-                                                                     : 0UL);
+    return ((READ_BIT(PKAx->SR, PKA_SR_ADDRERRF) == (PKA_SR_ADDRERRF)) ? 1UL : 0UL);
 }
 
 /**
@@ -486,7 +441,7 @@ __STATIC_INLINE uint32_t LL_PKA_IsActiveFlag_ADDRERR(const PKA_TypeDef *PKAx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_PKA_IsActiveFlag_RAMERR(const PKA_TypeDef *PKAx) {
-  return ((READ_BIT(PKAx->SR, PKA_SR_RAMERRF) == (PKA_SR_RAMERRF)) ? 1UL : 0UL);
+    return ((READ_BIT(PKAx->SR, PKA_SR_RAMERRF) == (PKA_SR_RAMERRF)) ? 1UL : 0UL);
 }
 
 /**
@@ -496,7 +451,7 @@ __STATIC_INLINE uint32_t LL_PKA_IsActiveFlag_RAMERR(const PKA_TypeDef *PKAx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_PKA_IsActiveFlag_OPERR(const PKA_TypeDef *PKAx) {
-  return ((READ_BIT(PKAx->SR, PKA_SR_OPERRF) == (PKA_SR_OPERRF)) ? 1UL : 0UL);
+    return ((READ_BIT(PKAx->SR, PKA_SR_OPERRF) == (PKA_SR_OPERRF)) ? 1UL : 0UL);
 }
 
 /**
@@ -506,8 +461,7 @@ __STATIC_INLINE uint32_t LL_PKA_IsActiveFlag_OPERR(const PKA_TypeDef *PKAx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_PKA_IsActiveFlag_PROCEND(const PKA_TypeDef *PKAx) {
-  return ((READ_BIT(PKAx->SR, PKA_SR_PROCENDF) == (PKA_SR_PROCENDF)) ? 1UL
-                                                                     : 0UL);
+    return ((READ_BIT(PKAx->SR, PKA_SR_PROCENDF) == (PKA_SR_PROCENDF)) ? 1UL : 0UL);
 }
 
 /**
@@ -517,7 +471,7 @@ __STATIC_INLINE uint32_t LL_PKA_IsActiveFlag_PROCEND(const PKA_TypeDef *PKAx) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_PKA_IsActiveFlag_BUSY(const PKA_TypeDef *PKAx) {
-  return ((READ_BIT(PKAx->SR, PKA_SR_BUSY) == (PKA_SR_BUSY)) ? 1UL : 0UL);
+    return ((READ_BIT(PKAx->SR, PKA_SR_BUSY) == (PKA_SR_BUSY)) ? 1UL : 0UL);
 }
 
 /**
@@ -526,9 +480,7 @@ __STATIC_INLINE uint32_t LL_PKA_IsActiveFlag_BUSY(const PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_ClearFlag_ADDERR(PKA_TypeDef *PKAx) {
-  SET_BIT(PKAx->CLRFR, PKA_CLRFR_ADDRERRFC);
-}
+__STATIC_INLINE void LL_PKA_ClearFlag_ADDERR(PKA_TypeDef *PKAx) { SET_BIT(PKAx->CLRFR, PKA_CLRFR_ADDRERRFC); }
 
 /**
  * @brief  Clear PKA RAM error flag.
@@ -536,9 +488,7 @@ __STATIC_INLINE void LL_PKA_ClearFlag_ADDERR(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_ClearFlag_RAMERR(PKA_TypeDef *PKAx) {
-  SET_BIT(PKAx->CLRFR, PKA_CLRFR_RAMERRFC);
-}
+__STATIC_INLINE void LL_PKA_ClearFlag_RAMERR(PKA_TypeDef *PKAx) { SET_BIT(PKAx->CLRFR, PKA_CLRFR_RAMERRFC); }
 
 /**
  * @brief  Clear PKA OPERATION error flag.
@@ -546,9 +496,7 @@ __STATIC_INLINE void LL_PKA_ClearFlag_RAMERR(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_ClearFlag_OPERR(PKA_TypeDef *PKAx) {
-  SET_BIT(PKAx->CLRFR, PKA_CLRFR_OPERRFC);
-}
+__STATIC_INLINE void LL_PKA_ClearFlag_OPERR(PKA_TypeDef *PKAx) { SET_BIT(PKAx->CLRFR, PKA_CLRFR_OPERRFC); }
 
 /**
  * @brief  Clear PKA end of operation flag.
@@ -556,9 +504,7 @@ __STATIC_INLINE void LL_PKA_ClearFlag_OPERR(PKA_TypeDef *PKAx) {
  * @param  PKAx PKA Instance.
  * @retval None
  */
-__STATIC_INLINE void LL_PKA_ClearFlag_PROCEND(PKA_TypeDef *PKAx) {
-  SET_BIT(PKAx->CLRFR, PKA_CLRFR_PROCENDFC);
-}
+__STATIC_INLINE void LL_PKA_ClearFlag_PROCEND(PKA_TypeDef *PKAx) { SET_BIT(PKAx->CLRFR, PKA_CLRFR_PROCENDFC); }
 
 /**
  * @}

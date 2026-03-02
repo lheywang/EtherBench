@@ -70,24 +70,24 @@
 /**************************************************************************/
 UINT _txe_timer_activate(TX_TIMER *timer_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid timer pointer.  */
-  if (timer_ptr == TX_NULL) {
-    /* Timer pointer is invalid, return appropriate error code.  */
-    status = TX_TIMER_ERROR;
-  }
+    /* Check for an invalid timer pointer.  */
+    if (timer_ptr == TX_NULL) {
+        /* Timer pointer is invalid, return appropriate error code.  */
+        status = TX_TIMER_ERROR;
+    }
 
-  /* Now check for invalid timer ID.  */
-  else if (timer_ptr->tx_timer_id != TX_TIMER_ID) {
-    /* Timer pointer is invalid, return appropriate error code.  */
-    status = TX_TIMER_ERROR;
-  } else {
+    /* Now check for invalid timer ID.  */
+    else if (timer_ptr->tx_timer_id != TX_TIMER_ID) {
+        /* Timer pointer is invalid, return appropriate error code.  */
+        status = TX_TIMER_ERROR;
+    } else {
 
-    /* Call actual application timer activate function.  */
-    status = _tx_timer_activate(timer_ptr);
-  }
+        /* Call actual application timer activate function.  */
+        status = _tx_timer_activate(timer_ptr);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

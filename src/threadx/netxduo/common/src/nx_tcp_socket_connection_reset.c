@@ -87,76 +87,71 @@
 /**************************************************************************/
 VOID _nx_tcp_socket_connection_reset(NX_TCP_SOCKET *socket_ptr) {
 
-  UINT saved_state;
+    UINT saved_state;
 
-  /* Save the current state of the socket.  */
-  saved_state = socket_ptr->nx_tcp_socket_state;
+    /* Save the current state of the socket.  */
+    saved_state = socket_ptr->nx_tcp_socket_state;
 
-  /* Cleanup the transmission control block.  */
-  _nx_tcp_socket_block_cleanup(socket_ptr);
+    /* Cleanup the transmission control block.  */
+    _nx_tcp_socket_block_cleanup(socket_ptr);
 
-  /* Check for queued sent packets and if found they need
-     to be released.  */
-  if (socket_ptr->nx_tcp_socket_transmit_sent_count) {
+    /* Check for queued sent packets and if found they need
+       to be released.  */
+    if (socket_ptr->nx_tcp_socket_transmit_sent_count) {
 
-    /* Release all transmit packets.  */
-    _nx_tcp_socket_transmit_queue_flush(socket_ptr);
-  }
-
-  /* Clear all receive thread suspensions on this socket.  */
-  while (socket_ptr->nx_tcp_socket_receive_suspension_list) {
-
-    /* Call the receive thread suspension cleanup routine.  */
-    _nx_tcp_receive_cleanup(
-        socket_ptr->nx_tcp_socket_receive_suspension_list NX_CLEANUP_ARGUMENT);
-  }
-
-  /* Clear all transmit thread suspensions on this socket.  */
-  while (socket_ptr->nx_tcp_socket_transmit_suspension_list) {
-
-    /* Call the receive thread suspension cleanup routine.  */
-    _nx_tcp_transmit_cleanup(
-        socket_ptr->nx_tcp_socket_transmit_suspension_list NX_CLEANUP_ARGUMENT);
-  }
-
-  /* Check for suspended connect thread.  */
-  if (socket_ptr->nx_tcp_socket_connect_suspended_thread) {
-
-    /* Call the connect thread suspension cleanup routine.  */
-    _nx_tcp_connect_cleanup(
-        socket_ptr->nx_tcp_socket_connect_suspended_thread NX_CLEANUP_ARGUMENT);
-  }
-
-  /* Check for suspended disconnect thread.  */
-  if (socket_ptr->nx_tcp_socket_disconnect_suspended_thread) {
-
-    /* Resume the thread suspended on the disconnect.  */
-    _nx_tcp_disconnect_cleanup(
-        socket_ptr
-            ->nx_tcp_socket_disconnect_suspended_thread NX_CLEANUP_ARGUMENT);
-  }
-
-  /* Determine if the socket was in an established state.  */
-  if (saved_state == NX_TCP_ESTABLISHED) {
-
-    /* If given, call the application's disconnect callback function
-       for disconnect.  */
-    if (socket_ptr->nx_tcp_disconnect_callback) {
-
-      /* Call the application's disconnect handling function.  It is
-         responsible for calling the socket disconnect function.  */
-      (socket_ptr->nx_tcp_disconnect_callback)(socket_ptr);
+        /* Release all transmit packets.  */
+        _nx_tcp_socket_transmit_queue_flush(socket_ptr);
     }
-  }
+
+    /* Clear all receive thread suspensions on this socket.  */
+    while (socket_ptr->nx_tcp_socket_receive_suspension_list) {
+
+        /* Call the receive thread suspension cleanup routine.  */
+        _nx_tcp_receive_cleanup(socket_ptr->nx_tcp_socket_receive_suspension_list NX_CLEANUP_ARGUMENT);
+    }
+
+    /* Clear all transmit thread suspensions on this socket.  */
+    while (socket_ptr->nx_tcp_socket_transmit_suspension_list) {
+
+        /* Call the receive thread suspension cleanup routine.  */
+        _nx_tcp_transmit_cleanup(socket_ptr->nx_tcp_socket_transmit_suspension_list NX_CLEANUP_ARGUMENT);
+    }
+
+    /* Check for suspended connect thread.  */
+    if (socket_ptr->nx_tcp_socket_connect_suspended_thread) {
+
+        /* Call the connect thread suspension cleanup routine.  */
+        _nx_tcp_connect_cleanup(socket_ptr->nx_tcp_socket_connect_suspended_thread NX_CLEANUP_ARGUMENT);
+    }
+
+    /* Check for suspended disconnect thread.  */
+    if (socket_ptr->nx_tcp_socket_disconnect_suspended_thread) {
+
+        /* Resume the thread suspended on the disconnect.  */
+        _nx_tcp_disconnect_cleanup(socket_ptr->nx_tcp_socket_disconnect_suspended_thread NX_CLEANUP_ARGUMENT);
+    }
+
+    /* Determine if the socket was in an established state.  */
+    if (saved_state == NX_TCP_ESTABLISHED) {
+
+        /* If given, call the application's disconnect callback function
+           for disconnect.  */
+        if (socket_ptr->nx_tcp_disconnect_callback) {
+
+            /* Call the application's disconnect handling function.  It is
+               responsible for calling the socket disconnect function.  */
+            (socket_ptr->nx_tcp_disconnect_callback)(socket_ptr);
+        }
+    }
 
 #ifndef NX_DISABLE_EXTENDED_NOTIFY_SUPPORT
 
-  /* Is a disconnect complete callback registered with the TCP socket? */
-  if (socket_ptr->nx_tcp_disconnect_complete_notify) {
+    /* Is a disconnect complete callback registered with the TCP socket? */
+    if (socket_ptr->nx_tcp_disconnect_complete_notify) {
 
-    /* Notify the application through the socket disconnect_complete callback.
-     */
-    (socket_ptr->nx_tcp_disconnect_complete_notify)(socket_ptr);
-  }
+        /* Notify the application through the socket disconnect_complete callback.
+         */
+        (socket_ptr->nx_tcp_disconnect_complete_notify)(socket_ptr);
+    }
 #endif
 }

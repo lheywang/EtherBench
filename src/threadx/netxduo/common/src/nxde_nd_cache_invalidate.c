@@ -78,21 +78,21 @@ NX_CALLER_CHECKING_EXTERNS
 UINT _nxde_nd_cache_invalidate(NX_IP *ip_ptr) {
 #ifdef FEATURE_NX_IPV6
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call the actual service and return the completion status. */
-  return (_nxd_nd_cache_invalidate(ip_ptr));
+    /* Call the actual service and return the completion status. */
+    return (_nxd_nd_cache_invalidate(ip_ptr));
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_ptr);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

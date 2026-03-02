@@ -73,34 +73,33 @@
 /**************************************************************************/
 VOID _nx_tcp_socket_receive_queue_flush(NX_TCP_SOCKET *socket_ptr) {
 
-  NX_PACKET *packet_ptr;
-  NX_PACKET *next_packet_ptr;
+    NX_PACKET *packet_ptr;
+    NX_PACKET *next_packet_ptr;
 
-  /* Setup packet pointer.  */
-  packet_ptr = socket_ptr->nx_tcp_socket_receive_queue_head;
+    /* Setup packet pointer.  */
+    packet_ptr = socket_ptr->nx_tcp_socket_receive_queue_head;
 
-  /* Clear the head and the tail pointers.  */
-  socket_ptr->nx_tcp_socket_receive_queue_head = NX_NULL;
-  socket_ptr->nx_tcp_socket_receive_queue_tail = NX_NULL;
+    /* Clear the head and the tail pointers.  */
+    socket_ptr->nx_tcp_socket_receive_queue_head = NX_NULL;
+    socket_ptr->nx_tcp_socket_receive_queue_tail = NX_NULL;
 
-  /* Loop to clear all the packets out.  */
-  while (socket_ptr->nx_tcp_socket_receive_queue_count) {
+    /* Loop to clear all the packets out.  */
+    while (socket_ptr->nx_tcp_socket_receive_queue_count) {
 
-    /* Pickup the next queued packet.  */
-    next_packet_ptr = packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next;
+        /* Pickup the next queued packet.  */
+        next_packet_ptr = packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next;
 
-    /* Mark it as allocated so it will be released.  */
-    /*lint -e{923} suppress cast of ULONT to pointer.  */
-    packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next =
-        (NX_PACKET *)NX_PACKET_ALLOCATED;
+        /* Mark it as allocated so it will be released.  */
+        /*lint -e{923} suppress cast of ULONT to pointer.  */
+        packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next = (NX_PACKET *)NX_PACKET_ALLOCATED;
 
-    /* Release the packet.  */
-    _nx_packet_release(packet_ptr);
+        /* Release the packet.  */
+        _nx_packet_release(packet_ptr);
 
-    /* Move to the next packet.  */
-    packet_ptr = next_packet_ptr;
+        /* Move to the next packet.  */
+        packet_ptr = next_packet_ptr;
 
-    /* Decrease the queued packet count.  */
-    socket_ptr->nx_tcp_socket_receive_queue_count--;
-  }
+        /* Decrease the queued packet count.  */
+        socket_ptr->nx_tcp_socket_receive_queue_count--;
+    }
 }

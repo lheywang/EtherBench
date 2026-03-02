@@ -71,60 +71,57 @@
 /**************************************************************************/
 INT _nxd_ipv6_search_onlink(NX_IP *ip_ptr, ULONG *dest_addr) {
 
-  UINT addr_index;
-  NX_IPV6_PREFIX_ENTRY *prefix_entry;
-  NXD_IPV6_ADDRESS *ipv6_address;
+    UINT addr_index;
+    NX_IPV6_PREFIX_ENTRY *prefix_entry;
+    NXD_IPV6_ADDRESS *ipv6_address;
 
-  /* First special case is the link local address. All these
-     addresses are onlink.  */
-  if (IPv6_Address_Type(dest_addr) & IPV6_ADDRESS_LINKLOCAL) {
-    return (1);
-  }
-
-  /* Set a local pointer for convenience. */
-  prefix_entry = ip_ptr->nx_ipv6_prefix_list_ptr;
-
-  /* Loop through the prefix table. Prefixes are the IPv6 equivalent of
-     network domains in IPv4.  */
-  while (prefix_entry) {
-
-    /* Check whether or not the destination address is matched. */
-    if (CHECK_IP_ADDRESSES_BY_PREFIX(
-            dest_addr, prefix_entry->nx_ipv6_prefix_entry_network_address,
-            prefix_entry->nx_ipv6_prefix_entry_prefix_length)) {
-      return (1);
+    /* First special case is the link local address. All these
+       addresses are onlink.  */
+    if (IPv6_Address_Type(dest_addr) & IPV6_ADDRESS_LINKLOCAL) {
+        return (1);
     }
 
-    /* No match. Try the next prefix. */
-    prefix_entry = prefix_entry->nx_ipv6_prefix_entry_next;
-  }
+    /* Set a local pointer for convenience. */
+    prefix_entry = ip_ptr->nx_ipv6_prefix_list_ptr;
 
-  /* If no matches found in the prefix list, search the manually configured IPv6
-   * interface addresses. */
-  for (addr_index = 0; addr_index < NX_MAX_IPV6_ADDRESSES; addr_index++) {
+    /* Loop through the prefix table. Prefixes are the IPv6 equivalent of
+       network domains in IPv4.  */
+    while (prefix_entry) {
 
-    ipv6_address = &ip_ptr->nx_ipv6_address[addr_index];
-    /* Skip invalid entries. */
-    if (!(ipv6_address->nxd_ipv6_address_valid)) {
-      continue;
+        /* Check whether or not the destination address is matched. */
+        if (CHECK_IP_ADDRESSES_BY_PREFIX(dest_addr, prefix_entry->nx_ipv6_prefix_entry_network_address,
+                                         prefix_entry->nx_ipv6_prefix_entry_prefix_length)) {
+            return (1);
+        }
+
+        /* No match. Try the next prefix. */
+        prefix_entry = prefix_entry->nx_ipv6_prefix_entry_next;
     }
 
-    /* Skip non-manually configured entires. */
-    if (ipv6_address->nxd_ipv6_address_ConfigurationMethod !=
-        NX_IPV6_ADDRESS_MANUAL_CONFIG) {
-      continue;
+    /* If no matches found in the prefix list, search the manually configured IPv6
+     * interface addresses. */
+    for (addr_index = 0; addr_index < NX_MAX_IPV6_ADDRESSES; addr_index++) {
+
+        ipv6_address = &ip_ptr->nx_ipv6_address[addr_index];
+        /* Skip invalid entries. */
+        if (!(ipv6_address->nxd_ipv6_address_valid)) {
+            continue;
+        }
+
+        /* Skip non-manually configured entires. */
+        if (ipv6_address->nxd_ipv6_address_ConfigurationMethod != NX_IPV6_ADDRESS_MANUAL_CONFIG) {
+            continue;
+        }
+
+        /* Check whether or not the destination address is matched. */
+        if (CHECK_IP_ADDRESSES_BY_PREFIX(dest_addr, ipv6_address->nxd_ipv6_address,
+                                         ipv6_address->nxd_ipv6_address_prefix_length)) {
+            return (1);
+        }
     }
 
-    /* Check whether or not the destination address is matched. */
-    if (CHECK_IP_ADDRESSES_BY_PREFIX(
-            dest_addr, ipv6_address->nxd_ipv6_address,
-            ipv6_address->nxd_ipv6_address_prefix_length)) {
-      return (1);
-    }
-  }
-
-  /* No matches found. Not an onlink address. */
-  return (0);
+    /* No matches found. Not an onlink address. */
+    return (0);
 }
 
 #endif /* FEATURE_NX_IPV6 */

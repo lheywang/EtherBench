@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_audio.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,45 +72,41 @@
 /*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_audio_read_frame_get(UX_DEVICE_CLASS_AUDIO_STREAM *stream,
-                                           UCHAR **frame_data, ULONG *frame_length)
-{
+UINT _ux_device_class_audio_read_frame_get(UX_DEVICE_CLASS_AUDIO_STREAM *stream, UCHAR **frame_data,
+                                           ULONG *frame_length) {
 
-UX_SLAVE_ENDPOINT           *endpoint;
-UX_SLAVE_DEVICE             *device;
-
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_SLAVE_DEVICE *device;
 
     /* Get the pointer to the device.  */
-    device =  &_ux_system_slave -> ux_system_slave_device;
+    device = &_ux_system_slave->ux_system_slave_device;
 
     /* As long as the device is in the CONFIGURED state.  */
-    if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
-    {
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
 
         /* Cannot proceed with command, the interface is down.  */
-        return(UX_CONFIGURATION_HANDLE_UNKNOWN);
+        return (UX_CONFIGURATION_HANDLE_UNKNOWN);
     }
 
     /* Check if endpoint is available.  */
-    endpoint = stream -> ux_device_class_audio_stream_endpoint;
+    endpoint = stream->ux_device_class_audio_stream_endpoint;
     if (endpoint == UX_NULL)
-        return(UX_ERROR);
+        return (UX_ERROR);
 
     /* Check if endpoint direction is OK.  */
-    if ((endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_OUT)
-        return(UX_ERROR);
+    if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_OUT)
+        return (UX_ERROR);
 
     /* Underflow!!  */
-    if (stream -> ux_device_class_audio_stream_access_pos -> ux_device_class_audio_frame_length == 0)
-    {
-        return(UX_BUFFER_OVERFLOW);
+    if (stream->ux_device_class_audio_stream_access_pos->ux_device_class_audio_frame_length == 0) {
+        return (UX_BUFFER_OVERFLOW);
     }
 
     /* Obtain frame structure pointer.  */
-    *frame_data = stream -> ux_device_class_audio_stream_access_pos -> ux_device_class_audio_frame_data;
-    *frame_length = stream -> ux_device_class_audio_stream_access_pos -> ux_device_class_audio_frame_length;
+    *frame_data = stream->ux_device_class_audio_stream_access_pos->ux_device_class_audio_frame_data;
+    *frame_length = stream->ux_device_class_audio_stream_access_pos->ux_device_class_audio_frame_length;
 
-    return(UX_SUCCESS);
+    return (UX_SUCCESS);
 }
 
 /**************************************************************************/
@@ -157,14 +151,13 @@ UX_SLAVE_DEVICE             *device;
 /*  03-08-2023     Chaoqiong Xiao           Initial Version 6.2.1         */
 /*                                                                        */
 /**************************************************************************/
-UINT _uxe_device_class_audio_read_frame_get(UX_DEVICE_CLASS_AUDIO_STREAM *stream,
-                                           UCHAR **frame_data, ULONG *frame_length)
-{
+UINT _uxe_device_class_audio_read_frame_get(UX_DEVICE_CLASS_AUDIO_STREAM *stream, UCHAR **frame_data,
+                                            ULONG *frame_length) {
 
     /* Sanity checks.  */
     if (stream == UX_NULL || frame_data == UX_NULL || frame_length == UX_NULL)
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Get frame access buffer.  */
-    return(_ux_device_class_audio_read_frame_get(stream, frame_data, frame_length));
+    return (_ux_device_class_audio_read_frame_get(stream, frame_data, frame_length));
 }

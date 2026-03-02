@@ -91,8 +91,7 @@ VOID _nx_rarp_queue_process(NX_IP *ip_ptr);
 /* Define RARP function prototypes.  */
 UINT _nx_rarp_enable(NX_IP *ip_ptr);
 UINT _nx_rarp_disable(NX_IP *ip_ptr);
-UINT _nx_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent,
-                       ULONG *rarp_responses_received,
+UINT _nx_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent, ULONG *rarp_responses_received,
                        ULONG *rarp_invalid_messages);
 
 /* Define error checking shells for RARP services.  These are only referenced by
@@ -100,7 +99,6 @@ UINT _nx_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent,
 
 UINT _nxe_rarp_enable(NX_IP *ip_ptr);
 UINT _nxe_rarp_disable(NX_IP *ip_ptr);
-UINT _nxe_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent,
-                        ULONG *rarp_responses_received,
+UINT _nxe_rarp_info_get(NX_IP *ip_ptr, ULONG *rarp_requests_sent, ULONG *rarp_responses_received,
                         ULONG *rarp_invalid_messages);
 #endif

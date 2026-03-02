@@ -72,37 +72,32 @@
 /**************************************************************************/
 UINT _fx_utility_exFAT_bitmap_cache_update(FX_MEDIA *media_ptr, ULONG cluster) {
 
-  /* Read exFAT bitmap to cache.  */
-  cluster -= FX_FAT_ENTRY_START;
-  media_ptr->fx_media_driver_request = FX_DRIVER_READ;
-  media_ptr->fx_media_driver_buffer =
-      (UCHAR *)media_ptr->fx_media_exfat_bitmap_cache;
-  media_ptr->fx_media_driver_logical_sector =
-      media_ptr->fx_media_exfat_bitmap_start_sector +
-      (cluster >> media_ptr->fx_media_exfat_bitmap_clusters_per_sector_shift);
-  media_ptr->fx_media_driver_sectors =
-      media_ptr->fx_media_exfat_bitmap_cache_size_in_sectors;
-  media_ptr->fx_media_driver_status = FX_IO_ERROR;
+    /* Read exFAT bitmap to cache.  */
+    cluster -= FX_FAT_ENTRY_START;
+    media_ptr->fx_media_driver_request = FX_DRIVER_READ;
+    media_ptr->fx_media_driver_buffer = (UCHAR *)media_ptr->fx_media_exfat_bitmap_cache;
+    media_ptr->fx_media_driver_logical_sector = media_ptr->fx_media_exfat_bitmap_start_sector +
+                                                (cluster >> media_ptr->fx_media_exfat_bitmap_clusters_per_sector_shift);
+    media_ptr->fx_media_driver_sectors = media_ptr->fx_media_exfat_bitmap_cache_size_in_sectors;
+    media_ptr->fx_media_driver_status = FX_IO_ERROR;
 
-  /* Invoke the driver to read the FAT sectors.  */
-  (media_ptr->fx_media_driver_entry)(media_ptr);
+    /* Invoke the driver to read the FAT sectors.  */
+    (media_ptr->fx_media_driver_entry)(media_ptr);
 
-  /* Calculate new cached clusters.  */
-  media_ptr->fx_media_exfat_bitmap_cache_start_cluster =
-      (ULONG)((media_ptr->fx_media_driver_logical_sector -
-               media_ptr->fx_media_exfat_bitmap_start_sector)
-              << media_ptr->fx_media_exfat_bitmap_clusters_per_sector_shift) +
-      FX_FAT_ENTRY_START;
+    /* Calculate new cached clusters.  */
+    media_ptr->fx_media_exfat_bitmap_cache_start_cluster =
+        (ULONG)((media_ptr->fx_media_driver_logical_sector - media_ptr->fx_media_exfat_bitmap_start_sector)
+                << media_ptr->fx_media_exfat_bitmap_clusters_per_sector_shift) +
+        FX_FAT_ENTRY_START;
 
-  media_ptr->fx_media_exfat_bitmap_cache_end_cluster =
-      media_ptr->fx_media_exfat_bitmap_cache_start_cluster +
-      ((media_ptr->fx_media_exfat_bitmap_cache_size_in_sectors
-        << media_ptr->fx_media_exfat_bytes_per_sector_shift)
-       << BITS_PER_BYTE_SHIFT) -
-      1;
+    media_ptr->fx_media_exfat_bitmap_cache_end_cluster =
+        media_ptr->fx_media_exfat_bitmap_cache_start_cluster +
+        ((media_ptr->fx_media_exfat_bitmap_cache_size_in_sectors << media_ptr->fx_media_exfat_bytes_per_sector_shift)
+         << BITS_PER_BYTE_SHIFT) -
+        1;
 
-  /* Return driver status.  */
-  return (media_ptr->fx_media_driver_status);
+    /* Return driver status.  */
+    return (media_ptr->fx_media_driver_status);
 }
 
 #endif /* FX_ENABLE_EXFAT */

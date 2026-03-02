@@ -79,20 +79,18 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxde_udp_packet_info_extract(NX_PACKET *packet_ptr,
-                                   NXD_ADDRESS *ip_address, UINT *protocol,
-                                   UINT *port, UINT *interface_index) {
-  UINT status;
+UINT _nxde_udp_packet_info_extract(NX_PACKET *packet_ptr, NXD_ADDRESS *ip_address, UINT *protocol, UINT *port,
+                                   UINT *interface_index) {
+    UINT status;
 
-  if (packet_ptr == NX_NULL) {
-    return (NX_PTR_ERROR);
-  }
+    if (packet_ptr == NX_NULL) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  status = _nxd_udp_packet_info_extract(packet_ptr, ip_address, protocol, port,
-                                        interface_index);
+    status = _nxd_udp_packet_info_extract(packet_ptr, ip_address, protocol, port, interface_index);
 
-  return (status);
+    return (status);
 }

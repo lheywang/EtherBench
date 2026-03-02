@@ -73,29 +73,26 @@
 /*  03-08-2023     Xiuwen Cai               Initial Version 6.2.1        */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_sectors_write(LX_NAND_FLASH *nand_flash,
-                                  ULONG logical_sector, VOID *buffer,
-                                  ULONG sector_count) {
+UINT _lx_nand_flash_sectors_write(LX_NAND_FLASH *nand_flash, ULONG logical_sector, VOID *buffer, ULONG sector_count) {
 
-  UINT status = LX_SUCCESS;
-  UINT i;
+    UINT status = LX_SUCCESS;
+    UINT i;
 
-  /* Loop to write all the sectors.  */
-  for (i = 0; i < sector_count; i++) {
+    /* Loop to write all the sectors.  */
+    for (i = 0; i < sector_count; i++) {
 
-    /* Write one sector.  */
-    status = _lx_nand_flash_sector_write(
-        nand_flash, logical_sector + i,
-        ((UCHAR *)buffer) + i * nand_flash->lx_nand_flash_bytes_per_page);
+        /* Write one sector.  */
+        status = _lx_nand_flash_sector_write(nand_flash, logical_sector + i,
+                                             ((UCHAR *)buffer) + i * nand_flash->lx_nand_flash_bytes_per_page);
 
-    /* Check return status.  */
-    if (status) {
+        /* Check return status.  */
+        if (status) {
 
-      /* Error, break the loop.  */
-      break;
+            /* Error, break the loop.  */
+            break;
+        }
     }
-  }
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }

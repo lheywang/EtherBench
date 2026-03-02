@@ -74,87 +74,84 @@
 /**************************************************************************/
 VOID _nx_icmp_cleanup(TX_THREAD *thread_ptr NX_CLEANUP_PARAMETER) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  NX_IP *ip_ptr;
+    NX_IP *ip_ptr;
 
-  NX_CLEANUP_EXTENSION
+    NX_CLEANUP_EXTENSION
 
-  /* Setup pointer to IP control block.  */
-  ip_ptr = (NX_IP *)thread_ptr->tx_thread_suspend_control_block;
+    /* Setup pointer to IP control block.  */
+    ip_ptr = (NX_IP *)thread_ptr->tx_thread_suspend_control_block;
 
-  /* Disable interrupts to remove the suspended thread from the packet pool.  */
-  TX_DISABLE
+    /* Disable interrupts to remove the suspended thread from the packet pool.  */
+    TX_DISABLE
 
-  /* Determine if the cleanup is still required.  */
-  if ((thread_ptr->tx_thread_suspend_cleanup) && (ip_ptr) &&
-      (ip_ptr->nx_ip_id == NX_IP_ID)) {
+    /* Determine if the cleanup is still required.  */
+    if ((thread_ptr->tx_thread_suspend_cleanup) && (ip_ptr) && (ip_ptr->nx_ip_id == NX_IP_ID)) {
 
-    /* Yes, we still have thread suspension!  */
+        /* Yes, we still have thread suspension!  */
 
-    /* Clear the suspension cleanup flag.  */
-    thread_ptr->tx_thread_suspend_cleanup = TX_NULL;
+        /* Clear the suspension cleanup flag.  */
+        thread_ptr->tx_thread_suspend_cleanup = TX_NULL;
 
-    /* Remove the suspended thread from the list.  */
+        /* Remove the suspended thread from the list.  */
 
-    /* See if this is the only suspended thread on the list.  */
-    if (thread_ptr == thread_ptr->tx_thread_suspended_next) {
+        /* See if this is the only suspended thread on the list.  */
+        if (thread_ptr == thread_ptr->tx_thread_suspended_next) {
 
-      /* Yes, the only suspended thread.  */
+            /* Yes, the only suspended thread.  */
 
-      /* Update the head pointer.  */
-      ip_ptr->nx_ip_icmp_ping_suspension_list = TX_NULL;
-    } else {
+            /* Update the head pointer.  */
+            ip_ptr->nx_ip_icmp_ping_suspension_list = TX_NULL;
+        } else {
 
-      /* At least one more thread is on the same suspension list.  */
+            /* At least one more thread is on the same suspension list.  */
 
-      /* Update the list head pointer.  */
-      if (ip_ptr->nx_ip_icmp_ping_suspension_list == thread_ptr) {
-        ip_ptr->nx_ip_icmp_ping_suspension_list =
-            thread_ptr->tx_thread_suspended_next;
-      }
+            /* Update the list head pointer.  */
+            if (ip_ptr->nx_ip_icmp_ping_suspension_list == thread_ptr) {
+                ip_ptr->nx_ip_icmp_ping_suspension_list = thread_ptr->tx_thread_suspended_next;
+            }
 
-      /* Update the links of the adjacent threads.  */
-      (thread_ptr->tx_thread_suspended_next)->tx_thread_suspended_previous =
-          thread_ptr->tx_thread_suspended_previous;
-      (thread_ptr->tx_thread_suspended_previous)->tx_thread_suspended_next =
-          thread_ptr->tx_thread_suspended_next;
-    }
+            /* Update the links of the adjacent threads.  */
+            (thread_ptr->tx_thread_suspended_next)->tx_thread_suspended_previous =
+                thread_ptr->tx_thread_suspended_previous;
+            (thread_ptr->tx_thread_suspended_previous)->tx_thread_suspended_next = thread_ptr->tx_thread_suspended_next;
+        }
 
-    /* Decrement the suspension count.  */
-    ip_ptr->nx_ip_icmp_ping_suspended_count--;
+        /* Decrement the suspension count.  */
+        ip_ptr->nx_ip_icmp_ping_suspended_count--;
 
-    /* Now we need to determine if this cleanup is from a terminate, timeout,
-       or from a wait abort.  */
-    if (thread_ptr->tx_thread_state == TX_TCP_IP) {
+        /* Now we need to determine if this cleanup is from a terminate, timeout,
+           or from a wait abort.  */
+        if (thread_ptr->tx_thread_state == TX_TCP_IP) {
 
-      /* Thread still suspended on the IP ping message.  Setup return error
-         status and resume the thread.  */
+            /* Thread still suspended on the IP ping message.  Setup return error
+               status and resume the thread.  */
 
-      /* Setup return status.  */
-      thread_ptr->tx_thread_suspend_status = NX_NO_RESPONSE;
+            /* Setup return status.  */
+            thread_ptr->tx_thread_suspend_status = NX_NO_RESPONSE;
 
 #ifndef NX_DISABLE_ICMP_INFO
-      /* Increment the ICMP timeout count.  */
-      ip_ptr->nx_ip_ping_timeouts++;
+            /* Increment the ICMP timeout count.  */
+            ip_ptr->nx_ip_ping_timeouts++;
 #endif
 
-      /* Temporarily disable preemption.  */
-      _tx_thread_preempt_disable++;
+            /* Temporarily disable preemption.  */
+            _tx_thread_preempt_disable++;
 
-      /* Restore interrupts.  */
-      TX_RESTORE
+            /* Restore interrupts.  */
+            TX_RESTORE
 
-      /* Resume the thread!  Check for preemption even though we are executing
-         from the system timer thread right now which normally executes at the
-         highest priority.  */
-      _tx_thread_system_resume(thread_ptr);
+            /* Resume the thread!  Check for preemption even though we are executing
+               from the system timer thread right now which normally executes at the
+               highest priority.  */
+            _tx_thread_system_resume(thread_ptr);
 
-      /* Finished, just return.  */
-      return;
+            /* Finished, just return.  */
+            return;
+        }
     }
-  }
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 }

@@ -72,33 +72,30 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_unicode_directory_create(FX_MEDIA *media_ptr,
-                                   UCHAR *source_unicode_name,
-                                   ULONG source_unicode_length,
+UINT _fxe_unicode_directory_create(FX_MEDIA *media_ptr, UCHAR *source_unicode_name, ULONG source_unicode_length,
                                    CHAR *short_name) {
 
-  UINT status, i;
+    UINT status, i;
 
-  /* Check for a NULL media or name pointers.  */
-  if ((media_ptr == FX_NULL) || (source_unicode_name == FX_NULL) ||
-      (source_unicode_length == 0) || (short_name == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
-
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
-
-  /* Check unicode zero in source_unicode_name */
-  for (i = 0; i < (source_unicode_length << 1); i += 2) {
-    if ((source_unicode_name[i] == 0) && (source_unicode_name[i + 1] == 0)) {
-      return (FX_INVALID_NAME);
+    /* Check for a NULL media or name pointers.  */
+    if ((media_ptr == FX_NULL) || (source_unicode_name == FX_NULL) || (source_unicode_length == 0) ||
+        (short_name == FX_NULL)) {
+        return (FX_PTR_ERROR);
     }
-  }
 
-  /* Call actual Unicode directory create service.  */
-  status = _fx_unicode_directory_create(media_ptr, source_unicode_name,
-                                        source_unicode_length, short_name);
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Check unicode zero in source_unicode_name */
+    for (i = 0; i < (source_unicode_length << 1); i += 2) {
+        if ((source_unicode_name[i] == 0) && (source_unicode_name[i + 1] == 0)) {
+            return (FX_INVALID_NAME);
+        }
+    }
+
+    /* Call actual Unicode directory create service.  */
+    status = _fx_unicode_directory_create(media_ptr, source_unicode_name, source_unicode_length, short_name);
+
+    /* Return status to the caller.  */
+    return (status);
 }

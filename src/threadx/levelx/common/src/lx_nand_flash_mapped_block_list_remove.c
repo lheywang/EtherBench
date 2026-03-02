@@ -69,49 +69,47 @@
 /*  03-08-2023     Xiuwen Cai               Initial Version 6.2.1        */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_mapped_block_list_remove(LX_NAND_FLASH *nand_flash,
-                                             ULONG block_mapping_index) {
+UINT _lx_nand_flash_mapped_block_list_remove(LX_NAND_FLASH *nand_flash, ULONG block_mapping_index) {
 
-  ULONG search_position;
+    ULONG search_position;
 
-  /* Initialize the search pointer.  */
-  search_position = nand_flash->lx_nand_flash_mapped_block_list_head + 1;
+    /* Initialize the search pointer.  */
+    search_position = nand_flash->lx_nand_flash_mapped_block_list_head + 1;
 
-  /* Loop to search the block in the list.  */
-  while (search_position < nand_flash->lx_nand_flash_block_list_size) {
+    /* Loop to search the block in the list.  */
+    while (search_position < nand_flash->lx_nand_flash_block_list_size) {
 
-    /* Check if there is a match in the list.  */
-    if (nand_flash->lx_nand_flash_block_list[search_position] ==
-        block_mapping_index) {
+        /* Check if there is a match in the list.  */
+        if (nand_flash->lx_nand_flash_block_list[search_position] == block_mapping_index) {
 
-      /* Get out of the loop.  */
-      break;
+            /* Get out of the loop.  */
+            break;
+        }
+
+        /* Move to next position.  */
+        search_position++;
     }
 
-    /* Move to next position.  */
-    search_position++;
-  }
+    /* Check if the block is found.  */
+    if (search_position < nand_flash->lx_nand_flash_block_list_size) {
 
-  /* Check if the block is found.  */
-  if (search_position < nand_flash->lx_nand_flash_block_list_size) {
+        /* Remove one item from the list.  */
+        nand_flash->lx_nand_flash_mapped_block_list_head++;
 
-    /* Remove one item from the list.  */
-    nand_flash->lx_nand_flash_mapped_block_list_head++;
+        /* Loop to move items in the list.  */
+        while (search_position > nand_flash->lx_nand_flash_mapped_block_list_head) {
 
-    /* Loop to move items in the list.  */
-    while (search_position > nand_flash->lx_nand_flash_mapped_block_list_head) {
+            /* Move the item in the list.  */
+            nand_flash->lx_nand_flash_block_list[search_position] =
+                nand_flash->lx_nand_flash_block_list[search_position - 1];
+            search_position--;
+        }
+    } else {
 
-      /* Move the item in the list.  */
-      nand_flash->lx_nand_flash_block_list[search_position] =
-          nand_flash->lx_nand_flash_block_list[search_position - 1];
-      search_position--;
+        /* Return error.  */
+        return (LX_NO_BLOCKS);
     }
-  } else {
 
-    /* Return error.  */
-    return (LX_NO_BLOCKS);
-  }
-
-  /* Return successful completion.  */
-  return (LX_SUCCESS);
+    /* Return successful completion.  */
+    return (LX_SUCCESS);
 }

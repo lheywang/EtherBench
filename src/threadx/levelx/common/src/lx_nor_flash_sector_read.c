@@ -85,133 +85,123 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nor_flash_sector_read(LX_NOR_FLASH *nor_flash, ULONG logical_sector,
-                               VOID *buffer) {
+UINT _lx_nor_flash_sector_read(LX_NOR_FLASH *nor_flash, ULONG logical_sector, VOID *buffer) {
 
-  UINT status;
-  ULONG *mapping_address;
-  ULONG mapping_entry;
-  ULONG *sector_address;
+    UINT status;
+    ULONG *mapping_address;
+    ULONG mapping_entry;
+    ULONG *sector_address;
 
 #ifdef LX_THREAD_SAFE_ENABLE
 
-  /* Obtain the thread safe mutex.  */
-  tx_mutex_get(&nor_flash->lx_nor_flash_mutex, TX_WAIT_FOREVER);
+    /* Obtain the thread safe mutex.  */
+    tx_mutex_get(&nor_flash->lx_nor_flash_mutex, TX_WAIT_FOREVER);
 #endif
 
-  /* Increment the number of read requests.  */
-  nor_flash->lx_nor_flash_read_requests++;
+    /* Increment the number of read requests.  */
+    nor_flash->lx_nor_flash_read_requests++;
 
-  /* See if we can find the sector in the current mapping.  */
-  _lx_nor_flash_logical_sector_find(nor_flash, logical_sector, LX_FALSE,
-                                    &mapping_address, &sector_address);
+    /* See if we can find the sector in the current mapping.  */
+    _lx_nor_flash_logical_sector_find(nor_flash, logical_sector, LX_FALSE, &mapping_address, &sector_address);
 
-  /* Determine if the logical sector was found.  */
-  if (mapping_address) {
-
-    /* Yes, we were able to find the logical sector.  */
-
-    /* Read the sector data from the physical sector.  */
-    status = _lx_nor_flash_driver_read(nor_flash, sector_address, buffer,
-                                       LX_NOR_SECTOR_SIZE);
-
-    /* Check for an error from flash driver. Drivers should never return an
-     * error..  */
-    if (status) {
-
-      /* Call system error handler.  */
-      _lx_nor_flash_system_error(nor_flash, status);
-
-      /* Adjust return status.  */
-      status = LX_ERROR;
-    } else {
-
-      /* Set the status to success.  */
-      status = LX_SUCCESS;
-    }
-  } else {
-
-    /* Allocate a new physical sector for this write.  */
-    _lx_nor_flash_physical_sector_allocate(nor_flash, logical_sector,
-                                           &mapping_address, &sector_address);
-
-    /* Determine if the new sector allocation was successful.  */
+    /* Determine if the logical sector was found.  */
     if (mapping_address) {
 
-      /* Update the number of free physical sectors.  */
-      nor_flash->lx_nor_flash_free_physical_sectors--;
+        /* Yes, we were able to find the logical sector.  */
 
-      /* Read the sector data from the physical sector.  */
-      status = _lx_nor_flash_driver_read(nor_flash, sector_address, buffer,
-                                         LX_NOR_SECTOR_SIZE);
+        /* Read the sector data from the physical sector.  */
+        status = _lx_nor_flash_driver_read(nor_flash, sector_address, buffer, LX_NOR_SECTOR_SIZE);
 
-      /* Check for an error from flash driver. Drivers should never return an
-       * error..  */
-      if (status) {
+        /* Check for an error from flash driver. Drivers should never return an
+         * error..  */
+        if (status) {
 
-        /* Call system error handler.  */
-        _lx_nor_flash_system_error(nor_flash, status);
-      }
+            /* Call system error handler.  */
+            _lx_nor_flash_system_error(nor_flash, status);
 
-      /* Now build the new mapping entry.  */
-      mapping_entry = ((ULONG)LX_NOR_PHYSICAL_SECTOR_VALID) |
-                      ((ULONG)LX_NOR_PHYSICAL_SECTOR_SUPERCEDED) |
-                      logical_sector;
+            /* Adjust return status.  */
+            status = LX_ERROR;
+        } else {
 
-      /* Write out the new mapping entry.  */
-      status = _lx_nor_flash_driver_write(nor_flash, mapping_address,
-                                          &mapping_entry, 1);
+            /* Set the status to success.  */
+            status = LX_SUCCESS;
+        }
+    } else {
 
-      /* Check for an error from flash driver. Drivers should never return an
-       * error..  */
-      if (status) {
+        /* Allocate a new physical sector for this write.  */
+        _lx_nor_flash_physical_sector_allocate(nor_flash, logical_sector, &mapping_address, &sector_address);
 
-        /* Call system error handler.  */
-        _lx_nor_flash_system_error(nor_flash, status);
+        /* Determine if the new sector allocation was successful.  */
+        if (mapping_address) {
+
+            /* Update the number of free physical sectors.  */
+            nor_flash->lx_nor_flash_free_physical_sectors--;
+
+            /* Read the sector data from the physical sector.  */
+            status = _lx_nor_flash_driver_read(nor_flash, sector_address, buffer, LX_NOR_SECTOR_SIZE);
+
+            /* Check for an error from flash driver. Drivers should never return an
+             * error..  */
+            if (status) {
+
+                /* Call system error handler.  */
+                _lx_nor_flash_system_error(nor_flash, status);
+            }
+
+            /* Now build the new mapping entry.  */
+            mapping_entry =
+                ((ULONG)LX_NOR_PHYSICAL_SECTOR_VALID) | ((ULONG)LX_NOR_PHYSICAL_SECTOR_SUPERCEDED) | logical_sector;
+
+            /* Write out the new mapping entry.  */
+            status = _lx_nor_flash_driver_write(nor_flash, mapping_address, &mapping_entry, 1);
+
+            /* Check for an error from flash driver. Drivers should never return an
+             * error..  */
+            if (status) {
+
+                /* Call system error handler.  */
+                _lx_nor_flash_system_error(nor_flash, status);
 
 #ifdef LX_THREAD_SAFE_ENABLE
 
-        /* Release the thread safe mutex.  */
-        tx_mutex_put(&nor_flash->lx_nor_flash_mutex);
+                /* Release the thread safe mutex.  */
+                tx_mutex_put(&nor_flash->lx_nor_flash_mutex);
 #endif
 
-        /* Return status.  */
-        return (LX_ERROR);
-      }
+                /* Return status.  */
+                return (LX_ERROR);
+            }
 #ifndef LX_NOR_DISABLE_EXTENDED_CACHE
 #ifdef LX_NOR_ENABLE_MAPPING_BITMAP
 
-      /* Determine if the logical sector is within the mapping bitmap.  */
-      if (logical_sector <
-          nor_flash
-              ->lx_nor_flash_extended_cache_mapping_bitmap_max_logical_sector) {
+            /* Determine if the logical sector is within the mapping bitmap.  */
+            if (logical_sector < nor_flash->lx_nor_flash_extended_cache_mapping_bitmap_max_logical_sector) {
 
-        /* Set the bit in the mapping bitmap.  */
-        nor_flash
-            ->lx_nor_flash_extended_cache_mapping_bitmap[logical_sector >> 5] |=
-            (ULONG)(1 << (logical_sector & 31));
-      }
+                /* Set the bit in the mapping bitmap.  */
+                nor_flash->lx_nor_flash_extended_cache_mapping_bitmap[logical_sector >> 5] |=
+                    (ULONG)(1 << (logical_sector & 31));
+            }
 #endif
 #endif
 
-      /* Increment the number of mapped physical sectors.  */
-      nor_flash->lx_nor_flash_mapped_physical_sectors++;
+            /* Increment the number of mapped physical sectors.  */
+            nor_flash->lx_nor_flash_mapped_physical_sectors++;
 
-      /* Set the status to success.  */
-      status = LX_SUCCESS;
-    } else {
+            /* Set the status to success.  */
+            status = LX_SUCCESS;
+        } else {
 
-      /* Could not find the logical sector.  */
-      status = LX_SECTOR_NOT_FOUND;
+            /* Could not find the logical sector.  */
+            status = LX_SECTOR_NOT_FOUND;
+        }
     }
-  }
 
 #ifdef LX_THREAD_SAFE_ENABLE
 
-  /* Release the thread safe mutex.  */
-  tx_mutex_put(&nor_flash->lx_nor_flash_mutex);
+    /* Release the thread safe mutex.  */
+    tx_mutex_put(&nor_flash->lx_nor_flash_mutex);
 #endif
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }

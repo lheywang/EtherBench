@@ -75,34 +75,30 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _txe_block_pool_info_get(TX_BLOCK_POOL *pool_ptr, CHAR **name,
-                              ULONG *available_blocks, ULONG *total_blocks,
-                              TX_THREAD **first_suspended,
-                              ULONG *suspended_count,
-                              TX_BLOCK_POOL **next_pool) {
+UINT _txe_block_pool_info_get(TX_BLOCK_POOL *pool_ptr, CHAR **name, ULONG *available_blocks, ULONG *total_blocks,
+                              TX_THREAD **first_suspended, ULONG *suspended_count, TX_BLOCK_POOL **next_pool) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid block pool pointer.  */
-  if (pool_ptr == TX_NULL) {
+    /* Check for an invalid block pool pointer.  */
+    if (pool_ptr == TX_NULL) {
 
-    /* Block pool pointer is invalid, return appropriate error code.  */
-    status = TX_POOL_ERROR;
-  }
+        /* Block pool pointer is invalid, return appropriate error code.  */
+        status = TX_POOL_ERROR;
+    }
 
-  /* Now check the pool ID.  */
-  else if (pool_ptr->tx_block_pool_id != TX_BLOCK_POOL_ID) {
+    /* Now check the pool ID.  */
+    else if (pool_ptr->tx_block_pool_id != TX_BLOCK_POOL_ID) {
 
-    /* Block pool pointer is invalid, return appropriate error code.  */
-    status = TX_POOL_ERROR;
-  } else {
+        /* Block pool pointer is invalid, return appropriate error code.  */
+        status = TX_POOL_ERROR;
+    } else {
 
-    /* Otherwise, call the actual block pool information get service.  */
-    status =
-        _tx_block_pool_info_get(pool_ptr, name, available_blocks, total_blocks,
-                                first_suspended, suspended_count, next_pool);
-  }
+        /* Otherwise, call the actual block pool information get service.  */
+        status = _tx_block_pool_info_get(pool_ptr, name, available_blocks, total_blocks, first_suspended,
+                                         suspended_count, next_pool);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

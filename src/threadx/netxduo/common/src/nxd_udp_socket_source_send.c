@@ -71,37 +71,34 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxd_udp_socket_source_send(NX_UDP_SOCKET *socket_ptr,
-                                 NX_PACKET *packet_ptr, NXD_ADDRESS *ip_address,
-                                 UINT port, UINT address_index) {
-  UINT status;
-  NX_IP *ip_ptr;
+UINT _nxd_udp_socket_source_send(NX_UDP_SOCKET *socket_ptr, NX_PACKET *packet_ptr, NXD_ADDRESS *ip_address, UINT port,
+                                 UINT address_index) {
+    UINT status;
+    NX_IP *ip_ptr;
 
-  /* Setup the pointer to the associated IP instance.  */
-  ip_ptr = socket_ptr->nx_udp_socket_ip_ptr;
+    /* Setup the pointer to the associated IP instance.  */
+    ip_ptr = socket_ptr->nx_udp_socket_ip_ptr;
 
-  /* Store address information into the packet structure. */
+    /* Store address information into the packet structure. */
 #ifndef NX_DISABLE_IPV4
-  if (ip_address->nxd_ip_version == NX_IP_VERSION_V4) {
-    packet_ptr->nx_packet_address.nx_packet_interface_ptr =
-        &(ip_ptr->nx_ip_interface[address_index]);
-  }
+    if (ip_address->nxd_ip_version == NX_IP_VERSION_V4) {
+        packet_ptr->nx_packet_address.nx_packet_interface_ptr = &(ip_ptr->nx_ip_interface[address_index]);
+    }
 #endif /* !NX_DISABLE_IPV4  */
 
 #ifdef FEATURE_NX_IPV6
-  if (ip_address->nxd_ip_version == NX_IP_VERSION_V6) {
-    packet_ptr->nx_packet_address.nx_packet_ipv6_address_ptr =
-        &ip_ptr->nx_ipv6_address[address_index];
+    if (ip_address->nxd_ip_version == NX_IP_VERSION_V6) {
+        packet_ptr->nx_packet_address.nx_packet_ipv6_address_ptr = &ip_ptr->nx_ipv6_address[address_index];
 
-    if (packet_ptr->nx_packet_address.nx_packet_ipv6_address_ptr
-            ->nxd_ipv6_address_state != NX_IPV6_ADDR_STATE_VALID) {
-      return (NX_NO_INTERFACE_ADDRESS);
+        if (packet_ptr->nx_packet_address.nx_packet_ipv6_address_ptr->nxd_ipv6_address_state !=
+            NX_IPV6_ADDR_STATE_VALID) {
+            return (NX_NO_INTERFACE_ADDRESS);
+        }
     }
-  }
 #endif /* FEATURE_NX_IPV6 */
 
-  /* Call udp_socket_send service */
-  status = _nxd_udp_socket_send(socket_ptr, packet_ptr, ip_address, port);
+    /* Call udp_socket_send service */
+    status = _nxd_udp_socket_send(socket_ptr, packet_ptr, ip_address, port);
 
-  return (status);
+    return (status);
 }

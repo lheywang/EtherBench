@@ -76,6 +76,6 @@
 #ifndef FX_DISABLE_ONE_LINE_FUNCTION
 UINT _fx_file_truncate_release(FX_FILE *file_ptr, ULONG size) {
 
-  return (_fx_file_extended_truncate_release(file_ptr, (ULONG64)size));
+    return (_fx_file_extended_truncate_release(file_ptr, (ULONG64)size));
 }
 #endif /* FX_DISABLE_ONE_LINE_FUNCTION */

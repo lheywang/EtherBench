@@ -71,136 +71,123 @@
 /*  03-08-2023     Xiuwen Cai               Initial Version 6.2.1        */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_memory_initialize(LX_NAND_FLASH *nand_flash,
-                                      ULONG *memory_ptr, UINT memory_size) {
+UINT _lx_nand_flash_memory_initialize(LX_NAND_FLASH *nand_flash, ULONG *memory_ptr, UINT memory_size) {
 
-  UINT memory_offset;
-  UINT buffer_size;
+    UINT memory_offset;
+    UINT buffer_size;
 
-  /* Clear the memory buffer.  */
-  LX_MEMSET(memory_ptr, 0, memory_size);
+    /* Clear the memory buffer.  */
+    LX_MEMSET(memory_ptr, 0, memory_size);
 
-  /* Reset the memory offset.  */
-  memory_offset = 0;
+    /* Reset the memory offset.  */
+    memory_offset = 0;
 
-  /* Set memory size for block mapping table.  */
-  buffer_size = nand_flash->lx_nand_flash_total_blocks *
-                sizeof(*nand_flash->lx_nand_flash_block_mapping_table);
+    /* Set memory size for block mapping table.  */
+    buffer_size = nand_flash->lx_nand_flash_total_blocks * sizeof(*nand_flash->lx_nand_flash_block_mapping_table);
 
-  /* Make sure the size is at least one page size.  */
-  if (buffer_size < nand_flash->lx_nand_flash_bytes_per_page) {
-    buffer_size = nand_flash->lx_nand_flash_bytes_per_page;
-  }
+    /* Make sure the size is at least one page size.  */
+    if (buffer_size < nand_flash->lx_nand_flash_bytes_per_page) {
+        buffer_size = nand_flash->lx_nand_flash_bytes_per_page;
+    }
 
-  /* Assign memory for block mapping table.  */
-  nand_flash->lx_nand_flash_block_mapping_table =
-      (USHORT *)(((UCHAR *)memory_ptr) + memory_offset);
+    /* Assign memory for block mapping table.  */
+    nand_flash->lx_nand_flash_block_mapping_table = (USHORT *)(((UCHAR *)memory_ptr) + memory_offset);
 
-  /* Update block mapping table size.  */
-  nand_flash->lx_nand_flash_block_mapping_table_size = buffer_size;
+    /* Update block mapping table size.  */
+    nand_flash->lx_nand_flash_block_mapping_table_size = buffer_size;
 
-  /* Update memory offset.  */
-  memory_offset += buffer_size;
+    /* Update memory offset.  */
+    memory_offset += buffer_size;
 
-  /* Check if there is enough memory.  */
-  if (memory_offset > memory_size) {
+    /* Check if there is enough memory.  */
+    if (memory_offset > memory_size) {
 
-    /* No enough memory, return error.  */
-    return (LX_NO_MEMORY);
-  }
+        /* No enough memory, return error.  */
+        return (LX_NO_MEMORY);
+    }
 
-  /* Set memory size for erase count table.  */
-  buffer_size = nand_flash->lx_nand_flash_total_blocks *
-                sizeof(*nand_flash->lx_nand_flash_erase_count_table);
+    /* Set memory size for erase count table.  */
+    buffer_size = nand_flash->lx_nand_flash_total_blocks * sizeof(*nand_flash->lx_nand_flash_erase_count_table);
 
-  /* Make sure the size is at least one page size.  */
-  if (buffer_size < nand_flash->lx_nand_flash_bytes_per_page) {
-    buffer_size = nand_flash->lx_nand_flash_bytes_per_page;
-  }
+    /* Make sure the size is at least one page size.  */
+    if (buffer_size < nand_flash->lx_nand_flash_bytes_per_page) {
+        buffer_size = nand_flash->lx_nand_flash_bytes_per_page;
+    }
 
-  /* Assign memory for erase count table.  */
-  nand_flash->lx_nand_flash_erase_count_table =
-      (UCHAR *)(((UCHAR *)memory_ptr) + memory_offset);
+    /* Assign memory for erase count table.  */
+    nand_flash->lx_nand_flash_erase_count_table = (UCHAR *)(((UCHAR *)memory_ptr) + memory_offset);
 
-  /* Update memory offset.  */
-  memory_offset += buffer_size;
+    /* Update memory offset.  */
+    memory_offset += buffer_size;
 
-  /* Update erase count table size.  */
-  nand_flash->lx_nand_flash_erase_count_table_size = buffer_size;
+    /* Update erase count table size.  */
+    nand_flash->lx_nand_flash_erase_count_table_size = buffer_size;
 
-  /* Check if there is enough memory.  */
-  if (memory_offset > memory_size) {
+    /* Check if there is enough memory.  */
+    if (memory_offset > memory_size) {
 
-    /* No enough memory, return error.  */
-    return (LX_NO_MEMORY);
-  }
+        /* No enough memory, return error.  */
+        return (LX_NO_MEMORY);
+    }
 
-  /* Assign memory for block list.  */
-  nand_flash->lx_nand_flash_block_list =
-      (USHORT *)(((UCHAR *)memory_ptr) + memory_offset);
+    /* Assign memory for block list.  */
+    nand_flash->lx_nand_flash_block_list = (USHORT *)(((UCHAR *)memory_ptr) + memory_offset);
 
-  /* Update memory offset.  */
-  memory_offset += nand_flash->lx_nand_flash_total_blocks *
-                   sizeof(*nand_flash->lx_nand_flash_block_list);
+    /* Update memory offset.  */
+    memory_offset += nand_flash->lx_nand_flash_total_blocks * sizeof(*nand_flash->lx_nand_flash_block_list);
 
-  /* Check if there is enough memory.  */
-  if (memory_offset > memory_size) {
+    /* Check if there is enough memory.  */
+    if (memory_offset > memory_size) {
 
-    /* No enough memory, return error.  */
-    return (LX_NO_MEMORY);
-  }
+        /* No enough memory, return error.  */
+        return (LX_NO_MEMORY);
+    }
 
-  /* Update block list size.  */
-  nand_flash->lx_nand_flash_block_list_size =
-      nand_flash->lx_nand_flash_total_blocks;
+    /* Update block list size.  */
+    nand_flash->lx_nand_flash_block_list_size = nand_flash->lx_nand_flash_total_blocks;
 
-  /* Initialize block list. */
-  nand_flash->lx_nand_flash_free_block_list_tail = 0;
-  nand_flash->lx_nand_flash_mapped_block_list_head =
-      nand_flash->lx_nand_flash_block_list_size - 1;
+    /* Initialize block list. */
+    nand_flash->lx_nand_flash_free_block_list_tail = 0;
+    nand_flash->lx_nand_flash_mapped_block_list_head = nand_flash->lx_nand_flash_block_list_size - 1;
 
-  /* Set memory size for block status table.  */
-  buffer_size = nand_flash->lx_nand_flash_total_blocks *
-                sizeof(*nand_flash->lx_nand_flash_block_status_table);
+    /* Set memory size for block status table.  */
+    buffer_size = nand_flash->lx_nand_flash_total_blocks * sizeof(*nand_flash->lx_nand_flash_block_status_table);
 
-  /* Make sure the size is at least one page size.  */
-  if (buffer_size < nand_flash->lx_nand_flash_bytes_per_page) {
-    buffer_size = nand_flash->lx_nand_flash_bytes_per_page;
-  }
+    /* Make sure the size is at least one page size.  */
+    if (buffer_size < nand_flash->lx_nand_flash_bytes_per_page) {
+        buffer_size = nand_flash->lx_nand_flash_bytes_per_page;
+    }
 
-  /* Assign memory for block status table.  */
-  nand_flash->lx_nand_flash_block_status_table =
-      (USHORT *)(((UCHAR *)memory_ptr) + memory_offset);
+    /* Assign memory for block status table.  */
+    nand_flash->lx_nand_flash_block_status_table = (USHORT *)(((UCHAR *)memory_ptr) + memory_offset);
 
-  /* Update memory offset.  */
-  memory_offset += buffer_size;
+    /* Update memory offset.  */
+    memory_offset += buffer_size;
 
-  /* Update block status table size.  */
-  nand_flash->lx_nand_flash_block_status_table_size = buffer_size;
+    /* Update block status table size.  */
+    nand_flash->lx_nand_flash_block_status_table_size = buffer_size;
 
-  /* Check if there is enough memory.  */
-  if (memory_offset > memory_size) {
+    /* Check if there is enough memory.  */
+    if (memory_offset > memory_size) {
 
-    /* No enough memory, return error.  */
-    return (LX_NO_MEMORY);
-  }
+        /* No enough memory, return error.  */
+        return (LX_NO_MEMORY);
+    }
 
-  /* Assign memory for page buffer.  */
-  nand_flash->lx_nand_flash_page_buffer = ((UCHAR *)memory_ptr) + memory_offset;
+    /* Assign memory for page buffer.  */
+    nand_flash->lx_nand_flash_page_buffer = ((UCHAR *)memory_ptr) + memory_offset;
 
-  /* Update page buffer size.  */
-  nand_flash->lx_nand_flash_page_buffer_size = memory_size - memory_offset;
+    /* Update page buffer size.  */
+    nand_flash->lx_nand_flash_page_buffer_size = memory_size - memory_offset;
 
-  /* Check if there is enough memory.  */
-  if (nand_flash->lx_nand_flash_page_buffer_size <
-      (nand_flash->lx_nand_flash_bytes_per_page +
-       nand_flash->lx_nand_flash_spare_total_length) *
-          2) {
+    /* Check if there is enough memory.  */
+    if (nand_flash->lx_nand_flash_page_buffer_size <
+        (nand_flash->lx_nand_flash_bytes_per_page + nand_flash->lx_nand_flash_spare_total_length) * 2) {
 
-    /* No enough memory, return error.  */
-    return (LX_NO_MEMORY);
-  }
+        /* No enough memory, return error.  */
+        return (LX_NO_MEMORY);
+    }
 
-  /* Return a successful completion.  */
-  return (LX_SUCCESS);
+    /* Return a successful completion.  */
+    return (LX_SUCCESS);
 }

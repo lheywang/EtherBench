@@ -28,8 +28,7 @@
 #include "ux_device_stack.h"
 
 #define USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH 34
-#if UX_SLAVE_REQUEST_DATA_MAX_LENGTH <                                         \
-    USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH
+#if UX_SLAVE_REQUEST_DATA_MAX_LENGTH < USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH
 /* #error UX_SLAVE_REQUEST_DATA_MAX_LENGTH is too small, please check  */
 /* Build option checked runtime by UX_ASSERT  */
 #endif
@@ -114,95 +113,83 @@ UCHAR usbx_device_class_storage_disk_information[] = {
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_storage_read_disk_information(
-    UX_SLAVE_CLASS_STORAGE *storage, ULONG lun, UX_SLAVE_ENDPOINT *endpoint_in,
-    UX_SLAVE_ENDPOINT *endpoint_out, UCHAR *cbwcb) {
+UINT _ux_device_class_storage_read_disk_information(UX_SLAVE_CLASS_STORAGE *storage, ULONG lun,
+                                                    UX_SLAVE_ENDPOINT *endpoint_in, UX_SLAVE_ENDPOINT *endpoint_out,
+                                                    UCHAR *cbwcb) {
 
-  UINT status;
-  UX_SLAVE_TRANSFER *transfer_request;
-  ULONG allocation_length;
+    UINT status;
+    UX_SLAVE_TRANSFER *transfer_request;
+    ULONG allocation_length;
 
-  UX_PARAMETER_NOT_USED(endpoint_out);
+    UX_PARAMETER_NOT_USED(endpoint_out);
 
-  /* Build option check.  */
-  UX_ASSERT(UX_SLAVE_REQUEST_DATA_MAX_LENGTH >=
-            USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH);
+    /* Build option check.  */
+    UX_ASSERT(UX_SLAVE_REQUEST_DATA_MAX_LENGTH >= USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH);
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_GET_CONFIGURATION,
-                          storage, lun, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0,
-                          0)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_GET_CONFIGURATION, storage, lun, 0, 0,
+                            UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
-  /* Initialize the length of the disk information field.  */
-  _ux_utility_short_put_big_endian(
-      usbx_device_class_storage_disk_information,
-      (USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH - 2));
+    /* Initialize the length of the disk information field.  */
+    _ux_utility_short_put_big_endian(usbx_device_class_storage_disk_information,
+                                     (USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH - 2));
 
-  /* Clean the disk status.  */
-  usbx_device_class_storage_disk_information[2] &= (UCHAR)~3;
+    /* Clean the disk status.  */
+    usbx_device_class_storage_disk_information[2] &= (UCHAR)~3;
 
-  /* Update the disk status.  */
-  usbx_device_class_storage_disk_information[2] =
-      (UCHAR)(usbx_device_class_storage_disk_information[2] |
-              (storage->ux_slave_class_storage_lun[lun]
-                   .ux_slave_class_storage_disk_status &
-               3));
+    /* Update the disk status.  */
+    usbx_device_class_storage_disk_information[2] =
+        (UCHAR)(usbx_device_class_storage_disk_information[2] |
+                (storage->ux_slave_class_storage_lun[lun].ux_slave_class_storage_disk_status & 3));
 
-  /* Clean the last session state.  */
-  usbx_device_class_storage_disk_information[2] &= (UCHAR)~0x0c;
+    /* Clean the last session state.  */
+    usbx_device_class_storage_disk_information[2] &= (UCHAR)~0x0c;
 
-  /* Update the last session state.  */
-  usbx_device_class_storage_disk_information[2] =
-      (UCHAR)(usbx_device_class_storage_disk_information[2] |
-              ((storage->ux_slave_class_storage_lun[lun]
-                    .ux_slave_class_storage_last_session_state
-                << 2) &
-               0x0c));
+    /* Update the last session state.  */
+    usbx_device_class_storage_disk_information[2] =
+        (UCHAR)(usbx_device_class_storage_disk_information[2] |
+                ((storage->ux_slave_class_storage_lun[lun].ux_slave_class_storage_last_session_state << 2) & 0x0c));
 
-  /* Obtain the pointer to the transfer request.  */
-  transfer_request = &endpoint_in->ux_slave_endpoint_transfer_request;
+    /* Obtain the pointer to the transfer request.  */
+    transfer_request = &endpoint_in->ux_slave_endpoint_transfer_request;
 
-  /* Get the allocation length.  */
-  allocation_length = _ux_utility_short_get_big_endian(
-      cbwcb + UX_SLAVE_CLASS_STORAGE_READ_DISK_INFORMATION_ALLOCATION_LENGTH);
+    /* Get the allocation length.  */
+    allocation_length =
+        _ux_utility_short_get_big_endian(cbwcb + UX_SLAVE_CLASS_STORAGE_READ_DISK_INFORMATION_ALLOCATION_LENGTH);
 
-  /* Can we send all the disk information ? */
-  if (allocation_length > USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH)
+    /* Can we send all the disk information ? */
+    if (allocation_length > USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH)
 
-    /* Yes, so send only the disk information profile.  */
-    allocation_length = USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH;
+        /* Yes, so send only the disk information profile.  */
+        allocation_length = USBX_DEVICE_CLASS_STORAGE_DISK_INFORMATION_LENGTH;
 
-  /* Copy the CSW into the transfer request memory.  */
-  _ux_utility_memory_copy(
-      transfer_request->ux_slave_transfer_request_data_pointer,
-      usbx_device_class_storage_disk_information,
-      allocation_length); /* Use case of memcpy is verified. */
+    /* Copy the CSW into the transfer request memory.  */
+    _ux_utility_memory_copy(transfer_request->ux_slave_transfer_request_data_pointer,
+                            usbx_device_class_storage_disk_information,
+                            allocation_length); /* Use case of memcpy is verified. */
 
 #if defined(UX_DEVICE_STANDALONE)
 
-  /* Next: Transfer (DATA).  */
-  storage->ux_device_class_storage_state =
-      UX_DEVICE_CLASS_STORAGE_STATE_TRANS_START;
-  storage->ux_device_class_storage_cmd_state = UX_DEVICE_CLASS_STORAGE_CMD_READ;
+    /* Next: Transfer (DATA).  */
+    storage->ux_device_class_storage_state = UX_DEVICE_CLASS_STORAGE_STATE_TRANS_START;
+    storage->ux_device_class_storage_cmd_state = UX_DEVICE_CLASS_STORAGE_CMD_READ;
 
-  storage->ux_device_class_storage_transfer = transfer_request;
-  storage->ux_device_class_storage_device_length = allocation_length;
-  storage->ux_device_class_storage_data_length = allocation_length;
-  storage->ux_device_class_storage_data_count = 0;
-  UX_SLAVE_TRANSFER_STATE_RESET(storage->ux_device_class_storage_transfer);
+    storage->ux_device_class_storage_transfer = transfer_request;
+    storage->ux_device_class_storage_device_length = allocation_length;
+    storage->ux_device_class_storage_data_length = allocation_length;
+    storage->ux_device_class_storage_data_count = 0;
+    UX_SLAVE_TRANSFER_STATE_RESET(storage->ux_device_class_storage_transfer);
 
 #else
 
-  /* Send a data payload with the read_capacity response buffer.  */
-  _ux_device_stack_transfer_request(transfer_request, allocation_length,
-                                    allocation_length);
+    /* Send a data payload with the read_capacity response buffer.  */
+    _ux_device_stack_transfer_request(transfer_request, allocation_length, allocation_length);
 #endif
 
-  /* Now we set the CSW with success.  */
-  storage->ux_slave_class_storage_csw_status =
-      UX_SLAVE_CLASS_STORAGE_CSW_PASSED;
-  status = UX_SUCCESS;
+    /* Now we set the CSW with success.  */
+    storage->ux_slave_class_storage_csw_status = UX_SLAVE_CLASS_STORAGE_CSW_PASSED;
+    status = UX_SUCCESS;
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

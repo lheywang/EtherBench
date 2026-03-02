@@ -58,17 +58,17 @@
 /* Yes, in-line initialization is supported, remap the
    semaphore initialization function.  */
 #ifndef TX_SEMAPHORE_ENABLE_PERFORMANCE_INFO
-#define _tx_semaphore_initialize()                                             \
-  _tx_semaphore_created_ptr = TX_NULL;                                         \
-  _tx_semaphore_created_count = TX_EMPTY
+#define _tx_semaphore_initialize()                                                                                     \
+    _tx_semaphore_created_ptr = TX_NULL;                                                                               \
+    _tx_semaphore_created_count = TX_EMPTY
 #else
-#define _tx_semaphore_initialize()                                             \
-  _tx_semaphore_created_ptr = TX_NULL;                                         \
-  _tx_semaphore_created_count = TX_EMPTY;                                      \
-  _tx_semaphore_performance_put_count = ((ULONG)0);                            \
-  _tx_semaphore_performance_get_count = ((ULONG)0);                            \
-  _tx_semaphore_performance_suspension_count = ((ULONG)0);                     \
-  _tx_semaphore_performance_timeout_count = ((ULONG)0)
+#define _tx_semaphore_initialize()                                                                                     \
+    _tx_semaphore_created_ptr = TX_NULL;                                                                               \
+    _tx_semaphore_created_count = TX_EMPTY;                                                                            \
+    _tx_semaphore_performance_put_count = ((ULONG)0);                                                                  \
+    _tx_semaphore_performance_get_count = ((ULONG)0);                                                                  \
+    _tx_semaphore_performance_suspension_count = ((ULONG)0);                                                           \
+    _tx_semaphore_performance_timeout_count = ((ULONG)0)
 #endif
 #define TX_SEMAPHORE_INIT
 #else

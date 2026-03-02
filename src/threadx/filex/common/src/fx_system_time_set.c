@@ -70,14 +70,12 @@
 /**************************************************************************/
 UINT _fx_system_time_set(UINT hour, UINT minute, UINT second) {
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  FX_TRACE_IN_LINE_INSERT(FX_TRACE_SYSTEM_TIME_SET, hour, minute, second, 0,
-                          FX_TRACE_INTERNAL_EVENTS, 0, 0)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    FX_TRACE_IN_LINE_INSERT(FX_TRACE_SYSTEM_TIME_SET, hour, minute, second, 0, FX_TRACE_INTERNAL_EVENTS, 0, 0)
 
-  /* Set the new system time.  */
-  _fx_system_time =
-      (hour << FX_HOUR_SHIFT) | (minute << FX_MINUTE_SHIFT) | (second / 2);
+    /* Set the new system time.  */
+    _fx_system_time = (hour << FX_HOUR_SHIFT) | (minute << FX_MINUTE_SHIFT) | (second / 2);
 
-  /* Return successful status.  */
-  return (FX_SUCCESS);
+    /* Return successful status.  */
+    return (FX_SUCCESS);
 }

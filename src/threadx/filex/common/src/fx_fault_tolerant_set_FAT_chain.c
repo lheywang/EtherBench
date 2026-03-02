@@ -79,66 +79,50 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_fault_tolerant_set_FAT_chain(FX_MEDIA *media_ptr, UINT use_bitmap,
-                                      ULONG insertion_front,
-                                      ULONG new_head_cluster,
-                                      ULONG original_head_cluster,
-                                      ULONG insertion_back) {
-  UINT status;
-  USHORT checksum;
-  UCHAR flag = FX_FAULT_TOLERANT_FLAG_FAT_CHAIN_VALID;
-  FX_FAULT_TOLERANT_FAT_CHAIN *FAT_chain;
+UINT _fx_fault_tolerant_set_FAT_chain(FX_MEDIA *media_ptr, UINT use_bitmap, ULONG insertion_front,
+                                      ULONG new_head_cluster, ULONG original_head_cluster, ULONG insertion_back) {
+    UINT status;
+    USHORT checksum;
+    UCHAR flag = FX_FAULT_TOLERANT_FLAG_FAT_CHAIN_VALID;
+    FX_FAULT_TOLERANT_FAT_CHAIN *FAT_chain;
 
-  /* Set FAT chain pointer. */
-  FAT_chain = (FX_FAULT_TOLERANT_FAT_CHAIN
-                   *)(media_ptr->fx_media_fault_tolerant_memory_buffer +
-                      FX_FAULT_TOLERANT_FAT_CHAIN_OFFSET);
+    /* Set FAT chain pointer. */
+    FAT_chain = (FX_FAULT_TOLERANT_FAT_CHAIN *)(media_ptr->fx_media_fault_tolerant_memory_buffer +
+                                                FX_FAULT_TOLERANT_FAT_CHAIN_OFFSET);
 
 #ifdef FX_ENABLE_EXFAT
-  /* Check flag for bitmap. */
-  if (use_bitmap == FX_TRUE) {
-    flag |= FX_FAULT_TOLERANT_FLAG_BITMAP_USED;
-  }
+    /* Check flag for bitmap. */
+    if (use_bitmap == FX_TRUE) {
+        flag |= FX_FAULT_TOLERANT_FLAG_BITMAP_USED;
+    }
 #else
-  /* Parameters not used. Avoid compiler warnings. */
-  FX_PARAMETER_NOT_USED(use_bitmap);
+    /* Parameters not used. Avoid compiler warnings. */
+    FX_PARAMETER_NOT_USED(use_bitmap);
 #endif /* FX_ENABLE_EXFAT */
 
-  /* Reset checksum first. */
-  _fx_utility_16_unsigned_write(
-      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_checksumm, 0);
+    /* Reset checksum first. */
+    _fx_utility_16_unsigned_write((UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_checksumm, 0);
 
-  /* Set clusters. */
-  _fx_utility_32_unsigned_write(
-      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_insertion_front,
-      insertion_front);
-  _fx_utility_32_unsigned_write(
-      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_head_new,
-      new_head_cluster);
-  _fx_utility_32_unsigned_write(
-      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_head_original,
-      original_head_cluster);
-  _fx_utility_32_unsigned_write(
-      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_insertion_back,
-      insertion_back);
-  _fx_utility_32_unsigned_write(
-      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_next_deletion,
-      FX_FREE_CLUSTER);
+    /* Set clusters. */
+    _fx_utility_32_unsigned_write((UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_insertion_front, insertion_front);
+    _fx_utility_32_unsigned_write((UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_head_new, new_head_cluster);
+    _fx_utility_32_unsigned_write((UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_head_original,
+                                  original_head_cluster);
+    _fx_utility_32_unsigned_write((UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_insertion_back, insertion_back);
+    _fx_utility_32_unsigned_write((UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_next_deletion, FX_FREE_CLUSTER);
 
-  /* Set flag and reserved. */
-  FAT_chain->fx_fault_tolerant_FAT_chain_flag = flag;
-  FAT_chain->fx_fault_tolerant_FAT_chain_reserved = (UCHAR)0;
+    /* Set flag and reserved. */
+    FAT_chain->fx_fault_tolerant_FAT_chain_flag = flag;
+    FAT_chain->fx_fault_tolerant_FAT_chain_reserved = (UCHAR)0;
 
-  /* Calculate checksum. */
-  checksum = _fx_fault_tolerant_calculate_checksum(
-      (UCHAR *)FAT_chain, FX_FAULT_TOLERANT_FAT_CHAIN_SIZE);
-  _fx_utility_16_unsigned_write(
-      (UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_checksumm, checksum);
+    /* Calculate checksum. */
+    checksum = _fx_fault_tolerant_calculate_checksum((UCHAR *)FAT_chain, FX_FAULT_TOLERANT_FAT_CHAIN_SIZE);
+    _fx_utility_16_unsigned_write((UCHAR *)&FAT_chain->fx_fault_tolerant_FAT_chain_checksumm, checksum);
 
-  /* Write the log header and FAT chain.  */
-  status = _fx_fault_tolerant_write_log_file(media_ptr, 0);
+    /* Write the log header and FAT chain.  */
+    status = _fx_fault_tolerant_write_log_file(media_ptr, 0);
 
-  /* Return the status.  */
-  return (status);
+    /* Return the status.  */
+    return (status);
 }
 #endif /* FX_ENABLE_FAULT_TOLERANT */

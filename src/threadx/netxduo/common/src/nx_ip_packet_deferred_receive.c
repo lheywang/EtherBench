@@ -71,38 +71,37 @@
 /**************************************************************************/
 VOID _nx_ip_packet_deferred_receive(NX_IP *ip_ptr, NX_PACKET *packet_ptr) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Add debug information. */
-  NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
+    /* Add debug information. */
+    NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
 
-  /* Check to see if the deferred processing queue is empty.  */
-  if (ip_ptr->nx_ip_deferred_received_packet_head) {
+    /* Check to see if the deferred processing queue is empty.  */
+    if (ip_ptr->nx_ip_deferred_received_packet_head) {
 
-    /* Not empty, just place the packet at the end of the queue.  */
-    (ip_ptr->nx_ip_deferred_received_packet_tail)->nx_packet_queue_next =
-        packet_ptr;
-    packet_ptr->nx_packet_queue_next = NX_NULL;
-    ip_ptr->nx_ip_deferred_received_packet_tail = packet_ptr;
+        /* Not empty, just place the packet at the end of the queue.  */
+        (ip_ptr->nx_ip_deferred_received_packet_tail)->nx_packet_queue_next = packet_ptr;
+        packet_ptr->nx_packet_queue_next = NX_NULL;
+        ip_ptr->nx_ip_deferred_received_packet_tail = packet_ptr;
 
-    /* Restore interrupts.  */
-    TX_RESTORE
-  } else {
+        /* Restore interrupts.  */
+        TX_RESTORE
+    } else {
 
-    /* Empty deferred receive processing queue.  Just setup the head pointers
-       and set the event flags to ensure the IP helper thread looks at the
-       deferred processing queue.  */
-    ip_ptr->nx_ip_deferred_received_packet_head = packet_ptr;
-    ip_ptr->nx_ip_deferred_received_packet_tail = packet_ptr;
-    packet_ptr->nx_packet_queue_next = NX_NULL;
+        /* Empty deferred receive processing queue.  Just setup the head pointers
+           and set the event flags to ensure the IP helper thread looks at the
+           deferred processing queue.  */
+        ip_ptr->nx_ip_deferred_received_packet_head = packet_ptr;
+        ip_ptr->nx_ip_deferred_received_packet_tail = packet_ptr;
+        packet_ptr->nx_packet_queue_next = NX_NULL;
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+        /* Restore interrupts.  */
+        TX_RESTORE
 
-    /* Wakeup IP helper thread to process the IP deferred receive.  */
-    tx_event_flags_set(&(ip_ptr->nx_ip_events), NX_IP_RECEIVE_EVENT, TX_OR);
-  }
+        /* Wakeup IP helper thread to process the IP deferred receive.  */
+        tx_event_flags_set(&(ip_ptr->nx_ip_events), NX_IP_RECEIVE_EVENT, TX_OR);
+    }
 }

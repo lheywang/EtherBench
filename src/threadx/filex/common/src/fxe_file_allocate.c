@@ -70,19 +70,19 @@ FX_CALLER_CHECKING_EXTERNS
 /**************************************************************************/
 UINT _fxe_file_allocate(FX_FILE *file_ptr, ULONG size) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null file pointer.  */
-  if (file_ptr == FX_NULL) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null file pointer.  */
+    if (file_ptr == FX_NULL) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual file allocate service.  */
-  status = _fx_file_allocate(file_ptr, size);
+    /* Call actual file allocate service.  */
+    status = _fx_file_allocate(file_ptr, size);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

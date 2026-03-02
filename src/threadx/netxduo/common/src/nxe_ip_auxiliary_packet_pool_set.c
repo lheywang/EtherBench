@@ -77,36 +77,34 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_ip_auxiliary_packet_pool_set(NX_IP *ip_ptr,
-                                       NX_PACKET_POOL *auxiliary_pool) {
+UINT _nxe_ip_auxiliary_packet_pool_set(NX_IP *ip_ptr, NX_PACKET_POOL *auxiliary_pool) {
 #ifdef NX_ENABLE_DUAL_PACKET_POOL
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for invalid input pointers.  */
-  if ((auxiliary_pool == NX_NULL) ||
-      (auxiliary_pool->nx_packet_pool_id != NX_PACKET_POOL_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((auxiliary_pool == NX_NULL) || (auxiliary_pool->nx_packet_pool_id != NX_PACKET_POOL_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call actual auxiliary packet pool set function.  */
-  status = _nx_ip_auxiliary_packet_pool_set(ip_ptr, auxiliary_pool);
+    /* Call actual auxiliary packet pool set function.  */
+    status = _nx_ip_auxiliary_packet_pool_set(ip_ptr, auxiliary_pool);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 
 #else /* !NX_ENABLE_DUAL_PACKET_POOL */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(auxiliary_pool);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(auxiliary_pool);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* NX_ENABLE_DUAL_PACKET_POOL */
 }

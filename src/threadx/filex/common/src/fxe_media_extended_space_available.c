@@ -69,22 +69,21 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_media_extended_space_available(FX_MEDIA *media_ptr,
-                                         ULONG64 *available_bytes_ptr) {
+UINT _fxe_media_extended_space_available(FX_MEDIA *media_ptr, ULONG64 *available_bytes_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null media pointer or destination pointer.  */
-  if ((media_ptr == FX_NULL) || (available_bytes_ptr == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null media pointer or destination pointer.  */
+    if ((media_ptr == FX_NULL) || (available_bytes_ptr == FX_NULL)) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual media space available service.  */
-  status = _fx_media_extended_space_available(media_ptr, available_bytes_ptr);
+    /* Call actual media space available service.  */
+    status = _fx_media_extended_space_available(media_ptr, available_bytes_ptr);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

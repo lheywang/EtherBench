@@ -80,40 +80,39 @@
 /**************************************************************************/
 VOID _nx_ip_deferred_link_status_process(NX_IP *ip_ptr) {
 
-  UINT i;
-  NX_IP_DRIVER driver_request;
-  ULONG link_up;
+    UINT i;
+    NX_IP_DRIVER driver_request;
+    ULONG link_up;
 
-  if (ip_ptr->nx_ip_link_status_change_callback == NX_NULL) {
+    if (ip_ptr->nx_ip_link_status_change_callback == NX_NULL) {
 
-    /* Callback function is not set. */
-    return;
-  }
+        /* Callback function is not set. */
+        return;
+    }
 
-  for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
-    if ((ip_ptr->nx_ip_interface[i].nx_interface_valid) &&
-        (ip_ptr->nx_ip_interface[i].nx_interface_link_status_change)) {
+    for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
+        if ((ip_ptr->nx_ip_interface[i].nx_interface_valid) &&
+            (ip_ptr->nx_ip_interface[i].nx_interface_link_status_change)) {
 
-      /* Reset the flag. */
-      ip_ptr->nx_ip_interface[i].nx_interface_link_status_change = NX_FALSE;
+            /* Reset the flag. */
+            ip_ptr->nx_ip_interface[i].nx_interface_link_status_change = NX_FALSE;
 
-      driver_request.nx_ip_driver_ptr = ip_ptr;
-      driver_request.nx_ip_driver_command = NX_LINK_GET_STATUS;
-      driver_request.nx_ip_driver_interface = &(ip_ptr->nx_ip_interface[i]);
-      driver_request.nx_ip_driver_return_ptr = &link_up;
+            driver_request.nx_ip_driver_ptr = ip_ptr;
+            driver_request.nx_ip_driver_command = NX_LINK_GET_STATUS;
+            driver_request.nx_ip_driver_interface = &(ip_ptr->nx_ip_interface[i]);
+            driver_request.nx_ip_driver_return_ptr = &link_up;
 
-      (ip_ptr->nx_ip_interface[i].nx_interface_link_driver_entry)(
-          &driver_request);
+            (ip_ptr->nx_ip_interface[i].nx_interface_link_driver_entry)(&driver_request);
 
-      /* Invoke the callback function. */
-      /*lint -e{644} suppress variable might not be initialized, since "link_up"
-       * was initialized in nx_interface_link_driver_entry. */
-      ip_ptr->nx_ip_link_status_change_callback(ip_ptr, i, link_up);
+            /* Invoke the callback function. */
+            /*lint -e{644} suppress variable might not be initialized, since "link_up"
+             * was initialized in nx_interface_link_driver_entry. */
+            ip_ptr->nx_ip_link_status_change_callback(ip_ptr, i, link_up);
 
 #ifdef NX_ENABLE_VLAN
-      /* Link status change need to propagate to vlan sub interface */
-      nx_link_vlan_interface_status_change(ip_ptr, i);
+            /* Link status change need to propagate to vlan sub interface */
+            nx_link_vlan_interface_status_change(ip_ptr, i);
 #endif /* NX_ENABLE_VLAN */
+        }
     }
-  }
 }

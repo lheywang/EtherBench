@@ -70,40 +70,39 @@
 /**************************************************************************/
 UINT _nx_tcp_socket_mss_get(NX_TCP_SOCKET *socket_ptr, ULONG *mss) {
 
-  NX_IP *ip_ptr;
+    NX_IP *ip_ptr;
 
-  /* Setup IP pointer.  */
-  ip_ptr = socket_ptr->nx_tcp_socket_ip_ptr;
+    /* Setup IP pointer.  */
+    ip_ptr = socket_ptr->nx_tcp_socket_ip_ptr;
 
-  /* Obtain the IP mutex so we can examine the bound port.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Obtain the IP mutex so we can examine the bound port.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  if (socket_ptr->nx_tcp_socket_state < NX_TCP_ESTABLISHED) {
+    if (socket_ptr->nx_tcp_socket_state < NX_TCP_ESTABLISHED) {
 
-    /* The socket is not connected. */
-    if (socket_ptr->nx_tcp_socket_mss) {
+        /* The socket is not connected. */
+        if (socket_ptr->nx_tcp_socket_mss) {
 
-      /* Return custom MSS. */
-      *mss = socket_ptr->nx_tcp_socket_mss;
+            /* Return custom MSS. */
+            *mss = socket_ptr->nx_tcp_socket_mss;
+        } else {
+
+            /* Return default MSS. */
+            *mss = NX_TCP_MSS_SIZE;
+        }
     } else {
 
-      /* Return default MSS. */
-      *mss = NX_TCP_MSS_SIZE;
+        /* Pickup SMSS value.  */
+        *mss = socket_ptr->nx_tcp_socket_connect_mss;
     }
-  } else {
 
-    /* Pickup SMSS value.  */
-    *mss = socket_ptr->nx_tcp_socket_connect_mss;
-  }
+    /* Release protection.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /* Release protection.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_TCP_SOCKET_MSS_GET, ip_ptr, socket_ptr, *mss, socket_ptr->nx_tcp_socket_state,
+                            NX_TRACE_TCP_EVENTS, 0, 0);
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_TCP_SOCKET_MSS_GET, ip_ptr, socket_ptr, *mss,
-                          socket_ptr->nx_tcp_socket_state, NX_TRACE_TCP_EVENTS,
-                          0, 0);
-
-  /* Return successful completion status.  */
-  return (NX_SUCCESS);
+    /* Return successful completion status.  */
+    return (NX_SUCCESS);
 }

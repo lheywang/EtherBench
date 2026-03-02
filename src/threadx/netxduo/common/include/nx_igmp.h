@@ -119,30 +119,30 @@
    to NetX.  */
 
 typedef struct NX_IGMP_HEADER_STRUCT {
-  /* Define the first 32-bit word of the IGMP header.  This word contains
-     the following information:
+    /* Define the first 32-bit word of the IGMP header.  This word contains
+       the following information:
 
-          bits 31-28  IGMP 4-bit version (Version 1)
+            bits 31-28  IGMP 4-bit version (Version 1)
 
-          bits 27-24  IGMP 4-bit type defined as follows:
+            bits 27-24  IGMP 4-bit type defined as follows:
 
-                                      Type Field      IGMP Message Type
+                                        Type Field      IGMP Message Type
 
-                                          1           Router Query Request
-                                          2           Host Query Response
+                                            1           Router Query Request
+                                            2           Host Query Response
 
-          bits 15-0   IGMP 16-bit checksum
+            bits 15-0   IGMP 16-bit checksum
 
-   */
+     */
 
-  ULONG nx_igmp_header_word_0;
+    ULONG nx_igmp_header_word_0;
 
-  /* Define the second and final word of the IGMP header.  This word contains
-     the following information:
+    /* Define the second and final word of the IGMP header.  This word contains
+       the following information:
 
-          bits 31-0   32-bit group address (class D IP address)
-   */
-  ULONG nx_igmp_header_word_1;
+            bits 31-0   32-bit group address (class D IP address)
+     */
+    ULONG nx_igmp_header_word_1;
 } NX_IGMP_HEADER;
 
 /* Define the IGMP query response message size.  */
@@ -150,54 +150,40 @@ typedef struct NX_IGMP_HEADER_STRUCT {
 #define NX_IGMP_HEADER_SIZE sizeof(NX_IGMP_HEADER)
 
 /* Define IGMP internal function prototypes.  */
-UINT _nx_igmp_multicast_interface_join_internal(NX_IP *ip_ptr,
-                                                ULONG group_address,
-                                                UINT interface_index,
+UINT _nx_igmp_multicast_interface_join_internal(NX_IP *ip_ptr, ULONG group_address, UINT interface_index,
                                                 UINT update_time);
-UINT _nx_igmp_multicast_interface_leave_internal(NX_IP *ip_ptr,
-                                                 ULONG group_address,
-                                                 UINT interface_index);
-UINT _nx_igmp_interface_report_send(NX_IP *ip_ptr, ULONG group_address,
-                                    UINT interface_index, UINT is_joining);
+UINT _nx_igmp_multicast_interface_leave_internal(NX_IP *ip_ptr, ULONG group_address, UINT interface_index);
+UINT _nx_igmp_interface_report_send(NX_IP *ip_ptr, ULONG group_address, UINT interface_index, UINT is_joining);
 VOID _nx_igmp_periodic_processing(NX_IP *ip_ptr);
 VOID _nx_igmp_packet_process(NX_IP *ip_ptr, NX_PACKET *packet_ptr);
 VOID _nx_igmp_packet_receive(NX_IP *ip_ptr, NX_PACKET *packet_ptr);
 VOID _nx_igmp_queue_process(NX_IP *ip_ptr);
-UINT _nx_igmp_multicast_check(NX_IP *ip_ptr, ULONG group_address,
-                              NX_INTERFACE *nx_interface);
+UINT _nx_igmp_multicast_check(NX_IP *ip_ptr, ULONG group_address, NX_INTERFACE *nx_interface);
 #endif /* NX_DISABLE_IPV4 */
 
 /* Define IGMP function prototypes.  */
 
 UINT _nx_igmp_enable(NX_IP *ip_ptr);
-UINT _nx_igmp_info_get(NX_IP *ip_ptr, ULONG *igmp_reports_sent,
-                       ULONG *igmp_queries_received,
-                       ULONG *igmp_checksum_errors,
-                       ULONG *current_groups_joined);
+UINT _nx_igmp_info_get(NX_IP *ip_ptr, ULONG *igmp_reports_sent, ULONG *igmp_queries_received,
+                       ULONG *igmp_checksum_errors, ULONG *current_groups_joined);
 UINT _nx_igmp_loopback_disable(NX_IP *ip_ptr);
 UINT _nx_igmp_loopback_enable(NX_IP *ip_ptr);
 UINT _nx_igmp_multicast_join(NX_IP *ip_ptr, ULONG group_address);
-UINT _nx_igmp_multicast_interface_join(NX_IP *ip_ptr, ULONG group_address,
-                                       UINT interface_index);
+UINT _nx_igmp_multicast_interface_join(NX_IP *ip_ptr, ULONG group_address, UINT interface_index);
 UINT _nx_igmp_multicast_leave(NX_IP *ip_ptr, ULONG group_address);
-UINT _nx_igmp_multicast_interface_leave(NX_IP *ip_ptr, ULONG group_address,
-                                        UINT interface_index);
+UINT _nx_igmp_multicast_interface_leave(NX_IP *ip_ptr, ULONG group_address, UINT interface_index);
 
 /* Define error checking shells for API services.  These are only referenced by
    the application.  */
 
 UINT _nxe_igmp_enable(NX_IP *ip_ptr);
-UINT _nxe_igmp_info_get(NX_IP *ip_ptr, ULONG *igmp_reports_sent,
-                        ULONG *igmp_queries_received,
-                        ULONG *igmp_checksum_errors,
-                        ULONG *current_groups_joined);
+UINT _nxe_igmp_info_get(NX_IP *ip_ptr, ULONG *igmp_reports_sent, ULONG *igmp_queries_received,
+                        ULONG *igmp_checksum_errors, ULONG *current_groups_joined);
 UINT _nxe_igmp_loopback_disable(NX_IP *ip_ptr);
 UINT _nxe_igmp_loopback_enable(NX_IP *ip_ptr);
 UINT _nxe_igmp_multicast_join(NX_IP *ip_ptr, ULONG group_address);
-UINT _nxe_igmp_multicast_interface_join(NX_IP *ip_ptr, ULONG group_address,
-                                        UINT interface_index);
+UINT _nxe_igmp_multicast_interface_join(NX_IP *ip_ptr, ULONG group_address, UINT interface_index);
 UINT _nxe_igmp_multicast_leave(NX_IP *ip_ptr, ULONG group_address);
-UINT _nxe_igmp_multicast_interface_leave(NX_IP *ip_ptr, ULONG group_address,
-                                         UINT interface_index);
+UINT _nxe_igmp_multicast_interface_leave(NX_IP *ip_ptr, ULONG group_address, UINT interface_index);
 
 #endif

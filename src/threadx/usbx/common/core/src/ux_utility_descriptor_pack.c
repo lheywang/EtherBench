@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -20,13 +19,11 @@
 /**************************************************************************/
 /**************************************************************************/
 
-
 /* Include necessary system files.  */
 
 #define UX_SOURCE_CODE
 
 #include "ux_api.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,40 +74,37 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-VOID  _ux_utility_descriptor_pack(UCHAR * descriptor, UCHAR * descriptor_structure,
-                        UINT descriptor_entries, UCHAR * raw_descriptor)
-{
+VOID _ux_utility_descriptor_pack(UCHAR *descriptor, UCHAR *descriptor_structure, UINT descriptor_entries,
+                                 UCHAR *raw_descriptor) {
 
     /* Loop on all the entries in this descriptor.  */
-    while(descriptor_entries--)
-    {
+    while (descriptor_entries--) {
 
         /* Get the length of that component.  */
-        switch(*descriptor_structure++)
-        {
+        switch (*descriptor_structure++) {
 
         /* Check the size then build the component from the source and
            insert it into the target descriptor.  */
         case 4:
 
             /* Increase address so it's aligned.  */
-            while((ALIGN_TYPE)descriptor & 3u)
+            while ((ALIGN_TYPE)descriptor & 3u)
                 descriptor++;
 
             /* Put the DW.  */
-            _ux_utility_long_put(raw_descriptor, *((ULONG *) descriptor));
-            raw_descriptor +=  4;
+            _ux_utility_long_put(raw_descriptor, *((ULONG *)descriptor));
+            raw_descriptor += 4;
             descriptor += 4;
             break;
 
         case 2:
 
             /* Increase address so it's aligned.  */
-            while((ALIGN_TYPE)descriptor & 1u)
+            while ((ALIGN_TYPE)descriptor & 1u)
                 descriptor++;
 
             /* Put the Word.  */
-            _ux_utility_short_put(raw_descriptor, (USHORT)*((USHORT *) descriptor));
+            _ux_utility_short_put(raw_descriptor, (USHORT) * ((USHORT *)descriptor));
             raw_descriptor += 2;
             descriptor += 2;
             break;
@@ -118,7 +112,7 @@ VOID  _ux_utility_descriptor_pack(UCHAR * descriptor, UCHAR * descriptor_structu
         default:
 
             /* Put the byte.  */
-            *raw_descriptor =  (UCHAR) *((UCHAR *) descriptor);
+            *raw_descriptor = (UCHAR) * ((UCHAR *)descriptor);
             raw_descriptor++;
             descriptor++;
         }

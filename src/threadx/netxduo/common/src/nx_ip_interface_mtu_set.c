@@ -70,18 +70,17 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_ip_interface_mtu_set(NX_IP *ip_ptr, UINT interface_index,
-                              ULONG mtu_size) {
+UINT _nx_ip_interface_mtu_set(NX_IP *ip_ptr, UINT interface_index, ULONG mtu_size) {
 
-  /* Get mutex protection.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Get mutex protection.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Set new mtu size. */
-  ip_ptr->nx_ip_interface[interface_index].nx_interface_ip_mtu_size = mtu_size;
+    /* Set new mtu size. */
+    ip_ptr->nx_ip_interface[interface_index].nx_interface_ip_mtu_size = mtu_size;
 
-  /* Release mutex protection.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release mutex protection.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /* Return completion status.  */
-  return (NX_SUCCESS);
+    /* Return completion status.  */
+    return (NX_SUCCESS);
 }

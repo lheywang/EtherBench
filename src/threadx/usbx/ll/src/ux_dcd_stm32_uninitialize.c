@@ -73,32 +73,32 @@
 /**************************************************************************/
 UINT _ux_dcd_stm32_uninitialize(ULONG dcd_io, ULONG parameter) {
 
-  UX_SLAVE_DCD *dcd;
-  UX_DCD_STM32 *dcd_stm32;
+    UX_SLAVE_DCD *dcd;
+    UX_DCD_STM32 *dcd_stm32;
 
-  UX_PARAMETER_NOT_USED(dcd_io);
+    UX_PARAMETER_NOT_USED(dcd_io);
 
-  /* Get the pointer to the DCD.  */
-  dcd = &_ux_system_slave->ux_system_slave_dcd;
+    /* Get the pointer to the DCD.  */
+    dcd = &_ux_system_slave->ux_system_slave_dcd;
 
-  /* Set the state of the controller to HALTED now.  */
-  dcd->ux_slave_dcd_status = UX_DCD_STATUS_HALTED;
+    /* Set the state of the controller to HALTED now.  */
+    dcd->ux_slave_dcd_status = UX_DCD_STATUS_HALTED;
 
-  /* Get controller driver.  */
-  dcd_stm32 = (UX_DCD_STM32 *)dcd->ux_slave_dcd_controller_hardware;
+    /* Get controller driver.  */
+    dcd_stm32 = (UX_DCD_STM32 *)dcd->ux_slave_dcd_controller_hardware;
 
-  if (dcd_stm32 == UX_NULL) {
-    dcd->ux_slave_dcd_controller_hardware = UX_NULL;
-    return (UX_SUCCESS);
-  }
+    if (dcd_stm32 == UX_NULL) {
+        dcd->ux_slave_dcd_controller_hardware = UX_NULL;
+        return (UX_SUCCESS);
+    }
 
-  /* Check parameter.  */
-  if ((ULONG)dcd_stm32->pcd_handle == parameter) {
-    _ux_utility_memory_free(dcd_stm32);
-    dcd->ux_slave_dcd_controller_hardware = UX_NULL;
-    return (UX_SUCCESS);
-  }
+    /* Check parameter.  */
+    if ((ULONG)dcd_stm32->pcd_handle == parameter) {
+        _ux_utility_memory_free(dcd_stm32);
+        dcd->ux_slave_dcd_controller_hardware = UX_NULL;
+        return (UX_SUCCESS);
+    }
 
-  /* Parameter not correct.  */
-  return (UX_ERROR);
+    /* Parameter not correct.  */
+    return (UX_ERROR);
 }

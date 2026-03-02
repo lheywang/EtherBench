@@ -79,12 +79,11 @@
 /*                                            resulting in version 6.2.1 */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_partial_defragment(LX_NAND_FLASH *nand_flash,
-                                       UINT max_blocks) {
+UINT _lx_nand_flash_partial_defragment(LX_NAND_FLASH *nand_flash, UINT max_blocks) {
 
-  LX_PARAMETER_NOT_USED(nand_flash);
-  LX_PARAMETER_NOT_USED(max_blocks);
+    LX_PARAMETER_NOT_USED(nand_flash);
+    LX_PARAMETER_NOT_USED(max_blocks);
 
-  /* Return not supported.  */
-  return (LX_NOT_SUPPORTED);
+    /* Return not supported.  */
+    return (LX_NOT_SUPPORTED);
 }

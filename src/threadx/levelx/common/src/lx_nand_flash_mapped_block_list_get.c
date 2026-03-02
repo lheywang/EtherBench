@@ -70,24 +70,21 @@
 /*  03-08-2023     Xiuwen Cai               Initial Version 6.2.1        */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_mapped_block_list_get(LX_NAND_FLASH *nand_flash,
-                                          ULONG *block_mapping_index) {
+UINT _lx_nand_flash_mapped_block_list_get(LX_NAND_FLASH *nand_flash, ULONG *block_mapping_index) {
 
-  /* Check if the mapped block list is empty.  */
-  if (nand_flash->lx_nand_flash_mapped_block_list_head ==
-      nand_flash->lx_nand_flash_block_list_size - 1) {
+    /* Check if the mapped block list is empty.  */
+    if (nand_flash->lx_nand_flash_mapped_block_list_head == nand_flash->lx_nand_flash_block_list_size - 1) {
 
-    /* Empty list, return error.  */
-    return (LX_NO_BLOCKS);
-  }
+        /* Empty list, return error.  */
+        return (LX_NO_BLOCKS);
+    }
 
-  /* Remove one block from the list.  */
-  nand_flash->lx_nand_flash_mapped_block_list_head++;
+    /* Remove one block from the list.  */
+    nand_flash->lx_nand_flash_mapped_block_list_head++;
 
-  /* Return the block number.  */
-  *block_mapping_index = nand_flash->lx_nand_flash_block_list
-                             [nand_flash->lx_nand_flash_mapped_block_list_head];
+    /* Return the block number.  */
+    *block_mapping_index = nand_flash->lx_nand_flash_block_list[nand_flash->lx_nand_flash_mapped_block_list_head];
 
-  /* Return successful completion.  */
-  return (LX_SUCCESS);
+    /* Return successful completion.  */
+    return (LX_SUCCESS);
 }

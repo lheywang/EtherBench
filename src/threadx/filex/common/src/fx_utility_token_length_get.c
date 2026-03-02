@@ -69,21 +69,20 @@
 /**************************************************************************/
 UINT _fx_utility_token_length_get(CHAR *path) {
 
-  UINT length;
+    UINT length;
 
-  /* Initialize the length to 0.  */
-  length = 0;
+    /* Initialize the length to 0.  */
+    length = 0;
 
-  /* Walk to the next sub-directory break.  */
-  while (path[length] && (path[length] != '\\') && (path[length] != '/') &&
-         (length < FX_MAXIMUM_PATH)) {
+    /* Walk to the next sub-directory break.  */
+    while (path[length] && (path[length] != '\\') && (path[length] != '/') && (length < FX_MAXIMUM_PATH)) {
 
-    /* Increment length (index).  */
-    length++;
-  }
+        /* Increment length (index).  */
+        length++;
+    }
 
-  /* Return length.  */
-  return (length);
+    /* Return length.  */
+    return (length);
 }
 
 #endif

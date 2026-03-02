@@ -74,12 +74,10 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_unicode_name_get(FX_MEDIA *media_ptr, CHAR *source_short_name,
-                          UCHAR *destination_unicode_name,
+UINT _fx_unicode_name_get(FX_MEDIA *media_ptr, CHAR *source_short_name, UCHAR *destination_unicode_name,
                           ULONG *destination_unicode_length) {
 
-  /* Call the extended version with 13 bytes short name length.  */
-  return (_fx_unicode_name_get_extended(
-      media_ptr, source_short_name, destination_unicode_name,
-      destination_unicode_length, FX_MAX_LONG_NAME_LEN * 2));
+    /* Call the extended version with 13 bytes short name length.  */
+    return (_fx_unicode_name_get_extended(media_ptr, source_short_name, destination_unicode_name,
+                                          destination_unicode_length, FX_MAX_LONG_NAME_LEN * 2));
 }

@@ -70,44 +70,44 @@
 /**************************************************************************/
 UINT _txe_mutex_put(TX_MUTEX *mutex_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Default status to success.  */
-  status = TX_SUCCESS;
+    /* Default status to success.  */
+    status = TX_SUCCESS;
 
-  /* Check for an invalid mutex pointer.  */
-  if (mutex_ptr == TX_NULL) {
+    /* Check for an invalid mutex pointer.  */
+    if (mutex_ptr == TX_NULL) {
 
-    /* Mutex pointer is invalid, return appropriate error code.  */
-    status = TX_MUTEX_ERROR;
-  }
-
-  /* Now check for invalid mutex ID.  */
-  else if (mutex_ptr->tx_mutex_id != TX_MUTEX_ID) {
-
-    /* Mutex pointer is invalid, return appropriate error code.  */
-    status = TX_MUTEX_ERROR;
-  } else {
-
-    /* Check for interrupt call.  */
-    if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
-
-      /* Now, make sure the call is from an interrupt and not initialization. */
-      if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS) {
-
-        /* Invalid caller of this function, return appropriate error code.  */
-        status = TX_CALLER_ERROR;
-      }
+        /* Mutex pointer is invalid, return appropriate error code.  */
+        status = TX_MUTEX_ERROR;
     }
-  }
 
-  /* Determine if everything is okay.  */
-  if (status == TX_SUCCESS) {
+    /* Now check for invalid mutex ID.  */
+    else if (mutex_ptr->tx_mutex_id != TX_MUTEX_ID) {
 
-    /* Call actual put mutex function.  */
-    status = _tx_mutex_put(mutex_ptr);
-  }
+        /* Mutex pointer is invalid, return appropriate error code.  */
+        status = TX_MUTEX_ERROR;
+    } else {
 
-  /* Return completion status.  */
-  return (status);
+        /* Check for interrupt call.  */
+        if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
+
+            /* Now, make sure the call is from an interrupt and not initialization. */
+            if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS) {
+
+                /* Invalid caller of this function, return appropriate error code.  */
+                status = TX_CALLER_ERROR;
+            }
+        }
+    }
+
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
+
+        /* Call actual put mutex function.  */
+        status = _tx_mutex_put(mutex_ptr);
+    }
+
+    /* Return completion status.  */
+    return (status);
 }

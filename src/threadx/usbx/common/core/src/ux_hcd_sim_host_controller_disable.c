@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_hcd_sim_host.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -70,15 +67,13 @@
 /*                                            resulting in version 6.1.2  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_hcd_sim_host_controller_disable(UX_HCD_SIM_HOST *hcd_sim_host)
-{
+UINT _ux_hcd_sim_host_controller_disable(UX_HCD_SIM_HOST *hcd_sim_host) {
 
-UX_HCD  *hcd = hcd_sim_host -> ux_hcd_sim_host_hcd_owner;
-
+    UX_HCD *hcd = hcd_sim_host->ux_hcd_sim_host_hcd_owner;
 
     /* Set the state of the controller to HALTED.  */
-    hcd -> ux_hcd_status =  UX_HCD_STATUS_HALTED;
+    hcd->ux_hcd_status = UX_HCD_STATUS_HALTED;
 
     /* Return successful completion.  */
-    return(UX_SUCCESS);
+    return (UX_SUCCESS);
 }

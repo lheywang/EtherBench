@@ -122,12 +122,11 @@ typedef unsigned long long ULONG64;
 #define FX_PROTECT
 #define FX_UNPROTECT
 #else
-#define FX_PROTECT                                                             \
-  if (media_ptr->fx_media_id != FX_MEDIA_ID)                                   \
-    return (FX_MEDIA_NOT_OPEN);                                                \
-  else if (tx_mutex_get(&(media_ptr->fx_media_protect), TX_WAIT_FOREVER) !=    \
-           TX_SUCCESS)                                                         \
-    return (FX_MEDIA_NOT_OPEN);
+#define FX_PROTECT                                                                                                     \
+    if (media_ptr->fx_media_id != FX_MEDIA_ID)                                                                         \
+        return (FX_MEDIA_NOT_OPEN);                                                                                    \
+    else if (tx_mutex_get(&(media_ptr->fx_media_protect), TX_WAIT_FOREVER) != TX_SUCCESS)                              \
+        return (FX_MEDIA_NOT_OPEN);
 #define FX_UNPROTECT tx_mutex_put(&(media_ptr->fx_media_protect));
 #endif
 
@@ -139,8 +138,7 @@ typedef unsigned long long ULONG64;
 #endif
 
 #ifndef FX_DISABLE_INTS
-#define FX_DISABLE_INTS                                                        \
-  old_interrupt_posture = tx_interrupt_control(TX_INT_DISABLE);
+#define FX_DISABLE_INTS old_interrupt_posture = tx_interrupt_control(TX_INT_DISABLE);
 #endif
 
 #ifndef FX_RESTORE_INTS
@@ -164,24 +162,24 @@ typedef unsigned long long ULONG64;
 #ifndef FX_STANDALONE_ENABLE
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-#define FX_CALLER_CHECKING_EXTERNS                                             \
-  extern TX_THREAD *_tx_thread_current_ptr;                                    \
-  extern TX_THREAD _tx_timer_thread;                                           \
-  extern volatile ULONG _tx_thread_system_state;
+#define FX_CALLER_CHECKING_EXTERNS                                                                                     \
+    extern TX_THREAD *_tx_thread_current_ptr;                                                                          \
+    extern TX_THREAD _tx_timer_thread;                                                                                 \
+    extern volatile ULONG _tx_thread_system_state;
 
-#define FX_CALLER_CHECKING_CODE                                                \
-  if ((TX_THREAD_GET_SYSTEM_STATE()) || (_tx_thread_current_ptr == TX_NULL) || \
-      (_tx_thread_current_ptr == &_tx_timer_thread))                           \
-    return (FX_CALLER_ERROR);
+#define FX_CALLER_CHECKING_CODE                                                                                        \
+    if ((TX_THREAD_GET_SYSTEM_STATE()) || (_tx_thread_current_ptr == TX_NULL) ||                                       \
+        (_tx_thread_current_ptr == &_tx_timer_thread))                                                                 \
+        return (FX_CALLER_ERROR);
 
 #else
-#define FX_CALLER_CHECKING_EXTERNS                                             \
-  extern TX_THREAD *_tx_thread_current_ptr;                                    \
-  extern volatile ULONG _tx_thread_system_state;
+#define FX_CALLER_CHECKING_EXTERNS                                                                                     \
+    extern TX_THREAD *_tx_thread_current_ptr;                                                                          \
+    extern volatile ULONG _tx_thread_system_state;
 
-#define FX_CALLER_CHECKING_CODE                                                \
-  if ((TX_THREAD_GET_SYSTEM_STATE()) || (_tx_thread_current_ptr == TX_NULL))   \
-    return (FX_CALLER_ERROR);
+#define FX_CALLER_CHECKING_CODE                                                                                        \
+    if ((TX_THREAD_GET_SYSTEM_STATE()) || (_tx_thread_current_ptr == TX_NULL))                                         \
+        return (FX_CALLER_ERROR);
 #endif
 #else
 #define FX_CALLER_CHECKING_EXTERNS
@@ -209,8 +207,7 @@ typedef unsigned long long ULONG64;
 
 #ifndef FX_UPDATE_RATE_IN_TICKS
 #if (defined(TX_TIMER_TICKS_PER_SECOND) && (!defined(FX_STANDALONE_ENABLE)))
-#define FX_UPDATE_RATE_IN_TICKS                                                \
-  (TX_TIMER_TICKS_PER_SECOND * FX_UPDATE_RATE_IN_SECONDS)
+#define FX_UPDATE_RATE_IN_TICKS (TX_TIMER_TICKS_PER_SECOND * FX_UPDATE_RATE_IN_SECONDS)
 #else
 #define FX_UPDATE_RATE_IN_TICKS 1000
 #endif

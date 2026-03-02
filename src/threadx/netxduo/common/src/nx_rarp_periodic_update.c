@@ -70,10 +70,10 @@
 /**************************************************************************/
 VOID _nx_rarp_periodic_update(NX_IP *ip_ptr) {
 
-  /* Send RARP message out.  */
-  _nx_rarp_packet_send(ip_ptr);
+    /* Send RARP message out.  */
+    _nx_rarp_packet_send(ip_ptr);
 
-  /* Setup the RARP queue process routine.  */
-  ip_ptr->nx_ip_rarp_queue_process = _nx_rarp_queue_process;
+    /* Setup the RARP queue process routine.  */
+    ip_ptr->nx_ip_rarp_queue_process = _nx_rarp_queue_process;
 }
 #endif /* !NX_DISABLE_IPV4  */

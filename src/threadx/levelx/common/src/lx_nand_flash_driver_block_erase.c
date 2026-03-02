@@ -78,22 +78,20 @@
 /*                                            resulting in version 6.2.1 */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_driver_block_erase(LX_NAND_FLASH *nand_flash, ULONG block,
-                                       ULONG erase_count) {
+UINT _lx_nand_flash_driver_block_erase(LX_NAND_FLASH *nand_flash, ULONG block, ULONG erase_count) {
 
-  UINT status;
+    UINT status;
 
-  /* Increment the block erases count.  */
-  nand_flash->lx_nand_flash_diagnostic_block_erases++;
+    /* Increment the block erases count.  */
+    nand_flash->lx_nand_flash_diagnostic_block_erases++;
 
-  /* Call driver erase block function.  */
+    /* Call driver erase block function.  */
 #ifdef LX_NAND_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-  status = (nand_flash->lx_nand_flash_driver_block_erase)(nand_flash, block,
-                                                          erase_count);
+    status = (nand_flash->lx_nand_flash_driver_block_erase)(nand_flash, block, erase_count);
 #else
-  status = (nand_flash->lx_nand_flash_driver_block_erase)(block, erase_count);
+    status = (nand_flash->lx_nand_flash_driver_block_erase)(block, erase_count);
 #endif
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }

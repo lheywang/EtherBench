@@ -81,30 +81,28 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_udp_packet_info_extract(NX_PACKET *packet_ptr, ULONG *ip_address,
-                                  UINT *protocol, UINT *port,
+UINT _nxe_udp_packet_info_extract(NX_PACKET *packet_ptr, ULONG *ip_address, UINT *protocol, UINT *port,
                                   UINT *interface_index) {
 #ifndef NX_DISABLE_IPV4
-  UINT status;
+    UINT status;
 
-  if (packet_ptr == NX_NULL) {
-    return (NX_PTR_ERROR);
-  }
+    if (packet_ptr == NX_NULL) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  status = _nx_udp_packet_info_extract(packet_ptr, ip_address, protocol, port,
-                                       interface_index);
+    status = _nx_udp_packet_info_extract(packet_ptr, ip_address, protocol, port, interface_index);
 
-  return (status);
+    return (status);
 #else
-  NX_PARAMETER_NOT_USED(packet_ptr);
-  NX_PARAMETER_NOT_USED(ip_address);
-  NX_PARAMETER_NOT_USED(protocol);
-  NX_PARAMETER_NOT_USED(port);
-  NX_PARAMETER_NOT_USED(interface_index);
+    NX_PARAMETER_NOT_USED(packet_ptr);
+    NX_PARAMETER_NOT_USED(ip_address);
+    NX_PARAMETER_NOT_USED(protocol);
+    NX_PARAMETER_NOT_USED(port);
+    NX_PARAMETER_NOT_USED(interface_index);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* NX_DISABLE_IPV4 */
 }

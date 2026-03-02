@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_hid.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -76,46 +74,41 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_hid_receiver_event_get(UX_SLAVE_CLASS_HID *hid,
-                                UX_DEVICE_CLASS_HID_RECEIVED_EVENT *event)
-{
+UINT _ux_device_class_hid_receiver_event_get(UX_SLAVE_CLASS_HID *hid, UX_DEVICE_CLASS_HID_RECEIVED_EVENT *event) {
 #if !defined(UX_DEVICE_CLASS_HID_INTERRUPT_OUT_SUPPORT)
     UX_PARAMETER_NOT_USED(hid);
     UX_PARAMETER_NOT_USED(event);
-    return(UX_FUNCTION_NOT_SUPPORTED);
+    return (UX_FUNCTION_NOT_SUPPORTED);
 #else
 
-
-UX_DEVICE_CLASS_HID_RECEIVER            *receiver;
-UX_DEVICE_CLASS_HID_RECEIVED_EVENT      *pos;
-
+    UX_DEVICE_CLASS_HID_RECEIVER *receiver;
+    UX_DEVICE_CLASS_HID_RECEIVED_EVENT *pos;
 
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_HID_RECEIVER_EVENT_GET, hid, event, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_HID_RECEIVER_EVENT_GET, hid, event, 0, 0,
+                            UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
     /* Get receiver.  */
-    receiver = hid -> ux_device_class_hid_receiver;
+    receiver = hid->ux_device_class_hid_receiver;
 
     /* Get current reading position.  */
-    pos = receiver -> ux_device_class_hid_receiver_event_read_pos;
+    pos = receiver->ux_device_class_hid_receiver_event_read_pos;
 
     /* Check if it's available.  */
-    if (pos -> ux_device_class_hid_received_event_length != 0)
-    {
+    if (pos->ux_device_class_hid_received_event_length != 0) {
 
         /* Fill event structure to return.  */
-        event -> ux_device_class_hid_received_event_length = pos -> ux_device_class_hid_received_event_length;
+        event->ux_device_class_hid_received_event_length = pos->ux_device_class_hid_received_event_length;
 
         /* Fill data buffer address to return.  */
-        event -> ux_device_class_hid_received_event_data = UX_DEVICE_CLASS_HID_RECEIVED_QUEUE_ITEM_BUFFER(pos);
+        event->ux_device_class_hid_received_event_data = UX_DEVICE_CLASS_HID_RECEIVED_QUEUE_ITEM_BUFFER(pos);
 
-        return(UX_SUCCESS);
+        return (UX_SUCCESS);
     }
 
-    return(UX_ERROR);
+    return (UX_ERROR);
 #endif
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -156,14 +149,12 @@ UX_DEVICE_CLASS_HID_RECEIVED_EVENT      *pos;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT  _uxe_device_class_hid_receiver_event_get(UX_SLAVE_CLASS_HID *hid,
-                                UX_DEVICE_CLASS_HID_RECEIVED_EVENT *event)
-{
+UINT _uxe_device_class_hid_receiver_event_get(UX_SLAVE_CLASS_HID *hid, UX_DEVICE_CLASS_HID_RECEIVED_EVENT *event) {
 
     /* Sanity check.  */
     if ((hid == UX_NULL) || (event == UX_NULL))
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Invoke function to free HID event.  */
-    return(_ux_device_class_hid_receiver_event_get(hid, event));
+    return (_ux_device_class_hid_receiver_event_get(hid, event));
 }

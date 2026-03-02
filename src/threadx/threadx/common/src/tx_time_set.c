@@ -69,22 +69,20 @@
 /**************************************************************************/
 VOID _tx_time_set(ULONG new_time) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  TX_TRACE_IN_LINE_INSERT(TX_TRACE_TIME_SET,
-                          TX_ULONG_TO_POINTER_CONVERT(new_time), 0, 0, 0,
-                          TX_TRACE_TIME_EVENTS)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    TX_TRACE_IN_LINE_INSERT(TX_TRACE_TIME_SET, TX_ULONG_TO_POINTER_CONVERT(new_time), 0, 0, 0, TX_TRACE_TIME_EVENTS)
 
-  /* Log this kernel call.  */
-  TX_EL_TIME_SET_INSERT
+    /* Log this kernel call.  */
+    TX_EL_TIME_SET_INSERT
 
-  /* Set the system clock time.  */
-  _tx_timer_system_clock = new_time;
+    /* Set the system clock time.  */
+    _tx_timer_system_clock = new_time;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 }

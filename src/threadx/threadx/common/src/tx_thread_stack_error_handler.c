@@ -24,8 +24,7 @@
 /* Include necessary system files.  */
 
 #include "../include/tx_api.h"
-#if defined(TX_MISRA_ENABLE) || defined(TX_ENABLE_STACK_CHECKING) ||           \
-    defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
+#if defined(TX_MISRA_ENABLE) || defined(TX_ENABLE_STACK_CHECKING) || defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
 #include "../include/tx_thread.h"
 
 /**************************************************************************/
@@ -82,36 +81,35 @@
 /**************************************************************************/
 VOID _tx_thread_stack_error_handler(TX_THREAD *thread_ptr) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-#if defined(TX_ENABLE_STACK_CHECKING) ||                                       \
-    defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
-
-  /* Disable interrupts.  */
-  TX_DISABLE
-
-  /* Determine if the application has registered an error handler.  */
-  if (_tx_thread_application_stack_error_handler != TX_NULL) {
-
-    /* Yes, an error handler is present, simply call the application error
-     * handler.  */
-    (_tx_thread_application_stack_error_handler)(thread_ptr);
-  }
-
-  /* Restore interrupts.  */
-  TX_RESTORE
-
-#else
-
-  /* Access input argument just for the sake of lint, MISRA, etc.  */
-  if (thread_ptr != TX_NULL) {
+#if defined(TX_ENABLE_STACK_CHECKING) || defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
 
     /* Disable interrupts.  */
     TX_DISABLE
 
+    /* Determine if the application has registered an error handler.  */
+    if (_tx_thread_application_stack_error_handler != TX_NULL) {
+
+        /* Yes, an error handler is present, simply call the application error
+         * handler.  */
+        (_tx_thread_application_stack_error_handler)(thread_ptr);
+    }
+
     /* Restore interrupts.  */
     TX_RESTORE
-  }
+
+#else
+
+    /* Access input argument just for the sake of lint, MISRA, etc.  */
+    if (thread_ptr != TX_NULL) {
+
+        /* Disable interrupts.  */
+        TX_DISABLE
+
+        /* Restore interrupts.  */
+        TX_RESTORE
+    }
 #endif
 }
 #endif

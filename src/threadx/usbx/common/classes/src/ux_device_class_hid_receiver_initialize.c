@@ -20,13 +20,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_hid.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -82,59 +80,60 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_hid_receiver_initialize(UX_SLAVE_CLASS_HID *hid,
-                                    UX_SLAVE_CLASS_HID_PARAMETER *parameter,
-                                    UX_DEVICE_CLASS_HID_RECEIVER **receiver)
-{
+UINT _ux_device_class_hid_receiver_initialize(UX_SLAVE_CLASS_HID *hid, UX_SLAVE_CLASS_HID_PARAMETER *parameter,
+                                              UX_DEVICE_CLASS_HID_RECEIVER **receiver) {
 #if !defined(UX_DEVICE_CLASS_HID_INTERRUPT_OUT_SUPPORT)
     UX_PARAMETER_NOT_USED(hid);
     UX_PARAMETER_NOT_USED(parameter);
     UX_PARAMETER_NOT_USED(receiver);
-    return(UX_FUNCTION_NOT_SUPPORTED);
+    return (UX_FUNCTION_NOT_SUPPORTED);
 #else
-ULONG                                   memory_size;
-ULONG                                   events_size;
-UCHAR                                   *memory_receiver;
-UCHAR                                   *memory_events;
+    ULONG memory_size;
+    ULONG events_size;
+    UCHAR *memory_receiver;
+    UCHAR *memory_events;
 #if !defined(UX_DEVICE_STANDALONE)
-UCHAR                                   *memory_stack;
+    UCHAR *memory_stack;
 #endif
 #if (UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1) && defined(UX_DEVICE_CLASS_HID_ZERO_COPY)
-UX_DEVICE_CLASS_HID_RECEIVED_EVENT      *events_head;
-UCHAR                                   *buffer;
-UINT                                    i;
+    UX_DEVICE_CLASS_HID_RECEIVED_EVENT *events_head;
+    UCHAR *buffer;
+    UINT i;
 #endif
-UINT                                    status = UX_SUCCESS;
-
+    UINT status = UX_SUCCESS;
 
     /* Validate parameters.  */
-    UX_ASSERT(parameter -> ux_device_class_hid_parameter_receiver_event_max_length <= UX_SLAVE_REQUEST_DATA_MAX_LENGTH);
+    UX_ASSERT(parameter->ux_device_class_hid_parameter_receiver_event_max_length <= UX_SLAVE_REQUEST_DATA_MAX_LENGTH);
 
     /* Allocate memory for receiver and receiver events.  */
 
     /* Memory of thread stack and receiver instance.  */
 #if !defined(UX_DEVICE_STANDALONE)
-    UX_ASSERT(!UX_OVERFLOW_CHECK_ADD_ULONG(UX_DEVICE_CLASS_HID_RECEIVER_THREAD_STACK_SIZE, sizeof(UX_DEVICE_CLASS_HID_RECEIVER)));
-    memory_size = UX_DEVICE_CLASS_HID_RECEIVER_THREAD_STACK_SIZE +
-                  sizeof(UX_DEVICE_CLASS_HID_RECEIVER);
+    UX_ASSERT(!UX_OVERFLOW_CHECK_ADD_ULONG(UX_DEVICE_CLASS_HID_RECEIVER_THREAD_STACK_SIZE,
+                                           sizeof(UX_DEVICE_CLASS_HID_RECEIVER)));
+    memory_size = UX_DEVICE_CLASS_HID_RECEIVER_THREAD_STACK_SIZE + sizeof(UX_DEVICE_CLASS_HID_RECEIVER);
 #else
     memory_size = sizeof(UX_DEVICE_CLASS_HID_RECEIVER);
 #endif
-    UX_ASSERT(!UX_OVERFLOW_CHECK_ADD_ULONG(parameter -> ux_device_class_hid_parameter_receiver_event_max_length, sizeof(ULONG)));
+    UX_ASSERT(!UX_OVERFLOW_CHECK_ADD_ULONG(parameter->ux_device_class_hid_parameter_receiver_event_max_length,
+                                           sizeof(ULONG)));
 
 #if (UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1) && defined(UX_DEVICE_CLASS_HID_ZERO_COPY)
 
     /* Events structs are in regular memory.  */
-    UX_ASSERT(!UX_OVERFLOW_CHECK_MULV_ULONG(sizeof(UX_DEVICE_CLASS_HID_RECEIVED_EVENT), parameter -> ux_device_class_hid_parameter_receiver_event_max_number));
-    events_size = sizeof(UX_DEVICE_CLASS_HID_RECEIVED_EVENT) * parameter -> ux_device_class_hid_parameter_receiver_event_max_number;
+    UX_ASSERT(!UX_OVERFLOW_CHECK_MULV_ULONG(sizeof(UX_DEVICE_CLASS_HID_RECEIVED_EVENT),
+                                            parameter->ux_device_class_hid_parameter_receiver_event_max_number));
+    events_size =
+        sizeof(UX_DEVICE_CLASS_HID_RECEIVED_EVENT) * parameter->ux_device_class_hid_parameter_receiver_event_max_number;
 
     /* Memory of events are allocated later as cache safe memory.  */
 #else
 
     /* Memory of events.  */
-    events_size  = parameter -> ux_device_class_hid_parameter_receiver_event_max_length + sizeof(ULONG);
-    UX_ASSERT(!UX_OVERFLOW_CHECK_MULV_ULONG(events_size, parameter -> ux_device_class_hid_parameter_receiver_event_max_number));
-    events_size *= parameter -> ux_device_class_hid_parameter_receiver_event_max_number;
+    events_size = parameter->ux_device_class_hid_parameter_receiver_event_max_length + sizeof(ULONG);
+    UX_ASSERT(
+        !UX_OVERFLOW_CHECK_MULV_ULONG(events_size, parameter->ux_device_class_hid_parameter_receiver_event_max_number));
+    events_size *= parameter->ux_device_class_hid_parameter_receiver_event_max_number;
 #endif
     UX_ASSERT(!UX_OVERFLOW_CHECK_ADD_ULONG(memory_size, events_size));
     memory_size += events_size;
@@ -142,7 +141,7 @@ UINT                                    status = UX_SUCCESS;
     /* Allocate memory.  */
     memory_receiver = _ux_utility_memory_allocate(UX_NO_ALIGN, UX_REGULAR_MEMORY, memory_size);
     if (memory_receiver == UX_NULL)
-        return(UX_MEMORY_INSUFFICIENT);
+        return (UX_MEMORY_INSUFFICIENT);
 #if !defined(UX_DEVICE_STANDALONE)
     memory_stack = memory_receiver + sizeof(UX_DEVICE_CLASS_HID_RECEIVER);
     memory_events = memory_stack + UX_DEVICE_CLASS_HID_RECEIVER_THREAD_STACK_SIZE;
@@ -155,29 +154,28 @@ UINT                                    status = UX_SUCCESS;
     /* Allocate cache safe memory.  */
 
     /* Total buffer size calculate.  */
-    events_size  = parameter -> ux_device_class_hid_parameter_receiver_event_max_length;
-    UX_ASSERT(!UX_OVERFLOW_CHECK_MULV_ULONG(events_size, parameter -> ux_device_class_hid_parameter_receiver_event_max_number));
-    events_size *= parameter -> ux_device_class_hid_parameter_receiver_event_max_number;
+    events_size = parameter->ux_device_class_hid_parameter_receiver_event_max_length;
+    UX_ASSERT(
+        !UX_OVERFLOW_CHECK_MULV_ULONG(events_size, parameter->ux_device_class_hid_parameter_receiver_event_max_number));
+    events_size *= parameter->ux_device_class_hid_parameter_receiver_event_max_number;
 
     /* Allocate buffer.  */
     buffer = _ux_utility_memory_allocate(UX_NO_ALIGN, UX_CACHE_SAFE_MEMORY, events_size);
-    if (buffer == UX_NULL)
-    {
+    if (buffer == UX_NULL) {
         _ux_utility_memory_free(memory_receiver);
-        return(UX_MEMORY_INSUFFICIENT);
+        return (UX_MEMORY_INSUFFICIENT);
     }
 
     /* Assign events buffers.  */
-    events_head = (UX_DEVICE_CLASS_HID_RECEIVED_EVENT *) memory_events;
-    for (i = 0; i < parameter -> ux_device_class_hid_parameter_receiver_event_max_number; i++)
-    {
+    events_head = (UX_DEVICE_CLASS_HID_RECEIVED_EVENT *)memory_events;
+    for (i = 0; i < parameter->ux_device_class_hid_parameter_receiver_event_max_number; i++) {
 
         /* Assign event buffer.  */
-        events_head -> ux_device_class_hid_received_event_data = buffer;
+        events_head->ux_device_class_hid_received_event_data = buffer;
 
         /* Move to next event and next buffer.  */
-        buffer += parameter -> ux_device_class_hid_parameter_receiver_event_max_length;
-        events_head ++;
+        buffer += parameter->ux_device_class_hid_parameter_receiver_event_max_length;
+        events_head++;
     }
 #endif
 
@@ -190,57 +188,51 @@ UINT                                    status = UX_SUCCESS;
        a new thread. We pass a pointer to the class to the new thread.  This thread
        does not start until we have a instance of the class. */
     if (status == UX_SUCCESS)
-        status =  _ux_utility_thread_create(&(*receiver) -> ux_device_class_hid_receiver_thread,
-                    "ux_device_class_hid_receiver_thread",
-                    _ux_device_class_hid_receiver_thread,
-                    (ULONG) (ALIGN_TYPE) hid, (VOID *) memory_stack,
-                    UX_DEVICE_CLASS_HID_RECEIVER_THREAD_STACK_SIZE, UX_THREAD_PRIORITY_CLASS,
-                    UX_THREAD_PRIORITY_CLASS, UX_NO_TIME_SLICE, UX_DONT_START);
+        status = _ux_utility_thread_create(&(*receiver)->ux_device_class_hid_receiver_thread,
+                                           "ux_device_class_hid_receiver_thread", _ux_device_class_hid_receiver_thread,
+                                           (ULONG)(ALIGN_TYPE)hid, (VOID *)memory_stack,
+                                           UX_DEVICE_CLASS_HID_RECEIVER_THREAD_STACK_SIZE, UX_THREAD_PRIORITY_CLASS,
+                                           UX_THREAD_PRIORITY_CLASS, UX_NO_TIME_SLICE, UX_DONT_START);
 #endif
 
     /* Check the creation of this thread.  */
-    if (status == UX_SUCCESS)
-    {
+    if (status == UX_SUCCESS) {
 
 #if !defined(UX_DEVICE_STANDALONE)
-        UX_THREAD_EXTENSION_PTR_SET(&((*receiver) -> ux_device_class_hid_receiver_thread), hid)
+        UX_THREAD_EXTENSION_PTR_SET(&((*receiver)->ux_device_class_hid_receiver_thread), hid)
 #else
-        hid -> ux_device_class_hid_read_state = UX_DEVICE_CLASS_HID_RECEIVER_START;
-        (*receiver) -> ux_device_class_hid_receiver_tasks_run = _ux_device_class_hid_receiver_tasks_run;
+        hid->ux_device_class_hid_read_state = UX_DEVICE_CLASS_HID_RECEIVER_START;
+        (*receiver)->ux_device_class_hid_receiver_tasks_run = _ux_device_class_hid_receiver_tasks_run;
 #endif
 
         /* Initialize event buffer size.  */
-        (*receiver) -> ux_device_class_hid_receiver_event_buffer_size =
-                    parameter -> ux_device_class_hid_parameter_receiver_event_max_length;
+        (*receiver)->ux_device_class_hid_receiver_event_buffer_size =
+            parameter->ux_device_class_hid_parameter_receiver_event_max_length;
 
         /* Initialize events.  */
-        (*receiver) -> ux_device_class_hid_receiver_events =
-                        (UX_DEVICE_CLASS_HID_RECEIVED_EVENT *)(memory_events);
-        (*receiver) -> ux_device_class_hid_receiver_events_end =
-                        (UX_DEVICE_CLASS_HID_RECEIVED_EVENT *)(memory_receiver + memory_size);
-        (*receiver) -> ux_device_class_hid_receiver_event_read_pos =
-                    (*receiver) -> ux_device_class_hid_receiver_events;
-        (*receiver) -> ux_device_class_hid_receiver_event_save_pos =
-                    (*receiver) -> ux_device_class_hid_receiver_events;
+        (*receiver)->ux_device_class_hid_receiver_events = (UX_DEVICE_CLASS_HID_RECEIVED_EVENT *)(memory_events);
+        (*receiver)->ux_device_class_hid_receiver_events_end =
+            (UX_DEVICE_CLASS_HID_RECEIVED_EVENT *)(memory_receiver + memory_size);
+        (*receiver)->ux_device_class_hid_receiver_event_read_pos = (*receiver)->ux_device_class_hid_receiver_events;
+        (*receiver)->ux_device_class_hid_receiver_event_save_pos = (*receiver)->ux_device_class_hid_receiver_events;
 
         /* Initialize uninitialize function.  */
-        (*receiver) -> ux_device_class_hid_receiver_uninitialize = _ux_device_class_hid_receiver_uninitialize;
+        (*receiver)->ux_device_class_hid_receiver_uninitialize = _ux_device_class_hid_receiver_uninitialize;
 
         /* Initialize callback function.  */
-        (*receiver) -> ux_device_class_hid_receiver_event_callback =
-                    parameter -> ux_device_class_hid_parameter_receiver_event_callback;
+        (*receiver)->ux_device_class_hid_receiver_event_callback =
+            parameter->ux_device_class_hid_parameter_receiver_event_callback;
 
         /* Done success.  */
-        return(UX_SUCCESS);
-    }
-    else
+        return (UX_SUCCESS);
+    } else
         status = (UX_THREAD_ERROR);
 
     /* Free allocated memory. */
     _ux_utility_memory_free(*receiver);
-    (*receiver) =  UX_NULL;
+    (*receiver) = UX_NULL;
 
     /* Return completion status.  */
-    return(status);
+    return (status);
 #endif
 }

@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_audio.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -82,76 +80,72 @@
 /*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_audio_entry(UX_SLAVE_CLASS_COMMAND *command)
-{
+UINT _ux_device_class_audio_entry(UX_SLAVE_CLASS_COMMAND *command) {
 
-UINT        status;
-
+    UINT status;
 
     /* The command request will tell us we need to do here, either a enumeration
        query, an activation or a deactivation.  */
-    switch (command -> ux_slave_class_command_request)
-    {
+    switch (command->ux_slave_class_command_request) {
 
     case UX_SLAVE_CLASS_COMMAND_INITIALIZE:
 
         /* Call the init function of the Audio class.  */
 #if defined(UX_DEVICE_CLASS_AUDIO_ENABLE_ERROR_CHECKING)
-        status =  _uxe_device_class_audio_initialize(command);
+        status = _uxe_device_class_audio_initialize(command);
 #else
-        status =  _ux_device_class_audio_initialize(command);
+        status = _ux_device_class_audio_initialize(command);
 #endif
 
         /* Return the completion status.  */
-        return(status);
+        return (status);
 
     case UX_SLAVE_CLASS_COMMAND_UNINITIALIZE:
 
         /* Call the init function of the Audio class.  */
-        status =  _ux_device_class_audio_uninitialize(command);
+        status = _ux_device_class_audio_uninitialize(command);
 
         /* Return the completion status.  */
-        return(status);
+        return (status);
 
     case UX_SLAVE_CLASS_COMMAND_QUERY:
 
         /* Check the CLASS definition in the interface descriptor. */
-        if (command -> ux_slave_class_command_class == UX_DEVICE_CLASS_AUDIO_CLASS)
-        {
-            if (command -> ux_slave_class_command_subclass == UX_DEVICE_CLASS_AUDIO_SUBCLASS_CONTROL)
-                return(UX_SUCCESS);
-            if (command -> ux_slave_class_command_subclass == UX_DEVICE_CLASS_AUDIO_SUBCLASS_AUDIOSTREAMING)
-                return(UX_SUCCESS);
+        if (command->ux_slave_class_command_class == UX_DEVICE_CLASS_AUDIO_CLASS) {
+            if (command->ux_slave_class_command_subclass == UX_DEVICE_CLASS_AUDIO_SUBCLASS_CONTROL)
+                return (UX_SUCCESS);
+            if (command->ux_slave_class_command_subclass == UX_DEVICE_CLASS_AUDIO_SUBCLASS_AUDIOSTREAMING)
+                return (UX_SUCCESS);
         }
-        return(UX_NO_CLASS_MATCH);
+        return (UX_NO_CLASS_MATCH);
 
     case UX_SLAVE_CLASS_COMMAND_ACTIVATE:
 
         /* The activate command is used when the host has sent a SET_CONFIGURATION command
            and this interface has to be mounted. Both Bulk endpoints have to be mounted
            and the audio thread needs to be activated.  */
-        status =  _ux_device_class_audio_activate(command);
+        status = _ux_device_class_audio_activate(command);
 
         /* Return the completion status.  */
-        return(status);
+        return (status);
 
     case UX_SLAVE_CLASS_COMMAND_CHANGE:
 
         /* The change command is used when the host has sent a SET_INTERFACE command
            to go from Alternate Setting 0 to 1 or revert to the default mode.  */
-        status =  _ux_device_class_audio_change(command);
+        status = _ux_device_class_audio_change(command);
 
         /* Return the completion status.  */
-        return(status);
+        return (status);
 
     case UX_SLAVE_CLASS_COMMAND_DEACTIVATE:
 
         /* The deactivate command is used when the device has been extracted.
            The device endpoints have to be dismounted and the audio thread canceled.  */
-        status =  _ux_device_class_audio_deactivate(command);
+        status = _ux_device_class_audio_deactivate(command);
 
         /* Return the completion status.  */
-        return(status);
+        return (status);
 
     case UX_SLAVE_CLASS_COMMAND_REQUEST:
 
@@ -161,6 +155,6 @@ UINT        status;
     default:
 
         /* Return an error.  */
-        return(UX_FUNCTION_NOT_SUPPORTED);
+        return (UX_FUNCTION_NOT_SUPPORTED);
     }
 }

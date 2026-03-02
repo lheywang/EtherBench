@@ -56,20 +56,13 @@ extern "C" {
 /** @defgroup SYSTEM_LL_Private_Constants SYSTEM Private Constants
  * @{
  */
-#define LL_SBS_HDPL_INCREMENT_VALUE                                            \
-  0x6AU /*!< Define used for the HDPL increment */
-#define LL_SBS_DBG_UNLOCK                                                      \
-  (0xB4U << SBS_DBGCR_DBG_UNLOCK_Pos) /*!< Define used to unlock debug */
-#define LL_SBS_ACCESS_PORT_UNLOCK                                              \
-  0xB4U /*!< Define used to unlock access port */
-#define LL_SBS_DBG_CONFIG_LOCK                                                 \
-  0xC3U /*!< Define used to lock debug configuration */
-#define LL_SBS_DBG_CONFIG_UNLOCK                                               \
-  0xB4U /*!< Define used to unlock debug configuration */
-#define LL_SBS_DEBUG_SEC_NSEC                                                  \
-  0xB4U /*!< Define used to open debug for secure and non-secure */
-#define LL_SBS_DEBUG_NSEC                                                      \
-  0x3CU /*!< Define used to open debug for non-secure only */
+#define LL_SBS_HDPL_INCREMENT_VALUE 0x6AU                     /*!< Define used for the HDPL increment */
+#define LL_SBS_DBG_UNLOCK (0xB4U << SBS_DBGCR_DBG_UNLOCK_Pos) /*!< Define used to unlock debug */
+#define LL_SBS_ACCESS_PORT_UNLOCK 0xB4U                       /*!< Define used to unlock access port */
+#define LL_SBS_DBG_CONFIG_LOCK 0xC3U                          /*!< Define used to lock debug configuration */
+#define LL_SBS_DBG_CONFIG_UNLOCK 0xB4U                        /*!< Define used to unlock debug configuration */
+#define LL_SBS_DEBUG_SEC_NSEC 0xB4U /*!< Define used to open debug for secure and non-secure */
+#define LL_SBS_DEBUG_NSEC 0x3CU     /*!< Define used to open debug for non-secure only */
 /**
  * @}
  */
@@ -85,16 +78,12 @@ extern "C" {
 /** @defgroup SYSTEM_LL_SBS_EC_FASTMODEPLUS SBS FASTMODEPLUS
  * @{
  */
-#define LL_SBS_FASTMODEPLUS_PB6                                                \
-  SBS_PMCR_PB6_FMP /*!< Enable Fast Mode Plus on PB6 */
-#define LL_SBS_FASTMODEPLUS_PB7                                                \
-  SBS_PMCR_PB7_FMP /*!< Enable Fast Mode Plus on PB7 */
-#define LL_SBS_FASTMODEPLUS_PB8                                                \
-  SBS_PMCR_PB8_FMP /*!< Enable Fast Mode Plus on PB8 */
+#define LL_SBS_FASTMODEPLUS_PB6 SBS_PMCR_PB6_FMP /*!< Enable Fast Mode Plus on PB6 */
+#define LL_SBS_FASTMODEPLUS_PB7 SBS_PMCR_PB7_FMP /*!< Enable Fast Mode Plus on PB7 */
+#define LL_SBS_FASTMODEPLUS_PB8 SBS_PMCR_PB8_FMP /*!< Enable Fast Mode Plus on PB8 */
 #if defined(SBS_PMCR_PB9_FMP)
-#define LL_SBS_FASTMODEPLUS_PB9                                                \
-  SBS_PMCR_PB9_FMP /*!< Enable Fast Mode Plus on PB9 */
-#endif             /* SBS_PMCR_PB9_FMP */
+#define LL_SBS_FASTMODEPLUS_PB9 SBS_PMCR_PB9_FMP /*!< Enable Fast Mode Plus on PB9 */
+#endif                                           /* SBS_PMCR_PB9_FMP */
 /**
  * @}
  */
@@ -102,11 +91,10 @@ extern "C" {
 /** @defgroup SYSTEM_LL_SBS_EC_CS1 SBS Vdd compensation cell Code selection
  * @{
  */
-#define LL_SBS_VDD_CELL_CODE                                                   \
-  0x0UL /*!< VDD I/Os code from the cell (available in the SBS_CCVALR) */
-#define LL_SBS_VDD_REGISTER_CODE                                               \
-  SBS_CCCSR_CS1 /*!< VDD I/Os code from the SBS compensation cell code         \
-                   register (SBS_CCSWCR) */
+#define LL_SBS_VDD_CELL_CODE 0x0UL /*!< VDD I/Os code from the cell (available in the SBS_CCVALR) */
+#define LL_SBS_VDD_REGISTER_CODE                                                                                       \
+    SBS_CCCSR_CS1 /*!< VDD I/Os code from the SBS compensation cell code                                               \
+                     register (SBS_CCSWCR) */
 /**
  * @}
  */
@@ -114,11 +102,10 @@ extern "C" {
 /** @defgroup SYSTEM_LL_SBS_EC_CS2 SBS VddIO compensation cell Code selection
  * @{
  */
-#define LL_SBS_VDDIO_CELL_CODE                                                 \
-  0x0UL /*!< VDDIO I/Os code from the cell (available in the SBS_CCVALR)*/
-#define LL_SBS_VDDIO_REGISTER_CODE                                             \
-  SBS_CCCSR_CS2 /*!< VDDIO I/Os code from the SBS compensation cell code       \
-                   register (SBS_CCSWCR)*/
+#define LL_SBS_VDDIO_CELL_CODE 0x0UL /*!< VDDIO I/Os code from the cell (available in the SBS_CCVALR)*/
+#define LL_SBS_VDDIO_REGISTER_CODE                                                                                     \
+    SBS_CCCSR_CS2 /*!< VDDIO I/Os code from the SBS compensation cell code                                             \
+                     register (SBS_CCSWCR)*/
 /**
  * @}
  */
@@ -127,11 +114,10 @@ extern "C" {
 /** @defgroup SYSTEM_LL_SBS_ETHERNET_CONFIG  ETHENET CONFIG
  * @{
  */
-#define LL_SBS_ETH_MII                                                         \
-  0x0UL /*!< Select the Media Independent Interface (MII) or GMII  */
-#define LL_SBS_ETH_RMII                                                        \
-  SBS_PMCR_ETH_SEL_PHY_2 /*!< Select the Reduced Media Independent Interface   \
-                            (RMII) */
+#define LL_SBS_ETH_MII 0x0UL /*!< Select the Media Independent Interface (MII) or GMII  */
+#define LL_SBS_ETH_RMII                                                                                                \
+    SBS_PMCR_ETH_SEL_PHY_2 /*!< Select the Reduced Media Independent Interface                                         \
+                              (RMII) */
 
 /**
  * @}
@@ -141,18 +127,18 @@ extern "C" {
 /** @defgroup SYSTEM_Memories_Erase_Flag_Status  Memories Erase Flags Status
  * @{
  */
-#define LL_SBS_MEMORIES_ERASE_MCLR_ON_GOING                                    \
-  0x0UL /*!< Erase after Power-on Reset of SRAM2, BKPRAM, ICACHE, DCACHE and   \
-           PKA RAMs on going or cleared by SW */
-#define LL_SBS_MEMORIES_ERASE_MCLR_ENDED                                       \
-  SBS_MESR_MCLR /*!< Erase after Power-on Reset of SRAM2, BKPRAM, ICACHE,      \
-                   DCACHE and PKA RAMs done */
-#define LL_SBS_MEMORIES_ERASE_IPMEE_ON_GOING                                   \
-  0x0UL /*!< Erase after Power-on Reset or Tamper detection for ICACHE and PKA \
-           RAMs on going or cleared by SW */
-#define LL_SBS_MEMORIES_ERASE_IPMEE_ENDED                                      \
-  SBS_MESR_IPMEE /*!< Erase after Power-on Reset or Tamper detection for       \
-                    ICACHE and PKA RAMs done */
+#define LL_SBS_MEMORIES_ERASE_MCLR_ON_GOING                                                                            \
+    0x0UL /*!< Erase after Power-on Reset of SRAM2, BKPRAM, ICACHE, DCACHE and                                         \
+             PKA RAMs on going or cleared by SW */
+#define LL_SBS_MEMORIES_ERASE_MCLR_ENDED                                                                               \
+    SBS_MESR_MCLR /*!< Erase after Power-on Reset of SRAM2, BKPRAM, ICACHE,                                            \
+                     DCACHE and PKA RAMs done */
+#define LL_SBS_MEMORIES_ERASE_IPMEE_ON_GOING                                                                           \
+    0x0UL /*!< Erase after Power-on Reset or Tamper detection for ICACHE and PKA                                       \
+             RAMs on going or cleared by SW */
+#define LL_SBS_MEMORIES_ERASE_IPMEE_ENDED                                                                              \
+    SBS_MESR_IPMEE /*!< Erase after Power-on Reset or Tamper detection for                                             \
+                      ICACHE and PKA RAMs done */
 /**
  * @}
  */
@@ -160,19 +146,19 @@ extern "C" {
 /** @defgroup SYSTEM_LL_SBS_EC_TIMBREAK SBS TIMER BREAK
  * @{
  */
-#define LL_SBS_TIMBREAK_ECC                                                    \
-  SBS_CFGR2_ECCL /*!< Enables and locks the Flash ECC double error signal      \
-                          with Break Input of TIM1/8/15/16/17  */
-#define LL_SBS_TIMBREAK_PVD                                                    \
-  SBS_CFGR2_PVDL /*!< Enables and locks the PVD connection                     \
-                          with TIM1/8/15/16/17 Break Input and also the PVDE   \
-                          and PLS bits of the Power Control Interface */
-#define LL_SBS_TIMBREAK_SRAM_ECC                                               \
-  SBS_CFGR2_SEL /*!< Enables and locks the SRAM ECC double error signal        \
-                         with Break Input of TIM1/8/15/16/17                */
-#define LL_SBS_TIMBREAK_LOCKUP                                                 \
-  SBS_CFGR2_CLL /*!< Enables and locks the LOCKUP (Hardfault) output of        \
-                          Cortex-M33 with Break Input of TIM1/15/16/17      */
+#define LL_SBS_TIMBREAK_ECC                                                                                            \
+    SBS_CFGR2_ECCL /*!< Enables and locks the Flash ECC double error signal                                            \
+                            with Break Input of TIM1/8/15/16/17  */
+#define LL_SBS_TIMBREAK_PVD                                                                                            \
+    SBS_CFGR2_PVDL /*!< Enables and locks the PVD connection                                                           \
+                            with TIM1/8/15/16/17 Break Input and also the PVDE                                         \
+                            and PLS bits of the Power Control Interface */
+#define LL_SBS_TIMBREAK_SRAM_ECC                                                                                       \
+    SBS_CFGR2_SEL /*!< Enables and locks the SRAM ECC double error signal                                              \
+                           with Break Input of TIM1/8/15/16/17                */
+#define LL_SBS_TIMBREAK_LOCKUP                                                                                         \
+    SBS_CFGR2_CLL /*!< Enables and locks the LOCKUP (Hardfault) output of                                              \
+                            Cortex-M33 with Break Input of TIM1/15/16/17      */
 /**
  * @}
  */
@@ -180,11 +166,9 @@ extern "C" {
 /** @defgroup SYSTEM_LL_SBS_EPOCH_Selection  EPOCH Selection
  * @{
  */
-#define LL_SBS_EPOCH_SEL_NONSECURE 0x0UL /*!< EPOCH non secure selected */
-#define LL_SBS_EPOCH_SEL_SECURE                                                \
-  SBS_EPOCHSELCR_EPOCH_SEL_0 /*!< EPOCH secure selected */
-#define LL_SBS_EPOCH_SEL_PUFCHECK                                              \
-  SBS_EPOCHSELCR_EPOCH_SEL_1 /*!< EPOCH all zeros for PUF integrity check */
+#define LL_SBS_EPOCH_SEL_NONSECURE 0x0UL                     /*!< EPOCH non secure selected */
+#define LL_SBS_EPOCH_SEL_SECURE SBS_EPOCHSELCR_EPOCH_SEL_0   /*!< EPOCH secure selected */
+#define LL_SBS_EPOCH_SEL_PUFCHECK SBS_EPOCHSELCR_EPOCH_SEL_1 /*!< EPOCH all zeros for PUF integrity check */
 
 /**
  * @}
@@ -193,21 +177,21 @@ extern "C" {
 /** @defgroup SYSTEM_LL_SBS_NextHDPL_Selection  Next HDPL Selection
  * @{
  */
-#define LL_SBS_OBKHDPL_INCR_0                                                  \
-  0x00000000U /*!< Index to add to the current HDPL to point (through          \
-                 OBK-HDPL) to the next secure storage areas */
-#define LL_SBS_OBKHDPL_INCR_1                                                  \
-  SBS_NEXTHDPLCR_NEXTHDPL_0 /*!< Index to add to the current HDPL to point     \
-                               (through OBK-HDPL) to the next secure storage   \
+#define LL_SBS_OBKHDPL_INCR_0                                                                                          \
+    0x00000000U /*!< Index to add to the current HDPL to point (through                                                \
+                   OBK-HDPL) to the next secure storage areas */
+#define LL_SBS_OBKHDPL_INCR_1                                                                                          \
+    SBS_NEXTHDPLCR_NEXTHDPL_0 /*!< Index to add to the current HDPL to point                                           \
+                                 (through OBK-HDPL) to the next secure storage                                         \
+                                 areas */
+#define LL_SBS_OBKHDPL_INCR_2                                                                                          \
+    SBS_NEXTHDPLCR_NEXTHDPL_1 /*!< Index to add to the current HDPL to point                                           \
+                                 (through OBK-HDPL) to the next secure storage                                         \
+                                 areas */
+#define LL_SBS_OBKHDPL_INCR_3                                                                                          \
+    SBS_NEXTHDPLCR_NEXTHDPL /*!< Index to add to the current HDPL to point                                             \
+                               (through OBK-HDPL) to the next secure storage                                           \
                                areas */
-#define LL_SBS_OBKHDPL_INCR_2                                                  \
-  SBS_NEXTHDPLCR_NEXTHDPL_1 /*!< Index to add to the current HDPL to point     \
-                               (through OBK-HDPL) to the next secure storage   \
-                               areas */
-#define LL_SBS_OBKHDPL_INCR_3                                                  \
-  SBS_NEXTHDPLCR_NEXTHDPL /*!< Index to add to the current HDPL to point       \
-                             (through OBK-HDPL) to the next secure storage     \
-                             areas */
 /**
  * @}
  */
@@ -227,15 +211,15 @@ extern "C" {
  * @brief SBS non secure items to set lock on
  * @{
  */
-#define LL_SBS_MPU_NSEC                                                        \
-  SBS_CNSLCKR_LOCKNSMPU /*!< Non-secure MPU lock (privileged secure or         \
-                           non-secure only) */
-#define LL_SBS_VTOR_NSEC                                                       \
-  SBS_CNSLCKR_LOCKNSVTOR /*!< Non-secure VTOR lock (privileged secure or       \
-                            non-secure only) */
-#define LL_SBS_LOCK_ALL_NSEC                                                   \
-  (LL_SBS_MPU_NSEC | LL_SBS_VTOR_NSEC) /*!< lock all Non-secure  (privileged   \
-                                          secure or non-secure only) */
+#define LL_SBS_MPU_NSEC                                                                                                \
+    SBS_CNSLCKR_LOCKNSMPU /*!< Non-secure MPU lock (privileged secure or                                               \
+                             non-secure only) */
+#define LL_SBS_VTOR_NSEC                                                                                               \
+    SBS_CNSLCKR_LOCKNSVTOR /*!< Non-secure VTOR lock (privileged secure or                                             \
+                              non-secure only) */
+#define LL_SBS_LOCK_ALL_NSEC                                                                                           \
+    (LL_SBS_MPU_NSEC | LL_SBS_VTOR_NSEC) /*!< lock all Non-secure  (privileged                                         \
+                                            secure or non-secure only) */
 /**
  * @}
  */
@@ -245,16 +229,13 @@ extern "C" {
  * @brief SBS secure items to set lock on
  * @{
  */
-#define LL_SBS_SAU                                                             \
-  SBS_CSLCKR_LOCKSAU /*!< SAU lock (privileged secure code only) */
-#define LL_SBS_MPU_SEC                                                         \
-  SBS_CSLCKR_LOCKSMPU /*!< Secure MPU lock (privileged secure code only) */
-#define LL_SBS_VTOR_AIRCR_SEC                                                  \
-  SBS_CSLCKR_LOCKSVTAIRCR /*!< VTOR_S and AIRCR lock (privileged secure code   \
-                             only) */
-#define LL_SBS_LOCK_ALL_SEC                                                    \
-  (LL_SBS_SAU | LL_SBS_MPU_SEC |                                               \
-   LL_SBS_VTOR_AIRCR_SEC) /*!< lock all secure (privileged secure only)  */
+#define LL_SBS_SAU SBS_CSLCKR_LOCKSAU      /*!< SAU lock (privileged secure code only) */
+#define LL_SBS_MPU_SEC SBS_CSLCKR_LOCKSMPU /*!< Secure MPU lock (privileged secure code only) */
+#define LL_SBS_VTOR_AIRCR_SEC                                                                                          \
+    SBS_CSLCKR_LOCKSVTAIRCR /*!< VTOR_S and AIRCR lock (privileged secure code                                         \
+                               only) */
+#define LL_SBS_LOCK_ALL_SEC                                                                                            \
+    (LL_SBS_SAU | LL_SBS_MPU_SEC | LL_SBS_VTOR_AIRCR_SEC) /*!< lock all secure (privileged secure only)  */
 /**
  * @}
  */
@@ -263,17 +244,12 @@ extern "C" {
  * @note Only available when system implements security (TZEN=1)
  * @{
  */
-#define LL_SBS_CLOCK_SEC                                                       \
-  SBS_SECCFGR_SBSSEC /*!< SBS clock configuration secure-only access */
-#define LL_SBS_CLOCK_NSEC                                                      \
-  0U /*!< SBS clock configuration secure/non-secure access */
-#define LL_SBS_CLASSB_SEC                                                      \
-  SBS_SECCFGR_CLASSBSEC /*!< Class B configuration secure-only access */
-#define LL_SBS_CLASSB_NSEC                                                     \
-  0U /*!< Class B configuration secure/non-secure access */
-#define LL_SBS_FPU_SEC                                                         \
-  SBS_SECCFGR_FPUSEC       /*!< FPU configuration secure-only access */
-#define LL_SBS_FPU_NSEC 0U /*!< FPU configuration secure/non-secure access */
+#define LL_SBS_CLOCK_SEC SBS_SECCFGR_SBSSEC     /*!< SBS clock configuration secure-only access */
+#define LL_SBS_CLOCK_NSEC 0U                    /*!< SBS clock configuration secure/non-secure access */
+#define LL_SBS_CLASSB_SEC SBS_SECCFGR_CLASSBSEC /*!< Class B configuration secure-only access */
+#define LL_SBS_CLASSB_NSEC 0U                   /*!< Class B configuration secure/non-secure access */
+#define LL_SBS_FPU_SEC SBS_SECCFGR_FPUSEC       /*!< FPU configuration secure-only access */
+#define LL_SBS_FPU_NSEC 0U                      /*!< FPU configuration secure/non-secure access */
 /**
  * @}
  */
@@ -282,22 +258,17 @@ extern "C" {
 /** @defgroup SYSTEM_LL_DBGMCU_EC_TRACE DBGMCU TRACE Pin Assignment
  * @{
  */
-#define LL_DBGMCU_TRACE_NONE                                                   \
-  0x00000000U /*!< TRACE pins not assigned (default state) */
-#define LL_DBGMCU_TRACE_ASYNCH                                                 \
-  DBGMCU_CR_TRACE_IOEN /*!< TRACE pin assignment for Asynchronous Mode */
-#define LL_DBGMCU_TRACE_SYNCH_SIZE1                                            \
-  (DBGMCU_CR_TRACE_IOEN |                                                      \
-   DBGMCU_CR_TRACE_MODE_0) /*!< TRACE pin assignment for Synchronous Mode with \
-                              a TRACEDATA size of 1 */
-#define LL_DBGMCU_TRACE_SYNCH_SIZE2                                            \
-  (DBGMCU_CR_TRACE_IOEN |                                                      \
-   DBGMCU_CR_TRACE_MODE_1) /*!< TRACE pin assignment for Synchronous Mode with \
-                              a TRACEDATA size of 2 */
-#define LL_DBGMCU_TRACE_SYNCH_SIZE4                                            \
-  (DBGMCU_CR_TRACE_IOEN |                                                      \
-   DBGMCU_CR_TRACE_MODE) /*!< TRACE pin assignment for Synchronous Mode with a \
-                            TRACEDATA size of 4 */
+#define LL_DBGMCU_TRACE_NONE 0x00000000U            /*!< TRACE pins not assigned (default state) */
+#define LL_DBGMCU_TRACE_ASYNCH DBGMCU_CR_TRACE_IOEN /*!< TRACE pin assignment for Asynchronous Mode */
+#define LL_DBGMCU_TRACE_SYNCH_SIZE1                                                                                    \
+    (DBGMCU_CR_TRACE_IOEN | DBGMCU_CR_TRACE_MODE_0) /*!< TRACE pin assignment for Synchronous Mode with                \
+                                                       a TRACEDATA size of 1 */
+#define LL_DBGMCU_TRACE_SYNCH_SIZE2                                                                                    \
+    (DBGMCU_CR_TRACE_IOEN | DBGMCU_CR_TRACE_MODE_1) /*!< TRACE pin assignment for Synchronous Mode with                \
+                                                       a TRACEDATA size of 2 */
+#define LL_DBGMCU_TRACE_SYNCH_SIZE4                                                                                    \
+    (DBGMCU_CR_TRACE_IOEN | DBGMCU_CR_TRACE_MODE) /*!< TRACE pin assignment for Synchronous Mode with a                \
+                                                     TRACEDATA size of 4 */
 /**
  * @}
  */
@@ -305,55 +276,52 @@ extern "C" {
 /** @defgroup SYSTEM_LL_DBGMCU_EC_APB1_GRP1_STOP_IP DBGMCU APB1 GRP1 STOP IP
  * @{
  */
-#define LL_DBGMCU_APB1_GRP1_TIM2_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_TIM2_STOP /*!< The counter clock of TIM2 is stopped when \
-                                   the core is halted*/
-#define LL_DBGMCU_APB1_GRP1_TIM3_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_TIM3_STOP /*!< The counter clock of TIM3 is stopped when \
-                                   the core is halted*/
+#define LL_DBGMCU_APB1_GRP1_TIM2_STOP                                                                                  \
+    DBGMCU_APB1FZR1_DBG_TIM2_STOP /*!< The counter clock of TIM2 is stopped when                                       \
+                                     the core is halted*/
+#define LL_DBGMCU_APB1_GRP1_TIM3_STOP                                                                                  \
+    DBGMCU_APB1FZR1_DBG_TIM3_STOP /*!< The counter clock of TIM3 is stopped when                                       \
+                                     the core is halted*/
 #if defined(TIM4)
-#define LL_DBGMCU_APB1_GRP1_TIM4_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_TIM4_STOP /*!< The counter clock of TIM4 is stopped when \
-                                   the core is halted*/
-#endif                          /* TIM4 */
+#define LL_DBGMCU_APB1_GRP1_TIM4_STOP                                                                                  \
+    DBGMCU_APB1FZR1_DBG_TIM4_STOP /*!< The counter clock of TIM4 is stopped when                                       \
+                                     the core is halted*/
+#endif                            /* TIM4 */
 #if defined(TIM5)
-#define LL_DBGMCU_APB1_GRP1_TIM5_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_TIM5_STOP /*!< The counter clock of TIM5 is stopped when \
-                                   the core is halted*/
-#endif                          /* TIM5 */
-#define LL_DBGMCU_APB1_GRP1_TIM6_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_TIM6_STOP /*!< The counter clock of TIM6 is stopped when \
-                                   the core is halted*/
-#define LL_DBGMCU_APB1_GRP1_TIM7_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_TIM7_STOP /*!< The counter clock of TIM7 is stopped when \
-                                   the core is halted*/
+#define LL_DBGMCU_APB1_GRP1_TIM5_STOP                                                                                  \
+    DBGMCU_APB1FZR1_DBG_TIM5_STOP /*!< The counter clock of TIM5 is stopped when                                       \
+                                     the core is halted*/
+#endif                            /* TIM5 */
+#define LL_DBGMCU_APB1_GRP1_TIM6_STOP                                                                                  \
+    DBGMCU_APB1FZR1_DBG_TIM6_STOP /*!< The counter clock of TIM6 is stopped when                                       \
+                                     the core is halted*/
+#define LL_DBGMCU_APB1_GRP1_TIM7_STOP                                                                                  \
+    DBGMCU_APB1FZR1_DBG_TIM7_STOP /*!< The counter clock of TIM7 is stopped when                                       \
+                                     the core is halted*/
 #if defined(TIM12)
-#define LL_DBGMCU_APB1_GRP1_TIM12_STOP                                         \
-  DBGMCU_APB1FZR1_DBG_TIM12_STOP /*!< The counter clock of TIM12 is stopped    \
-                                    when the core is halted*/
-#endif                           /* TIM12 */
+#define LL_DBGMCU_APB1_GRP1_TIM12_STOP                                                                                 \
+    DBGMCU_APB1FZR1_DBG_TIM12_STOP /*!< The counter clock of TIM12 is stopped                                          \
+                                      when the core is halted*/
+#endif                             /* TIM12 */
 #if defined(TIM13)
-#define LL_DBGMCU_APB1_GRP1_TIM13_STOP                                         \
-  DBGMCU_APB1FZR1_DBG_TIM13_STOP /*!< The counter clock of TIM13 is stopped    \
-                                    when the core is halted*/
-#endif                           /* TIM13 */
+#define LL_DBGMCU_APB1_GRP1_TIM13_STOP                                                                                 \
+    DBGMCU_APB1FZR1_DBG_TIM13_STOP /*!< The counter clock of TIM13 is stopped                                          \
+                                      when the core is halted*/
+#endif                             /* TIM13 */
 #if defined(TIM14)
-#define LL_DBGMCU_APB1_GRP1_TIM14_STOP                                         \
-  DBGMCU_APB1FZR1_DBG_TIM14_STOP /*!< The counter clock of TIM14 is stopped    \
-                                    when the core is halted*/
-#endif                           /* TIM14 */
-#define LL_DBGMCU_APB1_GRP1_WWDG_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_WWDG_STOP /*!< The window watchdog counter clock is      \
-                                   stopped when the core is halted*/
-#define LL_DBGMCU_APB1_GRP1_IWDG_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_IWDG_STOP /*!< The independent watchdog counter clock is \
-                                   stopped when the core is halted*/
-#define LL_DBGMCU_APB1_GRP1_I2C1_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_I2C1_STOP /*!< The I2C1 SMBus timeout is frozen*/
-#define LL_DBGMCU_APB1_GRP1_I2C2_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_I2C2_STOP /*!< The I2C2 SMBus timeout is frozen*/
-#define LL_DBGMCU_APB1_GRP1_I3C1_STOP                                          \
-  DBGMCU_APB1FZR1_DBG_I3C1_STOP /*!< The I3C1 SMBus timeout is frozen*/
+#define LL_DBGMCU_APB1_GRP1_TIM14_STOP                                                                                 \
+    DBGMCU_APB1FZR1_DBG_TIM14_STOP /*!< The counter clock of TIM14 is stopped                                          \
+                                      when the core is halted*/
+#endif                             /* TIM14 */
+#define LL_DBGMCU_APB1_GRP1_WWDG_STOP                                                                                  \
+    DBGMCU_APB1FZR1_DBG_WWDG_STOP /*!< The window watchdog counter clock is                                            \
+                                     stopped when the core is halted*/
+#define LL_DBGMCU_APB1_GRP1_IWDG_STOP                                                                                  \
+    DBGMCU_APB1FZR1_DBG_IWDG_STOP                                   /*!< The independent watchdog counter clock is     \
+                                                                       stopped when the core is halted*/
+#define LL_DBGMCU_APB1_GRP1_I2C1_STOP DBGMCU_APB1FZR1_DBG_I2C1_STOP /*!< The I2C1 SMBus timeout is frozen*/
+#define LL_DBGMCU_APB1_GRP1_I2C2_STOP DBGMCU_APB1FZR1_DBG_I2C2_STOP /*!< The I2C2 SMBus timeout is frozen*/
+#define LL_DBGMCU_APB1_GRP1_I3C1_STOP DBGMCU_APB1FZR1_DBG_I3C1_STOP /*!< The I3C1 SMBus timeout is frozen*/
 /**
  * @}
  */
@@ -361,9 +329,9 @@ extern "C" {
 /** @defgroup SYSTEM_LL_DBGMCU_EC_APB1_GRP2_STOP_IP DBGMCU APB1 GRP2 STOP IP
  * @{
  */
-#define LL_DBGMCU_APB1_GRP2_LPTIM2_STOP                                        \
-  DBGMCU_APB1FZR2_DBG_LPTIM2_STOP /*!< The counter clock of LPTIM2 is stopped  \
-                                     when the core is halted*/
+#define LL_DBGMCU_APB1_GRP2_LPTIM2_STOP                                                                                \
+    DBGMCU_APB1FZR2_DBG_LPTIM2_STOP /*!< The counter clock of LPTIM2 is stopped                                        \
+                                       when the core is halted*/
 /**
  * @}
  */
@@ -371,29 +339,29 @@ extern "C" {
 /** @defgroup SYSTEM_LL_DBGMCU_EC_APB2_GRP1_STOP_IP DBGMCU APB2 GRP1 STOP IP
  * @{
  */
-#define LL_DBGMCU_APB2_GRP1_TIM1_STOP                                          \
-  DBGMCU_APB2FZR_DBG_TIM1_STOP /*!< The counter clock of TIM1 is stopped when  \
-                                  the core is halted*/
+#define LL_DBGMCU_APB2_GRP1_TIM1_STOP                                                                                  \
+    DBGMCU_APB2FZR_DBG_TIM1_STOP /*!< The counter clock of TIM1 is stopped when                                        \
+                                    the core is halted*/
 #if defined(TIM8)
-#define LL_DBGMCU_APB2_GRP1_TIM8_STOP                                          \
-  DBGMCU_APB2FZR_DBG_TIM8_STOP /*!< The counter clock of TIM8 is stopped when  \
-                                  the core is halted*/
-#endif                         /* TIM8 */
+#define LL_DBGMCU_APB2_GRP1_TIM8_STOP                                                                                  \
+    DBGMCU_APB2FZR_DBG_TIM8_STOP /*!< The counter clock of TIM8 is stopped when                                        \
+                                    the core is halted*/
+#endif                           /* TIM8 */
 #if defined(TIM15)
-#define LL_DBGMCU_APB2_GRP1_TIM15_STOP                                         \
-  DBGMCU_APB2FZR_DBG_TIM15_STOP /*!< The counter clock of TIM15 is stopped     \
-                                   when the core is halted*/
-#endif                          /* TIM15 */
+#define LL_DBGMCU_APB2_GRP1_TIM15_STOP                                                                                 \
+    DBGMCU_APB2FZR_DBG_TIM15_STOP /*!< The counter clock of TIM15 is stopped                                           \
+                                     when the core is halted*/
+#endif                            /* TIM15 */
 #if defined(TIM16)
-#define LL_DBGMCU_APB2_GRP1_TIM16_STOP                                         \
-  DBGMCU_APB2FZR_DBG_TIM16_STOP /*!< The counter clock of TIM16 is stopped     \
-                                   when the core is halted*/
-#endif                          /* TIM16 */
+#define LL_DBGMCU_APB2_GRP1_TIM16_STOP                                                                                 \
+    DBGMCU_APB2FZR_DBG_TIM16_STOP /*!< The counter clock of TIM16 is stopped                                           \
+                                     when the core is halted*/
+#endif                            /* TIM16 */
 #if defined(TIM17)
-#define LL_DBGMCU_APB2_GRP1_TIM17_STOP                                         \
-  DBGMCU_APB2FZR_DBG_TIM17_STOP /*!< The counter clock of TIM17 is stopped     \
-                                   when the core is halted*/
-#endif                          /* TIM17 */
+#define LL_DBGMCU_APB2_GRP1_TIM17_STOP                                                                                 \
+    DBGMCU_APB2FZR_DBG_TIM17_STOP /*!< The counter clock of TIM17 is stopped                                           \
+                                     when the core is halted*/
+#endif                            /* TIM17 */
 /**
  * @}
  */
@@ -402,46 +370,46 @@ extern "C" {
  * @{
  */
 #if defined(I2C3)
-#define LL_DBGMCU_APB3_GRP1_I2C3_STOP                                          \
-  DBGMCU_APB3FZR_DBG_I2C3_STOP /*!< The counter clock of I2C3 is stopped when  \
-                                  the core is halted*/
-#endif                         /* I2C3 */
+#define LL_DBGMCU_APB3_GRP1_I2C3_STOP                                                                                  \
+    DBGMCU_APB3FZR_DBG_I2C3_STOP /*!< The counter clock of I2C3 is stopped when                                        \
+                                    the core is halted*/
+#endif                           /* I2C3 */
 #if defined(I2C4)
-#define LL_DBGMCU_APB3_GRP1_I2C4_STOP                                          \
-  DBGMCU_APB3FZR_DBG_I2C4_STOP /*!< The counter clock of I2C4 is stopped when  \
-                                  the core is halted*/
-#endif                         /* I2C4 */
+#define LL_DBGMCU_APB3_GRP1_I2C4_STOP                                                                                  \
+    DBGMCU_APB3FZR_DBG_I2C4_STOP /*!< The counter clock of I2C4 is stopped when                                        \
+                                    the core is halted*/
+#endif                           /* I2C4 */
 #if defined(I3C2)
-#define LL_DBGMCU_APB3_GRP1_I3C2_STOP                                          \
-  DBGMCU_APB3FZR_DBG_I3C2_STOP /*!< The counter clock of I3C2 is stopped when  \
-                                  the core is halted*/
-#endif                         /* I3C2 */
-#define LL_DBGMCU_APB3_GRP1_LPTIM1_STOP                                        \
-  DBGMCU_APB3FZR_DBG_LPTIM1_STOP /*!< The counter clock of LPTIM1 is stopped   \
-                                    when the core is halted*/
+#define LL_DBGMCU_APB3_GRP1_I3C2_STOP                                                                                  \
+    DBGMCU_APB3FZR_DBG_I3C2_STOP /*!< The counter clock of I3C2 is stopped when                                        \
+                                    the core is halted*/
+#endif                           /* I3C2 */
+#define LL_DBGMCU_APB3_GRP1_LPTIM1_STOP                                                                                \
+    DBGMCU_APB3FZR_DBG_LPTIM1_STOP /*!< The counter clock of LPTIM1 is stopped                                         \
+                                      when the core is halted*/
 #if defined(LPTIM3)
-#define LL_DBGMCU_APB3_GRP1_LPTIM3_STOP                                        \
-  DBGMCU_APB3FZR_DBG_LPTIM3_STOP /*!< The counter clock of LPTIM3 is stopped   \
-                                    when the core is halted*/
-#endif                           /* LPTIM3 */
+#define LL_DBGMCU_APB3_GRP1_LPTIM3_STOP                                                                                \
+    DBGMCU_APB3FZR_DBG_LPTIM3_STOP /*!< The counter clock of LPTIM3 is stopped                                         \
+                                      when the core is halted*/
+#endif                             /* LPTIM3 */
 #if defined(LPTIM4)
-#define LL_DBGMCU_APB3_GRP1_LPTIM4_STOP                                        \
-  DBGMCU_APB3FZR_DBG_LPTIM4_STOP /*!< The counter clock of LPTIM4 is stopped   \
-                                    when the core is halted*/
-#endif                           /* LPTIM4 */
+#define LL_DBGMCU_APB3_GRP1_LPTIM4_STOP                                                                                \
+    DBGMCU_APB3FZR_DBG_LPTIM4_STOP /*!< The counter clock of LPTIM4 is stopped                                         \
+                                      when the core is halted*/
+#endif                             /* LPTIM4 */
 #if defined(LPTIM5)
-#define LL_DBGMCU_APB3_GRP1_LPTIM5_STOP                                        \
-  DBGMCU_APB3FZR_DBG_LPTIM5_STOP /*!< The counter clock of LPTIM5 is stopped   \
-                                    when the core is halted*/
-#endif                           /* LPTIM5 */
+#define LL_DBGMCU_APB3_GRP1_LPTIM5_STOP                                                                                \
+    DBGMCU_APB3FZR_DBG_LPTIM5_STOP /*!< The counter clock of LPTIM5 is stopped                                         \
+                                      when the core is halted*/
+#endif                             /* LPTIM5 */
 #if defined(LPTIM6)
-#define LL_DBGMCU_APB3_GRP1_LPTIM6_STOP                                        \
-  DBGMCU_APB3FZR_DBG_LPTIM6_STOP /*!< The counter clock of LPTIM6 is stopped   \
-                                    when the core is halted*/
-#endif                           /* LPTIM6 */
-#define LL_DBGMCU_APB3_GRP1_RTC_STOP                                           \
-  DBGMCU_APB3FZR_DBG_RTC_STOP /*!< The counter clock of RTC is stopped when    \
-                                 the core is halted*/
+#define LL_DBGMCU_APB3_GRP1_LPTIM6_STOP                                                                                \
+    DBGMCU_APB3FZR_DBG_LPTIM6_STOP /*!< The counter clock of LPTIM6 is stopped                                         \
+                                      when the core is halted*/
+#endif                             /* LPTIM6 */
+#define LL_DBGMCU_APB3_GRP1_RTC_STOP                                                                                   \
+    DBGMCU_APB3FZR_DBG_RTC_STOP /*!< The counter clock of RTC is stopped when                                          \
+                                   the core is halted*/
 /**
  * @}
  */
@@ -450,15 +418,12 @@ extern "C" {
 /** @defgroup SYSTEM_LL_VREFBUF_EC_VOLTAGE VREFBUF VOLTAGE
  * @{
  */
-#define LL_VREFBUF_VOLTAGE_SCALE0                                              \
-  ((uint32_t)0x00000000) /*!< Voltage reference scale 0 (VREF_OUT1) */
-#define LL_VREFBUF_VOLTAGE_SCALE1                                              \
-  VREFBUF_CSR_VRS_0 /*!< Voltage reference scale 1 (VREF_OUT2) */
-#define LL_VREFBUF_VOLTAGE_SCALE2                                              \
-  VREFBUF_CSR_VRS_1 /*!< Voltage reference scale 2 (VREF_OUT3) */
-#define LL_VREFBUF_VOLTAGE_SCALE3                                              \
-  (VREFBUF_CSR_VRS_0 |                                                         \
-   VREFBUF_CSR_VRS_1) /*!< Voltage reference scale 3 (VREF_OUT4) */
+#define LL_VREFBUF_VOLTAGE_SCALE0 ((uint32_t)0x00000000) /*!< Voltage reference scale 0 (VREF_OUT1) */
+#define LL_VREFBUF_VOLTAGE_SCALE1 VREFBUF_CSR_VRS_0      /*!< Voltage reference scale 1 (VREF_OUT2) */
+#define LL_VREFBUF_VOLTAGE_SCALE2 VREFBUF_CSR_VRS_1      /*!< Voltage reference scale 2 (VREF_OUT3) */
+#define LL_VREFBUF_VOLTAGE_SCALE3                                                                                      \
+    (VREFBUF_CSR_VRS_0 | VREFBUF_CSR_VRS_1) /*!< Voltage reference scale 3 (VREF_OUT4)                                 \
+                                             */
 /**
  * @}
  */
@@ -470,38 +435,33 @@ extern "C" {
 #define LL_FLASH_LATENCY_0 FLASH_ACR_LATENCY_0WS /*!< FLASH zero wait state */
 #define LL_FLASH_LATENCY_1 FLASH_ACR_LATENCY_1WS /*!< FLASH one wait state */
 #define LL_FLASH_LATENCY_2 FLASH_ACR_LATENCY_2WS /*!< FLASH two wait states */
-#define LL_FLASH_LATENCY_3                                                     \
-  FLASH_ACR_LATENCY_3WS /*!< FLASH three wait states                           \
-                         */
-#define LL_FLASH_LATENCY_4                                                     \
-  FLASH_ACR_LATENCY_4WS /*!< FLASH four wait states                            \
-                         */
-#define LL_FLASH_LATENCY_5                                                     \
-  FLASH_ACR_LATENCY_5WS                          /*!< FLASH five wait states   \
+#define LL_FLASH_LATENCY_3                                                                                             \
+    FLASH_ACR_LATENCY_3WS /*!< FLASH three wait states                                                                 \
+                           */
+#define LL_FLASH_LATENCY_4                                                                                             \
+    FLASH_ACR_LATENCY_4WS /*!< FLASH four wait states                                                                  \
+                           */
+#define LL_FLASH_LATENCY_5                                                                                             \
+    FLASH_ACR_LATENCY_5WS                        /*!< FLASH five wait states                                           \
                                                   */
 #define LL_FLASH_LATENCY_6 FLASH_ACR_LATENCY_6WS /*!< FLASH six wait state */
-#define LL_FLASH_LATENCY_7                                                     \
-  FLASH_ACR_LATENCY_7WS /*!< FLASH Seven wait states                           \
-                         */
-#define LL_FLASH_LATENCY_8                                                     \
-  FLASH_ACR_LATENCY_8WS /*!< FLASH Eight wait states                           \
-                         */
-#define LL_FLASH_LATENCY_9                                                     \
-  FLASH_ACR_LATENCY_9WS /*!< FLASH nine wait states                            \
-                         */
-#define LL_FLASH_LATENCY_10                                                    \
-  FLASH_ACR_LATENCY_10WS /*!< FLASH ten wait states                            \
-                          */
-#define LL_FLASH_LATENCY_11                                                    \
-  FLASH_ACR_LATENCY_11WS /*!< FLASH eleven wait states */
-#define LL_FLASH_LATENCY_12                                                    \
-  FLASH_ACR_LATENCY_12WS /*!< FLASH twelve wait states */
-#define LL_FLASH_LATENCY_13                                                    \
-  FLASH_ACR_LATENCY_13WS /*!< FLASH thirteen wait states */
-#define LL_FLASH_LATENCY_14                                                    \
-  FLASH_ACR_LATENCY_14WS /*!< FLASH fourteen wait states */
-#define LL_FLASH_LATENCY_15                                                    \
-  FLASH_ACR_LATENCY_15WS /*!< FLASH fifteen wait states */
+#define LL_FLASH_LATENCY_7                                                                                             \
+    FLASH_ACR_LATENCY_7WS /*!< FLASH Seven wait states                                                                 \
+                           */
+#define LL_FLASH_LATENCY_8                                                                                             \
+    FLASH_ACR_LATENCY_8WS /*!< FLASH Eight wait states                                                                 \
+                           */
+#define LL_FLASH_LATENCY_9                                                                                             \
+    FLASH_ACR_LATENCY_9WS /*!< FLASH nine wait states                                                                  \
+                           */
+#define LL_FLASH_LATENCY_10                                                                                            \
+    FLASH_ACR_LATENCY_10WS                         /*!< FLASH ten wait states                                          \
+                                                    */
+#define LL_FLASH_LATENCY_11 FLASH_ACR_LATENCY_11WS /*!< FLASH eleven wait states */
+#define LL_FLASH_LATENCY_12 FLASH_ACR_LATENCY_12WS /*!< FLASH twelve wait states */
+#define LL_FLASH_LATENCY_13 FLASH_ACR_LATENCY_13WS /*!< FLASH thirteen wait states */
+#define LL_FLASH_LATENCY_14 FLASH_ACR_LATENCY_14WS /*!< FLASH fourteen wait states */
+#define LL_FLASH_LATENCY_15 FLASH_ACR_LATENCY_15WS /*!< FLASH fifteen wait states */
 /**
  * @}
  */
@@ -531,7 +491,7 @@ extern "C" {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_SetPHYInterface(uint32_t Interface) {
-  MODIFY_REG(SBS->PMCR, SBS_PMCR_ETH_SEL_PHY, Interface);
+    MODIFY_REG(SBS->PMCR, SBS_PMCR_ETH_SEL_PHY, Interface);
 }
 
 /**
@@ -541,9 +501,7 @@ __STATIC_INLINE void LL_SBS_SetPHYInterface(uint32_t Interface) {
  *         @arg @ref LL_SBS_ETH_MII
  *         @arg @ref LL_SBS_ETH_RMII
  */
-__STATIC_INLINE uint32_t LL_SBS_GetPHYInterface(void) {
-  return (uint32_t)(READ_BIT(SBS->PMCR, SBS_PMCR_ETH_SEL_PHY));
-}
+__STATIC_INLINE uint32_t LL_SBS_GetPHYInterface(void) { return (uint32_t)(READ_BIT(SBS->PMCR, SBS_PMCR_ETH_SEL_PHY)); }
 #endif /* SBS_PMCR_ETH_SEL_PHY */
 
 /**
@@ -558,9 +516,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetPHYInterface(void) {
  *         @arg @ref LL_SBS_FASTMODEPLUS_PB9
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_EnableFastModePlus(uint32_t ConfigFastModePlus) {
-  SET_BIT(SBS->PMCR, ConfigFastModePlus);
-}
+__STATIC_INLINE void LL_SBS_EnableFastModePlus(uint32_t ConfigFastModePlus) { SET_BIT(SBS->PMCR, ConfigFastModePlus); }
 
 /**
  * @brief  Disable the fast mode plus driving capability.
@@ -575,7 +531,7 @@ __STATIC_INLINE void LL_SBS_EnableFastModePlus(uint32_t ConfigFastModePlus) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_DisableFastModePlus(uint32_t ConfigFastModePlus) {
-  CLEAR_BIT(SBS->PMCR, ConfigFastModePlus);
+    CLEAR_BIT(SBS->PMCR, ConfigFastModePlus);
 }
 
 /**
@@ -583,108 +539,84 @@ __STATIC_INLINE void LL_SBS_DisableFastModePlus(uint32_t ConfigFastModePlus) {
  * @rmtoll FPUIMR     FPU_IE_0      LL_SBS_EnableIT_FPU_IOC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_EnableIT_FPU_IOC(void) {
-  SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_0);
-}
+__STATIC_INLINE void LL_SBS_EnableIT_FPU_IOC(void) { SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_0); }
 
 /**
  * @brief  Enable Floating Point Unit Divide-by-zero Interrupt
  * @rmtoll FPUIMR     FPU_IE_1      LL_SBS_EnableIT_FPU_DZC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_EnableIT_FPU_DZC(void) {
-  SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_1);
-}
+__STATIC_INLINE void LL_SBS_EnableIT_FPU_DZC(void) { SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_1); }
 
 /**
  * @brief  Enable Floating Point Unit Underflow Interrupt
  * @rmtoll FPUIMR     FPU_IE_2      LL_SBS_EnableIT_FPU_UFC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_EnableIT_FPU_UFC(void) {
-  SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_2);
-}
+__STATIC_INLINE void LL_SBS_EnableIT_FPU_UFC(void) { SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_2); }
 
 /**
  * @brief  Enable Floating Point Unit Overflow Interrupt
  * @rmtoll FPUIMR     FPU_IE_3      LL_SBS_EnableIT_FPU_OFC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_EnableIT_FPU_OFC(void) {
-  SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_3);
-}
+__STATIC_INLINE void LL_SBS_EnableIT_FPU_OFC(void) { SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_3); }
 
 /**
  * @brief  Enable Floating Point Unit Input denormal Interrupt
  * @rmtoll FPUIMR     FPU_IE_4      LL_SBS_EnableIT_FPU_IDC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_EnableIT_FPU_IDC(void) {
-  SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_4);
-}
+__STATIC_INLINE void LL_SBS_EnableIT_FPU_IDC(void) { SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_4); }
 
 /**
  * @brief  Enable Floating Point Unit Inexact Interrupt
  * @rmtoll FPUIMR     FPU_IE_5      LL_SBS_EnableIT_FPU_IXC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_EnableIT_FPU_IXC(void) {
-  SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_5);
-}
+__STATIC_INLINE void LL_SBS_EnableIT_FPU_IXC(void) { SET_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_5); }
 
 /**
  * @brief  Disable Floating Point Unit Invalid operation Interrupt
  * @rmtoll FPUIMR     FPU_IE_0      LL_SBS_DisableIT_FPU_IOC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_DisableIT_FPU_IOC(void) {
-  CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_0);
-}
+__STATIC_INLINE void LL_SBS_DisableIT_FPU_IOC(void) { CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_0); }
 
 /**
  * @brief  Disable Floating Point Unit Divide-by-zero Interrupt
  * @rmtoll FPUIMR      FPU_IE_1      LL_SBS_DisableIT_FPU_DZC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_DisableIT_FPU_DZC(void) {
-  CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_1);
-}
+__STATIC_INLINE void LL_SBS_DisableIT_FPU_DZC(void) { CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_1); }
 
 /**
  * @brief  Disable Floating Point Unit Underflow Interrupt
  * @rmtoll FPUIMR     FPU_IE_2      LL_SBS_DisableIT_FPU_UFC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_DisableIT_FPU_UFC(void) {
-  CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_2);
-}
+__STATIC_INLINE void LL_SBS_DisableIT_FPU_UFC(void) { CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_2); }
 
 /**
  * @brief  Disable Floating Point Unit Overflow Interrupt
  * @rmtoll FPUIMR     FPU_IE_3      LL_SBS_DisableIT_FPU_OFC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_DisableIT_FPU_OFC(void) {
-  CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_3);
-}
+__STATIC_INLINE void LL_SBS_DisableIT_FPU_OFC(void) { CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_3); }
 
 /**
  * @brief  Disable Floating Point Unit Input denormal Interrupt
  * @rmtoll FPUIMR     FPU_IE_4      LL_SBS_DisableIT_FPU_IDC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_DisableIT_FPU_IDC(void) {
-  CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_4);
-}
+__STATIC_INLINE void LL_SBS_DisableIT_FPU_IDC(void) { CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_4); }
 
 /**
  * @brief  Disable Floating Point Unit Inexact Interrupt
  * @rmtoll FPUIMR     FPU_IE_5      LL_SBS_DisableIT_FPU_IXC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_DisableIT_FPU_IXC(void) {
-  CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_5);
-}
+__STATIC_INLINE void LL_SBS_DisableIT_FPU_IXC(void) { CLEAR_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_5); }
 
 /**
  * @brief  Check if Floating Point Unit Invalid operation Interrupt source is
@@ -693,9 +625,7 @@ __STATIC_INLINE void LL_SBS_DisableIT_FPU_IXC(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_IOC(void) {
-  return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_0) == SBS_FPUIMR_FPU_IE_0)
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_0) == SBS_FPUIMR_FPU_IE_0) ? 1UL : 0UL);
 }
 
 /**
@@ -705,9 +635,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_IOC(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_DZC(void) {
-  return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_1) == SBS_FPUIMR_FPU_IE_1)
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_1) == SBS_FPUIMR_FPU_IE_1) ? 1UL : 0UL);
 }
 
 /**
@@ -717,9 +645,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_DZC(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_UFC(void) {
-  return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_2) == SBS_FPUIMR_FPU_IE_2)
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_2) == SBS_FPUIMR_FPU_IE_2) ? 1UL : 0UL);
 }
 
 /**
@@ -729,9 +655,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_UFC(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_OFC(void) {
-  return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_3) == SBS_FPUIMR_FPU_IE_3)
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_3) == SBS_FPUIMR_FPU_IE_3) ? 1UL : 0UL);
 }
 
 /**
@@ -741,9 +665,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_OFC(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_IDC(void) {
-  return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_4) == SBS_FPUIMR_FPU_IE_4)
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_4) == SBS_FPUIMR_FPU_IE_4) ? 1UL : 0UL);
 }
 
 /**
@@ -753,9 +675,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_IDC(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_IXC(void) {
-  return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_5) == SBS_FPUIMR_FPU_IE_5)
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(SBS->FPUIMR, SBS_FPUIMR_FPU_IE_5) == SBS_FPUIMR_FPU_IE_5) ? 1UL : 0UL);
 }
 
 /**
@@ -773,9 +693,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsEnabledIT_FPU_IXC(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_SetTIMBreakInputs(uint32_t Break) {
-  MODIFY_REG(SBS->CFGR2,
-             SBS_CFGR2_CLL | SBS_CFGR2_SEL | SBS_CFGR2_PVDL | SBS_CFGR2_ECCL,
-             Break);
+    MODIFY_REG(SBS->CFGR2, SBS_CFGR2_CLL | SBS_CFGR2_SEL | SBS_CFGR2_PVDL | SBS_CFGR2_ECCL, Break);
 }
 
 /**
@@ -791,8 +709,7 @@ __STATIC_INLINE void LL_SBS_SetTIMBreakInputs(uint32_t Break) {
  *         @arg @ref LL_SBS_TIMBREAK_LOCKUP
  */
 __STATIC_INLINE uint32_t LL_SBS_GetTIMBreakInputs(void) {
-  return (uint32_t)(READ_BIT(SBS->CFGR2, SBS_CFGR2_CLL | SBS_CFGR2_SEL |
-                                             SBS_CFGR2_PVDL | SBS_CFGR2_ECCL));
+    return (uint32_t)(READ_BIT(SBS->CFGR2, SBS_CFGR2_CLL | SBS_CFGR2_SEL | SBS_CFGR2_PVDL | SBS_CFGR2_ECCL));
 }
 
 #if defined(SBS_EPOCHSELCR_EPOCH_SEL)
@@ -808,8 +725,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetTIMBreakInputs(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_EPOCHSelection(uint32_t Epoch_Selection) {
-  MODIFY_REG(SBS->EPOCHSELCR, SBS_EPOCHSELCR_EPOCH_SEL,
-             (uint32_t)(Epoch_Selection));
+    MODIFY_REG(SBS->EPOCHSELCR, SBS_EPOCHSELCR_EPOCH_SEL, (uint32_t)(Epoch_Selection));
 }
 
 /**
@@ -822,7 +738,7 @@ __STATIC_INLINE void LL_SBS_EPOCHSelection(uint32_t Epoch_Selection) {
  * check.
  */
 __STATIC_INLINE uint32_t LL_SBS_GetEPOCHSelection(void) {
-  return (uint32_t)(READ_BIT(SBS->EPOCHSELCR, SBS_EPOCHSELCR_EPOCH_SEL));
+    return (uint32_t)(READ_BIT(SBS->EPOCHSELCR, SBS_EPOCHSELCR_EPOCH_SEL));
 }
 #endif /* SBS_EPOCHSELCR_EPOCH_SEL */
 
@@ -831,18 +747,14 @@ __STATIC_INLINE uint32_t LL_SBS_GetEPOCHSelection(void) {
  * @rmtoll ECCNMIR     SBS_ECCNMIR_ECCNMI_MASK_EN LL_SBS_FLASH_DisableECCNMI
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_FLASH_DisableECCNMI(void) {
-  SET_BIT(SBS->ECCNMIR, SBS_ECCNMIR_ECCNMI_MASK_EN);
-}
+__STATIC_INLINE void LL_SBS_FLASH_DisableECCNMI(void) { SET_BIT(SBS->ECCNMIR, SBS_ECCNMIR_ECCNMI_MASK_EN); }
 
 /**
  * @brief  Enable the NMI in case of double ECC error in FLASH Interface.
  * @rmtoll ECCNMIR     SBS_ECCNMIR_ECCNMI_MASK_EN      LL_SBS_FLASH_EnableECCNMI
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_FLASH_EnableECCNMI(void) {
-  CLEAR_BIT(SBS->ECCNMIR, SBS_ECCNMIR_ECCNMI_MASK_EN);
-}
+__STATIC_INLINE void LL_SBS_FLASH_EnableECCNMI(void) { CLEAR_BIT(SBS->ECCNMIR, SBS_ECCNMIR_ECCNMI_MASK_EN); }
 
 /** @defgroup SYSTEM_LL_SBS_EF_HDPL_Management HDPL Management
  * @{
@@ -854,7 +766,7 @@ __STATIC_INLINE void LL_SBS_FLASH_EnableECCNMI(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_IncrementHDPLValue(void) {
-  MODIFY_REG(SBS->HDPLCR, SBS_HDPLCR_INCR_HDPL, LL_SBS_HDPL_INCREMENT_VALUE);
+    MODIFY_REG(SBS->HDPLCR, SBS_HDPLCR_INCR_HDPL, LL_SBS_HDPL_INCREMENT_VALUE);
 }
 
 /**
@@ -867,9 +779,7 @@ __STATIC_INLINE void LL_SBS_IncrementHDPLValue(void) {
  *           @arg LL_SBS_HDPL_VALUE_2: HDPL2
  *           @arg LL_SBS_HDPL_VALUE_3: HDPL3
  */
-__STATIC_INLINE uint32_t LL_SBS_GetHDPLValue(void) {
-  return (uint32_t)(READ_BIT(SBS->HDPLSR, SBS_HDPLSR_HDPL));
-}
+__STATIC_INLINE uint32_t LL_SBS_GetHDPLValue(void) { return (uint32_t)(READ_BIT(SBS->HDPLSR, SBS_HDPLSR_HDPL)); }
 
 #if defined(SBS_NEXTHDPLCR_NEXTHDPL)
 /**
@@ -884,8 +794,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetHDPLValue(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_SetOBKHDPL(uint32_t OBKHDPL_Value) {
-  MODIFY_REG(SBS->NEXTHDPLCR, SBS_NEXTHDPLCR_NEXTHDPL,
-             (uint32_t)(OBKHDPL_Value));
+    MODIFY_REG(SBS->NEXTHDPLCR, SBS_NEXTHDPLCR_NEXTHDPL, (uint32_t)(OBKHDPL_Value));
 }
 
 /**
@@ -899,7 +808,7 @@ __STATIC_INLINE void LL_SBS_SetOBKHDPL(uint32_t OBKHDPL_Value) {
  *          @arg LL_SBS_OBKHDPL_INCR_3: HDPL + 3
  */
 __STATIC_INLINE uint32_t LL_SBS_GetOBKHDPL(void) {
-  return (uint32_t)(READ_BIT(SBS->NEXTHDPLCR, SBS_NEXTHDPLCR_NEXTHDPL));
+    return (uint32_t)(READ_BIT(SBS->NEXTHDPLCR, SBS_NEXTHDPLCR_NEXTHDPL));
 }
 #endif /* SBS_NEXTHDPLCR_NEXTHDPL */
 
@@ -921,8 +830,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetOBKHDPL(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_SetAuthDbgHDPL(uint32_t Level) {
-  MODIFY_REG(SBS->DBGCR, SBS_DBGCR_DBG_AUTH_HDPL,
-             (Level << SBS_DBGCR_DBG_AUTH_HDPL_Pos));
+    MODIFY_REG(SBS->DBGCR, SBS_DBGCR_DBG_AUTH_HDPL, (Level << SBS_DBGCR_DBG_AUTH_HDPL_Pos));
 }
 
 /**
@@ -935,8 +843,7 @@ __STATIC_INLINE void LL_SBS_SetAuthDbgHDPL(uint32_t Level) {
  *         @arg @ref LL_SBS_HDPL_VALUE_3
  */
 __STATIC_INLINE uint32_t LL_SBS_GetAuthDbgHDPL(void) {
-  return (uint32_t)(READ_BIT(SBS->DBGCR, SBS_DBGCR_DBG_AUTH_HDPL) >>
-                    SBS_DBGCR_DBG_AUTH_HDPL_Pos);
+    return (uint32_t)(READ_BIT(SBS->DBGCR, SBS_DBGCR_DBG_AUTH_HDPL) >> SBS_DBGCR_DBG_AUTH_HDPL_Pos);
 }
 
 #if defined(SBS_DBGCR_DBG_AUTH_SEC)
@@ -951,8 +858,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetAuthDbgHDPL(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_SetAuthDbgSec(uint32_t Security) {
-  MODIFY_REG(SBS->DBGCR, SBS_DBGCR_DBG_AUTH_SEC,
-             (Security << SBS_DBGCR_DBG_AUTH_SEC_Pos));
+    MODIFY_REG(SBS->DBGCR, SBS_DBGCR_DBG_AUTH_SEC, (Security << SBS_DBGCR_DBG_AUTH_SEC_Pos));
 }
 
 /**
@@ -964,7 +870,7 @@ __STATIC_INLINE void LL_SBS_SetAuthDbgSec(uint32_t Security) {
  *            @arg any other value: debug opening for non-secure only.
  */
 __STATIC_INLINE uint32_t LL_SBS_GetAuthDbgSec(void) {
-  return ((SBS->DBGCR & SBS_DBGCR_DBG_AUTH_SEC) >> SBS_DBGCR_DBG_AUTH_SEC_Pos);
+    return ((SBS->DBGCR & SBS_DBGCR_DBG_AUTH_SEC) >> SBS_DBGCR_DBG_AUTH_SEC_Pos);
 }
 #endif /* SBS_DBGCR_DBG_AUTH_SEC */
 
@@ -973,9 +879,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetAuthDbgSec(void) {
  * @rmtoll SBS_DBGCR DBG_UNLOCK     LL_SBS_UnlockDebug
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_UnlockDebug(void) {
-  MODIFY_REG(SBS->DBGCR, SBS_DBGCR_DBG_UNLOCK, LL_SBS_DBG_UNLOCK);
-}
+__STATIC_INLINE void LL_SBS_UnlockDebug(void) { MODIFY_REG(SBS->DBGCR, SBS_DBGCR_DBG_UNLOCK, LL_SBS_DBG_UNLOCK); }
 
 /**
  * @brief  Check if the debug is unlocked
@@ -983,9 +887,7 @@ __STATIC_INLINE void LL_SBS_UnlockDebug(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsUnlockedDebug(void) {
-  return ((READ_BIT(SBS->DBGCR, SBS_DBGCR_DBG_UNLOCK) == LL_SBS_DBG_UNLOCK)
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(SBS->DBGCR, SBS_DBGCR_DBG_UNLOCK) == LL_SBS_DBG_UNLOCK) ? 1UL : 0UL);
 }
 
 /**
@@ -994,7 +896,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsUnlockedDebug(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_UnlockAccessPort(void) {
-  MODIFY_REG(SBS->DBGCR, SBS_DBGCR_AP_UNLOCK, LL_SBS_ACCESS_PORT_UNLOCK);
+    MODIFY_REG(SBS->DBGCR, SBS_DBGCR_AP_UNLOCK, LL_SBS_ACCESS_PORT_UNLOCK);
 }
 
 /**
@@ -1003,10 +905,7 @@ __STATIC_INLINE void LL_SBS_UnlockAccessPort(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsUnlockedAccessPort(void) {
-  return (
-      (READ_BIT(SBS->DBGCR, SBS_DBGCR_AP_UNLOCK) == LL_SBS_ACCESS_PORT_UNLOCK)
-          ? 1UL
-          : 0UL);
+    return ((READ_BIT(SBS->DBGCR, SBS_DBGCR_AP_UNLOCK) == LL_SBS_ACCESS_PORT_UNLOCK) ? 1UL : 0UL);
 }
 
 /**
@@ -1015,7 +914,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsUnlockedAccessPort(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_LockDebugConfig(void) {
-  MODIFY_REG(SBS->DBGLOCKR, SBS_DBGLOCKR_DBGCFG_LOCK, LL_SBS_DBG_CONFIG_LOCK);
+    MODIFY_REG(SBS->DBGLOCKR, SBS_DBGLOCKR_DBGCFG_LOCK, LL_SBS_DBG_CONFIG_LOCK);
 }
 
 /**
@@ -1024,10 +923,7 @@ __STATIC_INLINE void LL_SBS_LockDebugConfig(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsLockedDebugConfig(void) {
-  return ((READ_BIT(SBS->DBGLOCKR, SBS_DBGLOCKR_DBGCFG_LOCK) !=
-           LL_SBS_DBG_CONFIG_UNLOCK)
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(SBS->DBGLOCKR, SBS_DBGLOCKR_DBGCFG_LOCK) != LL_SBS_DBG_CONFIG_UNLOCK) ? 1UL : 0UL);
 }
 
 /**
@@ -1052,8 +948,8 @@ __STATIC_INLINE uint32_t LL_SBS_IsLockedDebugConfig(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_NonSecureLock(uint32_t Item) {
-  /* Privilege secure/non-secure locks */
-  SBS->CNSLCKR = Item;
+    /* Privilege secure/non-secure locks */
+    SBS->CNSLCKR = Item;
 }
 
 /**
@@ -1068,7 +964,7 @@ __STATIC_INLINE void LL_SBS_NonSecureLock(uint32_t Item) {
  * lock
  */
 __STATIC_INLINE uint32_t LL_SBS_GetNonSecureLock(void) {
-  return (uint32_t)(READ_BIT(SBS->CNSLCKR, LL_SBS_LOCK_ALL_NSEC));
+    return (uint32_t)(READ_BIT(SBS->CNSLCKR, LL_SBS_LOCK_ALL_NSEC));
 }
 
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
@@ -1089,8 +985,8 @@ __STATIC_INLINE uint32_t LL_SBS_GetNonSecureLock(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_SecureLock(uint32_t Item) {
-  /* Privilege secure only locks */
-  SBS->CSLCKR = Item;
+    /* Privilege secure only locks */
+    SBS->CSLCKR = Item;
 }
 
 /**
@@ -1106,9 +1002,7 @@ __STATIC_INLINE void LL_SBS_SecureLock(uint32_t Item) {
  *          @arg LL_SBS_LOCK_ALL_SEC : VTOR_S, AIRCR, Secure MPU and SAU
  * registers lock
  */
-__STATIC_INLINE uint32_t LL_SBS_GetSecureLock(void) {
-  return (uint32_t)(READ_BIT(SBS->CSLCKR, LL_SBS_LOCK_ALL_SEC));
-}
+__STATIC_INLINE uint32_t LL_SBS_GetSecureLock(void) { return (uint32_t)(READ_BIT(SBS->CSLCKR, LL_SBS_LOCK_ALL_SEC)); }
 #endif /* __ARM_FEATURE_CMSE && __ARM_FEATURE_CMSE == 3U */
 
 /**
@@ -1134,9 +1028,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetSecureLock(void) {
  *         @arg @ref LL_SBS_FPU_SEC or LL_SBS_FPU_NSEC
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_ConfigSecure(uint32_t Configuration) {
-  WRITE_REG(SBS->SECCFGR, Configuration);
-}
+__STATIC_INLINE void LL_SBS_ConfigSecure(uint32_t Configuration) { WRITE_REG(SBS->SECCFGR, Configuration); }
 
 /**
  * @brief  Get Secure mode configuration
@@ -1150,8 +1042,7 @@ __STATIC_INLINE void LL_SBS_ConfigSecure(uint32_t Configuration) {
  *         @arg @ref LL_SBS_FPU_SEC or LL_SBS_FPU_NSEC
  */
 __STATIC_INLINE uint32_t LL_SBS_GetConfigSecure(void) {
-  return (uint32_t)(READ_BIT(
-      SBS->SECCFGR, LL_SBS_CLOCK_SEC | LL_SBS_CLASSB_SEC | LL_SBS_FPU_SEC));
+    return (uint32_t)(READ_BIT(SBS->SECCFGR, LL_SBS_CLOCK_SEC | LL_SBS_CLASSB_SEC | LL_SBS_FPU_SEC));
 }
 #endif /* __ARM_FEATURE_CMSE && __ARM_FEATURE_CMSE == 3U */
 
@@ -1174,7 +1065,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetConfigSecure(void) {
  * @retval Returned value is the PMOS compensation cell
  */
 __STATIC_INLINE uint32_t LL_SBS_GetPMOSVddCompensationValue(void) {
-  return (uint32_t)(READ_BIT(SBS->CCVALR, SBS_CCVALR_APSRC1));
+    return (uint32_t)(READ_BIT(SBS->CCVALR, SBS_CCVALR_APSRC1));
 }
 
 /**
@@ -1184,7 +1075,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetPMOSVddCompensationValue(void) {
  * @retval Returned value is the NMOS compensation cell
  */
 __STATIC_INLINE uint32_t LL_SBS_GetNMOSVddCompensationValue(void) {
-  return (uint32_t)(READ_BIT(SBS->CCVALR, SBS_CCVALR_ANSRC1));
+    return (uint32_t)(READ_BIT(SBS->CCVALR, SBS_CCVALR_ANSRC1));
 }
 
 /**
@@ -1194,7 +1085,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetNMOSVddCompensationValue(void) {
  * @retval Returned value is the PMOS compensation cell
  */
 __STATIC_INLINE uint32_t LL_SBS_GetPMOSVddIO2CompensationValue(void) {
-  return (uint32_t)(READ_BIT(SBS->CCVALR, SBS_CCVALR_APSRC2));
+    return (uint32_t)(READ_BIT(SBS->CCVALR, SBS_CCVALR_APSRC2));
 }
 
 /**
@@ -1204,7 +1095,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetPMOSVddIO2CompensationValue(void) {
  * @retval Returned value is the NMOS compensation cell
  */
 __STATIC_INLINE uint32_t LL_SBS_GetNMOSVddIO2CompensationValue(void) {
-  return (uint32_t)(READ_BIT(SBS->CCVALR, SBS_CCVALR_ANSRC2));
+    return (uint32_t)(READ_BIT(SBS->CCVALR, SBS_CCVALR_ANSRC2));
 }
 
 /**
@@ -1217,8 +1108,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetNMOSVddIO2CompensationValue(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_SetPMOSVddCompensationCode(uint32_t PMOSCode) {
-  MODIFY_REG(SBS->CCSWCR, SBS_CCSWCR_SW_APSRC1,
-             PMOSCode << SBS_CCSWCR_SW_APSRC1_Pos);
+    MODIFY_REG(SBS->CCSWCR, SBS_CCSWCR_SW_APSRC1, PMOSCode << SBS_CCSWCR_SW_APSRC1_Pos);
 }
 
 /**
@@ -1228,7 +1118,7 @@ __STATIC_INLINE void LL_SBS_SetPMOSVddCompensationCode(uint32_t PMOSCode) {
  * @retval Returned value is the PMOS compensation cell
  */
 __STATIC_INLINE uint32_t LL_SBS_GetPMOSVddCompensationCode(void) {
-  return (uint32_t)(READ_BIT(SBS->CCSWCR, SBS_CCSWCR_SW_APSRC1));
+    return (uint32_t)(READ_BIT(SBS->CCSWCR, SBS_CCSWCR_SW_APSRC1));
 }
 
 /**
@@ -1241,8 +1131,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetPMOSVddCompensationCode(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_SetPMOSVddIOCompensationCode(uint32_t PMOSCode) {
-  MODIFY_REG(SBS->CCSWCR, SBS_CCSWCR_SW_APSRC2,
-             PMOSCode << SBS_CCSWCR_SW_APSRC2_Pos);
+    MODIFY_REG(SBS->CCSWCR, SBS_CCSWCR_SW_APSRC2, PMOSCode << SBS_CCSWCR_SW_APSRC2_Pos);
 }
 
 /**
@@ -1252,7 +1141,7 @@ __STATIC_INLINE void LL_SBS_SetPMOSVddIOCompensationCode(uint32_t PMOSCode) {
  * @retval Returned value is the PMOS compensation
  */
 __STATIC_INLINE uint32_t LL_SBS_GetPMOSVddIOCompensationCode(void) {
-  return (uint32_t)(READ_BIT(SBS->CCSWCR, SBS_CCSWCR_SW_APSRC2));
+    return (uint32_t)(READ_BIT(SBS->CCSWCR, SBS_CCSWCR_SW_APSRC2));
 }
 
 /**
@@ -1265,8 +1154,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetPMOSVddIOCompensationCode(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_SetNMOSVddCompensationCode(uint32_t NMOSCode) {
-  MODIFY_REG(SBS->CCSWCR, SBS_CCSWCR_SW_ANSRC1,
-             NMOSCode << SBS_CCSWCR_SW_ANSRC1_Pos);
+    MODIFY_REG(SBS->CCSWCR, SBS_CCSWCR_SW_ANSRC1, NMOSCode << SBS_CCSWCR_SW_ANSRC1_Pos);
 }
 
 /**
@@ -1276,7 +1164,7 @@ __STATIC_INLINE void LL_SBS_SetNMOSVddCompensationCode(uint32_t NMOSCode) {
  * @retval Returned value is the Vdd compensation cell code for NMOS transistors
  */
 __STATIC_INLINE uint32_t LL_SBS_GetNMOSVddCompensationCode(void) {
-  return (uint32_t)(READ_BIT(SBS->CCSWCR, SBS_CCSWCR_SW_ANSRC1));
+    return (uint32_t)(READ_BIT(SBS->CCSWCR, SBS_CCSWCR_SW_ANSRC1));
 }
 
 /**
@@ -1289,8 +1177,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetNMOSVddCompensationCode(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_SBS_SetNMOSVddIOCompensationCode(uint32_t NMOSCode) {
-  MODIFY_REG(SBS->CCSWCR, SBS_CCSWCR_SW_ANSRC2,
-             NMOSCode << SBS_CCSWCR_SW_ANSRC2_Pos);
+    MODIFY_REG(SBS->CCSWCR, SBS_CCSWCR_SW_ANSRC2, NMOSCode << SBS_CCSWCR_SW_ANSRC2_Pos);
 }
 
 /**
@@ -1300,7 +1187,7 @@ __STATIC_INLINE void LL_SBS_SetNMOSVddIOCompensationCode(uint32_t NMOSCode) {
  * @retval Returned value is the NMOS compensation cell code
  */
 __STATIC_INLINE uint32_t LL_SBS_GetNMOSVddIOCompensationCode(void) {
-  return (uint32_t)(READ_BIT(SBS->CCSWCR, SBS_CCSWCR_SW_ANSRC2));
+    return (uint32_t)(READ_BIT(SBS->CCSWCR, SBS_CCSWCR_SW_ANSRC2));
 }
 
 /**
@@ -1310,9 +1197,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetNMOSVddIOCompensationCode(void) {
  *         voltage ranges from 1.71 to 3.6 V
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_EnableVddCompensationCell(void) {
-  SET_BIT(SBS->CCCSR, SBS_CCCSR_EN1);
-}
+__STATIC_INLINE void LL_SBS_EnableVddCompensationCell(void) { SET_BIT(SBS->CCCSR, SBS_CCCSR_EN1); }
 
 /**
  * @brief  Enable the Compensation Cell of GPIO supplied by VDDIO
@@ -1321,9 +1206,7 @@ __STATIC_INLINE void LL_SBS_EnableVddCompensationCell(void) {
  *         voltage ranges from 1.08 to 3.6 V
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_EnableVddIOCompensationCell(void) {
-  SET_BIT(SBS->CCCSR, SBS_CCCSR_EN2);
-}
+__STATIC_INLINE void LL_SBS_EnableVddIOCompensationCell(void) { SET_BIT(SBS->CCCSR, SBS_CCCSR_EN2); }
 
 /**
  * @brief  Disable the Compensation Cell of GPIO supplied by VDD
@@ -1332,9 +1215,7 @@ __STATIC_INLINE void LL_SBS_EnableVddIOCompensationCell(void) {
  *         voltage ranges from 1.71 to 3.6 V
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_DisableVddCompensationCell(void) {
-  CLEAR_BIT(SBS->CCCSR, SBS_CCCSR_EN1);
-}
+__STATIC_INLINE void LL_SBS_DisableVddCompensationCell(void) { CLEAR_BIT(SBS->CCCSR, SBS_CCCSR_EN1); }
 
 /**
  * @brief  Disable the Compensation Cell of GPIO supplied by VDDIO
@@ -1343,9 +1224,7 @@ __STATIC_INLINE void LL_SBS_DisableVddCompensationCell(void) {
  *         voltage ranges from 1.08 to 3.6 V
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_DisableVddIOCompensationCell(void) {
-  CLEAR_BIT(SBS->CCCSR, SBS_CCCSR_EN2);
-}
+__STATIC_INLINE void LL_SBS_DisableVddIOCompensationCell(void) { CLEAR_BIT(SBS->CCCSR, SBS_CCCSR_EN2); }
 
 /**
  * @brief  Check if the Compensation Cell of GPIO supplied by VDD is enable
@@ -1353,7 +1232,7 @@ __STATIC_INLINE void LL_SBS_DisableVddIOCompensationCell(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsEnabled_VddCompensationCell(void) {
-  return ((READ_BIT(SBS->CCCSR, SBS_CCCSR_EN1) == SBS_CCCSR_EN1) ? 1UL : 0UL);
+    return ((READ_BIT(SBS->CCCSR, SBS_CCCSR_EN1) == SBS_CCCSR_EN1) ? 1UL : 0UL);
 }
 
 /**
@@ -1362,7 +1241,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsEnabled_VddCompensationCell(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsEnabled_VddIOCompensationCell(void) {
-  return ((READ_BIT(SBS->CCCSR, SBS_CCCSR_EN2) == SBS_CCCSR_EN2) ? 1UL : 0UL);
+    return ((READ_BIT(SBS->CCCSR, SBS_CCCSR_EN2) == SBS_CCCSR_EN2) ? 1UL : 0UL);
 }
 
 /**
@@ -1371,8 +1250,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsEnabled_VddIOCompensationCell(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsActiveFlag_VddCMPCR(void) {
-  return ((READ_BIT(SBS->CCCSR, SBS_CCCSR_RDY1) == (SBS_CCCSR_RDY1)) ? 1UL
-                                                                     : 0UL);
+    return ((READ_BIT(SBS->CCCSR, SBS_CCCSR_RDY1) == (SBS_CCCSR_RDY1)) ? 1UL : 0UL);
 }
 
 /**
@@ -1381,8 +1259,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsActiveFlag_VddCMPCR(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_SBS_IsActiveFlag_VddIOCMPCR(void) {
-  return ((READ_BIT(SBS->CCCSR, SBS_CCCSR_RDY2) == (SBS_CCCSR_RDY2)) ? 1UL
-                                                                     : 0UL);
+    return ((READ_BIT(SBS->CCCSR, SBS_CCCSR_RDY2) == (SBS_CCCSR_RDY2)) ? 1UL : 0UL);
 }
 
 /**
@@ -1396,9 +1273,7 @@ __STATIC_INLINE uint32_t LL_SBS_IsActiveFlag_VddIOCMPCR(void) {
  * code register (SBS_CCSWCR)
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_SetVddCellCompensationCode(uint32_t CompCode) {
-  SET_BIT(SBS->CCCSR, CompCode);
-}
+__STATIC_INLINE void LL_SBS_SetVddCellCompensationCode(uint32_t CompCode) { SET_BIT(SBS->CCCSR, CompCode); }
 
 /**
  * @brief  Set the compensation cell code selection of GPIO supplied by VDDIO
@@ -1411,9 +1286,7 @@ __STATIC_INLINE void LL_SBS_SetVddCellCompensationCode(uint32_t CompCode) {
  * code register (SBS_CCSWCR)
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_SetVddIOCellCompensationCode(uint32_t CompCode) {
-  SET_BIT(SBS->CCCSR, CompCode);
-}
+__STATIC_INLINE void LL_SBS_SetVddIOCellCompensationCode(uint32_t CompCode) { SET_BIT(SBS->CCCSR, CompCode); }
 
 /**
  * @brief  Get the compensation cell code selection of GPIO supplied by VDD
@@ -1425,7 +1298,7 @@ __STATIC_INLINE void LL_SBS_SetVddIOCellCompensationCode(uint32_t CompCode) {
  * cell code register (SBS_CCSWCR)
  */
 __STATIC_INLINE uint32_t LL_SBS_GetVddCellCompensationCode(void) {
-  return (uint32_t)(READ_BIT(SBS->CCCSR, SBS_CCCSR_CS1));
+    return (uint32_t)(READ_BIT(SBS->CCCSR, SBS_CCCSR_CS1));
 }
 
 /**
@@ -1438,7 +1311,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetVddCellCompensationCode(void) {
  * cell code register (SBS_CCSWCR)
  */
 __STATIC_INLINE uint32_t LL_SBS_GetVddIOCellCompensationCode(void) {
-  return (uint32_t)(READ_BIT(SBS->CCCSR, SBS_CCCSR_CS2));
+    return (uint32_t)(READ_BIT(SBS->CCCSR, SBS_CCCSR_CS2));
 }
 
 /**
@@ -1456,7 +1329,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetVddIOCellCompensationCode(void) {
  * 0x6415)
  */
 __STATIC_INLINE uint32_t LL_DBGMCU_GetDeviceID(void) {
-  return (uint32_t)(READ_BIT(DBGMCU->IDCODE, DBGMCU_IDCODE_DEV_ID));
+    return (uint32_t)(READ_BIT(DBGMCU->IDCODE, DBGMCU_IDCODE_DEV_ID));
 }
 
 /**
@@ -1466,8 +1339,7 @@ __STATIC_INLINE uint32_t LL_DBGMCU_GetDeviceID(void) {
  * @retval Values between Min_Data=0x00 and Max_Data=0xFFFF
  */
 __STATIC_INLINE uint32_t LL_DBGMCU_GetRevisionID(void) {
-  return (uint32_t)(READ_BIT(DBGMCU->IDCODE, DBGMCU_IDCODE_REV_ID) >>
-                    DBGMCU_IDCODE_REV_ID_Pos);
+    return (uint32_t)(READ_BIT(DBGMCU->IDCODE, DBGMCU_IDCODE_REV_ID) >> DBGMCU_IDCODE_REV_ID_Pos);
 }
 
 /**
@@ -1475,54 +1347,42 @@ __STATIC_INLINE uint32_t LL_DBGMCU_GetRevisionID(void) {
  * @rmtoll DBGMCU_CR    DBG_STOP      LL_DBGMCU_EnableDBGStopMode
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_EnableDBGStopMode(void) {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOP);
-}
+__STATIC_INLINE void LL_DBGMCU_EnableDBGStopMode(void) { SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOP); }
 
 /**
  * @brief  Disable the Debug Module during STOP mode
  * @rmtoll DBGMCU_CR    DBG_STOP      LL_DBGMCU_DisableDBGStopMode
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_DisableDBGStopMode(void) {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOP);
-}
+__STATIC_INLINE void LL_DBGMCU_DisableDBGStopMode(void) { CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOP); }
 
 /**
  * @brief  Enable the Debug Module during STANDBY mode
  * @rmtoll DBGMCU_CR    DBG_STANDBY   LL_DBGMCU_EnableDBGStandbyMode
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_EnableDBGStandbyMode(void) {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBY);
-}
+__STATIC_INLINE void LL_DBGMCU_EnableDBGStandbyMode(void) { SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBY); }
 
 /**
  * @brief  Disable the Debug Module during STANDBY mode
  * @rmtoll DBGMCU_CR    DBG_STANDBY   LL_DBGMCU_DisableDBGStandbyMode
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_DisableDBGStandbyMode(void) {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBY);
-}
+__STATIC_INLINE void LL_DBGMCU_DisableDBGStandbyMode(void) { CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBY); }
 
 /**
  * @brief  Enable the Debug Clock Trace
  * @rmtoll DBGMCU_CR    TRACE_CLKEN   LL_DBGMCU_EnableTraceClock
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_EnableTraceClock(void) {
-  SET_BIT(DBGMCU->CR, DBGMCU_CR_TRACE_CLKEN);
-}
+__STATIC_INLINE void LL_DBGMCU_EnableTraceClock(void) { SET_BIT(DBGMCU->CR, DBGMCU_CR_TRACE_CLKEN); }
 
 /**
  * @brief  Disable the Debug Clock Trace
  * @rmtoll DBGMCU_CR    TRACE_CLKEN   LL_DBGMCU_DisableTraceClock
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_DisableTraceClock(void) {
-  CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_TRACE_CLKEN);
-}
+__STATIC_INLINE void LL_DBGMCU_DisableTraceClock(void) { CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_TRACE_CLKEN); }
 
 /**
  * @brief  Check if clock trace is enabled or disabled.
@@ -1530,9 +1390,7 @@ __STATIC_INLINE void LL_DBGMCU_DisableTraceClock(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_DBGMCU_IsEnabledTraceClock(void) {
-  return ((READ_BIT(DBGMCU->CR, DBGMCU_CR_TRACE_CLKEN) == DBGMCU_CR_TRACE_CLKEN)
-              ? 1UL
-              : 0UL);
+    return ((READ_BIT(DBGMCU->CR, DBGMCU_CR_TRACE_CLKEN) == DBGMCU_CR_TRACE_CLKEN) ? 1UL : 0UL);
 }
 
 /**
@@ -1548,8 +1406,7 @@ __STATIC_INLINE uint32_t LL_DBGMCU_IsEnabledTraceClock(void) {
  * @retval None
  */
 __STATIC_INLINE void LL_DBGMCU_SetTracePinAssignment(uint32_t PinAssignment) {
-  MODIFY_REG(DBGMCU->CR, DBGMCU_CR_TRACE_IOEN | DBGMCU_CR_TRACE_MODE,
-             PinAssignment);
+    MODIFY_REG(DBGMCU->CR, DBGMCU_CR_TRACE_IOEN | DBGMCU_CR_TRACE_MODE, PinAssignment);
 }
 
 /**
@@ -1564,8 +1421,7 @@ __STATIC_INLINE void LL_DBGMCU_SetTracePinAssignment(uint32_t PinAssignment) {
  *         @arg @ref LL_DBGMCU_TRACE_SYNCH_SIZE4
  */
 __STATIC_INLINE uint32_t LL_DBGMCU_GetTracePinAssignment(void) {
-  return (uint32_t)(READ_BIT(DBGMCU->CR,
-                             DBGMCU_CR_TRACE_IOEN | DBGMCU_CR_TRACE_MODE));
+    return (uint32_t)(READ_BIT(DBGMCU->CR, DBGMCU_CR_TRACE_IOEN | DBGMCU_CR_TRACE_MODE));
 }
 
 /**
@@ -1588,9 +1444,7 @@ __STATIC_INLINE uint32_t LL_DBGMCU_GetTracePinAssignment(void) {
  *         @arg @ref LL_DBGMCU_APB1_GRP1_I3C1_STOP
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_APB1_GRP1_FreezePeriph(uint32_t Periphs) {
-  SET_BIT(DBGMCU->APB1FZR1, Periphs);
-}
+__STATIC_INLINE void LL_DBGMCU_APB1_GRP1_FreezePeriph(uint32_t Periphs) { SET_BIT(DBGMCU->APB1FZR1, Periphs); }
 
 /**
  * @brief  Freeze APB1 peripherals (group2 peripherals)
@@ -1599,9 +1453,7 @@ __STATIC_INLINE void LL_DBGMCU_APB1_GRP1_FreezePeriph(uint32_t Periphs) {
  *         @arg @ref LL_DBGMCU_APB1_GRP2_LPTIM2_STOP
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_APB1_GRP2_FreezePeriph(uint32_t Periphs) {
-  SET_BIT(DBGMCU->APB1FZR2, Periphs);
-}
+__STATIC_INLINE void LL_DBGMCU_APB1_GRP2_FreezePeriph(uint32_t Periphs) { SET_BIT(DBGMCU->APB1FZR2, Periphs); }
 
 /**
  * @brief  Unfreeze APB1 peripherals (group1 peripherals)
@@ -1623,9 +1475,7 @@ __STATIC_INLINE void LL_DBGMCU_APB1_GRP2_FreezePeriph(uint32_t Periphs) {
  *         @arg @ref LL_DBGMCU_APB1_GRP1_I3C1_STOP
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_APB1_GRP1_UnFreezePeriph(uint32_t Periphs) {
-  CLEAR_BIT(DBGMCU->APB1FZR1, Periphs);
-}
+__STATIC_INLINE void LL_DBGMCU_APB1_GRP1_UnFreezePeriph(uint32_t Periphs) { CLEAR_BIT(DBGMCU->APB1FZR1, Periphs); }
 
 /**
  * @brief  Unfreeze APB1 peripherals (group2 peripherals)
@@ -1634,9 +1484,7 @@ __STATIC_INLINE void LL_DBGMCU_APB1_GRP1_UnFreezePeriph(uint32_t Periphs) {
  *         @arg @ref LL_DBGMCU_APB1_GRP2_LPTIM2_STOP
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_APB1_GRP2_UnFreezePeriph(uint32_t Periphs) {
-  CLEAR_BIT(DBGMCU->APB1FZR2, Periphs);
-}
+__STATIC_INLINE void LL_DBGMCU_APB1_GRP2_UnFreezePeriph(uint32_t Periphs) { CLEAR_BIT(DBGMCU->APB1FZR2, Periphs); }
 
 /**
  * @brief  Freeze APB2 peripherals
@@ -1649,9 +1497,7 @@ __STATIC_INLINE void LL_DBGMCU_APB1_GRP2_UnFreezePeriph(uint32_t Periphs) {
  *         @arg @ref LL_DBGMCU_APB2_GRP1_TIM17_STOP
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_APB2_GRP1_FreezePeriph(uint32_t Periphs) {
-  SET_BIT(DBGMCU->APB2FZR, Periphs);
-}
+__STATIC_INLINE void LL_DBGMCU_APB2_GRP1_FreezePeriph(uint32_t Periphs) { SET_BIT(DBGMCU->APB2FZR, Periphs); }
 
 /**
  * @brief  Unfreeze APB2 peripherals
@@ -1664,9 +1510,7 @@ __STATIC_INLINE void LL_DBGMCU_APB2_GRP1_FreezePeriph(uint32_t Periphs) {
  *         @arg @ref LL_DBGMCU_APB2_GRP1_TIM17_STOP
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_APB2_GRP1_UnFreezePeriph(uint32_t Periphs) {
-  CLEAR_BIT(DBGMCU->APB2FZR, Periphs);
-}
+__STATIC_INLINE void LL_DBGMCU_APB2_GRP1_UnFreezePeriph(uint32_t Periphs) { CLEAR_BIT(DBGMCU->APB2FZR, Periphs); }
 
 /**
  * @brief  Freeze APB3 peripherals
@@ -1678,9 +1522,7 @@ __STATIC_INLINE void LL_DBGMCU_APB2_GRP1_UnFreezePeriph(uint32_t Periphs) {
  *         @arg @ref LL_DBGMCU_APB3_GRP1_RTC_STOP
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_APB3_GRP1_FreezePeriph(uint32_t Periphs) {
-  SET_BIT(DBGMCU->APB3FZR, Periphs);
-}
+__STATIC_INLINE void LL_DBGMCU_APB3_GRP1_FreezePeriph(uint32_t Periphs) { SET_BIT(DBGMCU->APB3FZR, Periphs); }
 
 /**
  * @brief  Unfreeze APB3 peripherals
@@ -1692,9 +1534,7 @@ __STATIC_INLINE void LL_DBGMCU_APB3_GRP1_FreezePeriph(uint32_t Periphs) {
  *         @arg @ref LL_DBGMCU_APB3_GRP1_RTC_STOP
  * @retval None
  */
-__STATIC_INLINE void LL_DBGMCU_APB3_GRP1_UnFreezePeriph(uint32_t Periphs) {
-  CLEAR_BIT(DBGMCU->APB3FZR, Periphs);
-}
+__STATIC_INLINE void LL_DBGMCU_APB3_GRP1_UnFreezePeriph(uint32_t Periphs) { CLEAR_BIT(DBGMCU->APB3FZR, Periphs); }
 
 /**
  * @}
@@ -1710,27 +1550,21 @@ __STATIC_INLINE void LL_DBGMCU_APB3_GRP1_UnFreezePeriph(uint32_t Periphs) {
  * @rmtoll VREFBUF_CSR  ENVR          LL_VREFBUF_Enable
  * @retval None
  */
-__STATIC_INLINE void LL_VREFBUF_Enable(void) {
-  SET_BIT(VREFBUF->CSR, VREFBUF_CSR_ENVR);
-}
+__STATIC_INLINE void LL_VREFBUF_Enable(void) { SET_BIT(VREFBUF->CSR, VREFBUF_CSR_ENVR); }
 
 /**
  * @brief  Disable Internal voltage reference
  * @rmtoll VREFBUF_CSR  ENVR          LL_VREFBUF_Disable
  * @retval None
  */
-__STATIC_INLINE void LL_VREFBUF_Disable(void) {
-  CLEAR_BIT(VREFBUF->CSR, VREFBUF_CSR_ENVR);
-}
+__STATIC_INLINE void LL_VREFBUF_Disable(void) { CLEAR_BIT(VREFBUF->CSR, VREFBUF_CSR_ENVR); }
 
 /**
  * @brief  Enable high impedance (VREF+pin is high impedance)
  * @rmtoll VREFBUF_CSR  HIZ           LL_VREFBUF_EnableHIZ
  * @retval None
  */
-__STATIC_INLINE void LL_VREFBUF_EnableHIZ(void) {
-  SET_BIT(VREFBUF->CSR, VREFBUF_CSR_HIZ);
-}
+__STATIC_INLINE void LL_VREFBUF_EnableHIZ(void) { SET_BIT(VREFBUF->CSR, VREFBUF_CSR_HIZ); }
 
 /**
  * @brief  Disable high impedance (VREF+pin is internally connected to the
@@ -1738,9 +1572,7 @@ __STATIC_INLINE void LL_VREFBUF_EnableHIZ(void) {
  * @rmtoll VREFBUF_CSR  HIZ           LL_VREFBUF_DisableHIZ
  * @retval None
  */
-__STATIC_INLINE void LL_VREFBUF_DisableHIZ(void) {
-  CLEAR_BIT(VREFBUF->CSR, VREFBUF_CSR_HIZ);
-}
+__STATIC_INLINE void LL_VREFBUF_DisableHIZ(void) { CLEAR_BIT(VREFBUF->CSR, VREFBUF_CSR_HIZ); }
 
 /**
  * @brief  Set the Voltage reference scale
@@ -1752,9 +1584,7 @@ __STATIC_INLINE void LL_VREFBUF_DisableHIZ(void) {
  *         @arg @ref LL_VREFBUF_VOLTAGE_SCALE3
  * @retval None
  */
-__STATIC_INLINE void LL_VREFBUF_SetVoltageScaling(uint32_t Scale) {
-  MODIFY_REG(VREFBUF->CSR, VREFBUF_CSR_VRS, Scale);
-}
+__STATIC_INLINE void LL_VREFBUF_SetVoltageScaling(uint32_t Scale) { MODIFY_REG(VREFBUF->CSR, VREFBUF_CSR_VRS, Scale); }
 
 /**
  * @brief  Get the Voltage reference scale
@@ -1766,7 +1596,7 @@ __STATIC_INLINE void LL_VREFBUF_SetVoltageScaling(uint32_t Scale) {
  *         @arg @ref LL_VREFBUF_VOLTAGE_SCALE3
  */
 __STATIC_INLINE uint32_t LL_VREFBUF_GetVoltageScaling(void) {
-  return (uint32_t)(READ_BIT(VREFBUF->CSR, VREFBUF_CSR_VRS));
+    return (uint32_t)(READ_BIT(VREFBUF->CSR, VREFBUF_CSR_VRS));
 }
 
 /**
@@ -1775,8 +1605,7 @@ __STATIC_INLINE uint32_t LL_VREFBUF_GetVoltageScaling(void) {
  * @retval State of bit (1 or 0).
  */
 __STATIC_INLINE uint32_t LL_VREFBUF_IsVREFReady(void) {
-  return ((READ_BIT(VREFBUF->CSR, VREFBUF_CSR_VRR) == VREFBUF_CSR_VRR) ? 1UL
-                                                                       : 0UL);
+    return ((READ_BIT(VREFBUF->CSR, VREFBUF_CSR_VRR) == VREFBUF_CSR_VRR) ? 1UL : 0UL);
 }
 
 /**
@@ -1784,9 +1613,7 @@ __STATIC_INLINE uint32_t LL_VREFBUF_IsVREFReady(void) {
  * @rmtoll VREFBUF_CCR  TRIM          LL_VREFBUF_GetTrimming
  * @retval Between 0 and 0x3F
  */
-__STATIC_INLINE uint32_t LL_VREFBUF_GetTrimming(void) {
-  return (uint32_t)(READ_BIT(VREFBUF->CCR, VREFBUF_CCR_TRIM));
-}
+__STATIC_INLINE uint32_t LL_VREFBUF_GetTrimming(void) { return (uint32_t)(READ_BIT(VREFBUF->CCR, VREFBUF_CCR_TRIM)); }
 
 /**
  * @brief  Set the trimming code for VREFBUF calibration (Tune the internal
@@ -1795,9 +1622,7 @@ __STATIC_INLINE uint32_t LL_VREFBUF_GetTrimming(void) {
  * @param  Value Between 0 and 0x3F
  * @retval None
  */
-__STATIC_INLINE void LL_VREFBUF_SetTrimming(uint32_t Value) {
-  WRITE_REG(VREFBUF->CCR, Value);
-}
+__STATIC_INLINE void LL_VREFBUF_SetTrimming(uint32_t Value) { WRITE_REG(VREFBUF->CCR, Value); }
 
 /**
  * @}
@@ -1829,9 +1654,7 @@ __STATIC_INLINE void LL_VREFBUF_SetTrimming(uint32_t Value) {
  *         @arg @ref LL_FLASH_LATENCY_15
  * @retval None
  */
-__STATIC_INLINE void LL_FLASH_SetLatency(uint32_t Latency) {
-  MODIFY_REG(FLASH->ACR, FLASH_ACR_LATENCY, Latency);
-}
+__STATIC_INLINE void LL_FLASH_SetLatency(uint32_t Latency) { MODIFY_REG(FLASH->ACR, FLASH_ACR_LATENCY, Latency); }
 
 /**
  * @brief  Get FLASH Latency
@@ -1854,9 +1677,7 @@ __STATIC_INLINE void LL_FLASH_SetLatency(uint32_t Latency) {
  *         @arg @ref LL_FLASH_LATENCY_14
  *         @arg @ref LL_FLASH_LATENCY_15
  */
-__STATIC_INLINE uint32_t LL_FLASH_GetLatency(void) {
-  return (uint32_t)(READ_BIT(FLASH->ACR, FLASH_ACR_LATENCY));
-}
+__STATIC_INLINE uint32_t LL_FLASH_GetLatency(void) { return (uint32_t)(READ_BIT(FLASH->ACR, FLASH_ACR_LATENCY)); }
 
 /**
  * @}
@@ -1871,9 +1692,7 @@ __STATIC_INLINE uint32_t LL_FLASH_GetLatency(void) {
  * @rmtoll MESR   IPMEE    LL_SBS_ClearEraseEndStatus
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_ClearEraseEndStatus(void) {
-  WRITE_REG(SBS->MESR, SBS_MESR_IPMEE);
-}
+__STATIC_INLINE void LL_SBS_ClearEraseEndStatus(void) { WRITE_REG(SBS->MESR, SBS_MESR_IPMEE); }
 
 /**
  * @brief  Get Status of End of Erase for ICACHE and PKA RAMs
@@ -1883,9 +1702,7 @@ __STATIC_INLINE void LL_SBS_ClearEraseEndStatus(void) {
  * going or flag cleared by SW
  *   @arg LL_SBS_MEMORIES_ERASE_IPMEE_ENDED: Erase of ICACHE and PKA RAMs ended
  */
-__STATIC_INLINE uint32_t LL_SBS_GetEraseEndStatus(void) {
-  return (uint32_t)(READ_BIT(SBS->MESR, SBS_MESR_IPMEE));
-}
+__STATIC_INLINE uint32_t LL_SBS_GetEraseEndStatus(void) { return (uint32_t)(READ_BIT(SBS->MESR, SBS_MESR_IPMEE)); }
 
 /**
  * @brief  Clear Status of End of Erase after Power-on Reset for SRAM2, BKPRAM,
@@ -1893,9 +1710,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetEraseEndStatus(void) {
  * @rmtoll MESR   MCLR    LL_SBS_ClearEraseAfterResetStatus
  * @retval None
  */
-__STATIC_INLINE void LL_SBS_ClearEraseAfterResetStatus(void) {
-  WRITE_REG(SBS->MESR, SBS_MESR_MCLR);
-}
+__STATIC_INLINE void LL_SBS_ClearEraseAfterResetStatus(void) { WRITE_REG(SBS->MESR, SBS_MESR_MCLR); }
 
 /**
  * @brief  Get Status of End of Erase after Power-on Reset for SRAM2, BKPRAM,
@@ -1907,7 +1722,7 @@ __STATIC_INLINE void LL_SBS_ClearEraseAfterResetStatus(void) {
  *   @arg LL_SBS_MEMORIES_ERASE_MCLR_ENDED: Erase of memories ended
  */
 __STATIC_INLINE uint32_t LL_SBS_GetEraseAfterResetStatus(void) {
-  return (uint32_t)(READ_BIT(SBS->MESR, SBS_MESR_MCLR));
+    return (uint32_t)(READ_BIT(SBS->MESR, SBS_MESR_MCLR));
 }
 /**
  * @}
@@ -1921,7 +1736,7 @@ __STATIC_INLINE uint32_t LL_SBS_GetEraseAfterResetStatus(void) {
  * @}
  */
 
-#endif /* defined (FLASH) || defined (SBS) || defined (DBGMCU) || defined      \
+#endif /* defined (FLASH) || defined (SBS) || defined (DBGMCU) || defined                                              \
           (VREFBUF) */
 
 /**

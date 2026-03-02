@@ -76,61 +76,57 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _tx_event_flags_info_get(TX_EVENT_FLAGS_GROUP *group_ptr, CHAR **name,
-                              ULONG *current_flags, TX_THREAD **first_suspended,
-                              ULONG *suspended_count,
-                              TX_EVENT_FLAGS_GROUP **next_group) {
+UINT _tx_event_flags_info_get(TX_EVENT_FLAGS_GROUP *group_ptr, CHAR **name, ULONG *current_flags,
+                              TX_THREAD **first_suspended, ULONG *suspended_count, TX_EVENT_FLAGS_GROUP **next_group) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  TX_TRACE_IN_LINE_INSERT(TX_TRACE_EVENT_FLAGS_INFO_GET, group_ptr, 0, 0, 0,
-                          TX_TRACE_EVENT_FLAGS_EVENTS)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    TX_TRACE_IN_LINE_INSERT(TX_TRACE_EVENT_FLAGS_INFO_GET, group_ptr, 0, 0, 0, TX_TRACE_EVENT_FLAGS_EVENTS)
 
-  /* Log this kernel call.  */
-  TX_EL_EVENT_FLAGS_INFO_GET_INSERT
+    /* Log this kernel call.  */
+    TX_EL_EVENT_FLAGS_INFO_GET_INSERT
 
-  /* Retrieve all the pertinent information and return it in the supplied
-     destinations.  */
+    /* Retrieve all the pertinent information and return it in the supplied
+       destinations.  */
 
-  /* Retrieve the name of the event flag group.  */
-  if (name != TX_NULL) {
+    /* Retrieve the name of the event flag group.  */
+    if (name != TX_NULL) {
 
-    *name = group_ptr->tx_event_flags_group_name;
-  }
+        *name = group_ptr->tx_event_flags_group_name;
+    }
 
-  /* Retrieve the current event flags in the event flag group.  */
-  if (current_flags != TX_NULL) {
+    /* Retrieve the current event flags in the event flag group.  */
+    if (current_flags != TX_NULL) {
 
-    /* Pickup the current flags and apply delayed clearing.  */
-    *current_flags = group_ptr->tx_event_flags_group_current &
-                     ~group_ptr->tx_event_flags_group_delayed_clear;
-  }
+        /* Pickup the current flags and apply delayed clearing.  */
+        *current_flags = group_ptr->tx_event_flags_group_current & ~group_ptr->tx_event_flags_group_delayed_clear;
+    }
 
-  /* Retrieve the first thread suspended on this event flag group.  */
-  if (first_suspended != TX_NULL) {
+    /* Retrieve the first thread suspended on this event flag group.  */
+    if (first_suspended != TX_NULL) {
 
-    *first_suspended = group_ptr->tx_event_flags_group_suspension_list;
-  }
+        *first_suspended = group_ptr->tx_event_flags_group_suspension_list;
+    }
 
-  /* Retrieve the number of threads suspended on this event flag group.  */
-  if (suspended_count != TX_NULL) {
+    /* Retrieve the number of threads suspended on this event flag group.  */
+    if (suspended_count != TX_NULL) {
 
-    *suspended_count = (ULONG)group_ptr->tx_event_flags_group_suspended_count;
-  }
+        *suspended_count = (ULONG)group_ptr->tx_event_flags_group_suspended_count;
+    }
 
-  /* Retrieve the pointer to the next event flag group created.  */
-  if (next_group != TX_NULL) {
+    /* Retrieve the pointer to the next event flag group created.  */
+    if (next_group != TX_NULL) {
 
-    *next_group = group_ptr->tx_event_flags_group_created_next;
-  }
+        *next_group = group_ptr->tx_event_flags_group_created_next;
+    }
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Return completion status.  */
-  return (TX_SUCCESS);
+    /* Return completion status.  */
+    return (TX_SUCCESS);
 }

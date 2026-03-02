@@ -69,19 +69,19 @@ FX_CALLER_CHECKING_EXTERNS
 /**************************************************************************/
 UINT _fxe_media_close(FX_MEDIA *media_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null media pointer.  */
-  if (media_ptr == FX_NULL) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null media pointer.  */
+    if (media_ptr == FX_NULL) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual media close service.  */
-  status = _fx_media_close(media_ptr);
+    /* Call actual media close service.  */
+    status = _fx_media_close(media_ptr);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

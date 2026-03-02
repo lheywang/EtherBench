@@ -80,28 +80,28 @@ NX_CALLER_CHECKING_EXTERNS
 UINT _nxde_nd_cache_entry_delete(NX_IP *ip_ptr, ULONG *dest_ip) {
 #ifdef FEATURE_NX_IPV6
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for invalid address of cache entry to delete. */
-  if (dest_ip == NX_NULL) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid address of cache entry to delete. */
+    if (dest_ip == NX_NULL) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call the actual cache entry delete function and return completion status.
-   */
-  return (_nxd_nd_cache_entry_delete(ip_ptr, dest_ip));
+    /* Call the actual cache entry delete function and return completion status.
+     */
+    return (_nxd_nd_cache_entry_delete(ip_ptr, dest_ip));
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(dest_ip);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(dest_ip);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

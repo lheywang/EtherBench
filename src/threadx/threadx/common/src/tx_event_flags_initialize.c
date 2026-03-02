@@ -104,18 +104,18 @@ VOID _tx_event_flags_initialize(VOID) {
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-  /* Initialize the head pointer of the created event flags list and the
-     number of event flags created.  */
-  _tx_event_flags_created_ptr = TX_NULL;
-  _tx_event_flags_created_count = TX_EMPTY;
+    /* Initialize the head pointer of the created event flags list and the
+       number of event flags created.  */
+    _tx_event_flags_created_ptr = TX_NULL;
+    _tx_event_flags_created_count = TX_EMPTY;
 
 #ifdef TX_EVENT_FLAGS_ENABLE_PERFORMANCE_INFO
 
-  /* Initialize event flags performance counters.  */
-  _tx_event_flags_performance_set_count = ((ULONG)0);
-  _tx_event_flags_performance_get_count = ((ULONG)0);
-  _tx_event_flags_performance_suspension_count = ((ULONG)0);
-  _tx_event_flags_performance_timeout_count = ((ULONG)0);
+    /* Initialize event flags performance counters.  */
+    _tx_event_flags_performance_set_count = ((ULONG)0);
+    _tx_event_flags_performance_get_count = ((ULONG)0);
+    _tx_event_flags_performance_suspension_count = ((ULONG)0);
+    _tx_event_flags_performance_timeout_count = ((ULONG)0);
 #endif
 #endif
 }

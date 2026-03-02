@@ -70,26 +70,26 @@
 /**************************************************************************/
 UINT _txe_thread_suspend(TX_THREAD *thread_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid thread pointer.  */
-  if (thread_ptr == TX_NULL) {
+    /* Check for an invalid thread pointer.  */
+    if (thread_ptr == TX_NULL) {
 
-    /* Thread pointer is invalid, return appropriate error code.  */
-    status = TX_THREAD_ERROR;
-  }
+        /* Thread pointer is invalid, return appropriate error code.  */
+        status = TX_THREAD_ERROR;
+    }
 
-  /* Now check for invalid thread ID.  */
-  else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
+    /* Now check for invalid thread ID.  */
+    else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
 
-    /* Thread pointer is invalid, return appropriate error code.  */
-    status = TX_THREAD_ERROR;
-  } else {
+        /* Thread pointer is invalid, return appropriate error code.  */
+        status = TX_THREAD_ERROR;
+    } else {
 
-    /* Call actual thread suspend function.  */
-    status = _tx_thread_suspend(thread_ptr);
-  }
+        /* Call actual thread suspend function.  */
+        status = _tx_thread_suspend(thread_ptr);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

@@ -80,24 +80,20 @@
 /*                                            resulting in version 6.2.1 */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_driver_block_status_get(LX_NAND_FLASH *nand_flash,
-                                            ULONG block,
-                                            UCHAR *bad_block_flag) {
+UINT _lx_nand_flash_driver_block_status_get(LX_NAND_FLASH *nand_flash, ULONG block, UCHAR *bad_block_flag) {
 
-  UINT status;
+    UINT status;
 
-  /* Increment the block status get count.  */
-  nand_flash->lx_nand_flash_diagnostic_block_status_gets++;
+    /* Increment the block status get count.  */
+    nand_flash->lx_nand_flash_diagnostic_block_status_gets++;
 
-  /* Call driver block status get function.  */
+    /* Call driver block status get function.  */
 #ifdef LX_NAND_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-  status = (nand_flash->lx_nand_flash_driver_block_status_get)(
-      nand_flash, block, bad_block_flag);
+    status = (nand_flash->lx_nand_flash_driver_block_status_get)(nand_flash, block, bad_block_flag);
 #else
-  status = (nand_flash->lx_nand_flash_driver_block_status_get)(block,
-                                                               bad_block_flag);
+    status = (nand_flash->lx_nand_flash_driver_block_status_get)(block, bad_block_flag);
 #endif
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }

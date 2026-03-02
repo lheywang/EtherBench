@@ -73,29 +73,28 @@
 /**************************************************************************/
 TX_THREAD *_tx_thread_identify(VOID) {
 
-  TX_THREAD *thread_ptr;
+    TX_THREAD *thread_ptr;
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts to put the timer on the created list.  */
-  TX_DISABLE
+    /* Disable interrupts to put the timer on the created list.  */
+    TX_DISABLE
 
 #ifdef TX_ENABLE_EVENT_TRACE
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_IDENTIFY, 0, 0, 0, 0,
-                          TX_TRACE_THREAD_EVENTS)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_IDENTIFY, 0, 0, 0, 0, TX_TRACE_THREAD_EVENTS)
 #endif
 
-  /* Log this kernel call.  */
-  TX_EL_THREAD_IDENTIFY_INSERT
+    /* Log this kernel call.  */
+    TX_EL_THREAD_IDENTIFY_INSERT
 
-  /* Pickup thread pointer.  */
-  TX_THREAD_GET_CURRENT(thread_ptr)
+    /* Pickup thread pointer.  */
+    TX_THREAD_GET_CURRENT(thread_ptr)
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Return the current thread pointer.  */
-  return (thread_ptr);
+    /* Return the current thread pointer.  */
+    return (thread_ptr);
 }

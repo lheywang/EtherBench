@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -19,7 +18,6 @@
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /* Include necessary system files.  */
 
@@ -82,57 +80,47 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-VOID  *_ux_utility_memory_allocate(ULONG memory_alignment, ULONG memory_cache_flag,
-                                   ULONG memory_size_requested)
-{
-UX_MEMORY_BYTE_POOL *pool_ptr;
-UCHAR               *current_ptr;
-UCHAR               *work_ptr;
-UCHAR               *next_ptr;
-ALIGN_TYPE          *free_ptr;
-UCHAR               **this_block_link_ptr;
-UCHAR               **next_block_link_ptr;
-ULONG               available_bytes;
+VOID *_ux_utility_memory_allocate(ULONG memory_alignment, ULONG memory_cache_flag, ULONG memory_size_requested) {
+    UX_MEMORY_BYTE_POOL *pool_ptr;
+    UCHAR *current_ptr;
+    UCHAR *work_ptr;
+    UCHAR *next_ptr;
+    ALIGN_TYPE *free_ptr;
+    UCHAR **this_block_link_ptr;
+    UCHAR **next_block_link_ptr;
+    ULONG available_bytes;
 
-ALIGN_TYPE          int_memory_buffer;
+    ALIGN_TYPE int_memory_buffer;
 #ifdef UX_ENABLE_MEMORY_STATISTICS
-UINT                index;
+    UINT index;
 #endif
 
     /* Get the pool ptr */
-    if (memory_cache_flag == UX_REGULAR_MEMORY)
-    {
-        pool_ptr = _ux_system -> ux_system_memory_byte_pool[UX_MEMORY_BYTE_POOL_REGULAR];
-    }
-    else if (memory_cache_flag == UX_CACHE_SAFE_MEMORY)
-    {
-        pool_ptr = _ux_system -> ux_system_memory_byte_pool[UX_MEMORY_BYTE_POOL_CACHE_SAFE];
-    }
-    else
-    {
-        return(UX_NULL);
+    if (memory_cache_flag == UX_REGULAR_MEMORY) {
+        pool_ptr = _ux_system->ux_system_memory_byte_pool[UX_MEMORY_BYTE_POOL_REGULAR];
+    } else if (memory_cache_flag == UX_CACHE_SAFE_MEMORY) {
+        pool_ptr = _ux_system->ux_system_memory_byte_pool[UX_MEMORY_BYTE_POOL_CACHE_SAFE];
+    } else {
+        return (UX_NULL);
     }
 
     /* Check if pool_ptr is NX_NULL */
-    if (pool_ptr == UX_NULL)
-    {
-        return(UX_NULL);
+    if (pool_ptr == UX_NULL) {
+        return (UX_NULL);
     }
 
     /* Check if the memory size requested is 0.  */
-    if (memory_size_requested == 0)
-    {
-        return(UX_NULL);
+    if (memory_size_requested == 0) {
+        return (UX_NULL);
     }
 
     /* Get the mutex as this is a critical section.  */
-    _ux_system_mutex_on(&_ux_system -> ux_system_mutex);
+    _ux_system_mutex_on(&_ux_system->ux_system_mutex);
 
 #ifdef UX_ENFORCE_SAFE_ALIGNMENT
 
     /* Check if safe alignment requested, in this case switch to UX_NO_ALIGN.  */
-    if (memory_alignment == UX_SAFE_ALIGN)
-    {
+    if (memory_alignment == UX_SAFE_ALIGN) {
 
         /* We will use the memory_size_requested for the alignment.
            But we check to see if we have a minimum or maximum alignment.  */
@@ -198,7 +186,7 @@ UINT                index;
 
     /* Ensure the alignment meats the minimum.  */
     if (memory_alignment < UX_ALIGN_MIN)
-        memory_alignment =  UX_ALIGN_MIN;
+        memory_alignment = UX_ALIGN_MIN;
 
     /* We need to make sure that the next memory block buffer is 8-byte aligned too. We
        do this by first adjusting the requested memory to be 8-byte aligned. One problem
@@ -207,8 +195,9 @@ UINT                index;
        the correct alignment. For example, if the memory block has a size of 12, then we need
        to make sure it is placed on an 8-byte alignment that is after a 8-byte alignment so
        that the memory right after the memory block is 8-byte aligned (16).  */
-    memory_size_requested =  (memory_size_requested + UX_ALIGN_MIN) & (~(ULONG)UX_ALIGN_MIN);
-    memory_size_requested += (((ULONG)(UX_MEMORY_BLOCK_HEADER_SIZE + UX_ALIGN_MIN) & (~(ULONG)UX_ALIGN_MIN)) - (ULONG)UX_MEMORY_BLOCK_HEADER_SIZE);
+    memory_size_requested = (memory_size_requested + UX_ALIGN_MIN) & (~(ULONG)UX_ALIGN_MIN);
+    memory_size_requested += (((ULONG)(UX_MEMORY_BLOCK_HEADER_SIZE + UX_ALIGN_MIN) & (~(ULONG)UX_ALIGN_MIN)) -
+                              (ULONG)UX_MEMORY_BLOCK_HEADER_SIZE);
 
     if (memory_alignment <= UX_ALIGN_MIN)
         current_ptr = _ux_utility_memory_byte_pool_search(pool_ptr, memory_size_requested);
@@ -216,109 +205,107 @@ UINT                index;
         current_ptr = _ux_utility_memory_byte_pool_search(pool_ptr, memory_size_requested + memory_alignment);
 
     /* Check if we found a memory block.  */
-    if (current_ptr == UX_NULL)
-    {
+    if (current_ptr == UX_NULL) {
 
         /* We could not find a memory block.  */
-        _ux_system_mutex_off(&_ux_system -> ux_system_mutex);
+        _ux_system_mutex_off(&_ux_system->ux_system_mutex);
 
-        UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_MEMORY_INSUFFICIENT, memory_size_requested, 0, 0, UX_TRACE_ERRORS, 0, 0)
+        UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_MEMORY_INSUFFICIENT, memory_size_requested, 0, 0, UX_TRACE_ERRORS, 0,
+                                0)
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_UTILITY, UX_MEMORY_INSUFFICIENT);
 
-        return(UX_NULL);
+        return (UX_NULL);
     }
 
     /* Pickup the next block's pointer.  */
-    this_block_link_ptr =  UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(current_ptr);
-    next_ptr =             *this_block_link_ptr;
+    this_block_link_ptr = UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(current_ptr);
+    next_ptr = *this_block_link_ptr;
 
     /* Calculate the number of bytes available in this block.  */
-    available_bytes =   UX_UCHAR_POINTER_DIF(next_ptr, current_ptr);
-    available_bytes =   available_bytes - UX_MEMORY_BLOCK_HEADER_SIZE;
+    available_bytes = UX_UCHAR_POINTER_DIF(next_ptr, current_ptr);
+    available_bytes = available_bytes - UX_MEMORY_BLOCK_HEADER_SIZE;
 
     /* Get the memory buffer for this block.  */
-    int_memory_buffer = (ALIGN_TYPE) (UX_UCHAR_POINTER_ADD(current_ptr, UX_MEMORY_BLOCK_HEADER_SIZE));
+    int_memory_buffer = (ALIGN_TYPE)(UX_UCHAR_POINTER_ADD(current_ptr, UX_MEMORY_BLOCK_HEADER_SIZE));
 
     /* In case we are not aligned  */
-    if ((int_memory_buffer & memory_alignment) != 0)
-    {
+    if ((int_memory_buffer & memory_alignment) != 0) {
 
         /* No, we need to align the memory buffer.  */
         int_memory_buffer += (ALIGN_TYPE)UX_MEMORY_BLOCK_HEADER_SIZE;
         int_memory_buffer += memory_alignment;
-        int_memory_buffer &=  ~((ALIGN_TYPE) memory_alignment);
+        int_memory_buffer &= ~((ALIGN_TYPE)memory_alignment);
         int_memory_buffer -= (ALIGN_TYPE)UX_MEMORY_BLOCK_HEADER_SIZE;
 
         /* Setup the new free block.  */
         next_ptr = (UCHAR *)int_memory_buffer;
 
         /* Setup the new free block.  */
-        next_block_link_ptr =   UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(next_ptr);
-        *next_block_link_ptr =  *this_block_link_ptr;
-        work_ptr =              UX_UCHAR_POINTER_ADD(next_ptr, (sizeof(UCHAR *)));
-        free_ptr =              UX_UCHAR_TO_ALIGN_TYPE_POINTER_CONVERT(work_ptr);
-        *free_ptr =             UX_BYTE_BLOCK_FREE;
+        next_block_link_ptr = UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(next_ptr);
+        *next_block_link_ptr = *this_block_link_ptr;
+        work_ptr = UX_UCHAR_POINTER_ADD(next_ptr, (sizeof(UCHAR *)));
+        free_ptr = UX_UCHAR_TO_ALIGN_TYPE_POINTER_CONVERT(work_ptr);
+        *free_ptr = UX_BYTE_BLOCK_FREE;
 
         /* Increase the total fragment counter.  */
-        pool_ptr -> ux_byte_pool_fragments++;
+        pool_ptr->ux_byte_pool_fragments++;
 
         /* Update the current pointer to point at the newly created block.  */
-        *this_block_link_ptr =  next_ptr;
+        *this_block_link_ptr = next_ptr;
 
         /* Calculate the available bytes.  */
-        available_bytes -=  UX_UCHAR_POINTER_DIF(next_ptr, current_ptr);
+        available_bytes -= UX_UCHAR_POINTER_DIF(next_ptr, current_ptr);
 
         /* Set Current pointer to the aligned memory buffer.  */
         current_ptr = next_ptr;
     }
 
     /* Now we are aligned, determine if we need to split this block.  */
-    if ((available_bytes - memory_size_requested) >= ((ULONG) UX_BYTE_BLOCK_MIN))
-    {
+    if ((available_bytes - memory_size_requested) >= ((ULONG)UX_BYTE_BLOCK_MIN)) {
 
         /* Split the block.  */
-        next_ptr =  UX_UCHAR_POINTER_ADD(current_ptr, (memory_size_requested + UX_MEMORY_BLOCK_HEADER_SIZE));
+        next_ptr = UX_UCHAR_POINTER_ADD(current_ptr, (memory_size_requested + UX_MEMORY_BLOCK_HEADER_SIZE));
 
         /* Setup the new free block.  */
-        next_block_link_ptr =   UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(next_ptr);
-        this_block_link_ptr =   UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(current_ptr);
-        *next_block_link_ptr =  *this_block_link_ptr;
-        work_ptr =              UX_UCHAR_POINTER_ADD(next_ptr, (sizeof(UCHAR *)));
-        free_ptr =              UX_UCHAR_TO_ALIGN_TYPE_POINTER_CONVERT(work_ptr);
-        *free_ptr =             UX_BYTE_BLOCK_FREE;
+        next_block_link_ptr = UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(next_ptr);
+        this_block_link_ptr = UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(current_ptr);
+        *next_block_link_ptr = *this_block_link_ptr;
+        work_ptr = UX_UCHAR_POINTER_ADD(next_ptr, (sizeof(UCHAR *)));
+        free_ptr = UX_UCHAR_TO_ALIGN_TYPE_POINTER_CONVERT(work_ptr);
+        *free_ptr = UX_BYTE_BLOCK_FREE;
 
         /* Increase the total fragment counter.  */
-        pool_ptr -> ux_byte_pool_fragments++;
+        pool_ptr->ux_byte_pool_fragments++;
 
         /* Update the current pointer to point at the newly created block.  */
-        *this_block_link_ptr =  next_ptr;
+        *this_block_link_ptr = next_ptr;
 
         /* Set available equal to memory size for subsequent calculation.  */
-        available_bytes =  memory_size_requested;
+        available_bytes = memory_size_requested;
     }
 
     /* In any case, mark the current block as allocated.  */
-    work_ptr =              UX_UCHAR_POINTER_ADD(current_ptr, (sizeof(UCHAR *)));
-    this_block_link_ptr =   UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(work_ptr);
-    *this_block_link_ptr =  UX_BYTE_POOL_TO_UCHAR_POINTER_CONVERT(pool_ptr);
+    work_ptr = UX_UCHAR_POINTER_ADD(current_ptr, (sizeof(UCHAR *)));
+    this_block_link_ptr = UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(work_ptr);
+    *this_block_link_ptr = UX_BYTE_POOL_TO_UCHAR_POINTER_CONVERT(pool_ptr);
 
     /* Reduce the number of available bytes in the pool.  */
-    pool_ptr -> ux_byte_pool_available =  pool_ptr -> ux_byte_pool_available - (available_bytes + UX_MEMORY_BLOCK_HEADER_SIZE);
+    pool_ptr->ux_byte_pool_available =
+        pool_ptr->ux_byte_pool_available - (available_bytes + UX_MEMORY_BLOCK_HEADER_SIZE);
 
     /* Determine if the search pointer needs to be updated. This is only done
         if the search pointer matches the block to be returned.  */
-    if (current_ptr == pool_ptr -> ux_byte_pool_search)
-    {
+    if (current_ptr == pool_ptr->ux_byte_pool_search) {
 
         /* Yes, update the search pointer to the next block.  */
-        this_block_link_ptr =   UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(current_ptr);
-        pool_ptr -> ux_byte_pool_search =  *this_block_link_ptr;
+        this_block_link_ptr = UX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(current_ptr);
+        pool_ptr->ux_byte_pool_search = *this_block_link_ptr;
     }
 
     /* Adjust the pointer for the application.  */
-    work_ptr =  UX_UCHAR_POINTER_ADD(current_ptr, UX_MEMORY_BLOCK_HEADER_SIZE);
+    work_ptr = UX_UCHAR_POINTER_ADD(current_ptr, UX_MEMORY_BLOCK_HEADER_SIZE);
 
     /* Clear the memory block.  */
     _ux_utility_memory_set(work_ptr, 0, available_bytes); /* Use case of memset is verified. */
@@ -332,22 +319,29 @@ UINT                index;
         index = UX_MEMORY_BYTE_POOL_CACHE_SAFE;
 
     /* Update allocate count, total size.  */
-    _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_count ++;
-    _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_total += (available_bytes + UX_MEMORY_BLOCK_HEADER_SIZE);
+    _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_alloc_count++;
+    _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_alloc_total +=
+        (available_bytes + UX_MEMORY_BLOCK_HEADER_SIZE);
 
-    if (_ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_max_count < _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_count)
-        _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_max_count = _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_count;
+    if (_ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_alloc_max_count <
+        _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_alloc_count)
+        _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_alloc_max_count =
+            _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_alloc_count;
 
-    if (_ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_max_total < _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_total)
-        _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_max_total = _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_alloc_total;
+    if (_ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_alloc_max_total <
+        _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_alloc_total)
+        _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_alloc_max_total =
+            _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_alloc_total;
 
     /* Log max usage of memory pool.  */
-    if (_ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_min_free > _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_available)
-        _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_min_free = _ux_system -> ux_system_memory_byte_pool[index] -> ux_byte_pool_available;
+    if (_ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_min_free >
+        _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_available)
+        _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_min_free =
+            _ux_system->ux_system_memory_byte_pool[index]->ux_byte_pool_available;
 #endif
 
     /* Release the protection.  */
-    _ux_system_mutex_off(&_ux_system -> ux_system_mutex);
+    _ux_system_mutex_off(&_ux_system->ux_system_mutex);
 
-    return(work_ptr);
+    return (work_ptr);
 }

@@ -76,38 +76,37 @@ FX_LOCAL_PATH_SETUP
 /*                                            resulting in version 6.1.5  */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_directory_local_path_restore(FX_MEDIA *media_ptr,
-                                      FX_LOCAL_PATH *local_path_ptr) {
+UINT _fx_directory_local_path_restore(FX_MEDIA *media_ptr, FX_LOCAL_PATH *local_path_ptr) {
 
 #ifndef FX_MEDIA_STATISTICS_DISABLE
 
-  /* Increment the number of times this service has been called.  */
-  media_ptr->fx_media_directory_local_path_restores++;
+    /* Increment the number of times this service has been called.  */
+    media_ptr->fx_media_directory_local_path_restores++;
 #endif
 
-  /* Check the media to make sure it is open.  */
-  if (media_ptr->fx_media_id != FX_MEDIA_ID) {
+    /* Check the media to make sure it is open.  */
+    if (media_ptr->fx_media_id != FX_MEDIA_ID) {
 
-    /* Return the media not opened error.  */
-    return (FX_MEDIA_NOT_OPEN);
-  }
+        /* Return the media not opened error.  */
+        return (FX_MEDIA_NOT_OPEN);
+    }
 
 #ifdef FX_NO_LOCAL_PATH
 
-  FX_PARAMETER_NOT_USED(local_path_ptr);
+    FX_PARAMETER_NOT_USED(local_path_ptr);
 
-  /* Error, return to caller.  */
-  return (FX_NOT_IMPLEMENTED);
+    /* Error, return to caller.  */
+    return (FX_NOT_IMPLEMENTED);
 #else
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  FX_TRACE_IN_LINE_INSERT(FX_TRACE_DIRECTORY_LOCAL_PATH_RESTORE, media_ptr,
-                          local_path_ptr, 0, 0, FX_TRACE_DIRECTORY_EVENTS, 0, 0)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    FX_TRACE_IN_LINE_INSERT(FX_TRACE_DIRECTORY_LOCAL_PATH_RESTORE, media_ptr, local_path_ptr, 0, 0,
+                            FX_TRACE_DIRECTORY_EVENTS, 0, 0)
 
-  /* Setup thread control block to use this local path pointer.  */
-  _tx_thread_current_ptr->tx_thread_filex_ptr = (VOID *)local_path_ptr;
+    /* Setup thread control block to use this local path pointer.  */
+    _tx_thread_current_ptr->tx_thread_filex_ptr = (VOID *)local_path_ptr;
 
-  /* Default directory restore is complete, return status.  */
-  return (FX_SUCCESS);
+    /* Default directory restore is complete, return status.  */
+    return (FX_SUCCESS);
 #endif
 }

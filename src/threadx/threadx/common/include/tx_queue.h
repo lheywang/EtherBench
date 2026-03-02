@@ -60,18 +60,18 @@
    function.  */
 
 #ifndef TX_QUEUE_ENABLE_PERFORMANCE_INFO
-#define _tx_queue_initialize()                                                 \
-  _tx_queue_created_ptr = TX_NULL;                                             \
-  _tx_queue_created_count = TX_EMPTY
+#define _tx_queue_initialize()                                                                                         \
+    _tx_queue_created_ptr = TX_NULL;                                                                                   \
+    _tx_queue_created_count = TX_EMPTY
 #else
-#define _tx_queue_initialize()                                                 \
-  _tx_queue_created_ptr = TX_NULL;                                             \
-  _tx_queue_created_count = TX_EMPTY;                                          \
-  _tx_queue_performance_messages_sent_count = ((ULONG)0);                      \
-  _tx_queue_performance__messages_received_count = ((ULONG)0);                 \
-  _tx_queue_performance_empty_suspension_count = ((ULONG)0);                   \
-  _tx_queue_performance_full_suspension_count = ((ULONG)0);                    \
-  _tx_queue_performance_timeout_count = ((ULONG)0)
+#define _tx_queue_initialize()                                                                                         \
+    _tx_queue_created_ptr = TX_NULL;                                                                                   \
+    _tx_queue_created_count = TX_EMPTY;                                                                                \
+    _tx_queue_performance_messages_sent_count = ((ULONG)0);                                                            \
+    _tx_queue_performance__messages_received_count = ((ULONG)0);                                                       \
+    _tx_queue_performance_empty_suspension_count = ((ULONG)0);                                                         \
+    _tx_queue_performance_full_suspension_count = ((ULONG)0);                                                          \
+    _tx_queue_performance_timeout_count = ((ULONG)0)
 #endif
 #define TX_QUEUE_INIT
 #else
@@ -84,13 +84,13 @@ VOID _tx_queue_initialize(VOID);
    pointers must be modified since they are used subsequently.  */
 
 #ifndef TX_QUEUE_MESSAGE_COPY
-#define TX_QUEUE_MESSAGE_COPY(s, d, z)                                         \
-  *(d)++ = *(s)++;                                                             \
-  if ((z) > ((UINT)1)) {                                                       \
-    while (--(z)) {                                                            \
-      *(d)++ = *(s)++;                                                         \
-    }                                                                          \
-  }
+#define TX_QUEUE_MESSAGE_COPY(s, d, z)                                                                                 \
+    *(d)++ = *(s)++;                                                                                                   \
+    if ((z) > ((UINT)1)) {                                                                                             \
+        while (--(z)) {                                                                                                \
+            *(d)++ = *(s)++;                                                                                           \
+        }                                                                                                              \
+    }
 #endif
 
 /* Define internal queue management function prototypes.  */

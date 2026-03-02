@@ -93,36 +93,32 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_tcp_socket_info_get(
-    NX_TCP_SOCKET *socket_ptr, ULONG *tcp_packets_sent, ULONG *tcp_bytes_sent,
-    ULONG *tcp_packets_received, ULONG *tcp_bytes_received,
-    ULONG *tcp_retransmit_packets, ULONG *tcp_packets_queued,
-    ULONG *tcp_checksum_errors, ULONG *tcp_socket_state,
-    ULONG *tcp_transmit_queue_depth, ULONG *tcp_transmit_window,
-    ULONG *tcp_receive_window) {
+UINT _nxe_tcp_socket_info_get(NX_TCP_SOCKET *socket_ptr, ULONG *tcp_packets_sent, ULONG *tcp_bytes_sent,
+                              ULONG *tcp_packets_received, ULONG *tcp_bytes_received, ULONG *tcp_retransmit_packets,
+                              ULONG *tcp_packets_queued, ULONG *tcp_checksum_errors, ULONG *tcp_socket_state,
+                              ULONG *tcp_transmit_queue_depth, ULONG *tcp_transmit_window, ULONG *tcp_receive_window) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check to see if TCP is enabled.  */
-  if (!(socket_ptr->nx_tcp_socket_ip_ptr)->nx_ip_tcp_packet_receive) {
-    return (NX_NOT_ENABLED);
-  }
+    /* Check to see if TCP is enabled.  */
+    if (!(socket_ptr->nx_tcp_socket_ip_ptr)->nx_ip_tcp_packet_receive) {
+        return (NX_NOT_ENABLED);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call actual TCP socket information get function.  */
-  status = _nx_tcp_socket_info_get(
-      socket_ptr, tcp_packets_sent, tcp_bytes_sent, tcp_packets_received,
-      tcp_bytes_received, tcp_retransmit_packets, tcp_packets_queued,
-      tcp_checksum_errors, tcp_socket_state, tcp_transmit_queue_depth,
-      tcp_transmit_window, tcp_receive_window);
+    /* Call actual TCP socket information get function.  */
+    status =
+        _nx_tcp_socket_info_get(socket_ptr, tcp_packets_sent, tcp_bytes_sent, tcp_packets_received, tcp_bytes_received,
+                                tcp_retransmit_packets, tcp_packets_queued, tcp_checksum_errors, tcp_socket_state,
+                                tcp_transmit_queue_depth, tcp_transmit_window, tcp_receive_window);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_hid.h"
 #include "ux_device_stack.h"
-
 
 #if !defined(UX_DEVICE_STANDALONE)
 /**************************************************************************/
@@ -85,33 +83,30 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_hid_read(UX_SLAVE_CLASS_HID *hid, UCHAR *buffer,
-                                ULONG requested_length, ULONG *actual_length)
-{
+UINT _ux_device_class_hid_read(UX_SLAVE_CLASS_HID *hid, UCHAR *buffer, ULONG requested_length, ULONG *actual_length) {
 #if !defined(UX_DEVICE_CLASS_HID_INTERRUPT_OUT_SUPPORT)
     UX_PARAMETER_NOT_USED(hid);
     UX_PARAMETER_NOT_USED(buffer);
     UX_PARAMETER_NOT_USED(requested_length);
     UX_PARAMETER_NOT_USED(actual_length);
-    return(UX_FUNCTION_NOT_SUPPORTED);
+    return (UX_FUNCTION_NOT_SUPPORTED);
 #else
 
-UX_SLAVE_ENDPOINT           *endpoint;
-UX_SLAVE_DEVICE             *device;
-UX_SLAVE_TRANSFER           *transfer_request;
-UINT                        status= UX_SUCCESS;
-ULONG                       local_requested_length;
-
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_SLAVE_DEVICE *device;
+    UX_SLAVE_TRANSFER *transfer_request;
+    UINT status = UX_SUCCESS;
+    ULONG local_requested_length;
 
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_HID_READ, hid, buffer, requested_length, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_HID_READ, hid, buffer, requested_length, 0,
+                            UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
     /* Get the pointer to the device.  */
-    device =  &_ux_system_slave -> ux_system_slave_device;
+    device = &_ux_system_slave->ux_system_slave_device;
 
     /* As long as the device is in the CONFIGURED state.  */
-    if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
-    {
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_CONFIGURATION_HANDLE_UNKNOWN);
@@ -120,44 +115,43 @@ ULONG                       local_requested_length;
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONFIGURATION_HANDLE_UNKNOWN, device, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
         /* Cannot proceed with command, the interface is down.  */
-        return(UX_CONFIGURATION_HANDLE_UNKNOWN);
+        return (UX_CONFIGURATION_HANDLE_UNKNOWN);
     }
 
     /* Protect this thread.  */
-    _ux_device_mutex_on(&hid -> ux_device_class_hid_read_mutex);
+    _ux_device_mutex_on(&hid->ux_device_class_hid_read_mutex);
 
     /* Locate the endpoint.  */
-    endpoint =  hid -> ux_device_class_hid_read_endpoint;
+    endpoint = hid->ux_device_class_hid_read_endpoint;
 
     /* All HID reading  are on the endpoint OUT, from the host.  */
-    transfer_request = &endpoint -> ux_slave_endpoint_transfer_request;
+    transfer_request = &endpoint->ux_slave_endpoint_transfer_request;
 
 #if (UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1) && defined(UX_DEVICE_CLASS_HID_ZERO_COPY)
 
     /* Directly use buffer from application.  */
-    transfer_request -> ux_slave_transfer_request_data_pointer = buffer;
+    transfer_request->ux_slave_transfer_request_data_pointer = buffer;
 
     /* Send the request to the device controller.  */
     local_requested_length = requested_length;
-    status =  _ux_device_stack_transfer_request(transfer_request, local_requested_length, local_requested_length);
+    status = _ux_device_stack_transfer_request(transfer_request, local_requested_length, local_requested_length);
 
     /* Save actual length.  */
-    *actual_length = transfer_request -> ux_slave_transfer_request_actual_length;
+    *actual_length = transfer_request->ux_slave_transfer_request_actual_length;
 
 #else
 
     /* Reset the actual length.  */
-    *actual_length =  0;
+    *actual_length = 0;
 
     /* Check if we need more transactions.  */
-    while (device -> ux_slave_device_state == UX_DEVICE_CONFIGURED && requested_length != 0)
-    {
+    while (device->ux_slave_device_state == UX_DEVICE_CONFIGURED && requested_length != 0) {
 
         /* Check if we have enough in the local buffer.  */
-        if (requested_length > transfer_request -> ux_slave_transfer_request_transfer_length)
+        if (requested_length > transfer_request->ux_slave_transfer_request_transfer_length)
 
             /* We have too much to transfer.  */
-            local_requested_length = transfer_request -> ux_slave_transfer_request_transfer_length;
+            local_requested_length = transfer_request->ux_slave_transfer_request_transfer_length;
 
         else
 
@@ -165,56 +159,53 @@ ULONG                       local_requested_length;
             local_requested_length = requested_length;
 
         /* Send the request to the device controller.  */
-        status =  _ux_device_stack_transfer_request(transfer_request, local_requested_length, local_requested_length);
+        status = _ux_device_stack_transfer_request(transfer_request, local_requested_length, local_requested_length);
 
         /* Check the status */
-        if (status == UX_SUCCESS)
-        {
+        if (status == UX_SUCCESS) {
 
             /* We need to copy the buffer locally.  */
-            _ux_utility_memory_copy(buffer, transfer_request -> ux_slave_transfer_request_data_pointer,
-                            transfer_request -> ux_slave_transfer_request_actual_length); /* Use case of memcpy is verified. */
+            _ux_utility_memory_copy(
+                buffer, transfer_request->ux_slave_transfer_request_data_pointer,
+                transfer_request->ux_slave_transfer_request_actual_length); /* Use case of memcpy is verified. */
 
             /* Next buffer address.  */
-            buffer += transfer_request -> ux_slave_transfer_request_actual_length;
+            buffer += transfer_request->ux_slave_transfer_request_actual_length;
 
             /* Set the length actually received. */
-            *actual_length += transfer_request -> ux_slave_transfer_request_actual_length;
+            *actual_length += transfer_request->ux_slave_transfer_request_actual_length;
 
             /* Decrement what left has to be done.  */
-            requested_length -= transfer_request -> ux_slave_transfer_request_actual_length;
+            requested_length -= transfer_request->ux_slave_transfer_request_actual_length;
 
             /* Is this a short packet or a ZLP indicating we are done with this transfer ?  */
-            if (transfer_request -> ux_slave_transfer_request_actual_length < endpoint -> ux_slave_endpoint_descriptor.wMaxPacketSize)
-            {
+            if (transfer_request->ux_slave_transfer_request_actual_length <
+                endpoint->ux_slave_endpoint_descriptor.wMaxPacketSize) {
 
                 /* We are done.  */
                 /* Free Mutex resource.  */
-                _ux_device_mutex_off(&hid -> ux_device_class_hid_read_mutex);
+                _ux_device_mutex_off(&hid->ux_device_class_hid_read_mutex);
 
                 /* Return with success.  */
-                return(UX_SUCCESS);
+                return (UX_SUCCESS);
             }
-        }
-        else
-        {
+        } else {
 
             /* Free Mutex resource.  */
-            _ux_device_mutex_off(&hid -> ux_device_class_hid_read_mutex);
+            _ux_device_mutex_off(&hid->ux_device_class_hid_read_mutex);
 
             /* We got an error.  */
-            return(status);
+            return (status);
         }
     }
 
 #endif
 
     /* Free Mutex resource.  */
-    _ux_device_mutex_off(&hid -> ux_device_class_hid_read_mutex);
+    _ux_device_mutex_off(&hid->ux_device_class_hid_read_mutex);
 
     /* Check why we got here, either completion or device was extracted.  */
-    if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
-    {
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_TRANSFER_NO_ANSWER);
@@ -224,14 +215,12 @@ ULONG                       local_requested_length;
 
         /* Device must have been extracted.  */
         return (UX_TRANSFER_NO_ANSWER);
-    }
-    else
+    } else
 
         /* Simply return the last transaction result.  */
-        return(status);
+        return (status);
 #endif
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -273,19 +262,14 @@ ULONG                       local_requested_length;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT _uxe_device_class_hid_read(UX_SLAVE_CLASS_HID *hid, UCHAR *buffer,
-                                   ULONG requested_length, ULONG *actual_length)
-{
+UINT _uxe_device_class_hid_read(UX_SLAVE_CLASS_HID *hid, UCHAR *buffer, ULONG requested_length, ULONG *actual_length) {
 
     /* Sanity checks.  */
-    if ((hid == UX_NULL) ||
-        (buffer == UX_NULL) || (requested_length == 0) ||
-        (actual_length == UX_NULL))
-    {
-        return(UX_INVALID_PARAMETER);
+    if ((hid == UX_NULL) || (buffer == UX_NULL) || (requested_length == 0) || (actual_length == UX_NULL)) {
+        return (UX_INVALID_PARAMETER);
     }
 
     /* Invoke function to read data.  */
-    return(_ux_device_class_hid_read(hid, buffer, requested_length, actual_length));
+    return (_ux_device_class_hid_read(hid, buffer, requested_length, actual_length));
 }
 #endif

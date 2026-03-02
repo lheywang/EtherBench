@@ -71,27 +71,23 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_unicode_name_get(FX_MEDIA *media_ptr, CHAR *source_short_name,
-                           UCHAR *destination_unicode_name,
+UINT _fxe_unicode_name_get(FX_MEDIA *media_ptr, CHAR *source_short_name, UCHAR *destination_unicode_name,
                            ULONG *destination_unicode_length) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a NULL media or name pointers.  */
-  if ((media_ptr == FX_NULL) || (source_short_name == FX_NULL) ||
-      (destination_unicode_name == FX_NULL) ||
-      (destination_unicode_length == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a NULL media or name pointers.  */
+    if ((media_ptr == FX_NULL) || (source_short_name == FX_NULL) || (destination_unicode_name == FX_NULL) ||
+        (destination_unicode_length == FX_NULL)) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual Unicode name get service.  */
-  status = _fx_unicode_name_get(media_ptr, source_short_name,
-                                destination_unicode_name,
-                                destination_unicode_length);
+    /* Call actual Unicode name get service.  */
+    status = _fx_unicode_name_get(media_ptr, source_short_name, destination_unicode_name, destination_unicode_length);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

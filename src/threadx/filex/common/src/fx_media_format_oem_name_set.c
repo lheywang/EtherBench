@@ -76,15 +76,15 @@ UINT fx_media_format_oem_name_set(UCHAR new_oem_name[8]);
 /**************************************************************************/
 UINT fx_media_format_oem_name_set(UCHAR new_oem_name[8]) {
 
-  UINT i;
+    UINT i;
 
-  /* Simply copy the new OEM name into the default location.  */
-  for (i = 0; i < 8; i++) {
+    /* Simply copy the new OEM name into the default location.  */
+    for (i = 0; i < 8; i++) {
 
-    /* Copy one character of the new OEM name.  */
-    _fx_media_format_oem_name[i] = new_oem_name[i];
-  }
+        /* Copy one character of the new OEM name.  */
+        _fx_media_format_oem_name[i] = new_oem_name[i];
+    }
 
-  /* Return success.  */
-  return (FX_SUCCESS);
+    /* Return success.  */
+    return (FX_SUCCESS);
 }

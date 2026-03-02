@@ -75,119 +75,118 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _txe_semaphore_create(TX_SEMAPHORE *semaphore_ptr, CHAR *name_ptr,
-                           ULONG initial_count,
+UINT _txe_semaphore_create(TX_SEMAPHORE *semaphore_ptr, CHAR *name_ptr, ULONG initial_count,
                            UINT semaphore_control_block_size) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  UINT status;
-  ULONG i;
-  TX_SEMAPHORE *next_semaphore;
+    UINT status;
+    ULONG i;
+    TX_SEMAPHORE *next_semaphore;
 #ifndef TX_TIMER_PROCESS_IN_ISR
-  TX_THREAD *thread_ptr;
+    TX_THREAD *thread_ptr;
 #endif
 
-  /* Default status to success.  */
-  status = TX_SUCCESS;
+    /* Default status to success.  */
+    status = TX_SUCCESS;
 
-  /* Check for an invalid semaphore pointer.  */
-  if (semaphore_ptr == TX_NULL) {
+    /* Check for an invalid semaphore pointer.  */
+    if (semaphore_ptr == TX_NULL) {
 
-    /* Semaphore pointer is invalid, return appropriate error code.  */
-    status = TX_SEMAPHORE_ERROR;
-  }
-
-  /* Now check for a valid semaphore ID.  */
-  else if (semaphore_control_block_size != (sizeof(TX_SEMAPHORE))) {
-
-    /* Semaphore pointer is invalid, return appropriate error code.  */
-    status = TX_SEMAPHORE_ERROR;
-  } else {
-
-    /* Disable interrupts.  */
-    TX_DISABLE
-
-    /* Increment the preempt disable flag.  */
-    _tx_thread_preempt_disable++;
-
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Next see if it is already in the created list.  */
-    next_semaphore = _tx_semaphore_created_ptr;
-    for (i = ((ULONG)0); i < _tx_semaphore_created_count; i++) {
-
-      /* Determine if this semaphore matches the current semaphore in the list.
-       */
-      if (semaphore_ptr == next_semaphore) {
-
-        break;
-      } else {
-
-        /* Move to next semaphore.  */
-        next_semaphore = next_semaphore->tx_semaphore_created_next;
-      }
+        /* Semaphore pointer is invalid, return appropriate error code.  */
+        status = TX_SEMAPHORE_ERROR;
     }
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+    /* Now check for a valid semaphore ID.  */
+    else if (semaphore_control_block_size != (sizeof(TX_SEMAPHORE))) {
 
-    /* Decrement the preempt disable flag.  */
-    _tx_thread_preempt_disable--;
+        /* Semaphore pointer is invalid, return appropriate error code.  */
+        status = TX_SEMAPHORE_ERROR;
+    } else {
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+        /* Disable interrupts.  */
+        TX_DISABLE
 
-    /* Check for preemption.  */
-    _tx_thread_system_preempt_check();
+        /* Increment the preempt disable flag.  */
+        _tx_thread_preempt_disable++;
 
-    /* At this point, check to see if there is a duplicate semaphore.  */
-    if (semaphore_ptr == next_semaphore) {
+        /* Restore interrupts.  */
+        TX_RESTORE
 
-      /* Semaphore is already created, return appropriate error code.  */
-      status = TX_SEMAPHORE_ERROR;
-    }
+        /* Next see if it is already in the created list.  */
+        next_semaphore = _tx_semaphore_created_ptr;
+        for (i = ((ULONG)0); i < _tx_semaphore_created_count; i++) {
+
+            /* Determine if this semaphore matches the current semaphore in the list.
+             */
+            if (semaphore_ptr == next_semaphore) {
+
+                break;
+            } else {
+
+                /* Move to next semaphore.  */
+                next_semaphore = next_semaphore->tx_semaphore_created_next;
+            }
+        }
+
+        /* Disable interrupts.  */
+        TX_DISABLE
+
+        /* Decrement the preempt disable flag.  */
+        _tx_thread_preempt_disable--;
+
+        /* Restore interrupts.  */
+        TX_RESTORE
+
+        /* Check for preemption.  */
+        _tx_thread_system_preempt_check();
+
+        /* At this point, check to see if there is a duplicate semaphore.  */
+        if (semaphore_ptr == next_semaphore) {
+
+            /* Semaphore is already created, return appropriate error code.  */
+            status = TX_SEMAPHORE_ERROR;
+        }
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
-    else {
+        else {
 
-      /* Pickup thread pointer.  */
-      TX_THREAD_GET_CURRENT(thread_ptr)
+            /* Pickup thread pointer.  */
+            TX_THREAD_GET_CURRENT(thread_ptr)
 
-      /* Check for invalid caller of this function.  First check for a calling
-       * thread.  */
-      if (thread_ptr == &_tx_timer_thread) {
+            /* Check for invalid caller of this function.  First check for a calling
+             * thread.  */
+            if (thread_ptr == &_tx_timer_thread) {
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status = TX_CALLER_ERROR;
-      }
-    }
+                /* Invalid caller of this function, return appropriate error code.  */
+                status = TX_CALLER_ERROR;
+            }
+        }
 #endif
-  }
-
-  /* Determine if everything is okay.  */
-  if (status == TX_SUCCESS) {
-
-    /* Check for interrupt call.  */
-    if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
-
-      /* Now, make sure the call is from an interrupt and not initialization. */
-      if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS) {
-
-        /* Invalid caller of this function, return appropriate error code.  */
-        status = TX_CALLER_ERROR;
-      }
     }
-  }
 
-  /* Determine if everything is okay.  */
-  if (status == TX_SUCCESS) {
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
 
-    /* Call actual semaphore create function.  */
-    status = _tx_semaphore_create(semaphore_ptr, name_ptr, initial_count);
-  }
+        /* Check for interrupt call.  */
+        if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-  /* Return completion status.  */
-  return (status);
+            /* Now, make sure the call is from an interrupt and not initialization. */
+            if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS) {
+
+                /* Invalid caller of this function, return appropriate error code.  */
+                status = TX_CALLER_ERROR;
+            }
+        }
+    }
+
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
+
+        /* Call actual semaphore create function.  */
+        status = _tx_semaphore_create(semaphore_ptr, name_ptr, initial_count);
+    }
+
+    /* Return completion status.  */
+    return (status);
 }

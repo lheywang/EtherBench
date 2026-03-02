@@ -117,18 +117,14 @@
  */
 #define IS_DCACHE_REGION_SIZE(__SIZE__) ((__SIZE__) > 0U)
 
-#define IS_DCACHE_MONITOR_TYPE(__TYPE__)                                       \
-  (((__TYPE__) & ~DCACHE_MONITOR_ALL) == 0U)
+#define IS_DCACHE_MONITOR_TYPE(__TYPE__) (((__TYPE__) & ~DCACHE_MONITOR_ALL) == 0U)
 
-#define IS_DCACHE_SINGLE_MONITOR_TYPE(__TYPE__)                                \
-  (((__TYPE__) == DCACHE_MONITOR_READ_HIT) ||                                  \
-   ((__TYPE__) == DCACHE_MONITOR_READ_MISS) ||                                 \
-   ((__TYPE__) == DCACHE_MONITOR_WRITE_HIT) ||                                 \
-   ((__TYPE__) == DCACHE_MONITOR_WRITE_MISS))
+#define IS_DCACHE_SINGLE_MONITOR_TYPE(__TYPE__)                                                                        \
+    (((__TYPE__) == DCACHE_MONITOR_READ_HIT) || ((__TYPE__) == DCACHE_MONITOR_READ_MISS) ||                            \
+     ((__TYPE__) == DCACHE_MONITOR_WRITE_HIT) || ((__TYPE__) == DCACHE_MONITOR_WRITE_MISS))
 
-#define IS_DCACHE_READ_BURST_TYPE(__OUTPUTBURSTTYPE__)                         \
-  (((__OUTPUTBURSTTYPE__) == DCACHE_READ_BURST_WRAP) ||                        \
-   ((__OUTPUTBURSTTYPE__) == DCACHE_READ_BURST_INCR))
+#define IS_DCACHE_READ_BURST_TYPE(__OUTPUTBURSTTYPE__)                                                                 \
+    (((__OUTPUTBURSTTYPE__) == DCACHE_READ_BURST_WRAP) || ((__OUTPUTBURSTTYPE__) == DCACHE_READ_BURST_INCR))
 
 /**
  * @}
@@ -144,8 +140,7 @@
 
 #define DCACHE_COMMAND_INVALIDATE DCACHE_CR_CACHECMD_1
 #define DCACHE_COMMAND_CLEAN DCACHE_CR_CACHECMD_0
-#define DCACHE_COMMAND_CLEAN_INVALIDATE                                        \
-  (DCACHE_CR_CACHECMD_0 | DCACHE_CR_CACHECMD_1)
+#define DCACHE_COMMAND_CLEAN_INVALIDATE (DCACHE_CR_CACHECMD_0 | DCACHE_CR_CACHECMD_1)
 
 #define DCACHE_POLLING_MODE 0U
 #define DCACHE_IT_MODE 1U
@@ -156,10 +151,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-static HAL_StatusTypeDef DCACHE_CommandByAddr(DCACHE_HandleTypeDef *hdcache,
-                                              uint32_t Command,
-                                              const uint32_t *const pAddr,
-                                              uint32_t dSize, uint32_t mode);
+static HAL_StatusTypeDef DCACHE_CommandByAddr(DCACHE_HandleTypeDef *hdcache, uint32_t Command,
+                                              const uint32_t *const pAddr, uint32_t dSize, uint32_t mode);
 
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup DCACHE_Exported_Functions DCACHE Exported Functions
@@ -197,48 +190,46 @@ configuration of the selected DCACHEx peripheral.
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_DCACHE_Init(DCACHE_HandleTypeDef *hdcache) {
-  HAL_StatusTypeDef status;
+    HAL_StatusTypeDef status;
 
-  /* Check the DCACHE handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
-
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_READ_BURST_TYPE(hdcache->Init.ReadBurstType));
-
-  if (hdcache->State == HAL_DCACHE_STATE_RESET) {
-    /* Init the DCACHE Callback settings with legacy weak */
-    hdcache->ErrorCallback = HAL_DCACHE_ErrorCallback;
-    hdcache->CleanByAddrCallback = HAL_DCACHE_CleanByAddrCallback;
-    hdcache->InvalidateByAddrCallback = HAL_DCACHE_InvalidateByAddrCallback;
-    hdcache->InvalidateCompleteCallback = HAL_DCACHE_InvalidateCompleteCallback;
-    hdcache->CleanAndInvalidateByAddrCallback =
-        HAL_DCACHE_CleanAndInvalidateByAddrCallback;
-
-    if (hdcache->MspInitCallback == NULL) {
-      hdcache->MspInitCallback = HAL_DCACHE_MspInit;
+    /* Check the DCACHE handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
     }
 
-    /* Init the low level hardware */
-    hdcache->MspInitCallback(hdcache);
-  }
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_READ_BURST_TYPE(hdcache->Init.ReadBurstType));
 
-  /* Init the error code */
-  hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
+    if (hdcache->State == HAL_DCACHE_STATE_RESET) {
+        /* Init the DCACHE Callback settings with legacy weak */
+        hdcache->ErrorCallback = HAL_DCACHE_ErrorCallback;
+        hdcache->CleanByAddrCallback = HAL_DCACHE_CleanByAddrCallback;
+        hdcache->InvalidateByAddrCallback = HAL_DCACHE_InvalidateByAddrCallback;
+        hdcache->InvalidateCompleteCallback = HAL_DCACHE_InvalidateCompleteCallback;
+        hdcache->CleanAndInvalidateByAddrCallback = HAL_DCACHE_CleanAndInvalidateByAddrCallback;
 
-  /* Init the DCACHE handle state */
-  hdcache->State = HAL_DCACHE_STATE_READY;
+        if (hdcache->MspInitCallback == NULL) {
+            hdcache->MspInitCallback = HAL_DCACHE_MspInit;
+        }
 
-  /* Set requested read burst type */
-  MODIFY_REG(hdcache->Instance->CR, DCACHE_CR_HBURST,
-             hdcache->Init.ReadBurstType);
+        /* Init the low level hardware */
+        hdcache->MspInitCallback(hdcache);
+    }
 
-  /* Enable the selected DCACHE peripheral */
-  status = HAL_DCACHE_Enable(hdcache);
+    /* Init the error code */
+    hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
 
-  return status;
+    /* Init the DCACHE handle state */
+    hdcache->State = HAL_DCACHE_STATE_READY;
+
+    /* Set requested read burst type */
+    MODIFY_REG(hdcache->Instance->CR, DCACHE_CR_HBURST, hdcache->Init.ReadBurstType);
+
+    /* Enable the selected DCACHE peripheral */
+    status = HAL_DCACHE_Enable(hdcache);
+
+    return status;
 }
 
 /**
@@ -249,43 +240,42 @@ HAL_StatusTypeDef HAL_DCACHE_Init(DCACHE_HandleTypeDef *hdcache) {
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_DCACHE_DeInit(DCACHE_HandleTypeDef *hdcache) {
-  HAL_StatusTypeDef status;
+    HAL_StatusTypeDef status;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
 
-  /* Update the error code */
-  hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
+    /* Update the error code */
+    hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
 
-  /* Return to the reset state */
-  hdcache->State = HAL_DCACHE_STATE_RESET;
+    /* Return to the reset state */
+    hdcache->State = HAL_DCACHE_STATE_RESET;
 
-  /* Disable cache */
-  status = HAL_DCACHE_Disable(hdcache);
+    /* Disable cache */
+    status = HAL_DCACHE_Disable(hdcache);
 
-  /* reset monitor values */
-  (void)HAL_DCACHE_Monitor_Reset(hdcache, DCACHE_MONITOR_ALL);
+    /* reset monitor values */
+    (void)HAL_DCACHE_Monitor_Reset(hdcache, DCACHE_MONITOR_ALL);
 
-  /* Reset all remaining bit */
-  WRITE_REG(hdcache->Instance->CR, 0U);
-  WRITE_REG(hdcache->Instance->CMDRSADDRR, 0U);
-  WRITE_REG(hdcache->Instance->CMDREADDRR, 0U);
-  WRITE_REG(hdcache->Instance->FCR,
-            DCACHE_FCR_CCMDENDF | DCACHE_FCR_CERRF | DCACHE_FCR_CBSYENDF);
+    /* Reset all remaining bit */
+    WRITE_REG(hdcache->Instance->CR, 0U);
+    WRITE_REG(hdcache->Instance->CMDRSADDRR, 0U);
+    WRITE_REG(hdcache->Instance->CMDREADDRR, 0U);
+    WRITE_REG(hdcache->Instance->FCR, DCACHE_FCR_CCMDENDF | DCACHE_FCR_CERRF | DCACHE_FCR_CBSYENDF);
 
-  if (hdcache->MspDeInitCallback == NULL) {
-    hdcache->MspDeInitCallback = HAL_DCACHE_MspDeInit;
-  }
+    if (hdcache->MspDeInitCallback == NULL) {
+        hdcache->MspDeInitCallback = HAL_DCACHE_MspDeInit;
+    }
 
-  /* DeInitialize the low level hardware */
-  hdcache->MspDeInitCallback(hdcache);
+    /* DeInitialize the low level hardware */
+    hdcache->MspDeInitCallback(hdcache);
 
-  return status;
+    return status;
 }
 
 /**
@@ -296,12 +286,12 @@ HAL_StatusTypeDef HAL_DCACHE_DeInit(DCACHE_HandleTypeDef *hdcache) {
  * @retval None
  */
 __weak void HAL_DCACHE_MspInit(DCACHE_HandleTypeDef *hdcache) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdcache);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hdcache);
 
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_DCACHE_MspInit can be implemented in the user file
-   */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_DCACHE_MspInit can be implemented in the user file
+     */
 }
 
 /**
@@ -312,12 +302,12 @@ __weak void HAL_DCACHE_MspInit(DCACHE_HandleTypeDef *hdcache) {
  * @retval None
  */
 __weak void HAL_DCACHE_MspDeInit(DCACHE_HandleTypeDef *hdcache) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdcache);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hdcache);
 
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_DCACHE_MspDeInit can be implemented in the user file
-   */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_DCACHE_MspDeInit can be implemented in the user file
+     */
 }
 /**
  * @}
@@ -360,30 +350,29 @@ __weak void HAL_DCACHE_MspDeInit(DCACHE_HandleTypeDef *hdcache) {
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_DCACHE_Enable(DCACHE_HandleTypeDef *hdcache) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
 
-  /* Check no ongoing operation */
-  if (READ_BIT(hdcache->Instance->SR, (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) !=
-      0U) {
-    /* Return busy status */
-    status = HAL_BUSY;
-  } else {
-    /* Update the error code */
-    hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
+    /* Check no ongoing operation */
+    if (READ_BIT(hdcache->Instance->SR, (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) != 0U) {
+        /* Return busy status */
+        status = HAL_BUSY;
+    } else {
+        /* Update the error code */
+        hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
 
-    /* Enable the selected DCACHE peripheral */
-    SET_BIT(hdcache->Instance->CR, DCACHE_CR_EN);
-  }
+        /* Enable the selected DCACHE peripheral */
+        SET_BIT(hdcache->Instance->CR, DCACHE_CR_EN);
+    }
 
-  return status;
+    return status;
 }
 
 /**
@@ -394,53 +383,51 @@ HAL_StatusTypeDef HAL_DCACHE_Enable(DCACHE_HandleTypeDef *hdcache) {
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_DCACHE_Disable(DCACHE_HandleTypeDef *hdcache) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  uint32_t tickstart;
+    uint32_t tickstart;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
-
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-
-  /* Check DCACHE handle status */
-  if (HAL_DCACHE_IsEnabled(hdcache) != 0U) {
-    /* Update the error code */
-    hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
-
-    /* Change DCACHE handle state */
-    hdcache->State = HAL_DCACHE_STATE_READY;
-
-    /* Disable the selected DCACHE peripheral */
-    CLEAR_BIT(hdcache->Instance->CR, DCACHE_CR_EN);
-
-    /* Get timeout */
-    tickstart = HAL_GetTick();
-
-    /* Wait for end of data cache disabling */
-    while (READ_BIT(hdcache->Instance->SR,
-                    (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) != 0U) {
-      if ((HAL_GetTick() - tickstart) > DCACHE_DISABLE_TIMEOUT_VALUE) {
-        if (READ_BIT(hdcache->Instance->SR,
-                     (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) != 0U) {
-          /* Update error code */
-          hdcache->ErrorCode = HAL_DCACHE_ERROR_TIMEOUT;
-
-          /* Change the DCACHE handle state */
-          hdcache->State = HAL_DCACHE_STATE_READY;
-
-          /* Return error status */
-          status = HAL_ERROR;
-          break;
-        }
-      }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
     }
-  }
 
-  return status;
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+
+    /* Check DCACHE handle status */
+    if (HAL_DCACHE_IsEnabled(hdcache) != 0U) {
+        /* Update the error code */
+        hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
+
+        /* Change DCACHE handle state */
+        hdcache->State = HAL_DCACHE_STATE_READY;
+
+        /* Disable the selected DCACHE peripheral */
+        CLEAR_BIT(hdcache->Instance->CR, DCACHE_CR_EN);
+
+        /* Get timeout */
+        tickstart = HAL_GetTick();
+
+        /* Wait for end of data cache disabling */
+        while (READ_BIT(hdcache->Instance->SR, (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) != 0U) {
+            if ((HAL_GetTick() - tickstart) > DCACHE_DISABLE_TIMEOUT_VALUE) {
+                if (READ_BIT(hdcache->Instance->SR, (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) != 0U) {
+                    /* Update error code */
+                    hdcache->ErrorCode = HAL_DCACHE_ERROR_TIMEOUT;
+
+                    /* Change the DCACHE handle state */
+                    hdcache->State = HAL_DCACHE_STATE_READY;
+
+                    /* Return error status */
+                    status = HAL_ERROR;
+                    break;
+                }
+            }
+        }
+    }
+
+    return status;
 }
 /**
  * @brief  Check whether the Data Cache is enabled or not.
@@ -450,7 +437,7 @@ HAL_StatusTypeDef HAL_DCACHE_Disable(DCACHE_HandleTypeDef *hdcache) {
  * @retval Status (0: disabled, 1: enabled)
  */
 uint32_t HAL_DCACHE_IsEnabled(const DCACHE_HandleTypeDef *hdcache) {
-  return ((READ_BIT(hdcache->Instance->CR, DCACHE_CR_EN) != 0U) ? 1UL : 0UL);
+    return ((READ_BIT(hdcache->Instance->CR, DCACHE_CR_EN) != 0U) ? 1UL : 0UL);
 }
 
 /**
@@ -462,32 +449,31 @@ uint32_t HAL_DCACHE_IsEnabled(const DCACHE_HandleTypeDef *hdcache) {
  *                       DCACHE_READ_BURST_WRAP, DCACHE_READ_BURST_INC.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_DCACHE_SetReadBurstType(DCACHE_HandleTypeDef *hdcache,
-                                              uint32_t ReadBurstType) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_DCACHE_SetReadBurstType(DCACHE_HandleTypeDef *hdcache, uint32_t ReadBurstType) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_READ_BURST_TYPE(ReadBurstType));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_READ_BURST_TYPE(ReadBurstType));
 
-  /* check DCACHE status */
-  if (HAL_DCACHE_IsEnabled(hdcache) == 0U) {
-    /* Set requested read burst type */
-    MODIFY_REG(hdcache->Instance->CR, DCACHE_CR_HBURST, ReadBurstType);
-  } else {
-    /* Update the error code */
-    hdcache->ErrorCode = HAL_DCACHE_ERROR_INVALID_OPERATION;
+    /* check DCACHE status */
+    if (HAL_DCACHE_IsEnabled(hdcache) == 0U) {
+        /* Set requested read burst type */
+        MODIFY_REG(hdcache->Instance->CR, DCACHE_CR_HBURST, ReadBurstType);
+    } else {
+        /* Update the error code */
+        hdcache->ErrorCode = HAL_DCACHE_ERROR_INVALID_OPERATION;
 
-    /* Return error status */
-    status = HAL_ERROR;
-  }
+        /* Return error status */
+        status = HAL_ERROR;
+    }
 
-  return status;
+    return status;
 }
 
 /**
@@ -499,61 +485,59 @@ HAL_StatusTypeDef HAL_DCACHE_SetReadBurstType(DCACHE_HandleTypeDef *hdcache,
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_DCACHE_Invalidate(DCACHE_HandleTypeDef *hdcache) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t tickstart;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t tickstart;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
-
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-
-  /* Check no ongoing operation */
-  if (READ_BIT(hdcache->Instance->SR, (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) !=
-      0U) {
-    /* Return busy status */
-    status = HAL_BUSY;
-  } else {
-    /* Update the error code */
-    hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
-
-    /* Change DCACHE Handle state */
-    hdcache->State = HAL_DCACHE_STATE_READY;
-
-    /* Make sure flags are reset */
-    WRITE_REG(hdcache->Instance->FCR,
-              (DCACHE_FCR_CBSYENDF | DCACHE_FCR_CCMDENDF));
-
-    /* Set no operation on address range */
-    MODIFY_REG(hdcache->Instance->CR, DCACHE_CR_CACHECMD, 0U);
-
-    /* Launch cache invalidation */
-    SET_BIT(hdcache->Instance->CR, DCACHE_CR_CACHEINV);
-
-    /* Get timeout */
-    tickstart = HAL_GetTick();
-
-    /* Wait for end of cache invalidation */
-    while (READ_BIT(hdcache->Instance->SR, DCACHE_SR_BUSYF) != 0U) {
-      if ((HAL_GetTick() - tickstart) > DCACHE_COMMAND_TIMEOUT_VALUE) {
-        if (READ_BIT(hdcache->Instance->SR, DCACHE_SR_BUSYF) != 0U) {
-          /* Update error code */
-          hdcache->ErrorCode = HAL_DCACHE_ERROR_TIMEOUT;
-
-          /* Change the DCACHE state */
-          hdcache->State = HAL_DCACHE_STATE_ERROR;
-
-          /* Return error status */
-          status = HAL_ERROR;
-          break;
-        }
-      }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
     }
-  }
 
-  return status;
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+
+    /* Check no ongoing operation */
+    if (READ_BIT(hdcache->Instance->SR, (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) != 0U) {
+        /* Return busy status */
+        status = HAL_BUSY;
+    } else {
+        /* Update the error code */
+        hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
+
+        /* Change DCACHE Handle state */
+        hdcache->State = HAL_DCACHE_STATE_READY;
+
+        /* Make sure flags are reset */
+        WRITE_REG(hdcache->Instance->FCR, (DCACHE_FCR_CBSYENDF | DCACHE_FCR_CCMDENDF));
+
+        /* Set no operation on address range */
+        MODIFY_REG(hdcache->Instance->CR, DCACHE_CR_CACHECMD, 0U);
+
+        /* Launch cache invalidation */
+        SET_BIT(hdcache->Instance->CR, DCACHE_CR_CACHEINV);
+
+        /* Get timeout */
+        tickstart = HAL_GetTick();
+
+        /* Wait for end of cache invalidation */
+        while (READ_BIT(hdcache->Instance->SR, DCACHE_SR_BUSYF) != 0U) {
+            if ((HAL_GetTick() - tickstart) > DCACHE_COMMAND_TIMEOUT_VALUE) {
+                if (READ_BIT(hdcache->Instance->SR, DCACHE_SR_BUSYF) != 0U) {
+                    /* Update error code */
+                    hdcache->ErrorCode = HAL_DCACHE_ERROR_TIMEOUT;
+
+                    /* Change the DCACHE state */
+                    hdcache->State = HAL_DCACHE_STATE_ERROR;
+
+                    /* Return error status */
+                    status = HAL_ERROR;
+                    break;
+                }
+            }
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -566,24 +550,22 @@ HAL_StatusTypeDef HAL_DCACHE_Invalidate(DCACHE_HandleTypeDef *hdcache) {
  * @note   This function waits for end of cache Invalidation
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_DCACHE_InvalidateByAddr(DCACHE_HandleTypeDef *hdcache,
-                                              const uint32_t *const pAddr,
+HAL_StatusTypeDef HAL_DCACHE_InvalidateByAddr(DCACHE_HandleTypeDef *hdcache, const uint32_t *const pAddr,
                                               uint32_t dSize) {
-  HAL_StatusTypeDef status;
+    HAL_StatusTypeDef status;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_REGION_SIZE(dSize));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_REGION_SIZE(dSize));
 
-  status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_INVALIDATE, pAddr,
-                                dSize, DCACHE_POLLING_MODE);
+    status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_INVALIDATE, pAddr, dSize, DCACHE_POLLING_MODE);
 
-  return status;
+    return status;
 }
 
 /**
@@ -596,24 +578,21 @@ HAL_StatusTypeDef HAL_DCACHE_InvalidateByAddr(DCACHE_HandleTypeDef *hdcache,
  * @note   This function waits for end of cache Clean
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_DCACHE_CleanByAddr(DCACHE_HandleTypeDef *hdcache,
-                                         const uint32_t *const pAddr,
-                                         uint32_t dSize) {
-  HAL_StatusTypeDef status;
+HAL_StatusTypeDef HAL_DCACHE_CleanByAddr(DCACHE_HandleTypeDef *hdcache, const uint32_t *const pAddr, uint32_t dSize) {
+    HAL_StatusTypeDef status;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_REGION_SIZE(dSize));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_REGION_SIZE(dSize));
 
-  status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_CLEAN, pAddr, dSize,
-                                DCACHE_POLLING_MODE);
+    status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_CLEAN, pAddr, dSize, DCACHE_POLLING_MODE);
 
-  return status;
+    return status;
 }
 
 /**
@@ -626,24 +605,22 @@ HAL_StatusTypeDef HAL_DCACHE_CleanByAddr(DCACHE_HandleTypeDef *hdcache,
  * @note   This function waits for end of cache Clean and Invalidation
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_DCACHE_CleanInvalidByAddr(DCACHE_HandleTypeDef *hdcache,
-                                                const uint32_t *const pAddr,
+HAL_StatusTypeDef HAL_DCACHE_CleanInvalidByAddr(DCACHE_HandleTypeDef *hdcache, const uint32_t *const pAddr,
                                                 uint32_t dSize) {
-  HAL_StatusTypeDef status;
+    HAL_StatusTypeDef status;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_REGION_SIZE(dSize));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_REGION_SIZE(dSize));
 
-  status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_CLEAN_INVALIDATE, pAddr,
-                                dSize, DCACHE_POLLING_MODE);
+    status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_CLEAN_INVALIDATE, pAddr, dSize, DCACHE_POLLING_MODE);
 
-  return status;
+    return status;
 }
 
 /**
@@ -657,43 +634,41 @@ HAL_StatusTypeDef HAL_DCACHE_CleanInvalidByAddr(DCACHE_HandleTypeDef *hdcache,
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_DCACHE_Invalidate_IT(DCACHE_HandleTypeDef *hdcache) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
 
-  /* Check no ongoing operation */
-  if (READ_BIT(hdcache->Instance->SR, (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) !=
-      0U) {
-    /* Return busy status */
-    status = HAL_BUSY;
-  } else {
-    /* Update the error code */
-    hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
+    /* Check no ongoing operation */
+    if (READ_BIT(hdcache->Instance->SR, (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) != 0U) {
+        /* Return busy status */
+        status = HAL_BUSY;
+    } else {
+        /* Update the error code */
+        hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
 
-    /* Change DCACHE Handle state */
-    hdcache->State = HAL_DCACHE_STATE_READY;
+        /* Change DCACHE Handle state */
+        hdcache->State = HAL_DCACHE_STATE_READY;
 
-    /* Make sure BSYENDF is reset */
-    WRITE_REG(hdcache->Instance->FCR,
-              (DCACHE_FCR_CBSYENDF | DCACHE_FCR_CCMDENDF));
+        /* Make sure BSYENDF is reset */
+        WRITE_REG(hdcache->Instance->FCR, (DCACHE_FCR_CBSYENDF | DCACHE_FCR_CCMDENDF));
 
-    /* Set no operation on address range for callback under interrupt */
-    MODIFY_REG(hdcache->Instance->CR, DCACHE_CR_CACHECMD, 0U);
+        /* Set no operation on address range for callback under interrupt */
+        MODIFY_REG(hdcache->Instance->CR, DCACHE_CR_CACHECMD, 0U);
 
-    /* Enable end of cache invalidation interrupt */
-    SET_BIT(hdcache->Instance->IER, DCACHE_IER_BSYENDIE);
+        /* Enable end of cache invalidation interrupt */
+        SET_BIT(hdcache->Instance->IER, DCACHE_IER_BSYENDIE);
 
-    /* Launch cache invalidation */
-    SET_BIT(hdcache->Instance->CR, DCACHE_CR_CACHEINV);
-  }
+        /* Launch cache invalidation */
+        SET_BIT(hdcache->Instance->CR, DCACHE_CR_CACHEINV);
+    }
 
-  return status;
+    return status;
 }
 
 /**
@@ -708,24 +683,22 @@ HAL_StatusTypeDef HAL_DCACHE_Invalidate_IT(DCACHE_HandleTypeDef *hdcache) {
  *         the end of operation.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_DCACHE_InvalidateByAddr_IT(DCACHE_HandleTypeDef *hdcache,
-                                                 const uint32_t *const pAddr,
+HAL_StatusTypeDef HAL_DCACHE_InvalidateByAddr_IT(DCACHE_HandleTypeDef *hdcache, const uint32_t *const pAddr,
                                                  uint32_t dSize) {
-  HAL_StatusTypeDef status;
+    HAL_StatusTypeDef status;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_REGION_SIZE(dSize));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_REGION_SIZE(dSize));
 
-  status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_INVALIDATE, pAddr,
-                                dSize, DCACHE_IT_MODE);
+    status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_INVALIDATE, pAddr, dSize, DCACHE_IT_MODE);
 
-  return status;
+    return status;
 }
 
 /**
@@ -740,24 +713,22 @@ HAL_StatusTypeDef HAL_DCACHE_InvalidateByAddr_IT(DCACHE_HandleTypeDef *hdcache,
  *         the end of operation.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_DCACHE_CleanByAddr_IT(DCACHE_HandleTypeDef *hdcache,
-                                            const uint32_t *const pAddr,
+HAL_StatusTypeDef HAL_DCACHE_CleanByAddr_IT(DCACHE_HandleTypeDef *hdcache, const uint32_t *const pAddr,
                                             uint32_t dSize) {
-  HAL_StatusTypeDef status;
+    HAL_StatusTypeDef status;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_REGION_SIZE(dSize));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_REGION_SIZE(dSize));
 
-  status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_CLEAN, pAddr, dSize,
-                                DCACHE_IT_MODE);
+    status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_CLEAN, pAddr, dSize, DCACHE_IT_MODE);
 
-  return status;
+    return status;
 }
 
 /**
@@ -772,24 +743,22 @@ HAL_StatusTypeDef HAL_DCACHE_CleanByAddr_IT(DCACHE_HandleTypeDef *hdcache,
  *         the end of operation.
  * @retval HAL status
  */
-HAL_StatusTypeDef
-HAL_DCACHE_CleanInvalidByAddr_IT(DCACHE_HandleTypeDef *hdcache,
-                                 const uint32_t *const pAddr, uint32_t dSize) {
-  HAL_StatusTypeDef status;
+HAL_StatusTypeDef HAL_DCACHE_CleanInvalidByAddr_IT(DCACHE_HandleTypeDef *hdcache, const uint32_t *const pAddr,
+                                                   uint32_t dSize) {
+    HAL_StatusTypeDef status;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_REGION_SIZE(dSize));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_REGION_SIZE(dSize));
 
-  status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_CLEAN_INVALIDATE, pAddr,
-                                dSize, DCACHE_IT_MODE);
+    status = DCACHE_CommandByAddr(hdcache, DCACHE_COMMAND_CLEAN_INVALIDATE, pAddr, dSize, DCACHE_IT_MODE);
 
-  return status;
+    return status;
 }
 
 /**
@@ -806,20 +775,19 @@ HAL_DCACHE_CleanInvalidByAddr_IT(DCACHE_HandleTypeDef *hdcache,
  *            @arg DCACHE_MONITOR_ALL
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_DCACHE_Monitor_Start(DCACHE_HandleTypeDef *hdcache,
-                                           uint32_t MonitorType) {
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+HAL_StatusTypeDef HAL_DCACHE_Monitor_Start(DCACHE_HandleTypeDef *hdcache, uint32_t MonitorType) {
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_MONITOR_TYPE(MonitorType));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_MONITOR_TYPE(MonitorType));
 
-  SET_BIT(hdcache->Instance->CR, MonitorType);
+    SET_BIT(hdcache->Instance->CR, MonitorType);
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -837,20 +805,19 @@ HAL_StatusTypeDef HAL_DCACHE_Monitor_Start(DCACHE_HandleTypeDef *hdcache,
  *            @arg DCACHE_MONITOR_ALL
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_DCACHE_Monitor_Stop(DCACHE_HandleTypeDef *hdcache,
-                                          uint32_t MonitorType) {
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+HAL_StatusTypeDef HAL_DCACHE_Monitor_Stop(DCACHE_HandleTypeDef *hdcache, uint32_t MonitorType) {
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_MONITOR_TYPE(MonitorType));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_MONITOR_TYPE(MonitorType));
 
-  CLEAR_BIT(hdcache->Instance->CR, MonitorType);
+    CLEAR_BIT(hdcache->Instance->CR, MonitorType);
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -867,22 +834,21 @@ HAL_StatusTypeDef HAL_DCACHE_Monitor_Stop(DCACHE_HandleTypeDef *hdcache,
  *            @arg DCACHE_MONITOR_ALL
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_DCACHE_Monitor_Reset(DCACHE_HandleTypeDef *hdcache,
-                                           uint32_t MonitorType) {
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
+HAL_StatusTypeDef HAL_DCACHE_Monitor_Reset(DCACHE_HandleTypeDef *hdcache, uint32_t MonitorType) {
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
-  assert_param(IS_DCACHE_MONITOR_TYPE(MonitorType));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    assert_param(IS_DCACHE_MONITOR_TYPE(MonitorType));
 
-  /* Force/Release reset */
-  SET_BIT(hdcache->Instance->CR, (MonitorType << 2U));
-  CLEAR_BIT(hdcache->Instance->CR, (MonitorType << 2U));
+    /* Force/Release reset */
+    SET_BIT(hdcache->Instance->CR, (MonitorType << 2U));
+    CLEAR_BIT(hdcache->Instance->CR, (MonitorType << 2U));
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -893,13 +859,12 @@ HAL_StatusTypeDef HAL_DCACHE_Monitor_Reset(DCACHE_HandleTypeDef *hdcache,
  * @note   Upon reaching the 32-bit maximum value, monitor does not wrap.
  * @retval Read Hit monitoring value
  */
-uint32_t
-HAL_DCACHE_Monitor_GetReadHitValue(const DCACHE_HandleTypeDef *hdcache) {
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+uint32_t HAL_DCACHE_Monitor_GetReadHitValue(const DCACHE_HandleTypeDef *hdcache) {
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
 
-  /*return the Read Hit monitor value*/
-  return hdcache->Instance->RHMONR;
+    /*return the Read Hit monitor value*/
+    return hdcache->Instance->RHMONR;
 }
 
 /**
@@ -910,13 +875,12 @@ HAL_DCACHE_Monitor_GetReadHitValue(const DCACHE_HandleTypeDef *hdcache) {
  * @note   Upon reaching the 16-bit maximum value, monitor does not wrap.
  * @retval Read Miss monitoring value
  */
-uint32_t
-HAL_DCACHE_Monitor_GetReadMissValue(const DCACHE_HandleTypeDef *hdcache) {
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+uint32_t HAL_DCACHE_Monitor_GetReadMissValue(const DCACHE_HandleTypeDef *hdcache) {
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
 
-  /*return the Read Miss monitor value*/
-  return hdcache->Instance->RMMONR;
+    /*return the Read Miss monitor value*/
+    return hdcache->Instance->RMMONR;
 }
 
 /**
@@ -927,13 +891,12 @@ HAL_DCACHE_Monitor_GetReadMissValue(const DCACHE_HandleTypeDef *hdcache) {
  * @note   Upon reaching the 32-bit maximum value, monitor does not wrap.
  * @retval Write Hit monitoring value
  */
-uint32_t
-HAL_DCACHE_Monitor_GetWriteHitValue(const DCACHE_HandleTypeDef *hdcache) {
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+uint32_t HAL_DCACHE_Monitor_GetWriteHitValue(const DCACHE_HandleTypeDef *hdcache) {
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
 
-  /*return the Write Hit monitor value*/
-  return hdcache->Instance->WHMONR;
+    /*return the Write Hit monitor value*/
+    return hdcache->Instance->WHMONR;
 }
 
 /**
@@ -944,13 +907,12 @@ HAL_DCACHE_Monitor_GetWriteHitValue(const DCACHE_HandleTypeDef *hdcache) {
  * @note   Upon reaching the 16-bit maximum value, monitor does not wrap.
  * @retval Write Miss monitoring value
  */
-uint32_t
-HAL_DCACHE_Monitor_GetWriteMissValue(const DCACHE_HandleTypeDef *hdcache) {
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+uint32_t HAL_DCACHE_Monitor_GetWriteMissValue(const DCACHE_HandleTypeDef *hdcache) {
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
 
-  /*return the Write Miss monitor value*/
-  return hdcache->Instance->WMMONR;
+    /*return the Write Miss monitor value*/
+    return hdcache->Instance->WMMONR;
 }
 
 /**
@@ -979,65 +941,63 @@ callback
  * @retval None
  */
 void HAL_DCACHE_IRQHandler(DCACHE_HandleTypeDef *hdcache) {
-  uint32_t itflags;
-  uint32_t itsources;
+    uint32_t itflags;
+    uint32_t itsources;
 
-  /* Check the parameters */
-  assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
+    /* Check the parameters */
+    assert_param(IS_DCACHE_ALL_INSTANCE(hdcache->Instance));
 
-  /* Get current interrupt flags and interrupt sources value */
-  itflags = READ_REG(hdcache->Instance->SR);
-  itsources = READ_REG(hdcache->Instance->IER);
+    /* Get current interrupt flags and interrupt sources value */
+    itflags = READ_REG(hdcache->Instance->SR);
+    itsources = READ_REG(hdcache->Instance->IER);
 
-  /* Check Data cache Error interrupt flag  */
-  if (((itflags & itsources) & DCACHE_FLAG_ERROR) != 0U) {
-    /* Clear DCACHE error pending flag */
-    __HAL_DCACHE_CLEAR_FLAG(hdcache, DCACHE_FLAG_ERROR);
+    /* Check Data cache Error interrupt flag  */
+    if (((itflags & itsources) & DCACHE_FLAG_ERROR) != 0U) {
+        /* Clear DCACHE error pending flag */
+        __HAL_DCACHE_CLEAR_FLAG(hdcache, DCACHE_FLAG_ERROR);
 
-    /* Update data cache error code */
-    hdcache->ErrorCode = HAL_DCACHE_ERROR_EVICTION_CLEAN;
+        /* Update data cache error code */
+        hdcache->ErrorCode = HAL_DCACHE_ERROR_EVICTION_CLEAN;
 
-    /* Data cache error interrupt user callback */
-    hdcache->ErrorCallback(hdcache);
-  }
+        /* Data cache error interrupt user callback */
+        hdcache->ErrorCallback(hdcache);
+    }
 
-  /* Check for end of full invalidate operation */
-  if (READ_BIT(hdcache->Instance->CR, DCACHE_CR_CACHECMD) == 0U) {
-    /* Clear DCACHE busyend pending flag */
-    __HAL_DCACHE_CLEAR_FLAG(hdcache, DCACHE_FLAG_BUSYEND);
+    /* Check for end of full invalidate operation */
+    if (READ_BIT(hdcache->Instance->CR, DCACHE_CR_CACHECMD) == 0U) {
+        /* Clear DCACHE busyend pending flag */
+        __HAL_DCACHE_CLEAR_FLAG(hdcache, DCACHE_FLAG_BUSYEND);
 
-    /* Data cache invalidate complete interrupt user callback */
-    hdcache->InvalidateCompleteCallback(hdcache);
-  }
+        /* Data cache invalidate complete interrupt user callback */
+        hdcache->InvalidateCompleteCallback(hdcache);
+    }
 
-  /* Check for end of clean and invalidate by address operation */
-  else if (READ_BIT(hdcache->Instance->CR, DCACHE_COMMAND_CLEAN_INVALIDATE) ==
-           (DCACHE_COMMAND_CLEAN_INVALIDATE)) {
-    /* Clear DCACHE cmdend pending flag */
-    __HAL_DCACHE_CLEAR_FLAG(hdcache, DCACHE_FLAG_CMDEND);
+    /* Check for end of clean and invalidate by address operation */
+    else if (READ_BIT(hdcache->Instance->CR, DCACHE_COMMAND_CLEAN_INVALIDATE) == (DCACHE_COMMAND_CLEAN_INVALIDATE)) {
+        /* Clear DCACHE cmdend pending flag */
+        __HAL_DCACHE_CLEAR_FLAG(hdcache, DCACHE_FLAG_CMDEND);
 
-    /* Data cache clean and invalidate range cmdend interrupt user callback */
-    hdcache->CleanAndInvalidateByAddrCallback(hdcache);
-  }
+        /* Data cache clean and invalidate range cmdend interrupt user callback */
+        hdcache->CleanAndInvalidateByAddrCallback(hdcache);
+    }
 
-  /* Check for end of clean by address operation */
-  else if (READ_BIT(hdcache->Instance->CR, DCACHE_COMMAND_CLEAN) ==
-           DCACHE_COMMAND_CLEAN) {
-    /* Clear DCACHE cmdend pending flag */
-    __HAL_DCACHE_CLEAR_FLAG(hdcache, DCACHE_FLAG_CMDEND);
+    /* Check for end of clean by address operation */
+    else if (READ_BIT(hdcache->Instance->CR, DCACHE_COMMAND_CLEAN) == DCACHE_COMMAND_CLEAN) {
+        /* Clear DCACHE cmdend pending flag */
+        __HAL_DCACHE_CLEAR_FLAG(hdcache, DCACHE_FLAG_CMDEND);
 
-    /* Data cache clean range cmdend interrupt user callback */
-    hdcache->CleanByAddrCallback(hdcache);
-  }
+        /* Data cache clean range cmdend interrupt user callback */
+        hdcache->CleanByAddrCallback(hdcache);
+    }
 
-  /* Check for end of invalidate by address operation */
-  else {
-    /* Clear DCACHE cmdend pending flag */
-    __HAL_DCACHE_CLEAR_FLAG(hdcache, DCACHE_FLAG_CMDEND);
+    /* Check for end of invalidate by address operation */
+    else {
+        /* Clear DCACHE cmdend pending flag */
+        __HAL_DCACHE_CLEAR_FLAG(hdcache, DCACHE_FLAG_CMDEND);
 
-    /* Data cache Invalidate range cmdend interrupt user callback */
-    hdcache->InvalidateByAddrCallback(hdcache);
-  }
+        /* Data cache Invalidate range cmdend interrupt user callback */
+        hdcache->InvalidateByAddrCallback(hdcache);
+    }
 }
 
 /**
@@ -1062,90 +1022,88 @@ void HAL_DCACHE_IRQHandler(DCACHE_HandleTypeDef *hdcache) {
  * @param  pCallback pointer to the Callback function
  * @retval HAL status
  */
-HAL_StatusTypeDef
-HAL_DCACHE_RegisterCallback(DCACHE_HandleTypeDef *hdcache,
-                            HAL_DCACHE_CallbackIDTypeDef CallbackID,
-                            pDCACHE_CallbackTypeDef pCallback) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_DCACHE_RegisterCallback(DCACHE_HandleTypeDef *hdcache, HAL_DCACHE_CallbackIDTypeDef CallbackID,
+                                              pDCACHE_CallbackTypeDef pCallback) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
-
-  if (pCallback == NULL) {
-    /* Update the error code */
-    hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
-
-    /* Return error status */
-    return HAL_ERROR;
-  }
-
-  if (hdcache->State == HAL_DCACHE_STATE_READY) {
-    switch (CallbackID) {
-    case HAL_DCACHE_CLEAN_BY_ADDRESS_CB_ID:
-      hdcache->CleanByAddrCallback = pCallback;
-      break;
-
-    case HAL_DCACHE_INVALIDATE_BY_ADDRESS_CB_ID:
-      hdcache->InvalidateByAddrCallback = pCallback;
-      break;
-
-    case HAL_DCACHE_CLEAN_AND_INVALIDATE_BY_ADDRESS_CB_ID:
-      hdcache->CleanAndInvalidateByAddrCallback = pCallback;
-      break;
-
-    case HAL_DCACHE_INVALIDATE_COMPLETE_CB_ID:
-      hdcache->InvalidateCompleteCallback = pCallback;
-      break;
-
-    case HAL_DCACHE_ERROR_CB_ID:
-      hdcache->ErrorCallback = pCallback;
-      break;
-
-    case HAL_DCACHE_MSPINIT_CB_ID:
-      hdcache->MspInitCallback = pCallback;
-      break;
-
-    case HAL_DCACHE_MSPDEINIT_CB_ID:
-      hdcache->MspDeInitCallback = pCallback;
-      break;
-
-    default:
-      /* Update the error code */
-      hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
-
-      /* Return error status */
-      status = HAL_ERROR;
-      break;
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
     }
-  } else if (hdcache->State == HAL_DCACHE_STATE_RESET) {
-    switch (CallbackID) {
-    case HAL_DCACHE_MSPINIT_CB_ID:
-      hdcache->MspInitCallback = pCallback;
-      break;
 
-    case HAL_DCACHE_MSPDEINIT_CB_ID:
-      hdcache->MspDeInitCallback = pCallback;
-      break;
+    if (pCallback == NULL) {
+        /* Update the error code */
+        hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
 
-    default:
-      /* Update the error code */
-      hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
-
-      /* Return error status */
-      status = HAL_ERROR;
-      break;
+        /* Return error status */
+        return HAL_ERROR;
     }
-  } else {
-    /* Update the error code */
-    hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
 
-    /* Return error status */
-    status = HAL_ERROR;
-  }
+    if (hdcache->State == HAL_DCACHE_STATE_READY) {
+        switch (CallbackID) {
+        case HAL_DCACHE_CLEAN_BY_ADDRESS_CB_ID:
+            hdcache->CleanByAddrCallback = pCallback;
+            break;
 
-  return status;
+        case HAL_DCACHE_INVALIDATE_BY_ADDRESS_CB_ID:
+            hdcache->InvalidateByAddrCallback = pCallback;
+            break;
+
+        case HAL_DCACHE_CLEAN_AND_INVALIDATE_BY_ADDRESS_CB_ID:
+            hdcache->CleanAndInvalidateByAddrCallback = pCallback;
+            break;
+
+        case HAL_DCACHE_INVALIDATE_COMPLETE_CB_ID:
+            hdcache->InvalidateCompleteCallback = pCallback;
+            break;
+
+        case HAL_DCACHE_ERROR_CB_ID:
+            hdcache->ErrorCallback = pCallback;
+            break;
+
+        case HAL_DCACHE_MSPINIT_CB_ID:
+            hdcache->MspInitCallback = pCallback;
+            break;
+
+        case HAL_DCACHE_MSPDEINIT_CB_ID:
+            hdcache->MspDeInitCallback = pCallback;
+            break;
+
+        default:
+            /* Update the error code */
+            hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
+
+            /* Return error status */
+            status = HAL_ERROR;
+            break;
+        }
+    } else if (hdcache->State == HAL_DCACHE_STATE_RESET) {
+        switch (CallbackID) {
+        case HAL_DCACHE_MSPINIT_CB_ID:
+            hdcache->MspInitCallback = pCallback;
+            break;
+
+        case HAL_DCACHE_MSPDEINIT_CB_ID:
+            hdcache->MspDeInitCallback = pCallback;
+            break;
+
+        default:
+            /* Update the error code */
+            hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
+
+            /* Return error status */
+            status = HAL_ERROR;
+            break;
+        }
+    } else {
+        /* Update the error code */
+        hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
+
+        /* Return error status */
+        status = HAL_ERROR;
+    }
+
+    return status;
 }
 
 /**
@@ -1169,92 +1127,89 @@ HAL_DCACHE_RegisterCallback(DCACHE_HandleTypeDef *hdcache,
  *          @arg @ref HAL_DCACHE_MSPDEINIT_CB_ID MspDeInit callback ID
  * @retval HAL status
  */
-HAL_StatusTypeDef
-HAL_DCACHE_UnRegisterCallback(DCACHE_HandleTypeDef *hdcache,
-                              HAL_DCACHE_CallbackIDTypeDef CallbackID) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_DCACHE_UnRegisterCallback(DCACHE_HandleTypeDef *hdcache,
+                                                HAL_DCACHE_CallbackIDTypeDef CallbackID) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the dcache handle allocation */
-  if (hdcache == NULL) {
-    return HAL_ERROR;
-  }
-
-  if (hdcache->State == HAL_DCACHE_STATE_READY) {
-    switch (CallbackID) {
-    case HAL_DCACHE_CLEAN_BY_ADDRESS_CB_ID:
-      /* Legacy weak Clean By Addr Callback */
-      hdcache->CleanByAddrCallback = HAL_DCACHE_CleanByAddrCallback;
-      break;
-
-    case HAL_DCACHE_INVALIDATE_BY_ADDRESS_CB_ID:
-      /* Legacy weak Invalidate By Addr Callback */
-      hdcache->InvalidateByAddrCallback = HAL_DCACHE_InvalidateByAddrCallback;
-      break;
-
-    case HAL_DCACHE_CLEAN_AND_INVALIDATE_BY_ADDRESS_CB_ID:
-      /* Legacy weak Clean and Invalidate By Addr Callback */
-      hdcache->CleanAndInvalidateByAddrCallback =
-          HAL_DCACHE_CleanAndInvalidateByAddrCallback;
-      break;
-
-    case HAL_DCACHE_INVALIDATE_COMPLETE_CB_ID:
-      /* Legacy weak Invalidate Complete Callback */
-      hdcache->InvalidateCompleteCallback =
-          HAL_DCACHE_InvalidateCompleteCallback;
-      break;
-
-    case HAL_DCACHE_ERROR_CB_ID:
-      /* Legacy weak ErrorCallback */
-      hdcache->ErrorCallback = HAL_DCACHE_ErrorCallback;
-      break;
-
-    case HAL_DCACHE_MSPINIT_CB_ID:
-      /* Legacy weak MspInit */
-      hdcache->MspInitCallback = HAL_DCACHE_MspInit;
-      break;
-
-    case HAL_DCACHE_MSPDEINIT_CB_ID:
-      /* Legacy weak MspDeInit */
-      hdcache->MspDeInitCallback = HAL_DCACHE_MspDeInit;
-      break;
-
-    default:
-      /* Update the error code */
-      hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
-
-      /* Return error status */
-      status = HAL_ERROR;
-      break;
+    /* Check the dcache handle allocation */
+    if (hdcache == NULL) {
+        return HAL_ERROR;
     }
-  } else if (HAL_DCACHE_STATE_RESET == hdcache->State) {
-    switch (CallbackID) {
-    case HAL_DCACHE_MSPINIT_CB_ID:
-      /* Legacy weak MspInit */
-      hdcache->MspInitCallback = HAL_DCACHE_MspInit;
-      break;
 
-    case HAL_DCACHE_MSPDEINIT_CB_ID:
-      /* Legacy weak MspDeInit */
-      hdcache->MspDeInitCallback = HAL_DCACHE_MspDeInit;
-      break;
+    if (hdcache->State == HAL_DCACHE_STATE_READY) {
+        switch (CallbackID) {
+        case HAL_DCACHE_CLEAN_BY_ADDRESS_CB_ID:
+            /* Legacy weak Clean By Addr Callback */
+            hdcache->CleanByAddrCallback = HAL_DCACHE_CleanByAddrCallback;
+            break;
 
-    default:
-      /* Update the error code */
-      hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
+        case HAL_DCACHE_INVALIDATE_BY_ADDRESS_CB_ID:
+            /* Legacy weak Invalidate By Addr Callback */
+            hdcache->InvalidateByAddrCallback = HAL_DCACHE_InvalidateByAddrCallback;
+            break;
 
-      /* Return error status */
-      status = HAL_ERROR;
-      break;
+        case HAL_DCACHE_CLEAN_AND_INVALIDATE_BY_ADDRESS_CB_ID:
+            /* Legacy weak Clean and Invalidate By Addr Callback */
+            hdcache->CleanAndInvalidateByAddrCallback = HAL_DCACHE_CleanAndInvalidateByAddrCallback;
+            break;
+
+        case HAL_DCACHE_INVALIDATE_COMPLETE_CB_ID:
+            /* Legacy weak Invalidate Complete Callback */
+            hdcache->InvalidateCompleteCallback = HAL_DCACHE_InvalidateCompleteCallback;
+            break;
+
+        case HAL_DCACHE_ERROR_CB_ID:
+            /* Legacy weak ErrorCallback */
+            hdcache->ErrorCallback = HAL_DCACHE_ErrorCallback;
+            break;
+
+        case HAL_DCACHE_MSPINIT_CB_ID:
+            /* Legacy weak MspInit */
+            hdcache->MspInitCallback = HAL_DCACHE_MspInit;
+            break;
+
+        case HAL_DCACHE_MSPDEINIT_CB_ID:
+            /* Legacy weak MspDeInit */
+            hdcache->MspDeInitCallback = HAL_DCACHE_MspDeInit;
+            break;
+
+        default:
+            /* Update the error code */
+            hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
+
+            /* Return error status */
+            status = HAL_ERROR;
+            break;
+        }
+    } else if (HAL_DCACHE_STATE_RESET == hdcache->State) {
+        switch (CallbackID) {
+        case HAL_DCACHE_MSPINIT_CB_ID:
+            /* Legacy weak MspInit */
+            hdcache->MspInitCallback = HAL_DCACHE_MspInit;
+            break;
+
+        case HAL_DCACHE_MSPDEINIT_CB_ID:
+            /* Legacy weak MspDeInit */
+            hdcache->MspDeInitCallback = HAL_DCACHE_MspDeInit;
+            break;
+
+        default:
+            /* Update the error code */
+            hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
+
+            /* Return error status */
+            status = HAL_ERROR;
+            break;
+        }
+    } else {
+        /* Update the error code */
+        hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
+
+        /* Return error status */
+        status = HAL_ERROR;
     }
-  } else {
-    /* Update the error code */
-    hdcache->ErrorCode |= HAL_DCACHE_ERROR_INVALID_CALLBACK;
 
-    /* Return error status */
-    status = HAL_ERROR;
-  }
-
-  return status;
+    return status;
 }
 
 /**
@@ -1265,13 +1220,13 @@ HAL_DCACHE_UnRegisterCallback(DCACHE_HandleTypeDef *hdcache,
  * @retval None
  */
 __weak void HAL_DCACHE_CleanByAddrCallback(DCACHE_HandleTypeDef *hdcache) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdcache);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hdcache);
 
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_DCACHE_CleanByAddrCallback() should be implemented in the
-     user file
-   */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_DCACHE_CleanByAddrCallback() should be implemented in the
+       user file
+     */
 }
 
 /**
@@ -1282,13 +1237,13 @@ __weak void HAL_DCACHE_CleanByAddrCallback(DCACHE_HandleTypeDef *hdcache) {
  * @retval None
  */
 __weak void HAL_DCACHE_InvalidateByAddrCallback(DCACHE_HandleTypeDef *hdcache) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdcache);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hdcache);
 
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_DCACHE_InvalidateByAddrCallback() should be implemented in
-     the user file
-   */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_DCACHE_InvalidateByAddrCallback() should be implemented in
+       the user file
+     */
 }
 
 /**
@@ -1298,15 +1253,14 @@ __weak void HAL_DCACHE_InvalidateByAddrCallback(DCACHE_HandleTypeDef *hdcache) {
  * peripheral.
  * @retval None
  */
-__weak void
-HAL_DCACHE_CleanAndInvalidateByAddrCallback(DCACHE_HandleTypeDef *hdcache) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdcache);
+__weak void HAL_DCACHE_CleanAndInvalidateByAddrCallback(DCACHE_HandleTypeDef *hdcache) {
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hdcache);
 
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_DCACHE_CleanAndInvalidateByAddrCallback() should be
-     implemented in the user file
-   */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_DCACHE_CleanAndInvalidateByAddrCallback() should be
+       implemented in the user file
+     */
 }
 
 /**
@@ -1316,15 +1270,14 @@ HAL_DCACHE_CleanAndInvalidateByAddrCallback(DCACHE_HandleTypeDef *hdcache) {
  * peripheral.
  * @retval None
  */
-__weak void
-HAL_DCACHE_InvalidateCompleteCallback(DCACHE_HandleTypeDef *hdcache) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdcache);
+__weak void HAL_DCACHE_InvalidateCompleteCallback(DCACHE_HandleTypeDef *hdcache) {
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hdcache);
 
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_DCACHE_InvalidateCompleteCallback() should be implemented in
-     the user file
-   */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_DCACHE_InvalidateCompleteCallback() should be implemented in
+       the user file
+     */
 }
 
 /**
@@ -1335,13 +1288,13 @@ HAL_DCACHE_InvalidateCompleteCallback(DCACHE_HandleTypeDef *hdcache) {
  * @retval None
  */
 __weak void HAL_DCACHE_ErrorCallback(DCACHE_HandleTypeDef *hdcache) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdcache);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hdcache);
 
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_DCACHE_ErrorCallback() should be implemented in the user
-     file
-   */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_DCACHE_ErrorCallback() should be implemented in the user
+       file
+     */
 }
 
 /**
@@ -1369,10 +1322,9 @@ __weak void HAL_DCACHE_ErrorCallback(DCACHE_HandleTypeDef *hdcache) {
  * peripheral.
  * @retval HAL state
  */
-HAL_DCACHE_StateTypeDef
-HAL_DCACHE_GetState(const DCACHE_HandleTypeDef *hdcache) {
-  /* Return DCACHE handle state */
-  return hdcache->State;
+HAL_DCACHE_StateTypeDef HAL_DCACHE_GetState(const DCACHE_HandleTypeDef *hdcache) {
+    /* Return DCACHE handle state */
+    return hdcache->State;
 }
 
 /**
@@ -1382,8 +1334,8 @@ HAL_DCACHE_GetState(const DCACHE_HandleTypeDef *hdcache) {
  * @retval DCACHE Error Code
  */
 uint32_t HAL_DCACHE_GetError(const DCACHE_HandleTypeDef *hdcache) {
-  /* Return DCACHE handle error code */
-  return hdcache->ErrorCode;
+    /* Return DCACHE handle error code */
+    return hdcache->ErrorCode;
 }
 
 /**
@@ -1418,76 +1370,72 @@ uint32_t HAL_DCACHE_GetError(const DCACHE_HandleTypeDef *hdcache) {
  *                       DCACHE_IT_MODE, DCACHE_POLLING_MODE.
  * @retval HAL status
  */
-static HAL_StatusTypeDef DCACHE_CommandByAddr(DCACHE_HandleTypeDef *hdcache,
-                                              uint32_t Command,
-                                              const uint32_t *const pAddr,
-                                              uint32_t dSize, uint32_t mode) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t op_addr = (uint32_t)pAddr;
-  uint32_t tickstart;
+static HAL_StatusTypeDef DCACHE_CommandByAddr(DCACHE_HandleTypeDef *hdcache, uint32_t Command,
+                                              const uint32_t *const pAddr, uint32_t dSize, uint32_t mode) {
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t op_addr = (uint32_t)pAddr;
+    uint32_t tickstart;
 
-  /* Check no ongoing operation */
-  if (READ_BIT(hdcache->Instance->SR, (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) !=
-      0U) {
-    /* Return busy status */
-    status = HAL_BUSY;
-  } else {
-    /* Update the error code */
-    hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
-
-    /* Update the DCACHE handle State */
-    hdcache->State = HAL_DCACHE_STATE_READY;
-
-    /* Make sure flags are reset */
-    WRITE_REG(hdcache->Instance->FCR,
-              (DCACHE_FCR_CBSYENDF | DCACHE_FCR_CCMDENDF));
-
-    /* Fill area start address */
-    WRITE_REG(hdcache->Instance->CMDRSADDRR, op_addr);
-
-    /* Fill area end address */
-    WRITE_REG(hdcache->Instance->CMDREADDRR, (op_addr + dSize - 1U));
-
-    /* Set command */
-    MODIFY_REG(hdcache->Instance->CR, DCACHE_CR_CACHECMD, Command);
-
-    /* Enable IT if required */
-    if (mode == DCACHE_IT_MODE) {
-      /* Enable end of cache command interrupt */
-      SET_BIT(hdcache->Instance->IER, DCACHE_IER_CMDENDIE);
-
-      /* Launch cache command */
-      SET_BIT(hdcache->Instance->CR, DCACHE_CR_STARTCMD);
+    /* Check no ongoing operation */
+    if (READ_BIT(hdcache->Instance->SR, (DCACHE_SR_BUSYF | DCACHE_SR_BUSYCMDF)) != 0U) {
+        /* Return busy status */
+        status = HAL_BUSY;
     } else {
-      /* Make sure that end of cache command interrupt is disabled */
-      CLEAR_BIT(hdcache->Instance->IER, DCACHE_IER_CMDENDIE);
+        /* Update the error code */
+        hdcache->ErrorCode = HAL_DCACHE_ERROR_NONE;
 
-      /* Launch cache command */
-      SET_BIT(hdcache->Instance->CR, DCACHE_CR_STARTCMD);
+        /* Update the DCACHE handle State */
+        hdcache->State = HAL_DCACHE_STATE_READY;
 
-      /* Get timeout */
-      tickstart = HAL_GetTick();
+        /* Make sure flags are reset */
+        WRITE_REG(hdcache->Instance->FCR, (DCACHE_FCR_CBSYENDF | DCACHE_FCR_CCMDENDF));
 
-      /* Wait for end of cache command */
-      while (READ_BIT(hdcache->Instance->SR, DCACHE_SR_CMDENDF) == 0U) {
-        if ((HAL_GetTick() - tickstart) > DCACHE_COMMAND_TIMEOUT_VALUE) {
-          if (READ_BIT(hdcache->Instance->SR, DCACHE_SR_CMDENDF) == 0U) {
-            /* Update error code */
-            hdcache->ErrorCode = HAL_DCACHE_ERROR_TIMEOUT;
+        /* Fill area start address */
+        WRITE_REG(hdcache->Instance->CMDRSADDRR, op_addr);
 
-            /* Change the DCACHE state */
-            hdcache->State = HAL_DCACHE_STATE_ERROR;
+        /* Fill area end address */
+        WRITE_REG(hdcache->Instance->CMDREADDRR, (op_addr + dSize - 1U));
 
-            /* Return error status */
-            status = HAL_ERROR;
-            break;
-          }
+        /* Set command */
+        MODIFY_REG(hdcache->Instance->CR, DCACHE_CR_CACHECMD, Command);
+
+        /* Enable IT if required */
+        if (mode == DCACHE_IT_MODE) {
+            /* Enable end of cache command interrupt */
+            SET_BIT(hdcache->Instance->IER, DCACHE_IER_CMDENDIE);
+
+            /* Launch cache command */
+            SET_BIT(hdcache->Instance->CR, DCACHE_CR_STARTCMD);
+        } else {
+            /* Make sure that end of cache command interrupt is disabled */
+            CLEAR_BIT(hdcache->Instance->IER, DCACHE_IER_CMDENDIE);
+
+            /* Launch cache command */
+            SET_BIT(hdcache->Instance->CR, DCACHE_CR_STARTCMD);
+
+            /* Get timeout */
+            tickstart = HAL_GetTick();
+
+            /* Wait for end of cache command */
+            while (READ_BIT(hdcache->Instance->SR, DCACHE_SR_CMDENDF) == 0U) {
+                if ((HAL_GetTick() - tickstart) > DCACHE_COMMAND_TIMEOUT_VALUE) {
+                    if (READ_BIT(hdcache->Instance->SR, DCACHE_SR_CMDENDF) == 0U) {
+                        /* Update error code */
+                        hdcache->ErrorCode = HAL_DCACHE_ERROR_TIMEOUT;
+
+                        /* Change the DCACHE state */
+                        hdcache->State = HAL_DCACHE_STATE_ERROR;
+
+                        /* Return error status */
+                        status = HAL_ERROR;
+                        break;
+                    }
+                }
+            }
         }
-      }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**

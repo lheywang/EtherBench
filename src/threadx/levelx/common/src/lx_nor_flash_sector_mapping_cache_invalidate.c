@@ -74,72 +74,56 @@
 /*                                            resulting in version 6.1.7  */
 /*                                                                        */
 /**************************************************************************/
-VOID _lx_nor_flash_sector_mapping_cache_invalidate(LX_NOR_FLASH *nor_flash,
-                                                   ULONG logical_sector) {
+VOID _lx_nor_flash_sector_mapping_cache_invalidate(LX_NOR_FLASH *nor_flash, ULONG logical_sector) {
 
-  ULONG i;
-  LX_NOR_SECTOR_MAPPING_CACHE_ENTRY *sector_mapping_cache_entry_ptr;
+    ULONG i;
+    LX_NOR_SECTOR_MAPPING_CACHE_ENTRY *sector_mapping_cache_entry_ptr;
 
-  /* Determine if the sector mapping cache is enabled.  */
-  if (nor_flash->lx_nor_flash_sector_mapping_cache_enabled) {
+    /* Determine if the sector mapping cache is enabled.  */
+    if (nor_flash->lx_nor_flash_sector_mapping_cache_enabled) {
 
-    /* Calculate the starting index of the sector mapping cache for this sector
-     * entry.  */
-    i = (logical_sector & LX_NOR_SECTOR_MAPPING_CACHE_HASH_MASK) *
-        LX_NOR_SECTOR_MAPPING_CACHE_DEPTH;
+        /* Calculate the starting index of the sector mapping cache for this sector
+         * entry.  */
+        i = (logical_sector & LX_NOR_SECTOR_MAPPING_CACHE_HASH_MASK) * LX_NOR_SECTOR_MAPPING_CACHE_DEPTH;
 
-    /* Build a pointer to the cache entry.  */
-    sector_mapping_cache_entry_ptr =
-        &nor_flash->lx_nor_flash_sector_mapping_cache[i];
+        /* Build a pointer to the cache entry.  */
+        sector_mapping_cache_entry_ptr = &nor_flash->lx_nor_flash_sector_mapping_cache[i];
 
-    /* Determine if the sector is in the sector mapping cache - assuming the
-       depth of the sector mapping cache is LX_NOR_SECTOR_MAPPING_CACHE_DEPTH
-       entries.  */
-    if ((sector_mapping_cache_entry_ptr
-             ->lx_nor_sector_mapping_cache_logical_sector) ==
-        (logical_sector | LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_VALID)) {
+        /* Determine if the sector is in the sector mapping cache - assuming the
+           depth of the sector mapping cache is LX_NOR_SECTOR_MAPPING_CACHE_DEPTH
+           entries.  */
+        if ((sector_mapping_cache_entry_ptr->lx_nor_sector_mapping_cache_logical_sector) ==
+            (logical_sector | LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_VALID)) {
 
-      /* Move all cache entries up and invalidate the last entry.  */
-      *(sector_mapping_cache_entry_ptr) = *(sector_mapping_cache_entry_ptr + 1);
-      *(sector_mapping_cache_entry_ptr + 1) =
-          *(sector_mapping_cache_entry_ptr + 2);
-      *(sector_mapping_cache_entry_ptr + 2) =
-          *(sector_mapping_cache_entry_ptr + 3);
+            /* Move all cache entries up and invalidate the last entry.  */
+            *(sector_mapping_cache_entry_ptr) = *(sector_mapping_cache_entry_ptr + 1);
+            *(sector_mapping_cache_entry_ptr + 1) = *(sector_mapping_cache_entry_ptr + 2);
+            *(sector_mapping_cache_entry_ptr + 2) = *(sector_mapping_cache_entry_ptr + 3);
 
-      /* Invalidate the last entry.  */
-      (sector_mapping_cache_entry_ptr + 3)
-          ->lx_nor_sector_mapping_cache_logical_sector = 0;
-    } else if (((sector_mapping_cache_entry_ptr + 1)
-                    ->lx_nor_sector_mapping_cache_logical_sector) ==
-               (logical_sector | LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_VALID)) {
+            /* Invalidate the last entry.  */
+            (sector_mapping_cache_entry_ptr + 3)->lx_nor_sector_mapping_cache_logical_sector = 0;
+        } else if (((sector_mapping_cache_entry_ptr + 1)->lx_nor_sector_mapping_cache_logical_sector) ==
+                   (logical_sector | LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_VALID)) {
 
-      /* Move all subsequent cache entries up and invalidate the last entry.  */
-      *(sector_mapping_cache_entry_ptr + 1) =
-          *(sector_mapping_cache_entry_ptr + 2);
-      *(sector_mapping_cache_entry_ptr + 2) =
-          *(sector_mapping_cache_entry_ptr + 3);
+            /* Move all subsequent cache entries up and invalidate the last entry.  */
+            *(sector_mapping_cache_entry_ptr + 1) = *(sector_mapping_cache_entry_ptr + 2);
+            *(sector_mapping_cache_entry_ptr + 2) = *(sector_mapping_cache_entry_ptr + 3);
 
-      /* Invalidate the last entry.  */
-      (sector_mapping_cache_entry_ptr + 3)
-          ->lx_nor_sector_mapping_cache_logical_sector = 0;
-    } else if (((sector_mapping_cache_entry_ptr + 2)
-                    ->lx_nor_sector_mapping_cache_logical_sector) ==
-               (logical_sector | LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_VALID)) {
+            /* Invalidate the last entry.  */
+            (sector_mapping_cache_entry_ptr + 3)->lx_nor_sector_mapping_cache_logical_sector = 0;
+        } else if (((sector_mapping_cache_entry_ptr + 2)->lx_nor_sector_mapping_cache_logical_sector) ==
+                   (logical_sector | LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_VALID)) {
 
-      /* Move all subsequent cache entries up and invalidate the last entry.  */
-      *(sector_mapping_cache_entry_ptr + 2) =
-          *(sector_mapping_cache_entry_ptr + 3);
+            /* Move all subsequent cache entries up and invalidate the last entry.  */
+            *(sector_mapping_cache_entry_ptr + 2) = *(sector_mapping_cache_entry_ptr + 3);
 
-      /* Invalidate the last entry.  */
-      (sector_mapping_cache_entry_ptr + 3)
-          ->lx_nor_sector_mapping_cache_logical_sector = 0;
-    } else if (((sector_mapping_cache_entry_ptr + 3)
-                    ->lx_nor_sector_mapping_cache_logical_sector) ==
-               (logical_sector | LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_VALID)) {
+            /* Invalidate the last entry.  */
+            (sector_mapping_cache_entry_ptr + 3)->lx_nor_sector_mapping_cache_logical_sector = 0;
+        } else if (((sector_mapping_cache_entry_ptr + 3)->lx_nor_sector_mapping_cache_logical_sector) ==
+                   (logical_sector | LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_VALID)) {
 
-      /* Simply invalidate the last entry.  */
-      (sector_mapping_cache_entry_ptr + 3)
-          ->lx_nor_sector_mapping_cache_logical_sector = 0;
+            /* Simply invalidate the last entry.  */
+            (sector_mapping_cache_entry_ptr + 3)->lx_nor_sector_mapping_cache_logical_sector = 0;
+        }
     }
-  }
 }

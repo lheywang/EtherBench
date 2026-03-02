@@ -9,17 +9,15 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Utility                                                             */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /* Include necessary system files.  */
 
@@ -27,40 +25,39 @@
 
 #include "ux_api.h"
 
-
 #if !defined(UX_STANDALONE)
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_utility_thread_relinquish                       PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_utility_thread_relinquish                       PORTABLE C      */
 /*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function helps the thread relinquish its control.              */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    tx_thread_relinquish                  ThreadX relinquish thread     */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function helps the thread relinquish its control.              */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    tx_thread_relinquish                  ThreadX relinquish thread     */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -69,11 +66,9 @@
 /*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
-VOID  _ux_utility_thread_relinquish(VOID)
-{
+VOID _ux_utility_thread_relinquish(VOID) {
 
     /* Call ThreadX to relinquish a USBX thread.  */
     tx_thread_relinquish();
-
 }
 #endif

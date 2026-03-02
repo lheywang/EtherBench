@@ -157,8 +157,7 @@ VOID (*_tx_thread_mutex_release)(TX_THREAD *thread_ptr);
 
 ULONG _tx_build_options;
 
-#if defined(TX_ENABLE_STACK_CHECKING) ||                                       \
-    defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
+#if defined(TX_ENABLE_STACK_CHECKING) || defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
 
 /* Define the global function pointer for stack error handling. If a stack error
    is detected and the application has registered a stack error handler, it will
@@ -242,9 +241,8 @@ TX_THREAD *_tx_thread_performance_execute_log[TX_THREAD_EXECUTE_LOG_SIZE];
 /* Define special string.  */
 
 #ifndef TX_MISRA_ENABLE
-const CHAR _tx_thread_special_string[] =
-    "G-ML-EL-ML-BL-DL-BL-GB-GL-M-D-DL-GZ-KH-EL-CM-NH-HA-GF-DD-JC-YZ-CT-AT-DW-"
-    "USA-CA-SD-SDSU";
+const CHAR _tx_thread_special_string[] = "G-ML-EL-ML-BL-DL-BL-GB-GL-M-D-DL-GZ-KH-EL-CM-NH-HA-GF-DD-JC-YZ-CT-AT-DW-"
+                                         "USA-CA-SD-SDSU";
 #endif
 
 /**************************************************************************/
@@ -295,140 +293,134 @@ const CHAR _tx_thread_special_string[] =
 /**************************************************************************/
 VOID _tx_thread_initialize(VOID) {
 
-  /* Note: the system stack pointer and the system state variables are
-     initialized by the low and high-level initialization functions,
-     respectively.  */
+    /* Note: the system stack pointer and the system state variables are
+       initialized by the low and high-level initialization functions,
+       respectively.  */
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-  /* Set current thread pointer to NULL.  */
-  TX_THREAD_SET_CURRENT(TX_NULL)
+    /* Set current thread pointer to NULL.  */
+    TX_THREAD_SET_CURRENT(TX_NULL)
 
-  /* Initialize the execute thread pointer to NULL.  */
-  _tx_thread_execute_ptr = TX_NULL;
+    /* Initialize the execute thread pointer to NULL.  */
+    _tx_thread_execute_ptr = TX_NULL;
 
-  /* Initialize the priority information.  */
-  TX_MEMSET(&_tx_thread_priority_maps[0], 0,
-            (sizeof(_tx_thread_priority_maps)));
+    /* Initialize the priority information.  */
+    TX_MEMSET(&_tx_thread_priority_maps[0], 0, (sizeof(_tx_thread_priority_maps)));
 
 #ifndef TX_DISABLE_PREEMPTION_THRESHOLD
-  TX_MEMSET(&_tx_thread_preempted_maps[0], 0,
-            (sizeof(_tx_thread_preempted_maps)));
+    TX_MEMSET(&_tx_thread_preempted_maps[0], 0, (sizeof(_tx_thread_preempted_maps)));
 #endif
 #endif
 
-  /* Setup the highest priority variable to the max, indicating no thread is
-     currently ready.  */
-  _tx_thread_highest_priority = ((UINT)TX_MAX_PRIORITIES);
+    /* Setup the highest priority variable to the max, indicating no thread is
+       currently ready.  */
+    _tx_thread_highest_priority = ((UINT)TX_MAX_PRIORITIES);
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-  /* Initialize the array of priority head pointers.  */
-  TX_MEMSET(&_tx_thread_priority_list[0], 0,
-            (sizeof(_tx_thread_priority_list)));
+    /* Initialize the array of priority head pointers.  */
+    TX_MEMSET(&_tx_thread_priority_list[0], 0, (sizeof(_tx_thread_priority_list)));
 
-  /* Initialize the head pointer of the created threads list and the
-     number of threads created.  */
-  _tx_thread_created_ptr = TX_NULL;
-  _tx_thread_created_count = TX_EMPTY;
+    /* Initialize the head pointer of the created threads list and the
+       number of threads created.  */
+    _tx_thread_created_ptr = TX_NULL;
+    _tx_thread_created_count = TX_EMPTY;
 
-  /* Clear the global preempt disable variable.  */
-  _tx_thread_preempt_disable = ((UINT)0);
+    /* Clear the global preempt disable variable.  */
+    _tx_thread_preempt_disable = ((UINT)0);
 
-  /* Initialize the thread mutex release function pointer.  */
-  _tx_thread_mutex_release = TX_NULL;
+    /* Initialize the thread mutex release function pointer.  */
+    _tx_thread_mutex_release = TX_NULL;
 
 #ifdef TX_ENABLE_STACK_CHECKING
 
-  /* Clear application registered stack error handler.  */
-  _tx_thread_application_stack_error_handler = TX_NULL;
+    /* Clear application registered stack error handler.  */
+    _tx_thread_application_stack_error_handler = TX_NULL;
 #endif
 
 #ifdef TX_THREAD_ENABLE_PERFORMANCE_INFO
 
-  /* Clear performance counters.  */
-  _tx_thread_performance_resume_count = ((ULONG)0);
-  _tx_thread_performance_suspend_count = ((ULONG)0);
-  _tx_thread_performance_solicited_preemption_count = ((ULONG)0);
-  _tx_thread_performance_interrupt_preemption_count = ((ULONG)0);
-  _tx_thread_performance_priority_inversion_count = ((ULONG)0);
-  _tx_thread_performance_time_slice_count = ((ULONG)0);
-  _tx_thread_performance_relinquish_count = ((ULONG)0);
-  _tx_thread_performance_timeout_count = ((ULONG)0);
-  _tx_thread_performance_wait_abort_count = ((ULONG)0);
-  _tx_thread_performance_idle_return_count = ((ULONG)0);
-  _tx_thread_performance_non_idle_return_count = ((ULONG)0);
+    /* Clear performance counters.  */
+    _tx_thread_performance_resume_count = ((ULONG)0);
+    _tx_thread_performance_suspend_count = ((ULONG)0);
+    _tx_thread_performance_solicited_preemption_count = ((ULONG)0);
+    _tx_thread_performance_interrupt_preemption_count = ((ULONG)0);
+    _tx_thread_performance_priority_inversion_count = ((ULONG)0);
+    _tx_thread_performance_time_slice_count = ((ULONG)0);
+    _tx_thread_performance_relinquish_count = ((ULONG)0);
+    _tx_thread_performance_timeout_count = ((ULONG)0);
+    _tx_thread_performance_wait_abort_count = ((ULONG)0);
+    _tx_thread_performance_idle_return_count = ((ULONG)0);
+    _tx_thread_performance_non_idle_return_count = ((ULONG)0);
 
-  /* Initialize the execute thread log.  */
-  TX_MEMSET(&_tx_thread_performance_execute_log[0], 0,
-            (sizeof(_tx_thread_performance_execute_log)));
+    /* Initialize the execute thread log.  */
+    TX_MEMSET(&_tx_thread_performance_execute_log[0], 0, (sizeof(_tx_thread_performance_execute_log)));
 #endif
 #endif
 
-  /* Setup the build options flag. This is used to identify how the ThreadX
-   * library was constructed.  */
-  _tx_build_options = _tx_build_options |
-                      (((ULONG)(TX_MAX_PRIORITIES / 32)) << 24)
+    /* Setup the build options flag. This is used to identify how the ThreadX
+     * library was constructed.  */
+    _tx_build_options = _tx_build_options | (((ULONG)(TX_MAX_PRIORITIES / 32)) << 24)
 #ifdef TX_NOT_INTERRUPTABLE
-                      | (((ULONG)1) << 31)
+                        | (((ULONG)1) << 31)
 #endif
 #ifdef TX_INLINE_THREAD_RESUME_SUSPEND
-                      | (((ULONG)1) << 30)
+                        | (((ULONG)1) << 30)
 #endif
 #ifdef TX_TIMER_PROCESS_IN_ISR
-                      | (((ULONG)1) << 23)
+                        | (((ULONG)1) << 23)
 #endif
 #ifdef TX_REACTIVATE_INLINE
-                      | (((ULONG)1) << 22)
+                        | (((ULONG)1) << 22)
 #endif
 #ifdef TX_DISABLE_STACK_FILLING
-                      | (((ULONG)1) << 21)
+                        | (((ULONG)1) << 21)
 #endif
 #ifdef TX_ENABLE_STACK_CHECKING
-                      | (((ULONG)1) << 20)
+                        | (((ULONG)1) << 20)
 #endif
 #ifdef TX_DISABLE_PREEMPTION_THRESHOLD
-                      | (((ULONG)1) << 19)
+                        | (((ULONG)1) << 19)
 #endif
 #ifdef TX_DISABLE_REDUNDANT_CLEARING
-                      | (((ULONG)1) << 18)
+                        | (((ULONG)1) << 18)
 #endif
 #ifdef TX_DISABLE_NOTIFY_CALLBACKS
-                      | (((ULONG)1) << 17)
+                        | (((ULONG)1) << 17)
 #endif
 #ifdef TX_BLOCK_POOL_ENABLE_PERFORMANCE_INFO
-                      | (((ULONG)1) << 16)
+                        | (((ULONG)1) << 16)
 #endif
 #ifdef TX_BYTE_POOL_ENABLE_PERFORMANCE_INFO
-                      | (((ULONG)1) << 15)
+                        | (((ULONG)1) << 15)
 #endif
 #ifdef TX_EVENT_FLAGS_ENABLE_PERFORMANCE_INFO
-                      | (((ULONG)1) << 14)
+                        | (((ULONG)1) << 14)
 #endif
 #ifdef TX_MUTEX_ENABLE_PERFORMANCE_INFO
-                      | (((ULONG)1) << 13)
+                        | (((ULONG)1) << 13)
 #endif
 #ifdef TX_QUEUE_ENABLE_PERFORMANCE_INFO
-                      | (((ULONG)1) << 12)
+                        | (((ULONG)1) << 12)
 #endif
 #ifdef TX_SEMAPHORE_ENABLE_PERFORMANCE_INFO
-                      | (((ULONG)1) << 11)
+                        | (((ULONG)1) << 11)
 #endif
 #ifdef TX_THREAD_ENABLE_PERFORMANCE_INFO
-                      | (((ULONG)1) << 10)
+                        | (((ULONG)1) << 10)
 #endif
 #ifdef TX_TIMER_ENABLE_PERFORMANCE_INFO
-                      | (((ULONG)1) << 9)
+                        | (((ULONG)1) << 9)
 #endif
 #ifdef TX_ENABLE_EVENT_TRACE
-                      | (((ULONG)1) << 8)
+                        | (((ULONG)1) << 8)
 #endif
-#if defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) ||                              \
-    defined(TX_EXECUTION_PROFILE_ENABLE)
-                      | (((ULONG)1) << 7)
+#if defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE)
+                        | (((ULONG)1) << 7)
 #endif
 #if TX_PORT_SPECIFIC_BUILD_OPTIONS != 0
-                      | TX_PORT_SPECIFIC_BUILD_OPTIONS
+                        | TX_PORT_SPECIFIC_BUILD_OPTIONS
 #endif
-      ;
+        ;
 }

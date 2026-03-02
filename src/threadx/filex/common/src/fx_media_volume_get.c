@@ -80,10 +80,8 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_media_volume_get(FX_MEDIA *media_ptr, CHAR *volume_name,
-                          UINT volume_source) {
+UINT _fx_media_volume_get(FX_MEDIA *media_ptr, CHAR *volume_name, UINT volume_source) {
 
-  /* Call the extended version with 12 bytes volume name length.  */
-  return (
-      _fx_media_volume_get_extended(media_ptr, volume_name, 12, volume_source));
+    /* Call the extended version with 12 bytes volume name length.  */
+    return (_fx_media_volume_get_extended(media_ptr, volume_name, 12, volume_source));
 }

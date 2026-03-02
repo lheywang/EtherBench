@@ -20,13 +20,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_ccid.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -81,28 +79,27 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_ccid_initialize(UX_SLAVE_CLASS_COMMAND *command)
-{
-UX_DEVICE_CLASS_CCID                    *ccid;
-UX_DEVICE_CLASS_CCID_RUNNER             *runner;
-UX_DEVICE_CLASS_CCID_SLOT               *slot;
-UX_DEVICE_CLASS_CCID_PARAMETER          *ccid_parameter;
-UX_SLAVE_CLASS                          *ccid_class;
-UINT                                    status;
-ULONG                                   memory_size;
-ULONG                                   ccid_size, runners_size, slots_size;
-ULONG                                   buffer_size, buffers_size;
-UCHAR                                   *memory;
-ULONG                                   i;
+UINT _ux_device_class_ccid_initialize(UX_SLAVE_CLASS_COMMAND *command) {
+    UX_DEVICE_CLASS_CCID *ccid;
+    UX_DEVICE_CLASS_CCID_RUNNER *runner;
+    UX_DEVICE_CLASS_CCID_SLOT *slot;
+    UX_DEVICE_CLASS_CCID_PARAMETER *ccid_parameter;
+    UX_SLAVE_CLASS *ccid_class;
+    UINT status;
+    ULONG memory_size;
+    ULONG ccid_size, runners_size, slots_size;
+    ULONG buffer_size, buffers_size;
+    UCHAR *memory;
+    ULONG i;
 #if !defined(UX_DEVICE_STANDALONE)
-ULONG                                   stacks_size;
+    ULONG stacks_size;
 #endif
 
     /* Get the class container.  */
-    ccid_class =  command -> ux_slave_class_command_class_ptr;
+    ccid_class = command->ux_slave_class_command_class_ptr;
 
     /* Get the pointer to the application parameters for the ccid class.  */
-    ccid_parameter =  command -> ux_slave_class_command_parameter;
+    ccid_parameter = command->ux_slave_class_command_parameter;
 
     /* Sanity check for parameters.
         - number slots < 32
@@ -112,19 +109,17 @@ ULONG                                   stacks_size;
 
 #if !defined(UX_DEVICE_STANDALONE)
 
-    UX_ASSERT(ccid_parameter -> ux_device_class_ccid_max_n_slots <= UX_DEVICE_CLASS_CCID_MAX_N_SLOTS);
-    UX_ASSERT(ccid_parameter -> ux_device_class_ccid_max_n_busy_slots != 0);
-    UX_ASSERT(ccid_parameter -> ux_device_class_ccid_max_n_busy_slots <=
-                ccid_parameter -> ux_device_class_ccid_max_n_slots)
+    UX_ASSERT(ccid_parameter->ux_device_class_ccid_max_n_slots <= UX_DEVICE_CLASS_CCID_MAX_N_SLOTS);
+    UX_ASSERT(ccid_parameter->ux_device_class_ccid_max_n_busy_slots != 0);
+    UX_ASSERT(ccid_parameter->ux_device_class_ccid_max_n_busy_slots <= ccid_parameter->ux_device_class_ccid_max_n_slots)
 #else
 
     /* To optimize only support 1 slot.  */
-    ccid_parameter -> ux_device_class_ccid_max_n_slots = 1;
-    ccid_parameter -> ux_device_class_ccid_max_n_busy_slots = 1;
+    ccid_parameter->ux_device_class_ccid_max_n_slots = 1;
+    ccid_parameter->ux_device_class_ccid_max_n_busy_slots = 1;
 #endif
 
-    UX_ASSERT(ccid_parameter -> ux_device_class_ccid_max_transfer_length <=
-                UX_DEVICE_CLASS_CCID_BULK_BUFFER_SIZE);
+    UX_ASSERT(ccid_parameter->ux_device_class_ccid_max_transfer_length <= UX_DEVICE_CLASS_CCID_BULK_BUFFER_SIZE);
     UX_ASSERT(ccid_parameter->ux_device_class_ccid_handles != UX_NULL);
 
     /* Calculate size for instance (structures already aligned).  */
@@ -144,28 +139,25 @@ ULONG                                   stacks_size;
     buffer_size += 3u;
     buffer_size &= ~3u;
     ccid_parameter->ux_device_class_ccid_max_transfer_length = buffer_size;
-    if (UX_OVERFLOW_CHECK_MULC_ULONG(buffer_size, 2))
-    {
+    if (UX_OVERFLOW_CHECK_MULC_ULONG(buffer_size, 2)) {
 
         /* Error trap.  */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_ERROR);
-        return(UX_ERROR);
+        return (UX_ERROR);
     }
     buffers_size = (buffer_size << 1) & 0xFFFFFFFFu;
-    if (UX_OVERFLOW_CHECK_MULV_ULONG(buffers_size, ccid_parameter->ux_device_class_ccid_max_n_busy_slots))
-    {
+    if (UX_OVERFLOW_CHECK_MULV_ULONG(buffers_size, ccid_parameter->ux_device_class_ccid_max_n_busy_slots)) {
 
         /* Error trap.  */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_ERROR);
-        return(UX_ERROR);
+        return (UX_ERROR);
     }
     buffers_size = (buffers_size * ccid_parameter->ux_device_class_ccid_max_n_busy_slots) & 0xFFFFFFFFu;
-    if (UX_OVERFLOW_CHECK_ADD_ULONG(memory_size, buffer_size))
-    {
+    if (UX_OVERFLOW_CHECK_ADD_ULONG(memory_size, buffer_size)) {
 
         /* Error trap.  */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_ERROR);
-        return(UX_ERROR);
+        return (UX_ERROR);
     }
     memory_size = (memory_size + buffers_size) & 0xFFFFFFFFu;
 
@@ -173,36 +165,32 @@ ULONG                                   stacks_size;
 
     /* Calculate memory size for stackes.  */
     stacks_size = ccid_parameter->ux_device_class_ccid_max_n_busy_slots;
-    if (UX_OVERFLOW_CHECK_MULC_ULONG(stacks_size, UX_DEVICE_CLASS_CCID_RUNNER_THREAD_STACK_SIZE))
-    {
+    if (UX_OVERFLOW_CHECK_MULC_ULONG(stacks_size, UX_DEVICE_CLASS_CCID_RUNNER_THREAD_STACK_SIZE)) {
 
         /* Error trap.  */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_ERROR);
-        return(UX_ERROR);
+        return (UX_ERROR);
     }
     stacks_size *= UX_DEVICE_CLASS_CCID_RUNNER_THREAD_STACK_SIZE;
-    if (UX_OVERFLOW_CHECK_ADD_ULONG(stacks_size, UX_DEVICE_CLASS_CCID_THREAD_STACK_SIZE))
-    {
+    if (UX_OVERFLOW_CHECK_ADD_ULONG(stacks_size, UX_DEVICE_CLASS_CCID_THREAD_STACK_SIZE)) {
 
         /* Error trap.  */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_ERROR);
-        return(UX_ERROR);
+        return (UX_ERROR);
     }
     stacks_size += UX_DEVICE_CLASS_CCID_THREAD_STACK_SIZE;
-    if (UX_OVERFLOW_CHECK_ADD_ULONG(stacks_size, UX_DEVICE_CLASS_CCID_NOTIFY_THREAD_STACK_SIZE))
-    {
+    if (UX_OVERFLOW_CHECK_ADD_ULONG(stacks_size, UX_DEVICE_CLASS_CCID_NOTIFY_THREAD_STACK_SIZE)) {
 
         /* Error trap.  */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_ERROR);
-        return(UX_ERROR);
+        return (UX_ERROR);
     }
     stacks_size += UX_DEVICE_CLASS_CCID_NOTIFY_THREAD_STACK_SIZE;
-    if (UX_OVERFLOW_CHECK_ADD_ULONG(memory_size, stacks_size))
-    {
+    if (UX_OVERFLOW_CHECK_ADD_ULONG(memory_size, stacks_size)) {
 
         /* Error trap.  */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_ERROR);
-        return(UX_ERROR);
+        return (UX_ERROR);
     }
     memory_size = (memory_size + stacks_size) & 0xFFFFFFFFu;
 #endif
@@ -212,7 +200,7 @@ ULONG                                   stacks_size;
 
     /* Check for successful allocation.  */
     if (memory == UX_NULL)
-        return(UX_MEMORY_INSUFFICIENT);
+        return (UX_MEMORY_INSUFFICIENT);
 
     /* Create and save resources for ccid, runners, slots, buffers.  */
 
@@ -223,127 +211,107 @@ ULONG                                   stacks_size;
 #if !defined(UX_DEVICE_STANDALONE)
 
     /* CCID thread.  */
-    status =  _ux_utility_thread_create(
-                &ccid -> ux_device_class_ccid_thread,
-                "ux_device_class_ccid_thread",
-                _ux_device_class_ccid_thread_entry,
-                (ULONG) (ALIGN_TYPE) ccid,
-                (VOID *) memory,
-                UX_DEVICE_CLASS_CCID_THREAD_STACK_SIZE, UX_THREAD_PRIORITY_CLASS,
-                UX_THREAD_PRIORITY_CLASS, UX_NO_TIME_SLICE, UX_DONT_START);
+    status = _ux_utility_thread_create(&ccid->ux_device_class_ccid_thread, "ux_device_class_ccid_thread",
+                                       _ux_device_class_ccid_thread_entry, (ULONG)(ALIGN_TYPE)ccid, (VOID *)memory,
+                                       UX_DEVICE_CLASS_CCID_THREAD_STACK_SIZE, UX_THREAD_PRIORITY_CLASS,
+                                       UX_THREAD_PRIORITY_CLASS, UX_NO_TIME_SLICE, UX_DONT_START);
     if (status != UX_SUCCESS)
         status = UX_THREAD_ERROR;
-    else
-    {
-        ccid -> ux_device_class_ccid_thread_stack = memory;
+    else {
+        ccid->ux_device_class_ccid_thread_stack = memory;
         memory += UX_DEVICE_CLASS_CCID_THREAD_STACK_SIZE;
-        UX_THREAD_EXTENSION_PTR_SET(&(ccid -> ux_device_class_ccid_thread), ccid);
+        UX_THREAD_EXTENSION_PTR_SET(&(ccid->ux_device_class_ccid_thread), ccid);
     }
 
     /* CCID Notify thread.  */
-    if (status == UX_SUCCESS)
-    {
-        status =  _ux_utility_thread_create(
-                    &ccid -> ux_device_class_ccid_notify_thread,
-                    "ux_device_class_ccid_notify_thread",
-                    _ux_device_class_ccid_notify_thread_entry,
-                    (ULONG) (ALIGN_TYPE) ccid,
-                    (VOID *) memory,
-                    UX_DEVICE_CLASS_CCID_NOTIFY_THREAD_STACK_SIZE, UX_THREAD_PRIORITY_CLASS,
-                    UX_THREAD_PRIORITY_CLASS, UX_NO_TIME_SLICE, UX_DONT_START);
+    if (status == UX_SUCCESS) {
+        status = _ux_utility_thread_create(
+            &ccid->ux_device_class_ccid_notify_thread, "ux_device_class_ccid_notify_thread",
+            _ux_device_class_ccid_notify_thread_entry, (ULONG)(ALIGN_TYPE)ccid, (VOID *)memory,
+            UX_DEVICE_CLASS_CCID_NOTIFY_THREAD_STACK_SIZE, UX_THREAD_PRIORITY_CLASS, UX_THREAD_PRIORITY_CLASS,
+            UX_NO_TIME_SLICE, UX_DONT_START);
         if (status != UX_SUCCESS)
             status = UX_THREAD_ERROR;
-        else
-        {
-            ccid -> ux_device_class_ccid_notify_thread_stack = memory;
+        else {
+            ccid->ux_device_class_ccid_notify_thread_stack = memory;
             memory += UX_DEVICE_CLASS_CCID_NOTIFY_THREAD_STACK_SIZE;
-            UX_THREAD_EXTENSION_PTR_SET(&(ccid -> ux_device_class_ccid_notify_thread), ccid);
+            UX_THREAD_EXTENSION_PTR_SET(&(ccid->ux_device_class_ccid_notify_thread), ccid);
         }
     }
 #else
 
     /* Set task function.  */
-    ccid_class -> ux_slave_class_task_function = _ux_device_class_ccid_tasks_run;
+    ccid_class->ux_slave_class_task_function = _ux_device_class_ccid_tasks_run;
 
     /* By default status is OK.  */
     status = UX_SUCCESS;
 #endif
 
     /* CCID runners.  */
-    if (status == UX_SUCCESS)
-    {
+    if (status == UX_SUCCESS) {
 
-        ccid -> ux_device_class_ccid_runners = (UX_DEVICE_CLASS_CCID_RUNNER *)memory;
+        ccid->ux_device_class_ccid_runners = (UX_DEVICE_CLASS_CCID_RUNNER *)memory;
         memory += runners_size;
 
-        runner = ccid -> ux_device_class_ccid_runners;
-        for (i = 0; i < ccid_parameter -> ux_device_class_ccid_max_n_busy_slots; i ++)
-        {
+        runner = ccid->ux_device_class_ccid_runners;
+        for (i = 0; i < ccid_parameter->ux_device_class_ccid_max_n_busy_slots; i++) {
 
             /* Save CCID for runner.  */
-            runner -> ux_device_class_ccid_runner_ccid = ccid;
+            runner->ux_device_class_ccid_runner_ccid = ccid;
 
             /* Save runner ID.  */
-            runner -> ux_device_class_ccid_runner_id = (CHAR)i;
+            runner->ux_device_class_ccid_runner_id = (CHAR)i;
 
             /* Runner is free.  */
-            runner -> ux_device_class_ccid_runner_slot = -1;
+            runner->ux_device_class_ccid_runner_slot = -1;
 
             /* Runner command buffer.  */
-            runner -> ux_device_class_ccid_runner_command = memory;
+            runner->ux_device_class_ccid_runner_command = memory;
             memory += buffer_size;
 
             /* Runner response buffer.  */
-            runner -> ux_device_class_ccid_runner_response = memory;
+            runner->ux_device_class_ccid_runner_response = memory;
             memory += buffer_size;
 
 #if !defined(UX_DEVICE_STANDALONE)
 
             /* CCID runners threads.  */
             status = _ux_utility_thread_create(
-                &runner -> ux_device_class_ccid_runner_thread,
-                "ux_device_class_ccid_runner_thread",
-                _ux_device_class_ccid_runner_thread_entry,
-                (ULONG) (ALIGN_TYPE) runner,
-                (VOID *)memory,
-                UX_DEVICE_CLASS_CCID_RUNNER_THREAD_STACK_SIZE, UX_THREAD_PRIORITY_CLASS,
-                UX_THREAD_PRIORITY_CLASS, UX_NO_TIME_SLICE, UX_DONT_START);
-            if (status != UX_SUCCESS)
-            {
+                &runner->ux_device_class_ccid_runner_thread, "ux_device_class_ccid_runner_thread",
+                _ux_device_class_ccid_runner_thread_entry, (ULONG)(ALIGN_TYPE)runner, (VOID *)memory,
+                UX_DEVICE_CLASS_CCID_RUNNER_THREAD_STACK_SIZE, UX_THREAD_PRIORITY_CLASS, UX_THREAD_PRIORITY_CLASS,
+                UX_NO_TIME_SLICE, UX_DONT_START);
+            if (status != UX_SUCCESS) {
                 status = UX_THREAD_ERROR;
                 break;
-            }
-            else
-            {
-                runner -> ux_device_class_ccid_runner_thread_stack = memory;
+            } else {
+                runner->ux_device_class_ccid_runner_thread_stack = memory;
                 memory += UX_DEVICE_CLASS_CCID_RUNNER_THREAD_STACK_SIZE;
-                UX_THREAD_EXTENSION_PTR_SET(&(runner -> ux_device_class_ccid_runner_thread), runner);
+                UX_THREAD_EXTENSION_PTR_SET(&(runner->ux_device_class_ccid_runner_thread), runner);
             }
 #endif
 
             /* Next runner.  */
-            runner ++;
+            runner++;
         }
     }
 
     /* CCID slots.  */
-    if (status == UX_SUCCESS)
-    {
+    if (status == UX_SUCCESS) {
 
-        ccid -> ux_device_class_ccid_slots = (UX_DEVICE_CLASS_CCID_SLOT *)memory;
+        ccid->ux_device_class_ccid_slots = (UX_DEVICE_CLASS_CCID_SLOT *)memory;
 
-        slot = ccid -> ux_device_class_ccid_slots;
-        for (i = 0; i < ccid_parameter -> ux_device_class_ccid_max_n_slots; i ++)
-        {
+        slot = ccid->ux_device_class_ccid_slots;
+        for (i = 0; i < ccid_parameter->ux_device_class_ccid_max_n_slots; i++) {
 
             /* Slot not busy.  */
-            slot -> ux_device_class_ccid_slot_runner = -1;
+            slot->ux_device_class_ccid_slot_runner = -1;
 
             /* Slot ICC no card.  */
-            slot -> ux_device_class_ccid_slot_icc_status = UX_DEVICE_CLASS_CCID_ICC_NOT_PRESENT;
+            slot->ux_device_class_ccid_slot_icc_status = UX_DEVICE_CLASS_CCID_ICC_NOT_PRESENT;
 
             /* Next slot.  */
-            slot ++;
+            slot++;
         }
     }
 
@@ -351,78 +319,69 @@ ULONG                                   stacks_size;
 
     /* Create endpoint buffers.  */
     UX_ASSERT(!UX_DEVICE_CLASS_CCID_ENDPOINT_BUFFER_SIZE_CALC_OVERFLOW);
-    ccid -> ux_device_class_ccid_endpoint_buffer = _ux_utility_memory_allocate(UX_NO_ALIGN,
-        UX_CACHE_SAFE_MEMORY, UX_DEVICE_CLASS_CCID_INTERRUPT_BUFFER_SIZE + UX_DEVICE_CLASS_CCID_BULK_BUFFER_SIZE * 2);
-    if (ccid -> ux_device_class_ccid_endpoint_buffer == UX_NULL)
+    ccid->ux_device_class_ccid_endpoint_buffer = _ux_utility_memory_allocate(
+        UX_NO_ALIGN, UX_CACHE_SAFE_MEMORY,
+        UX_DEVICE_CLASS_CCID_INTERRUPT_BUFFER_SIZE + UX_DEVICE_CLASS_CCID_BULK_BUFFER_SIZE * 2);
+    if (ccid->ux_device_class_ccid_endpoint_buffer == UX_NULL)
         status = UX_MEMORY_INSUFFICIENT;
 #endif
 
 #if !defined(UX_DEVICE_STANDALONE)
 
     /* CCID mutexes, semaphore and event flags.  */
-    if (status == UX_SUCCESS)
-    {
+    if (status == UX_SUCCESS) {
 
         /* Create Event Flags.  */
-        status = _ux_utility_event_flags_create(&ccid -> ux_device_class_ccid_events,
-                                                "ux_device_class_ccid_events");
-        if (status == UX_SUCCESS)
-        {
+        status = _ux_utility_event_flags_create(&ccid->ux_device_class_ccid_events, "ux_device_class_ccid_events");
+        if (status == UX_SUCCESS) {
 
             /* Bulk IN mutex.  */
-            status =  _ux_utility_mutex_create(&ccid -> ux_device_class_ccid_response_mutex,
-                                                "ux_device_class_ccid_response_mutex");
-            if (status == UX_SUCCESS)
-            {
+            status = _ux_utility_mutex_create(&ccid->ux_device_class_ccid_response_mutex,
+                                              "ux_device_class_ccid_response_mutex");
+            if (status == UX_SUCCESS) {
 
                 /* Interrupt IN semaphore.  */
-                status =  _ux_utility_semaphore_create(&ccid -> ux_device_class_ccid_notify_semaphore,
-                                                "ux_device_class_ccid_notify_semaphore", 0);
-                if (status == UX_SUCCESS)
-                {
+                status = _ux_utility_semaphore_create(&ccid->ux_device_class_ccid_notify_semaphore,
+                                                      "ux_device_class_ccid_notify_semaphore", 0);
+                if (status == UX_SUCCESS) {
 
                     /* Resource access Mutex.  */
-                    status = _ux_utility_mutex_create(&ccid -> ux_device_class_ccid_mutex,
-                                                "ux_device_class_ccid_mutex");
+                    status = _ux_utility_mutex_create(&ccid->ux_device_class_ccid_mutex, "ux_device_class_ccid_mutex");
                     if (status != UX_SUCCESS)
                         status = UX_MUTEX_ERROR;
 
                     /* If there is error, allocated semaphore should be deleted.  */
                     if (status != UX_SUCCESS)
-                        _ux_utility_semaphore_delete(&ccid -> ux_device_class_ccid_notify_semaphore);
-                }
-                else
+                        _ux_utility_semaphore_delete(&ccid->ux_device_class_ccid_notify_semaphore);
+                } else
                     status = UX_MUTEX_ERROR;
 
                 /* If there is error, allocated mutex should be deleted.  */
                 if (status != UX_SUCCESS)
-                    _ux_device_mutex_delete(&ccid -> ux_device_class_ccid_response_mutex);
-            }
-            else
+                    _ux_device_mutex_delete(&ccid->ux_device_class_ccid_response_mutex);
+            } else
                 status = UX_MUTEX_ERROR;
 
             /* If there is error, allocated event should be deleted.  */
             if (status != UX_SUCCESS)
-                _ux_utility_event_flags_delete(&ccid -> ux_device_class_ccid_events);
-        }
-        else
+                _ux_utility_event_flags_delete(&ccid->ux_device_class_ccid_events);
+        } else
             status = UX_EVENT_ERROR;
     }
 #endif
 
     /* Success case.  */
-    if (status == UX_SUCCESS)
-    {
+    if (status == UX_SUCCESS) {
 
         /* Save the address of the CDC instance inside the CDC container.  */
-        ccid_class -> ux_slave_class_instance = (VOID *) ccid;
+        ccid_class->ux_slave_class_instance = (VOID *)ccid;
 
         /* Store parameters.  */
-        _ux_utility_memory_copy(&ccid -> ux_device_class_ccid_parameter, ccid_parameter,
+        _ux_utility_memory_copy(&ccid->ux_device_class_ccid_parameter, ccid_parameter,
                                 sizeof(UX_DEVICE_CLASS_CCID_PARAMETER)); /* Use case of memcpy is verified. */
 
         /* Return success status.  */
-        return(UX_SUCCESS);
+        return (UX_SUCCESS);
     }
 
     /* Error cases.  */
@@ -432,62 +391,45 @@ ULONG                                   stacks_size;
 #if !defined(UX_DEVICE_STANDALONE)
 
     /* Check thread states and free them.  */
-    if (ccid -> ux_device_class_ccid_thread_stack)
-        _ux_utility_thread_delete(&ccid -> ux_device_class_ccid_thread);
-    for (i = 0; i < ccid_parameter -> ux_device_class_ccid_max_n_busy_slots; i ++)
-    {
-        runner = &ccid -> ux_device_class_ccid_runners[i];
-        if (runner -> ux_device_class_ccid_runner_thread_stack)
-            _ux_utility_thread_delete(&runner -> ux_device_class_ccid_runner_thread);
+    if (ccid->ux_device_class_ccid_thread_stack)
+        _ux_utility_thread_delete(&ccid->ux_device_class_ccid_thread);
+    for (i = 0; i < ccid_parameter->ux_device_class_ccid_max_n_busy_slots; i++) {
+        runner = &ccid->ux_device_class_ccid_runners[i];
+        if (runner->ux_device_class_ccid_runner_thread_stack)
+            _ux_utility_thread_delete(&runner->ux_device_class_ccid_runner_thread);
     }
-    if (ccid -> ux_device_class_ccid_notify_thread_stack)
-        _ux_utility_thread_delete(&ccid -> ux_device_class_ccid_notify_thread);
+    if (ccid->ux_device_class_ccid_notify_thread_stack)
+        _ux_utility_thread_delete(&ccid->ux_device_class_ccid_notify_thread);
 #endif
 
 #if UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1
 
     /* Free the endpoint buffers.  */
-    if (ccid -> ux_device_class_ccid_endpoint_buffer)
-        _ux_utility_memory_free(ccid -> ux_device_class_ccid_endpoint_buffer);
+    if (ccid->ux_device_class_ccid_endpoint_buffer)
+        _ux_utility_memory_free(ccid->ux_device_class_ccid_endpoint_buffer);
 #endif
 
     /* Free the memory.  */
     _ux_utility_memory_free(ccid);
 
     /* Return completion status.  */
-    return(status);
+    return (status);
 }
 
-const UX_DEVICE_CLASS_CCID_COMMAND_SETT
-_ux_device_class_ccid_command_sett[UX_DEVICE_CLASS_CCID_N_COMMANDS + 1] =
-{
-    {0x62, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x62),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x62), 0},
-    {0x63, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x63),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x63), 1},
-    {0x65, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x65),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x65), 2},
-    {0x6F, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6F),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6F), 3},
-    {0x6C, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6C),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6C), 4},
-    {0x6D, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6D),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6D), 5},
-    {0x61, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x61),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x61), 6},
-    {0x6B, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6B),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6B), 7},
-    {0x6E, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6E),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6E), 8},
-    {0x6A, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6A),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6A), 9},
-    {0x69, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x69),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x69), 10},
-    {0x71, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x71),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x71), 11},
-    {0x72, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x72),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x72), 12},
-    {0x73, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x73),
-           UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x73), 13},
+const UX_DEVICE_CLASS_CCID_COMMAND_SETT _ux_device_class_ccid_command_sett[UX_DEVICE_CLASS_CCID_N_COMMANDS + 1] = {
+    {0x62, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x62), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x62), 0},
+    {0x63, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x63), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x63), 1},
+    {0x65, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x65), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x65), 2},
+    {0x6F, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6F), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6F), 3},
+    {0x6C, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6C), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6C), 4},
+    {0x6D, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6D), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6D), 5},
+    {0x61, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x61), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x61), 6},
+    {0x6B, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6B), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6B), 7},
+    {0x6E, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6E), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6E), 8},
+    {0x6A, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x6A), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x6A), 9},
+    {0x69, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x69), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x69), 10},
+    {0x71, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x71), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x71), 11},
+    {0x72, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x72), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x72), 12},
+    {0x73, UX_DEVICE_CLASS_CCID_COMMAND_RESP_TYPE(0x73), UX_DEVICE_CLASS_CCID_COMMAND_FLAGS(0x73), 13},
     {0, 0, 0, -1}, /* Command not supported.  */
 };

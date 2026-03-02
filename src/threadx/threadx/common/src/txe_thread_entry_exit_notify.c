@@ -69,30 +69,29 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _txe_thread_entry_exit_notify(
-    TX_THREAD *thread_ptr,
-    VOID (*thread_entry_exit_notify)(TX_THREAD *notify_thread_ptr, UINT type)) {
+UINT _txe_thread_entry_exit_notify(TX_THREAD *thread_ptr,
+                                   VOID (*thread_entry_exit_notify)(TX_THREAD *notify_thread_ptr, UINT type)) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid thread pointer.  */
-  if (thread_ptr == TX_NULL) {
+    /* Check for an invalid thread pointer.  */
+    if (thread_ptr == TX_NULL) {
 
-    /* Thread pointer is invalid, return appropriate error code.  */
-    status = TX_THREAD_ERROR;
-  }
+        /* Thread pointer is invalid, return appropriate error code.  */
+        status = TX_THREAD_ERROR;
+    }
 
-  /* Now check for invalid thread ID.  */
-  else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
+    /* Now check for invalid thread ID.  */
+    else if (thread_ptr->tx_thread_id != TX_THREAD_ID) {
 
-    /* Thread pointer is invalid, return appropriate error code.  */
-    status = TX_THREAD_ERROR;
-  } else {
+        /* Thread pointer is invalid, return appropriate error code.  */
+        status = TX_THREAD_ERROR;
+    } else {
 
-    /* Call actual thread entry/exit notify function.  */
-    status = _tx_thread_entry_exit_notify(thread_ptr, thread_entry_exit_notify);
-  }
+        /* Call actual thread entry/exit notify function.  */
+        status = _tx_thread_entry_exit_notify(thread_ptr, thread_entry_exit_notify);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

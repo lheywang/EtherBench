@@ -78,137 +78,125 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID _nx_ipv6_prefix_list_delete_entry(NX_IP *ip_ptr,
-                                       NX_IPV6_PREFIX_ENTRY *entry) {
+VOID _nx_ipv6_prefix_list_delete_entry(NX_IP *ip_ptr, NX_IPV6_PREFIX_ENTRY *entry) {
 
-  UINT i;
-  ULONG address_prefix[4];
-  NXD_IPV6_ADDRESS *interface_ipv6_address_prev, *interface_ipv6_address;
-  ULONG multicast_address[4];
+    UINT i;
+    ULONG address_prefix[4];
+    NXD_IPV6_ADDRESS *interface_ipv6_address_prev, *interface_ipv6_address;
+    ULONG multicast_address[4];
 #ifdef NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY
-  UINT ipv6_addr_index;
+    UINT ipv6_addr_index;
 #endif /* NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY */
 
-  /* Invalidate the interface IP address if we obtained the
-     interface IP address based on the prefix information. */
+    /* Invalidate the interface IP address if we obtained the
+       interface IP address based on the prefix information. */
 
-  /* Search through each physical interface for a match. */
-  for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
+    /* Search through each physical interface for a match. */
+    for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
 
-    /* Get a pointer to the first address in the interface list. */
-    interface_ipv6_address =
-        ip_ptr->nx_ip_interface[i].nxd_interface_ipv6_address_list_head;
-    interface_ipv6_address_prev = NX_NULL;
+        /* Get a pointer to the first address in the interface list. */
+        interface_ipv6_address = ip_ptr->nx_ip_interface[i].nxd_interface_ipv6_address_list_head;
+        interface_ipv6_address_prev = NX_NULL;
 
-    /* Search the address list for a match. */
-    while (interface_ipv6_address) {
+        /* Search the address list for a match. */
+        while (interface_ipv6_address) {
 
-      /* Is this interface address valid? */
-      if (interface_ipv6_address->nxd_ipv6_address_state !=
-              NX_IPV6_ADDR_STATE_UNKNOWN &&
-          interface_ipv6_address->nxd_ipv6_address_ConfigurationMethod ==
-              NX_IPV6_ADDRESS_BASED_ON_INTERFACE) {
+            /* Is this interface address valid? */
+            if (interface_ipv6_address->nxd_ipv6_address_state != NX_IPV6_ADDR_STATE_UNKNOWN &&
+                interface_ipv6_address->nxd_ipv6_address_ConfigurationMethod == NX_IPV6_ADDRESS_BASED_ON_INTERFACE) {
 
-        /* Yes.  Extract the prefix to match on. The prefix length is 64 bits.
-         */
-        address_prefix[0] = interface_ipv6_address->nxd_ipv6_address[0];
-        address_prefix[1] = interface_ipv6_address->nxd_ipv6_address[1];
-        address_prefix[2] = 0;
-        address_prefix[3] = 0;
+                /* Yes.  Extract the prefix to match on. The prefix length is 64 bits.
+                 */
+                address_prefix[0] = interface_ipv6_address->nxd_ipv6_address[0];
+                address_prefix[1] = interface_ipv6_address->nxd_ipv6_address[1];
+                address_prefix[2] = 0;
+                address_prefix[3] = 0;
 
-        /* Do we have a match?  */
-        if (CHECK_IPV6_ADDRESSES_SAME(
-                address_prefix, entry->nx_ipv6_prefix_entry_network_address)) {
+                /* Do we have a match?  */
+                if (CHECK_IPV6_ADDRESSES_SAME(address_prefix, entry->nx_ipv6_prefix_entry_network_address)) {
 
-          /* Yes, invalidate this address.  */
-          interface_ipv6_address->nxd_ipv6_address_valid = NX_FALSE;
-          interface_ipv6_address->nxd_ipv6_address_state =
-              NX_IPV6_ADDR_STATE_UNKNOWN;
+                    /* Yes, invalidate this address.  */
+                    interface_ipv6_address->nxd_ipv6_address_valid = NX_FALSE;
+                    interface_ipv6_address->nxd_ipv6_address_state = NX_IPV6_ADDR_STATE_UNKNOWN;
 
-          interface_ipv6_address->nxd_ipv6_address_ConfigurationMethod =
-              NX_IPV6_ADDRESS_NOT_CONFIGURED;
+                    interface_ipv6_address->nxd_ipv6_address_ConfigurationMethod = NX_IPV6_ADDRESS_NOT_CONFIGURED;
 
 #ifndef NX_DISABLE_IPV6_DAD
-          interface_ipv6_address->nxd_ipv6_address_DupAddrDetectTransmit = 0;
+                    interface_ipv6_address->nxd_ipv6_address_DupAddrDetectTransmit = 0;
 #endif /* NX_DISABLE_IPV6_DAD */
 
-          /* Update the list. */
-          if (interface_ipv6_address_prev == NX_NULL) {
-            ip_ptr->nx_ip_interface[i].nxd_interface_ipv6_address_list_head =
-                interface_ipv6_address->nxd_ipv6_address_next;
-          } else {
-            interface_ipv6_address_prev->nxd_ipv6_address_next =
-                interface_ipv6_address->nxd_ipv6_address_next;
-          }
+                    /* Update the list. */
+                    if (interface_ipv6_address_prev == NX_NULL) {
+                        ip_ptr->nx_ip_interface[i].nxd_interface_ipv6_address_list_head =
+                            interface_ipv6_address->nxd_ipv6_address_next;
+                    } else {
+                        interface_ipv6_address_prev->nxd_ipv6_address_next =
+                            interface_ipv6_address->nxd_ipv6_address_next;
+                    }
 
-          /* Delete the associated multicast address. */
-          SET_SOLICITED_NODE_MULTICAST_ADDRESS(
-              multicast_address, interface_ipv6_address->nxd_ipv6_address);
+                    /* Delete the associated multicast address. */
+                    SET_SOLICITED_NODE_MULTICAST_ADDRESS(multicast_address, interface_ipv6_address->nxd_ipv6_address);
 
-          _nx_ipv6_multicast_leave(
-              ip_ptr, &multicast_address[0],
-              interface_ipv6_address->nxd_ipv6_address_attached);
+                    _nx_ipv6_multicast_leave(ip_ptr, &multicast_address[0],
+                                             interface_ipv6_address->nxd_ipv6_address_attached);
 
 #ifdef NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY
-          /* If the address change notify callback is set, invoke the callback
-           * function. */
-          if (ip_ptr->nx_ipv6_address_change_notify) {
-            ipv6_addr_index =
-                (ULONG)interface_ipv6_address->nxd_ipv6_address_index;
-            ip_ptr->nx_ipv6_address_change_notify(
-                ip_ptr, NX_IPV6_ADDRESS_LIFETIME_EXPIRED, i, ipv6_addr_index,
-                &interface_ipv6_address->nxd_ipv6_address[0]);
-          }
+                    /* If the address change notify callback is set, invoke the callback
+                     * function. */
+                    if (ip_ptr->nx_ipv6_address_change_notify) {
+                        ipv6_addr_index = (ULONG)interface_ipv6_address->nxd_ipv6_address_index;
+                        ip_ptr->nx_ipv6_address_change_notify(ip_ptr, NX_IPV6_ADDRESS_LIFETIME_EXPIRED, i,
+                                                              ipv6_addr_index,
+                                                              &interface_ipv6_address->nxd_ipv6_address[0]);
+                    }
 #endif /* NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY */
 
-          /* Clear the address at last. */
-          SET_UNSPECIFIED_ADDRESS(interface_ipv6_address->nxd_ipv6_address);
+                    /* Clear the address at last. */
+                    SET_UNSPECIFIED_ADDRESS(interface_ipv6_address->nxd_ipv6_address);
 
-          /* Address for this interface is found. Just break. */
-          break;
-        }
-      }
+                    /* Address for this interface is found. Just break. */
+                    break;
+                }
+            }
 
-      /* Set the previous address. */
-      interface_ipv6_address_prev = interface_ipv6_address;
+            /* Set the previous address. */
+            interface_ipv6_address_prev = interface_ipv6_address;
 
-      /* Get the next address. */
-      interface_ipv6_address = interface_ipv6_address->nxd_ipv6_address_next;
-    } /* while (interface_ipv6_address) */
-  } /* for(i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) */
+            /* Get the next address. */
+            interface_ipv6_address = interface_ipv6_address->nxd_ipv6_address_next;
+        } /* while (interface_ipv6_address) */
+    } /* for(i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) */
 
-  /* Unlink the previous node, if it exists. */
-  if (entry->nx_ipv6_prefix_entry_prev == NX_NULL) {
-    ip_ptr->nx_ipv6_prefix_list_ptr = entry->nx_ipv6_prefix_entry_next;
-  } else {
-    entry->nx_ipv6_prefix_entry_prev->nx_ipv6_prefix_entry_next =
-        entry->nx_ipv6_prefix_entry_next;
-  }
+    /* Unlink the previous node, if it exists. */
+    if (entry->nx_ipv6_prefix_entry_prev == NX_NULL) {
+        ip_ptr->nx_ipv6_prefix_list_ptr = entry->nx_ipv6_prefix_entry_next;
+    } else {
+        entry->nx_ipv6_prefix_entry_prev->nx_ipv6_prefix_entry_next = entry->nx_ipv6_prefix_entry_next;
+    }
 
-  /* Unlink the next node if it exists. */
-  if (entry->nx_ipv6_prefix_entry_next) {
-    entry->nx_ipv6_prefix_entry_next->nx_ipv6_prefix_entry_prev =
-        entry->nx_ipv6_prefix_entry_prev;
-  }
+    /* Unlink the next node if it exists. */
+    if (entry->nx_ipv6_prefix_entry_next) {
+        entry->nx_ipv6_prefix_entry_next->nx_ipv6_prefix_entry_prev = entry->nx_ipv6_prefix_entry_prev;
+    }
 
-  /* Clean up this entry. */
-  entry->nx_ipv6_prefix_entry_next = NX_NULL;
-  entry->nx_ipv6_prefix_entry_prev = NX_NULL;
+    /* Clean up this entry. */
+    entry->nx_ipv6_prefix_entry_next = NX_NULL;
+    entry->nx_ipv6_prefix_entry_prev = NX_NULL;
 
-  /* Put entry onto the free list.*/
-  if (ip_ptr->nx_ipv6_prefix_entry_free_list == NX_NULL) {
-    /* Free list is empty.  Set entry to be the first on the list. */
-    ip_ptr->nx_ipv6_prefix_entry_free_list = entry;
-  } else {
+    /* Put entry onto the free list.*/
+    if (ip_ptr->nx_ipv6_prefix_entry_free_list == NX_NULL) {
+        /* Free list is empty.  Set entry to be the first on the list. */
+        ip_ptr->nx_ipv6_prefix_entry_free_list = entry;
+    } else {
 
-    /* Free list is not empty.  Insert the entry to the head of the list. */
-    ip_ptr->nx_ipv6_prefix_entry_free_list->nx_ipv6_prefix_entry_prev = entry;
-    entry->nx_ipv6_prefix_entry_next = ip_ptr->nx_ipv6_prefix_entry_free_list;
-    ip_ptr->nx_ipv6_prefix_entry_free_list = entry;
-  }
+        /* Free list is not empty.  Insert the entry to the head of the list. */
+        ip_ptr->nx_ipv6_prefix_entry_free_list->nx_ipv6_prefix_entry_prev = entry;
+        entry->nx_ipv6_prefix_entry_next = ip_ptr->nx_ipv6_prefix_entry_free_list;
+        ip_ptr->nx_ipv6_prefix_entry_free_list = entry;
+    }
 
-  /* All done. Return. */
-  return;
+    /* All done. Return. */
+    return;
 }
 
 #endif /* FEATURE_NX_IPV6 */

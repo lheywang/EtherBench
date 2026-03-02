@@ -71,19 +71,19 @@ FX_CALLER_CHECKING_EXTERNS
 /**************************************************************************/
 UINT _fxe_file_truncate_release(FX_FILE *file_ptr, ULONG size) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null file pointer.  */
-  if (file_ptr == FX_NULL) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null file pointer.  */
+    if (file_ptr == FX_NULL) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual file truncate release service.  */
-  status = _fx_file_truncate_release(file_ptr, size);
+    /* Call actual file truncate release service.  */
+    status = _fx_file_truncate_release(file_ptr, size);
 
-  /* Truncate is complete, return status.  */
-  return (status);
+    /* Truncate is complete, return status.  */
+    return (status);
 }

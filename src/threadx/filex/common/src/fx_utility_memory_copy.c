@@ -78,6 +78,6 @@
 /**************************************************************************/
 VOID _fx_utility_memory_copy(UCHAR *source_ptr, UCHAR *dest_ptr, ULONG size) {
 
-  /* Copy the memory.  */
-  memcpy(dest_ptr, source_ptr, size); /* Use case of memcpy is verified. */
+    /* Copy the memory.  */
+    memcpy(dest_ptr, source_ptr, size); /* Use case of memcpy is verified. */
 }

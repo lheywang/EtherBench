@@ -82,78 +82,74 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_udp_socket_create(NX_IP *ip_ptr, NX_UDP_SOCKET *socket_ptr,
-                            CHAR *name, ULONG type_of_service, ULONG fragment,
-                            UINT time_to_live, ULONG queue_maximum,
-                            UINT udp_socket_size) {
+UINT _nxe_udp_socket_create(NX_IP *ip_ptr, NX_UDP_SOCKET *socket_ptr, CHAR *name, ULONG type_of_service, ULONG fragment,
+                            UINT time_to_live, ULONG queue_maximum, UINT udp_socket_size) {
 
-  UINT status;
-  NX_UDP_SOCKET *created_socket;
-  ULONG created_count;
+    UINT status;
+    NX_UDP_SOCKET *created_socket;
+    ULONG created_count;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
-      (socket_ptr == NX_NULL) ||
-      (udp_socket_size != (UINT)sizeof(NX_UDP_SOCKET))) {
-    return (NX_PTR_ERROR);
-  }
-
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
-
-  /* Get protection mutex.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
-
-  /* Pickup created count and created socket pointer.  */
-  created_count = ip_ptr->nx_ip_udp_created_sockets_count;
-  created_socket = ip_ptr->nx_ip_udp_created_sockets_ptr;
-
-  /* Loop to look for socket already created.  */
-  while (created_count--) {
-
-    /* Compare the new socket with the already created socket.  */
-    if (socket_ptr == created_socket) {
-
-      /* Error, socket already created!  */
-
-      /* Release protection mutex.  */
-      tx_mutex_put(&(ip_ptr->nx_ip_protection));
-
-      /* Return error.  */
-      return (NX_PTR_ERROR);
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) || (socket_ptr == NX_NULL) ||
+        (udp_socket_size != (UINT)sizeof(NX_UDP_SOCKET))) {
+        return (NX_PTR_ERROR);
     }
 
-    /* Move to next created socket.  */
-    created_socket = created_socket->nx_udp_socket_created_next;
-  }
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Release protection mutex.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Get protection mutex.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Check to see if UDP is enabled.  */
-  if (!ip_ptr->nx_ip_udp_packet_receive) {
-    return (NX_NOT_ENABLED);
-  }
+    /* Pickup created count and created socket pointer.  */
+    created_count = ip_ptr->nx_ip_udp_created_sockets_count;
+    created_socket = ip_ptr->nx_ip_udp_created_sockets_ptr;
 
-  /* Check for valid type of service.  */
-  if (type_of_service & ~(NX_IP_TOS_MASK)) {
-    return (NX_OPTION_ERROR);
-  }
+    /* Loop to look for socket already created.  */
+    while (created_count--) {
 
-  /* Check for valid fragment option.  */
-  if ((fragment != NX_FRAGMENT_OKAY) && (fragment != NX_DONT_FRAGMENT)) {
-    return (NX_OPTION_ERROR);
-  }
+        /* Compare the new socket with the already created socket.  */
+        if (socket_ptr == created_socket) {
 
-  /* Check for valid time to live option.  */
-  if (((ULONG)time_to_live) > NX_IP_TIME_TO_LIVE_MASK) {
-    return (NX_OPTION_ERROR);
-  }
+            /* Error, socket already created!  */
 
-  /* Call actual UDP socket create function.  */
-  status = _nx_udp_socket_create(ip_ptr, socket_ptr, name, type_of_service,
-                                 fragment, time_to_live, queue_maximum);
+            /* Release protection mutex.  */
+            tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /* Return completion status.  */
-  return (status);
+            /* Return error.  */
+            return (NX_PTR_ERROR);
+        }
+
+        /* Move to next created socket.  */
+        created_socket = created_socket->nx_udp_socket_created_next;
+    }
+
+    /* Release protection mutex.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
+
+    /* Check to see if UDP is enabled.  */
+    if (!ip_ptr->nx_ip_udp_packet_receive) {
+        return (NX_NOT_ENABLED);
+    }
+
+    /* Check for valid type of service.  */
+    if (type_of_service & ~(NX_IP_TOS_MASK)) {
+        return (NX_OPTION_ERROR);
+    }
+
+    /* Check for valid fragment option.  */
+    if ((fragment != NX_FRAGMENT_OKAY) && (fragment != NX_DONT_FRAGMENT)) {
+        return (NX_OPTION_ERROR);
+    }
+
+    /* Check for valid time to live option.  */
+    if (((ULONG)time_to_live) > NX_IP_TIME_TO_LIVE_MASK) {
+        return (NX_OPTION_ERROR);
+    }
+
+    /* Call actual UDP socket create function.  */
+    status = _nx_udp_socket_create(ip_ptr, socket_ptr, name, type_of_service, fragment, time_to_live, queue_maximum);
+
+    /* Return completion status.  */
+    return (status);
 }

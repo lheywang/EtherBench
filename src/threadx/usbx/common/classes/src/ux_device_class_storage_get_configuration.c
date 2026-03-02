@@ -31,10 +31,10 @@
 #define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_HEADER_LENGTH 8
 #define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_DESCRIPTOR_LENGTH 32
 #define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH 4
-#define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_LENGTH                 \
-  (USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH -                    \
-   USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_DESCRIPTOR_LENGTH -         \
-   USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_HEADER_LENGTH)
+#define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_LENGTH                                                         \
+    (USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH -                                                          \
+     USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_DESCRIPTOR_LENGTH -                                               \
+     USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_HEADER_LENGTH)
 UCHAR usbx_device_class_storage_configuration_profile[] = {
 
     /* Feature Header */
@@ -341,13 +341,12 @@ UCHAR usbx_device_class_storage_configuration_profile[] = {
 
 #define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH 112
 #define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_HEADER_LENGTH 8
-#define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_FEATURE_DESCRIPTOR_LENGTH \
-  32
+#define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_FEATURE_DESCRIPTOR_LENGTH 32
 #define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_FEATURE_HEADER_LENGTH 4
-#define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_FEATURE_LENGTH          \
-  (USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH -             \
-   USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_FEATURE_DESCRIPTOR_LENGTH -  \
-   USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_HEADER_LENGTH)
+#define USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_FEATURE_LENGTH                                                  \
+    (USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH -                                                   \
+     USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_FEATURE_DESCRIPTOR_LENGTH -                                        \
+     USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_HEADER_LENGTH)
 UCHAR usbx_device_class_storage_configuration_active_profile[] = {
 
     /* Feature Header */
@@ -495,10 +494,8 @@ UCHAR usbx_device_class_storage_configuration_active_profile[] = {
 
 };
 
-#if (UX_SLAVE_REQUEST_DATA_MAX_LENGTH <                                        \
-     USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH) ||         \
-    (UX_SLAVE_REQUEST_DATA_MAX_LENGTH <                                        \
-     USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH)
+#if (UX_SLAVE_REQUEST_DATA_MAX_LENGTH < USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH) ||              \
+    (UX_SLAVE_REQUEST_DATA_MAX_LENGTH < USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH)
 /* #error UX_SLAVE_REQUEST_DATA_MAX_LENGTH too small, please check  */
 /* Build option checked runtime by UX_ASSERT  */
 #endif
@@ -560,227 +557,196 @@ UCHAR usbx_device_class_storage_configuration_active_profile[] = {
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_storage_get_configuration(UX_SLAVE_CLASS_STORAGE *storage,
-                                                ULONG lun,
-                                                UX_SLAVE_ENDPOINT *endpoint_in,
-                                                UX_SLAVE_ENDPOINT *endpoint_out,
+UINT _ux_device_class_storage_get_configuration(UX_SLAVE_CLASS_STORAGE *storage, ULONG lun,
+                                                UX_SLAVE_ENDPOINT *endpoint_in, UX_SLAVE_ENDPOINT *endpoint_out,
                                                 UCHAR *cbwcb) {
 
-  UINT status = 0;
-  UX_SLAVE_TRANSFER *transfer_request;
-  ULONG starting_feature;
-  ULONG allocation_length;
-  ULONG additional_length;
-  ULONG profile_counter;
-  UCHAR *profile_pointer;
-  ULONG feature;
+    UINT status = 0;
+    UX_SLAVE_TRANSFER *transfer_request;
+    ULONG starting_feature;
+    ULONG allocation_length;
+    ULONG additional_length;
+    ULONG profile_counter;
+    UCHAR *profile_pointer;
+    ULONG feature;
 
-  UX_PARAMETER_NOT_USED(endpoint_out);
+    UX_PARAMETER_NOT_USED(endpoint_out);
 
-  /* Build option check.  */
-  UX_ASSERT((UX_SLAVE_REQUEST_DATA_MAX_LENGTH >=
-             USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH) &&
-            (UX_SLAVE_REQUEST_DATA_MAX_LENGTH >=
-             USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH));
+    /* Build option check.  */
+    UX_ASSERT((UX_SLAVE_REQUEST_DATA_MAX_LENGTH >= USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH) &&
+              (UX_SLAVE_REQUEST_DATA_MAX_LENGTH >= USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH));
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_GET_CONFIGURATION,
-                          storage, lun, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0,
-                          0)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_GET_CONFIGURATION, storage, lun, 0, 0,
+                            UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
-  /* Initialize the length of the configuration profile.  */
-  _ux_utility_long_put_big_endian(
-      usbx_device_class_storage_configuration_profile,
-      (USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH - 4));
+    /* Initialize the length of the configuration profile.  */
+    _ux_utility_long_put_big_endian(usbx_device_class_storage_configuration_profile,
+                                    (USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH - 4));
 
-  /* Initialize the length of the active configuration profile.  */
-  _ux_utility_long_put_big_endian(
-      usbx_device_class_storage_configuration_active_profile,
-      (USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH - 4));
+    /* Initialize the length of the active configuration profile.  */
+    _ux_utility_long_put_big_endian(usbx_device_class_storage_configuration_active_profile,
+                                    (USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH - 4));
 
-  /* Obtain the pointer to the transfer request.  */
-  transfer_request = &endpoint_in->ux_slave_endpoint_transfer_request;
+    /* Obtain the pointer to the transfer request.  */
+    transfer_request = &endpoint_in->ux_slave_endpoint_transfer_request;
 
-  /* Get the Starting Feature.  */
-  starting_feature = _ux_utility_short_get_big_endian(
-      cbwcb + UX_SLAVE_CLASS_STORAGE_GET_CONFIGURATION_STARTING_FEATURE);
+    /* Get the Starting Feature.  */
+    starting_feature =
+        _ux_utility_short_get_big_endian(cbwcb + UX_SLAVE_CLASS_STORAGE_GET_CONFIGURATION_STARTING_FEATURE);
 
-  /* Get the allocation length.  */
-  allocation_length = _ux_utility_short_get_big_endian(
-      cbwcb + UX_SLAVE_CLASS_STORAGE_GET_CONFIGURATION_ALLOCATION_LENGTH);
+    /* Get the allocation length.  */
+    allocation_length =
+        _ux_utility_short_get_big_endian(cbwcb + UX_SLAVE_CLASS_STORAGE_GET_CONFIGURATION_ALLOCATION_LENGTH);
 
-  /* Default CSW to success.  */
-  storage->ux_slave_class_storage_csw_status =
-      UX_SLAVE_CLASS_STORAGE_CSW_PASSED;
+    /* Default CSW to success.  */
+    storage->ux_slave_class_storage_csw_status = UX_SLAVE_CLASS_STORAGE_CSW_PASSED;
 
-  /* Is the request demanding all the features ? */
-  if (starting_feature == 0) {
+    /* Is the request demanding all the features ? */
+    if (starting_feature == 0) {
 
-    /* Is the requester demanding the active profile ? */
-    if ((*(cbwcb + UX_SLAVE_CLASS_STORAGE_GET_CONFIGURATION_RT) & 3) == 1) {
+        /* Is the requester demanding the active profile ? */
+        if ((*(cbwcb + UX_SLAVE_CLASS_STORAGE_GET_CONFIGURATION_RT) & 3) == 1) {
 
-      /* We get the active profile.  */
-      /* Can we send all the activeconfiguration profile ? If not, the host may
-         demand the first part of the configuration to get the entire length. In
-         this case, return the length demanded by the host.  */
-      if (allocation_length >=
-          USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH)
+            /* We get the active profile.  */
+            /* Can we send all the activeconfiguration profile ? If not, the host may
+               demand the first part of the configuration to get the entire length. In
+               this case, return the length demanded by the host.  */
+            if (allocation_length >= USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH)
 
-        /* Adjust allocation length to maximum allowed.  */
-        allocation_length =
-            USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH;
+                /* Adjust allocation length to maximum allowed.  */
+                allocation_length = USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_ACTIVE_PROFILE_LENGTH;
 
-      /* Copy the CSW into the transfer request memory.  */
-      _ux_utility_memory_copy(
-          transfer_request->ux_slave_transfer_request_data_pointer,
-          usbx_device_class_storage_configuration_active_profile,
-          allocation_length); /* Use case of memcpy is verified. */
-    } else {
+            /* Copy the CSW into the transfer request memory.  */
+            _ux_utility_memory_copy(transfer_request->ux_slave_transfer_request_data_pointer,
+                                    usbx_device_class_storage_configuration_active_profile,
+                                    allocation_length); /* Use case of memcpy is verified. */
+        } else {
 
-      /* We get the whole profile.  */
-      /* Can we send all the configuration profile ? If not, the host may demand
-         the first part of the configuration to get the entire length. In this
-         case, return the length demanded by the host.  */
-      if (allocation_length >=
-          USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH)
+            /* We get the whole profile.  */
+            /* Can we send all the configuration profile ? If not, the host may demand
+               the first part of the configuration to get the entire length. In this
+               case, return the length demanded by the host.  */
+            if (allocation_length >= USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH)
 
-        /* Adjust allocation length to maximum allowed.  */
-        allocation_length =
-            USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH;
+                /* Adjust allocation length to maximum allowed.  */
+                allocation_length = USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_PROFILE_LENGTH;
 
-      /* Copy the CSW into the transfer request memory.  */
-      _ux_utility_memory_copy(
-          transfer_request->ux_slave_transfer_request_data_pointer,
-          usbx_device_class_storage_configuration_profile,
-          allocation_length); /* Use case of memcpy is verified. */
-    }
-
-    /* Now success.  */
-    status = UX_SUCCESS;
-  } else {
-
-    /* The caller has demanded a specific feature. Scan our configuration
-     * profile.  Jump over the beginning sections.  */
-    profile_pointer =
-        usbx_device_class_storage_configuration_profile +
-        USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_HEADER_LENGTH +
-        USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_DESCRIPTOR_LENGTH;
-    profile_counter = USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_LENGTH;
-
-    /* Scan our configuration profile.  */
-    while (profile_counter != 0) {
-
-      /* Extract the feature from the configuration profile. */
-      feature = _ux_utility_short_get_big_endian(
-          profile_pointer +
-          USBX_DEVICE_CLASS_STORAGE_FEATURE_DESCRIPTOR_FEATURE_CODE);
-
-      /* Extract the feature length from the configuration profile. */
-      additional_length =
-          (ULONG) *
-          (profile_pointer +
-           USBX_DEVICE_CLASS_STORAGE_FEATURE_DESCRIPTOR_FEATURE_ADD_LENGTH);
-
-      /* Compare the Feature extracted with the one demanded.  */
-      if (feature == starting_feature) {
-
-        /* We found the feature, we check if the requester has enough space for
-         * us to return it.  */
-        if (allocation_length >=
-            (additional_length +
-             USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_HEADER_LENGTH +
-             USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH))
-
-          /* Need to adjust the allocation length.  */
-          allocation_length =
-              additional_length +
-              USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_HEADER_LENGTH +
-              USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH;
-
-        /* Copy the CSW into the transfer request memory.  */
-        _ux_utility_memory_copy(
-            transfer_request->ux_slave_transfer_request_data_pointer,
-            profile_pointer,
-            allocation_length); /* Use case of memcpy is verified. */
+            /* Copy the CSW into the transfer request memory.  */
+            _ux_utility_memory_copy(transfer_request->ux_slave_transfer_request_data_pointer,
+                                    usbx_device_class_storage_configuration_profile,
+                                    allocation_length); /* Use case of memcpy is verified. */
+        }
 
         /* Now success.  */
         status = UX_SUCCESS;
+    } else {
 
-        /* Get out of the loop.  */
-        break;
-      } else {
+        /* The caller has demanded a specific feature. Scan our configuration
+         * profile.  Jump over the beginning sections.  */
+        profile_pointer = usbx_device_class_storage_configuration_profile +
+                          USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_HEADER_LENGTH +
+                          USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_DESCRIPTOR_LENGTH;
+        profile_counter = USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_LENGTH;
 
-        /* We have not yet found the feature, keep parsing.  */
-        if (profile_counter - additional_length -
-                USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH <=
-            0) {
+        /* Scan our configuration profile.  */
+        while (profile_counter != 0) {
 
-          /* We are either at the end of the profile or the profile is
-           * corrupted.  */
+            /* Extract the feature from the configuration profile. */
+            feature = _ux_utility_short_get_big_endian(profile_pointer +
+                                                       USBX_DEVICE_CLASS_STORAGE_FEATURE_DESCRIPTOR_FEATURE_CODE);
 
-          /* And update the REQUEST_SENSE codes.  */
-          storage->ux_slave_class_storage_lun[lun]
-              .ux_slave_class_storage_request_sense_status =
-              UX_DEVICE_CLASS_STORAGE_SENSE_STATUS(
-                  UX_SLAVE_CLASS_STORAGE_SENSE_KEY_ILLEGAL_REQUEST, 0x26, 0x02);
+            /* Extract the feature length from the configuration profile. */
+            additional_length =
+                (ULONG) * (profile_pointer + USBX_DEVICE_CLASS_STORAGE_FEATURE_DESCRIPTOR_FEATURE_ADD_LENGTH);
 
-          /* Now we set the CSW with failure.  */
-          storage->ux_slave_class_storage_csw_status =
-              UX_SLAVE_CLASS_STORAGE_CSW_FAILED;
+            /* Compare the Feature extracted with the one demanded.  */
+            if (feature == starting_feature) {
 
-          /* Set status to error.  */
-          status = UX_ERROR;
+                /* We found the feature, we check if the requester has enough space for
+                 * us to return it.  */
+                if (allocation_length >= (additional_length + USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_HEADER_LENGTH +
+                                          USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH))
 
-          /* Get out of the loop.  */
-          break;
+                    /* Need to adjust the allocation length.  */
+                    allocation_length = additional_length + USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_HEADER_LENGTH +
+                                        USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH;
 
-        } else {
+                /* Copy the CSW into the transfer request memory.  */
+                _ux_utility_memory_copy(transfer_request->ux_slave_transfer_request_data_pointer, profile_pointer,
+                                        allocation_length); /* Use case of memcpy is verified. */
 
-          /* Update the profile pointer. */
-          profile_pointer +=
-              additional_length +
-              USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH;
+                /* Now success.  */
+                status = UX_SUCCESS;
 
-          /* Update the length remaining to parse in profile.  */
-          profile_counter -=
-              additional_length +
-              USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH;
+                /* Get out of the loop.  */
+                break;
+            } else {
+
+                /* We have not yet found the feature, keep parsing.  */
+                if (profile_counter - additional_length -
+                        USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH <=
+                    0) {
+
+                    /* We are either at the end of the profile or the profile is
+                     * corrupted.  */
+
+                    /* And update the REQUEST_SENSE codes.  */
+                    storage->ux_slave_class_storage_lun[lun].ux_slave_class_storage_request_sense_status =
+                        UX_DEVICE_CLASS_STORAGE_SENSE_STATUS(UX_SLAVE_CLASS_STORAGE_SENSE_KEY_ILLEGAL_REQUEST, 0x26,
+                                                             0x02);
+
+                    /* Now we set the CSW with failure.  */
+                    storage->ux_slave_class_storage_csw_status = UX_SLAVE_CLASS_STORAGE_CSW_FAILED;
+
+                    /* Set status to error.  */
+                    status = UX_ERROR;
+
+                    /* Get out of the loop.  */
+                    break;
+
+                } else {
+
+                    /* Update the profile pointer. */
+                    profile_pointer +=
+                        additional_length + USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH;
+
+                    /* Update the length remaining to parse in profile.  */
+                    profile_counter -=
+                        additional_length + USBX_DEVICE_CLASS_STORAGE_CONFIGURATION_FEATURE_HEADER_LENGTH;
+                }
+            }
         }
-      }
     }
-  }
 
-  /* Success, send data.  */
-  if (status == UX_SUCCESS) {
+    /* Success, send data.  */
+    if (status == UX_SUCCESS) {
 
 #if defined(UX_DEVICE_STANDALONE)
 
-    /* Next: Transfer (DATA).  */
-    storage->ux_device_class_storage_state =
-        UX_DEVICE_CLASS_STORAGE_STATE_TRANS_START;
-    storage->ux_device_class_storage_cmd_state =
-        UX_DEVICE_CLASS_STORAGE_CMD_READ;
+        /* Next: Transfer (DATA).  */
+        storage->ux_device_class_storage_state = UX_DEVICE_CLASS_STORAGE_STATE_TRANS_START;
+        storage->ux_device_class_storage_cmd_state = UX_DEVICE_CLASS_STORAGE_CMD_READ;
 
-    storage->ux_device_class_storage_transfer = transfer_request;
-    storage->ux_device_class_storage_device_length = allocation_length;
-    storage->ux_device_class_storage_data_length = allocation_length;
-    storage->ux_device_class_storage_data_count = 0;
-    UX_SLAVE_TRANSFER_STATE_RESET(storage->ux_device_class_storage_transfer);
+        storage->ux_device_class_storage_transfer = transfer_request;
+        storage->ux_device_class_storage_device_length = allocation_length;
+        storage->ux_device_class_storage_data_length = allocation_length;
+        storage->ux_device_class_storage_data_count = 0;
+        UX_SLAVE_TRANSFER_STATE_RESET(storage->ux_device_class_storage_transfer);
 #else
 
-    /* Send a data payload with the read_capacity response buffer.  */
-    _ux_device_stack_transfer_request(transfer_request, allocation_length,
-                                      allocation_length);
+        /* Send a data payload with the read_capacity response buffer.  */
+        _ux_device_stack_transfer_request(transfer_request, allocation_length, allocation_length);
 #endif
 
-  } else {
+    } else {
 
-    /* Error, stall.  */
+        /* Error, stall.  */
 #if !defined(UX_DEVICE_STANDALONE)
-    _ux_device_stack_endpoint_stall(endpoint_in);
+        _ux_device_stack_endpoint_stall(endpoint_in);
 #endif
-  }
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

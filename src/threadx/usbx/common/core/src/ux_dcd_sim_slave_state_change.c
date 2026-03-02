@@ -9,11 +9,10 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Slave Simulator Controller Driver                                   */
 /**                                                                       */
@@ -22,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_dcd_sim_slave.h"
 #include "ux_hcd_sim_host.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -52,20 +49,20 @@
 /*                                                                        */
 /*  OUTPUT                                                                */
 /*                                                                        */
-/*    Completion Status                                                   */ 
+/*    Completion Status                                                   */
 /*                                                                        */
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Slave Simulator Controller Driver                                   */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -77,31 +74,26 @@
 /*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_dcd_sim_slave_state_change(UX_DCD_SIM_SLAVE *dcd_sim_slave, ULONG state)
-{
+UINT _ux_dcd_sim_slave_state_change(UX_DCD_SIM_SLAVE *dcd_sim_slave, ULONG state) {
 
-UX_HCD              *hcd;
-
+    UX_HCD *hcd;
 
     UX_PARAMETER_NOT_USED(state);
 
-    if (state == UX_DEVICE_FORCE_DISCONNECT)
-    {
+    if (state == UX_DEVICE_FORCE_DISCONNECT) {
 
         /* Simulate port detach & attach on host side.  */
 
         /* Get HCD.  */
-        hcd = (UX_HCD *)dcd_sim_slave -> ux_dcd_sim_slave_hcd;
+        hcd = (UX_HCD *)dcd_sim_slave->ux_dcd_sim_slave_hcd;
 
         /* Something happened on this port. Signal it to the root hub thread.  */
-        if (hcd)
-        {
-            hcd -> ux_hcd_root_hub_signal[0] = 2;
-            _ux_host_semaphore_put(&_ux_system_host -> ux_system_host_enum_semaphore);
+        if (hcd) {
+            hcd->ux_hcd_root_hub_signal[0] = 2;
+            _ux_host_semaphore_put(&_ux_system_host->ux_system_host_enum_semaphore);
         }
     }
 
     /* Nothing to do in simulation mode.  */
-    return(UX_SUCCESS);         
+    return (UX_SUCCESS);
 }
-

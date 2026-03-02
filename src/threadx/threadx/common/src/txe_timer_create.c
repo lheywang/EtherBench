@@ -79,139 +79,136 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _txe_timer_create(TX_TIMER *timer_ptr, CHAR *name_ptr,
-                       VOID (*expiration_function)(ULONG id),
-                       ULONG expiration_input, ULONG initial_ticks,
-                       ULONG reschedule_ticks, UINT auto_activate,
+UINT _txe_timer_create(TX_TIMER *timer_ptr, CHAR *name_ptr, VOID (*expiration_function)(ULONG id),
+                       ULONG expiration_input, ULONG initial_ticks, ULONG reschedule_ticks, UINT auto_activate,
                        UINT timer_control_block_size) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  UINT status;
-  ULONG i;
-  TX_TIMER *next_timer;
+    UINT status;
+    ULONG i;
+    TX_TIMER *next_timer;
 #ifndef TX_TIMER_PROCESS_IN_ISR
-  TX_THREAD *thread_ptr;
+    TX_THREAD *thread_ptr;
 #endif
 
-  /* Default status to success.  */
-  status = TX_SUCCESS;
+    /* Default status to success.  */
+    status = TX_SUCCESS;
 
-  /* Check for a NULL timer pointer.  */
-  if (timer_ptr == TX_NULL) {
+    /* Check for a NULL timer pointer.  */
+    if (timer_ptr == TX_NULL) {
 
-    /* Timer pointer is invalid, return appropriate error code.  */
-    status = TX_TIMER_ERROR;
-  }
-
-  /* Now check for invalid control block size.  */
-  else if (timer_control_block_size != (sizeof(TX_TIMER))) {
-
-    /* Timer pointer is invalid, return appropriate error code.  */
-    status = TX_TIMER_ERROR;
-  } else {
-
-    /* Disable interrupts.  */
-    TX_DISABLE
-
-    /* Increment the preempt disable flag.  */
-    _tx_thread_preempt_disable++;
-
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Next see if it is already in the created list.  */
-    next_timer = _tx_timer_created_ptr;
-    for (i = ((ULONG)0); i < _tx_timer_created_count; i++) {
-
-      /* Determine if this timer matches the current timer in the list.  */
-      if (timer_ptr == next_timer) {
-
-        break;
-      } else {
-
-        /* Move to next timer.  */
-        next_timer = next_timer->tx_timer_created_next;
-      }
+        /* Timer pointer is invalid, return appropriate error code.  */
+        status = TX_TIMER_ERROR;
     }
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+    /* Now check for invalid control block size.  */
+    else if (timer_control_block_size != (sizeof(TX_TIMER))) {
 
-    /* Decrement the preempt disable flag.  */
-    _tx_thread_preempt_disable--;
-
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Check for preemption.  */
-    _tx_thread_system_preempt_check();
-
-    /* At this point, check to see if there is a duplicate timer.  */
-    if (timer_ptr == next_timer) {
-
-      /* Timer is already created, return appropriate error code.  */
-      status = TX_TIMER_ERROR;
-    }
-
-    /* Check for an illegal initial tick value.  */
-    else if (initial_ticks == ((ULONG)0)) {
-
-      /* Invalid initial tick value, return appropriate error code.  */
-      status = TX_TICK_ERROR;
+        /* Timer pointer is invalid, return appropriate error code.  */
+        status = TX_TIMER_ERROR;
     } else {
 
-      /* Check for an illegal activation.  */
-      if (auto_activate != TX_AUTO_ACTIVATE) {
+        /* Disable interrupts.  */
+        TX_DISABLE
 
-        /* And activation is not the other value.  */
-        if (auto_activate != TX_NO_ACTIVATE) {
+        /* Increment the preempt disable flag.  */
+        _tx_thread_preempt_disable++;
 
-          /* Invalid activation selected, return appropriate error code.  */
-          status = TX_ACTIVATE_ERROR;
+        /* Restore interrupts.  */
+        TX_RESTORE
+
+        /* Next see if it is already in the created list.  */
+        next_timer = _tx_timer_created_ptr;
+        for (i = ((ULONG)0); i < _tx_timer_created_count; i++) {
+
+            /* Determine if this timer matches the current timer in the list.  */
+            if (timer_ptr == next_timer) {
+
+                break;
+            } else {
+
+                /* Move to next timer.  */
+                next_timer = next_timer->tx_timer_created_next;
+            }
         }
-      }
-    }
-  }
 
-  /* Determine if everything is okay.  */
-  if (status == TX_SUCCESS) {
+        /* Disable interrupts.  */
+        TX_DISABLE
+
+        /* Decrement the preempt disable flag.  */
+        _tx_thread_preempt_disable--;
+
+        /* Restore interrupts.  */
+        TX_RESTORE
+
+        /* Check for preemption.  */
+        _tx_thread_system_preempt_check();
+
+        /* At this point, check to see if there is a duplicate timer.  */
+        if (timer_ptr == next_timer) {
+
+            /* Timer is already created, return appropriate error code.  */
+            status = TX_TIMER_ERROR;
+        }
+
+        /* Check for an illegal initial tick value.  */
+        else if (initial_ticks == ((ULONG)0)) {
+
+            /* Invalid initial tick value, return appropriate error code.  */
+            status = TX_TICK_ERROR;
+        } else {
+
+            /* Check for an illegal activation.  */
+            if (auto_activate != TX_AUTO_ACTIVATE) {
+
+                /* And activation is not the other value.  */
+                if (auto_activate != TX_NO_ACTIVATE) {
+
+                    /* Invalid activation selected, return appropriate error code.  */
+                    status = TX_ACTIVATE_ERROR;
+                }
+            }
+        }
+    }
+
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-    /* Pickup thread pointer.  */
-    TX_THREAD_GET_CURRENT(thread_ptr)
+        /* Pickup thread pointer.  */
+        TX_THREAD_GET_CURRENT(thread_ptr)
 
-    /* Check for invalid caller of this function.  First check for a calling
-     * thread.  */
-    if (thread_ptr == &_tx_timer_thread) {
+        /* Check for invalid caller of this function.  First check for a calling
+         * thread.  */
+        if (thread_ptr == &_tx_timer_thread) {
 
-      /* Invalid caller of this function, return appropriate error code.  */
-      status = TX_CALLER_ERROR;
-    }
+            /* Invalid caller of this function, return appropriate error code.  */
+            status = TX_CALLER_ERROR;
+        }
 #endif
 
-    /* Check for interrupt call.  */
-    if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
+        /* Check for interrupt call.  */
+        if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-      /* Now, make sure the call is from an interrupt and not initialization. */
-      if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS) {
+            /* Now, make sure the call is from an interrupt and not initialization. */
+            if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS) {
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status = TX_CALLER_ERROR;
-      }
+                /* Invalid caller of this function, return appropriate error code.  */
+                status = TX_CALLER_ERROR;
+            }
+        }
     }
-  }
 
-  /* Determine if everything is okay.  */
-  if (status == TX_SUCCESS) {
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
 
-    /* Call actual application timer create function.  */
-    status = _tx_timer_create(timer_ptr, name_ptr, expiration_function,
-                              expiration_input, initial_ticks, reschedule_ticks,
-                              auto_activate);
-  }
+        /* Call actual application timer create function.  */
+        status = _tx_timer_create(timer_ptr, name_ptr, expiration_function, expiration_input, initial_ticks,
+                                  reschedule_ticks, auto_activate);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

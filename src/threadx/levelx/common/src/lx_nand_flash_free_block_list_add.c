@@ -69,48 +69,45 @@
 /*  03-08-2023     Xiuwen Cai               Initial Version 6.2.1        */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_free_block_list_add(LX_NAND_FLASH *nand_flash,
-                                        ULONG block) {
+UINT _lx_nand_flash_free_block_list_add(LX_NAND_FLASH *nand_flash, ULONG block) {
 
-  ULONG insert_position;
-  INT search_position;
-  UCHAR new_block_erase_count;
+    ULONG insert_position;
+    INT search_position;
+    UCHAR new_block_erase_count;
 
-  /* Get insert position for the free block list.  */
-  insert_position = nand_flash->lx_nand_flash_free_block_list_tail;
+    /* Get insert position for the free block list.  */
+    insert_position = nand_flash->lx_nand_flash_free_block_list_tail;
 
-  /* Check if the list if full.  */
-  if (insert_position > nand_flash->lx_nand_flash_mapped_block_list_head) {
+    /* Check if the list if full.  */
+    if (insert_position > nand_flash->lx_nand_flash_mapped_block_list_head) {
 
-    /* Return an error.  */
-    return (LX_ERROR);
-  }
+        /* Return an error.  */
+        return (LX_ERROR);
+    }
 
-  /* Get the erase count.  */
-  new_block_erase_count = nand_flash->lx_nand_flash_erase_count_table[block];
+    /* Get the erase count.  */
+    new_block_erase_count = nand_flash->lx_nand_flash_erase_count_table[block];
 
-  /* Add one block to the free list.  */
-  nand_flash->lx_nand_flash_free_block_list_tail++;
+    /* Add one block to the free list.  */
+    nand_flash->lx_nand_flash_free_block_list_tail++;
 
-  /* Initialize the search pointer.  */
-  search_position = (INT)insert_position - 1;
+    /* Initialize the search pointer.  */
+    search_position = (INT)insert_position - 1;
 
-  /* Loop to search the insert position by block erase count.  */
-  while ((search_position >= 0) &&
-         (nand_flash->lx_nand_flash_erase_count_table
-              [nand_flash->lx_nand_flash_block_list[search_position]] <
-          new_block_erase_count)) {
+    /* Loop to search the insert position by block erase count.  */
+    while ((search_position >= 0) &&
+           (nand_flash->lx_nand_flash_erase_count_table[nand_flash->lx_nand_flash_block_list[search_position]] <
+            new_block_erase_count)) {
 
-    /* Move the item in the list.  */
-    nand_flash->lx_nand_flash_block_list[insert_position] =
-        nand_flash->lx_nand_flash_block_list[search_position];
-    search_position--;
-    insert_position--;
-  }
+        /* Move the item in the list.  */
+        nand_flash->lx_nand_flash_block_list[insert_position] = nand_flash->lx_nand_flash_block_list[search_position];
+        search_position--;
+        insert_position--;
+    }
 
-  /* Insert the new block to the list.  */
-  nand_flash->lx_nand_flash_block_list[insert_position] = (USHORT)block;
+    /* Insert the new block to the list.  */
+    nand_flash->lx_nand_flash_block_list[insert_position] = (USHORT)block;
 
-  /* Return successful completion.  */
-  return (LX_SUCCESS);
+    /* Return successful completion.  */
+    return (LX_SUCCESS);
 }

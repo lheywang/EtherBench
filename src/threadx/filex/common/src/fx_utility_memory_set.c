@@ -77,10 +77,10 @@
 /**************************************************************************/
 VOID _fx_utility_memory_set(UCHAR *dest_ptr, UCHAR value, ULONG size) {
 
-  /* Loop to set memory.  */
-  while (size--) {
+    /* Loop to set memory.  */
+    while (size--) {
 
-    /* Set byte.  */
-    *dest_ptr++ = value;
-  }
+        /* Set byte.  */
+        *dest_ptr++ = value;
+    }
 }

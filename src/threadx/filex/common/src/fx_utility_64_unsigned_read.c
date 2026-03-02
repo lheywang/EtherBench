@@ -69,16 +69,16 @@
 /**************************************************************************/
 ULONG64 _fx_utility_64_unsigned_read(UCHAR *source_ptr) {
 
-  ULONG64 value;
-  ULONG upper_portion;
-  ULONG lower_portion;
+    ULONG64 value;
+    ULONG upper_portion;
+    ULONG lower_portion;
 
-  lower_portion = _fx_utility_32_unsigned_read(source_ptr);
-  upper_portion = _fx_utility_32_unsigned_read(source_ptr + sizeof(ULONG));
+    lower_portion = _fx_utility_32_unsigned_read(source_ptr);
+    upper_portion = _fx_utility_32_unsigned_read(source_ptr + sizeof(ULONG));
 
-  value = ((ULONG64)upper_portion) << 32;
-  value |= (ULONG64)lower_portion;
+    value = ((ULONG64)upper_portion) << 32;
+    value |= (ULONG64)lower_portion;
 
-  /* Return 64-bit value to caller.  */
-  return (value);
+    /* Return 64-bit value to caller.  */
+    return (value);
 }

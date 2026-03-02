@@ -75,58 +75,54 @@
 /**************************************************************************/
 UINT _nx_packet_transmit_release(NX_PACKET *packet_ptr) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  UINT status;
+    UINT status;
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(
-      NX_TRACE_PACKET_TRANSMIT_RELEASE, packet_ptr,
-      packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next,
-      (packet_ptr->nx_packet_pool_owner)->nx_packet_pool_available, 0,
-      NX_TRACE_PACKET_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(
+        NX_TRACE_PACKET_TRANSMIT_RELEASE, packet_ptr, packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next,
+        (packet_ptr->nx_packet_pool_owner)->nx_packet_pool_available, 0, NX_TRACE_PACKET_EVENTS, 0, 0);
 
-  /* Disable interrupts temporarily.  */
-  TX_DISABLE
+    /* Disable interrupts temporarily.  */
+    TX_DISABLE
 
-  /* Add debug information. */
-  NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
+    /* Add debug information. */
+    NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
 
-  /* Determine if the packet is a queued TCP data packet.  Such packets cannot
-     be released immediately, since they may need to be resent.  */
-  /*lint -e{923} suppress cast of ULONG to pointer.  */
-  if ((packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next !=
-       ((NX_PACKET *)NX_PACKET_ALLOCATED)) &&
-      (packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next !=
-       ((NX_PACKET *)NX_PACKET_FREE))) {
-
-    /* Yes, this is indeed a TCP packet.  Just mark this with the
-       NX_DRIVER_TX_DONE value to let the TCP layer know it is no longer queued
-       up.  */
+    /* Determine if the packet is a queued TCP data packet.  Such packets cannot
+       be released immediately, since they may need to be resent.  */
     /*lint -e{923} suppress cast of ULONG to pointer.  */
-    packet_ptr->nx_packet_queue_next = (NX_PACKET *)NX_DRIVER_TX_DONE;
+    if ((packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next != ((NX_PACKET *)NX_PACKET_ALLOCATED)) &&
+        (packet_ptr->nx_packet_union_next.nx_packet_tcp_queue_next != ((NX_PACKET *)NX_PACKET_FREE))) {
 
-    /* Remove the IP header and adjust the length.  */
-    packet_ptr->nx_packet_prepend_ptr += packet_ptr->nx_packet_ip_header_length;
-    packet_ptr->nx_packet_length -= packet_ptr->nx_packet_ip_header_length;
+        /* Yes, this is indeed a TCP packet.  Just mark this with the
+           NX_DRIVER_TX_DONE value to let the TCP layer know it is no longer queued
+           up.  */
+        /*lint -e{923} suppress cast of ULONG to pointer.  */
+        packet_ptr->nx_packet_queue_next = (NX_PACKET *)NX_DRIVER_TX_DONE;
 
-    /* Reset the IP header length. */
-    packet_ptr->nx_packet_ip_header_length = 0;
+        /* Remove the IP header and adjust the length.  */
+        packet_ptr->nx_packet_prepend_ptr += packet_ptr->nx_packet_ip_header_length;
+        packet_ptr->nx_packet_length -= packet_ptr->nx_packet_ip_header_length;
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+        /* Reset the IP header length. */
+        packet_ptr->nx_packet_ip_header_length = 0;
 
-    /* Return success.  */
-    status = NX_SUCCESS;
-  } else {
+        /* Restore interrupts.  */
+        TX_RESTORE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+        /* Return success.  */
+        status = NX_SUCCESS;
+    } else {
 
-    /* Call the actual packet release function.  */
-    status = _nx_packet_release(packet_ptr);
-  }
+        /* Restore interrupts.  */
+        TX_RESTORE
 
-  /* Return completion status.  */
-  return (status);
+        /* Call the actual packet release function.  */
+        status = _nx_packet_release(packet_ptr);
+    }
+
+    /* Return completion status.  */
+    return (status);
 }

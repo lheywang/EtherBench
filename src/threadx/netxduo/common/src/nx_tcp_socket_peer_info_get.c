@@ -72,27 +72,26 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_tcp_socket_peer_info_get(NX_TCP_SOCKET *socket_ptr,
-                                  ULONG *peer_ip_address, ULONG *peer_port) {
+UINT _nx_tcp_socket_peer_info_get(NX_TCP_SOCKET *socket_ptr, ULONG *peer_ip_address, ULONG *peer_port) {
 #ifndef NX_DISABLE_IPV4
-  UINT status;
-  NXD_ADDRESS ip_address;
+    UINT status;
+    NXD_ADDRESS ip_address;
 
-  status = _nxd_tcp_socket_peer_info_get(socket_ptr, &ip_address, peer_port);
-  if (status == NX_SUCCESS) {
+    status = _nxd_tcp_socket_peer_info_get(socket_ptr, &ip_address, peer_port);
+    if (status == NX_SUCCESS) {
 
-    /*lint -e{644} suppress variable might not be initialized, since
-     * "ip_address" was initialized as long as status is NX_SUCCESS. */
-    *peer_ip_address = ip_address.nxd_ip_address.v4;
-  }
+        /*lint -e{644} suppress variable might not be initialized, since
+         * "ip_address" was initialized as long as status is NX_SUCCESS. */
+        *peer_ip_address = ip_address.nxd_ip_address.v4;
+    }
 
-  /* Return successful completion status.  */
-  return (status);
+    /* Return successful completion status.  */
+    return (status);
 #else
-  NX_PARAMETER_NOT_USED(socket_ptr);
-  NX_PARAMETER_NOT_USED(peer_ip_address);
-  NX_PARAMETER_NOT_USED(peer_port);
+    NX_PARAMETER_NOT_USED(socket_ptr);
+    NX_PARAMETER_NOT_USED(peer_ip_address);
+    NX_PARAMETER_NOT_USED(peer_port);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* NX_DISABLE_IPV4 */
 }

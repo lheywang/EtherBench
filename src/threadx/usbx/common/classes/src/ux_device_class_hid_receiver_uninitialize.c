@@ -20,13 +20,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_hid.h"
 #include "ux_device_stack.h"
-
 
 #if defined(UX_DEVICE_CLASS_HID_INTERRUPT_OUT_SUPPORT)
 /**************************************************************************/
@@ -71,19 +69,18 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-VOID _ux_device_class_hid_receiver_uninitialize(UX_DEVICE_CLASS_HID_RECEIVER *receiver)
-{
+VOID _ux_device_class_hid_receiver_uninitialize(UX_DEVICE_CLASS_HID_RECEIVER *receiver) {
 
 #if !defined(UX_DEVICE_STANDALONE)
 
     /* Delete receiver thread.  */
-    _ux_utility_thread_delete(&receiver -> ux_device_class_hid_receiver_thread);
+    _ux_utility_thread_delete(&receiver->ux_device_class_hid_receiver_thread);
 #endif
 
 #if (UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1) && defined(UX_DEVICE_CLASS_HID_ZERO_COPY)
 
     /* Free cache safe event memory.  */
-    _ux_utility_memory_free(receiver -> ux_device_class_hid_receiver_events -> ux_device_class_hid_received_event_data);
+    _ux_utility_memory_free(receiver->ux_device_class_hid_receiver_events->ux_device_class_hid_received_event_data);
 #endif
 
     /* Free receiver and events memory.  */

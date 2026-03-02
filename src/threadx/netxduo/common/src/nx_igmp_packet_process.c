@@ -81,206 +81,187 @@
 /**************************************************************************/
 VOID _nx_igmp_packet_process(NX_IP *ip_ptr, NX_PACKET *packet_ptr) {
 
-  UINT i;
-  ULONG update_time;
-  NX_IGMP_HEADER *header_ptr;
-  USHORT max_update_time;
-  ULONG checksum;
+    UINT i;
+    ULONG update_time;
+    NX_IGMP_HEADER *header_ptr;
+    USHORT max_update_time;
+    ULONG checksum;
 
-  /* Add debug information. */
-  NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
+    /* Add debug information. */
+    NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
 
-  /* Setup a pointer to the IGMP packet header.  */
-  /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
-   * necessary  */
-  header_ptr = (NX_IGMP_HEADER *)packet_ptr->nx_packet_prepend_ptr;
+    /* Setup a pointer to the IGMP packet header.  */
+    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+     * necessary  */
+    header_ptr = (NX_IGMP_HEADER *)packet_ptr->nx_packet_prepend_ptr;
 
 #ifdef NX_ENABLE_INTERFACE_CAPABILITY
-  if (!(packet_ptr->nx_packet_address.nx_packet_interface_ptr
-            ->nx_interface_capability_flag &
-        NX_INTERFACE_CAPABILITY_IGMP_RX_CHECKSUM))
+    if (!(packet_ptr->nx_packet_address.nx_packet_interface_ptr->nx_interface_capability_flag &
+          NX_INTERFACE_CAPABILITY_IGMP_RX_CHECKSUM))
 #endif /* FEATURE_LINK_CAPABILITY */
-  {
+    {
 
-    /* First verify the checksum is correct. */
-    checksum = _nx_ip_checksum_compute(packet_ptr, NX_IP_IGMP,
-                                       (UINT)packet_ptr->nx_packet_length,
-                                       NX_NULL, NX_NULL);
+        /* First verify the checksum is correct. */
+        checksum =
+            _nx_ip_checksum_compute(packet_ptr, NX_IP_IGMP, (UINT)packet_ptr->nx_packet_length, NX_NULL, NX_NULL);
 
-    checksum = ~checksum & NX_LOWER_16_MASK;
+        checksum = ~checksum & NX_LOWER_16_MASK;
 
-    /* Determine if the checksum is valid.  */
-    if (checksum) {
+        /* Determine if the checksum is valid.  */
+        if (checksum) {
 
-      /* It is not. By RFC requirements we should not accept this packet. */
+            /* It is not. By RFC requirements we should not accept this packet. */
 
 #ifndef NX_DISABLE_IGMP_INFO
-      /* Increment the IGMP invalid packet error.  */
-      ip_ptr->nx_ip_igmp_invalid_packets++;
+            /* Increment the IGMP invalid packet error.  */
+            ip_ptr->nx_ip_igmp_invalid_packets++;
 
-      /* Increment the IGMP checksum error count.  */
-      ip_ptr->nx_ip_igmp_checksum_errors++;
+            /* Increment the IGMP checksum error count.  */
+            ip_ptr->nx_ip_igmp_checksum_errors++;
 #endif /* NX_DISABLE_IGMP_INFO */
 
-      /* Toss this IGMP packet out.  */
-      _nx_packet_release(packet_ptr);
-      return;
+            /* Toss this IGMP packet out.  */
+            _nx_packet_release(packet_ptr);
+            return;
+        }
     }
-  }
 
-  /* Swap the IGMP headers to host byte order. */
-  NX_CHANGE_ULONG_ENDIAN(header_ptr->nx_igmp_header_word_0);
-  NX_CHANGE_ULONG_ENDIAN(header_ptr->nx_igmp_header_word_1);
+    /* Swap the IGMP headers to host byte order. */
+    NX_CHANGE_ULONG_ENDIAN(header_ptr->nx_igmp_header_word_0);
+    NX_CHANGE_ULONG_ENDIAN(header_ptr->nx_igmp_header_word_1);
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_INTERNAL_IGMP_RECEIVE, ip_ptr,
-                          *(((ULONG *)packet_ptr->nx_packet_prepend_ptr) - 2),
-                          packet_ptr, header_ptr->nx_igmp_header_word_0,
-                          NX_TRACE_INTERNAL_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_INTERNAL_IGMP_RECEIVE, ip_ptr, *(((ULONG *)packet_ptr->nx_packet_prepend_ptr) - 2),
+                            packet_ptr, header_ptr->nx_igmp_header_word_0, NX_TRACE_INTERNAL_EVENTS, 0, 0);
 
-  /* Determine the type of IGMP message received.  Note that an IGMPv1 host will
-     respond to an IGMPv2 general query but not process the maximum response
-     time field. */
-  if ((header_ptr->nx_igmp_header_word_0 & NX_IGMP_TYPE_MASK) ==
-      NX_IGMP_ROUTER_QUERY_TYPE) {
+    /* Determine the type of IGMP message received.  Note that an IGMPv1 host will
+       respond to an IGMPv2 general query but not process the maximum response
+       time field. */
+    if ((header_ptr->nx_igmp_header_word_0 & NX_IGMP_TYPE_MASK) == NX_IGMP_ROUTER_QUERY_TYPE) {
 
 #ifndef NX_DISABLE_IGMP_INFO
-    /* Increment the IGMP queries received count.  */
-    ip_ptr->nx_ip_igmp_queries_received++;
+        /* Increment the IGMP queries received count.  */
+        ip_ptr->nx_ip_igmp_queries_received++;
 #endif
 
-    /* Set the max response time recommended by RFC 1112 set by host in seconds.
-       In a IGMPv2 network, the router may set a different max time in its IGMP
-       membership queries. */
-    max_update_time = NX_IGMP_MAX_UPDATE_TIME;
+        /* Set the max response time recommended by RFC 1112 set by host in seconds.
+           In a IGMPv2 network, the router may set a different max time in its IGMP
+           membership queries. */
+        max_update_time = NX_IGMP_MAX_UPDATE_TIME;
 
 #ifndef NX_DISABLE_IGMPV2
 
-    /* Determine the IGMP version the sender (router) is using.  */
+        /* Determine the IGMP version the sender (router) is using.  */
 
-    /* Is the max response time non zero? */
+        /* Is the max response time non zero? */
 
-    if ((header_ptr->nx_igmp_header_word_0 & NX_IGMP_MAX_RESP_TIME_MASK) !=
-        NX_NULL) {
-      /* Yes, this must be an IGMPv2 router. */
-      ip_ptr->nx_ip_igmp_router_version = NX_IGMP_HOST_VERSION_2;
+        if ((header_ptr->nx_igmp_header_word_0 & NX_IGMP_MAX_RESP_TIME_MASK) != NX_NULL) {
+            /* Yes, this must be an IGMPv2 router. */
+            ip_ptr->nx_ip_igmp_router_version = NX_IGMP_HOST_VERSION_2;
 
-      /* Parse the max response time from the IGMP header. */
-      max_update_time = (USHORT)((header_ptr->nx_igmp_header_word_0 &
-                                  NX_IGMP_MAX_RESP_TIME_MASK) >>
-                                 16) &
-                        0x0000FF;
+            /* Parse the max response time from the IGMP header. */
+            max_update_time =
+                (USHORT)((header_ptr->nx_igmp_header_word_0 & NX_IGMP_MAX_RESP_TIME_MASK) >> 16) & 0x0000FF;
 
-      /* Convert from tenths of a second to seconds. */
-      max_update_time /= 10;
-    } else {
-      /* No; IGMPv1 requires setting this field to zero. */
-      ip_ptr->nx_ip_igmp_router_version = NX_IGMP_HOST_VERSION_1;
-    }
+            /* Convert from tenths of a second to seconds. */
+            max_update_time /= 10;
+        } else {
+            /* No; IGMPv1 requires setting this field to zero. */
+            ip_ptr->nx_ip_igmp_router_version = NX_IGMP_HOST_VERSION_1;
+        }
 
 #endif
 
-    /* Then generate a random update time initially in timer ticks for the
-     * delay. */
-    update_time = tx_time_get() & 0xF;
+        /* Then generate a random update time initially in timer ticks for the
+         * delay. */
+        update_time = tx_time_get() & 0xF;
 
-    /* Check we have a valid non zero update time that does not exceed the
-       maximum response time. */
-    if ((update_time > max_update_time) || (update_time == 0)) {
+        /* Check we have a valid non zero update time that does not exceed the
+           maximum response time. */
+        if ((update_time > max_update_time) || (update_time == 0)) {
 
-      /* If not, wrap the update time back to one second. */
-      update_time = 1;
+            /* If not, wrap the update time back to one second. */
+            update_time = 1;
+        }
+
+        /* Loop through the multicast join list and assign an arbitrary timeout to
+           respond between 1 and maximum response time for each group.  */
+        for (i = 0; i < NX_MAX_MULTICAST_GROUPS; i++) {
+
+            /* Is there a group address in this slot?  */
+            if (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list == NX_NULL) {
+
+                /* No, skip doing further processing. */
+                continue;
+            }
+
+            /* Does the group address in the header match our join list? */
+            if ((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list != header_ptr->nx_igmp_header_word_1) &&
+                /* or is this a general membership query? */
+                (header_ptr->nx_igmp_header_word_1 != NX_NULL)) {
+
+                /* No; so no need to update the timer, skip to the next group in the
+                 * host list. */
+                continue;
+            }
+
+            /* Is the current host group running timer less than the max delay? */
+            if (((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time < max_update_time) &&
+                 (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time != NX_NULL)) ||
+                (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time == NX_WAIT_FOREVER)) {
+
+                /* Yes; Let the current timer timeout. Skip to the next group. */
+                continue;
+            }
+
+            /* Set the timeout for this multicast group. */
+            ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time = update_time;
+
+            /* Then increment the update time for the next host group so the
+               update/expiration times are separated by one second. This avoids bursts
+               of IGMP reports to the server. */
+            update_time++;
+
+            /* Check after each multicast group that we have not exceeded the maximum
+             * response time. */
+            if (update_time > max_update_time) {
+
+                /* We have, so wrap the update time back to one. */
+                update_time = 1;
+            }
+        }
     }
-
-    /* Loop through the multicast join list and assign an arbitrary timeout to
-       respond between 1 and maximum response time for each group.  */
-    for (i = 0; i < NX_MAX_MULTICAST_GROUPS; i++) {
-
-      /* Is there a group address in this slot?  */
-      if (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list ==
-          NX_NULL) {
-
-        /* No, skip doing further processing. */
-        continue;
-      }
-
-      /* Does the group address in the header match our join list? */
-      if ((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list !=
-           header_ptr->nx_igmp_header_word_1) &&
-          /* or is this a general membership query? */
-          (header_ptr->nx_igmp_header_word_1 != NX_NULL)) {
-
-        /* No; so no need to update the timer, skip to the next group in the
-         * host list. */
-        continue;
-      }
-
-      /* Is the current host group running timer less than the max delay? */
-      if (((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time <
-            max_update_time) &&
-           (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time !=
-            NX_NULL)) ||
-          (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time ==
-           NX_WAIT_FOREVER)) {
-
-        /* Yes; Let the current timer timeout. Skip to the next group. */
-        continue;
-      }
-
-      /* Set the timeout for this multicast group. */
-      ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time =
-          update_time;
-
-      /* Then increment the update time for the next host group so the
-         update/expiration times are separated by one second. This avoids bursts
-         of IGMP reports to the server. */
-      update_time++;
-
-      /* Check after each multicast group that we have not exceeded the maximum
-       * response time. */
-      if (update_time > max_update_time) {
-
-        /* We have, so wrap the update time back to one. */
-        update_time = 1;
-      }
-    }
-  }
 #ifndef NX_DISABLE_IGMPV2
 
-  /* Is this another IGMPv1 host's join request? */
-  else if (((header_ptr->nx_igmp_header_word_0 & NX_IGMP_TYPE_MASK) ==
-            NX_IGMP_HOST_RESPONSE_TYPE) ||
-           /* ...Or an IGMPv2 host's join request? */
-           ((header_ptr->nx_igmp_header_word_0 & NX_IGMPV2_TYPE_MASK) ==
-            NX_IGMP_HOST_V2_JOIN_TYPE))
+    /* Is this another IGMPv1 host's join request? */
+    else if (((header_ptr->nx_igmp_header_word_0 & NX_IGMP_TYPE_MASK) == NX_IGMP_HOST_RESPONSE_TYPE) ||
+             /* ...Or an IGMPv2 host's join request? */
+             ((header_ptr->nx_igmp_header_word_0 & NX_IGMPV2_TYPE_MASK) == NX_IGMP_HOST_V2_JOIN_TYPE))
 #else
 
-  /* Is this another IGMPv1 host's join request? */
-  else if ((header_ptr->nx_igmp_header_word_0 & NX_IGMP_TYPE_MASK) ==
-           NX_IGMP_HOST_RESPONSE_TYPE)
+    /* Is this another IGMPv1 host's join request? */
+    else if ((header_ptr->nx_igmp_header_word_0 & NX_IGMP_TYPE_MASK) == NX_IGMP_HOST_RESPONSE_TYPE)
 #endif
-  {
+    {
 
-    /* Yes;  Loop through the host multicast join list to find a matching group.
-     */
-    for (i = 0; i < NX_MAX_MULTICAST_GROUPS; i++) {
+        /* Yes;  Loop through the host multicast join list to find a matching group.
+         */
+        for (i = 0; i < NX_MAX_MULTICAST_GROUPS; i++) {
 
-      /* Compare the group address in the header with the host list. Is this a
-       * match? */
-      if ((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list ==
-           header_ptr->nx_igmp_header_word_1) &&
-          (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time !=
-           NX_WAIT_FOREVER)) {
+            /* Compare the group address in the header with the host list. Is this a
+             * match? */
+            if ((ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list == header_ptr->nx_igmp_header_word_1) &&
+                (ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time != NX_WAIT_FOREVER)) {
 
-        /* Yes; Clear the update time. This will cancel sending a join
-           request for the same multicast group.  */
-        ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time = 0;
-        break;
-      }
+                /* Yes; Clear the update time. This will cancel sending a join
+                   request for the same multicast group.  */
+                ip_ptr->nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time = 0;
+                break;
+            }
+        }
     }
-  }
 
-  /* Release the IGMP packet.  */
-  _nx_packet_release(packet_ptr);
+    /* Release the IGMP packet.  */
+    _nx_packet_release(packet_ptr);
 }
 #endif /* !NX_DISABLE_IPV4  */

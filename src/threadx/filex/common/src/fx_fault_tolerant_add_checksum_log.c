@@ -73,81 +73,74 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_fault_tolerant_add_checksum_log(FX_MEDIA *media_ptr,
-                                         ULONG64 logical_sector, ULONG offset,
-                                         USHORT checksum) {
-  ULONG logs_remaining;
-  UCHAR *current_ptr;
-  ULONG size;
-  USHORT type;
-  ULONG log_len;
-  ULONG64 log_sector;
-  ULONG log_offset;
-  FX_FAULT_TOLERANT_DIR_LOG *dir_log;
+UINT _fx_fault_tolerant_add_checksum_log(FX_MEDIA *media_ptr, ULONG64 logical_sector, ULONG offset, USHORT checksum) {
+    ULONG logs_remaining;
+    UCHAR *current_ptr;
+    ULONG size;
+    USHORT type;
+    ULONG log_len;
+    ULONG64 log_sector;
+    ULONG log_offset;
+    FX_FAULT_TOLERANT_DIR_LOG *dir_log;
 
-  /* Get fault tolerant data. */
-  logs_remaining = media_ptr->fx_media_fault_tolerant_total_logs;
+    /* Get fault tolerant data. */
+    logs_remaining = media_ptr->fx_media_fault_tolerant_total_logs;
 
-  /* Get size of all logs. */
-  size = media_ptr->fx_media_fault_tolerant_file_size -
-         FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET;
+    /* Get size of all logs. */
+    size = media_ptr->fx_media_fault_tolerant_file_size - FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET;
 
-  /* Get the first log pointer. */
-  current_ptr = media_ptr->fx_media_fault_tolerant_memory_buffer +
-                FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET +
-                FX_FAULT_TOLERANT_LOG_CONTENT_HEADER_SIZE;
+    /* Get the first log pointer. */
+    current_ptr = media_ptr->fx_media_fault_tolerant_memory_buffer + FX_FAULT_TOLERANT_LOG_CONTENT_OFFSET +
+                  FX_FAULT_TOLERANT_LOG_CONTENT_HEADER_SIZE;
 
-  /* Loop throught all DIR logs. */
-  while (logs_remaining) {
+    /* Loop throught all DIR logs. */
+    while (logs_remaining) {
 
-    /* Check log type. */
-    type = (USHORT)_fx_utility_16_unsigned_read(current_ptr);
+        /* Check log type. */
+        type = (USHORT)_fx_utility_16_unsigned_read(current_ptr);
 
-    /* Get log length. */
-    log_len = _fx_utility_16_unsigned_read(current_ptr + 2);
+        /* Get log length. */
+        log_len = _fx_utility_16_unsigned_read(current_ptr + 2);
 
-    /* Validate the size value. */
-    if (log_len > size) {
+        /* Validate the size value. */
+        if (log_len > size) {
 
-      /* Log file is corrupted.  Nothing can be done.  Return.*/
-      return (FX_FILE_CORRUPT);
+            /* Log file is corrupted.  Nothing can be done.  Return.*/
+            return (FX_FILE_CORRUPT);
+        }
+        size -= log_len;
+
+        /* Check log type. */
+        if (type == FX_FAULT_TOLERANT_DIR_LOG_TYPE) {
+
+            /* Set the log pointer. */
+            dir_log = (FX_FAULT_TOLERANT_DIR_LOG *)current_ptr;
+
+            /* Get the sector of log. */
+            log_sector = _fx_utility_64_unsigned_read((UCHAR *)&dir_log->fx_fault_tolerant_dir_log_sector);
+
+            /* Get the offset of log. */
+            log_offset = _fx_utility_32_unsigned_read((UCHAR *)&dir_log->fx_fault_tolerant_dir_log_offset);
+
+            /* Is the checksum for this directory log? */
+            if ((log_sector == logical_sector) && (offset == log_offset + 2)) {
+
+                /* Yes. Update the checksum field. */
+                _fx_utility_16_unsigned_write(current_ptr + FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE + 2, checksum);
+
+                /* Return success. */
+                return (FX_SUCCESS);
+            }
+        }
+
+        /* Decrease the logs_remaining counter. */
+        logs_remaining--;
+
+        /* Move to start position of next log entry. */
+        current_ptr += log_len;
     }
-    size -= log_len;
 
-    /* Check log type. */
-    if (type == FX_FAULT_TOLERANT_DIR_LOG_TYPE) {
-
-      /* Set the log pointer. */
-      dir_log = (FX_FAULT_TOLERANT_DIR_LOG *)current_ptr;
-
-      /* Get the sector of log. */
-      log_sector = _fx_utility_64_unsigned_read(
-          (UCHAR *)&dir_log->fx_fault_tolerant_dir_log_sector);
-
-      /* Get the offset of log. */
-      log_offset = _fx_utility_32_unsigned_read(
-          (UCHAR *)&dir_log->fx_fault_tolerant_dir_log_offset);
-
-      /* Is the checksum for this directory log? */
-      if ((log_sector == logical_sector) && (offset == log_offset + 2)) {
-
-        /* Yes. Update the checksum field. */
-        _fx_utility_16_unsigned_write(
-            current_ptr + FX_FAULT_TOLERANT_DIR_LOG_ENTRY_SIZE + 2, checksum);
-
-        /* Return success. */
-        return (FX_SUCCESS);
-      }
-    }
-
-    /* Decrease the logs_remaining counter. */
-    logs_remaining--;
-
-    /* Move to start position of next log entry. */
-    current_ptr += log_len;
-  }
-
-  /* The directory is not found. Log file is corrupted. */
-  return (FX_FILE_CORRUPT);
+    /* The directory is not found. Log file is corrupted. */
+    return (FX_FILE_CORRUPT);
 }
 #endif /* FX_ENABLE_FAULT_TOLERANT && FX_ENABLE_EXFAT */

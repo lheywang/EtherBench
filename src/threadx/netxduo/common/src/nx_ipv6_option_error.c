@@ -76,66 +76,62 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_ipv6_option_error(NX_IP *ip_ptr, NX_PACKET *packet_ptr,
-                           UCHAR option_type, UINT offset) {
+UINT _nx_ipv6_option_error(NX_IP *ip_ptr, NX_PACKET *packet_ptr, UCHAR option_type, UINT offset) {
 
-  UINT rv = NX_SUCCESS;
+    UINT rv = NX_SUCCESS;
 
-  /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
-   * necessary  */
-  NX_IPV6_HEADER *ip_header_ptr =
-      (NX_IPV6_HEADER *)packet_ptr->nx_packet_ip_header;
+    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+     * necessary  */
+    NX_IPV6_HEADER *ip_header_ptr = (NX_IPV6_HEADER *)packet_ptr->nx_packet_ip_header;
 
-  /* Top 2 bits of the option type indicate how we shall process this option
-     in case of an error. */
-  switch (option_type >> 6) {
+    /* Top 2 bits of the option type indicate how we shall process this option
+       in case of an error. */
+    switch (option_type >> 6) {
 
-  case 3: /* Discard the packet and send ICMP Parameter Problem to unicast
-             address */
-    if ((ip_header_ptr->nx_ip_header_destination_ip[0] & (ULONG)0xFF000000) ==
-        (ULONG)0xFF000000) {
+    case 3: /* Discard the packet and send ICMP Parameter Problem to unicast
+               address */
+        if ((ip_header_ptr->nx_ip_header_destination_ip[0] & (ULONG)0xFF000000) == (ULONG)0xFF000000) {
 
-      /* If the destination address is a multicast address, we discard the
-       * packet. */
-      rv = NX_OPTION_HEADER_ERROR;
-      break;
-    }
-  /*
-     No need to break here:  execute the next two cases:
-     (1) transmit ICMP error message
-     (2) release the packet.
-   */
+            /* If the destination address is a multicast address, we discard the
+             * packet. */
+            rv = NX_OPTION_HEADER_ERROR;
+            break;
+        }
+    /*
+       No need to break here:  execute the next two cases:
+       (1) transmit ICMP error message
+       (2) release the packet.
+     */
 
-  /*lint -e{825} suppress fallthrough, since it is necessary.  */ /* fallthrough
-                                                                   */
-  case 2: /* Discard the packet and send ICMP Parameter Problem */
+    /*lint -e{825} suppress fallthrough, since it is necessary.  */ /* fallthrough
+                                                                     */
+    case 2: /* Discard the packet and send ICMP Parameter Problem */
 
 #ifndef NX_DISABLE_ICMPV6_ERROR_MESSAGE
 
-    NX_ICMPV6_SEND_PARAMETER_PROBLEM(ip_ptr, packet_ptr, 2,
-                                     (ULONG)(offset + sizeof(NX_IPV6_HEADER)));
+        NX_ICMPV6_SEND_PARAMETER_PROBLEM(ip_ptr, packet_ptr, 2, (ULONG)(offset + sizeof(NX_IPV6_HEADER)));
 #else
-    NX_PARAMETER_NOT_USED(ip_ptr);
-    NX_PARAMETER_NOT_USED(offset);
+        NX_PARAMETER_NOT_USED(ip_ptr);
+        NX_PARAMETER_NOT_USED(offset);
 #endif
 
-  /* No break here.  Execute the next statement to release the packet. */
+    /* No break here.  Execute the next statement to release the packet. */
 
-  /*lint -e{825} suppress fallthrough, since it is necessary.  */ /* fallthrough
-                                                                   */
-  case 1: /* Discard the packet */
+    /*lint -e{825} suppress fallthrough, since it is necessary.  */ /* fallthrough
+                                                                     */
+    case 1:                                                         /* Discard the packet */
 
-    /* Error status - Drop the packet */
-    rv = NX_OPTION_HEADER_ERROR;
-    break;
+        /* Error status - Drop the packet */
+        rv = NX_OPTION_HEADER_ERROR;
+        break;
 
-  case 0: /* Skip over this option and continue processing the rest of the
-             packet. */
-  default:
-    break;
-  }
+    case 0: /* Skip over this option and continue processing the rest of the
+               packet. */
+    default:
+        break;
+    }
 
-  return (rv);
+    return (rv);
 }
 
 #endif /*  FEATURE_NX_IPV6 */

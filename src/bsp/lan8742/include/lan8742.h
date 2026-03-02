@@ -380,18 +380,18 @@ typedef int32_t (*lan8742_WriteReg_Func)(uint32_t, uint32_t, uint32_t);
 typedef int32_t (*lan8742_GetTick_Func)(void);
 
 typedef struct {
-  lan8742_Init_Func Init;
-  lan8742_DeInit_Func DeInit;
-  lan8742_WriteReg_Func WriteReg;
-  lan8742_ReadReg_Func ReadReg;
-  lan8742_GetTick_Func GetTick;
+    lan8742_Init_Func Init;
+    lan8742_DeInit_Func DeInit;
+    lan8742_WriteReg_Func WriteReg;
+    lan8742_ReadReg_Func ReadReg;
+    lan8742_GetTick_Func GetTick;
 } lan8742_IOCtx_t;
 
 typedef struct {
-  uint32_t DevAddr;
-  uint32_t Is_Initialized;
-  lan8742_IOCtx_t IO;
-  void *pData;
+    uint32_t DevAddr;
+    uint32_t Is_Initialized;
+    lan8742_IOCtx_t IO;
+    void *pData;
 } lan8742_Object_t;
 /**
  * @}

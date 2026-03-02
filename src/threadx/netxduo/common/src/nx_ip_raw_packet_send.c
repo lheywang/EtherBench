@@ -75,55 +75,51 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_ip_raw_packet_send(NX_IP *ip_ptr, NX_PACKET *packet_ptr,
-                            ULONG destination_ip, ULONG type_of_service) {
+UINT _nx_ip_raw_packet_send(NX_IP *ip_ptr, NX_PACKET *packet_ptr, ULONG destination_ip, ULONG type_of_service) {
 
 #ifndef NX_DISABLE_IPV4
-  ULONG next_hop_address = NX_NULL;
+    ULONG next_hop_address = NX_NULL;
 
-  /* Add debug information. */
-  NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
+    /* Add debug information. */
+    NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_RAW_PACKET_SEND, ip_ptr, destination_ip,
-                          type_of_service, packet_ptr, NX_TRACE_IP_EVENTS, 0,
-                          0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_RAW_PACKET_SEND, ip_ptr, destination_ip, type_of_service, packet_ptr,
+                            NX_TRACE_IP_EVENTS, 0, 0);
 
-  /* Get mutex protection.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Get mutex protection.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Make sure a valid interface exists for the destination. */
-  if (_nx_ip_route_find(ip_ptr, destination_ip,
-                        &packet_ptr->nx_packet_address.nx_packet_interface_ptr,
-                        &next_hop_address) != NX_SUCCESS) {
+    /* Make sure a valid interface exists for the destination. */
+    if (_nx_ip_route_find(ip_ptr, destination_ip, &packet_ptr->nx_packet_address.nx_packet_interface_ptr,
+                          &next_hop_address) != NX_SUCCESS) {
 
-    /* Release protection. */
-    tx_mutex_put(&ip_ptr->nx_ip_protection);
+        /* Release protection. */
+        tx_mutex_put(&ip_ptr->nx_ip_protection);
 
-    /* There is not; return the error status. */
-    return (NX_IP_ADDRESS_ERROR);
-  } else {
+        /* There is not; return the error status. */
+        return (NX_IP_ADDRESS_ERROR);
+    } else {
 
-    /* Yes, a valid interface exists. Send the packet!  */
-    /*lint -e{644} suppress variable might not be initialized, since
-     * "next_hop_address" was initialized as long as return value is NX_SUCCESS.
-     */
-    _nx_ip_packet_send(ip_ptr, packet_ptr, destination_ip, type_of_service,
-                       NX_IP_TIME_TO_LIVE, NX_IP_RAW, NX_FRAGMENT_OKAY,
-                       next_hop_address);
-  }
+        /* Yes, a valid interface exists. Send the packet!  */
+        /*lint -e{644} suppress variable might not be initialized, since
+         * "next_hop_address" was initialized as long as return value is NX_SUCCESS.
+         */
+        _nx_ip_packet_send(ip_ptr, packet_ptr, destination_ip, type_of_service, NX_IP_TIME_TO_LIVE, NX_IP_RAW,
+                           NX_FRAGMENT_OKAY, next_hop_address);
+    }
 
-  /* Release mutex protection.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release mutex protection.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /* Return a successful status!  */
-  return (NX_SUCCESS);
+    /* Return a successful status!  */
+    return (NX_SUCCESS);
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(packet_ptr);
-  NX_PARAMETER_NOT_USED(destination_ip);
-  NX_PARAMETER_NOT_USED(type_of_service);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(packet_ptr);
+    NX_PARAMETER_NOT_USED(destination_ip);
+    NX_PARAMETER_NOT_USED(type_of_service);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

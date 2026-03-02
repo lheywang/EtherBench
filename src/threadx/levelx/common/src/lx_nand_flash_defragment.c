@@ -80,8 +80,8 @@
 /**************************************************************************/
 UINT _lx_nand_flash_defragment(LX_NAND_FLASH *nand_flash) {
 
-  LX_PARAMETER_NOT_USED(nand_flash);
+    LX_PARAMETER_NOT_USED(nand_flash);
 
-  /* Return not supported.  */
-  return (LX_NOT_SUPPORTED);
+    /* Return not supported.  */
+    return (LX_NOT_SUPPORTED);
 }

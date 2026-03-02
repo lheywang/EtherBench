@@ -72,20 +72,18 @@ extern VOID _tx_trace_object_register(UCHAR, VOID *, CHAR *, ULONG, ULONG);
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID _nx_trace_object_register(UCHAR object_type, VOID *object_ptr,
-                               CHAR *object_name, ULONG parameter_1,
+VOID _nx_trace_object_register(UCHAR object_type, VOID *object_ptr, CHAR *object_name, ULONG parameter_1,
                                ULONG parameter_2) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Call actual object register function.  */
-  _tx_trace_object_register(object_type, object_ptr, object_name, parameter_1,
-                            parameter_2);
+    /* Call actual object register function.  */
+    _tx_trace_object_register(object_type, object_ptr, object_name, parameter_1, parameter_2);
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 }
 #endif

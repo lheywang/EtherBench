@@ -9,17 +9,15 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /* Include necessary system files.  */
 
@@ -28,21 +26,20 @@
 #include "ux_api.h"
 #include "ux_host_stack.h"
 
-
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_class_interface_scan                 PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_class_interface_scan                 PORTABLE C      */
 /*                                                           6.1.4        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function will scan all default interfaces for a single         */ 
-/*    configuration and call the registered class with the                */ 
+/*                                                                        */
+/*    This function will scan all default interfaces for a single         */
+/*    configuration and call the registered class with the                */
 /*    Class/SubClass/Protocol of the interface.                           */
 /*                                                                        */
 /*    If the device has multiple configurations (like the Apple iPod),    */
@@ -52,34 +49,34 @@
 /*    class at the device level claims the entire device.                 */
 /*                                                                        */
 /*                                                                        */
-/*    For the interface, there is no reason to use the PID/VID has a      */ 
-/*    binding element as classes that trigger on PID/VID will be called   */ 
-/*    by the device descriptor scanning process.                          */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    device                                Device pointer                */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Result of operation                                                 */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*    For the interface, there is no reason to use the PID/VID has a      */
+/*    binding element as classes that trigger on PID/VID will be called   */
+/*    by the device descriptor scanning process.                          */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    device                                Device pointer                */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Result of operation                                                 */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_host_stack_class_call             Call class command            */
 /*    _ux_host_stack_device_configuration_select                          */
-/*                                          Select configuration          */ 
-/*    (ux_host_stack_class_call)            Call class from host stack    */ 
-/*    (ux_host_class_entry_function)        Class entry function          */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                          Select configuration          */
+/*    (ux_host_stack_class_call)            Call class from host stack    */
+/*    (ux_host_class_entry_function)        Class entry function          */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -89,23 +86,20 @@
 /*                                            resulting in version 6.1.4  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_host_stack_class_interface_scan(UX_DEVICE *device)
-{
+UINT _ux_host_stack_class_interface_scan(UX_DEVICE *device) {
 
-UX_CONFIGURATION        *configuration;
-UINT                    status;
-
+    UX_CONFIGURATION *configuration;
+    UINT status;
 
     /* Get the 1st and only configuration.  If the device has multiple
        configurations, we simply use the first one as default. */
-    configuration =  device -> ux_device_first_configuration;
+    configuration = device->ux_device_first_configuration;
     if (configuration == UX_NULL)
-        return(UX_ERROR);
+        return (UX_ERROR);
 
     /* Scan interfaces for this configuration.  */
     status = _ux_host_stack_configuration_interface_scan(configuration);
 
     /* Return operation result.  */
-    return(status);
+    return (status);
 }
-

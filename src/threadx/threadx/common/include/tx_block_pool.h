@@ -61,17 +61,17 @@
    initialization function.  */
 
 #ifndef TX_BLOCK_POOL_ENABLE_PERFORMANCE_INFO
-#define _tx_block_pool_initialize()                                            \
-  _tx_block_pool_created_ptr = TX_NULL;                                        \
-  _tx_block_pool_created_count = TX_EMPTY
+#define _tx_block_pool_initialize()                                                                                    \
+    _tx_block_pool_created_ptr = TX_NULL;                                                                              \
+    _tx_block_pool_created_count = TX_EMPTY
 #else
-#define _tx_block_pool_initialize()                                            \
-  _tx_block_pool_created_ptr = TX_NULL;                                        \
-  _tx_block_pool_created_count = TX_EMPTY;                                     \
-  _tx_block_pool_performance_allocate_count = ((ULONG)0);                      \
-  _tx_block_pool_performance_release_count = ((ULONG)0);                       \
-  _tx_block_pool_performance_suspension_count = ((ULONG)0);                    \
-  _tx_block_pool_performance_timeout_count = ((ULONG)0)
+#define _tx_block_pool_initialize()                                                                                    \
+    _tx_block_pool_created_ptr = TX_NULL;                                                                              \
+    _tx_block_pool_created_count = TX_EMPTY;                                                                           \
+    _tx_block_pool_performance_allocate_count = ((ULONG)0);                                                            \
+    _tx_block_pool_performance_release_count = ((ULONG)0);                                                             \
+    _tx_block_pool_performance_suspension_count = ((ULONG)0);                                                          \
+    _tx_block_pool_performance_timeout_count = ((ULONG)0)
 #endif
 #define TX_BLOCK_POOL_INIT
 #else

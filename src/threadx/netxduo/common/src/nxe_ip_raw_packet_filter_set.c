@@ -74,31 +74,29 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_ip_raw_packet_filter_set(NX_IP *ip_ptr,
-                                   UINT (*raw_packet_filter)(NX_IP *, ULONG,
-                                                             NX_PACKET *)) {
+UINT _nxe_ip_raw_packet_filter_set(NX_IP *ip_ptr, UINT (*raw_packet_filter)(NX_IP *, ULONG, NX_PACKET *)) {
 #ifdef NX_ENABLE_IP_RAW_PACKET_FILTER
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call actual IP raw packet enable function.  */
-  status = _nx_ip_raw_packet_filter_set(ip_ptr, raw_packet_filter);
+    /* Call actual IP raw packet enable function.  */
+    status = _nx_ip_raw_packet_filter_set(ip_ptr, raw_packet_filter);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 
 #else /* NX_ENABLE_IP_RAW_PACKET_FILTER */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(raw_packet_filter);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(raw_packet_filter);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* NX_ENABLE_IP_RAW_PACKET_FILTER */
 }

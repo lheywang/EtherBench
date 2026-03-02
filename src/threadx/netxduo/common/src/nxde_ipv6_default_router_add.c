@@ -81,45 +81,42 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxde_ipv6_default_router_add(NX_IP *ip_ptr, NXD_ADDRESS *router_addr,
-                                   ULONG router_lifetime, UINT interface_index)
+UINT _nxde_ipv6_default_router_add(NX_IP *ip_ptr, NXD_ADDRESS *router_addr, ULONG router_lifetime, UINT interface_index)
 
 {
 #ifdef FEATURE_NX_IPV6
-  /* Check for invalid input pointers. */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
-      (router_addr == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers. */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) || (router_addr == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for valid IP version. */
-  if (router_addr->nxd_ip_version != NX_IP_VERSION_V6) {
-    return (NX_INVALID_PARAMETERS);
-  }
+    /* Check for valid IP version. */
+    if (router_addr->nxd_ip_version != NX_IP_VERSION_V6) {
+        return (NX_INVALID_PARAMETERS);
+    }
 
-  if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
-    return (NX_INVALID_INTERFACE);
-  }
+    if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
+        return (NX_INVALID_INTERFACE);
+    }
 
-  /* Make sure the interface is valid. */
-  if (ip_ptr->nx_ip_interface[interface_index].nx_interface_valid != NX_TRUE) {
-    return (NX_INVALID_INTERFACE);
-  }
+    /* Make sure the interface is valid. */
+    if (ip_ptr->nx_ip_interface[interface_index].nx_interface_valid != NX_TRUE) {
+        return (NX_INVALID_INTERFACE);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call the actual service and return completion status. */
-  return (_nxd_ipv6_default_router_add(ip_ptr, router_addr, router_lifetime,
-                                       interface_index));
+    /* Call the actual service and return completion status. */
+    return (_nxd_ipv6_default_router_add(ip_ptr, router_addr, router_lifetime, interface_index));
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(router_addr);
-  NX_PARAMETER_NOT_USED(router_lifetime);
-  NX_PARAMETER_NOT_USED(interface_index);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(router_addr);
+    NX_PARAMETER_NOT_USED(router_lifetime);
+    NX_PARAMETER_NOT_USED(interface_index);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

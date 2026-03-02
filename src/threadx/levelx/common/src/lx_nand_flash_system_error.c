@@ -78,35 +78,33 @@
 /*                                            resulting in version 6.2.1 */
 /*                                                                        */
 /**************************************************************************/
-VOID _lx_nand_flash_system_error(LX_NAND_FLASH *nand_flash, UINT error_code,
-                                 ULONG block, ULONG page) {
+VOID _lx_nand_flash_system_error(LX_NAND_FLASH *nand_flash, UINT error_code, ULONG block, ULONG page) {
 
-  /* Increment the system error counter.  */
-  nand_flash->lx_nand_flash_diagnostic_system_errors++;
+    /* Increment the system error counter.  */
+    nand_flash->lx_nand_flash_diagnostic_system_errors++;
 
-  /* Save the most recent system error code.  */
-  nand_flash->lx_nand_flash_diagnostic_system_error = error_code;
+    /* Save the most recent system error code.  */
+    nand_flash->lx_nand_flash_diagnostic_system_error = error_code;
 
-  /* Determine if the system error is a NAND page corrected error.  */
-  if (error_code == LX_NAND_ERROR_CORRECTED) {
+    /* Determine if the system error is a NAND page corrected error.  */
+    if (error_code == LX_NAND_ERROR_CORRECTED) {
 
-    /* Yes, increment error correction information.  */
-    nand_flash->lx_nand_flash_page_corrections++;
+        /* Yes, increment error correction information.  */
+        nand_flash->lx_nand_flash_page_corrections++;
 
-    /* Remember the last block/page of corrected error.  */
-    nand_flash->lx_nand_flash_last_block_correction = block;
-    nand_flash->lx_nand_flash_last_page_correction = page;
-  }
+        /* Remember the last block/page of corrected error.  */
+        nand_flash->lx_nand_flash_last_block_correction = block;
+        nand_flash->lx_nand_flash_last_page_correction = page;
+    }
 
-  /* Determine if the driver has setup a system error handler.  */
-  if (nand_flash->lx_nand_flash_driver_system_error) {
+    /* Determine if the driver has setup a system error handler.  */
+    if (nand_flash->lx_nand_flash_driver_system_error) {
 
-    /* Yes, call the driver's system error handler.  */
+        /* Yes, call the driver's system error handler.  */
 #ifdef LX_NAND_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-    (nand_flash->lx_nand_flash_driver_system_error)(nand_flash, error_code,
-                                                    block, page);
+        (nand_flash->lx_nand_flash_driver_system_error)(nand_flash, error_code, block, page);
 #else
-    (nand_flash->lx_nand_flash_driver_system_error)(error_code, block, page);
+        (nand_flash->lx_nand_flash_driver_system_error)(error_code, block, page);
 #endif
-  }
+    }
 }

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -20,14 +19,12 @@
 /**************************************************************************/
 /**************************************************************************/
 
-
 /* Include necessary system files.  */
 
 #define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -83,69 +80,65 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_host_stack_hcd_register(UCHAR *hcd_name,
-                                    UINT (*hcd_init_function)(struct UX_HCD_STRUCT *), ULONG hcd_param1, ULONG hcd_param2)
-{
+UINT _ux_host_stack_hcd_register(UCHAR *hcd_name, UINT (*hcd_init_function)(struct UX_HCD_STRUCT *), ULONG hcd_param1,
+                                 ULONG hcd_param2) {
 
-UX_HCD      *hcd;
-UINT        status;
+    UX_HCD *hcd;
+    UINT status;
 #if !defined(UX_NAME_REFERENCED_BY_POINTER)
-UINT        hcd_name_length =  0;
+    UINT hcd_name_length = 0;
 #endif
 #if UX_MAX_HCD > 1
-ULONG       hcd_index;
+    ULONG hcd_index;
 #endif
 
-
-
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_HCD_REGISTER, hcd_name, hcd_param1, hcd_param2, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_HCD_REGISTER, hcd_name, hcd_param1, hcd_param2, 0,
+                            UX_TRACE_HOST_STACK_EVENTS, 0, 0)
 
 #if !defined(UX_NAME_REFERENCED_BY_POINTER)
     /* Get the length of the class name (exclude null-terminator).  */
-    status =  _ux_utility_string_length_check(hcd_name, &hcd_name_length, UX_MAX_HCD_NAME_LENGTH);
+    status = _ux_utility_string_length_check(hcd_name, &hcd_name_length, UX_MAX_HCD_NAME_LENGTH);
     if (status)
-        return(status);
+        return (status);
 #endif
 
     /* Get HCD.  */
-    hcd =  _ux_system_host -> ux_system_host_hcd_array;
+    hcd = _ux_system_host->ux_system_host_hcd_array;
 
 #if UX_MAX_HCD > 1
     /* We need to parse the controller driver table to find an empty spot.  */
-    for(hcd_index = 0; hcd_index < _ux_system_host -> ux_system_host_max_hcd; hcd_index++)
-    {
+    for (hcd_index = 0; hcd_index < _ux_system_host->ux_system_host_max_hcd; hcd_index++) {
 #endif
 
         /* Is this slot available?  */
-        if(hcd -> ux_hcd_status == UX_UNUSED)
-        {
+        if (hcd->ux_hcd_status == UX_UNUSED) {
 
             /* Yes, setup the new HCD entry.  */
 
 #if defined(UX_NAME_REFERENCED_BY_POINTER)
-            hcd -> ux_hcd_name = (const UCHAR *)hcd_name;
+            hcd->ux_hcd_name = (const UCHAR *)hcd_name;
 #else
 
-            /* Initialize the array of the new controller with its name (include null-terminator).  */
-            _ux_utility_memory_copy(hcd -> ux_hcd_name, hcd_name, hcd_name_length + 1); /* Use case of memcpy is verified. */
+        /* Initialize the array of the new controller with its name (include null-terminator).  */
+        _ux_utility_memory_copy(hcd->ux_hcd_name, hcd_name, hcd_name_length + 1); /* Use case of memcpy is verified. */
 #endif
 
             /* Store the hardware resources of the controller */
-            hcd -> ux_hcd_io =   hcd_param1;
-            hcd -> ux_hcd_irq =  hcd_param2;
+            hcd->ux_hcd_io = hcd_param1;
+            hcd->ux_hcd_irq = hcd_param2;
 
             /* This controller is now used */
-            hcd -> ux_hcd_status =  UX_USED;
+            hcd->ux_hcd_status = UX_USED;
 
             /* And we have one new controller registered.  */
-            _ux_system_host -> ux_system_host_registered_hcd++;
+            _ux_system_host->ux_system_host_registered_hcd++;
 
             /* We are now calling the HCD driver initialization.  */
-            status =  hcd_init_function(hcd);
+            status = hcd_init_function(hcd);
 
             /* Return the completion status to the caller.  */
-            return(status);
+            return (status);
         }
 #if UX_MAX_HCD > 1
         /* Try the next HCD structure */
@@ -154,9 +147,8 @@ ULONG       hcd_index;
 #endif
 
     /* We have exhausted the array of the HCDs, return an error.  */
-    return(UX_MEMORY_INSUFFICIENT);
+    return (UX_MEMORY_INSUFFICIENT);
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -196,14 +188,13 @@ ULONG       hcd_index;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT  _uxe_host_stack_hcd_register(UCHAR *hcd_name,
-                                    UINT (*hcd_init_function)(struct UX_HCD_STRUCT *), ULONG hcd_param1, ULONG hcd_param2)
-{
+UINT _uxe_host_stack_hcd_register(UCHAR *hcd_name, UINT (*hcd_init_function)(struct UX_HCD_STRUCT *), ULONG hcd_param1,
+                                  ULONG hcd_param2) {
 
     /* Sanity check.  */
     if ((hcd_name == UX_NULL) || (hcd_init_function == UX_NULL))
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Invoke HCD register function.  */
-    return(_ux_host_stack_hcd_register(hcd_name, hcd_init_function, hcd_param1, hcd_param2));
+    return (_ux_host_stack_hcd_register(hcd_name, hcd_init_function, hcd_param1, hcd_param2));
 }

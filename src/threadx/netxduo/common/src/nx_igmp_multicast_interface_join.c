@@ -68,17 +68,15 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_igmp_multicast_interface_join(NX_IP *ip_ptr, ULONG group_address,
-                                       UINT interface_index) {
+UINT _nx_igmp_multicast_interface_join(NX_IP *ip_ptr, ULONG group_address, UINT interface_index) {
 
 #ifndef NX_DISABLE_IPV4
-  return (_nx_igmp_multicast_interface_join_internal(ip_ptr, group_address,
-                                                     interface_index, 1));
+    return (_nx_igmp_multicast_interface_join_internal(ip_ptr, group_address, interface_index, 1));
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(group_address);
-  NX_PARAMETER_NOT_USED(interface_index);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(group_address);
+    NX_PARAMETER_NOT_USED(interface_index);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

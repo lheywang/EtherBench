@@ -72,36 +72,35 @@
 /**************************************************************************/
 UINT _nx_tcp_client_socket_port_get(NX_TCP_SOCKET *socket_ptr, UINT *port_ptr) {
 
-  NX_IP *ip_ptr;
+    NX_IP *ip_ptr;
 
-  /* Setup IP pointer.  */
-  ip_ptr = socket_ptr->nx_tcp_socket_ip_ptr;
+    /* Setup IP pointer.  */
+    ip_ptr = socket_ptr->nx_tcp_socket_ip_ptr;
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_TCP_CLIENT_SOCKET_PORT_GET, ip_ptr,
-                          socket_ptr, socket_ptr->nx_tcp_socket_port, 0,
-                          NX_TRACE_TCP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_TCP_CLIENT_SOCKET_PORT_GET, ip_ptr, socket_ptr, socket_ptr->nx_tcp_socket_port, 0,
+                            NX_TRACE_TCP_EVENTS, 0, 0);
 
-  /* Obtain the IP mutex so we can examine the bound port.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Obtain the IP mutex so we can examine the bound port.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Determine if the socket has already been bound to port or if a socket bind
-     is already pending from another thread.  */
-  if (!socket_ptr->nx_tcp_socket_bound_next) {
+    /* Determine if the socket has already been bound to port or if a socket bind
+       is already pending from another thread.  */
+    if (!socket_ptr->nx_tcp_socket_bound_next) {
+
+        /* Release protection.  */
+        tx_mutex_put(&(ip_ptr->nx_ip_protection));
+
+        /* Return a not bound error code.  */
+        return (NX_NOT_BOUND);
+    }
+
+    /* Return the port number from the socket.  */
+    *port_ptr = socket_ptr->nx_tcp_socket_port;
 
     /* Release protection.  */
     tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    /* Return a not bound error code.  */
-    return (NX_NOT_BOUND);
-  }
-
-  /* Return the port number from the socket.  */
-  *port_ptr = socket_ptr->nx_tcp_socket_port;
-
-  /* Release protection.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
-
-  /* Return successful completion status.  */
-  return (NX_SUCCESS);
+    /* Return successful completion status.  */
+    return (NX_SUCCESS);
 }

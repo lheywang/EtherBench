@@ -67,37 +67,37 @@
 /**************************************************************************/
 VOID _nx_tcp_queue_process(NX_IP *ip_ptr) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  NX_PACKET *queue_head;
-  NX_PACKET *packet_ptr;
+    NX_PACKET *queue_head;
+    NX_PACKET *packet_ptr;
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Remove the TCP message queue from the IP structure.  */
-  queue_head = ip_ptr->nx_ip_tcp_queue_head;
-  ip_ptr->nx_ip_tcp_queue_head = NX_NULL;
-  ip_ptr->nx_ip_tcp_queue_tail = NX_NULL;
-  ip_ptr->nx_ip_tcp_received_packet_count = 0;
+    /* Remove the TCP message queue from the IP structure.  */
+    queue_head = ip_ptr->nx_ip_tcp_queue_head;
+    ip_ptr->nx_ip_tcp_queue_head = NX_NULL;
+    ip_ptr->nx_ip_tcp_queue_tail = NX_NULL;
+    ip_ptr->nx_ip_tcp_received_packet_count = 0;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Walk through the entire TCP message queue and process packets
-     one by one.  */
-  while (queue_head) {
+    /* Walk through the entire TCP message queue and process packets
+       one by one.  */
+    while (queue_head) {
 
-    /* Pickup the first queue TCP message and remove it from the
-       TCP queue.  */
-    packet_ptr = queue_head;
-    queue_head = queue_head->nx_packet_queue_next;
-    packet_ptr->nx_packet_queue_next = NX_NULL;
+        /* Pickup the first queue TCP message and remove it from the
+           TCP queue.  */
+        packet_ptr = queue_head;
+        queue_head = queue_head->nx_packet_queue_next;
+        packet_ptr->nx_packet_queue_next = NX_NULL;
 
-    /* Add debug information. */
-    NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
+        /* Add debug information. */
+        NX_PACKET_DEBUG(__FILE__, __LINE__, packet_ptr);
 
-    /* Process the packet.  */
-    _nx_tcp_packet_process(ip_ptr, packet_ptr);
-  }
+        /* Process the packet.  */
+        _nx_tcp_packet_process(ip_ptr, packet_ptr);
+    }
 }

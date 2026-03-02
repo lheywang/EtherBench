@@ -78,8 +78,7 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_tcp_socket_send(NX_TCP_SOCKET *socket_ptr, NX_PACKET *packet_ptr,
-                         ULONG wait_option) {
+UINT _nx_tcp_socket_send(NX_TCP_SOCKET *socket_ptr, NX_PACKET *packet_ptr, ULONG wait_option) {
 
-  return (_nx_tcp_socket_send_internal(socket_ptr, packet_ptr, wait_option));
+    return (_nx_tcp_socket_send_internal(socket_ptr, packet_ptr, wait_option));
 }

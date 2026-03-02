@@ -72,32 +72,32 @@
 UINT _nx_ip_gateway_address_get(NX_IP *ip_ptr, ULONG *ip_address) {
 
 #ifndef NX_DISABLE_IPV4
-  UINT status;
+    UINT status;
 
-  /* Initialize the return value to be NX_NOT_FOUND.  If the gateway address
-     is set, the return value changes to NX_SUCCESS. */
-  status = NX_NOT_FOUND;
+    /* Initialize the return value to be NX_NOT_FOUND.  If the gateway address
+       is set, the return value changes to NX_SUCCESS. */
+    status = NX_NOT_FOUND;
 
-  /* Obtain the IP internal mutex to get the Gateway IP address.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Obtain the IP internal mutex to get the Gateway IP address.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  if (ip_ptr->nx_ip_gateway_address) {
+    if (ip_ptr->nx_ip_gateway_address) {
 
-    /* Setup the Gateway IP address.  */
-    *ip_address = ip_ptr->nx_ip_gateway_address;
+        /* Setup the Gateway IP address.  */
+        *ip_address = ip_ptr->nx_ip_gateway_address;
 
-    status = NX_SUCCESS;
-  }
+        status = NX_SUCCESS;
+    }
 
-  /* Release the protection mutex.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release the protection mutex.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(ip_address);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_address);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

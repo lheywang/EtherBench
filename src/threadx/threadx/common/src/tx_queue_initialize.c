@@ -111,19 +111,19 @@ VOID _tx_queue_initialize(VOID) {
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-  /* Initialize the head pointer of the created queue list and the
-     number of queues created.  */
-  _tx_queue_created_ptr = TX_NULL;
-  _tx_queue_created_count = TX_EMPTY;
+    /* Initialize the head pointer of the created queue list and the
+       number of queues created.  */
+    _tx_queue_created_ptr = TX_NULL;
+    _tx_queue_created_count = TX_EMPTY;
 
 #ifdef TX_QUEUE_ENABLE_PERFORMANCE_INFO
 
-  /* Initialize the queue performance counters.  */
-  _tx_queue_performance_messages_sent_count = ((ULONG)0);
-  _tx_queue_performance__messages_received_count = ((ULONG)0);
-  _tx_queue_performance_empty_suspension_count = ((ULONG)0);
-  _tx_queue_performance_full_suspension_count = ((ULONG)0);
-  _tx_queue_performance_timeout_count = ((ULONG)0);
+    /* Initialize the queue performance counters.  */
+    _tx_queue_performance_messages_sent_count = ((ULONG)0);
+    _tx_queue_performance__messages_received_count = ((ULONG)0);
+    _tx_queue_performance_empty_suspension_count = ((ULONG)0);
+    _tx_queue_performance_full_suspension_count = ((ULONG)0);
+    _tx_queue_performance_timeout_count = ((ULONG)0);
 #endif
 #endif
 }

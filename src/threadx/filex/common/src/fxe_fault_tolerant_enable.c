@@ -71,23 +71,22 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_fault_tolerant_enable(FX_MEDIA *media_ptr, VOID *memory_buffer,
-                                UINT memory_size) {
+UINT _fxe_fault_tolerant_enable(FX_MEDIA *media_ptr, VOID *memory_buffer, UINT memory_size) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null media pointer or buffer pointer.  */
-  if ((media_ptr == FX_NULL) || (memory_buffer == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null media pointer or buffer pointer.  */
+    if ((media_ptr == FX_NULL) || (memory_buffer == FX_NULL)) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual fault tolerant enable service.  */
-  status = _fx_fault_tolerant_enable(media_ptr, memory_buffer, memory_size);
+    /* Call actual fault tolerant enable service.  */
+    status = _fx_fault_tolerant_enable(media_ptr, memory_buffer, memory_size);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }
 #endif /* FX_ENABLE_FAULT_TOLERANT */

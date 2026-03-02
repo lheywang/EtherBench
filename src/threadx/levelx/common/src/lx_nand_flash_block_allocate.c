@@ -71,20 +71,19 @@
 /**************************************************************************/
 UINT _lx_nand_flash_block_allocate(LX_NAND_FLASH *nand_flash, ULONG *block) {
 
-  /* Check if the free block list is empty.  */
-  if (nand_flash->lx_nand_flash_free_block_list_tail == 0) {
+    /* Check if the free block list is empty.  */
+    if (nand_flash->lx_nand_flash_free_block_list_tail == 0) {
 
-    /* Empty list, return error.  */
-    return (LX_NO_BLOCKS);
-  }
+        /* Empty list, return error.  */
+        return (LX_NO_BLOCKS);
+    }
 
-  /* Remove one block from the list.  */
-  nand_flash->lx_nand_flash_free_block_list_tail--;
+    /* Remove one block from the list.  */
+    nand_flash->lx_nand_flash_free_block_list_tail--;
 
-  /* Return the block number.  */
-  *block = nand_flash->lx_nand_flash_block_list
-               [nand_flash->lx_nand_flash_free_block_list_tail];
+    /* Return the block number.  */
+    *block = nand_flash->lx_nand_flash_block_list[nand_flash->lx_nand_flash_free_block_list_tail];
 
-  /* Return successful completion.  */
-  return (LX_SUCCESS);
+    /* Return successful completion.  */
+    return (LX_SUCCESS);
 }

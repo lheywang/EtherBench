@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_audio.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -76,15 +74,14 @@
 /*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
-UINT    _ux_device_class_audio_stream_get(UX_DEVICE_CLASS_AUDIO *audio,
-        ULONG stream_index, UX_DEVICE_CLASS_AUDIO_STREAM **stream)
-{
+UINT _ux_device_class_audio_stream_get(UX_DEVICE_CLASS_AUDIO *audio, ULONG stream_index,
+                                       UX_DEVICE_CLASS_AUDIO_STREAM **stream) {
 
     /* Store the stream instance found.  */
-    *stream = audio -> ux_device_class_audio_streams + stream_index;
+    *stream = audio->ux_device_class_audio_streams + stream_index;
 
     /* Return completion status.  */
-    return(UX_SUCCESS);
+    return (UX_SUCCESS);
 }
 
 /**************************************************************************/
@@ -128,22 +125,21 @@ UINT    _ux_device_class_audio_stream_get(UX_DEVICE_CLASS_AUDIO *audio,
 /*  03-08-2023     Chaoqiong Xiao           Initial Version 6.2.1         */
 /*                                                                        */
 /**************************************************************************/
-UINT    _uxe_device_class_audio_stream_get(UX_DEVICE_CLASS_AUDIO *audio,
-        ULONG stream_index, UX_DEVICE_CLASS_AUDIO_STREAM **stream)
-{
+UINT _uxe_device_class_audio_stream_get(UX_DEVICE_CLASS_AUDIO *audio, ULONG stream_index,
+                                        UX_DEVICE_CLASS_AUDIO_STREAM **stream) {
 
     /* Sanity check.  */
     if (audio == UX_NULL)
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Index validation.  */
-    if (stream_index >= audio -> ux_device_class_audio_streams_nb)
-        return(UX_INVALID_PARAMETER);
+    if (stream_index >= audio->ux_device_class_audio_streams_nb)
+        return (UX_INVALID_PARAMETER);
 
     /* Store the stream instance found.  */
     if (stream == UX_NULL)
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Get audio stream instance.  */
-    return(_ux_device_class_audio_stream_get(audio, stream_index, stream));
+    return (_ux_device_class_audio_stream_get(audio, stream_index, stream));
 }

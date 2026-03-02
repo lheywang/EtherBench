@@ -70,37 +70,35 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_tcp_socket_timed_wait_callback(
-    NX_TCP_SOCKET *socket_ptr,
-    VOID (*tcp_timed_wait_callback)(NX_TCP_SOCKET *socket_ptr)) {
+UINT _nx_tcp_socket_timed_wait_callback(NX_TCP_SOCKET *socket_ptr,
+                                        VOID (*tcp_timed_wait_callback)(NX_TCP_SOCKET *socket_ptr)) {
 #ifndef NX_DISABLE_EXTENDED_NOTIFY_SUPPORT
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Get mutex protection.  */
-  tx_mutex_get(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection),
-               TX_WAIT_FOREVER);
+    /* Get mutex protection.  */
+    tx_mutex_get(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Setup the establish notify function pointer.  */
-  socket_ptr->nx_tcp_timed_wait_callback = tcp_timed_wait_callback;
+    /* Setup the establish notify function pointer.  */
+    socket_ptr->nx_tcp_timed_wait_callback = tcp_timed_wait_callback;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Release protection.  */
-  tx_mutex_put(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection));
+    /* Release protection.  */
+    tx_mutex_put(&(socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_protection));
 
-  /* Return successful completion.  */
-  return (NX_SUCCESS);
+    /* Return successful completion.  */
+    return (NX_SUCCESS);
 
 #else /* !NX_DISABLE_EXTENDED_NOTIFY_SUPPORT */
-  NX_PARAMETER_NOT_USED(socket_ptr);
-  NX_PARAMETER_NOT_USED(tcp_timed_wait_callback);
+    NX_PARAMETER_NOT_USED(socket_ptr);
+    NX_PARAMETER_NOT_USED(tcp_timed_wait_callback);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* NX_DISABLE_EXTENDED_NOTIFY_SUPPORT */
 }

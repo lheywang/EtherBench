@@ -62,17 +62,17 @@
    function.  */
 
 #ifndef TX_EVENT_FLAGS_ENABLE_PERFORMANCE_INFO
-#define _tx_event_flags_initialize()                                           \
-  _tx_event_flags_created_ptr = TX_NULL;                                       \
-  _tx_event_flags_created_count = TX_EMPTY
+#define _tx_event_flags_initialize()                                                                                   \
+    _tx_event_flags_created_ptr = TX_NULL;                                                                             \
+    _tx_event_flags_created_count = TX_EMPTY
 #else
-#define _tx_event_flags_initialize()                                           \
-  _tx_event_flags_created_ptr = TX_NULL;                                       \
-  _tx_event_flags_created_count = TX_EMPTY;                                    \
-  _tx_event_flags_performance_set_count = ((ULONG)0);                          \
-  _tx_event_flags_performance_get_count = ((ULONG)0);                          \
-  _tx_event_flags_performance_suspension_count = ((ULONG)0);                   \
-  _tx_event_flags_performance_timeout_count = ((ULONG)0)
+#define _tx_event_flags_initialize()                                                                                   \
+    _tx_event_flags_created_ptr = TX_NULL;                                                                             \
+    _tx_event_flags_created_count = TX_EMPTY;                                                                          \
+    _tx_event_flags_performance_set_count = ((ULONG)0);                                                                \
+    _tx_event_flags_performance_get_count = ((ULONG)0);                                                                \
+    _tx_event_flags_performance_suspension_count = ((ULONG)0);                                                         \
+    _tx_event_flags_performance_timeout_count = ((ULONG)0)
 #endif
 #define TX_EVENT_FLAGS_INIT
 #else

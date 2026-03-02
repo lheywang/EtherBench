@@ -105,18 +105,18 @@ VOID _tx_block_pool_initialize(VOID) {
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-  /* Initialize the head pointer of the created block pools list and the
-     number of block pools created.  */
-  _tx_block_pool_created_ptr = TX_NULL;
-  _tx_block_pool_created_count = TX_EMPTY;
+    /* Initialize the head pointer of the created block pools list and the
+       number of block pools created.  */
+    _tx_block_pool_created_ptr = TX_NULL;
+    _tx_block_pool_created_count = TX_EMPTY;
 
 #ifdef TX_BLOCK_POOL_ENABLE_PERFORMANCE_INFO
 
-  /* Initialize block pool performance counters.  */
-  _tx_block_pool_performance_allocate_count = ((ULONG)0);
-  _tx_block_pool_performance_release_count = ((ULONG)0);
-  _tx_block_pool_performance_suspension_count = ((ULONG)0);
-  _tx_block_pool_performance_timeout_count = ((ULONG)0);
+    /* Initialize block pool performance counters.  */
+    _tx_block_pool_performance_allocate_count = ((ULONG)0);
+    _tx_block_pool_performance_release_count = ((ULONG)0);
+    _tx_block_pool_performance_suspension_count = ((ULONG)0);
+    _tx_block_pool_performance_timeout_count = ((ULONG)0);
 #endif
 #endif
 }

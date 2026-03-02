@@ -50,8 +50,7 @@
 TX_THREAD fx_app_thread;
 
 /* Buffer for FileX FX_MEDIA sector cache. */
-ALIGN_32BYTES(uint32_t fx_sd_media_memory[FX_STM32_SD_DEFAULT_SECTOR_SIZE /
-                                          sizeof(uint32_t)]);
+ALIGN_32BYTES(uint32_t fx_sd_media_memory[FX_STM32_SD_DEFAULT_SECTOR_SIZE / sizeof(uint32_t)]);
 /* Define FileX global data structures.  */
 FX_MEDIA sdio_disk;
 HAL_SD_CardInfoTypeDef *pCardInfoSD;
@@ -75,50 +74,48 @@ void fx_app_thread_entry(ULONG thread_input);
  * @retval int
  */
 UINT MX_FileX_Init(VOID *memory_ptr) {
-  UINT ret = FX_SUCCESS;
-  TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL *)memory_ptr;
-  VOID *pointer;
+    UINT ret = FX_SUCCESS;
+    TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL *)memory_ptr;
+    VOID *pointer;
 
-  /* USER CODE BEGIN MX_FileX_MEM_POOL */
+    /* USER CODE BEGIN MX_FileX_MEM_POOL */
 
-  /* USER CODE END MX_FileX_MEM_POOL */
+    /* USER CODE END MX_FileX_MEM_POOL */
 
-  /* USER CODE BEGIN 0 */
+    /* USER CODE BEGIN 0 */
 
-  /* USER CODE END 0 */
+    /* USER CODE END 0 */
 
-  /*Allocate memory for the main thread's stack*/
-  ret = tx_byte_allocate(byte_pool, &pointer, FX_APP_THREAD_STACK_SIZE,
-                         TX_NO_WAIT);
+    /*Allocate memory for the main thread's stack*/
+    ret = tx_byte_allocate(byte_pool, &pointer, FX_APP_THREAD_STACK_SIZE, TX_NO_WAIT);
 
-  /* Check FX_APP_THREAD_STACK_SIZE allocation*/
-  if (ret != FX_SUCCESS) {
-    return TX_POOL_ERROR;
-  }
+    /* Check FX_APP_THREAD_STACK_SIZE allocation*/
+    if (ret != FX_SUCCESS) {
+        return TX_POOL_ERROR;
+    }
 
-  /* Create the main thread.  */
-  ret = tx_thread_create(
-      &fx_app_thread, FX_APP_THREAD_NAME, fx_app_thread_entry, 0, pointer,
-      FX_APP_THREAD_STACK_SIZE, FX_APP_THREAD_PRIO, FX_APP_PREEMPTION_THRESHOLD,
-      FX_APP_THREAD_TIME_SLICE, FX_APP_THREAD_AUTO_START);
+    /* Create the main thread.  */
+    ret = tx_thread_create(&fx_app_thread, FX_APP_THREAD_NAME, fx_app_thread_entry, 0, pointer,
+                           FX_APP_THREAD_STACK_SIZE, FX_APP_THREAD_PRIO, FX_APP_PREEMPTION_THRESHOLD,
+                           FX_APP_THREAD_TIME_SLICE, FX_APP_THREAD_AUTO_START);
 
-  /* Check main thread creation */
-  if (ret != FX_SUCCESS) {
-    return TX_THREAD_ERROR;
-  }
+    /* Check main thread creation */
+    if (ret != FX_SUCCESS) {
+        return TX_THREAD_ERROR;
+    }
 
-  /* USER CODE BEGIN MX_FileX_Init */
+    /* USER CODE BEGIN MX_FileX_Init */
 
-  /* USER CODE END MX_FileX_Init */
+    /* USER CODE END MX_FileX_Init */
 
-  /* Initialize FileX.  */
-  fx_system_initialize();
+    /* Initialize FileX.  */
+    fx_system_initialize();
 
-  /* USER CODE BEGIN MX_FileX_Init 1*/
+    /* USER CODE BEGIN MX_FileX_Init 1*/
 
-  /* USER CODE END MX_FileX_Init 1*/
+    /* USER CODE END MX_FileX_Init 1*/
 
-  return ret;
+    return ret;
 }
 
 /**
@@ -128,53 +125,51 @@ UINT MX_FileX_Init(VOID *memory_ptr) {
  */
 void fx_app_thread_entry(ULONG thread_input) {
 
-  UINT sd_status = FX_SUCCESS;
+    UINT sd_status = FX_SUCCESS;
 
-  /* USER CODE BEGIN fx_app_thread_entry 0*/
+    /* USER CODE BEGIN fx_app_thread_entry 0*/
 
-  /* USER CODE END fx_app_thread_entry 0*/
+    /* USER CODE END fx_app_thread_entry 0*/
 
-  /* Format the SD memory as FAT */
-  sd_status =
-      fx_media_format(&sdio_disk,                      // SD_Disk pointer
-                      fx_stm32_sd_driver,              // Driver entry
-                      (VOID *)FX_NULL,                 // Device info pointer
-                      (UCHAR *)fx_sd_media_memory,     // Media buffer pointer
-                      sizeof(fx_sd_media_memory),      // Media buffer size
-                      FX_SD_VOLUME_NAME,               // Volume Name
-                      FX_SD_NUMBER_OF_FATS,            // Number of FATs
-                      32,                              // Directory Entries
-                      FX_SD_HIDDEN_SECTORS,            // Hidden sectors
-                      pCardInfoSD->BlockNbr,           // Total sectors
-                      FX_STM32_SD_DEFAULT_SECTOR_SIZE, // Sector size
-                      8,                               // Sectors per cluster
-                      1,                               // Heads
-                      1);                              // Sectors per track
+    /* Format the SD memory as FAT */
+    sd_status = fx_media_format(&sdio_disk,                      // SD_Disk pointer
+                                fx_stm32_sd_driver,              // Driver entry
+                                (VOID *)FX_NULL,                 // Device info pointer
+                                (UCHAR *)fx_sd_media_memory,     // Media buffer pointer
+                                sizeof(fx_sd_media_memory),      // Media buffer size
+                                FX_SD_VOLUME_NAME,               // Volume Name
+                                FX_SD_NUMBER_OF_FATS,            // Number of FATs
+                                32,                              // Directory Entries
+                                FX_SD_HIDDEN_SECTORS,            // Hidden sectors
+                                pCardInfoSD->BlockNbr,           // Total sectors
+                                FX_STM32_SD_DEFAULT_SECTOR_SIZE, // Sector size
+                                8,                               // Sectors per cluster
+                                1,                               // Heads
+                                1);                              // Sectors per track
 
-  /* Check the format sd_status */
-  if (sd_status != FX_SUCCESS) {
-    /* USER CODE BEGIN SD MEDIA get info error */
-    while (1)
-      ;
-    /* USER CODE END SD MEDIA get info error */
-  }
+    /* Check the format sd_status */
+    if (sd_status != FX_SUCCESS) {
+        /* USER CODE BEGIN SD MEDIA get info error */
+        while (1)
+            ;
+        /* USER CODE END SD MEDIA get info error */
+    }
 
-  /* Open the SD disk driver */
-  sd_status = fx_media_open(&sdio_disk, FX_SD_VOLUME_NAME, fx_stm32_sd_driver,
-                            (VOID *)FX_NULL, (VOID *)fx_sd_media_memory,
-                            sizeof(fx_sd_media_memory));
+    /* Open the SD disk driver */
+    sd_status = fx_media_open(&sdio_disk, FX_SD_VOLUME_NAME, fx_stm32_sd_driver, (VOID *)FX_NULL,
+                              (VOID *)fx_sd_media_memory, sizeof(fx_sd_media_memory));
 
-  /* Check the media open sd_status */
-  if (sd_status != FX_SUCCESS) {
-    /* USER CODE BEGIN SD DRIVER get info error */
-    while (1)
-      ;
-    /* USER CODE END SD DRIVER get info error */
-  }
+    /* Check the media open sd_status */
+    if (sd_status != FX_SUCCESS) {
+        /* USER CODE BEGIN SD DRIVER get info error */
+        while (1)
+            ;
+        /* USER CODE END SD DRIVER get info error */
+    }
 
-  /* USER CODE BEGIN fx_app_thread_entry 1*/
+    /* USER CODE BEGIN fx_app_thread_entry 1*/
 
-  /* USER CODE END fx_app_thread_entry 1*/
+    /* USER CODE END fx_app_thread_entry 1*/
 }
 
 /* USER CODE BEGIN 1 */

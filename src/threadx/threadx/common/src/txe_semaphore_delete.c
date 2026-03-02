@@ -72,60 +72,60 @@
 /**************************************************************************/
 UINT _txe_semaphore_delete(TX_SEMAPHORE *semaphore_ptr) {
 
-  UINT status;
+    UINT status;
 #ifndef TX_TIMER_PROCESS_IN_ISR
-  TX_THREAD *thread_ptr;
+    TX_THREAD *thread_ptr;
 #endif
 
-  /* Default status to success.  */
-  status = TX_SUCCESS;
+    /* Default status to success.  */
+    status = TX_SUCCESS;
 
-  /* Check for an invalid semaphore pointer.  */
-  if (semaphore_ptr == TX_NULL) {
+    /* Check for an invalid semaphore pointer.  */
+    if (semaphore_ptr == TX_NULL) {
 
-    /* Semaphore pointer is invalid, return appropriate error code.  */
-    status = TX_SEMAPHORE_ERROR;
-  }
-
-  /* Now check for invalid semaphore ID.  */
-  else if (semaphore_ptr->tx_semaphore_id != TX_SEMAPHORE_ID) {
-
-    /* Semaphore pointer is invalid, return appropriate error code.  */
-    status = TX_SEMAPHORE_ERROR;
-  } else {
-
-    /* Check for invalid caller of this function.  */
-
-    /* Is the caller an ISR or Initialization?  */
-    if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
-
-      /* Invalid caller of this function, return appropriate error code.  */
-      status = TX_CALLER_ERROR;
+        /* Semaphore pointer is invalid, return appropriate error code.  */
+        status = TX_SEMAPHORE_ERROR;
     }
+
+    /* Now check for invalid semaphore ID.  */
+    else if (semaphore_ptr->tx_semaphore_id != TX_SEMAPHORE_ID) {
+
+        /* Semaphore pointer is invalid, return appropriate error code.  */
+        status = TX_SEMAPHORE_ERROR;
+    } else {
+
+        /* Check for invalid caller of this function.  */
+
+        /* Is the caller an ISR or Initialization?  */
+        if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
+
+            /* Invalid caller of this function, return appropriate error code.  */
+            status = TX_CALLER_ERROR;
+        }
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
-    else {
+        else {
 
-      /* Pickup thread pointer.  */
-      TX_THREAD_GET_CURRENT(thread_ptr)
+            /* Pickup thread pointer.  */
+            TX_THREAD_GET_CURRENT(thread_ptr)
 
-      /* Is the caller the system timer thread?  */
-      if (thread_ptr == &_tx_timer_thread) {
+            /* Is the caller the system timer thread?  */
+            if (thread_ptr == &_tx_timer_thread) {
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status = TX_CALLER_ERROR;
-      }
-    }
+                /* Invalid caller of this function, return appropriate error code.  */
+                status = TX_CALLER_ERROR;
+            }
+        }
 #endif
-  }
+    }
 
-  /* Determine if everything is okay.  */
-  if (status == TX_SUCCESS) {
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
 
-    /* Call actual semaphore delete function.  */
-    status = _tx_semaphore_delete(semaphore_ptr);
-  }
+        /* Call actual semaphore delete function.  */
+        status = _tx_semaphore_delete(semaphore_ptr);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

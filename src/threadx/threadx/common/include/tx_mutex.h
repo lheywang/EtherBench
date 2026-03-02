@@ -61,19 +61,19 @@
    function.  */
 
 #ifndef TX_MUTEX_ENABLE_PERFORMANCE_INFO
-#define _tx_mutex_initialize()                                                 \
-  _tx_mutex_created_ptr = TX_NULL;                                             \
-  _tx_mutex_created_count = TX_EMPTY
+#define _tx_mutex_initialize()                                                                                         \
+    _tx_mutex_created_ptr = TX_NULL;                                                                                   \
+    _tx_mutex_created_count = TX_EMPTY
 #else
-#define _tx_mutex_initialize()                                                 \
-  _tx_mutex_created_ptr = TX_NULL;                                             \
-  _tx_mutex_created_count = TX_EMPTY;                                          \
-  _tx_mutex_performance_put_count = ((ULONG)0);                                \
-  _tx_mutex_performance_get_count = ((ULONG)0);                                \
-  _tx_mutex_performance_suspension_count = ((ULONG)0);                         \
-  _tx_mutex_performance_timeout_count = ((ULONG)0);                            \
-  _tx_mutex_performance_priority_inversion_count = ((ULONG)0);                 \
-  _tx_mutex_performance__priority_inheritance_count = ((ULONG)0)
+#define _tx_mutex_initialize()                                                                                         \
+    _tx_mutex_created_ptr = TX_NULL;                                                                                   \
+    _tx_mutex_created_count = TX_EMPTY;                                                                                \
+    _tx_mutex_performance_put_count = ((ULONG)0);                                                                      \
+    _tx_mutex_performance_get_count = ((ULONG)0);                                                                      \
+    _tx_mutex_performance_suspension_count = ((ULONG)0);                                                               \
+    _tx_mutex_performance_timeout_count = ((ULONG)0);                                                                  \
+    _tx_mutex_performance_priority_inversion_count = ((ULONG)0);                                                       \
+    _tx_mutex_performance__priority_inheritance_count = ((ULONG)0)
 #endif
 #define TX_MUTEX_INIT
 #else

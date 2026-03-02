@@ -74,30 +74,29 @@
 UINT _nxd_nd_cache_invalidate(NX_IP *ip_ptr) {
 
 #ifdef FEATURE_NX_IPV6
-  INT idx;
+    INT idx;
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NXD_TRACE_ND_CACHE_INVALIDATE, ip_ptr, 0, 0, 0,
-                          NX_TRACE_ARP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NXD_TRACE_ND_CACHE_INVALIDATE, ip_ptr, 0, 0, 0, NX_TRACE_ARP_EVENTS, 0, 0);
 
-  /* Obtain the protection. */
-  tx_mutex_get(&ip_ptr->nx_ip_protection, TX_WAIT_FOREVER);
+    /* Obtain the protection. */
+    tx_mutex_get(&ip_ptr->nx_ip_protection, TX_WAIT_FOREVER);
 
-  /* Invalidate all entries. */
-  for (idx = 0; idx < NX_IPV6_NEIGHBOR_CACHE_SIZE; idx++) {
-    _nx_nd_cache_delete_internal(ip_ptr, &(ip_ptr->nx_ipv6_nd_cache[idx]));
-  }
+    /* Invalidate all entries. */
+    for (idx = 0; idx < NX_IPV6_NEIGHBOR_CACHE_SIZE; idx++) {
+        _nx_nd_cache_delete_internal(ip_ptr, &(ip_ptr->nx_ipv6_nd_cache[idx]));
+    }
 
-  /* Release the protection. */
-  tx_mutex_put(&ip_ptr->nx_ip_protection);
+    /* Release the protection. */
+    tx_mutex_put(&ip_ptr->nx_ip_protection);
 
-  return (NX_SUCCESS);
+    return (NX_SUCCESS);
 
 #else /* !FEATURE_NX_IPV6 */
 
-  NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_ptr);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

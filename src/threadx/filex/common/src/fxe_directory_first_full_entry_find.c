@@ -78,28 +78,23 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_directory_first_full_entry_find(FX_MEDIA *media_ptr,
-                                          CHAR *directory_name,
-                                          UINT *attributes, ULONG *size,
-                                          UINT *year, UINT *month, UINT *day,
-                                          UINT *hour, UINT *minute,
-                                          UINT *second) {
+UINT _fxe_directory_first_full_entry_find(FX_MEDIA *media_ptr, CHAR *directory_name, UINT *attributes, ULONG *size,
+                                          UINT *year, UINT *month, UINT *day, UINT *hour, UINT *minute, UINT *second) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null media pointer.  */
-  if (media_ptr == FX_NULL) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null media pointer.  */
+    if (media_ptr == FX_NULL) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual directory find first full entry service.  */
-  status = _fx_directory_first_full_entry_find(media_ptr, directory_name,
-                                               attributes, size, year, month,
-                                               day, hour, minute, second);
+    /* Call actual directory find first full entry service.  */
+    status = _fx_directory_first_full_entry_find(media_ptr, directory_name, attributes, size, year, month, day, hour,
+                                                 minute, second);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

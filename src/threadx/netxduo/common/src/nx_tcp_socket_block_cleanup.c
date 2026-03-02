@@ -78,60 +78,55 @@
 /**************************************************************************/
 VOID _nx_tcp_socket_block_cleanup(NX_TCP_SOCKET *socket_ptr) {
 
-  /* Clean up the connect IP address.  */
+    /* Clean up the connect IP address.  */
 
-  socket_ptr->nx_tcp_socket_connect_ip.nxd_ip_version = 0;
+    socket_ptr->nx_tcp_socket_connect_ip.nxd_ip_version = 0;
 #ifdef FEATURE_NX_IPV6
-  /* Clean up the IP address field. */
-  SET_UNSPECIFIED_ADDRESS(
-      socket_ptr->nx_tcp_socket_connect_ip.nxd_ip_address.v6);
+    /* Clean up the IP address field. */
+    SET_UNSPECIFIED_ADDRESS(socket_ptr->nx_tcp_socket_connect_ip.nxd_ip_address.v6);
 #else  /* FEATURE_NX_IPV6 */
-  socket_ptr->nx_tcp_socket_connect_ip.nxd_ip_address.v4 = 0;
+    socket_ptr->nx_tcp_socket_connect_ip.nxd_ip_address.v4 = 0;
 #endif /* FEATURE_NX_IPV6 */
 
-  /* Clean up the connect port.  */
-  socket_ptr->nx_tcp_socket_connect_port = 0;
+    /* Clean up the connect port.  */
+    socket_ptr->nx_tcp_socket_connect_port = 0;
 
-  /* Reset zero window probe flag. */
-  socket_ptr->nx_tcp_socket_zero_window_probe_has_data = NX_FALSE;
+    /* Reset zero window probe flag. */
+    socket_ptr->nx_tcp_socket_zero_window_probe_has_data = NX_FALSE;
 
-  /* Simply clear the timeout.  */
-  socket_ptr->nx_tcp_socket_timeout = 0;
+    /* Simply clear the timeout.  */
+    socket_ptr->nx_tcp_socket_timeout = 0;
 
-  /* Reset duplicated ack received. */
-  socket_ptr->nx_tcp_socket_duplicated_ack_received = 0;
+    /* Reset duplicated ack received. */
+    socket_ptr->nx_tcp_socket_duplicated_ack_received = 0;
 
-  /* Reset fast recovery stage. */
-  socket_ptr->nx_tcp_socket_fast_recovery = NX_FALSE;
+    /* Reset fast recovery stage. */
+    socket_ptr->nx_tcp_socket_fast_recovery = NX_FALSE;
 
-  /* Connection needs to be closed down immediately.  */
-  if (socket_ptr->nx_tcp_socket_client_type) {
+    /* Connection needs to be closed down immediately.  */
+    if (socket_ptr->nx_tcp_socket_client_type) {
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(NX_TRACE_INTERNAL_TCP_STATE_CHANGE,
-                            socket_ptr->nx_tcp_socket_ip_ptr, socket_ptr,
-                            socket_ptr->nx_tcp_socket_state, NX_TCP_CLOSED,
-                            NX_TRACE_INTERNAL_EVENTS, 0, 0);
+        /* If trace is enabled, insert this event into the trace buffer.  */
+        NX_TRACE_IN_LINE_INSERT(NX_TRACE_INTERNAL_TCP_STATE_CHANGE, socket_ptr->nx_tcp_socket_ip_ptr, socket_ptr,
+                                socket_ptr->nx_tcp_socket_state, NX_TCP_CLOSED, NX_TRACE_INTERNAL_EVENTS, 0, 0);
 
-    /* Client socket, return to a CLOSED state.  */
-    socket_ptr->nx_tcp_socket_state = NX_TCP_CLOSED;
+        /* Client socket, return to a CLOSED state.  */
+        socket_ptr->nx_tcp_socket_state = NX_TCP_CLOSED;
 
 #ifdef NX_ENABLE_HTTP_PROXY
-    if (socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_http_proxy_enable) {
+        if (socket_ptr->nx_tcp_socket_ip_ptr->nx_ip_http_proxy_enable) {
 
-      /* Clean up the HTTP Proxy.  */
-      _nx_http_proxy_client_cleanup(socket_ptr);
-    }
+            /* Clean up the HTTP Proxy.  */
+            _nx_http_proxy_client_cleanup(socket_ptr);
+        }
 #endif /* NX_ENABLE_HTTP_PROXY */
-  } else {
+    } else {
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    NX_TRACE_IN_LINE_INSERT(
-        NX_TRACE_INTERNAL_TCP_STATE_CHANGE, socket_ptr->nx_tcp_socket_ip_ptr,
-        socket_ptr, socket_ptr->nx_tcp_socket_state, NX_TCP_LISTEN_STATE,
-        NX_TRACE_INTERNAL_EVENTS, 0, 0);
+        /* If trace is enabled, insert this event into the trace buffer.  */
+        NX_TRACE_IN_LINE_INSERT(NX_TRACE_INTERNAL_TCP_STATE_CHANGE, socket_ptr->nx_tcp_socket_ip_ptr, socket_ptr,
+                                socket_ptr->nx_tcp_socket_state, NX_TCP_LISTEN_STATE, NX_TRACE_INTERNAL_EVENTS, 0, 0);
 
-    /* Server socket, return to LISTEN state.  */
-    socket_ptr->nx_tcp_socket_state = NX_TCP_LISTEN_STATE;
-  }
+        /* Server socket, return to LISTEN state.  */
+        socket_ptr->nx_tcp_socket_state = NX_TCP_LISTEN_STATE;
+    }
 }

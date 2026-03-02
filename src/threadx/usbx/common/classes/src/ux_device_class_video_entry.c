@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_video.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,78 +75,74 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_video_entry(UX_SLAVE_CLASS_COMMAND *command)
-{
+UINT _ux_device_class_video_entry(UX_SLAVE_CLASS_COMMAND *command) {
 
-UINT        status;
-
+    UINT status;
 
     /* The command request will tell us we need to do here, either a enumeration
        query, an activation or a deactivation.  */
-    switch (command -> ux_slave_class_command_request)
-    {
+    switch (command->ux_slave_class_command_request) {
 
     case UX_SLAVE_CLASS_COMMAND_INITIALIZE:
 #if defined(UX_DEVICE_CLASS_VIDEO_ENABLE_ERROR_CHECKING)
 
         /* Call the init function of the Video class.  */
-        status =  _uxe_device_class_video_initialize(command);
+        status = _uxe_device_class_video_initialize(command);
 #else
 
         /* Call the init function of the Video class.  */
-        status =  _ux_device_class_video_initialize(command);
-#endif  /* UX_DEVICE_CLASS_VIDEO_ENABLE_ERROR_CHECKING */
+        status = _ux_device_class_video_initialize(command);
+#endif /* UX_DEVICE_CLASS_VIDEO_ENABLE_ERROR_CHECKING */
 
         /* Return the completion status.  */
-        return(status);
+        return (status);
 
     case UX_SLAVE_CLASS_COMMAND_UNINITIALIZE:
 
         /* Call the init function of the Video class.  */
-        status =  _ux_device_class_video_uninitialize(command);
+        status = _ux_device_class_video_uninitialize(command);
 
         /* Return the completion status.  */
-        return(status);
+        return (status);
 
     case UX_SLAVE_CLASS_COMMAND_QUERY:
 
         /* Check the CLASS definition in the interface descriptor. */
-        if (command -> ux_slave_class_command_class == UX_DEVICE_CLASS_VIDEO_CLASS)
-        {
-            if (command -> ux_slave_class_command_subclass == UX_DEVICE_CLASS_VIDEO_SUBCLASS_CONTROL)
-                return(UX_SUCCESS);
-            if (command -> ux_slave_class_command_subclass == UX_DEVICE_CLASS_VIDEO_SUBCLASS_STREAMING)
-                return(UX_SUCCESS);
+        if (command->ux_slave_class_command_class == UX_DEVICE_CLASS_VIDEO_CLASS) {
+            if (command->ux_slave_class_command_subclass == UX_DEVICE_CLASS_VIDEO_SUBCLASS_CONTROL)
+                return (UX_SUCCESS);
+            if (command->ux_slave_class_command_subclass == UX_DEVICE_CLASS_VIDEO_SUBCLASS_STREAMING)
+                return (UX_SUCCESS);
         }
-        return(UX_NO_CLASS_MATCH);
+        return (UX_NO_CLASS_MATCH);
 
     case UX_SLAVE_CLASS_COMMAND_ACTIVATE:
 
         /* The activate command is used when the host has sent a SET_CONFIGURATION command
            and this interface has to be mounted. Both Bulk endpoints have to be mounted
            and the video thread needs to be activated.  */
-        status =  _ux_device_class_video_activate(command);
+        status = _ux_device_class_video_activate(command);
 
         /* Return the completion status.  */
-        return(status);
+        return (status);
 
     case UX_SLAVE_CLASS_COMMAND_CHANGE:
 
         /* The change command is used when the host has sent a SET_INTERFACE command
            to go from Alternate Setting 0 to 1 or revert to the default mode.  */
-        status =  _ux_device_class_video_change(command);
+        status = _ux_device_class_video_change(command);
 
         /* Return the completion status.  */
-        return(status);
+        return (status);
 
     case UX_SLAVE_CLASS_COMMAND_DEACTIVATE:
 
         /* The deactivate command is used when the device has been extracted.
            The device endpoints have to be dismounted and the video thread canceled.  */
-        status =  _ux_device_class_video_deactivate(command);
+        status = _ux_device_class_video_deactivate(command);
 
         /* Return the completion status.  */
-        return(status);
+        return (status);
 
     case UX_SLAVE_CLASS_COMMAND_REQUEST:
 
@@ -156,11 +150,11 @@ UINT        status;
         _ux_device_class_video_control_request(command);
 
         /* Return the completion status.  */
-        return(UX_SUCCESS);
+        return (UX_SUCCESS);
 
     default:
 
         /* Return an error.  */
-        return(UX_FUNCTION_NOT_SUPPORTED);
+        return (UX_FUNCTION_NOT_SUPPORTED);
     }
 }

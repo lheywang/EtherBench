@@ -70,27 +70,24 @@
 /*  03-08-2023     Xiuwen Cai               Initial Version 6.2.1        */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_block_status_set(LX_NAND_FLASH *nand_flash, ULONG block,
-                                     ULONG block_status) {
+UINT _lx_nand_flash_block_status_set(LX_NAND_FLASH *nand_flash, ULONG block, ULONG block_status) {
 
-  UCHAR page_number;
-  UINT status;
+    UCHAR page_number;
+    UINT status;
 
-  /* Save the block status to status table.  */
-  nand_flash->lx_nand_flash_block_status_table[block] = (USHORT)block_status;
+    /* Save the block status to status table.  */
+    nand_flash->lx_nand_flash_block_status_table[block] = (USHORT)block_status;
 
-  /* Get the page number to write.  */
-  page_number =
-      (UCHAR)(block * sizeof(*nand_flash->lx_nand_flash_block_status_table) /
-              nand_flash->lx_nand_flash_bytes_per_page);
+    /* Get the page number to write.  */
+    page_number = (UCHAR)(block * sizeof(*nand_flash->lx_nand_flash_block_status_table) /
+                          nand_flash->lx_nand_flash_bytes_per_page);
 
-  /* Save the status table.  */
-  status = _lx_nand_flash_metadata_write(
-      nand_flash,
-      ((UCHAR *)nand_flash->lx_nand_flash_block_status_table) +
-          page_number * nand_flash->lx_nand_flash_bytes_per_page,
-      LX_NAND_PAGE_TYPE_BLOCK_STATUS_TABLE | page_number);
+    /* Save the status table.  */
+    status = _lx_nand_flash_metadata_write(nand_flash,
+                                           ((UCHAR *)nand_flash->lx_nand_flash_block_status_table) +
+                                               page_number * nand_flash->lx_nand_flash_bytes_per_page,
+                                           LX_NAND_PAGE_TYPE_BLOCK_STATUS_TABLE | page_number);
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }

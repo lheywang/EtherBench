@@ -71,29 +71,28 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_media_space_available(FX_MEDIA *media_ptr,
-                               ULONG *available_bytes_ptr) {
+UINT _fx_media_space_available(FX_MEDIA *media_ptr, ULONG *available_bytes_ptr) {
 
-  UINT status;
-  ULONG64 available_bytes;
+    UINT status;
+    ULONG64 available_bytes;
 
-  /* Call actual media space available service.  */
-  status = _fx_media_extended_space_available(media_ptr, &available_bytes);
+    /* Call actual media space available service.  */
+    status = _fx_media_extended_space_available(media_ptr, &available_bytes);
 
-  /* Check status.  */
-  if (status == FX_SUCCESS) {
+    /* Check status.  */
+    if (status == FX_SUCCESS) {
 
-    /* Determine if more than 4GB available.  */
-    if (available_bytes > 0x00000000FFFFFFFF) {
+        /* Determine if more than 4GB available.  */
+        if (available_bytes > 0x00000000FFFFFFFF) {
 
-      /* Yes, we must have more than 4GB available... report the maximum we can
-         fit in 32bits, which is 4GB.  */
-      *available_bytes_ptr = 0xFFFFFFFF;
-    } else {
-      *available_bytes_ptr = (ULONG)(available_bytes);
+            /* Yes, we must have more than 4GB available... report the maximum we can
+               fit in 32bits, which is 4GB.  */
+            *available_bytes_ptr = 0xFFFFFFFF;
+        } else {
+            *available_bytes_ptr = (ULONG)(available_bytes);
+        }
     }
-  }
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

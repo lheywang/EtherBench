@@ -74,65 +74,62 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _tx_byte_pool_info_get(TX_BYTE_POOL *pool_ptr, CHAR **name,
-                            ULONG *available_bytes, ULONG *fragments,
-                            TX_THREAD **first_suspended, ULONG *suspended_count,
-                            TX_BYTE_POOL **next_pool) {
+UINT _tx_byte_pool_info_get(TX_BYTE_POOL *pool_ptr, CHAR **name, ULONG *available_bytes, ULONG *fragments,
+                            TX_THREAD **first_suspended, ULONG *suspended_count, TX_BYTE_POOL **next_pool) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  TX_TRACE_IN_LINE_INSERT(TX_TRACE_BYTE_POOL_INFO_GET, pool_ptr, 0, 0, 0,
-                          TX_TRACE_BYTE_POOL_EVENTS)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    TX_TRACE_IN_LINE_INSERT(TX_TRACE_BYTE_POOL_INFO_GET, pool_ptr, 0, 0, 0, TX_TRACE_BYTE_POOL_EVENTS)
 
-  /* Log this kernel call.  */
-  TX_EL_BYTE_POOL_INFO_GET_INSERT
+    /* Log this kernel call.  */
+    TX_EL_BYTE_POOL_INFO_GET_INSERT
 
-  /* Retrieve all the pertinent information and return it in the supplied
-     destinations.  */
+    /* Retrieve all the pertinent information and return it in the supplied
+       destinations.  */
 
-  /* Retrieve the name of the byte pool.  */
-  if (name != TX_NULL) {
+    /* Retrieve the name of the byte pool.  */
+    if (name != TX_NULL) {
 
-    *name = pool_ptr->tx_byte_pool_name;
-  }
+        *name = pool_ptr->tx_byte_pool_name;
+    }
 
-  /* Retrieve the number of available bytes in the byte pool.  */
-  if (available_bytes != TX_NULL) {
+    /* Retrieve the number of available bytes in the byte pool.  */
+    if (available_bytes != TX_NULL) {
 
-    *available_bytes = pool_ptr->tx_byte_pool_available;
-  }
+        *available_bytes = pool_ptr->tx_byte_pool_available;
+    }
 
-  /* Retrieve the total number of bytes in the byte pool.  */
-  if (fragments != TX_NULL) {
+    /* Retrieve the total number of bytes in the byte pool.  */
+    if (fragments != TX_NULL) {
 
-    *fragments = (ULONG)pool_ptr->tx_byte_pool_fragments;
-  }
+        *fragments = (ULONG)pool_ptr->tx_byte_pool_fragments;
+    }
 
-  /* Retrieve the first thread suspended on this byte pool.  */
-  if (first_suspended != TX_NULL) {
+    /* Retrieve the first thread suspended on this byte pool.  */
+    if (first_suspended != TX_NULL) {
 
-    *first_suspended = pool_ptr->tx_byte_pool_suspension_list;
-  }
+        *first_suspended = pool_ptr->tx_byte_pool_suspension_list;
+    }
 
-  /* Retrieve the number of threads suspended on this byte pool.  */
-  if (suspended_count != TX_NULL) {
+    /* Retrieve the number of threads suspended on this byte pool.  */
+    if (suspended_count != TX_NULL) {
 
-    *suspended_count = (ULONG)pool_ptr->tx_byte_pool_suspended_count;
-  }
+        *suspended_count = (ULONG)pool_ptr->tx_byte_pool_suspended_count;
+    }
 
-  /* Retrieve the pointer to the next byte pool created.  */
-  if (next_pool != TX_NULL) {
+    /* Retrieve the pointer to the next byte pool created.  */
+    if (next_pool != TX_NULL) {
 
-    *next_pool = pool_ptr->tx_byte_pool_created_next;
-  }
+        *next_pool = pool_ptr->tx_byte_pool_created_next;
+    }
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Return completion status.  */
-  return (TX_SUCCESS);
+    /* Return completion status.  */
+    return (TX_SUCCESS);
 }

@@ -73,51 +73,43 @@
 /**************************************************************************/
 VOID _nxd_ipv6_default_router_table_init(NX_IP *ip_ptr) {
 
-  ULONG i;
+    ULONG i;
 
-  /* Initialize each entry in the default router table to null. */
-  for (i = 0; i < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE; i++) {
+    /* Initialize each entry in the default router table to null. */
+    for (i = 0; i < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE; i++) {
 
-    ip_ptr->nx_ipv6_default_router_table[i].nx_ipv6_default_router_entry_flag =
-        0;
-    ip_ptr->nx_ipv6_default_router_table[i]
-        .nx_ipv6_default_router_entry_life_time = 0;
-    ip_ptr->nx_ipv6_default_router_table[i]
-        .nx_ipv6_default_router_entry_neighbor_cache_ptr = NX_NULL;
-  }
+        ip_ptr->nx_ipv6_default_router_table[i].nx_ipv6_default_router_entry_flag = 0;
+        ip_ptr->nx_ipv6_default_router_table[i].nx_ipv6_default_router_entry_life_time = 0;
+        ip_ptr->nx_ipv6_default_router_table[i].nx_ipv6_default_router_entry_neighbor_cache_ptr = NX_NULL;
+    }
 
-  /* Set the initial size to zero. */
-  ip_ptr->nx_ipv6_default_router_table_size = 0;
+    /* Set the initial size to zero. */
+    ip_ptr->nx_ipv6_default_router_table_size = 0;
 
-  /* Initialize the index for recruiting less "reachable" routers
-     when the current router cannot be reached. */
-  ip_ptr->nx_ipv6_default_router_table_round_robin_index = 0;
+    /* Initialize the index for recruiting less "reachable" routers
+       when the current router cannot be reached. */
+    ip_ptr->nx_ipv6_default_router_table_round_robin_index = 0;
 
-  /* Initialize the start of the prefix table (linked list) to NULL. */
-  ip_ptr->nx_ipv6_prefix_list_table[0].nx_ipv6_prefix_entry_prev = NX_NULL;
-  ip_ptr->nx_ipv6_prefix_list_table[0].nx_ipv6_prefix_entry_next =
-      &ip_ptr->nx_ipv6_prefix_list_table[1];
+    /* Initialize the start of the prefix table (linked list) to NULL. */
+    ip_ptr->nx_ipv6_prefix_list_table[0].nx_ipv6_prefix_entry_prev = NX_NULL;
+    ip_ptr->nx_ipv6_prefix_list_table[0].nx_ipv6_prefix_entry_next = &ip_ptr->nx_ipv6_prefix_list_table[1];
 
-  /* Link up the entries in the prefix table.  */
-  for (i = 1; i < NX_IPV6_PREFIX_LIST_TABLE_SIZE - 1; i++) {
+    /* Link up the entries in the prefix table.  */
+    for (i = 1; i < NX_IPV6_PREFIX_LIST_TABLE_SIZE - 1; i++) {
 
-    ip_ptr->nx_ipv6_prefix_list_table[i].nx_ipv6_prefix_entry_prev =
-        &ip_ptr->nx_ipv6_prefix_list_table[i - 1];
-    ip_ptr->nx_ipv6_prefix_list_table[i].nx_ipv6_prefix_entry_next =
-        &ip_ptr->nx_ipv6_prefix_list_table[i + 1];
-  }
+        ip_ptr->nx_ipv6_prefix_list_table[i].nx_ipv6_prefix_entry_prev = &ip_ptr->nx_ipv6_prefix_list_table[i - 1];
+        ip_ptr->nx_ipv6_prefix_list_table[i].nx_ipv6_prefix_entry_next = &ip_ptr->nx_ipv6_prefix_list_table[i + 1];
+    }
 
-  /* Null terminate the end of the prefix table (linked list). */
-  ip_ptr->nx_ipv6_prefix_list_table[i].nx_ipv6_prefix_entry_prev =
-      &ip_ptr->nx_ipv6_prefix_list_table[i - 1];
-  ip_ptr->nx_ipv6_prefix_list_table[i].nx_ipv6_prefix_entry_next = NX_NULL;
+    /* Null terminate the end of the prefix table (linked list). */
+    ip_ptr->nx_ipv6_prefix_list_table[i].nx_ipv6_prefix_entry_prev = &ip_ptr->nx_ipv6_prefix_list_table[i - 1];
+    ip_ptr->nx_ipv6_prefix_list_table[i].nx_ipv6_prefix_entry_next = NX_NULL;
 
-  /* Set the free list pointer to the 1st entry. */
-  ip_ptr->nx_ipv6_prefix_entry_free_list =
-      &ip_ptr->nx_ipv6_prefix_list_table[0];
-  ip_ptr->nx_ipv6_prefix_list_ptr = NX_NULL;
+    /* Set the free list pointer to the 1st entry. */
+    ip_ptr->nx_ipv6_prefix_entry_free_list = &ip_ptr->nx_ipv6_prefix_list_table[0];
+    ip_ptr->nx_ipv6_prefix_list_ptr = NX_NULL;
 
-  /* All done, return. */
+    /* All done, return. */
 }
 
 #endif /* FEATURE_NX_IPV6 */

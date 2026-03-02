@@ -67,24 +67,24 @@
 /**************************************************************************/
 UINT _txe_queue_prioritize(TX_QUEUE *queue_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid queue pointer.  */
-  if (queue_ptr == TX_NULL) {
-    /* Queue pointer is invalid, return appropriate error code.  */
-    status = TX_QUEUE_ERROR;
-  }
+    /* Check for an invalid queue pointer.  */
+    if (queue_ptr == TX_NULL) {
+        /* Queue pointer is invalid, return appropriate error code.  */
+        status = TX_QUEUE_ERROR;
+    }
 
-  /* Now check for invalid queue ID.  */
-  else if (queue_ptr->tx_queue_id != TX_QUEUE_ID) {
-    /* Queue pointer is invalid, return appropriate error code.  */
-    status = TX_QUEUE_ERROR;
-  } else {
+    /* Now check for invalid queue ID.  */
+    else if (queue_ptr->tx_queue_id != TX_QUEUE_ID) {
+        /* Queue pointer is invalid, return appropriate error code.  */
+        status = TX_QUEUE_ERROR;
+    } else {
 
-    /* Call actual queue prioritize function.  */
-    status = _tx_queue_prioritize(queue_ptr);
-  }
+        /* Call actual queue prioritize function.  */
+        status = _tx_queue_prioritize(queue_ptr);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

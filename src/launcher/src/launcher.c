@@ -26,8 +26,8 @@
 // STD
 #include <stdint.h>
 
-#include "task_leds.h"
 #include "logger.h"
+#include "task_leds.h"
 
 // ======================================================================
 //                              MEMORY AREAS
@@ -50,41 +50,23 @@ uint8_t logger_stack[LOGGER_STACK_SIZE];
 
 uint32_t launcher(void) {
 
-  /*
-   * Launching the USBX task
-   */
-  MX_USBX_Device_Init();
+    /*
+     * Launching the USBX task
+     */
+    MX_USBX_Device_Init();
 
-  /*
-   * Creating the idle task
-   */
-  tx_thread_create(&leds_thread,
-		  	  	  "Leds control",
-				  leds_task,
-				  0,
-				  leds_stack,
-                  IDLE_STACK_SIZE,
-				  31,
-				  31,
-				  TX_NO_TIME_SLICE,
-				  TX_AUTO_START
-  );
+    /*
+     * Creating the idle task
+     */
+    tx_thread_create(&leds_thread, "Leds control", leds_task, 0, leds_stack, IDLE_STACK_SIZE, 31, 31, TX_NO_TIME_SLICE,
+                     TX_AUTO_START);
 
-  tx_thread_create(&logger_thread,
-		  	  "Deferred Logger",
-			  logger_task,
-			  0,
-			  logger_stack,
-			  LOGGER_STACK_SIZE,
-			  31,
-			  31,
-			  TX_NO_TIME_SLICE,
-			  TX_AUTO_START
-  );
+    tx_thread_create(&logger_thread, "Deferred Logger", logger_task, 0, logger_stack, LOGGER_STACK_SIZE, 31, 31,
+                     TX_NO_TIME_SLICE, TX_AUTO_START);
 
-  tx_thread_sleep(20);
+    tx_thread_sleep(20);
 
-  LOG("Booted HAL, %d", HAL_OK);
+    LOG("Booted HAL, %d", HAL_OK);
 
-  return 0;
+    return 0;
 }

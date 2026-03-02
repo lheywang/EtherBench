@@ -74,64 +74,61 @@
 /**************************************************************************/
 VOID _nx_tcp_socket_state_transmit_check(NX_TCP_SOCKET *socket_ptr) {
 
-  ULONG tx_window_current;
+    ULONG tx_window_current;
 
-  /* Now check to see if there is a thread suspended attempting to transmit.  */
-  if (socket_ptr->nx_tcp_socket_transmit_suspension_list) {
+    /* Now check to see if there is a thread suspended attempting to transmit.  */
+    if (socket_ptr->nx_tcp_socket_transmit_suspension_list) {
 
-    /* Yes, a thread is suspended attempting to transmit when the transmit
-       window is lower than its request size.  Determine if the current transmit
-       window size can now accommodate the request.  */
+        /* Yes, a thread is suspended attempting to transmit when the transmit
+           window is lower than its request size.  Determine if the current transmit
+           window size can now accommodate the request.  */
 
-    /* Pick up the min(cwnd, swnd) */
-    if (socket_ptr->nx_tcp_socket_tx_window_advertised >
-        socket_ptr->nx_tcp_socket_tx_window_congestion) {
-      tx_window_current = socket_ptr->nx_tcp_socket_tx_window_congestion;
+        /* Pick up the min(cwnd, swnd) */
+        if (socket_ptr->nx_tcp_socket_tx_window_advertised > socket_ptr->nx_tcp_socket_tx_window_congestion) {
+            tx_window_current = socket_ptr->nx_tcp_socket_tx_window_congestion;
 
-      /* On the first and second duplicate ACKs received, the total FlightSize
-         would remain less than or equal to cwnd plus 2*SMSS. Section 3.2, Page
-         9, RFC5681. */
-      if ((socket_ptr->nx_tcp_socket_duplicated_ack_received == 1) ||
-          (socket_ptr->nx_tcp_socket_duplicated_ack_received == 2)) {
-        tx_window_current += (socket_ptr->nx_tcp_socket_connect_mss << 1);
-      }
+            /* On the first and second duplicate ACKs received, the total FlightSize
+               would remain less than or equal to cwnd plus 2*SMSS. Section 3.2, Page
+               9, RFC5681. */
+            if ((socket_ptr->nx_tcp_socket_duplicated_ack_received == 1) ||
+                (socket_ptr->nx_tcp_socket_duplicated_ack_received == 2)) {
+                tx_window_current += (socket_ptr->nx_tcp_socket_connect_mss << 1);
+            }
 
-      /* Make sure the tx_window_current is less or equal to swnd. */
-      if (tx_window_current > socket_ptr->nx_tcp_socket_tx_window_advertised) {
-        tx_window_current = socket_ptr->nx_tcp_socket_tx_window_advertised;
-      }
-    } else {
-      tx_window_current = socket_ptr->nx_tcp_socket_tx_window_advertised;
+            /* Make sure the tx_window_current is less or equal to swnd. */
+            if (tx_window_current > socket_ptr->nx_tcp_socket_tx_window_advertised) {
+                tx_window_current = socket_ptr->nx_tcp_socket_tx_window_advertised;
+            }
+        } else {
+            tx_window_current = socket_ptr->nx_tcp_socket_tx_window_advertised;
+        }
+
+        /* Substract any data transmitted but unacked (outstanding bytes) */
+        if (tx_window_current > socket_ptr->nx_tcp_socket_tx_outstanding_bytes) {
+            tx_window_current -= socket_ptr->nx_tcp_socket_tx_outstanding_bytes;
+        } else /* Set tx_window_current to zero. */
+        {
+            tx_window_current = 0;
+        }
+
+        /* Determine if the current transmit window (received from the connected
+           socket) is large enough to handle the transmit.  */
+        if ((tx_window_current) &&
+            (socket_ptr->nx_tcp_socket_transmit_sent_count < socket_ptr->nx_tcp_socket_transmit_queue_maximum)) {
+
+            /* Is NetX set up with a windows update callback? */
+            if (socket_ptr->nx_tcp_socket_window_update_notify) {
+
+                /* Yes; Call this function when there is a change in transmit windows
+                 * size. */
+                (socket_ptr->nx_tcp_socket_window_update_notify)(socket_ptr);
+            }
+
+            /* Decrement the suspension count.  */
+            socket_ptr->nx_tcp_socket_transmit_suspended_count--;
+
+            /* Remove the suspended thread from the list.  */
+            _nx_tcp_socket_thread_resume(&(socket_ptr->nx_tcp_socket_transmit_suspension_list), NX_SUCCESS);
+        }
     }
-
-    /* Substract any data transmitted but unacked (outstanding bytes) */
-    if (tx_window_current > socket_ptr->nx_tcp_socket_tx_outstanding_bytes) {
-      tx_window_current -= socket_ptr->nx_tcp_socket_tx_outstanding_bytes;
-    } else /* Set tx_window_current to zero. */
-    {
-      tx_window_current = 0;
-    }
-
-    /* Determine if the current transmit window (received from the connected
-       socket) is large enough to handle the transmit.  */
-    if ((tx_window_current) &&
-        (socket_ptr->nx_tcp_socket_transmit_sent_count <
-         socket_ptr->nx_tcp_socket_transmit_queue_maximum)) {
-
-      /* Is NetX set up with a windows update callback? */
-      if (socket_ptr->nx_tcp_socket_window_update_notify) {
-
-        /* Yes; Call this function when there is a change in transmit windows
-         * size. */
-        (socket_ptr->nx_tcp_socket_window_update_notify)(socket_ptr);
-      }
-
-      /* Decrement the suspension count.  */
-      socket_ptr->nx_tcp_socket_transmit_suspended_count--;
-
-      /* Remove the suspended thread from the list.  */
-      _nx_tcp_socket_thread_resume(
-          &(socket_ptr->nx_tcp_socket_transmit_suspension_list), NX_SUCCESS);
-    }
-  }
 }

@@ -76,49 +76,47 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_ip_interface_address_set(NX_IP *ip_ptr, UINT interface_index,
-                                   ULONG ip_address, ULONG network_mask) {
+UINT _nxe_ip_interface_address_set(NX_IP *ip_ptr, UINT interface_index, ULONG ip_address, ULONG network_mask) {
 
 #ifndef NX_DISABLE_IPV4
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for invalid IP address.  */
-  if (((ip_address & NX_IP_CLASS_A_MASK) != NX_IP_CLASS_A_TYPE) &&
-      ((ip_address & NX_IP_CLASS_B_MASK) != NX_IP_CLASS_B_TYPE) &&
-      ((ip_address & NX_IP_CLASS_C_MASK) != NX_IP_CLASS_C_TYPE)) {
-    return (NX_IP_ADDRESS_ERROR);
-  }
+    /* Check for invalid IP address.  */
+    if (((ip_address & NX_IP_CLASS_A_MASK) != NX_IP_CLASS_A_TYPE) &&
+        ((ip_address & NX_IP_CLASS_B_MASK) != NX_IP_CLASS_B_TYPE) &&
+        ((ip_address & NX_IP_CLASS_C_MASK) != NX_IP_CLASS_C_TYPE)) {
+        return (NX_IP_ADDRESS_ERROR);
+    }
 
-  /* Check for invalid interface ID */
-  if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
-    return (NX_INVALID_INTERFACE);
-  }
+    /* Check for invalid interface ID */
+    if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
+        return (NX_INVALID_INTERFACE);
+    }
 
-  /* Check for interface being valid. */
-  if (!ip_ptr->nx_ip_interface[interface_index].nx_interface_valid) {
-    return (NX_INVALID_INTERFACE);
-  }
+    /* Check for interface being valid. */
+    if (!ip_ptr->nx_ip_interface[interface_index].nx_interface_valid) {
+        return (NX_INVALID_INTERFACE);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call actual IP address set function.  */
-  status = _nx_ip_interface_address_set(ip_ptr, interface_index, ip_address,
-                                        network_mask);
+    /* Call actual IP address set function.  */
+    status = _nx_ip_interface_address_set(ip_ptr, interface_index, ip_address, network_mask);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(interface_index);
-  NX_PARAMETER_NOT_USED(ip_address);
-  NX_PARAMETER_NOT_USED(network_mask);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(interface_index);
+    NX_PARAMETER_NOT_USED(ip_address);
+    NX_PARAMETER_NOT_USED(network_mask);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

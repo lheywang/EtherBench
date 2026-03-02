@@ -71,20 +71,19 @@ FX_CALLER_CHECKING_EXTERNS
 /**************************************************************************/
 UINT _fxe_media_volume_set(FX_MEDIA *media_ptr, CHAR *volume_name) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a NULL media or volume name pointer.  */
-  if ((media_ptr == FX_NULL) || (volume_name == FX_NULL) ||
-      (volume_name[0] == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a NULL media or volume name pointer.  */
+    if ((media_ptr == FX_NULL) || (volume_name == FX_NULL) || (volume_name[0] == FX_NULL)) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual media volume set service.  */
-  status = _fx_media_volume_set(media_ptr, volume_name);
+    /* Call actual media volume set service.  */
+    status = _fx_media_volume_set(media_ptr, volume_name);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

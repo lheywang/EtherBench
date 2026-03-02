@@ -72,8 +72,8 @@
 /*                                                                        */
 /**************************************************************************/
 VOID _nx_tcp_cleanup_deferred(TX_THREAD *thread_ptr NX_CLEANUP_PARAMETER) {
-  NX_PARAMETER_NOT_USED(thread_ptr);
+    NX_PARAMETER_NOT_USED(thread_ptr);
 
-  NX_CLEANUP_EXTENSION
-  /* This function is never called... so do nothing!  */
+    NX_CLEANUP_EXTENSION
+    /* This function is never called... so do nothing!  */
 }

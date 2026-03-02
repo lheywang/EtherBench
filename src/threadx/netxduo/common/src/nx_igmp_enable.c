@@ -71,37 +71,36 @@ UINT _nx_igmp_enable(NX_IP *ip_ptr) {
 
 #ifndef NX_DISABLE_IPV4
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_IGMP_ENABLE, ip_ptr, 0, 0, 0,
-                          NX_TRACE_IGMP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_IGMP_ENABLE, ip_ptr, 0, 0, 0, NX_TRACE_IGMP_EVENTS, 0, 0);
 
 #ifndef NX_DISABLE_IGMPV2
 
-  /* Set the IGMP protocol to the default version supported by NetX, IGMPv2. */
+    /* Set the IGMP protocol to the default version supported by NetX, IGMPv2. */
 
-  ip_ptr->nx_ip_igmp_router_version = NX_IGMP_HOST_VERSION_2;
+    ip_ptr->nx_ip_igmp_router_version = NX_IGMP_HOST_VERSION_2;
 
 #endif
 
-  /* Setup the IGMP packet receive routine, which enables the IGMP component. */
-  ip_ptr->nx_ip_igmp_packet_receive = _nx_igmp_packet_receive;
+    /* Setup the IGMP packet receive routine, which enables the IGMP component. */
+    ip_ptr->nx_ip_igmp_packet_receive = _nx_igmp_packet_receive;
 
-  /* Setup the IGMP periodic processing routine, which enables the IGMP
-   * component.  */
-  ip_ptr->nx_ip_igmp_periodic_processing = _nx_igmp_periodic_processing;
+    /* Setup the IGMP periodic processing routine, which enables the IGMP
+     * component.  */
+    ip_ptr->nx_ip_igmp_periodic_processing = _nx_igmp_periodic_processing;
 
-  /* Setup the IGMP queue processing routine, which processes deferred IGMP
-     requests.  */
-  ip_ptr->nx_ip_igmp_queue_process = _nx_igmp_queue_process;
+    /* Setup the IGMP queue processing routine, which processes deferred IGMP
+       requests.  */
+    ip_ptr->nx_ip_igmp_queue_process = _nx_igmp_queue_process;
 
-  /* Wakeup IP helper thread to process the IGMP deferred enable.  */
-  tx_event_flags_set(&(ip_ptr->nx_ip_events), NX_IP_IGMP_ENABLE_EVENT, TX_OR);
+    /* Wakeup IP helper thread to process the IGMP deferred enable.  */
+    tx_event_flags_set(&(ip_ptr->nx_ip_events), NX_IP_IGMP_ENABLE_EVENT, TX_OR);
 
-  /* Return a successful status!  */
-  return (NX_SUCCESS);
+    /* Return a successful status!  */
+    return (NX_SUCCESS);
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_ptr);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

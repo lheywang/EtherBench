@@ -21,16 +21,13 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_cdc_acm.h"
 #include "ux_device_stack.h"
 
-
 #if defined(UX_DEVICE_STANDALONE)
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -95,37 +92,36 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_cdc_acm_write_run(UX_SLAVE_CLASS_CDC_ACM *cdc_acm,
-    UCHAR *buffer, ULONG requested_length, ULONG *actual_length)
-{
+UINT _ux_device_class_cdc_acm_write_run(UX_SLAVE_CLASS_CDC_ACM *cdc_acm, UCHAR *buffer, ULONG requested_length,
+                                        ULONG *actual_length) {
 
-UX_SLAVE_ENDPOINT           *endpoint;
-UX_SLAVE_DEVICE             *device;
-UX_SLAVE_INTERFACE          *interface_ptr;
-UX_SLAVE_TRANSFER           *transfer_request;
-UINT                        status = 0;
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_SLAVE_DEVICE *device;
+    UX_SLAVE_INTERFACE *interface_ptr;
+    UX_SLAVE_TRANSFER *transfer_request;
+    UINT status = 0;
 #if (UX_DEVICE_ENDPOINT_BUFFER_OWNER != 1) || !defined(UX_DEVICE_CLASS_CDC_ACM_ZERO_COPY)
-UINT                        zlp = UX_FALSE;
+    UINT zlp = UX_FALSE;
 #endif
 
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_CDC_ACM_WRITE, cdc_acm, buffer, requested_length, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_CDC_ACM_WRITE, cdc_acm, buffer, requested_length, 0,
+                            UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
 #ifndef UX_DEVICE_CLASS_CDC_ACM_TRANSMISSION_DISABLE
 
     /* Check if current cdc-acm is using callback or not. We cannot use direct writes with callback on.  */
-    if (cdc_acm -> ux_slave_class_cdc_acm_transmission_status == UX_TRUE)
+    if (cdc_acm->ux_slave_class_cdc_acm_transmission_status == UX_TRUE)
 
         /* Not allowed. */
-        return(UX_STATE_ERROR);
+        return (UX_STATE_ERROR);
 #endif
 
     /* Get the pointer to the device.  */
-    device =  &_ux_system_slave -> ux_system_slave_device;
+    device = &_ux_system_slave->ux_system_slave_device;
 
     /* As long as the device is in the CONFIGURED state.  */
-    if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
-    {
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_CONFIGURATION_HANDLE_UNKNOWN);
@@ -134,46 +130,44 @@ UINT                        zlp = UX_FALSE;
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONFIGURATION_HANDLE_UNKNOWN, device, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
         /* Cannot proceed with command, the interface is down.  */
-        cdc_acm -> ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
-        cdc_acm -> ux_device_class_cdc_acm_write_status = UX_CONFIGURATION_HANDLE_UNKNOWN;
+        cdc_acm->ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
+        cdc_acm->ux_device_class_cdc_acm_write_status = UX_CONFIGURATION_HANDLE_UNKNOWN;
 
-        return(UX_STATE_EXIT);
+        return (UX_STATE_EXIT);
     }
 
     /* We need the interface to the class.  */
-    interface_ptr =  cdc_acm -> ux_slave_class_cdc_acm_interface;
+    interface_ptr = cdc_acm->ux_slave_class_cdc_acm_interface;
 
     /* Locate the endpoints.  */
-    endpoint =  interface_ptr -> ux_slave_interface_first_endpoint;
+    endpoint = interface_ptr->ux_slave_interface_first_endpoint;
 
     /* Check the endpoint direction, if IN we have the correct endpoint.  */
-    if ((endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_IN)
-    {
+    if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_IN) {
 
         /* So the next endpoint has to be the IN endpoint.  */
-        endpoint =  endpoint -> ux_slave_endpoint_next_endpoint;
+        endpoint = endpoint->ux_slave_endpoint_next_endpoint;
     }
 
     /* We are writing to the IN endpoint.  */
-    transfer_request =  &endpoint -> ux_slave_endpoint_transfer_request;
+    transfer_request = &endpoint->ux_slave_endpoint_transfer_request;
 
 #if defined(UX_DEVICE_CLASS_CDC_ACM_OWN_ENDPOINT_BUFFER)
-    transfer_request -> ux_slave_transfer_request_data_pointer =
-                                UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER(cdc_acm);
+    transfer_request->ux_slave_transfer_request_data_pointer = UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER(cdc_acm);
 #endif
 
 #if (UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1) && defined(UX_DEVICE_CLASS_CDC_ACM_ZERO_COPY)
 
     /* Run the transfer state machine.  */
-    if(cdc_acm -> ux_device_class_cdc_acm_write_state == UX_STATE_RESET)
-    {
+    if (cdc_acm->ux_device_class_cdc_acm_write_state == UX_STATE_RESET) {
 
         /* If trace is enabled, insert this event into the trace buffer.  */
-        UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_CDC_ACM_WRITE, cdc_acm, buffer, requested_length, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
+        UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_CDC_ACM_WRITE, cdc_acm, buffer, requested_length, 0,
+                                UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
-        cdc_acm -> ux_device_class_cdc_acm_write_state = UX_DEVICE_CLASS_CDC_ACM_WRITE_WAIT;
-        cdc_acm -> ux_device_class_cdc_acm_write_status = UX_TRANSFER_NO_ANSWER;
-        transfer_request -> ux_slave_transfer_request_data_pointer = buffer;
+        cdc_acm->ux_device_class_cdc_acm_write_state = UX_DEVICE_CLASS_CDC_ACM_WRITE_WAIT;
+        cdc_acm->ux_device_class_cdc_acm_write_status = UX_TRANSFER_NO_ANSWER;
+        transfer_request->ux_slave_transfer_request_data_pointer = buffer;
         UX_SLAVE_TRANSFER_STATE_RESET(transfer_request);
     }
 
@@ -185,42 +179,37 @@ UINT                        zlp = UX_FALSE;
 #endif
 
     /* Error case.  */
-    if (status < UX_STATE_NEXT)
-    {
-        cdc_acm -> ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
-        cdc_acm -> ux_device_class_cdc_acm_write_status =
-            transfer_request -> ux_slave_transfer_request_completion_code;
-        return(UX_STATE_ERROR);
+    if (status < UX_STATE_NEXT) {
+        cdc_acm->ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
+        cdc_acm->ux_device_class_cdc_acm_write_status = transfer_request->ux_slave_transfer_request_completion_code;
+        return (UX_STATE_ERROR);
     }
 
     /* Success case.  */
-    if (status == UX_STATE_NEXT)
-    {
+    if (status == UX_STATE_NEXT) {
 
         /* Last transfer status.  */
-        cdc_acm -> ux_device_class_cdc_acm_write_status =
-            transfer_request -> ux_slave_transfer_request_completion_code;
+        cdc_acm->ux_device_class_cdc_acm_write_status = transfer_request->ux_slave_transfer_request_completion_code;
 
         /* Update actual length.  */
-        *actual_length = transfer_request -> ux_slave_transfer_request_actual_length;
+        *actual_length = transfer_request->ux_slave_transfer_request_actual_length;
 
         /* It's done.  */
-        cdc_acm -> ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
+        cdc_acm->ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
     }
 
-    return(status);
+    return (status);
 #else
 
     /* Handle state cases.  */
-    switch(cdc_acm -> ux_device_class_cdc_acm_write_state)
-    {
+    switch (cdc_acm->ux_device_class_cdc_acm_write_state) {
     case UX_STATE_RESET:
-        cdc_acm -> ux_device_class_cdc_acm_write_state = UX_DEVICE_CLASS_CDC_ACM_WRITE_START;
-        cdc_acm -> ux_device_class_cdc_acm_write_status = UX_TRANSFER_NO_ANSWER;
-        cdc_acm -> ux_device_class_cdc_acm_write_buffer = buffer;
-        cdc_acm -> ux_device_class_cdc_acm_write_requested_length = requested_length;
-        cdc_acm -> ux_device_class_cdc_acm_write_actual_length = 0;
-        cdc_acm -> ux_device_class_cdc_acm_write_host_length = UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE;
+        cdc_acm->ux_device_class_cdc_acm_write_state = UX_DEVICE_CLASS_CDC_ACM_WRITE_START;
+        cdc_acm->ux_device_class_cdc_acm_write_status = UX_TRANSFER_NO_ANSWER;
+        cdc_acm->ux_device_class_cdc_acm_write_buffer = buffer;
+        cdc_acm->ux_device_class_cdc_acm_write_requested_length = requested_length;
+        cdc_acm->ux_device_class_cdc_acm_write_actual_length = 0;
+        cdc_acm->ux_device_class_cdc_acm_write_host_length = UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE;
         if (requested_length == 0)
             zlp = UX_TRUE;
 
@@ -228,111 +217,100 @@ UINT                        zlp = UX_FALSE;
     case UX_DEVICE_CLASS_CDC_ACM_WRITE_START:
 
         /* Get remaining requested length.  */
-        requested_length = cdc_acm -> ux_device_class_cdc_acm_write_requested_length -
-                        cdc_acm -> ux_device_class_cdc_acm_write_actual_length;
+        requested_length = cdc_acm->ux_device_class_cdc_acm_write_requested_length -
+                           cdc_acm->ux_device_class_cdc_acm_write_actual_length;
 
         /* There is no remaining, we are done.  */
-        if (requested_length == 0 && !zlp)
-        {
-            *actual_length = cdc_acm -> ux_device_class_cdc_acm_write_actual_length;
-            cdc_acm -> ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
-            cdc_acm -> ux_device_class_cdc_acm_write_status = UX_SUCCESS;
-            return(UX_STATE_NEXT);
+        if (requested_length == 0 && !zlp) {
+            *actual_length = cdc_acm->ux_device_class_cdc_acm_write_actual_length;
+            cdc_acm->ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
+            cdc_acm->ux_device_class_cdc_acm_write_status = UX_SUCCESS;
+            return (UX_STATE_NEXT);
         }
 
         /* Check if we have enough in the local buffer.  */
         if (requested_length > UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE)
 
             /* We have too much to transfer.  */
-            cdc_acm -> ux_device_class_cdc_acm_write_transfer_length =
-                                            UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE;
+            cdc_acm->ux_device_class_cdc_acm_write_transfer_length = UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE;
 
-        else
-        {
+        else {
 
             /* We can proceed with the demanded length.  */
-            cdc_acm -> ux_device_class_cdc_acm_write_transfer_length = requested_length;
+            cdc_acm->ux_device_class_cdc_acm_write_transfer_length = requested_length;
 
 #if !defined(UX_DEVICE_CLASS_CDC_ACM_WRITE_AUTO_ZLP)
 
             /* Assume expected length and transfer length match.  */
-            cdc_acm -> ux_device_class_cdc_acm_write_host_length = requested_length;
+            cdc_acm->ux_device_class_cdc_acm_write_host_length = requested_length;
 #else
 
             /* Assume expected more than transfer to let stack append ZLP if needed.  */
-            cdc_acm -> ux_device_class_cdc_acm_write_host_length = UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE + 1;
+            cdc_acm->ux_device_class_cdc_acm_write_host_length = UX_DEVICE_CLASS_CDC_ACM_WRITE_BUFFER_SIZE + 1;
 #endif
         }
 
-
         /* On a out, we copy the buffer to the caller. Not very efficient but it makes the API
            easier.  */
-        _ux_utility_memory_copy(transfer_request -> ux_slave_transfer_request_data_pointer, 
-                            cdc_acm -> ux_device_class_cdc_acm_write_buffer,
-                            cdc_acm -> ux_device_class_cdc_acm_write_transfer_length); /* Use case of memcpy is verified. */
+        _ux_utility_memory_copy(
+            transfer_request->ux_slave_transfer_request_data_pointer, cdc_acm->ux_device_class_cdc_acm_write_buffer,
+            cdc_acm->ux_device_class_cdc_acm_write_transfer_length); /* Use case of memcpy is verified. */
 
         /* Next state.  */
-        cdc_acm -> ux_device_class_cdc_acm_write_state = UX_DEVICE_CLASS_CDC_ACM_WRITE_WAIT;
+        cdc_acm->ux_device_class_cdc_acm_write_state = UX_DEVICE_CLASS_CDC_ACM_WRITE_WAIT;
         UX_SLAVE_TRANSFER_STATE_RESET(transfer_request);
 
         /* Fall through.  */
     case UX_DEVICE_CLASS_CDC_ACM_WRITE_WAIT:
 
         /* Send the request to the device controller.  */
-        status =  _ux_device_stack_transfer_run(transfer_request,
-                            cdc_acm -> ux_device_class_cdc_acm_write_transfer_length,
-                            cdc_acm -> ux_device_class_cdc_acm_write_host_length);
+        status = _ux_device_stack_transfer_run(transfer_request, cdc_acm->ux_device_class_cdc_acm_write_transfer_length,
+                                               cdc_acm->ux_device_class_cdc_acm_write_host_length);
 
         /* Error case.  */
-        if (status < UX_STATE_NEXT)
-        {
+        if (status < UX_STATE_NEXT) {
 
-            cdc_acm -> ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
-            cdc_acm -> ux_device_class_cdc_acm_write_status =
-                transfer_request -> ux_slave_transfer_request_completion_code;
-            return(UX_STATE_ERROR);
+            cdc_acm->ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
+            cdc_acm->ux_device_class_cdc_acm_write_status = transfer_request->ux_slave_transfer_request_completion_code;
+            return (UX_STATE_ERROR);
         }
 
         /* Success case.  */
-        if (status == UX_STATE_NEXT)
-        {
+        if (status == UX_STATE_NEXT) {
 
             /* Next buffer address.  */
-            cdc_acm -> ux_device_class_cdc_acm_write_buffer +=
-                    transfer_request -> ux_slave_transfer_request_actual_length;
+            cdc_acm->ux_device_class_cdc_acm_write_buffer += transfer_request->ux_slave_transfer_request_actual_length;
 
             /* Set the length actually received. */
-            cdc_acm -> ux_device_class_cdc_acm_write_actual_length +=
-                    transfer_request -> ux_slave_transfer_request_actual_length;
+            cdc_acm->ux_device_class_cdc_acm_write_actual_length +=
+                transfer_request->ux_slave_transfer_request_actual_length;
 
             /* Last transfer status.  */
-            cdc_acm -> ux_device_class_cdc_acm_write_status =
-                transfer_request -> ux_slave_transfer_request_completion_code;
+            cdc_acm->ux_device_class_cdc_acm_write_status = transfer_request->ux_slave_transfer_request_completion_code;
 
             /* Update actual done length.  */
-            *actual_length = cdc_acm -> ux_device_class_cdc_acm_write_actual_length;
+            *actual_length = cdc_acm->ux_device_class_cdc_acm_write_actual_length;
 
             /* Check ZLP case.  */
-            if (cdc_acm -> ux_device_class_cdc_acm_write_requested_length == 0)
-            {
-                cdc_acm -> ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
-                return(UX_STATE_NEXT);
+            if (cdc_acm->ux_device_class_cdc_acm_write_requested_length == 0) {
+                cdc_acm->ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
+                return (UX_STATE_NEXT);
             }
 
             /* Next state.  */
-            cdc_acm -> ux_device_class_cdc_acm_write_state = UX_DEVICE_CLASS_CDC_ACM_WRITE_START;
+            cdc_acm->ux_device_class_cdc_acm_write_state = UX_DEVICE_CLASS_CDC_ACM_WRITE_START;
         }
 
         /* Keep waiting.  */
-        return(UX_STATE_WAIT);
+        return (UX_STATE_WAIT);
 
     default: /* Error.  */
-        cdc_acm -> ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
+        cdc_acm->ux_device_class_cdc_acm_write_state = UX_STATE_RESET;
         break;
     }
 
     /* Error case.  */
-    return(UX_STATE_EXIT);
+    return (UX_STATE_EXIT);
 #endif
 }
 
@@ -384,14 +362,12 @@ UINT                        zlp = UX_FALSE;
 /*  10-31-2023     Yajun Xia                Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT _uxe_device_class_cdc_acm_write_run(UX_SLAVE_CLASS_CDC_ACM *cdc_acm,
-                    UCHAR *buffer, ULONG requested_length, ULONG *actual_length)
-{
+UINT _uxe_device_class_cdc_acm_write_run(UX_SLAVE_CLASS_CDC_ACM *cdc_acm, UCHAR *buffer, ULONG requested_length,
+                                         ULONG *actual_length) {
 
     /* Sanity checks.  */
-    if ((cdc_acm == UX_NULL) || ((buffer == UX_NULL) && (requested_length > 0)) || (actual_length == UX_NULL))
-    {
-        return(UX_STATE_ERROR);
+    if ((cdc_acm == UX_NULL) || ((buffer == UX_NULL) && (requested_length > 0)) || (actual_length == UX_NULL)) {
+        return (UX_STATE_ERROR);
     }
 
     return (_ux_device_class_cdc_acm_write_run(cdc_acm, buffer, requested_length, actual_length));

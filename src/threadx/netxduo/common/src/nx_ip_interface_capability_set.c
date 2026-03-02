@@ -72,29 +72,27 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_ip_interface_capability_set(NX_IP *ip_ptr, UINT interface_index,
-                                     ULONG interface_capability_flag) {
+UINT _nx_ip_interface_capability_set(NX_IP *ip_ptr, UINT interface_index, ULONG interface_capability_flag) {
 #ifdef NX_ENABLE_INTERFACE_CAPABILITY
 
-  /* Get mutex protection.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Get mutex protection.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Set interface capability flag. */
-  ip_ptr->nx_ip_interface[interface_index].nx_interface_capability_flag =
-      interface_capability_flag;
+    /* Set interface capability flag. */
+    ip_ptr->nx_ip_interface[interface_index].nx_interface_capability_flag = interface_capability_flag;
 
-  /* Release mutex protection.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release mutex protection.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /* Return completion status.  */
-  return (NX_SUCCESS);
+    /* Return completion status.  */
+    return (NX_SUCCESS);
 
 #else /* NX_ENABLE_INTERFACE_CAPABILITY */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(interface_index);
-  NX_PARAMETER_NOT_USED(interface_capability_flag);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(interface_index);
+    NX_PARAMETER_NOT_USED(interface_capability_flag);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* NX_ENABLE_INTERFACE_CAPABILITY */
 }

@@ -68,47 +68,43 @@
 /*  08-02-2021     Yuxin Zhou               Initial Version 6.1.8         */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_tcp_server_socket_driver_listen(NX_IP *ip_ptr, UINT port,
-                                         NX_TCP_SOCKET *socket_ptr) {
-  UINT status;
-  UINT i;
-  NX_INTERFACE *interface_ptr;
+UINT _nx_tcp_server_socket_driver_listen(NX_IP *ip_ptr, UINT port, NX_TCP_SOCKET *socket_ptr) {
+    UINT status;
+    UINT i;
+    NX_INTERFACE *interface_ptr;
 
-  /* Loop all interfaces to listen to ones support TCP/IP offload.  */
-  for (i = 0; i < NX_MAX_IP_INTERFACES; i++) {
+    /* Loop all interfaces to listen to ones support TCP/IP offload.  */
+    for (i = 0; i < NX_MAX_IP_INTERFACES; i++) {
 
-    /* Use a local variable for convenience.  */
-    interface_ptr = &(ip_ptr->nx_ip_interface[i]);
+        /* Use a local variable for convenience.  */
+        interface_ptr = &(ip_ptr->nx_ip_interface[i]);
 
-    /* Check for valid interfaces.  */
-    if ((interface_ptr->nx_interface_valid == NX_FALSE) ||
-        (interface_ptr->nx_interface_link_up == NX_FALSE)) {
+        /* Check for valid interfaces.  */
+        if ((interface_ptr->nx_interface_valid == NX_FALSE) || (interface_ptr->nx_interface_link_up == NX_FALSE)) {
 
-      /* Skip interface not valid.  */
-      continue;
+            /* Skip interface not valid.  */
+            continue;
+        }
+
+        /* Check for TCP/IP offload feature.  */
+        if (((interface_ptr->nx_interface_capability_flag & NX_INTERFACE_CAPABILITY_TCPIP_OFFLOAD) == 0) ||
+            (interface_ptr->nx_interface_tcpip_offload_handler == NX_NULL)) {
+
+            /* Skip interface not support TCP/IP offload.  */
+            continue;
+        }
+
+        /* Let TCP/IP offload interface listen to port.  */
+        status = interface_ptr->nx_interface_tcpip_offload_handler(ip_ptr, interface_ptr, socket_ptr,
+                                                                   NX_TCPIP_OFFLOAD_TCP_SERVER_SOCKET_LISTEN, NX_NULL,
+                                                                   NX_NULL, NX_NULL, port, NX_NULL, NX_NO_WAIT);
+        if (status) {
+
+            /* Return an already bound error code.  */
+            return (NX_TCPIP_OFFLOAD_ERROR);
+        }
     }
 
-    /* Check for TCP/IP offload feature.  */
-    if (((interface_ptr->nx_interface_capability_flag &
-          NX_INTERFACE_CAPABILITY_TCPIP_OFFLOAD) == 0) ||
-        (interface_ptr->nx_interface_tcpip_offload_handler == NX_NULL)) {
-
-      /* Skip interface not support TCP/IP offload.  */
-      continue;
-    }
-
-    /* Let TCP/IP offload interface listen to port.  */
-    status = interface_ptr->nx_interface_tcpip_offload_handler(
-        ip_ptr, interface_ptr, socket_ptr,
-        NX_TCPIP_OFFLOAD_TCP_SERVER_SOCKET_LISTEN, NX_NULL, NX_NULL, NX_NULL,
-        port, NX_NULL, NX_NO_WAIT);
-    if (status) {
-
-      /* Return an already bound error code.  */
-      return (NX_TCPIP_OFFLOAD_ERROR);
-    }
-  }
-
-  return (NX_SUCCESS);
+    return (NX_SUCCESS);
 }
 #endif /* NX_ENABLE_TCPIP_OFFLOAD */

@@ -80,88 +80,76 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_dcd_stm32_transfer_request(UX_DCD_STM32 *dcd_stm32,
-                                    UX_SLAVE_TRANSFER *transfer_request) {
+UINT _ux_dcd_stm32_transfer_request(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_TRANSFER *transfer_request) {
 
-  UX_SLAVE_ENDPOINT *endpoint;
-  UINT status;
+    UX_SLAVE_ENDPOINT *endpoint;
+    UINT status;
 
-  /* Get the pointer to the logical endpoint from the transfer request.  */
-  endpoint = transfer_request->ux_slave_transfer_request_endpoint;
+    /* Get the pointer to the logical endpoint from the transfer request.  */
+    endpoint = transfer_request->ux_slave_transfer_request_endpoint;
 
-  /* Check for transfer direction.  Is this a IN endpoint ? */
-  if (transfer_request->ux_slave_transfer_request_phase ==
-      UX_TRANSFER_PHASE_DATA_OUT) {
+    /* Check for transfer direction.  Is this a IN endpoint ? */
+    if (transfer_request->ux_slave_transfer_request_phase == UX_TRANSFER_PHASE_DATA_OUT) {
 
-    /* Transmit data.  */
-    HAL_PCD_EP_Transmit(
-        dcd_stm32->pcd_handle,
-        endpoint->ux_slave_endpoint_descriptor.bEndpointAddress,
-        transfer_request->ux_slave_transfer_request_data_pointer,
-        transfer_request->ux_slave_transfer_request_requested_length);
+        /* Transmit data.  */
+        HAL_PCD_EP_Transmit(dcd_stm32->pcd_handle, endpoint->ux_slave_endpoint_descriptor.bEndpointAddress,
+                            transfer_request->ux_slave_transfer_request_data_pointer,
+                            transfer_request->ux_slave_transfer_request_requested_length);
 
-    /* If the endpoint is a Control endpoint, all this is happening under
-       Interrupt and there is no thread to suspend.  */
-    if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress &
-         (UINT)~UX_ENDPOINT_DIRECTION) != 0) {
+        /* If the endpoint is a Control endpoint, all this is happening under
+           Interrupt and there is no thread to suspend.  */
+        if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress & (UINT)~UX_ENDPOINT_DIRECTION) != 0) {
 
-      /* We should wait for the semaphore to wake us up.  */
-      status = _ux_utility_semaphore_get(
-          &transfer_request->ux_slave_transfer_request_semaphore,
-          (ULONG)transfer_request->ux_slave_transfer_request_timeout);
+            /* We should wait for the semaphore to wake us up.  */
+            status = _ux_utility_semaphore_get(&transfer_request->ux_slave_transfer_request_semaphore,
+                                               (ULONG)transfer_request->ux_slave_transfer_request_timeout);
 
-      /* Check the completion code. */
-      if (status != UX_SUCCESS)
-        return (status);
+            /* Check the completion code. */
+            if (status != UX_SUCCESS)
+                return (status);
 
-      transfer_request->ux_slave_transfer_request_actual_length =
-          transfer_request->ux_slave_transfer_request_requested_length;
+            transfer_request->ux_slave_transfer_request_actual_length =
+                transfer_request->ux_slave_transfer_request_requested_length;
 
-      /* Check the transfer request completion code. We may have had a BUS reset
-         or a device disconnection.  */
-      if (transfer_request->ux_slave_transfer_request_completion_code !=
-          UX_SUCCESS)
-        return (transfer_request->ux_slave_transfer_request_completion_code);
+            /* Check the transfer request completion code. We may have had a BUS reset
+               or a device disconnection.  */
+            if (transfer_request->ux_slave_transfer_request_completion_code != UX_SUCCESS)
+                return (transfer_request->ux_slave_transfer_request_completion_code);
 
-      /* Return to caller with success.  */
-      return (UX_SUCCESS);
+            /* Return to caller with success.  */
+            return (UX_SUCCESS);
+        }
+    } else {
+
+        /* We have a request for a SETUP or OUT Endpoint.  */
+        /* Receive data.  */
+        HAL_PCD_EP_Receive(dcd_stm32->pcd_handle, endpoint->ux_slave_endpoint_descriptor.bEndpointAddress,
+                           transfer_request->ux_slave_transfer_request_data_pointer,
+                           transfer_request->ux_slave_transfer_request_requested_length);
+
+        /* If the endpoint is a Control endpoint, all this is happening under
+           Interrupt and there is no thread to suspend.  */
+        if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress & (UINT)~UX_ENDPOINT_DIRECTION) != 0) {
+
+            /* We should wait for the semaphore to wake us up.  */
+            status = _ux_utility_semaphore_get(&transfer_request->ux_slave_transfer_request_semaphore,
+                                               (ULONG)transfer_request->ux_slave_transfer_request_timeout);
+
+            /* Check the completion code. */
+            if (status != UX_SUCCESS)
+                return (status);
+
+            /* Check the transfer request completion code. We may have had a BUS reset
+               or a device disconnection.  */
+            if (transfer_request->ux_slave_transfer_request_completion_code != UX_SUCCESS)
+                return (transfer_request->ux_slave_transfer_request_completion_code);
+
+            /* Return to caller with success.  */
+            return (UX_SUCCESS);
+        }
     }
-  } else {
 
-    /* We have a request for a SETUP or OUT Endpoint.  */
-    /* Receive data.  */
-    HAL_PCD_EP_Receive(
-        dcd_stm32->pcd_handle,
-        endpoint->ux_slave_endpoint_descriptor.bEndpointAddress,
-        transfer_request->ux_slave_transfer_request_data_pointer,
-        transfer_request->ux_slave_transfer_request_requested_length);
-
-    /* If the endpoint is a Control endpoint, all this is happening under
-       Interrupt and there is no thread to suspend.  */
-    if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress &
-         (UINT)~UX_ENDPOINT_DIRECTION) != 0) {
-
-      /* We should wait for the semaphore to wake us up.  */
-      status = _ux_utility_semaphore_get(
-          &transfer_request->ux_slave_transfer_request_semaphore,
-          (ULONG)transfer_request->ux_slave_transfer_request_timeout);
-
-      /* Check the completion code. */
-      if (status != UX_SUCCESS)
-        return (status);
-
-      /* Check the transfer request completion code. We may have had a BUS reset
-         or a device disconnection.  */
-      if (transfer_request->ux_slave_transfer_request_completion_code !=
-          UX_SUCCESS)
-        return (transfer_request->ux_slave_transfer_request_completion_code);
-
-      /* Return to caller with success.  */
-      return (UX_SUCCESS);
-    }
-  }
-
-  /* Return to caller with success.  */
-  return (UX_SUCCESS);
+    /* Return to caller with success.  */
+    return (UX_SUCCESS);
 }
 #endif

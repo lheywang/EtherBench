@@ -27,8 +27,7 @@
 #include "ux_device_class_storage.h"
 #include "ux_device_stack.h"
 
-#if UX_SLAVE_CLASS_STORAGE_BUFFER_SIZE <                                       \
-    UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_LENGTH
+#if UX_SLAVE_CLASS_STORAGE_BUFFER_SIZE < UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_LENGTH
 /* #error UX_SLAVE_CLASS_STORAGE_BUFFER_SIZE too small, please check  */
 /* Build option checked runtime by UX_ASSERT  */
 #endif
@@ -91,99 +90,87 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_storage_request_sense(UX_SLAVE_CLASS_STORAGE *storage,
-                                            ULONG lun,
-                                            UX_SLAVE_ENDPOINT *endpoint_in,
-                                            UX_SLAVE_ENDPOINT *endpoint_out,
-                                            UCHAR *cbwcb) {
+UINT _ux_device_class_storage_request_sense(UX_SLAVE_CLASS_STORAGE *storage, ULONG lun, UX_SLAVE_ENDPOINT *endpoint_in,
+                                            UX_SLAVE_ENDPOINT *endpoint_out, UCHAR *cbwcb) {
 
-  UINT status = UX_SUCCESS;
-  UX_SLAVE_TRANSFER *transfer_request;
-  UCHAR *sense_buffer;
-  UCHAR key, code, qualifier;
-  ULONG sense_length;
+    UINT status = UX_SUCCESS;
+    UX_SLAVE_TRANSFER *transfer_request;
+    UCHAR *sense_buffer;
+    UCHAR key, code, qualifier;
+    ULONG sense_length;
 
-  UX_PARAMETER_NOT_USED(cbwcb);
-  UX_PARAMETER_NOT_USED(endpoint_out);
+    UX_PARAMETER_NOT_USED(cbwcb);
+    UX_PARAMETER_NOT_USED(endpoint_out);
 
-  /* Build option check.  */
-  UX_ASSERT(UX_SLAVE_CLASS_STORAGE_BUFFER_SIZE >=
-            UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_LENGTH);
+    /* Build option check.  */
+    UX_ASSERT(UX_SLAVE_CLASS_STORAGE_BUFFER_SIZE >= UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_LENGTH);
 
-  /* Obtain the pointer to the transfer request.  */
-  transfer_request = &endpoint_in->ux_slave_endpoint_transfer_request;
+    /* Obtain the pointer to the transfer request.  */
+    transfer_request = &endpoint_in->ux_slave_endpoint_transfer_request;
 
-  /* Get length.  */
-  sense_length = storage->ux_slave_class_storage_host_length;
-  if (sense_length > UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_LENGTH)
-    sense_length = UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_LENGTH;
+    /* Get length.  */
+    sense_length = storage->ux_slave_class_storage_host_length;
+    if (sense_length > UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_LENGTH)
+        sense_length = UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_LENGTH;
 
-  /* Obtain sense buffer.  */
-  sense_buffer = transfer_request->ux_slave_transfer_request_data_pointer;
+    /* Obtain sense buffer.  */
+    sense_buffer = transfer_request->ux_slave_transfer_request_data_pointer;
 
-  /* Ensure it is cleaned.  */
-  _ux_utility_memory_set(sense_buffer, 0,
-                         sense_length); /* Use case of memset is verified. */
+    /* Ensure it is cleaned.  */
+    _ux_utility_memory_set(sense_buffer, 0, sense_length); /* Use case of memset is verified. */
 
-  /* Initialize the response buffer with the error code.  */
-  sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_ERROR_CODE] =
-      UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_ERROR_CODE_VALUE;
+    /* Initialize the response buffer with the error code.  */
+    sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_ERROR_CODE] =
+        UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_ERROR_CODE_VALUE;
 
-  /* Extract sense key, code, qualifier.  */
-  key = UX_DEVICE_CLASS_STORAGE_SENSE_KEY(
-      storage->ux_slave_class_storage_lun[lun]
-          .ux_slave_class_storage_request_sense_status);
-  code = UX_DEVICE_CLASS_STORAGE_SENSE_CODE(
-      storage->ux_slave_class_storage_lun[lun]
-          .ux_slave_class_storage_request_sense_status);
-  qualifier = UX_DEVICE_CLASS_STORAGE_SENSE_QUALIFIER(
-      storage->ux_slave_class_storage_lun[lun]
-          .ux_slave_class_storage_request_sense_status);
+    /* Extract sense key, code, qualifier.  */
+    key = UX_DEVICE_CLASS_STORAGE_SENSE_KEY(
+        storage->ux_slave_class_storage_lun[lun].ux_slave_class_storage_request_sense_status);
+    code = UX_DEVICE_CLASS_STORAGE_SENSE_CODE(
+        storage->ux_slave_class_storage_lun[lun].ux_slave_class_storage_request_sense_status);
+    qualifier = UX_DEVICE_CLASS_STORAGE_SENSE_QUALIFIER(
+        storage->ux_slave_class_storage_lun[lun].ux_slave_class_storage_request_sense_status);
 
-  /* Initialize the response buffer with the sense key.  */
-  sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_SENSE_KEY] = key;
+    /* Initialize the response buffer with the sense key.  */
+    sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_SENSE_KEY] = key;
 
-  /* Initialize the response buffer with the code.  */
-  sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_CODE] = code;
+    /* Initialize the response buffer with the code.  */
+    sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_CODE] = code;
 
-  /* Initialize the response buffer with the code qualifier.  */
-  sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_CODE_QUALIFIER] =
-      qualifier;
+    /* Initialize the response buffer with the code qualifier.  */
+    sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_CODE_QUALIFIER] = qualifier;
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_REQUEST_SENSE, storage,
-                          lun, key, code, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_REQUEST_SENSE, storage, lun, key, code,
+                            UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
 
-  /* Initialize the response buffer with the additional length.  */
-  sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_ADD_LENGTH] = 10;
+    /* Initialize the response buffer with the additional length.  */
+    sense_buffer[UX_SLAVE_CLASS_STORAGE_REQUEST_SENSE_RESPONSE_ADD_LENGTH] = 10;
 
 #if defined(UX_DEVICE_STANDALONE)
 
-  /* Next: Transfer (DATA).  */
-  storage->ux_device_class_storage_state =
-      UX_DEVICE_CLASS_STORAGE_STATE_TRANS_START;
-  storage->ux_device_class_storage_cmd_state = UX_DEVICE_CLASS_STORAGE_CMD_READ;
+    /* Next: Transfer (DATA).  */
+    storage->ux_device_class_storage_state = UX_DEVICE_CLASS_STORAGE_STATE_TRANS_START;
+    storage->ux_device_class_storage_cmd_state = UX_DEVICE_CLASS_STORAGE_CMD_READ;
 
-  storage->ux_device_class_storage_transfer = transfer_request;
-  storage->ux_device_class_storage_device_length = sense_length;
-  storage->ux_device_class_storage_data_length = sense_length;
-  storage->ux_device_class_storage_data_count = 0;
+    storage->ux_device_class_storage_transfer = transfer_request;
+    storage->ux_device_class_storage_device_length = sense_length;
+    storage->ux_device_class_storage_data_length = sense_length;
+    storage->ux_device_class_storage_data_count = 0;
 
 #else
 
-  /* Send a data payload with the sense codes.  */
-  if (sense_length)
-    _ux_device_stack_transfer_request(transfer_request, sense_length,
-                                      sense_length);
+    /* Send a data payload with the sense codes.  */
+    if (sense_length)
+        _ux_device_stack_transfer_request(transfer_request, sense_length, sense_length);
 
-  /* Check length.  */
-  if (storage->ux_slave_class_storage_host_length != sense_length) {
-    _ux_device_stack_endpoint_stall(endpoint_in);
-    storage->ux_slave_class_storage_csw_status =
-        UX_SLAVE_CLASS_STORAGE_CSW_PHASE_ERROR;
-  }
+    /* Check length.  */
+    if (storage->ux_slave_class_storage_host_length != sense_length) {
+        _ux_device_stack_endpoint_stall(endpoint_in);
+        storage->ux_slave_class_storage_csw_status = UX_SLAVE_CLASS_STORAGE_CSW_PHASE_ERROR;
+    }
 #endif
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_audio.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -66,8 +64,7 @@
 /*  01-31-2022     Chaoqiong Xiao           Initial Version 6.1.10        */
 /*                                                                        */
 /**************************************************************************/
-ULONG _ux_device_class_audio_speed_get(UX_DEVICE_CLASS_AUDIO_STREAM *stream)
-{
+ULONG _ux_device_class_audio_speed_get(UX_DEVICE_CLASS_AUDIO_STREAM *stream) {
     UX_PARAMETER_NOT_USED(stream);
-    return(_ux_system_slave -> ux_system_slave_speed);
+    return (_ux_system_slave->ux_system_slave_speed);
 }

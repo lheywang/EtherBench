@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_hid.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -68,30 +66,26 @@
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_hid_event_check(UX_SLAVE_CLASS_HID *hid,
-                                       UX_DEVICE_CLASS_HID_EVENT **hid_event)
-{
-UX_SLAVE_DEVICE                 *device;
+UINT _ux_device_class_hid_event_check(UX_SLAVE_CLASS_HID *hid, UX_DEVICE_CLASS_HID_EVENT **hid_event) {
+    UX_SLAVE_DEVICE *device;
 
     /* Get the pointer to the device.  */
-    device =  &_ux_system_slave -> ux_system_slave_device;
+    device = &_ux_system_slave->ux_system_slave_device;
 
     /* Check the device state.  */
-    if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
-        return(UX_DEVICE_HANDLE_UNKNOWN);
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED)
+        return (UX_DEVICE_HANDLE_UNKNOWN);
 
     /* Check if the head and the tail of the event array is the same.  */
-    if (hid -> ux_device_class_hid_event_array_head ==
-        hid -> ux_device_class_hid_event_array_tail)
+    if (hid->ux_device_class_hid_event_array_head == hid->ux_device_class_hid_event_array_tail)
 
         /* No event to report.  */
-        return(UX_ERROR);
+        return (UX_ERROR);
 
     /* There is an event to report, get the current pointer to the event.  */
-    *hid_event =  hid -> ux_device_class_hid_event_array_tail;
-    return(UX_SUCCESS);
+    *hid_event = hid->ux_device_class_hid_event_array_tail;
+    return (UX_SUCCESS);
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -128,17 +122,15 @@ UX_SLAVE_DEVICE                 *device;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-VOID  _ux_device_class_hid_event_free(UX_SLAVE_CLASS_HID *hid)
-{
-UCHAR                           *pos;
+VOID _ux_device_class_hid_event_free(UX_SLAVE_CLASS_HID *hid) {
+    UCHAR *pos;
 
-    pos = (UCHAR *) hid -> ux_device_class_hid_event_array_tail;
+    pos = (UCHAR *)hid->ux_device_class_hid_event_array_tail;
     pos += UX_DEVICE_CLASS_HID_EVENT_QUEUE_ITEM_SIZE(hid);
-    if (pos >= (UCHAR *) hid -> ux_device_class_hid_event_array_end)
-        pos = (UCHAR *) hid -> ux_device_class_hid_event_array;
-    hid -> ux_device_class_hid_event_array_tail = (UX_DEVICE_CLASS_HID_EVENT *) pos;
+    if (pos >= (UCHAR *)hid->ux_device_class_hid_event_array_end)
+        pos = (UCHAR *)hid->ux_device_class_hid_event_array;
+    hid->ux_device_class_hid_event_array_tail = (UX_DEVICE_CLASS_HID_EVENT *)pos;
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -185,40 +177,38 @@ UCHAR                           *pos;
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_hid_event_get(UX_SLAVE_CLASS_HID *hid,
-                                     UX_SLAVE_CLASS_HID_EVENT *hid_event)
-{
+UINT _ux_device_class_hid_event_get(UX_SLAVE_CLASS_HID *hid, UX_SLAVE_CLASS_HID_EVENT *hid_event) {
 
-UX_DEVICE_CLASS_HID_EVENT       *current_hid_event;
-UINT                            status;
+    UX_DEVICE_CLASS_HID_EVENT *current_hid_event;
+    UINT status;
 
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_HID_EVENT_GET, hid, hid_event, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_HID_EVENT_GET, hid, hid_event, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0,
+                            0)
 
     /* Check and get event pointer.  */
     status = _ux_device_class_hid_event_check(hid, &current_hid_event);
     if (status != UX_SUCCESS)
-        return(status);
+        return (status);
 
     /* Keep the event data length inside buffer area.  */
-    if (current_hid_event -> ux_device_class_hid_event_length > UX_DEVICE_CLASS_HID_EVENT_MAX_LENGTH(hid))
-        current_hid_event -> ux_device_class_hid_event_length = UX_DEVICE_CLASS_HID_EVENT_MAX_LENGTH(hid);
+    if (current_hid_event->ux_device_class_hid_event_length > UX_DEVICE_CLASS_HID_EVENT_MAX_LENGTH(hid))
+        current_hid_event->ux_device_class_hid_event_length = UX_DEVICE_CLASS_HID_EVENT_MAX_LENGTH(hid);
 
     /* fill in the event structure from the user.  */
-    hid_event -> ux_device_class_hid_event_length =  current_hid_event -> ux_device_class_hid_event_length;
+    hid_event->ux_device_class_hid_event_length = current_hid_event->ux_device_class_hid_event_length;
 
     /* Copy the event data into the user buffer.  */
-    _ux_utility_memory_copy(hid_event -> ux_device_class_hid_event_buffer,
+    _ux_utility_memory_copy(hid_event->ux_device_class_hid_event_buffer,
                             UX_DEVICE_CLASS_HID_EVENT_BUFFER(current_hid_event),
-                            current_hid_event -> ux_device_class_hid_event_length); /* Use case of memcpy is verified. */
+                            current_hid_event->ux_device_class_hid_event_length); /* Use case of memcpy is verified. */
 
     /* Free the tail event.  */
     _ux_device_class_hid_event_free(hid);
 
     /* Return event status to the user.  */
-    return(UX_SUCCESS);
+    return (UX_SUCCESS);
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -258,14 +248,12 @@ UINT                            status;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT  _uxe_device_class_hid_event_get(UX_SLAVE_CLASS_HID *hid,
-                                      UX_SLAVE_CLASS_HID_EVENT *hid_event)
-{
+UINT _uxe_device_class_hid_event_get(UX_SLAVE_CLASS_HID *hid, UX_SLAVE_CLASS_HID_EVENT *hid_event) {
 
     /* Sanity checks.  */
     if ((hid == UX_NULL) || (hid_event == UX_NULL))
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Invoke function to get event.  */
-    return(_ux_device_class_hid_event_get(hid, hid_event));
+    return (_ux_device_class_hid_event_get(hid, hid_event));
 }

@@ -20,13 +20,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_hid.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -91,46 +89,42 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_hid_activate(UX_SLAVE_CLASS_COMMAND *command)
-{
+UINT _ux_device_class_hid_activate(UX_SLAVE_CLASS_COMMAND *command) {
 
-UX_SLAVE_INTERFACE                      *interface_ptr;
-UX_SLAVE_CLASS                          *class_ptr;
-UX_SLAVE_CLASS_HID                      *hid;
-UX_SLAVE_ENDPOINT                       *endpoint_interrupt;
-UX_SLAVE_ENDPOINT                       *endpoint_in = UX_NULL;
+    UX_SLAVE_INTERFACE *interface_ptr;
+    UX_SLAVE_CLASS *class_ptr;
+    UX_SLAVE_CLASS_HID *hid;
+    UX_SLAVE_ENDPOINT *endpoint_interrupt;
+    UX_SLAVE_ENDPOINT *endpoint_in = UX_NULL;
 #if defined(UX_DEVICE_CLASS_HID_INTERRUPT_OUT_SUPPORT)
-UX_SLAVE_ENDPOINT                       *endpoint_out = UX_NULL;
-UCHAR                                   *pos;
+    UX_SLAVE_ENDPOINT *endpoint_out = UX_NULL;
+    UCHAR *pos;
 #endif
 
     /* Get the class container.  */
-    class_ptr =  command -> ux_slave_class_command_class_ptr;
+    class_ptr = command->ux_slave_class_command_class_ptr;
 
     /* Get the class instance in the container.  */
-    hid =  (UX_SLAVE_CLASS_HID *) class_ptr -> ux_slave_class_instance;
+    hid = (UX_SLAVE_CLASS_HID *)class_ptr->ux_slave_class_instance;
 
     /* Get the interface that owns this instance.  */
-    interface_ptr =  (UX_SLAVE_INTERFACE  *) command -> ux_slave_class_command_interface;
+    interface_ptr = (UX_SLAVE_INTERFACE *)command->ux_slave_class_command_interface;
 
     /* Store the class instance into the interface.  */
-    interface_ptr -> ux_slave_interface_class_instance =  (VOID *)hid;
+    interface_ptr->ux_slave_interface_class_instance = (VOID *)hid;
 
     /* Now the opposite, store the interface in the class instance.  */
-    hid -> ux_slave_class_hid_interface =  interface_ptr;
+    hid->ux_slave_class_hid_interface = interface_ptr;
 
     /* Locate the endpoints.  */
-    endpoint_interrupt =  interface_ptr -> ux_slave_interface_first_endpoint;
+    endpoint_interrupt = interface_ptr->ux_slave_interface_first_endpoint;
 
     /* Check if interrupt IN endpoint exists.  */
-    while (endpoint_interrupt != UX_NULL)
-    {
-        if ((endpoint_interrupt -> ux_slave_endpoint_descriptor.bmAttributes &
-             UX_MASK_ENDPOINT_TYPE) == UX_INTERRUPT_ENDPOINT)
-        {
-            if ((endpoint_interrupt -> ux_slave_endpoint_descriptor.bEndpointAddress &
-                 UX_ENDPOINT_DIRECTION) == UX_ENDPOINT_IN)
-            {
+    while (endpoint_interrupt != UX_NULL) {
+        if ((endpoint_interrupt->ux_slave_endpoint_descriptor.bmAttributes & UX_MASK_ENDPOINT_TYPE) ==
+            UX_INTERRUPT_ENDPOINT) {
+            if ((endpoint_interrupt->ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) ==
+                UX_ENDPOINT_IN) {
 
                 /* It's interrupt IN endpoint we need.  */
                 endpoint_in = endpoint_interrupt;
@@ -138,9 +132,8 @@ UCHAR                                   *pos;
 #if defined(UX_DEVICE_CLASS_HID_OWN_ENDPOINT_BUFFER)
 
                 /* Set endpoint buffer owner to class instance.  */
-                endpoint_in -> ux_slave_endpoint_transfer_request.
-                        ux_slave_transfer_request_data_pointer =
-                                UX_DEVICE_CLASS_HID_INTERRUPTIN_BUFFER(hid);
+                endpoint_in->ux_slave_endpoint_transfer_request.ux_slave_transfer_request_data_pointer =
+                    UX_DEVICE_CLASS_HID_INTERRUPTIN_BUFFER(hid);
 #endif
 
 #if defined(UX_DEVICE_CLASS_HID_INTERRUPT_OUT_SUPPORT)
@@ -149,8 +142,7 @@ UCHAR                                   *pos;
                     break;
             }
 #if defined(UX_DEVICE_CLASS_HID_INTERRUPT_OUT_SUPPORT)
-            else
-            {
+            else {
 
                 /* It's optional interrupt OUT endpoint.  */
                 endpoint_out = endpoint_interrupt;
@@ -158,9 +150,8 @@ UCHAR                                   *pos;
 #if defined(UX_DEVICE_CLASS_HID_OWN_ENDPOINT_BUFFER)
 
                 /* Set endpoint buffer owner to class instance.  */
-                endpoint_out -> ux_slave_endpoint_transfer_request.
-                        ux_slave_transfer_request_data_pointer =
-                                UX_DEVICE_CLASS_HID_INTERRUPTOUT_BUFFER(hid);
+                endpoint_out->ux_slave_endpoint_transfer_request.ux_slave_transfer_request_data_pointer =
+                    UX_DEVICE_CLASS_HID_INTERRUPTOUT_BUFFER(hid);
 #endif
 
                 if (endpoint_in != UX_NULL)
@@ -170,7 +161,7 @@ UCHAR                                   *pos;
         }
 
         /* Try next endpoint.  */
-        endpoint_interrupt =  endpoint_interrupt -> ux_slave_endpoint_next_endpoint;
+        endpoint_interrupt = endpoint_interrupt->ux_slave_endpoint_next_endpoint;
     }
 
     /* Check if we found right endpoint.  */
@@ -179,44 +170,41 @@ UCHAR                                   *pos;
 
     /* Validate event buffer size (fits largest transfer payload size).  */
     UX_ASSERT(UX_DEVICE_CLASS_HID_EVENT_BUFFER_LENGTH >=
-              endpoint_in -> ux_slave_endpoint_transfer_request.
-                            ux_slave_transfer_request_transfer_length);
+              endpoint_in->ux_slave_endpoint_transfer_request.ux_slave_transfer_request_transfer_length);
 
     /* Default HID protocol is report protocol.  */
-    hid -> ux_device_class_hid_protocol = UX_DEVICE_CLASS_HID_PROTOCOL_REPORT;
+    hid->ux_device_class_hid_protocol = UX_DEVICE_CLASS_HID_PROTOCOL_REPORT;
 
     /* Save the endpoints in the hid instance.  */
-    hid -> ux_device_class_hid_interrupt_endpoint         = endpoint_in;
+    hid->ux_device_class_hid_interrupt_endpoint = endpoint_in;
 
 #if defined(UX_DEVICE_CLASS_HID_INTERRUPT_OUT_SUPPORT)
 
     /* Save endpoint OUT.  */
-    hid -> ux_device_class_hid_read_endpoint              = endpoint_out;
+    hid->ux_device_class_hid_read_endpoint = endpoint_out;
 
     /* Resume receiver thread/task (if present).  */
-    if (hid -> ux_device_class_hid_receiver && endpoint_out)
-    {
+    if (hid->ux_device_class_hid_receiver && endpoint_out) {
 
         /* Reset events.  */
-        hid -> ux_device_class_hid_receiver -> ux_device_class_hid_receiver_event_save_pos =
-            hid -> ux_device_class_hid_receiver -> ux_device_class_hid_receiver_events;
-        hid -> ux_device_class_hid_receiver -> ux_device_class_hid_receiver_event_read_pos =
-            hid -> ux_device_class_hid_receiver -> ux_device_class_hid_receiver_events;
-        for (pos = (UCHAR*)hid -> ux_device_class_hid_receiver -> ux_device_class_hid_receiver_events;
-             pos < (UCHAR*)hid -> ux_device_class_hid_receiver -> ux_device_class_hid_receiver_events_end;
-             pos += UX_DEVICE_CLASS_HID_RECEIVED_QUEUE_ITEM_SIZE(hid -> ux_device_class_hid_receiver))
-        {
-            ((UX_DEVICE_CLASS_HID_RECEIVED_EVENT*)pos) -> ux_device_class_hid_received_event_length = 0;
+        hid->ux_device_class_hid_receiver->ux_device_class_hid_receiver_event_save_pos =
+            hid->ux_device_class_hid_receiver->ux_device_class_hid_receiver_events;
+        hid->ux_device_class_hid_receiver->ux_device_class_hid_receiver_event_read_pos =
+            hid->ux_device_class_hid_receiver->ux_device_class_hid_receiver_events;
+        for (pos = (UCHAR *)hid->ux_device_class_hid_receiver->ux_device_class_hid_receiver_events;
+             pos < (UCHAR *)hid->ux_device_class_hid_receiver->ux_device_class_hid_receiver_events_end;
+             pos += UX_DEVICE_CLASS_HID_RECEIVED_QUEUE_ITEM_SIZE(hid->ux_device_class_hid_receiver)) {
+            ((UX_DEVICE_CLASS_HID_RECEIVED_EVENT *)pos)->ux_device_class_hid_received_event_length = 0;
         }
 
 #if !defined(UX_DEVICE_STANDALONE)
 
         /* Resume thread.  */
-        _ux_utility_thread_resume(&hid -> ux_device_class_hid_receiver -> ux_device_class_hid_receiver_thread);
+        _ux_utility_thread_resume(&hid->ux_device_class_hid_receiver->ux_device_class_hid_receiver_thread);
 #else
 
         /* Setup read state for receiver.  */
-        hid -> ux_device_class_hid_read_state = UX_DEVICE_CLASS_HID_RECEIVER_START;
+        hid->ux_device_class_hid_read_state = UX_DEVICE_CLASS_HID_RECEIVER_START;
 #endif
     }
 #endif
@@ -224,27 +212,24 @@ UCHAR                                   *pos;
 #if !defined(UX_DEVICE_STANDALONE)
 
     /* Resume thread.  */
-    _ux_device_thread_resume(&class_ptr -> ux_slave_class_thread);
+    _ux_device_thread_resume(&class_ptr->ux_slave_class_thread);
 #else
 
     /* Reset event buffered for background transfer.  */
-    _ux_utility_memory_set((VOID *)&hid -> ux_device_class_hid_event, 0,
-                                            sizeof(UX_DEVICE_CLASS_HID_EVENT)); /* Use case of memset is verified. */
-    hid -> ux_device_class_hid_event.ux_device_class_hid_event_length =
-                    endpoint_in -> ux_slave_endpoint_transfer_request.
-                                    ux_slave_transfer_request_transfer_length;
+    _ux_utility_memory_set((VOID *)&hid->ux_device_class_hid_event, 0,
+                           sizeof(UX_DEVICE_CLASS_HID_EVENT)); /* Use case of memset is verified. */
+    hid->ux_device_class_hid_event.ux_device_class_hid_event_length =
+        endpoint_in->ux_slave_endpoint_transfer_request.ux_slave_transfer_request_transfer_length;
 
     /* Reset event sending state.  */
-    hid -> ux_device_class_hid_event_state = UX_STATE_RESET;
+    hid->ux_device_class_hid_event_state = UX_STATE_RESET;
 #endif
 
-
     /* If there is a activate function call it.  */
-    if (hid -> ux_slave_class_hid_instance_activate != UX_NULL)
-    {
+    if (hid->ux_slave_class_hid_instance_activate != UX_NULL) {
 
         /* Invoke the application.  */
-        hid -> ux_slave_class_hid_instance_activate(hid);
+        hid->ux_slave_class_hid_instance_activate(hid);
     }
 
     /* If trace is enabled, insert this event into the trace buffer.  */
@@ -254,5 +239,5 @@ UCHAR                                   *pos;
     UX_TRACE_OBJECT_REGISTER(UX_TRACE_DEVICE_OBJECT_TYPE_INTERFACE, hid, 0, 0, 0)
 
     /* Return completion status.  */
-    return(UX_SUCCESS);
+    return (UX_SUCCESS);
 }

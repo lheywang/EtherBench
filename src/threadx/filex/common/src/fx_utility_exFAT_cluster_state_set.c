@@ -75,72 +75,63 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_utility_exFAT_cluster_state_set(FX_MEDIA *media_ptr, ULONG cluster,
-                                         UCHAR new_cluster_state) {
+UINT _fx_utility_exFAT_cluster_state_set(FX_MEDIA *media_ptr, ULONG cluster, UCHAR new_cluster_state) {
 
-  UINT status;
-  UCHAR cluster_state;
-  UINT bitmap_offset;
-  UCHAR cluster_shift;
+    UINT status;
+    UCHAR cluster_state;
+    UINT bitmap_offset;
+    UCHAR cluster_shift;
 
 #ifdef FX_ENABLE_FAULT_TOLERANT
-  if (media_ptr->fx_media_fault_tolerant_enabled &&
-      (media_ptr->fx_media_fault_tolerant_state &
-       FX_FAULT_TOLERANT_STATE_STARTED) &&
-      !(media_ptr->fx_media_fault_tolerant_state &
-        FX_FAULT_TOLERANT_STATE_SET_FAT_CHAIN)) {
+    if (media_ptr->fx_media_fault_tolerant_enabled &&
+        (media_ptr->fx_media_fault_tolerant_state & FX_FAULT_TOLERANT_STATE_STARTED) &&
+        !(media_ptr->fx_media_fault_tolerant_state & FX_FAULT_TOLERANT_STATE_SET_FAT_CHAIN)) {
 
-    /* Redirect this request to log file.
-       Under fault tolerant protection, the changes to FAT is recorded in the
-       fault tolerant log, in case the operation fails, the changes can be
-       reverted.  */
-    return (_fx_fault_tolerant_add_bitmap_log(media_ptr, cluster,
-                                              new_cluster_state));
-  }
+        /* Redirect this request to log file.
+           Under fault tolerant protection, the changes to FAT is recorded in the
+           fault tolerant log, in case the operation fails, the changes can be
+           reverted.  */
+        return (_fx_fault_tolerant_add_bitmap_log(media_ptr, cluster, new_cluster_state));
+    }
 #endif /* FX_ENABLE_FAULT_TOLERANT */
 
-  /* Get the state of the cluster?  */
-  status =
-      _fx_utility_exFAT_cluster_state_get(media_ptr, cluster, &cluster_state);
+    /* Get the state of the cluster?  */
+    status = _fx_utility_exFAT_cluster_state_get(media_ptr, cluster, &cluster_state);
 
-  /* Was the state get successful?  */
-  if (status == FX_SUCCESS) {
+    /* Was the state get successful?  */
+    if (status == FX_SUCCESS) {
 
-    /* Is it the same state?  */
-    if (new_cluster_state != cluster_state) {
+        /* Is it the same state?  */
+        if (new_cluster_state != cluster_state) {
 
-      /* No, we need to set the state.  */
+            /* No, we need to set the state.  */
 
-      /* Calculate the bitmap offset.  */
-      bitmap_offset =
-          (UINT)(cluster -
-                 media_ptr->fx_media_exfat_bitmap_cache_start_cluster) >>
-          BITS_PER_BYTE_SHIFT;
+            /* Calculate the bitmap offset.  */
+            bitmap_offset =
+                (UINT)(cluster - media_ptr->fx_media_exfat_bitmap_cache_start_cluster) >> BITS_PER_BYTE_SHIFT;
 
-      /* Calculate where the cluster is located.  */
-      cluster_shift = (UCHAR)((cluster - FX_FAT_ENTRY_START) % BITS_PER_BYTE);
+            /* Calculate where the cluster is located.  */
+            cluster_shift = (UCHAR)((cluster - FX_FAT_ENTRY_START) % BITS_PER_BYTE);
 
-      /* Is occupied the new state?  */
-      if (FX_EXFAT_BITMAP_CLUSTER_OCCUPIED == new_cluster_state) {
+            /* Is occupied the new state?  */
+            if (FX_EXFAT_BITMAP_CLUSTER_OCCUPIED == new_cluster_state) {
 
-        /* Yes, mark this cluster as occupied.  */
-        *(media_ptr->fx_media_exfat_bitmap_cache + bitmap_offset) =
-            (UCHAR)(*(media_ptr->fx_media_exfat_bitmap_cache + bitmap_offset) |
-                    (1 << cluster_shift));
-      } else {
+                /* Yes, mark this cluster as occupied.  */
+                *(media_ptr->fx_media_exfat_bitmap_cache + bitmap_offset) =
+                    (UCHAR)(*(media_ptr->fx_media_exfat_bitmap_cache + bitmap_offset) | (1 << cluster_shift));
+            } else {
 
-        /* No, mark this cluster as not occupied.  */
-        *(media_ptr->fx_media_exfat_bitmap_cache + bitmap_offset) &=
-            (UCHAR) ~(1 << cluster_shift);
-      }
+                /* No, mark this cluster as not occupied.  */
+                *(media_ptr->fx_media_exfat_bitmap_cache + bitmap_offset) &= (UCHAR) ~(1 << cluster_shift);
+            }
 
-      /* Mark the cache as dirty.  */
-      media_ptr->fx_media_exfat_bitmap_cache_dirty = FX_TRUE;
+            /* Mark the cache as dirty.  */
+            media_ptr->fx_media_exfat_bitmap_cache_dirty = FX_TRUE;
+        }
     }
-  }
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }
 
 #endif /* FX_ENABLE_EXFAT */

@@ -81,34 +81,32 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxde_nd_cache_entry_set(NX_IP *ip_ptr, ULONG *dest_ip,
-                              UINT interface_index, CHAR *mac) {
+UINT _nxde_nd_cache_entry_set(NX_IP *ip_ptr, ULONG *dest_ip, UINT interface_index, CHAR *mac) {
 #ifdef FEATURE_NX_IPV6
 
-  /* Check for validate user input. */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
-      (dest_ip == NX_NULL) || (mac == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for validate user input. */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) || (dest_ip == NX_NULL) || (mac == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Validate the interface. */
-  if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
-    return (NX_INVALID_INTERFACE);
-  }
+    /* Validate the interface. */
+    if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
+        return (NX_INVALID_INTERFACE);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call the actual service and return completion status. */
-  return (_nxd_nd_cache_entry_set(ip_ptr, dest_ip, interface_index, mac));
+    /* Call the actual service and return completion status. */
+    return (_nxd_nd_cache_entry_set(ip_ptr, dest_ip, interface_index, mac));
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(dest_ip);
-  NX_PARAMETER_NOT_USED(interface_index);
-  NX_PARAMETER_NOT_USED(mac);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(dest_ip);
+    NX_PARAMETER_NOT_USED(interface_index);
+    NX_PARAMETER_NOT_USED(mac);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

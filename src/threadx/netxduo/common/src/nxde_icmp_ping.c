@@ -76,65 +76,61 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxde_icmp_ping(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, CHAR *data_ptr,
-                     ULONG data_size, NX_PACKET **response_ptr,
+UINT _nxde_icmp_ping(NX_IP *ip_ptr, NXD_ADDRESS *ip_address, CHAR *data_ptr, ULONG data_size, NX_PACKET **response_ptr,
                      ULONG wait_option) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
-      (response_ptr == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) || (response_ptr == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for invalid IP address.  */
-  if (ip_address == NX_NULL) {
-    return (NX_IP_ADDRESS_ERROR);
-  }
+    /* Check for invalid IP address.  */
+    if (ip_address == NX_NULL) {
+        return (NX_IP_ADDRESS_ERROR);
+    }
 
-  /* Check for invalid version. */
-  if ((ip_address->nxd_ip_version != NX_IP_VERSION_V4) &&
-      (ip_address->nxd_ip_version != NX_IP_VERSION_V6)) {
+    /* Check for invalid version. */
+    if ((ip_address->nxd_ip_version != NX_IP_VERSION_V4) && (ip_address->nxd_ip_version != NX_IP_VERSION_V6)) {
 
-    return (NX_IP_ADDRESS_ERROR);
-  }
+        return (NX_IP_ADDRESS_ERROR);
+    }
 
 #ifndef NX_DISABLE_IPV4
-  /* Check to see if ICMP is enabled.  */
-  /* Cast the function pointer into a ULONG. Since this is exactly what we wish
-   * to do, disable the lint warning with the following comment:  */
-  /*lint -e{923} suppress cast of pointer to ULONG.  */
-  if ((ip_address->nxd_ip_version == NX_IP_VERSION_V4) &&
-      ((ALIGN_TYPE)ip_ptr->nx_ip_icmpv4_packet_process == NX_NULL)) {
+    /* Check to see if ICMP is enabled.  */
+    /* Cast the function pointer into a ULONG. Since this is exactly what we wish
+     * to do, disable the lint warning with the following comment:  */
+    /*lint -e{923} suppress cast of pointer to ULONG.  */
+    if ((ip_address->nxd_ip_version == NX_IP_VERSION_V4) &&
+        ((ALIGN_TYPE)ip_ptr->nx_ip_icmpv4_packet_process == NX_NULL)) {
 
-    return (NX_NOT_ENABLED);
-  }
+        return (NX_NOT_ENABLED);
+    }
 #endif /* !NX_DISABLE_IPV4  */
 
 #ifdef FEATURE_NX_IPV6
 
-  if (ip_address->nxd_ip_version == NX_IP_VERSION_V6) {
+    if (ip_address->nxd_ip_version == NX_IP_VERSION_V6) {
 
-    /* Cast the function pointer into a ULONG. Since this is exactly what we
-     * wish to do, disable the lint warning with the following comment:  */
-    /*lint -e{923} suppress cast of pointer to ULONG.  */
-    if (((ALIGN_TYPE)ip_ptr->nx_ip_icmpv6_packet_process == NX_NULL) ||
-        ((ALIGN_TYPE)ip_ptr->nx_ipv6_packet_receive == NX_NULL)) {
+        /* Cast the function pointer into a ULONG. Since this is exactly what we
+         * wish to do, disable the lint warning with the following comment:  */
+        /*lint -e{923} suppress cast of pointer to ULONG.  */
+        if (((ALIGN_TYPE)ip_ptr->nx_ip_icmpv6_packet_process == NX_NULL) ||
+            ((ALIGN_TYPE)ip_ptr->nx_ipv6_packet_receive == NX_NULL)) {
 
-      return (NX_NOT_ENABLED);
+            return (NX_NOT_ENABLED);
+        }
     }
-  }
 
 #endif /* FEATURE_NX_IPV6 */
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call actual ICMP ping function.  */
-  status = _nxd_icmp_ping(ip_ptr, ip_address, data_ptr, data_size, response_ptr,
-                          wait_option);
+    /* Call actual ICMP ping function.  */
+    status = _nxd_icmp_ping(ip_ptr, ip_address, data_ptr, data_size, response_ptr, wait_option);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

@@ -77,35 +77,30 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxd_nd_cache_entry_set(NX_IP *ip_ptr, ULONG *dest_ip,
-                             UINT interface_index, CHAR *mac) {
+UINT _nxd_nd_cache_entry_set(NX_IP *ip_ptr, ULONG *dest_ip, UINT interface_index, CHAR *mac) {
 #ifdef FEATURE_NX_IPV6
 
-  ND_CACHE_ENTRY *nd_cache_entry;
-  UINT status;
+    ND_CACHE_ENTRY *nd_cache_entry;
+    UINT status;
 
-  /* If trace is enabled, insert this event into the trace buffer. */
-  NX_TRACE_IN_LINE_INSERT(
-      NXD_TRACE_ND_CACHE_ENTRY_SET, dest_ip[3], ((mac[0] << 16) | mac[1]),
-      ((mac[2] << 24) | (mac[3] << 16) | (mac[4] << 8) | mac[5]), 0,
-      NX_TRACE_ARP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer. */
+    NX_TRACE_IN_LINE_INSERT(NXD_TRACE_ND_CACHE_ENTRY_SET, dest_ip[3], ((mac[0] << 16) | mac[1]),
+                            ((mac[2] << 24) | (mac[3] << 16) | (mac[4] << 8) | mac[5]), 0, NX_TRACE_ARP_EVENTS, 0, 0);
 
-  /* Call the actual cache entry add service. */
-  status = _nx_nd_cache_add(
-      ip_ptr, dest_ip,
-      ip_ptr->nx_ipv6_address[interface_index].nxd_ipv6_address_attached, mac,
-      1, ND_CACHE_STATE_REACHABLE, &(ip_ptr->nx_ipv6_address[interface_index]),
-      &nd_cache_entry);
+    /* Call the actual cache entry add service. */
+    status =
+        _nx_nd_cache_add(ip_ptr, dest_ip, ip_ptr->nx_ipv6_address[interface_index].nxd_ipv6_address_attached, mac, 1,
+                         ND_CACHE_STATE_REACHABLE, &(ip_ptr->nx_ipv6_address[interface_index]), &nd_cache_entry);
 
-  return (status);
+    return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(dest_ip);
-  NX_PARAMETER_NOT_USED(interface_index);
-  NX_PARAMETER_NOT_USED(mac);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(dest_ip);
+    NX_PARAMETER_NOT_USED(interface_index);
+    NX_PARAMETER_NOT_USED(mac);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

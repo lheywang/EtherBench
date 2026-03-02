@@ -73,38 +73,37 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_tcp_socket_peer_info_get(NX_TCP_SOCKET *socket_ptr,
-                                   ULONG *peer_ip_address, ULONG *peer_port) {
+UINT _nxe_tcp_socket_peer_info_get(NX_TCP_SOCKET *socket_ptr, ULONG *peer_ip_address, ULONG *peer_port) {
 #ifndef NX_DISABLE_IPV4
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  if ((peer_ip_address == NX_NULL) || (peer_port == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    if ((peer_ip_address == NX_NULL) || (peer_port == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check to see if TCP is enabled.  */
-  if (!(socket_ptr->nx_tcp_socket_ip_ptr)->nx_ip_tcp_packet_receive) {
-    return (NX_NOT_ENABLED);
-  }
+    /* Check to see if TCP is enabled.  */
+    if (!(socket_ptr->nx_tcp_socket_ip_ptr)->nx_ip_tcp_packet_receive) {
+        return (NX_NOT_ENABLED);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call actual TCP socket MSS get function.  */
-  status = _nx_tcp_socket_peer_info_get(socket_ptr, peer_ip_address, peer_port);
+    /* Call actual TCP socket MSS get function.  */
+    status = _nx_tcp_socket_peer_info_get(socket_ptr, peer_ip_address, peer_port);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 #else
-  NX_PARAMETER_NOT_USED(socket_ptr);
-  NX_PARAMETER_NOT_USED(peer_ip_address);
-  NX_PARAMETER_NOT_USED(peer_port);
+    NX_PARAMETER_NOT_USED(socket_ptr);
+    NX_PARAMETER_NOT_USED(peer_ip_address);
+    NX_PARAMETER_NOT_USED(peer_port);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* NX_DISABLE_IPV4 */
 }

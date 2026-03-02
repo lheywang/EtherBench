@@ -76,42 +76,37 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_nd_cache_find_entry(NX_IP *ip_ptr, ULONG *dest_ip,
-                             ND_CACHE_ENTRY **nd_cache_entry) {
-  UINT i;
-  UINT index;
+UINT _nx_nd_cache_find_entry(NX_IP *ip_ptr, ULONG *dest_ip, ND_CACHE_ENTRY **nd_cache_entry) {
+    UINT i;
+    UINT index;
 
-  /* Initialize the return value. */
-  *nd_cache_entry = NX_NULL;
+    /* Initialize the return value. */
+    *nd_cache_entry = NX_NULL;
 
-  /* Compute a simple hash based on the dest_ip */
-  index = (UINT)((dest_ip[0] + dest_ip[1] + dest_ip[2] + dest_ip[3]) %
-                 (NX_IPV6_NEIGHBOR_CACHE_SIZE));
+    /* Compute a simple hash based on the dest_ip */
+    index = (UINT)((dest_ip[0] + dest_ip[1] + dest_ip[2] + dest_ip[3]) % (NX_IPV6_NEIGHBOR_CACHE_SIZE));
 
-  for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++) {
+    for (i = 0; i < NX_IPV6_NEIGHBOR_CACHE_SIZE; i++) {
 
-    if ((ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_nd_status !=
-         ND_CACHE_STATE_INVALID) &&
-        (ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_interface_ptr) &&
-        (CHECK_IPV6_ADDRESSES_SAME(
-            &ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_dest_ip[0],
-            dest_ip))) {
+        if ((ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_nd_status != ND_CACHE_STATE_INVALID) &&
+            (ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_interface_ptr) &&
+            (CHECK_IPV6_ADDRESSES_SAME(&ip_ptr->nx_ipv6_nd_cache[index].nx_nd_cache_dest_ip[0], dest_ip))) {
 
-      /* find the entry */
-      *nd_cache_entry = &ip_ptr->nx_ipv6_nd_cache[index];
+            /* find the entry */
+            *nd_cache_entry = &ip_ptr->nx_ipv6_nd_cache[index];
 
-      return (NX_SUCCESS);
+            return (NX_SUCCESS);
+        }
+
+        index++;
+
+        /* Check for overflow */
+        if (index == NX_IPV6_NEIGHBOR_CACHE_SIZE) {
+            index = 0;
+        }
     }
 
-    index++;
-
-    /* Check for overflow */
-    if (index == NX_IPV6_NEIGHBOR_CACHE_SIZE) {
-      index = 0;
-    }
-  }
-
-  return (NX_NOT_SUCCESSFUL);
+    return (NX_NOT_SUCCESSFUL);
 }
 
 #endif /* FEATURE_NX_IPV6 */

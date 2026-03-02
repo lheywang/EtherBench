@@ -73,29 +73,28 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_ipv6_multicast_join(NX_IP *ip_ptr, ULONG *multicast_addr,
-                             NX_INTERFACE *nx_interface) {
+UINT _nx_ipv6_multicast_join(NX_IP *ip_ptr, ULONG *multicast_addr, NX_INTERFACE *nx_interface) {
 
-  NX_IP_DRIVER driver_request;
+    NX_IP_DRIVER driver_request;
 
-  /* Construct a driver command. */
-  driver_request.nx_ip_driver_ptr = ip_ptr;
-  driver_request.nx_ip_driver_command = NX_LINK_MULTICAST_JOIN;
-  driver_request.nx_ip_driver_physical_address_msw = 0x00003333;
-  driver_request.nx_ip_driver_physical_address_lsw = multicast_addr[3];
-  driver_request.nx_ip_driver_interface = nx_interface;
+    /* Construct a driver command. */
+    driver_request.nx_ip_driver_ptr = ip_ptr;
+    driver_request.nx_ip_driver_command = NX_LINK_MULTICAST_JOIN;
+    driver_request.nx_ip_driver_physical_address_msw = 0x00003333;
+    driver_request.nx_ip_driver_physical_address_lsw = multicast_addr[3];
+    driver_request.nx_ip_driver_interface = nx_interface;
 
-  /* Obtain the IP mutex so we can search the multicast join list.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Obtain the IP mutex so we can search the multicast join list.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Call the device driver with the driver request. */
-  (nx_interface->nx_interface_link_driver_entry)(&driver_request);
+    /* Call the device driver with the driver request. */
+    (nx_interface->nx_interface_link_driver_entry)(&driver_request);
 
-  /* Release the protection over the IP instance.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release the protection over the IP instance.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /*lint -e{644} suppress variable might not be initialized, since
-   * "nx_ip_driver_status" was initialized in nx_interface_link_driver_entry. */
-  return (driver_request.nx_ip_driver_status);
+    /*lint -e{644} suppress variable might not be initialized, since
+     * "nx_ip_driver_status" was initialized in nx_interface_link_driver_entry. */
+    return (driver_request.nx_ip_driver_status);
 }
 #endif /* FEATURE_NX_IPV6 */

@@ -72,65 +72,65 @@
 /**************************************************************************/
 UINT _txe_semaphore_get(TX_SEMAPHORE *semaphore_ptr, ULONG wait_option) {
 
-  UINT status;
+    UINT status;
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
-  TX_THREAD *current_thread;
+    TX_THREAD *current_thread;
 #endif
 
-  /* Default status to success.  */
-  status = TX_SUCCESS;
+    /* Default status to success.  */
+    status = TX_SUCCESS;
 
-  /* Check for an invalid semaphore pointer.  */
-  if (semaphore_ptr == TX_NULL) {
+    /* Check for an invalid semaphore pointer.  */
+    if (semaphore_ptr == TX_NULL) {
 
-    /* Semaphore pointer is invalid, return appropriate error code.  */
-    status = TX_SEMAPHORE_ERROR;
-  }
-
-  /* Now check for invalid semaphore ID.  */
-  else if (semaphore_ptr->tx_semaphore_id != TX_SEMAPHORE_ID) {
-
-    /* Semaphore pointer is invalid, return appropriate error code.  */
-    status = TX_SEMAPHORE_ERROR;
-  } else {
-
-    /* Check for a wait option error.  Only threads are allowed any form of
-       suspension.  */
-    if (wait_option != TX_NO_WAIT) {
-
-      /* Is the call from an ISR or Initialization?  */
-      if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
-
-        /* A non-thread is trying to suspend, return appropriate error code.  */
-        status = TX_WAIT_ERROR;
-      }
-
-#ifndef TX_TIMER_PROCESS_IN_ISR
-      else {
-
-        /* Pickup thread pointer.  */
-        TX_THREAD_GET_CURRENT(current_thread)
-
-        /* Is the current thread the timer thread?  */
-        if (current_thread == &_tx_timer_thread) {
-
-          /* A non-thread is trying to suspend, return appropriate error code.
-           */
-          status = TX_WAIT_ERROR;
-        }
-      }
-#endif
+        /* Semaphore pointer is invalid, return appropriate error code.  */
+        status = TX_SEMAPHORE_ERROR;
     }
-  }
 
-  /* Determine if everything is okay.  */
-  if (status == TX_SUCCESS) {
+    /* Now check for invalid semaphore ID.  */
+    else if (semaphore_ptr->tx_semaphore_id != TX_SEMAPHORE_ID) {
 
-    /* Call actual get semaphore function.  */
-    status = _tx_semaphore_get(semaphore_ptr, wait_option);
-  }
+        /* Semaphore pointer is invalid, return appropriate error code.  */
+        status = TX_SEMAPHORE_ERROR;
+    } else {
 
-  /* Return completion status.  */
-  return (status);
+        /* Check for a wait option error.  Only threads are allowed any form of
+           suspension.  */
+        if (wait_option != TX_NO_WAIT) {
+
+            /* Is the call from an ISR or Initialization?  */
+            if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
+
+                /* A non-thread is trying to suspend, return appropriate error code.  */
+                status = TX_WAIT_ERROR;
+            }
+
+#ifndef TX_TIMER_PROCESS_IN_ISR
+            else {
+
+                /* Pickup thread pointer.  */
+                TX_THREAD_GET_CURRENT(current_thread)
+
+                /* Is the current thread the timer thread?  */
+                if (current_thread == &_tx_timer_thread) {
+
+                    /* A non-thread is trying to suspend, return appropriate error code.
+                     */
+                    status = TX_WAIT_ERROR;
+                }
+            }
+#endif
+        }
+    }
+
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
+
+        /* Call actual get semaphore function.  */
+        status = _tx_semaphore_get(semaphore_ptr, wait_option);
+    }
+
+    /* Return completion status.  */
+    return (status);
 }

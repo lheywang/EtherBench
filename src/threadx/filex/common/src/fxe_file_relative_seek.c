@@ -76,28 +76,27 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_file_relative_seek(FX_FILE *file_ptr, ULONG byte_offset,
-                             UINT seek_from) {
+UINT _fxe_file_relative_seek(FX_FILE *file_ptr, ULONG byte_offset, UINT seek_from) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null file pointer.  */
-  if (file_ptr == FX_NULL) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null file pointer.  */
+    if (file_ptr == FX_NULL) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for valid seek from option.  */
-  if ((seek_from != FX_SEEK_BEGIN) && (seek_from != FX_SEEK_END) &&
-      (seek_from != FX_SEEK_FORWARD) && (seek_from != FX_SEEK_BACK)) {
-    return (FX_INVALID_OPTION);
-  }
+    /* Check for valid seek from option.  */
+    if ((seek_from != FX_SEEK_BEGIN) && (seek_from != FX_SEEK_END) && (seek_from != FX_SEEK_FORWARD) &&
+        (seek_from != FX_SEEK_BACK)) {
+        return (FX_INVALID_OPTION);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual file relative seek service.  */
-  status = _fx_file_relative_seek(file_ptr, byte_offset, seek_from);
+    /* Call actual file relative seek service.  */
+    status = _fx_file_relative_seek(file_ptr, byte_offset, seek_from);
 
-  /* Seek is complete, return status.  */
-  return (status);
+    /* Seek is complete, return status.  */
+    return (status);
 }

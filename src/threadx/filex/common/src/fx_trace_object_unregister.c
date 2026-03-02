@@ -76,15 +76,15 @@
 /**************************************************************************/
 VOID _fx_trace_object_unregister(VOID *object_ptr) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Call actual object unregister function.  */
-  _tx_trace_object_unregister(object_ptr);
+    /* Call actual object unregister function.  */
+    _tx_trace_object_unregister(object_ptr);
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 }
 #endif

@@ -76,76 +76,69 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_utility_exFAT_cluster_state_get(FX_MEDIA *media_ptr, ULONG cluster,
-                                         UCHAR *cluster_state) {
+UINT _fx_utility_exFAT_cluster_state_get(FX_MEDIA *media_ptr, ULONG cluster, UCHAR *cluster_state) {
 
-  UINT status;
-  UINT bitmap_offset;
-  UCHAR cluster_shift;
-  UCHAR eight_clusters_block;
+    UINT status;
+    UINT bitmap_offset;
+    UCHAR cluster_shift;
+    UCHAR eight_clusters_block;
 #ifdef FX_ENABLE_FAULT_TOLERANT
-  ULONG value;
+    ULONG value;
 
-  if (media_ptr->fx_media_fault_tolerant_enabled &&
-      (media_ptr->fx_media_fault_tolerant_state &
-       FX_FAULT_TOLERANT_STATE_STARTED)) {
+    if (media_ptr->fx_media_fault_tolerant_enabled &&
+        (media_ptr->fx_media_fault_tolerant_state & FX_FAULT_TOLERANT_STATE_STARTED)) {
 
-    /* Redirect this request to the log file.
-       During file or directory operations with Fault Tolerant
-       protection, intermediate operations are written to the fault
-       tolerant log file.  Therefore, FAT-entry read should search for
-       fault tolerant log before the request can be passed to normal FAT
-       entry read routine.
-     */
-    status = _fx_fault_tolerant_read_FAT(media_ptr, cluster, &value,
-                                         FX_FAULT_TOLERANT_BITMAP_LOG_TYPE);
+        /* Redirect this request to the log file.
+           During file or directory operations with Fault Tolerant
+           protection, intermediate operations are written to the fault
+           tolerant log file.  Therefore, FAT-entry read should search for
+           fault tolerant log before the request can be passed to normal FAT
+           entry read routine.
+         */
+        status = _fx_fault_tolerant_read_FAT(media_ptr, cluster, &value, FX_FAULT_TOLERANT_BITMAP_LOG_TYPE);
 
-    /* Return on success. */
-    if (status != FX_READ_CONTINUE) {
-      *cluster_state = (UCHAR)value;
-      return (status);
+        /* Return on success. */
+        if (status != FX_READ_CONTINUE) {
+            *cluster_state = (UCHAR)value;
+            return (status);
+        }
     }
-  }
 #endif /* FX_ENABLE_FAULT_TOLERANT */
 
-  /* Prepare bitmap cache.  */
-  status = _fx_utility_exFAT_bitmap_cache_prepare(media_ptr, cluster);
+    /* Prepare bitmap cache.  */
+    status = _fx_utility_exFAT_bitmap_cache_prepare(media_ptr, cluster);
 
-  /* Was it successful?  */
-  if (status == FX_SUCCESS) {
+    /* Was it successful?  */
+    if (status == FX_SUCCESS) {
 
-    /* Calculate the bitmap offset.  */
-    bitmap_offset =
-        (UINT)(cluster -
-               media_ptr->fx_media_exfat_bitmap_cache_start_cluster) >>
-        BITS_PER_BYTE_SHIFT;
+        /* Calculate the bitmap offset.  */
+        bitmap_offset = (UINT)(cluster - media_ptr->fx_media_exfat_bitmap_cache_start_cluster) >> BITS_PER_BYTE_SHIFT;
 
-    /* Pickup the 8 cluster block.  */
-    eight_clusters_block =
-        *(media_ptr->fx_media_exfat_bitmap_cache + bitmap_offset);
+        /* Pickup the 8 cluster block.  */
+        eight_clusters_block = *(media_ptr->fx_media_exfat_bitmap_cache + bitmap_offset);
 
-    /* Check all 8 bits for 0x00 (all clusters in the block are free).  */
-    if (eight_clusters_block == 0x00) {
+        /* Check all 8 bits for 0x00 (all clusters in the block are free).  */
+        if (eight_clusters_block == 0x00) {
 
-      /* Cluster is free, return state.  */
-      *cluster_state = FX_EXFAT_BITMAP_CLUSTER_FREE;
+            /* Cluster is free, return state.  */
+            *cluster_state = FX_EXFAT_BITMAP_CLUSTER_FREE;
+        }
+        /* Check all 8 bits for 0xFF (all 8 clusters are occupied).  */
+        else if (0xFF == eight_clusters_block) {
+
+            /* Cluster is not free, return state.  */
+            *cluster_state = FX_EXFAT_BITMAP_CLUSTER_OCCUPIED;
+        } else {
+
+            /* Check bit respondent for cluster state.  */
+            cluster_shift = (UCHAR)((cluster - FX_FAT_ENTRY_START) % BITS_PER_BYTE);
+
+            *cluster_state = (eight_clusters_block >> cluster_shift) & 0x1;
+        }
     }
-    /* Check all 8 bits for 0xFF (all 8 clusters are occupied).  */
-    else if (0xFF == eight_clusters_block) {
 
-      /* Cluster is not free, return state.  */
-      *cluster_state = FX_EXFAT_BITMAP_CLUSTER_OCCUPIED;
-    } else {
-
-      /* Check bit respondent for cluster state.  */
-      cluster_shift = (UCHAR)((cluster - FX_FAT_ENTRY_START) % BITS_PER_BYTE);
-
-      *cluster_state = (eight_clusters_block >> cluster_shift) & 0x1;
-    }
-  }
-
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }
 
 #endif /* FX_ENABLE_EXFAT */

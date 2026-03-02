@@ -9,17 +9,15 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Data Pump Class                                                */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /* Include necessary system files.  */
 
@@ -29,45 +27,44 @@
 #include "ux_host_class_dpump.h"
 #include "ux_host_stack.h"
 
-
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_class_dpump_ioctl                          PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_class_dpump_ioctl                          PORTABLE C      */
 /*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function is called by the application to change the alternate  */ 
-/*    setting of the dpump class.                                         */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    dpump                                 Pointer to the dpump class    */ 
-/*    ioctl_function                        ioctl function                */ 
-/*    parameter                             pointer to structure          */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                                                   */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This function is called by the application to change the alternate  */
+/*    setting of the dpump class.                                         */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    dpump                                 Pointer to the dpump class    */
+/*    ioctl_function                        ioctl function                */
+/*    parameter                             pointer to structure          */
+/*                                                                        */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                                                   */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _ux_host_stack_interface_setting_select                             */
 /*                                          Select alternate setting      */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
@@ -77,18 +74,15 @@
 /*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_host_class_dpump_ioctl(UX_HOST_CLASS_DPUMP *dpump, ULONG ioctl_function,
-                                    VOID *parameter)
-{
+UINT _ux_host_class_dpump_ioctl(UX_HOST_CLASS_DPUMP *dpump, ULONG ioctl_function, VOID *parameter) {
 
-UX_CONFIGURATION            *configuration;
-UX_INTERFACE                *interface_ptr;
-UINT                           status;
+    UX_CONFIGURATION *configuration;
+    UX_INTERFACE *interface_ptr;
+    UINT status;
 
     /* Ensure the instance is valid.  */
-    if ((dpump -> ux_host_class_dpump_state !=  UX_HOST_CLASS_INSTANCE_LIVE) && 
-        (dpump -> ux_host_class_dpump_state !=  UX_HOST_CLASS_INSTANCE_MOUNTING))
-    {        
+    if ((dpump->ux_host_class_dpump_state != UX_HOST_CLASS_INSTANCE_LIVE) &&
+        (dpump->ux_host_class_dpump_state != UX_HOST_CLASS_INSTANCE_MOUNTING)) {
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_HOST_CLASS_INSTANCE_UNKNOWN);
@@ -96,75 +90,68 @@ UINT                           status;
         /* If trace is enabled, insert this event into the trace buffer.  */
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_HOST_CLASS_INSTANCE_UNKNOWN, dpump, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
-        return(UX_HOST_CLASS_INSTANCE_UNKNOWN);
+        return (UX_HOST_CLASS_INSTANCE_UNKNOWN);
     }
 
     /* The command request will tell us we need to do here.  */
-    switch (ioctl_function)
-    {
+    switch (ioctl_function) {
 
-        case UX_HOST_CLASS_DPUMP_SELECT_ALTERNATE_SETTING: 
+    case UX_HOST_CLASS_DPUMP_SELECT_ALTERNATE_SETTING:
 
+        /* The parameter value has the alternate setting number.
+           We need to scan the entire device framework.  Only one configuration for data pump device framework.  */
+        interface_ptr = dpump->ux_host_class_dpump_interface;
+        configuration = interface_ptr->ux_interface_configuration;
 
-            /* The parameter value has the alternate setting number. 
-               We need to scan the entire device framework.  Only one configuration for data pump device framework.  */
-            interface_ptr = dpump -> ux_host_class_dpump_interface;
-            configuration = interface_ptr -> ux_interface_configuration;
-
-            /* Do some verification just in case !  */
-            if (configuration == UX_NULL)
-            {            
+        /* Do some verification just in case !  */
+        if (configuration == UX_NULL) {
 
             /* Error trap. */
             _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_HOST_CLASS_INSTANCE_UNKNOWN);
 
-                return(UX_HOST_CLASS_INSTANCE_UNKNOWN);
-            }
-                        
-            /* Point to the first interface.  */
-            interface_ptr =  configuration -> ux_configuration_first_interface;
+            return (UX_HOST_CLASS_INSTANCE_UNKNOWN);
+        }
 
-            /* Loop on all interfaces and alternate settings for this device in search of the right alternate setting.  */
-            while (interface_ptr != UX_NULL)
-            {
+        /* Point to the first interface.  */
+        interface_ptr = configuration->ux_configuration_first_interface;
 
-                /* Check the alternate setting.  */
-                if (interface_ptr -> ux_interface_descriptor.bAlternateSetting == (ULONG) (ALIGN_TYPE) parameter)
-                {
+        /* Loop on all interfaces and alternate settings for this device in search of the right alternate setting.  */
+        while (interface_ptr != UX_NULL) {
 
-                    /* We have found the alternate setting. Select it now.  */
-                    status =  _ux_host_stack_interface_setting_select(interface_ptr);
-                    
-                    /* We are done here.  */
-                    return(status);
-                }
-            
-                /* Next interface.  */
-                interface_ptr = interface_ptr -> ux_interface_next_interface;
+            /* Check the alternate setting.  */
+            if (interface_ptr->ux_interface_descriptor.bAlternateSetting == (ULONG)(ALIGN_TYPE)parameter) {
+
+                /* We have found the alternate setting. Select it now.  */
+                status = _ux_host_stack_interface_setting_select(interface_ptr);
+
+                /* We are done here.  */
+                return (status);
             }
 
-            /* We come here when the alternate setting was not found.  */
-            status = UX_INTERFACE_HANDLE_UNKNOWN;
+            /* Next interface.  */
+            interface_ptr = interface_ptr->ux_interface_next_interface;
+        }
 
-            /* Error trap. */
-            _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, status);
+        /* We come here when the alternate setting was not found.  */
+        status = UX_INTERFACE_HANDLE_UNKNOWN;
 
-            break;
+        /* Error trap. */
+        _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, status);
 
-        default: 
+        break;
 
-            /* If trace is enabled, insert this event into the trace buffer.  */
-            UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_FUNCTION_NOT_SUPPORTED, 0, 0, 0, UX_TRACE_ERRORS, 0, 0)
+    default:
 
-            /* Function not supported. Return an error.  */
-            status =  UX_FUNCTION_NOT_SUPPORTED;
+        /* If trace is enabled, insert this event into the trace buffer.  */
+        UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_FUNCTION_NOT_SUPPORTED, 0, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
-            /* Error trap. */
-            _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, status);
+        /* Function not supported. Return an error.  */
+        status = UX_FUNCTION_NOT_SUPPORTED;
 
-    }   
+        /* Error trap. */
+        _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, status);
+    }
 
     /* Return status to caller.  */
-    return(status);
+    return (status);
 }
-

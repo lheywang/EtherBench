@@ -85,77 +85,74 @@
 /**************************************************************************/
 UINT _nx_nd_cache_delete_internal(NX_IP *ip_ptr, ND_CACHE_ENTRY *entry) {
 
-  UINT i = 0, table_size;
-  NX_PACKET *pkt, *next_pkt;
+    UINT i = 0, table_size;
+    NX_PACKET *pkt, *next_pkt;
 
-  /* Free up the queued packets. */
-  pkt = entry->nx_nd_cache_packet_waiting_head;
+    /* Free up the queued packets. */
+    pkt = entry->nx_nd_cache_packet_waiting_head;
 
-  /* Flush any packets enqueued waiting on neighbor reachability confirmation.
-   */
-  while (pkt) {
+    /* Flush any packets enqueued waiting on neighbor reachability confirmation.
+     */
+    while (pkt) {
 
-    next_pkt = pkt->nx_packet_queue_next;
-    _nx_packet_transmit_release(pkt);
-    pkt = next_pkt;
-  }
-  entry->nx_nd_cache_packet_waiting_queue_length = 0;
+        next_pkt = pkt->nx_packet_queue_next;
+        _nx_packet_transmit_release(pkt);
+        pkt = next_pkt;
+    }
+    entry->nx_nd_cache_packet_waiting_queue_length = 0;
 
-  /* Clear the pointers to the original start and end of the packet queue. */
-  entry->nx_nd_cache_packet_waiting_head = NX_NULL;
-  entry->nx_nd_cache_packet_waiting_tail = NX_NULL;
+    /* Clear the pointers to the original start and end of the packet queue. */
+    entry->nx_nd_cache_packet_waiting_head = NX_NULL;
+    entry->nx_nd_cache_packet_waiting_tail = NX_NULL;
 
-  /* Initialize the rest of the fields. */
-  memset(entry->nx_nd_cache_mac_addr, 0, 6);
+    /* Initialize the rest of the fields. */
+    memset(entry->nx_nd_cache_mac_addr, 0, 6);
 
-  /* Clear the entry out.  */
-  entry->nx_nd_cache_nd_status = ND_CACHE_STATE_INVALID;
-  entry->nx_nd_cache_is_static = 0;
+    /* Clear the entry out.  */
+    entry->nx_nd_cache_nd_status = ND_CACHE_STATE_INVALID;
+    entry->nx_nd_cache_is_static = 0;
 
-  /* Is there a corresponding link in the default router list? */
-  if (entry->nx_nd_cache_is_router) {
+    /* Is there a corresponding link in the default router list? */
+    if (entry->nx_nd_cache_is_router) {
 
-    /* Set its pointer to this entry in the cache table to NULL. */
-    entry->nx_nd_cache_is_router
-        ->nx_ipv6_default_router_entry_neighbor_cache_ptr = NX_NULL;
-  }
-
-  /* And indicate that this cache entry is no longer a router. */
-  entry->nx_nd_cache_is_router = NX_NULL;
-
-  /* Set a local variable for convenience. */
-  table_size = ip_ptr->nx_ipv6_destination_table_size;
-
-  while (table_size && i < NX_IPV6_DESTINATION_TABLE_SIZE) {
-
-    /* Skip invalid entries. */
-    if (!ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_valid) {
-      i++;
-      continue;
+        /* Set its pointer to this entry in the cache table to NULL. */
+        entry->nx_nd_cache_is_router->nx_ipv6_default_router_entry_neighbor_cache_ptr = NX_NULL;
     }
 
-    /* Keep track of valid entries we have checked. */
-    table_size--;
+    /* And indicate that this cache entry is no longer a router. */
+    entry->nx_nd_cache_is_router = NX_NULL;
 
-    /* Find the destination unit. */
-    if (ip_ptr->nx_ipv6_destination_table[i]
-            .nx_ipv6_destination_entry_nd_entry == entry) {
+    /* Set a local variable for convenience. */
+    table_size = ip_ptr->nx_ipv6_destination_table_size;
 
-      /* Set the status. */
-      ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_valid = 0;
+    while (table_size && i < NX_IPV6_DESTINATION_TABLE_SIZE) {
 
-      /* Set its pointer to this entry in the destination table to NULL. */
-      ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_nd_entry =
-          NX_NULL;
+        /* Skip invalid entries. */
+        if (!ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_valid) {
+            i++;
+            continue;
+        }
 
-      /* Update the destination_table size. */
-      ip_ptr->nx_ipv6_destination_table_size--;
+        /* Keep track of valid entries we have checked. */
+        table_size--;
+
+        /* Find the destination unit. */
+        if (ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_nd_entry == entry) {
+
+            /* Set the status. */
+            ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_valid = 0;
+
+            /* Set its pointer to this entry in the destination table to NULL. */
+            ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_nd_entry = NX_NULL;
+
+            /* Update the destination_table size. */
+            ip_ptr->nx_ipv6_destination_table_size--;
+        }
+
+        i++;
     }
 
-    i++;
-  }
-
-  return (NX_SUCCESS);
+    return (NX_SUCCESS);
 }
 
 #endif /* FEATURE_NX_IPV6 */

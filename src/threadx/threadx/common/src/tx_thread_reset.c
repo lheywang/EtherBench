@@ -71,88 +71,86 @@
 /**************************************************************************/
 UINT _tx_thread_reset(TX_THREAD *thread_ptr) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  TX_THREAD *current_thread;
-  UINT status;
+    TX_THREAD *current_thread;
+    UINT status;
 
-  /* Default a successful completion status.  */
-  status = TX_SUCCESS;
-
-  /* Disable interrupts.  */
-  TX_DISABLE
-
-  /* Pickup thread pointer.  */
-  TX_THREAD_GET_CURRENT(current_thread)
-
-  /* Check for a call from the current thread, which is not allowed!  */
-  if (current_thread == thread_ptr) {
-
-    /* Thread not completed or terminated - return an error!  */
-    status = TX_NOT_DONE;
-  } else {
-
-    /* Check for proper status of this thread to reset.  */
-    if (thread_ptr->tx_thread_state != TX_COMPLETED) {
-
-      /* Now check for terminated state.  */
-      if (thread_ptr->tx_thread_state != TX_TERMINATED) {
-
-        /* Thread not completed or terminated - return an error!  */
-        status = TX_NOT_DONE;
-      }
-    }
-  }
-
-  /* Is the request valid?  */
-  if (status == TX_SUCCESS) {
-
-    /* Modify the thread status to prevent additional reset calls.  */
-    thread_ptr->tx_thread_state = TX_NOT_DONE;
-
-    /* Execute Port-Specific completion processing. If needed, it is typically
-     * defined in tx_port.h.  */
-    TX_THREAD_RESET_PORT_COMPLETION(thread_ptr)
-
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-#ifndef TX_DISABLE_STACK_FILLING
-
-    /* Set the thread stack to a pattern prior to creating the initial
-       stack frame.  This pattern is used by the stack checking routines
-       to see how much has been used.  */
-    TX_MEMSET(thread_ptr->tx_thread_stack_start, ((UCHAR)TX_STACK_FILL),
-              thread_ptr->tx_thread_stack_size);
-#endif
-
-    /* Call the target specific stack frame building routine to build the
-       thread's initial stack and to setup the actual stack pointer in the
-       control block.  */
-    _tx_thread_stack_build(thread_ptr, _tx_thread_shell_entry);
+    /* Default a successful completion status.  */
+    status = TX_SUCCESS;
 
     /* Disable interrupts.  */
     TX_DISABLE
 
-    /* Finally, move into a suspended state to allow for the thread to be
-     * resumed.  */
-    thread_ptr->tx_thread_state = TX_SUSPENDED;
+    /* Pickup thread pointer.  */
+    TX_THREAD_GET_CURRENT(current_thread)
 
-    /* If trace is enabled, insert this event into the trace buffer.  */
-    TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_RESET, thread_ptr,
-                            thread_ptr->tx_thread_state, 0, 0,
-                            TX_TRACE_THREAD_EVENTS)
+    /* Check for a call from the current thread, which is not allowed!  */
+    if (current_thread == thread_ptr) {
 
-    /* Log this kernel call.  */
-    TX_EL_THREAD_RESET_INSERT
+        /* Thread not completed or terminated - return an error!  */
+        status = TX_NOT_DONE;
+    } else {
 
-    /* Log the thread status change.  */
-    TX_EL_THREAD_STATUS_CHANGE_INSERT(thread_ptr, TX_SUSPENDED)
-  }
+        /* Check for proper status of this thread to reset.  */
+        if (thread_ptr->tx_thread_state != TX_COMPLETED) {
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+            /* Now check for terminated state.  */
+            if (thread_ptr->tx_thread_state != TX_TERMINATED) {
 
-  /* Return completion status to caller.  */
-  return (status);
+                /* Thread not completed or terminated - return an error!  */
+                status = TX_NOT_DONE;
+            }
+        }
+    }
+
+    /* Is the request valid?  */
+    if (status == TX_SUCCESS) {
+
+        /* Modify the thread status to prevent additional reset calls.  */
+        thread_ptr->tx_thread_state = TX_NOT_DONE;
+
+        /* Execute Port-Specific completion processing. If needed, it is typically
+         * defined in tx_port.h.  */
+        TX_THREAD_RESET_PORT_COMPLETION(thread_ptr)
+
+        /* Restore interrupts.  */
+        TX_RESTORE
+
+#ifndef TX_DISABLE_STACK_FILLING
+
+        /* Set the thread stack to a pattern prior to creating the initial
+           stack frame.  This pattern is used by the stack checking routines
+           to see how much has been used.  */
+        TX_MEMSET(thread_ptr->tx_thread_stack_start, ((UCHAR)TX_STACK_FILL), thread_ptr->tx_thread_stack_size);
+#endif
+
+        /* Call the target specific stack frame building routine to build the
+           thread's initial stack and to setup the actual stack pointer in the
+           control block.  */
+        _tx_thread_stack_build(thread_ptr, _tx_thread_shell_entry);
+
+        /* Disable interrupts.  */
+        TX_DISABLE
+
+        /* Finally, move into a suspended state to allow for the thread to be
+         * resumed.  */
+        thread_ptr->tx_thread_state = TX_SUSPENDED;
+
+        /* If trace is enabled, insert this event into the trace buffer.  */
+        TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_RESET, thread_ptr, thread_ptr->tx_thread_state, 0, 0,
+                                TX_TRACE_THREAD_EVENTS)
+
+        /* Log this kernel call.  */
+        TX_EL_THREAD_RESET_INSERT
+
+        /* Log the thread status change.  */
+        TX_EL_THREAD_STATUS_CHANGE_INSERT(thread_ptr, TX_SUSPENDED)
+    }
+
+    /* Restore interrupts.  */
+    TX_RESTORE
+
+    /* Return completion status to caller.  */
+    return (status);
 }

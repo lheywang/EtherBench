@@ -74,31 +74,29 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _txe_timer_info_get(TX_TIMER *timer_ptr, CHAR **name, UINT *active,
-                         ULONG *remaining_ticks, ULONG *reschedule_ticks,
-                         TX_TIMER **next_timer) {
+UINT _txe_timer_info_get(TX_TIMER *timer_ptr, CHAR **name, UINT *active, ULONG *remaining_ticks,
+                         ULONG *reschedule_ticks, TX_TIMER **next_timer) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid timer pointer.  */
-  if (timer_ptr == TX_NULL) {
+    /* Check for an invalid timer pointer.  */
+    if (timer_ptr == TX_NULL) {
 
-    /* Timer pointer is invalid, return appropriate error code.  */
-    status = TX_TIMER_ERROR;
-  }
+        /* Timer pointer is invalid, return appropriate error code.  */
+        status = TX_TIMER_ERROR;
+    }
 
-  /* Now check for invalid timer ID.  */
-  else if (timer_ptr->tx_timer_id != TX_TIMER_ID) {
+    /* Now check for invalid timer ID.  */
+    else if (timer_ptr->tx_timer_id != TX_TIMER_ID) {
 
-    /* Timer pointer is invalid, return appropriate error code.  */
-    status = TX_TIMER_ERROR;
-  } else {
+        /* Timer pointer is invalid, return appropriate error code.  */
+        status = TX_TIMER_ERROR;
+    } else {
 
-    /* Otherwise, call the actual timer information get service.  */
-    status = _tx_timer_info_get(timer_ptr, name, active, remaining_ticks,
-                                reschedule_ticks, next_timer);
-  }
+        /* Otherwise, call the actual timer information get service.  */
+        status = _tx_timer_info_get(timer_ptr, name, active, remaining_ticks, reschedule_ticks, next_timer);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

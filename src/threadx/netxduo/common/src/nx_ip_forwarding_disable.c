@@ -69,26 +69,25 @@
 UINT _nx_ip_forwarding_disable(NX_IP *ip_ptr) {
 
 #ifndef NX_DISABLE_IPV4
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_FORWARDING_DISABLE, ip_ptr, 0, 0, 0,
-                          NX_TRACE_IP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_FORWARDING_DISABLE, ip_ptr, 0, 0, 0, NX_TRACE_IP_EVENTS, 0, 0);
 
-  /* Disable interrupts temporarily.  */
-  TX_DISABLE
+    /* Disable interrupts temporarily.  */
+    TX_DISABLE
 
-  /* Clear the IP forwarding processing routine pointer.  */
-  ip_ptr->nx_ip_forward_packet_process = NX_NULL;
+    /* Clear the IP forwarding processing routine pointer.  */
+    ip_ptr->nx_ip_forward_packet_process = NX_NULL;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Return success to the caller.  */
-  return (NX_SUCCESS);
+    /* Return success to the caller.  */
+    return (NX_SUCCESS);
 #else
-  NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_ptr);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

@@ -71,18 +71,18 @@
 /**************************************************************************/
 UINT _fx_utility_string_length_get(CHAR *string, UINT max_length) {
 
-  UINT length;
+    UINT length;
 
-  /* Initialize length to 0.  */
-  length = 0;
+    /* Initialize length to 0.  */
+    length = 0;
 
-  /* Loop to calculate the length.  */
-  while (string[length] && (length < max_length)) {
+    /* Loop to calculate the length.  */
+    while (string[length] && (length < max_length)) {
 
-    /* Increment the length (index).  */
-    length++;
-  }
+        /* Increment the length (index).  */
+        length++;
+    }
 
-  /* Return length.  */
-  return (length);
+    /* Return length.  */
+    return (length);
 }

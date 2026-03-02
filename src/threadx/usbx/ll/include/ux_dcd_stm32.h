@@ -108,71 +108,60 @@
 /* Define USB STM32 physical endpoint structure.  */
 
 typedef struct UX_DCD_STM32_ED_STRUCT {
-  struct UX_SLAVE_ENDPOINT_STRUCT *ux_dcd_stm32_ed_endpoint;
-  ULONG ux_dcd_stm32_ed_status;
-  UCHAR ux_dcd_stm32_ed_state;
-  UCHAR ux_dcd_stm32_ed_index;
-  UCHAR ux_dcd_stm32_ed_direction;
-  UCHAR reserved;
+    struct UX_SLAVE_ENDPOINT_STRUCT *ux_dcd_stm32_ed_endpoint;
+    ULONG ux_dcd_stm32_ed_status;
+    UCHAR ux_dcd_stm32_ed_state;
+    UCHAR ux_dcd_stm32_ed_index;
+    UCHAR ux_dcd_stm32_ed_direction;
+    UCHAR reserved;
 } UX_DCD_STM32_ED;
 
 /* Define USB STM32 DCD structure definition.  */
 
 typedef struct UX_DCD_STM32_STRUCT {
 
-  struct UX_SLAVE_DCD_STRUCT *ux_dcd_stm32_dcd_owner;
-  struct UX_DCD_STM32_ED_STRUCT ux_dcd_stm32_ed[UX_DCD_STM32_MAX_ED];
+    struct UX_SLAVE_DCD_STRUCT *ux_dcd_stm32_dcd_owner;
+    struct UX_DCD_STM32_ED_STRUCT ux_dcd_stm32_ed[UX_DCD_STM32_MAX_ED];
 #if defined(UX_DEVICE_BIDIRECTIONAL_ENDPOINT_SUPPORT)
-  struct UX_DCD_STM32_ED_STRUCT ux_dcd_stm32_ed_in[UX_DCD_STM32_MAX_ED];
+    struct UX_DCD_STM32_ED_STRUCT ux_dcd_stm32_ed_in[UX_DCD_STM32_MAX_ED];
 #endif /* defined(UX_DEVICE_BIDIRECTIONAL_ENDPOINT_SUPPORT) */
-  PCD_HandleTypeDef *pcd_handle;
+    PCD_HandleTypeDef *pcd_handle;
 } UX_DCD_STM32;
 
-static inline struct UX_DCD_STM32_ED_STRUCT *
-_stm32_ed_get(UX_DCD_STM32 *dcd_stm32, ULONG ep_addr) {
+static inline struct UX_DCD_STM32_ED_STRUCT *_stm32_ed_get(UX_DCD_STM32 *dcd_stm32, ULONG ep_addr) {
 #if defined(UX_DEVICE_BIDIRECTIONAL_ENDPOINT_SUPPORT)
-  ULONG ep_dir = ep_addr & 0x80u;
+    ULONG ep_dir = ep_addr & 0x80u;
 #endif /* defined(UX_DEVICE_BIDIRECTIONAL_ENDPOINT_SUPPORT) */
-  ULONG ep_num = ep_addr & 0x7Fu;
+    ULONG ep_num = ep_addr & 0x7Fu;
 
-  if (ep_num >= UX_DCD_STM32_MAX_ED ||
-      ep_num >= dcd_stm32->pcd_handle->Init.dev_endpoints)
-    return (UX_NULL);
+    if (ep_num >= UX_DCD_STM32_MAX_ED || ep_num >= dcd_stm32->pcd_handle->Init.dev_endpoints)
+        return (UX_NULL);
 
 #if defined(UX_DEVICE_BIDIRECTIONAL_ENDPOINT_SUPPORT)
-  if (ep_dir)
-    return (&dcd_stm32->ux_dcd_stm32_ed_in[ep_num]);
+    if (ep_dir)
+        return (&dcd_stm32->ux_dcd_stm32_ed_in[ep_num]);
 #endif /* defined(UX_DEVICE_BIDIRECTIONAL_ENDPOINT_SUPPORT) */
 
-  return (&dcd_stm32->ux_dcd_stm32_ed[ep_num]);
+    return (&dcd_stm32->ux_dcd_stm32_ed[ep_num]);
 }
 
 /* Define USB STM32 DCD prototypes.  */
 
-UINT _ux_dcd_stm32_endpoint_create(UX_DCD_STM32 *dcd_stm32,
-                                   UX_SLAVE_ENDPOINT *endpoint);
-UINT _ux_dcd_stm32_endpoint_destroy(UX_DCD_STM32 *dcd_stm32,
-                                    UX_SLAVE_ENDPOINT *endpoint);
-UINT _ux_dcd_stm32_endpoint_reset(UX_DCD_STM32 *dcd_stm32,
-                                  UX_SLAVE_ENDPOINT *endpoint);
-UINT _ux_dcd_stm32_endpoint_stall(UX_DCD_STM32 *dcd_stm32,
-                                  UX_SLAVE_ENDPOINT *endpoint);
-UINT _ux_dcd_stm32_endpoint_status(UX_DCD_STM32 *dcd_stm32,
-                                   ULONG endpoint_index);
-UINT _ux_dcd_stm32_frame_number_get(UX_DCD_STM32 *dcd_stm32,
-                                    ULONG *frame_number);
+UINT _ux_dcd_stm32_endpoint_create(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_ENDPOINT *endpoint);
+UINT _ux_dcd_stm32_endpoint_destroy(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_ENDPOINT *endpoint);
+UINT _ux_dcd_stm32_endpoint_reset(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_ENDPOINT *endpoint);
+UINT _ux_dcd_stm32_endpoint_stall(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_ENDPOINT *endpoint);
+UINT _ux_dcd_stm32_endpoint_status(UX_DCD_STM32 *dcd_stm32, ULONG endpoint_index);
+UINT _ux_dcd_stm32_frame_number_get(UX_DCD_STM32 *dcd_stm32, ULONG *frame_number);
 UINT _ux_dcd_stm32_function(UX_SLAVE_DCD *dcd, UINT function, VOID *parameter);
 UINT _ux_dcd_stm32_initialize_complete(VOID);
 VOID _ux_dcd_stm32_interrupt_handler(VOID);
-UINT _ux_dcd_stm32_transfer_abort(UX_DCD_STM32 *dcd_stm32,
-                                  UX_SLAVE_TRANSFER *transfer_request);
+UINT _ux_dcd_stm32_transfer_abort(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_TRANSFER *transfer_request);
 
 #if !defined(UX_DEVICE_STANDALONE)
-UINT _ux_dcd_stm32_transfer_request(UX_DCD_STM32 *dcd_stm32,
-                                    UX_SLAVE_TRANSFER *transfer_request);
+UINT _ux_dcd_stm32_transfer_request(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_TRANSFER *transfer_request);
 #else
-UINT _ux_dcd_stm32_transfer_run(UX_DCD_STM32 *dcd_stm32,
-                                UX_SLAVE_TRANSFER *transfer_request);
+UINT _ux_dcd_stm32_transfer_run(UX_DCD_STM32 *dcd_stm32, UX_SLAVE_TRANSFER *transfer_request);
 VOID _ux_dcd_stm32_setup_isr_pending(UX_DCD_STM32 *dcd_stm32);
 #endif /* !defined(UX_DEVICE_STANDALONE) */
 

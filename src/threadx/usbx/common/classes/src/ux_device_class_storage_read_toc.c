@@ -89,137 +89,129 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_storage_read_toc(UX_SLAVE_CLASS_STORAGE *storage,
-                                       ULONG lun,
-                                       UX_SLAVE_ENDPOINT *endpoint_in,
-                                       UX_SLAVE_ENDPOINT *endpoint_out,
-                                       UCHAR *cbwcb) {
+UINT _ux_device_class_storage_read_toc(UX_SLAVE_CLASS_STORAGE *storage, ULONG lun, UX_SLAVE_ENDPOINT *endpoint_in,
+                                       UX_SLAVE_ENDPOINT *endpoint_out, UCHAR *cbwcb) {
 
-  UINT status;
-  UX_SLAVE_TRANSFER *transfer_request;
-  ULONG allocation_length;
-  ULONG toc_length;
-  UCHAR *toc_buffer;
+    UINT status;
+    UX_SLAVE_TRANSFER *transfer_request;
+    ULONG allocation_length;
+    ULONG toc_length;
+    UCHAR *toc_buffer;
 
-  UX_PARAMETER_NOT_USED(lun);
-  UX_PARAMETER_NOT_USED(endpoint_out);
+    UX_PARAMETER_NOT_USED(lun);
+    UX_PARAMETER_NOT_USED(endpoint_out);
 
-  /* Build option check.  */
-  UX_ASSERT(UX_SLAVE_CLASS_STORAGE_BUFFER_SIZE >= 20);
+    /* Build option check.  */
+    UX_ASSERT(UX_SLAVE_CLASS_STORAGE_BUFFER_SIZE >= 20);
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_READ_TOC, storage, lun,
-                          0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_STORAGE_READ_TOC, storage, lun, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0,
+                            0)
 
-  /* Obtain the pointer to the transfer request.  */
-  transfer_request = &endpoint_in->ux_slave_endpoint_transfer_request;
+    /* Obtain the pointer to the transfer request.  */
+    transfer_request = &endpoint_in->ux_slave_endpoint_transfer_request;
 
-  /* Obtain TOC buffer.  */
-  toc_buffer = transfer_request->ux_slave_transfer_request_data_pointer;
+    /* Obtain TOC buffer.  */
+    toc_buffer = transfer_request->ux_slave_transfer_request_data_pointer;
 
-  /* Reset this buffer.  */
-  _ux_utility_memory_set(toc_buffer, 0,
-                         20); /* Use case of memset is verified. */
+    /* Reset this buffer.  */
+    _ux_utility_memory_set(toc_buffer, 0, 20); /* Use case of memset is verified. */
 
-  /* Get the allocation length.  */
-  allocation_length = _ux_utility_short_get_big_endian(
-      cbwcb + UX_SLAVE_CLASS_STORAGE_READ_TOC_ALLOCATION_LENGTH);
+    /* Get the allocation length.  */
+    allocation_length = _ux_utility_short_get_big_endian(cbwcb + UX_SLAVE_CLASS_STORAGE_READ_TOC_ALLOCATION_LENGTH);
 
-  /* Insert the fist and last tack number.  */
-  toc_buffer[2] = 0x01;
-  toc_buffer[3] = 0x01;
+    /* Insert the fist and last tack number.  */
+    toc_buffer[2] = 0x01;
+    toc_buffer[3] = 0x01;
 
-  /* Set TOC length by default.  */
-  toc_length = 20;
-
-  /* Insert the ADR and control values.  */
-  toc_buffer[5] = 0x14;
-
-  /* Insert the TOC tack number.  */
-  toc_buffer[6] = 0x01;
-
-  /* Check if the request is for the TOC or time stamp.  */
-  switch (*(cbwcb + UX_SLAVE_CLASS_STORAGE_READ_TOC_FORMAT)) {
-
-  case 0x02:
-
-    /* Set the toc buffer length.  */
+    /* Set TOC length by default.  */
     toc_length = 20;
 
-    /* Insert the TOC buffer length.  */
-    toc_buffer[1] = 0x12;
+    /* Insert the ADR and control values.  */
+    toc_buffer[5] = 0x14;
 
-    /* Insert some time values.  */
-    toc_buffer[10] = 0x02;
-    toc_buffer[13] = 0x17;
-    toc_buffer[14] = 0xAA;
-    toc_buffer[18] = 0x04;
-    toc_buffer[19] = 0x1a;
+    /* Insert the TOC tack number.  */
+    toc_buffer[6] = 0x01;
 
-    break;
+    /* Check if the request is for the TOC or time stamp.  */
+    switch (*(cbwcb + UX_SLAVE_CLASS_STORAGE_READ_TOC_FORMAT)) {
 
-  case 0x01:
+    case 0x02:
 
-    /* Set the toc buffer length.  */
-    toc_length = 19;
+        /* Set the toc buffer length.  */
+        toc_length = 20;
 
-    /* Insert the TOC buffer length.  */
-    toc_buffer[1] = 0x12;
+        /* Insert the TOC buffer length.  */
+        toc_buffer[1] = 0x12;
 
-    toc_buffer[13] = 0x17;
-    toc_buffer[14] = 0xAA;
-    toc_buffer[19] = 0xb0;
+        /* Insert some time values.  */
+        toc_buffer[10] = 0x02;
+        toc_buffer[13] = 0x17;
+        toc_buffer[14] = 0xAA;
+        toc_buffer[18] = 0x04;
+        toc_buffer[19] = 0x1a;
 
-    break;
+        break;
 
-  case 0x00:
+    case 0x01:
 
-    /* Set the toc buffer length.  */
-    toc_length = 20;
+        /* Set the toc buffer length.  */
+        toc_length = 19;
 
-    /* Insert the TOC buffer length.  */
-    toc_buffer[1] = 0x12;
+        /* Insert the TOC buffer length.  */
+        toc_buffer[1] = 0x12;
 
-    /* Insert some time values.  */
-    toc_buffer[10] = 0x02;
-    toc_buffer[13] = 0x17;
-    toc_buffer[14] = 0xAA;
-    toc_buffer[18] = 0x04;
-    toc_buffer[19] = 0x1a;
+        toc_buffer[13] = 0x17;
+        toc_buffer[14] = 0xAA;
+        toc_buffer[19] = 0xb0;
 
-    break;
-  }
+        break;
 
-  /* Check how much we can send back.  */
-  if (allocation_length > toc_length)
+    case 0x00:
 
-    /* We return less than demanded.  */
-    allocation_length = toc_length;
+        /* Set the toc buffer length.  */
+        toc_length = 20;
+
+        /* Insert the TOC buffer length.  */
+        toc_buffer[1] = 0x12;
+
+        /* Insert some time values.  */
+        toc_buffer[10] = 0x02;
+        toc_buffer[13] = 0x17;
+        toc_buffer[14] = 0xAA;
+        toc_buffer[18] = 0x04;
+        toc_buffer[19] = 0x1a;
+
+        break;
+    }
+
+    /* Check how much we can send back.  */
+    if (allocation_length > toc_length)
+
+        /* We return less than demanded.  */
+        allocation_length = toc_length;
 
 #if defined(UX_DEVICE_STANDALONE)
 
-  /* Next: Transfer (DATA).  */
-  storage->ux_device_class_storage_state =
-      UX_DEVICE_CLASS_STORAGE_STATE_TRANS_START;
-  storage->ux_device_class_storage_cmd_state = UX_DEVICE_CLASS_STORAGE_CMD_READ;
+    /* Next: Transfer (DATA).  */
+    storage->ux_device_class_storage_state = UX_DEVICE_CLASS_STORAGE_STATE_TRANS_START;
+    storage->ux_device_class_storage_cmd_state = UX_DEVICE_CLASS_STORAGE_CMD_READ;
 
-  storage->ux_device_class_storage_transfer = transfer_request;
-  storage->ux_device_class_storage_device_length = allocation_length;
-  storage->ux_device_class_storage_data_length = allocation_length;
-  storage->ux_device_class_storage_data_count = 0;
+    storage->ux_device_class_storage_transfer = transfer_request;
+    storage->ux_device_class_storage_device_length = allocation_length;
+    storage->ux_device_class_storage_data_length = allocation_length;
+    storage->ux_device_class_storage_data_count = 0;
 
 #else
 
-  /* Send a data payload with the TOC response buffer.  */
-  _ux_device_stack_transfer_request(transfer_request, allocation_length,
-                                    allocation_length);
+    /* Send a data payload with the TOC response buffer.  */
+    _ux_device_stack_transfer_request(transfer_request, allocation_length, allocation_length);
 #endif
 
-  /* Now we set the CSW with success.  */
-  storage->ux_slave_class_storage_csw_status =
-      UX_SLAVE_CLASS_STORAGE_CSW_PASSED;
-  status = UX_SUCCESS;
+    /* Now we set the CSW with success.  */
+    storage->ux_slave_class_storage_csw_status = UX_SLAVE_CLASS_STORAGE_CSW_PASSED;
+    status = UX_SUCCESS;
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

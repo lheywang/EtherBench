@@ -80,124 +80,114 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxd_ipv6_router_lookup(NX_IP *ip_ptr, NX_INTERFACE *if_ptr,
-                             ULONG *router_address, void **nd_cache_entry) {
+UINT _nxd_ipv6_router_lookup(NX_IP *ip_ptr, NX_INTERFACE *if_ptr, ULONG *router_address, void **nd_cache_entry) {
 
-  UINT i;
-  UINT table_size;
-  UINT routers_checked;
-  NX_IPV6_DEFAULT_ROUTER_ENTRY *rt_entry;
-  ND_CACHE_ENTRY *NDCacheEntry;
+    UINT i;
+    UINT table_size;
+    UINT routers_checked;
+    NX_IPV6_DEFAULT_ROUTER_ENTRY *rt_entry;
+    ND_CACHE_ENTRY *NDCacheEntry;
 
-  NX_ASSERT(nd_cache_entry != NX_NULL)
+    NX_ASSERT(nd_cache_entry != NX_NULL)
 
-  /* Initialize cache pointer to NULL (if no router found). */
-  *nd_cache_entry = NULL;
+    /* Initialize cache pointer to NULL (if no router found). */
+    *nd_cache_entry = NULL;
 
-  /* Set a local variable for convenience. */
-  table_size = ip_ptr->nx_ipv6_default_router_table_size;
+    /* Set a local variable for convenience. */
+    table_size = ip_ptr->nx_ipv6_default_router_table_size;
 
-  /* Check if there have been any routers added to the table. */
-  if (table_size == 0) {
+    /* Check if there have been any routers added to the table. */
+    if (table_size == 0) {
 
-    /* Return a non zero (e.g. unsuccessful) error status. */
+        /* Return a non zero (e.g. unsuccessful) error status. */
+        return (NX_NOT_SUCCESSFUL);
+    }
+
+    /* Loop to check the router table.  */
+    for (i = 0; table_size && (i < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE); i++) {
+
+        /* Local pointer for convenience. */
+        rt_entry = &(ip_ptr->nx_ipv6_default_router_table[i]);
+
+        /* Does this slot contain a valid router? */
+        if ((rt_entry->nx_ipv6_default_router_entry_flag & NX_IPV6_ROUTE_TYPE_VALID) &&
+            (rt_entry->nx_ipv6_default_router_entry_interface_ptr == if_ptr)) {
+
+            /* Keep track of valid entries we have checked. */
+            NDCacheEntry = rt_entry->nx_ipv6_default_router_entry_neighbor_cache_ptr;
+
+            /* Is this router reachable? */
+            if (!NDCacheEntry || (NDCacheEntry->nx_nd_cache_nd_status < ND_CACHE_STATE_REACHABLE) ||
+                (NDCacheEntry->nx_nd_cache_nd_status > ND_CACHE_STATE_PROBE)) {
+
+                /* No, skip over. */
+                table_size--;
+                continue;
+            }
+
+            /* Yes, copy this router address into the return pointer. */
+            COPY_IPV6_ADDRESS(ip_ptr->nx_ipv6_default_router_table[i].nx_ipv6_default_router_entry_router_address,
+                              router_address);
+
+            /* Copy the router's cache entry pointer to the supplied cache table
+             * pointer. */
+            *nd_cache_entry = ip_ptr->nx_ipv6_default_router_table[i].nx_ipv6_default_router_entry_neighbor_cache_ptr;
+
+            /* We're done. Break out of the search. */
+            return (NX_SUCCESS);
+        }
+    }
+
+    /* If we are here, we did not find a suitable default router. Do a search
+       of routers previously reachable. */
+
+    /* Start at the round robin index so we don't always choose the first
+       less-than-reachable router in the table. */
+    i = ip_ptr->nx_ipv6_default_router_table_round_robin_index;
+
+    /* Find a router with previously known reachability. */
+    for (routers_checked = 0; routers_checked < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE; routers_checked++) {
+
+        /* Local pointer for convenience. */
+        rt_entry = &(ip_ptr->nx_ipv6_default_router_table[i]);
+
+        /* Does this slot contain a valid router? */
+        if ((rt_entry->nx_ipv6_default_router_entry_flag & NX_IPV6_ROUTE_TYPE_VALID) &&
+            (rt_entry->nx_ipv6_default_router_entry_interface_ptr == if_ptr)) {
+
+            /* Yes, copy this router to the return pointer. */
+            COPY_IPV6_ADDRESS(rt_entry->nx_ipv6_default_router_entry_router_address, router_address);
+
+            /* Copy the router's cache entry pointer to the supplied cache table
+             * pointer. */
+            *nd_cache_entry = rt_entry->nx_ipv6_default_router_entry_neighbor_cache_ptr;
+
+            /* Update the index so the same router is not chosen again if there
+               any other less-than-reachable routers we can choose, RFC 2461 6.3.6. */
+            ip_ptr->nx_ipv6_default_router_table_round_robin_index++;
+
+            /* Do we need wrap the index? */
+            if (ip_ptr->nx_ipv6_default_router_table_round_robin_index == NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE) {
+
+                /* Yes, start back at the first slot. */
+                ip_ptr->nx_ipv6_default_router_table_round_robin_index = 0;
+            }
+
+            /* We're done. Return successful outcome status. */
+            return (NX_SUCCESS);
+        }
+
+        /* Are we past the end of the table? */
+        if (i == NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE - 1) {
+            /* Yes, wrap to the first slot.*/
+            i = 0;
+        } else {
+            i++;
+        }
+    }
+
+    /* Router not found. */
     return (NX_NOT_SUCCESSFUL);
-  }
-
-  /* Loop to check the router table.  */
-  for (i = 0; table_size && (i < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE); i++) {
-
-    /* Local pointer for convenience. */
-    rt_entry = &(ip_ptr->nx_ipv6_default_router_table[i]);
-
-    /* Does this slot contain a valid router? */
-    if ((rt_entry->nx_ipv6_default_router_entry_flag &
-         NX_IPV6_ROUTE_TYPE_VALID) &&
-        (rt_entry->nx_ipv6_default_router_entry_interface_ptr == if_ptr)) {
-
-      /* Keep track of valid entries we have checked. */
-      NDCacheEntry = rt_entry->nx_ipv6_default_router_entry_neighbor_cache_ptr;
-
-      /* Is this router reachable? */
-      if (!NDCacheEntry ||
-          (NDCacheEntry->nx_nd_cache_nd_status < ND_CACHE_STATE_REACHABLE) ||
-          (NDCacheEntry->nx_nd_cache_nd_status > ND_CACHE_STATE_PROBE)) {
-
-        /* No, skip over. */
-        table_size--;
-        continue;
-      }
-
-      /* Yes, copy this router address into the return pointer. */
-      COPY_IPV6_ADDRESS(ip_ptr->nx_ipv6_default_router_table[i]
-                            .nx_ipv6_default_router_entry_router_address,
-                        router_address);
-
-      /* Copy the router's cache entry pointer to the supplied cache table
-       * pointer. */
-      *nd_cache_entry = ip_ptr->nx_ipv6_default_router_table[i]
-                            .nx_ipv6_default_router_entry_neighbor_cache_ptr;
-
-      /* We're done. Break out of the search. */
-      return (NX_SUCCESS);
-    }
-  }
-
-  /* If we are here, we did not find a suitable default router. Do a search
-     of routers previously reachable. */
-
-  /* Start at the round robin index so we don't always choose the first
-     less-than-reachable router in the table. */
-  i = ip_ptr->nx_ipv6_default_router_table_round_robin_index;
-
-  /* Find a router with previously known reachability. */
-  for (routers_checked = 0; routers_checked < NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE;
-       routers_checked++) {
-
-    /* Local pointer for convenience. */
-    rt_entry = &(ip_ptr->nx_ipv6_default_router_table[i]);
-
-    /* Does this slot contain a valid router? */
-    if ((rt_entry->nx_ipv6_default_router_entry_flag &
-         NX_IPV6_ROUTE_TYPE_VALID) &&
-        (rt_entry->nx_ipv6_default_router_entry_interface_ptr == if_ptr)) {
-
-      /* Yes, copy this router to the return pointer. */
-      COPY_IPV6_ADDRESS(rt_entry->nx_ipv6_default_router_entry_router_address,
-                        router_address);
-
-      /* Copy the router's cache entry pointer to the supplied cache table
-       * pointer. */
-      *nd_cache_entry =
-          rt_entry->nx_ipv6_default_router_entry_neighbor_cache_ptr;
-
-      /* Update the index so the same router is not chosen again if there
-         any other less-than-reachable routers we can choose, RFC 2461 6.3.6. */
-      ip_ptr->nx_ipv6_default_router_table_round_robin_index++;
-
-      /* Do we need wrap the index? */
-      if (ip_ptr->nx_ipv6_default_router_table_round_robin_index ==
-          NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE) {
-
-        /* Yes, start back at the first slot. */
-        ip_ptr->nx_ipv6_default_router_table_round_robin_index = 0;
-      }
-
-      /* We're done. Return successful outcome status. */
-      return (NX_SUCCESS);
-    }
-
-    /* Are we past the end of the table? */
-    if (i == NX_IPV6_DEFAULT_ROUTER_TABLE_SIZE - 1) {
-      /* Yes, wrap to the first slot.*/
-      i = 0;
-    } else {
-      i++;
-    }
-  }
-
-  /* Router not found. */
-  return (NX_NOT_SUCCESSFUL);
 }
 
 #endif /* FEATURE_NX_IPV6 */

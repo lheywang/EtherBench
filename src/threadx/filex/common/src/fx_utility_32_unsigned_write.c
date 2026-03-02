@@ -70,9 +70,9 @@
 /**************************************************************************/
 VOID _fx_utility_32_unsigned_write(UCHAR *dest_ptr, ULONG value) {
 
-  /* Store the UINT into the destination with endian-awareness.  */
-  *(dest_ptr) = (UCHAR)(value & 0xFF);
-  *(dest_ptr + 1) = (UCHAR)((value >> 8) & 0xFF);
-  *(dest_ptr + 2) = (UCHAR)((value >> 16) & 0xFF);
-  *(dest_ptr + 3) = (UCHAR)((value >> 24) & 0xFF);
+    /* Store the UINT into the destination with endian-awareness.  */
+    *(dest_ptr) = (UCHAR)(value & 0xFF);
+    *(dest_ptr + 1) = (UCHAR)((value >> 8) & 0xFF);
+    *(dest_ptr + 2) = (UCHAR)((value >> 16) & 0xFF);
+    *(dest_ptr + 3) = (UCHAR)((value >> 24) & 0xFF);
 }

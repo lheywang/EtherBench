@@ -77,31 +77,31 @@
 /**************************************************************************/
 UINT _lx_nor_flash_defragment(LX_NOR_FLASH *nor_flash) {
 
-  ULONG i;
+    ULONG i;
 
 #ifdef LX_THREAD_SAFE_ENABLE
 
-  /* Obtain the thread safe mutex.  */
-  tx_mutex_get(&nor_flash->lx_nor_flash_mutex, TX_WAIT_FOREVER);
+    /* Obtain the thread safe mutex.  */
+    tx_mutex_get(&nor_flash->lx_nor_flash_mutex, TX_WAIT_FOREVER);
 #endif
 
-  /* Loop for max number of blocks, while there are obsolete count.  */
-  for (i = 0; i < nor_flash->lx_nor_flash_total_blocks; i++) {
+    /* Loop for max number of blocks, while there are obsolete count.  */
+    for (i = 0; i < nor_flash->lx_nor_flash_total_blocks; i++) {
 
-    /* Determine if there is any more defragment work.  */
-    if (nor_flash->lx_nor_flash_obsolete_physical_sectors == 0)
-      break;
+        /* Determine if there is any more defragment work.  */
+        if (nor_flash->lx_nor_flash_obsolete_physical_sectors == 0)
+            break;
 
-    /* Call the block reclaim function to defragment.  */
-    _lx_nor_flash_block_reclaim(nor_flash);
-  }
+        /* Call the block reclaim function to defragment.  */
+        _lx_nor_flash_block_reclaim(nor_flash);
+    }
 
 #ifdef LX_THREAD_SAFE_ENABLE
 
-  /* Release the thread safe mutex.  */
-  tx_mutex_put(&nor_flash->lx_nor_flash_mutex);
+    /* Release the thread safe mutex.  */
+    tx_mutex_put(&nor_flash->lx_nor_flash_mutex);
 #endif
 
-  /* Return successful completion.  */
-  return (LX_SUCCESS);
+    /* Return successful completion.  */
+    return (LX_SUCCESS);
 }

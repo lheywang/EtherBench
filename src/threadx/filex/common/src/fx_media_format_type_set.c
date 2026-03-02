@@ -75,9 +75,9 @@ UINT fx_media_format_type_set(UCHAR new_media_type);
 /**************************************************************************/
 UINT fx_media_format_type_set(UCHAR new_media_type) {
 
-  /* Simply copy the new media type into the default location.  */
-  _fx_media_format_media_type = new_media_type;
+    /* Simply copy the new media type into the default location.  */
+    _fx_media_format_media_type = new_media_type;
 
-  /* Return success.  */
-  return (FX_SUCCESS);
+    /* Return success.  */
+    return (FX_SUCCESS);
 }

@@ -74,30 +74,30 @@ NX_CALLER_CHECKING_EXTERNS
 UINT _nxe_arp_entry_delete(NX_IP *ip_ptr, ULONG ip_address) {
 
 #ifndef NX_DISABLE_IPV4
-  UINT status;
+    UINT status;
 
-  /* Check for invalid IP pointer. */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+    /* Check for invalid IP pointer. */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
 
-    return (NX_PTR_ERROR);
-  }
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for invalid IP address. */
-  if (ip_address == 0x0) {
+    /* Check for invalid IP address. */
+    if (ip_address == 0x0) {
 
-    return (NX_IP_ADDRESS_ERROR);
-  }
+        return (NX_IP_ADDRESS_ERROR);
+    }
 
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call the actual service. */
-  status = _nx_arp_entry_delete(ip_ptr, ip_address);
+    /* Call the actual service. */
+    status = _nx_arp_entry_delete(ip_ptr, ip_address);
 
-  return (status);
+    return (status);
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(ip_address);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_address);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

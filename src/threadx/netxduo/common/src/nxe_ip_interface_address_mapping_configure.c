@@ -73,28 +73,25 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_ip_interface_address_mapping_configure(NX_IP *ip_ptr,
-                                                 UINT interface_index,
-                                                 UINT mapping_needed) {
+UINT _nxe_ip_interface_address_mapping_configure(NX_IP *ip_ptr, UINT interface_index, UINT mapping_needed) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for invalid interface index */
-  if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
-    return (NX_INVALID_INTERFACE);
-  }
+    /* Check for invalid interface index */
+    if (interface_index >= NX_MAX_PHYSICAL_INTERFACES) {
+        return (NX_INVALID_INTERFACE);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  status = _nx_ip_interface_address_mapping_configure(ip_ptr, interface_index,
-                                                      mapping_needed);
+    status = _nx_ip_interface_address_mapping_configure(ip_ptr, interface_index, mapping_needed);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

@@ -57,19 +57,19 @@
  * @retval int
  */
 UINT MX_NetXDuo_Init(VOID *memory_ptr) {
-  UINT ret = NX_SUCCESS;
-  TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL *)memory_ptr;
-  /* USER CODE BEGIN App_NetXDuo_MEM_POOL */
-  (void)byte_pool;
-  /* USER CODE END App_NetXDuo_MEM_POOL */
-  /* USER CODE BEGIN 0 */
+    UINT ret = NX_SUCCESS;
+    TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL *)memory_ptr;
+    /* USER CODE BEGIN App_NetXDuo_MEM_POOL */
+    (void)byte_pool;
+    /* USER CODE END App_NetXDuo_MEM_POOL */
+    /* USER CODE BEGIN 0 */
 
-  /* USER CODE END 0 */
+    /* USER CODE END 0 */
 
-  /* USER CODE BEGIN MX_NetXDuo_Init */
-  /* USER CODE END MX_NetXDuo_Init */
+    /* USER CODE BEGIN MX_NetXDuo_Init */
+    /* USER CODE END MX_NetXDuo_Init */
 
-  return ret;
+    return ret;
 }
 
 /* USER CODE BEGIN 1 */

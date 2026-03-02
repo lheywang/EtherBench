@@ -71,142 +71,133 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_arp_entry_allocate(NX_IP *ip_ptr, NX_ARP **arp_list_ptr,
-                            UINT is_static) {
+UINT _nx_arp_entry_allocate(NX_IP *ip_ptr, NX_ARP **arp_list_ptr, UINT is_static) {
 
-  TX_INTERRUPT_SAVE_AREA
-  NX_ARP *arp_entry;
-  UINT status;
+    TX_INTERRUPT_SAVE_AREA
+    NX_ARP *arp_entry;
+    UINT status;
 
-  /* Determine if there is an ARP entry available in the dynamic list.  */
-  if (ip_ptr->nx_ip_arp_dynamic_list) {
+    /* Determine if there is an ARP entry available in the dynamic list.  */
+    if (ip_ptr->nx_ip_arp_dynamic_list) {
 
-    /* Yes there are one or more free entries.  */
+        /* Yes there are one or more free entries.  */
 
-    /* Pickup pointer to last used dynamic ARP entry.  */
-    arp_entry = (ip_ptr->nx_ip_arp_dynamic_list)->nx_arp_pool_previous;
+        /* Pickup pointer to last used dynamic ARP entry.  */
+        arp_entry = (ip_ptr->nx_ip_arp_dynamic_list)->nx_arp_pool_previous;
 
-    /* Remove from the dynamic list. */
-    _nx_arp_dynamic_entry_delete(ip_ptr, arp_entry);
+        /* Remove from the dynamic list. */
+        _nx_arp_dynamic_entry_delete(ip_ptr, arp_entry);
 
-    /* Disable interrupts temporarily.  */
-    TX_DISABLE
+        /* Disable interrupts temporarily.  */
+        TX_DISABLE
 
-    /* Link the ARP entry at the head of the IP list.  */
+        /* Link the ARP entry at the head of the IP list.  */
 
-    /* Determine if the ARP entry is being added to an empty list.  */
-    if (*arp_list_ptr) {
+        /* Determine if the ARP entry is being added to an empty list.  */
+        if (*arp_list_ptr) {
 
-      /* Add the ARP entry to the beginning of the nonempty ARP
-         list.  */
-      arp_entry->nx_arp_active_list_head = arp_list_ptr;
-      arp_entry->nx_arp_active_next = *arp_list_ptr;
-      arp_entry->nx_arp_active_previous =
-          (*arp_list_ptr)->nx_arp_active_previous;
-      (arp_entry->nx_arp_active_previous)->nx_arp_active_next = arp_entry;
-      (*arp_list_ptr)->nx_arp_active_previous = arp_entry;
-    } else {
-      /* Empty list, just put the ARP entry at the beginning.  */
-      arp_entry->nx_arp_active_list_head = arp_list_ptr;
-      arp_entry->nx_arp_active_next = arp_entry;
-      arp_entry->nx_arp_active_previous = arp_entry;
+            /* Add the ARP entry to the beginning of the nonempty ARP
+               list.  */
+            arp_entry->nx_arp_active_list_head = arp_list_ptr;
+            arp_entry->nx_arp_active_next = *arp_list_ptr;
+            arp_entry->nx_arp_active_previous = (*arp_list_ptr)->nx_arp_active_previous;
+            (arp_entry->nx_arp_active_previous)->nx_arp_active_next = arp_entry;
+            (*arp_list_ptr)->nx_arp_active_previous = arp_entry;
+        } else {
+            /* Empty list, just put the ARP entry at the beginning.  */
+            arp_entry->nx_arp_active_list_head = arp_list_ptr;
+            arp_entry->nx_arp_active_next = arp_entry;
+            arp_entry->nx_arp_active_previous = arp_entry;
 
-      /* Now setup the list head.  */
-      *arp_list_ptr = arp_entry;
-    }
+            /* Now setup the list head.  */
+            *arp_list_ptr = arp_entry;
+        }
 
-    /* Determine if this is a static entry. */
-    if (is_static == NX_TRUE) {
+        /* Determine if this is a static entry. */
+        if (is_static == NX_TRUE) {
 
-      /* Remove this entry from the ARP dynamic list.  */
+            /* Remove this entry from the ARP dynamic list.  */
 
-      /* Determine if this is the only ARP entry on the dynamic list.  */
-      if (arp_entry == arp_entry->nx_arp_pool_next) {
+            /* Determine if this is the only ARP entry on the dynamic list.  */
+            if (arp_entry == arp_entry->nx_arp_pool_next) {
 
-        /* Remove the sole entry from the dynamic list head.  */
-        ip_ptr->nx_ip_arp_dynamic_list = NX_NULL;
-      } else {
+                /* Remove the sole entry from the dynamic list head.  */
+                ip_ptr->nx_ip_arp_dynamic_list = NX_NULL;
+            } else {
 
-        /* Remove the entry from a list of more than one entry.  */
+                /* Remove the entry from a list of more than one entry.  */
 
-        /* Update the links of the adjacent ARP dynamic pool entries.  */
-        (arp_entry->nx_arp_pool_next)->nx_arp_pool_previous =
-            arp_entry->nx_arp_pool_previous;
-        (arp_entry->nx_arp_pool_previous)->nx_arp_pool_next =
-            arp_entry->nx_arp_pool_next;
-      }
+                /* Update the links of the adjacent ARP dynamic pool entries.  */
+                (arp_entry->nx_arp_pool_next)->nx_arp_pool_previous = arp_entry->nx_arp_pool_previous;
+                (arp_entry->nx_arp_pool_previous)->nx_arp_pool_next = arp_entry->nx_arp_pool_next;
+            }
 
-      /* Add the entry to the ARP static list.  */
+            /* Add the entry to the ARP static list.  */
 
-      /* Determine if the ARP static list is empty.  */
-      if (ip_ptr->nx_ip_arp_static_list == NX_NULL) {
+            /* Determine if the ARP static list is empty.  */
+            if (ip_ptr->nx_ip_arp_static_list == NX_NULL) {
 
-        /* Just place this single ARP entry on the list.  */
-        arp_entry->nx_arp_pool_next = arp_entry;
-        arp_entry->nx_arp_pool_previous = arp_entry;
-        ip_ptr->nx_ip_arp_static_list = arp_entry;
-      } else {
+                /* Just place this single ARP entry on the list.  */
+                arp_entry->nx_arp_pool_next = arp_entry;
+                arp_entry->nx_arp_pool_previous = arp_entry;
+                ip_ptr->nx_ip_arp_static_list = arp_entry;
+            } else {
 
-        /* Add to the end of the ARP static list.  */
-        arp_entry->nx_arp_pool_next = ip_ptr->nx_ip_arp_static_list;
-        arp_entry->nx_arp_pool_previous =
-            (ip_ptr->nx_ip_arp_static_list)->nx_arp_pool_previous;
-        ((ip_ptr->nx_ip_arp_static_list)->nx_arp_pool_previous)
-            ->nx_arp_pool_next = arp_entry;
-        (ip_ptr->nx_ip_arp_static_list)->nx_arp_pool_previous = arp_entry;
-      }
+                /* Add to the end of the ARP static list.  */
+                arp_entry->nx_arp_pool_next = ip_ptr->nx_ip_arp_static_list;
+                arp_entry->nx_arp_pool_previous = (ip_ptr->nx_ip_arp_static_list)->nx_arp_pool_previous;
+                ((ip_ptr->nx_ip_arp_static_list)->nx_arp_pool_previous)->nx_arp_pool_next = arp_entry;
+                (ip_ptr->nx_ip_arp_static_list)->nx_arp_pool_previous = arp_entry;
+            }
 
 #ifndef NX_DISABLE_ARP_INFO
-      /* Increment the ARP static entry count.  */
-      ip_ptr->nx_ip_arp_static_entries++;
+            /* Increment the ARP static entry count.  */
+            ip_ptr->nx_ip_arp_static_entries++;
 #endif
-    } else /* Allocate entry from dynamic list. */
-    {
+        } else /* Allocate entry from dynamic list. */
+        {
 
-      /* Move this ARP entry to the front of the general ARP dynamic entry pool.
-       */
-      if (arp_entry != ip_ptr->nx_ip_arp_dynamic_list) {
+            /* Move this ARP entry to the front of the general ARP dynamic entry pool.
+             */
+            if (arp_entry != ip_ptr->nx_ip_arp_dynamic_list) {
 
-        /* The current ARP entry is not at the front of the list, so it
-           must be moved.  */
+                /* The current ARP entry is not at the front of the list, so it
+                   must be moved.  */
 
-        /* Link up the neighbors first.  */
-        (arp_entry->nx_arp_pool_next)->nx_arp_pool_previous =
-            arp_entry->nx_arp_pool_previous;
-        (arp_entry->nx_arp_pool_previous)->nx_arp_pool_next =
-            arp_entry->nx_arp_pool_next;
+                /* Link up the neighbors first.  */
+                (arp_entry->nx_arp_pool_next)->nx_arp_pool_previous = arp_entry->nx_arp_pool_previous;
+                (arp_entry->nx_arp_pool_previous)->nx_arp_pool_next = arp_entry->nx_arp_pool_next;
 
-        /* Now link this ARP entry to the head of the list.  */
-        arp_entry->nx_arp_pool_next = ip_ptr->nx_ip_arp_dynamic_list;
-        arp_entry->nx_arp_pool_previous =
-            (arp_entry->nx_arp_pool_next)->nx_arp_pool_previous;
-        (arp_entry->nx_arp_pool_previous)->nx_arp_pool_next = arp_entry;
-        (arp_entry->nx_arp_pool_next)->nx_arp_pool_previous = arp_entry;
+                /* Now link this ARP entry to the head of the list.  */
+                arp_entry->nx_arp_pool_next = ip_ptr->nx_ip_arp_dynamic_list;
+                arp_entry->nx_arp_pool_previous = (arp_entry->nx_arp_pool_next)->nx_arp_pool_previous;
+                (arp_entry->nx_arp_pool_previous)->nx_arp_pool_next = arp_entry;
+                (arp_entry->nx_arp_pool_next)->nx_arp_pool_previous = arp_entry;
 
-        /* Now set the list head to this ARP entry.  */
-        ip_ptr->nx_ip_arp_dynamic_list = arp_entry;
-      }
+                /* Now set the list head to this ARP entry.  */
+                ip_ptr->nx_ip_arp_dynamic_list = arp_entry;
+            }
 
-      /* Increment the number of active dynamic entries.  */
-      ip_ptr->nx_ip_arp_dynamic_active_count++;
+            /* Increment the number of active dynamic entries.  */
+            ip_ptr->nx_ip_arp_dynamic_active_count++;
+        }
+
+        /* Set the entry type.  */
+        arp_entry->nx_arp_route_static = is_static;
+
+        /* Restore interrupts.  */
+        TX_RESTORE
+
+        /* Setup a successful status return.  */
+        status = NX_SUCCESS;
+    } else {
+
+        /* No more ARP entries are available, all the ARP entries must be
+           allocated on the static list.  */
+        status = NX_NO_MORE_ENTRIES;
     }
 
-    /* Set the entry type.  */
-    arp_entry->nx_arp_route_static = is_static;
-
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Setup a successful status return.  */
-    status = NX_SUCCESS;
-  } else {
-
-    /* No more ARP entries are available, all the ARP entries must be
-       allocated on the static list.  */
-    status = NX_NO_MORE_ENTRIES;
-  }
-
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }
 #endif /* !NX_DISABLE_IPV4  */

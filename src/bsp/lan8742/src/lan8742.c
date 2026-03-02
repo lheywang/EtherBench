@@ -58,17 +58,17 @@
  *         LAN8742_STATUS_ERROR if missing mandatory function
  */
 int32_t LAN8742_RegisterBusIO(lan8742_Object_t *pObj, lan8742_IOCtx_t *ioctx) {
-  if (!pObj || !ioctx->ReadReg || !ioctx->WriteReg || !ioctx->GetTick) {
-    return LAN8742_STATUS_ERROR;
-  }
+    if (!pObj || !ioctx->ReadReg || !ioctx->WriteReg || !ioctx->GetTick) {
+        return LAN8742_STATUS_ERROR;
+    }
 
-  pObj->IO.Init = ioctx->Init;
-  pObj->IO.DeInit = ioctx->DeInit;
-  pObj->IO.ReadReg = ioctx->ReadReg;
-  pObj->IO.WriteReg = ioctx->WriteReg;
-  pObj->IO.GetTick = ioctx->GetTick;
+    pObj->IO.Init = ioctx->Init;
+    pObj->IO.DeInit = ioctx->DeInit;
+    pObj->IO.ReadReg = ioctx->ReadReg;
+    pObj->IO.WriteReg = ioctx->WriteReg;
+    pObj->IO.GetTick = ioctx->GetTick;
 
-  return LAN8742_STATUS_OK;
+    return LAN8742_STATUS_OK;
 }
 
 /**
@@ -79,45 +79,45 @@ int32_t LAN8742_RegisterBusIO(lan8742_Object_t *pObj, lan8742_IOCtx_t *ioctx) {
  *         LAN8742_STATUS_READ_ERROR if cannot read register
  */
 int32_t LAN8742_Init(lan8742_Object_t *pObj) {
-  uint32_t regvalue = 0, addr = 0;
-  int32_t status = LAN8742_STATUS_OK;
+    uint32_t regvalue = 0, addr = 0;
+    int32_t status = LAN8742_STATUS_OK;
 
-  if (pObj->Is_Initialized == 0) {
-    if (pObj->IO.Init != 0) {
-      /* GPIO and Clocks initialization */
-      pObj->IO.Init();
+    if (pObj->Is_Initialized == 0) {
+        if (pObj->IO.Init != 0) {
+            /* GPIO and Clocks initialization */
+            pObj->IO.Init();
+        }
+
+        /* for later check */
+        pObj->DevAddr = LAN8742_MAX_DEV_ADDR + 1;
+
+        /* Get the device address from special mode register */
+        for (addr = 0; addr <= LAN8742_MAX_DEV_ADDR; addr++) {
+            if (pObj->IO.ReadReg(addr, LAN8742_SMR, &regvalue) < 0) {
+                status = LAN8742_STATUS_READ_ERROR;
+                /* Can't read from this device address
+                   continue with next address */
+                continue;
+            }
+
+            if ((regvalue & LAN8742_SMR_PHY_ADDR) == addr) {
+                pObj->DevAddr = addr;
+                status = LAN8742_STATUS_OK;
+                break;
+            }
+        }
+
+        if (pObj->DevAddr > LAN8742_MAX_DEV_ADDR) {
+            status = LAN8742_STATUS_ADDRESS_ERROR;
+        }
+
+        /* if device address is matched */
+        if (status == LAN8742_STATUS_OK) {
+            pObj->Is_Initialized = 1;
+        }
     }
 
-    /* for later check */
-    pObj->DevAddr = LAN8742_MAX_DEV_ADDR + 1;
-
-    /* Get the device address from special mode register */
-    for (addr = 0; addr <= LAN8742_MAX_DEV_ADDR; addr++) {
-      if (pObj->IO.ReadReg(addr, LAN8742_SMR, &regvalue) < 0) {
-        status = LAN8742_STATUS_READ_ERROR;
-        /* Can't read from this device address
-           continue with next address */
-        continue;
-      }
-
-      if ((regvalue & LAN8742_SMR_PHY_ADDR) == addr) {
-        pObj->DevAddr = addr;
-        status = LAN8742_STATUS_OK;
-        break;
-      }
-    }
-
-    if (pObj->DevAddr > LAN8742_MAX_DEV_ADDR) {
-      status = LAN8742_STATUS_ADDRESS_ERROR;
-    }
-
-    /* if device address is matched */
-    if (status == LAN8742_STATUS_OK) {
-      pObj->Is_Initialized = 1;
-    }
-  }
-
-  return status;
+    return status;
 }
 
 /**
@@ -126,17 +126,17 @@ int32_t LAN8742_Init(lan8742_Object_t *pObj) {
  * @retval None
  */
 int32_t LAN8742_DeInit(lan8742_Object_t *pObj) {
-  if (pObj->Is_Initialized) {
-    if (pObj->IO.DeInit != 0) {
-      if (pObj->IO.DeInit() < 0) {
-        return LAN8742_STATUS_ERROR;
-      }
+    if (pObj->Is_Initialized) {
+        if (pObj->IO.DeInit != 0) {
+            if (pObj->IO.DeInit() < 0) {
+                return LAN8742_STATUS_ERROR;
+            }
+        }
+
+        pObj->Is_Initialized = 0;
     }
 
-    pObj->Is_Initialized = 0;
-  }
-
-  return LAN8742_STATUS_OK;
+    return LAN8742_STATUS_OK;
 }
 
 /**
@@ -147,21 +147,21 @@ int32_t LAN8742_DeInit(lan8742_Object_t *pObj) {
  *         LAN8742_STATUS_WRITE_ERROR if cannot write to register
  */
 int32_t LAN8742_DisablePowerDownMode(lan8742_Object_t *pObj) {
-  uint32_t readval = 0;
-  int32_t status = LAN8742_STATUS_OK;
+    uint32_t readval = 0;
+    int32_t status = LAN8742_STATUS_OK;
 
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) >= 0) {
-    readval &= ~LAN8742_BCR_POWER_DOWN;
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) >= 0) {
+        readval &= ~LAN8742_BCR_POWER_DOWN;
 
-    /* Apply configuration */
-    if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, readval) < 0) {
-      status = LAN8742_STATUS_WRITE_ERROR;
+        /* Apply configuration */
+        if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, readval) < 0) {
+            status = LAN8742_STATUS_WRITE_ERROR;
+        }
+    } else {
+        status = LAN8742_STATUS_READ_ERROR;
     }
-  } else {
-    status = LAN8742_STATUS_READ_ERROR;
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -172,21 +172,21 @@ int32_t LAN8742_DisablePowerDownMode(lan8742_Object_t *pObj) {
  *         LAN8742_STATUS_WRITE_ERROR if cannot write to register
  */
 int32_t LAN8742_EnablePowerDownMode(lan8742_Object_t *pObj) {
-  uint32_t readval = 0;
-  int32_t status = LAN8742_STATUS_OK;
+    uint32_t readval = 0;
+    int32_t status = LAN8742_STATUS_OK;
 
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) >= 0) {
-    readval |= LAN8742_BCR_POWER_DOWN;
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) >= 0) {
+        readval |= LAN8742_BCR_POWER_DOWN;
 
-    /* Apply configuration */
-    if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, readval) < 0) {
-      status = LAN8742_STATUS_WRITE_ERROR;
+        /* Apply configuration */
+        if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, readval) < 0) {
+            status = LAN8742_STATUS_WRITE_ERROR;
+        }
+    } else {
+        status = LAN8742_STATUS_READ_ERROR;
     }
-  } else {
-    status = LAN8742_STATUS_READ_ERROR;
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -197,21 +197,21 @@ int32_t LAN8742_EnablePowerDownMode(lan8742_Object_t *pObj) {
  *         LAN8742_STATUS_WRITE_ERROR if cannot write to register
  */
 int32_t LAN8742_StartAutoNego(lan8742_Object_t *pObj) {
-  uint32_t readval = 0;
-  int32_t status = LAN8742_STATUS_OK;
+    uint32_t readval = 0;
+    int32_t status = LAN8742_STATUS_OK;
 
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) >= 0) {
-    readval |= LAN8742_BCR_AUTONEGO_EN;
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) >= 0) {
+        readval |= LAN8742_BCR_AUTONEGO_EN;
 
-    /* Apply configuration */
-    if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, readval) < 0) {
-      status = LAN8742_STATUS_WRITE_ERROR;
+        /* Apply configuration */
+        if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, readval) < 0) {
+            status = LAN8742_STATUS_WRITE_ERROR;
+        }
+    } else {
+        status = LAN8742_STATUS_READ_ERROR;
     }
-  } else {
-    status = LAN8742_STATUS_READ_ERROR;
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -228,63 +228,60 @@ int32_t LAN8742_StartAutoNego(lan8742_Object_t *pObj) {
  *         LAN8742_STATUS_WRITE_ERROR if cannot write to register
  */
 int32_t LAN8742_GetLinkState(lan8742_Object_t *pObj) {
-  uint32_t readval = 0;
+    uint32_t readval = 0;
 
-  /* Read Status register  */
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BSR, &readval) < 0) {
-    return LAN8742_STATUS_READ_ERROR;
-  }
-
-  /* Read Status register again */
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BSR, &readval) < 0) {
-    return LAN8742_STATUS_READ_ERROR;
-  }
-
-  if ((readval & LAN8742_BSR_LINK_STATUS) == 0) {
-    /* Return Link Down status */
-    return LAN8742_STATUS_LINK_DOWN;
-  }
-
-  /* Check Auto negotiation */
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) < 0) {
-    return LAN8742_STATUS_READ_ERROR;
-  }
-
-  if ((readval & LAN8742_BCR_AUTONEGO_EN) != LAN8742_BCR_AUTONEGO_EN) {
-    if (((readval & LAN8742_BCR_SPEED_SELECT) == LAN8742_BCR_SPEED_SELECT) &&
-        ((readval & LAN8742_BCR_DUPLEX_MODE) == LAN8742_BCR_DUPLEX_MODE)) {
-      return LAN8742_STATUS_100MBITS_FULLDUPLEX;
-    } else if ((readval & LAN8742_BCR_SPEED_SELECT) ==
-               LAN8742_BCR_SPEED_SELECT) {
-      return LAN8742_STATUS_100MBITS_HALFDUPLEX;
-    } else if ((readval & LAN8742_BCR_DUPLEX_MODE) == LAN8742_BCR_DUPLEX_MODE) {
-      return LAN8742_STATUS_10MBITS_FULLDUPLEX;
-    } else {
-      return LAN8742_STATUS_10MBITS_HALFDUPLEX;
-    }
-  } else /* Auto Nego enabled */
-  {
-    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_PHYSCSR, &readval) < 0) {
-      return LAN8742_STATUS_READ_ERROR;
+    /* Read Status register  */
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BSR, &readval) < 0) {
+        return LAN8742_STATUS_READ_ERROR;
     }
 
-    /* Check if auto nego not done */
-    if ((readval & LAN8742_PHYSCSR_AUTONEGO_DONE) == 0) {
-      return LAN8742_STATUS_AUTONEGO_NOTDONE;
+    /* Read Status register again */
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BSR, &readval) < 0) {
+        return LAN8742_STATUS_READ_ERROR;
     }
 
-    if ((readval & LAN8742_PHYSCSR_HCDSPEEDMASK) == LAN8742_PHYSCSR_100BTX_FD) {
-      return LAN8742_STATUS_100MBITS_FULLDUPLEX;
-    } else if ((readval & LAN8742_PHYSCSR_HCDSPEEDMASK) ==
-               LAN8742_PHYSCSR_100BTX_HD) {
-      return LAN8742_STATUS_100MBITS_HALFDUPLEX;
-    } else if ((readval & LAN8742_PHYSCSR_HCDSPEEDMASK) ==
-               LAN8742_PHYSCSR_10BT_FD) {
-      return LAN8742_STATUS_10MBITS_FULLDUPLEX;
-    } else {
-      return LAN8742_STATUS_10MBITS_HALFDUPLEX;
+    if ((readval & LAN8742_BSR_LINK_STATUS) == 0) {
+        /* Return Link Down status */
+        return LAN8742_STATUS_LINK_DOWN;
     }
-  }
+
+    /* Check Auto negotiation */
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) < 0) {
+        return LAN8742_STATUS_READ_ERROR;
+    }
+
+    if ((readval & LAN8742_BCR_AUTONEGO_EN) != LAN8742_BCR_AUTONEGO_EN) {
+        if (((readval & LAN8742_BCR_SPEED_SELECT) == LAN8742_BCR_SPEED_SELECT) &&
+            ((readval & LAN8742_BCR_DUPLEX_MODE) == LAN8742_BCR_DUPLEX_MODE)) {
+            return LAN8742_STATUS_100MBITS_FULLDUPLEX;
+        } else if ((readval & LAN8742_BCR_SPEED_SELECT) == LAN8742_BCR_SPEED_SELECT) {
+            return LAN8742_STATUS_100MBITS_HALFDUPLEX;
+        } else if ((readval & LAN8742_BCR_DUPLEX_MODE) == LAN8742_BCR_DUPLEX_MODE) {
+            return LAN8742_STATUS_10MBITS_FULLDUPLEX;
+        } else {
+            return LAN8742_STATUS_10MBITS_HALFDUPLEX;
+        }
+    } else /* Auto Nego enabled */
+    {
+        if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_PHYSCSR, &readval) < 0) {
+            return LAN8742_STATUS_READ_ERROR;
+        }
+
+        /* Check if auto nego not done */
+        if ((readval & LAN8742_PHYSCSR_AUTONEGO_DONE) == 0) {
+            return LAN8742_STATUS_AUTONEGO_NOTDONE;
+        }
+
+        if ((readval & LAN8742_PHYSCSR_HCDSPEEDMASK) == LAN8742_PHYSCSR_100BTX_FD) {
+            return LAN8742_STATUS_100MBITS_FULLDUPLEX;
+        } else if ((readval & LAN8742_PHYSCSR_HCDSPEEDMASK) == LAN8742_PHYSCSR_100BTX_HD) {
+            return LAN8742_STATUS_100MBITS_HALFDUPLEX;
+        } else if ((readval & LAN8742_PHYSCSR_HCDSPEEDMASK) == LAN8742_PHYSCSR_10BT_FD) {
+            return LAN8742_STATUS_10MBITS_FULLDUPLEX;
+        } else {
+            return LAN8742_STATUS_10MBITS_HALFDUPLEX;
+        }
+    }
 }
 
 /**
@@ -301,36 +298,35 @@ int32_t LAN8742_GetLinkState(lan8742_Object_t *pObj) {
  *         LAN8742_STATUS_WRITE_ERROR if cannot write to register
  */
 int32_t LAN8742_SetLinkState(lan8742_Object_t *pObj, uint32_t LinkState) {
-  uint32_t bcrvalue = 0;
-  int32_t status = LAN8742_STATUS_OK;
+    uint32_t bcrvalue = 0;
+    int32_t status = LAN8742_STATUS_OK;
 
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &bcrvalue) >= 0) {
-    /* Disable link config (Auto nego, speed and duplex) */
-    bcrvalue &= ~(LAN8742_BCR_AUTONEGO_EN | LAN8742_BCR_SPEED_SELECT |
-                  LAN8742_BCR_DUPLEX_MODE);
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &bcrvalue) >= 0) {
+        /* Disable link config (Auto nego, speed and duplex) */
+        bcrvalue &= ~(LAN8742_BCR_AUTONEGO_EN | LAN8742_BCR_SPEED_SELECT | LAN8742_BCR_DUPLEX_MODE);
 
-    if (LinkState == LAN8742_STATUS_100MBITS_FULLDUPLEX) {
-      bcrvalue |= (LAN8742_BCR_SPEED_SELECT | LAN8742_BCR_DUPLEX_MODE);
-    } else if (LinkState == LAN8742_STATUS_100MBITS_HALFDUPLEX) {
-      bcrvalue |= LAN8742_BCR_SPEED_SELECT;
-    } else if (LinkState == LAN8742_STATUS_10MBITS_FULLDUPLEX) {
-      bcrvalue |= LAN8742_BCR_DUPLEX_MODE;
+        if (LinkState == LAN8742_STATUS_100MBITS_FULLDUPLEX) {
+            bcrvalue |= (LAN8742_BCR_SPEED_SELECT | LAN8742_BCR_DUPLEX_MODE);
+        } else if (LinkState == LAN8742_STATUS_100MBITS_HALFDUPLEX) {
+            bcrvalue |= LAN8742_BCR_SPEED_SELECT;
+        } else if (LinkState == LAN8742_STATUS_10MBITS_FULLDUPLEX) {
+            bcrvalue |= LAN8742_BCR_DUPLEX_MODE;
+        } else {
+            /* Wrong link status parameter */
+            status = LAN8742_STATUS_ERROR;
+        }
     } else {
-      /* Wrong link status parameter */
-      status = LAN8742_STATUS_ERROR;
+        status = LAN8742_STATUS_READ_ERROR;
     }
-  } else {
-    status = LAN8742_STATUS_READ_ERROR;
-  }
 
-  if (status == LAN8742_STATUS_OK) {
-    /* Apply configuration */
-    if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, bcrvalue) < 0) {
-      status = LAN8742_STATUS_WRITE_ERROR;
+    if (status == LAN8742_STATUS_OK) {
+        /* Apply configuration */
+        if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, bcrvalue) < 0) {
+            status = LAN8742_STATUS_WRITE_ERROR;
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -341,21 +337,21 @@ int32_t LAN8742_SetLinkState(lan8742_Object_t *pObj, uint32_t LinkState) {
  *         LAN8742_STATUS_WRITE_ERROR if cannot write to register
  */
 int32_t LAN8742_EnableLoopbackMode(lan8742_Object_t *pObj) {
-  uint32_t readval = 0;
-  int32_t status = LAN8742_STATUS_OK;
+    uint32_t readval = 0;
+    int32_t status = LAN8742_STATUS_OK;
 
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) >= 0) {
-    readval |= LAN8742_BCR_LOOPBACK;
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) >= 0) {
+        readval |= LAN8742_BCR_LOOPBACK;
 
-    /* Apply configuration */
-    if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, readval) < 0) {
-      status = LAN8742_STATUS_WRITE_ERROR;
+        /* Apply configuration */
+        if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, readval) < 0) {
+            status = LAN8742_STATUS_WRITE_ERROR;
+        }
+    } else {
+        status = LAN8742_STATUS_READ_ERROR;
     }
-  } else {
-    status = LAN8742_STATUS_READ_ERROR;
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -366,21 +362,21 @@ int32_t LAN8742_EnableLoopbackMode(lan8742_Object_t *pObj) {
  *         LAN8742_STATUS_WRITE_ERROR if cannot write to register
  */
 int32_t LAN8742_DisableLoopbackMode(lan8742_Object_t *pObj) {
-  uint32_t readval = 0;
-  int32_t status = LAN8742_STATUS_OK;
+    uint32_t readval = 0;
+    int32_t status = LAN8742_STATUS_OK;
 
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) >= 0) {
-    readval &= ~LAN8742_BCR_LOOPBACK;
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BCR, &readval) >= 0) {
+        readval &= ~LAN8742_BCR_LOOPBACK;
 
-    /* Apply configuration */
-    if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, readval) < 0) {
-      status = LAN8742_STATUS_WRITE_ERROR;
+        /* Apply configuration */
+        if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_BCR, readval) < 0) {
+            status = LAN8742_STATUS_WRITE_ERROR;
+        }
+    } else {
+        status = LAN8742_STATUS_READ_ERROR;
     }
-  } else {
-    status = LAN8742_STATUS_READ_ERROR;
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -401,21 +397,21 @@ int32_t LAN8742_DisableLoopbackMode(lan8742_Object_t *pObj) {
  *         LAN8742_STATUS_WRITE_ERROR if cannot write to register
  */
 int32_t LAN8742_EnableIT(lan8742_Object_t *pObj, uint32_t Interrupt) {
-  uint32_t readval = 0;
-  int32_t status = LAN8742_STATUS_OK;
+    uint32_t readval = 0;
+    int32_t status = LAN8742_STATUS_OK;
 
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_IMR, &readval) >= 0) {
-    readval |= Interrupt;
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_IMR, &readval) >= 0) {
+        readval |= Interrupt;
 
-    /* Apply configuration */
-    if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_IMR, readval) < 0) {
-      status = LAN8742_STATUS_WRITE_ERROR;
+        /* Apply configuration */
+        if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_IMR, readval) < 0) {
+            status = LAN8742_STATUS_WRITE_ERROR;
+        }
+    } else {
+        status = LAN8742_STATUS_READ_ERROR;
     }
-  } else {
-    status = LAN8742_STATUS_READ_ERROR;
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -436,21 +432,21 @@ int32_t LAN8742_EnableIT(lan8742_Object_t *pObj, uint32_t Interrupt) {
  *         LAN8742_STATUS_WRITE_ERROR if cannot write to register
  */
 int32_t LAN8742_DisableIT(lan8742_Object_t *pObj, uint32_t Interrupt) {
-  uint32_t readval = 0;
-  int32_t status = LAN8742_STATUS_OK;
+    uint32_t readval = 0;
+    int32_t status = LAN8742_STATUS_OK;
 
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_IMR, &readval) >= 0) {
-    readval &= ~Interrupt;
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_IMR, &readval) >= 0) {
+        readval &= ~Interrupt;
 
-    /* Apply configuration */
-    if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_IMR, readval) < 0) {
-      status = LAN8742_STATUS_WRITE_ERROR;
+        /* Apply configuration */
+        if (pObj->IO.WriteReg(pObj->DevAddr, LAN8742_IMR, readval) < 0) {
+            status = LAN8742_STATUS_WRITE_ERROR;
+        }
+    } else {
+        status = LAN8742_STATUS_READ_ERROR;
     }
-  } else {
-    status = LAN8742_STATUS_READ_ERROR;
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -470,14 +466,14 @@ int32_t LAN8742_DisableIT(lan8742_Object_t *pObj, uint32_t Interrupt) {
  *         LAN8742_STATUS_READ_ERROR if cannot read register
  */
 int32_t LAN8742_ClearIT(lan8742_Object_t *pObj, uint32_t Interrupt) {
-  uint32_t readval = 0;
-  int32_t status = LAN8742_STATUS_OK;
+    uint32_t readval = 0;
+    int32_t status = LAN8742_STATUS_OK;
 
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_ISFR, &readval) < 0) {
-    status = LAN8742_STATUS_READ_ERROR;
-  }
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_ISFR, &readval) < 0) {
+        status = LAN8742_STATUS_READ_ERROR;
+    }
 
-  return status;
+    return status;
 }
 
 /**
@@ -498,16 +494,16 @@ int32_t LAN8742_ClearIT(lan8742_Object_t *pObj, uint32_t Interrupt) {
  *         LAN8742_STATUS_READ_ERROR if cannot read register
  */
 int32_t LAN8742_GetITStatus(lan8742_Object_t *pObj, uint32_t Interrupt) {
-  uint32_t readval = 0;
-  int32_t status = 0;
+    uint32_t readval = 0;
+    int32_t status = 0;
 
-  if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_ISFR, &readval) >= 0) {
-    status = ((readval & Interrupt) == Interrupt);
-  } else {
-    status = LAN8742_STATUS_READ_ERROR;
-  }
+    if (pObj->IO.ReadReg(pObj->DevAddr, LAN8742_ISFR, &readval) >= 0) {
+        status = ((readval & Interrupt) == Interrupt);
+    } else {
+        status = LAN8742_STATUS_READ_ERROR;
+    }
 
-  return status;
+    return status;
 }
 
 /**

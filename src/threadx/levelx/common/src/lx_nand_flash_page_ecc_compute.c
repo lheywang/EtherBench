@@ -74,28 +74,27 @@
 /*                                            resulting in version 6.1.7  */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_page_ecc_compute(LX_NAND_FLASH *nand_flash,
-                                     UCHAR *page_buffer, UCHAR *ecc_buffer) {
+UINT _lx_nand_flash_page_ecc_compute(LX_NAND_FLASH *nand_flash, UCHAR *page_buffer, UCHAR *ecc_buffer) {
 
-  UINT bytes_computed;
+    UINT bytes_computed;
 
-  /* Loop to compute the ECC over the entire NAND flash page.  */
-  bytes_computed = 0;
-  while (bytes_computed < nand_flash->lx_nand_flash_bytes_per_page) {
+    /* Loop to compute the ECC over the entire NAND flash page.  */
+    bytes_computed = 0;
+    while (bytes_computed < nand_flash->lx_nand_flash_bytes_per_page) {
 
-    /* Compute the ECC for this 256 byte piece of the page.  */
-    _lx_nand_flash_256byte_ecc_compute(page_buffer, ecc_buffer);
+        /* Compute the ECC for this 256 byte piece of the page.  */
+        _lx_nand_flash_256byte_ecc_compute(page_buffer, ecc_buffer);
 
-    /* Move to the next 256 byte portion of the page.  */
-    bytes_computed = bytes_computed + 256;
+        /* Move to the next 256 byte portion of the page.  */
+        bytes_computed = bytes_computed + 256;
 
-    /* Move the page buffer forward.  */
-    page_buffer = page_buffer + 256;
+        /* Move the page buffer forward.  */
+        page_buffer = page_buffer + 256;
 
-    /* Move the ECC buffer forward, note there are 3 bytes of ECC per page. */
-    ecc_buffer = ecc_buffer + 3;
-  }
+        /* Move the ECC buffer forward, note there are 3 bytes of ECC per page. */
+        ecc_buffer = ecc_buffer + 3;
+    }
 
-  /* Return success.  */
-  return (LX_SUCCESS);
+    /* Return success.  */
+    return (LX_SUCCESS);
 }

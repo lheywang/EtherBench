@@ -69,22 +69,21 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_directory_first_entry_find(FX_MEDIA *media_ptr,
-                                     CHAR *directory_name) {
+UINT _fxe_directory_first_entry_find(FX_MEDIA *media_ptr, CHAR *directory_name) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null media pointer.  */
-  if (media_ptr == FX_NULL) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null media pointer.  */
+    if (media_ptr == FX_NULL) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual directory find first service.  */
-  status = _fx_directory_first_entry_find(media_ptr, directory_name);
+    /* Call actual directory find first service.  */
+    status = _fx_directory_first_entry_find(media_ptr, directory_name);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

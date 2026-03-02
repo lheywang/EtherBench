@@ -73,38 +73,37 @@
 /**************************************************************************/
 UINT _fx_system_date_get(UINT *year, UINT *month, UINT *day) {
 
-  UINT date;
+    UINT date;
 
-  /* Get a copy of the current date.  */
-  date = _fx_system_date;
+    /* Get a copy of the current date.  */
+    date = _fx_system_date;
 
-  /* Check to see if the year is required.  */
-  if (year) {
+    /* Check to see if the year is required.  */
+    if (year) {
 
-    /* Pickup the year.  */
-    *year = ((date >> FX_YEAR_SHIFT) & FX_YEAR_MASK) + FX_BASE_YEAR;
-  }
+        /* Pickup the year.  */
+        *year = ((date >> FX_YEAR_SHIFT) & FX_YEAR_MASK) + FX_BASE_YEAR;
+    }
 
-  /* Check to see if the month is required.  */
-  if (month) {
+    /* Check to see if the month is required.  */
+    if (month) {
 
-    /* Pickup the month.  */
-    *month = (date >> FX_MONTH_SHIFT) & FX_MONTH_MASK;
-  }
+        /* Pickup the month.  */
+        *month = (date >> FX_MONTH_SHIFT) & FX_MONTH_MASK;
+    }
 
-  /* Check to see if the day is required.  */
-  if (day) {
+    /* Check to see if the day is required.  */
+    if (day) {
 
-    /* Pickup the day.  */
-    *day = date & FX_DAY_MASK;
-  }
+        /* Pickup the day.  */
+        *day = date & FX_DAY_MASK;
+    }
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  if (year && month && day) {
-    FX_TRACE_IN_LINE_INSERT(FX_TRACE_SYSTEM_DATE_GET, *year, *month, *day, 0,
-                            FX_TRACE_INTERNAL_EVENTS, 0, 0)
-  }
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    if (year && month && day) {
+        FX_TRACE_IN_LINE_INSERT(FX_TRACE_SYSTEM_DATE_GET, *year, *month, *day, 0, FX_TRACE_INTERNAL_EVENTS, 0, 0)
+    }
 
-  /* Return successful status.  */
-  return (FX_SUCCESS);
+    /* Return successful status.  */
+    return (FX_SUCCESS);
 }

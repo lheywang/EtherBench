@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_audio.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -73,35 +71,32 @@
 /*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_device_class_audio_control_request(UX_SLAVE_CLASS_COMMAND *command)
-{
+UINT _ux_device_class_audio_control_request(UX_SLAVE_CLASS_COMMAND *command) {
 
-UX_SLAVE_TRANSFER             *transfer_request;
-UX_SLAVE_DEVICE               *device;
-UX_SLAVE_CLASS                *class_ptr;
-UX_DEVICE_CLASS_AUDIO         *audio;
-
+    UX_SLAVE_TRANSFER *transfer_request;
+    UX_SLAVE_DEVICE *device;
+    UX_SLAVE_CLASS *class_ptr;
+    UX_DEVICE_CLASS_AUDIO *audio;
 
     /* Get the class container.  */
-    class_ptr =  command -> ux_slave_class_command_class_ptr;
+    class_ptr = command->ux_slave_class_command_class_ptr;
 
     /* Get the audio instance from this class container.  */
-    audio =  (UX_DEVICE_CLASS_AUDIO *) class_ptr -> ux_slave_class_instance;
+    audio = (UX_DEVICE_CLASS_AUDIO *)class_ptr->ux_slave_class_instance;
 
     /* Get the pointer to the device.  */
-    device =  &_ux_system_slave -> ux_system_slave_device;
+    device = &_ux_system_slave->ux_system_slave_device;
 
     /* Get the pointer to the transfer request associated with the control endpoint.  */
-    transfer_request =  &device -> ux_slave_device_control_endpoint.ux_slave_endpoint_transfer_request;
+    transfer_request = &device->ux_slave_device_control_endpoint.ux_slave_endpoint_transfer_request;
 
     /* Invoke callback.  */
-    if (audio -> ux_device_class_audio_callbacks.ux_device_class_audio_control_process != UX_NULL)
-    {
+    if (audio->ux_device_class_audio_callbacks.ux_device_class_audio_control_process != UX_NULL) {
 
         /* Handled by callback.  */
-        return audio -> ux_device_class_audio_callbacks.ux_device_class_audio_control_process(audio, transfer_request);
+        return audio->ux_device_class_audio_callbacks.ux_device_class_audio_control_process(audio, transfer_request);
     }
 
     /* Not handled.  */
-    return(UX_ERROR);
+    return (UX_ERROR);
 }

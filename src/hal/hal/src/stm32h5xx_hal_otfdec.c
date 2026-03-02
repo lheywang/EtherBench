@@ -181,40 +181,39 @@ de-initialization functions
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_OTFDEC_Init(OTFDEC_HandleTypeDef *hotfdec) {
-  /* Check the OTFDEC handle allocation */
-  if (hotfdec == NULL) {
-    return HAL_ERROR;
-  }
-
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-
-  if (hotfdec->State == HAL_OTFDEC_STATE_RESET) {
-    /* Allocate lock resource and initialize it */
-    __HAL_UNLOCK(hotfdec);
-
-#if (USE_HAL_OTFDEC_REGISTER_CALLBACKS == 1)
-    /* Init the OTFDEC Callback settings */
-    hotfdec->ErrorCallback =
-        HAL_OTFDEC_ErrorCallback; /* Legacy weak callback */
-
-    if (hotfdec->MspInitCallback == NULL) {
-      hotfdec->MspInitCallback = HAL_OTFDEC_MspInit; /* Legacy weak MspInit */
+    /* Check the OTFDEC handle allocation */
+    if (hotfdec == NULL) {
+        return HAL_ERROR;
     }
 
-    /* Init the low level hardware */
-    hotfdec->MspInitCallback(hotfdec);
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+
+    if (hotfdec->State == HAL_OTFDEC_STATE_RESET) {
+        /* Allocate lock resource and initialize it */
+        __HAL_UNLOCK(hotfdec);
+
+#if (USE_HAL_OTFDEC_REGISTER_CALLBACKS == 1)
+        /* Init the OTFDEC Callback settings */
+        hotfdec->ErrorCallback = HAL_OTFDEC_ErrorCallback; /* Legacy weak callback */
+
+        if (hotfdec->MspInitCallback == NULL) {
+            hotfdec->MspInitCallback = HAL_OTFDEC_MspInit; /* Legacy weak MspInit */
+        }
+
+        /* Init the low level hardware */
+        hotfdec->MspInitCallback(hotfdec);
 #else
-    /* Init the low level hardware */
-    HAL_OTFDEC_MspInit(hotfdec);
+        /* Init the low level hardware */
+        HAL_OTFDEC_MspInit(hotfdec);
 #endif /* USE_HAL_OTFDEC_REGISTER_CALLBACKS */
-  }
+    }
 
-  /* Change the OTFDEC state */
-  hotfdec->State = HAL_OTFDEC_STATE_READY;
+    /* Change the OTFDEC state */
+    hotfdec->State = HAL_OTFDEC_STATE_READY;
 
-  /* Return function status */
-  return HAL_OK;
+    /* Return function status */
+    return HAL_OK;
 }
 
 /**
@@ -224,41 +223,40 @@ HAL_StatusTypeDef HAL_OTFDEC_Init(OTFDEC_HandleTypeDef *hotfdec) {
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_OTFDEC_DeInit(OTFDEC_HandleTypeDef *hotfdec) {
-  /* Check the OTFDEC handle allocation */
-  if (hotfdec == NULL) {
-    return HAL_ERROR;
-  }
+    /* Check the OTFDEC handle allocation */
+    if (hotfdec == NULL) {
+        return HAL_ERROR;
+    }
 
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
 
-  /* Change the OTFDEC state */
-  hotfdec->State = HAL_OTFDEC_STATE_BUSY;
+    /* Change the OTFDEC state */
+    hotfdec->State = HAL_OTFDEC_STATE_BUSY;
 
 #if (USE_HAL_OTFDEC_REGISTER_CALLBACKS == 1)
-  if (hotfdec->MspDeInitCallback == NULL) {
-    hotfdec->MspDeInitCallback =
-        HAL_OTFDEC_MspDeInit; /* Legacy weak MspDeInit */
-  }
+    if (hotfdec->MspDeInitCallback == NULL) {
+        hotfdec->MspDeInitCallback = HAL_OTFDEC_MspDeInit; /* Legacy weak MspDeInit */
+    }
 
-  /* DeInit the low level hardware: CLOCK, NVIC */
-  hotfdec->MspDeInitCallback(hotfdec);
+    /* DeInit the low level hardware: CLOCK, NVIC */
+    hotfdec->MspDeInitCallback(hotfdec);
 #else
-  /* DeInit the low level hardware: CLOCK, NVIC */
-  HAL_OTFDEC_MspDeInit(hotfdec);
+    /* DeInit the low level hardware: CLOCK, NVIC */
+    HAL_OTFDEC_MspDeInit(hotfdec);
 #endif /* USE_HAL_OTFDEC_REGISTER_CALLBACKS */
 
-  /* Change the OTFDEC state */
-  hotfdec->State = HAL_OTFDEC_STATE_RESET;
+    /* Change the OTFDEC state */
+    hotfdec->State = HAL_OTFDEC_STATE_RESET;
 
-  /* Reset OTFDEC error status */
-  hotfdec->ErrorCode = HAL_OTFDEC_ERROR_NONE;
+    /* Reset OTFDEC error status */
+    hotfdec->ErrorCode = HAL_OTFDEC_ERROR_NONE;
 
-  /* Release Lock */
-  __HAL_UNLOCK(hotfdec);
+    /* Release Lock */
+    __HAL_UNLOCK(hotfdec);
 
-  /* Return function status */
-  return HAL_OK;
+    /* Return function status */
+    return HAL_OK;
 }
 
 /**
@@ -268,12 +266,12 @@ HAL_StatusTypeDef HAL_OTFDEC_DeInit(OTFDEC_HandleTypeDef *hotfdec) {
  * @retval None
  */
 __weak void HAL_OTFDEC_MspInit(OTFDEC_HandleTypeDef *hotfdec) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hotfdec);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hotfdec);
 
-  /* NOTE : This function should not be modified; when the callback is needed,
-            the HAL_OTFDEC_MspInit can be implemented in the user file.
-   */
+    /* NOTE : This function should not be modified; when the callback is needed,
+              the HAL_OTFDEC_MspInit can be implemented in the user file.
+     */
 }
 
 /**
@@ -283,12 +281,12 @@ __weak void HAL_OTFDEC_MspInit(OTFDEC_HandleTypeDef *hotfdec) {
  * @retval None
  */
 __weak void HAL_OTFDEC_MspDeInit(OTFDEC_HandleTypeDef *hotfdec) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hotfdec);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hotfdec);
 
-  /* NOTE : This function should not be modified; when the callback is needed,
-            the HAL_OTFDEC_MspDeInit can be implemented in the user file.
-   */
+    /* NOTE : This function should not be modified; when the callback is needed,
+              the HAL_OTFDEC_MspDeInit can be implemented in the user file.
+     */
 }
 
 #if (USE_HAL_OTFDEC_REGISTER_CALLBACKS == 1)
@@ -305,68 +303,66 @@ __weak void HAL_OTFDEC_MspDeInit(OTFDEC_HandleTypeDef *hotfdec) {
  * @param  pCallback pointer to the Callback function
  * @retval HAL status
  */
-HAL_StatusTypeDef
-HAL_OTFDEC_RegisterCallback(OTFDEC_HandleTypeDef *hotfdec,
-                            HAL_OTFDEC_CallbackIDTypeDef CallbackID,
-                            pOTFDEC_CallbackTypeDef pCallback) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_OTFDEC_RegisterCallback(OTFDEC_HandleTypeDef *hotfdec, HAL_OTFDEC_CallbackIDTypeDef CallbackID,
+                                              pOTFDEC_CallbackTypeDef pCallback) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  if (pCallback == NULL) {
-    /* Update the error code */
-    hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
+    if (pCallback == NULL) {
+        /* Update the error code */
+        hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
 
-    return HAL_ERROR;
-  }
-
-  if (hotfdec->State == HAL_OTFDEC_STATE_READY) {
-    switch (CallbackID) {
-    case HAL_OTFDEC_ERROR_CB_ID:
-      hotfdec->ErrorCallback = pCallback;
-      break;
-
-    case HAL_OTFDEC_MSPINIT_CB_ID:
-      hotfdec->MspInitCallback = pCallback;
-      break;
-
-    case HAL_OTFDEC_MSPDEINIT_CB_ID:
-      hotfdec->MspDeInitCallback = pCallback;
-      break;
-
-    default:
-      /* Update the error code */
-      hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
-
-      /* Return error status */
-      status = HAL_ERROR;
-      break;
+        return HAL_ERROR;
     }
-  } else if (HAL_OTFDEC_STATE_RESET == hotfdec->State) {
-    switch (CallbackID) {
-    case HAL_OTFDEC_MSPINIT_CB_ID:
-      hotfdec->MspInitCallback = pCallback;
-      break;
 
-    case HAL_OTFDEC_MSPDEINIT_CB_ID:
-      hotfdec->MspDeInitCallback = pCallback;
-      break;
+    if (hotfdec->State == HAL_OTFDEC_STATE_READY) {
+        switch (CallbackID) {
+        case HAL_OTFDEC_ERROR_CB_ID:
+            hotfdec->ErrorCallback = pCallback;
+            break;
 
-    default:
-      /* Update the error code */
-      hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
+        case HAL_OTFDEC_MSPINIT_CB_ID:
+            hotfdec->MspInitCallback = pCallback;
+            break;
 
-      /* Return error status */
-      status = HAL_ERROR;
-      break;
+        case HAL_OTFDEC_MSPDEINIT_CB_ID:
+            hotfdec->MspDeInitCallback = pCallback;
+            break;
+
+        default:
+            /* Update the error code */
+            hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
+
+            /* Return error status */
+            status = HAL_ERROR;
+            break;
+        }
+    } else if (HAL_OTFDEC_STATE_RESET == hotfdec->State) {
+        switch (CallbackID) {
+        case HAL_OTFDEC_MSPINIT_CB_ID:
+            hotfdec->MspInitCallback = pCallback;
+            break;
+
+        case HAL_OTFDEC_MSPDEINIT_CB_ID:
+            hotfdec->MspDeInitCallback = pCallback;
+            break;
+
+        default:
+            /* Update the error code */
+            hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
+
+            /* Return error status */
+            status = HAL_ERROR;
+            break;
+        }
+    } else {
+        /* Update the error code */
+        hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
+
+        /* Return error status */
+        status = HAL_ERROR;
     }
-  } else {
-    /* Update the error code */
-    hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
 
-    /* Return error status */
-    status = HAL_ERROR;
-  }
-
-  return status;
+    return status;
 }
 
 /**
@@ -381,62 +377,59 @@ HAL_OTFDEC_RegisterCallback(OTFDEC_HandleTypeDef *hotfdec,
  *          @arg @ref HAL_OTFDEC_MSPDEINIT_CB_ID       MspDeInit callback ID
  * @retval HAL status
  */
-HAL_StatusTypeDef
-HAL_OTFDEC_UnRegisterCallback(OTFDEC_HandleTypeDef *hotfdec,
-                              HAL_OTFDEC_CallbackIDTypeDef CallbackID) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_OTFDEC_UnRegisterCallback(OTFDEC_HandleTypeDef *hotfdec,
+                                                HAL_OTFDEC_CallbackIDTypeDef CallbackID) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  if (hotfdec->State == HAL_OTFDEC_STATE_READY) {
-    switch (CallbackID) {
-    case HAL_OTFDEC_ERROR_CB_ID:
-      hotfdec->ErrorCallback = HAL_OTFDEC_ErrorCallback;
-      break;
+    if (hotfdec->State == HAL_OTFDEC_STATE_READY) {
+        switch (CallbackID) {
+        case HAL_OTFDEC_ERROR_CB_ID:
+            hotfdec->ErrorCallback = HAL_OTFDEC_ErrorCallback;
+            break;
 
-    case HAL_OTFDEC_MSPINIT_CB_ID:
-      hotfdec->MspInitCallback = HAL_OTFDEC_MspInit; /* Legacy weak MspInit */
-      break;
+        case HAL_OTFDEC_MSPINIT_CB_ID:
+            hotfdec->MspInitCallback = HAL_OTFDEC_MspInit; /* Legacy weak MspInit */
+            break;
 
-    case HAL_OTFDEC_MSPDEINIT_CB_ID:
-      hotfdec->MspDeInitCallback =
-          HAL_OTFDEC_MspDeInit; /* Legacy weak MspDeInit */
-      break;
+        case HAL_OTFDEC_MSPDEINIT_CB_ID:
+            hotfdec->MspDeInitCallback = HAL_OTFDEC_MspDeInit; /* Legacy weak MspDeInit */
+            break;
 
-    default:
-      /* Update the error code */
-      hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
+        default:
+            /* Update the error code */
+            hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
 
-      /* Return error status */
-      status = HAL_ERROR;
-      break;
+            /* Return error status */
+            status = HAL_ERROR;
+            break;
+        }
+    } else if (HAL_OTFDEC_STATE_RESET == hotfdec->State) {
+        switch (CallbackID) {
+        case HAL_OTFDEC_MSPINIT_CB_ID:
+            hotfdec->MspInitCallback = HAL_OTFDEC_MspInit; /* Legacy weak MspInit */
+            break;
+
+        case HAL_OTFDEC_MSPDEINIT_CB_ID:
+            hotfdec->MspDeInitCallback = HAL_OTFDEC_MspDeInit; /* Legacy weak MspDeInit */
+            break;
+
+        default:
+            /* Update the error code */
+            hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
+
+            /* Return error status */
+            status = HAL_ERROR;
+            break;
+        }
+    } else {
+        /* Update the error code */
+        hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
+
+        /* Return error status */
+        status = HAL_ERROR;
     }
-  } else if (HAL_OTFDEC_STATE_RESET == hotfdec->State) {
-    switch (CallbackID) {
-    case HAL_OTFDEC_MSPINIT_CB_ID:
-      hotfdec->MspInitCallback = HAL_OTFDEC_MspInit; /* Legacy weak MspInit */
-      break;
 
-    case HAL_OTFDEC_MSPDEINIT_CB_ID:
-      hotfdec->MspDeInitCallback =
-          HAL_OTFDEC_MspDeInit; /* Legacy weak MspDeInit */
-      break;
-
-    default:
-      /* Update the error code */
-      hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
-
-      /* Return error status */
-      status = HAL_ERROR;
-      break;
-    }
-  } else {
-    /* Update the error code */
-    hotfdec->ErrorCode |= HAL_OTFDEC_ERROR_INVALID_CALLBACK;
-
-    /* Return error status */
-    status = HAL_ERROR;
-  }
-
-  return status;
+    return status;
 }
 
 #endif /* USE_HAL_OTFDEC_REGISTER_CALLBACKS */
@@ -465,26 +458,26 @@ HAL_OTFDEC_UnRegisterCallback(OTFDEC_HandleTypeDef *hotfdec,
  * @retval None
  */
 void HAL_OTFDEC_IRQHandler(OTFDEC_HandleTypeDef *hotfdec) {
-  uint32_t isr_reg;
+    uint32_t isr_reg;
 
-  isr_reg = READ_REG(hotfdec->Instance->ISR);
-  if ((isr_reg & OTFDEC_ISR_SEIF) == OTFDEC_ISR_SEIF) {
-    SET_BIT(hotfdec->Instance->ICR, OTFDEC_ICR_SEIF);
-    hotfdec->ErrorCode |= HAL_OTFDEC_SECURITY_ERROR;
-  }
-  if ((isr_reg & OTFDEC_ISR_XONEIF) == OTFDEC_ISR_XONEIF) {
-    SET_BIT(hotfdec->Instance->ICR, OTFDEC_ICR_XONEIF);
-    hotfdec->ErrorCode |= HAL_OTFDEC_EXECUTE_ERROR;
-  }
-  if ((isr_reg & OTFDEC_ISR_KEIF) == OTFDEC_ISR_KEIF) {
-    SET_BIT(hotfdec->Instance->ICR, OTFDEC_ICR_KEIF);
-    hotfdec->ErrorCode |= HAL_OTFDEC_KEY_ERROR;
-  }
+    isr_reg = READ_REG(hotfdec->Instance->ISR);
+    if ((isr_reg & OTFDEC_ISR_SEIF) == OTFDEC_ISR_SEIF) {
+        SET_BIT(hotfdec->Instance->ICR, OTFDEC_ICR_SEIF);
+        hotfdec->ErrorCode |= HAL_OTFDEC_SECURITY_ERROR;
+    }
+    if ((isr_reg & OTFDEC_ISR_XONEIF) == OTFDEC_ISR_XONEIF) {
+        SET_BIT(hotfdec->Instance->ICR, OTFDEC_ICR_XONEIF);
+        hotfdec->ErrorCode |= HAL_OTFDEC_EXECUTE_ERROR;
+    }
+    if ((isr_reg & OTFDEC_ISR_KEIF) == OTFDEC_ISR_KEIF) {
+        SET_BIT(hotfdec->Instance->ICR, OTFDEC_ICR_KEIF);
+        hotfdec->ErrorCode |= HAL_OTFDEC_KEY_ERROR;
+    }
 
 #if (USE_HAL_OTFDEC_REGISTER_CALLBACKS == 1)
-  hotfdec->ErrorCallback(hotfdec);
+    hotfdec->ErrorCallback(hotfdec);
 #else
-  HAL_OTFDEC_ErrorCallback(hotfdec);
+    HAL_OTFDEC_ErrorCallback(hotfdec);
 #endif /* USE_HAL_OTFDEC_REGISTER_CALLBACKS */
 }
 
@@ -495,12 +488,12 @@ void HAL_OTFDEC_IRQHandler(OTFDEC_HandleTypeDef *hotfdec) {
  * @retval None
  */
 __weak void HAL_OTFDEC_ErrorCallback(OTFDEC_HandleTypeDef *hotfdec) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hotfdec);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hotfdec);
 
-  /* NOTE : This function should not be modified; when the callback is needed,
-            the HAL_OTFDEC_ErrorCallback can be implemented in the user file.
-   */
+    /* NOTE : This function should not be modified; when the callback is needed,
+              the HAL_OTFDEC_ErrorCallback can be implemented in the user file.
+     */
 }
 
 /**
@@ -530,28 +523,27 @@ __weak void HAL_OTFDEC_ErrorCallback(OTFDEC_HandleTypeDef *hotfdec) {
  * @param  RegionIndex index of region the keys of which are locked
  * @retval HAL state
  */
-HAL_StatusTypeDef HAL_OTFDEC_RegionKeyLock(OTFDEC_HandleTypeDef *hotfdec,
-                                           uint32_t RegionIndex) {
-  OTFDEC_Region_TypeDef *region;
-  uint32_t address;
+HAL_StatusTypeDef HAL_OTFDEC_RegionKeyLock(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex) {
+    OTFDEC_Region_TypeDef *region;
+    uint32_t address;
 
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-  assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
 
-  /* Take Lock */
-  __HAL_LOCK(hotfdec);
+    /* Take Lock */
+    __HAL_LOCK(hotfdec);
 
-  address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
-  region = (OTFDEC_Region_TypeDef *)address;
+    address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
+    region = (OTFDEC_Region_TypeDef *)address;
 
-  SET_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_KEYLOCK);
+    SET_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_KEYLOCK);
 
-  /* Release Lock */
-  __HAL_UNLOCK(hotfdec);
+    /* Release Lock */
+    __HAL_UNLOCK(hotfdec);
 
-  /* Status is okay */
-  return HAL_OK;
+    /* Status is okay */
+    return HAL_OK;
 }
 
 /**
@@ -564,60 +556,57 @@ HAL_StatusTypeDef HAL_OTFDEC_RegionKeyLock(OTFDEC_HandleTypeDef *hotfdec,
  * with that theoretically expected. An error is reported if they are different.
  * @retval HAL state
  */
-HAL_StatusTypeDef HAL_OTFDEC_RegionSetKey(OTFDEC_HandleTypeDef *hotfdec,
-                                          uint32_t RegionIndex,
-                                          uint32_t *pKey) {
-  OTFDEC_Region_TypeDef *region;
-  uint32_t address;
+HAL_StatusTypeDef HAL_OTFDEC_RegionSetKey(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex, uint32_t *pKey) {
+    OTFDEC_Region_TypeDef *region;
+    uint32_t address;
 
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-  assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
 
-  if (pKey == NULL) {
-    return HAL_ERROR;
-  } else {
-    /* Take Lock */
-    __HAL_LOCK(hotfdec);
+    if (pKey == NULL) {
+        return HAL_ERROR;
+    } else {
+        /* Take Lock */
+        __HAL_LOCK(hotfdec);
 
-    address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
-    region = (OTFDEC_Region_TypeDef *)address;
+        address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
+        region = (OTFDEC_Region_TypeDef *)address;
 
-    /* Set Key */
-    WRITE_REG(region->REG_KEYR0, pKey[0]);
+        /* Set Key */
+        WRITE_REG(region->REG_KEYR0, pKey[0]);
 
-    __DSB();
-    __ISB();
+        __DSB();
+        __ISB();
 
-    WRITE_REG(region->REG_KEYR1, pKey[1]);
+        WRITE_REG(region->REG_KEYR1, pKey[1]);
 
-    __DSB();
-    __ISB();
+        __DSB();
+        __ISB();
 
-    WRITE_REG(region->REG_KEYR2, pKey[2]);
+        WRITE_REG(region->REG_KEYR2, pKey[2]);
 
-    __DSB();
-    __ISB();
+        __DSB();
+        __ISB();
 
-    WRITE_REG(region->REG_KEYR3, pKey[3]);
+        WRITE_REG(region->REG_KEYR3, pKey[3]);
 
-    /* Compute theoretically expected CRC and compare it with that reported by
-     * the peripheral */
-    if (HAL_OTFDEC_KeyCRCComputation(pKey) !=
-        HAL_OTFDEC_RegionGetKeyCRC(hotfdec, RegionIndex)) {
-      /* Release Lock */
-      __HAL_UNLOCK(hotfdec);
+        /* Compute theoretically expected CRC and compare it with that reported by
+         * the peripheral */
+        if (HAL_OTFDEC_KeyCRCComputation(pKey) != HAL_OTFDEC_RegionGetKeyCRC(hotfdec, RegionIndex)) {
+            /* Release Lock */
+            __HAL_UNLOCK(hotfdec);
 
-      /* Status is okay */
-      return HAL_ERROR;
+            /* Status is okay */
+            return HAL_ERROR;
+        }
+
+        /* Release Lock */
+        __HAL_UNLOCK(hotfdec);
+
+        /* Status is okay */
+        return HAL_OK;
     }
-
-    /* Release Lock */
-    __HAL_UNLOCK(hotfdec);
-
-    /* Status is okay */
-    return HAL_OK;
-  }
 }
 
 /**
@@ -633,31 +622,29 @@ HAL_StatusTypeDef HAL_OTFDEC_RegionSetKey(OTFDEC_HandleTypeDef *hotfdec,
   cipher activated
   * @retval HAL state
   */
-HAL_StatusTypeDef HAL_OTFDEC_RegionSetMode(OTFDEC_HandleTypeDef *hotfdec,
-                                           uint32_t RegionIndex,
-                                           uint32_t mode) {
-  OTFDEC_Region_TypeDef *region;
-  uint32_t address;
+HAL_StatusTypeDef HAL_OTFDEC_RegionSetMode(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex, uint32_t mode) {
+    OTFDEC_Region_TypeDef *region;
+    uint32_t address;
 
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-  assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
-  assert_param(IS_OTFDEC_REGION_OPERATING_MODE(mode));
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
+    assert_param(IS_OTFDEC_REGION_OPERATING_MODE(mode));
 
-  /* Take Lock */
-  __HAL_LOCK(hotfdec);
+    /* Take Lock */
+    __HAL_LOCK(hotfdec);
 
-  address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
-  region = (OTFDEC_Region_TypeDef *)address;
+    address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
+    region = (OTFDEC_Region_TypeDef *)address;
 
-  /* Set mode */
-  MODIFY_REG(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_MODE, mode);
+    /* Set mode */
+    MODIFY_REG(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_MODE, mode);
 
-  /* Release Lock */
-  __HAL_UNLOCK(hotfdec);
+    /* Release Lock */
+    __HAL_UNLOCK(hotfdec);
 
-  /* Status is okay */
-  return HAL_OK;
+    /* Status is okay */
+    return HAL_OK;
 }
 
 /**
@@ -676,57 +663,55 @@ HAL_StatusTypeDef HAL_OTFDEC_RegionSetMode(OTFDEC_HandleTypeDef *hotfdec,
  * configuration is locked
  * @retval HAL state
  */
-HAL_StatusTypeDef
-HAL_OTFDEC_RegionConfig(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex,
-                        const OTFDEC_RegionConfigTypeDef *Config,
-                        uint32_t lock) {
-  OTFDEC_Region_TypeDef *region;
-  uint32_t address;
+HAL_StatusTypeDef HAL_OTFDEC_RegionConfig(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex,
+                                          const OTFDEC_RegionConfigTypeDef *Config, uint32_t lock) {
+    OTFDEC_Region_TypeDef *region;
+    uint32_t address;
 
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-  assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
-  assert_param(IS_OTFDEC_REGION_CONFIG_LOCK(lock));
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
+    assert_param(IS_OTFDEC_REGION_CONFIG_LOCK(lock));
 
-  if (Config == NULL) {
-    return HAL_ERROR;
-  } else {
+    if (Config == NULL) {
+        return HAL_ERROR;
+    } else {
 
-    /* Take Lock */
-    __HAL_LOCK(hotfdec);
+        /* Take Lock */
+        __HAL_LOCK(hotfdec);
 
-    address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
-    region = (OTFDEC_Region_TypeDef *)address;
+        address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
+        region = (OTFDEC_Region_TypeDef *)address;
 
-    /* Set Nonce */
-    WRITE_REG(region->REG_NONCER0, Config->Nonce[0]);
+        /* Set Nonce */
+        WRITE_REG(region->REG_NONCER0, Config->Nonce[0]);
 
-    WRITE_REG(region->REG_NONCER1, Config->Nonce[1]);
+        WRITE_REG(region->REG_NONCER1, Config->Nonce[1]);
 
-    /* Write region protected area start and end addresses */
-    WRITE_REG(region->REG_START_ADDR, Config->StartAddress);
+        /* Write region protected area start and end addresses */
+        WRITE_REG(region->REG_START_ADDR, Config->StartAddress);
 
-    WRITE_REG(region->REG_END_ADDR, Config->EndAddress);
+        WRITE_REG(region->REG_END_ADDR, Config->EndAddress);
 
-    /* Write Version */
-    MODIFY_REG(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_VERSION,
-               (uint32_t)(Config->Version) << OTFDEC_REG_CONFIGR_VERSION_Pos);
+        /* Write Version */
+        MODIFY_REG(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_VERSION,
+                   (uint32_t)(Config->Version) << OTFDEC_REG_CONFIGR_VERSION_Pos);
 
-    /* Enable region deciphering or enciphering (depending of OTFDEC_CR ENC bit
-     * setting) */
-    SET_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_REG_ENABLE);
+        /* Enable region deciphering or enciphering (depending of OTFDEC_CR ENC bit
+         * setting) */
+        SET_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_REG_ENABLE);
 
-    /* Lock the region configuration according to lock parameter value */
-    if (lock == OTFDEC_REG_CONFIGR_LOCK_ENABLE) {
-      SET_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_LOCK_ENABLE);
+        /* Lock the region configuration according to lock parameter value */
+        if (lock == OTFDEC_REG_CONFIGR_LOCK_ENABLE) {
+            SET_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_LOCK_ENABLE);
+        }
+
+        /* Release Lock */
+        __HAL_UNLOCK(hotfdec);
+
+        /* Status is okay */
+        return HAL_OK;
     }
-
-    /* Release Lock */
-    __HAL_UNLOCK(hotfdec);
-
-    /* Status is okay */
-    return HAL_OK;
-  }
 }
 
 /**
@@ -740,22 +725,21 @@ HAL_OTFDEC_RegionConfig(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex,
  * protection
  * @retval HAL state
  */
-HAL_StatusTypeDef HAL_OTFDEC_ConfigAttributes(OTFDEC_HandleTypeDef *hotfdec,
-                                              uint32_t Attributes) {
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-  assert_param(IS_OTFDEC_ATTRIBUTE(Attributes));
+HAL_StatusTypeDef HAL_OTFDEC_ConfigAttributes(OTFDEC_HandleTypeDef *hotfdec, uint32_t Attributes) {
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    assert_param(IS_OTFDEC_ATTRIBUTE(Attributes));
 
-  /* Take Lock */
-  __HAL_LOCK(hotfdec);
+    /* Take Lock */
+    __HAL_LOCK(hotfdec);
 
-  MODIFY_REG(hotfdec->Instance->PRIVCFGR, OTFDEC_PRIVCFGR_PRIV, Attributes);
+    MODIFY_REG(hotfdec->Instance->PRIVCFGR, OTFDEC_PRIVCFGR_PRIV, Attributes);
 
-  /* Release Lock */
-  __HAL_UNLOCK(hotfdec);
+    /* Release Lock */
+    __HAL_UNLOCK(hotfdec);
 
-  /* Status is okay */
-  return HAL_OK;
+    /* Status is okay */
+    return HAL_OK;
 }
 
 /**
@@ -764,40 +748,37 @@ HAL_StatusTypeDef HAL_OTFDEC_ConfigAttributes(OTFDEC_HandleTypeDef *hotfdec,
  * @retval CRC value
  */
 uint32_t HAL_OTFDEC_KeyCRCComputation(const uint32_t *pKey) {
-  uint8_t crc7_poly = 0x7;
-  const uint32_t key_strobe[4] = {0xAA55AA55U, 0x3U, 0x18U, 0xC0U};
-  uint8_t i;
-  uint8_t crc = 0;
-  uint32_t j;
-  uint32_t keyval;
-  uint32_t k;
-  const uint32_t *temp = pKey;
+    uint8_t crc7_poly = 0x7;
+    const uint32_t key_strobe[4] = {0xAA55AA55U, 0x3U, 0x18U, 0xC0U};
+    uint8_t i;
+    uint8_t crc = 0;
+    uint32_t j;
+    uint32_t keyval;
+    uint32_t k;
+    const uint32_t *temp = pKey;
 
-  for (j = 0U; j < 4U; j++) {
-    keyval = *temp;
-    temp++;
-    if (j == 0U) {
-      keyval ^= key_strobe[0];
-    } else {
-      keyval ^= (key_strobe[j] << 24) | ((uint32_t)crc << 16) |
-                (key_strobe[j] << 8) | crc;
+    for (j = 0U; j < 4U; j++) {
+        keyval = *temp;
+        temp++;
+        if (j == 0U) {
+            keyval ^= key_strobe[0];
+        } else {
+            keyval ^= (key_strobe[j] << 24) | ((uint32_t)crc << 16) | (key_strobe[j] << 8) | crc;
+        }
+
+        crc = 0;
+        for (i = 0; i < (uint8_t)32; i++) {
+            k = ((((uint32_t)crc >> 7) ^ ((keyval >> ((uint8_t)31 - i)) & ((uint8_t)0xF)))) & 1U;
+            crc <<= 1;
+            if (k != 0U) {
+                crc ^= crc7_poly;
+            }
+        }
+
+        crc ^= (uint8_t)0x55;
     }
 
-    crc = 0;
-    for (i = 0; i < (uint8_t)32; i++) {
-      k = ((((uint32_t)crc >> 7) ^
-            ((keyval >> ((uint8_t)31 - i)) & ((uint8_t)0xF)))) &
-          1U;
-      crc <<= 1;
-      if (k != 0U) {
-        crc ^= crc7_poly;
-      }
-    }
-
-    crc ^= (uint8_t)0x55;
-  }
-
-  return (uint32_t)crc;
+    return (uint32_t)crc;
 }
 
 /**
@@ -808,16 +789,16 @@ uint32_t HAL_OTFDEC_KeyCRCComputation(const uint32_t *pKey) {
  * @retval HAL state
  */
 HAL_StatusTypeDef HAL_OTFDEC_EnableEnciphering(OTFDEC_HandleTypeDef *hotfdec) {
-  /* Take Lock */
-  __HAL_LOCK(hotfdec);
+    /* Take Lock */
+    __HAL_LOCK(hotfdec);
 
-  SET_BIT(hotfdec->Instance->CR, OTFDEC_CR_ENC);
+    SET_BIT(hotfdec->Instance->CR, OTFDEC_CR_ENC);
 
-  /* Release Lock */
-  __HAL_UNLOCK(hotfdec);
+    /* Release Lock */
+    __HAL_UNLOCK(hotfdec);
 
-  /* Status is okay */
-  return HAL_OK;
+    /* Status is okay */
+    return HAL_OK;
 }
 
 /**
@@ -827,16 +808,16 @@ HAL_StatusTypeDef HAL_OTFDEC_EnableEnciphering(OTFDEC_HandleTypeDef *hotfdec) {
  * @retval HAL state
  */
 HAL_StatusTypeDef HAL_OTFDEC_DisableEnciphering(OTFDEC_HandleTypeDef *hotfdec) {
-  /* Take Lock */
-  __HAL_LOCK(hotfdec);
+    /* Take Lock */
+    __HAL_LOCK(hotfdec);
 
-  CLEAR_BIT(hotfdec->Instance->CR, OTFDEC_CR_ENC);
+    CLEAR_BIT(hotfdec->Instance->CR, OTFDEC_CR_ENC);
 
-  /* Release Lock */
-  __HAL_UNLOCK(hotfdec);
+    /* Release Lock */
+    __HAL_UNLOCK(hotfdec);
 
-  /* Status is okay */
-  return HAL_OK;
+    /* Status is okay */
+    return HAL_OK;
 }
 
 /**
@@ -857,39 +838,37 @@ HAL_StatusTypeDef HAL_OTFDEC_DisableEnciphering(OTFDEC_HandleTypeDef *hotfdec) {
   process is over.
   * @retval HAL state
   */
-HAL_StatusTypeDef HAL_OTFDEC_Cipher(OTFDEC_HandleTypeDef *hotfdec,
-                                    uint32_t RegionIndex, const uint32_t *input,
-                                    uint32_t *output, uint32_t size,
-                                    uint32_t start_address) {
-  uint32_t j;
-  __IO uint32_t *extMem_ptr = (uint32_t *)start_address;
-  const uint32_t *in_ptr = input;
-  uint32_t *out_ptr = output;
+HAL_StatusTypeDef HAL_OTFDEC_Cipher(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex, const uint32_t *input,
+                                    uint32_t *output, uint32_t size, uint32_t start_address) {
+    uint32_t j;
+    __IO uint32_t *extMem_ptr = (uint32_t *)start_address;
+    const uint32_t *in_ptr = input;
+    uint32_t *out_ptr = output;
 
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-  assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
 
-  if ((input == NULL) || (output == NULL) || (size == 0U)) {
-    return HAL_ERROR;
-  } else {
-    /* Take Lock */
-    __HAL_LOCK(hotfdec);
+    if ((input == NULL) || (output == NULL) || (size == 0U)) {
+        return HAL_ERROR;
+    } else {
+        /* Take Lock */
+        __HAL_LOCK(hotfdec);
 
-    for (j = 0; j < size; j++) {
-      *extMem_ptr = *in_ptr;
-      in_ptr++;
-      *out_ptr = *extMem_ptr;
-      out_ptr++;
-      extMem_ptr++;
+        for (j = 0; j < size; j++) {
+            *extMem_ptr = *in_ptr;
+            in_ptr++;
+            *out_ptr = *extMem_ptr;
+            out_ptr++;
+            extMem_ptr++;
+        }
+
+        /* Release Lock */
+        __HAL_UNLOCK(hotfdec);
+
+        /* Status is okay */
+        return HAL_OK;
     }
-
-    /* Release Lock */
-    __HAL_UNLOCK(hotfdec);
-
-    /* Status is okay */
-    return HAL_OK;
-  }
 }
 
 /**
@@ -900,37 +879,35 @@ HAL_StatusTypeDef HAL_OTFDEC_Cipher(OTFDEC_HandleTypeDef *hotfdec,
  * @note   An error is reported when the configuration is locked.
  * @retval HAL state
  */
-HAL_StatusTypeDef HAL_OTFDEC_RegionEnable(OTFDEC_HandleTypeDef *hotfdec,
-                                          uint32_t RegionIndex) {
-  OTFDEC_Region_TypeDef *region;
-  uint32_t address;
+HAL_StatusTypeDef HAL_OTFDEC_RegionEnable(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex) {
+    OTFDEC_Region_TypeDef *region;
+    uint32_t address;
 
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-  assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
 
-  /* Take Lock */
-  __HAL_LOCK(hotfdec);
+    /* Take Lock */
+    __HAL_LOCK(hotfdec);
 
-  address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
-  region = (OTFDEC_Region_TypeDef *)address;
+    address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
+    region = (OTFDEC_Region_TypeDef *)address;
 
-  if (READ_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_LOCK_ENABLE) ==
-      OTFDEC_REG_CONFIGR_LOCK_ENABLE) {
-    /* Configuration is locked, REG_EN bit can't be modified */
+    if (READ_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_LOCK_ENABLE) == OTFDEC_REG_CONFIGR_LOCK_ENABLE) {
+        /* Configuration is locked, REG_EN bit can't be modified */
+        __HAL_UNLOCK(hotfdec);
+
+        return HAL_ERROR;
+    }
+
+    /* Enable region processing */
+    SET_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_REG_ENABLE);
+
+    /* Release Lock */
     __HAL_UNLOCK(hotfdec);
 
-    return HAL_ERROR;
-  }
-
-  /* Enable region processing */
-  SET_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_REG_ENABLE);
-
-  /* Release Lock */
-  __HAL_UNLOCK(hotfdec);
-
-  /* Status is okay */
-  return HAL_OK;
+    /* Status is okay */
+    return HAL_OK;
 }
 
 /**
@@ -942,37 +919,35 @@ HAL_StatusTypeDef HAL_OTFDEC_RegionEnable(OTFDEC_HandleTypeDef *hotfdec,
  * @note   An error is reported when the configuration is locked.
  * @retval HAL state
  */
-HAL_StatusTypeDef HAL_OTFDEC_RegionDisable(OTFDEC_HandleTypeDef *hotfdec,
-                                           uint32_t RegionIndex) {
-  OTFDEC_Region_TypeDef *region;
-  uint32_t address;
+HAL_StatusTypeDef HAL_OTFDEC_RegionDisable(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex) {
+    OTFDEC_Region_TypeDef *region;
+    uint32_t address;
 
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-  assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
 
-  /* Take Lock */
-  __HAL_LOCK(hotfdec);
+    /* Take Lock */
+    __HAL_LOCK(hotfdec);
 
-  address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
-  region = (OTFDEC_Region_TypeDef *)address;
+    address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
+    region = (OTFDEC_Region_TypeDef *)address;
 
-  if (READ_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_LOCK_ENABLE) ==
-      OTFDEC_REG_CONFIGR_LOCK_ENABLE) {
-    /* Configuration is locked, REG_EN bit can't be modified */
+    if (READ_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_LOCK_ENABLE) == OTFDEC_REG_CONFIGR_LOCK_ENABLE) {
+        /* Configuration is locked, REG_EN bit can't be modified */
+        __HAL_UNLOCK(hotfdec);
+
+        return HAL_ERROR;
+    }
+
+    /* Disable region processing */
+    CLEAR_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_REG_ENABLE);
+
+    /* Release Lock */
     __HAL_UNLOCK(hotfdec);
 
-    return HAL_ERROR;
-  }
-
-  /* Disable region processing */
-  CLEAR_BIT(region->REG_CONFIGR, OTFDEC_REG_CONFIGR_REG_ENABLE);
-
-  /* Release Lock */
-  __HAL_UNLOCK(hotfdec);
-
-  /* Status is okay */
-  return HAL_OK;
+    /* Status is okay */
+    return HAL_OK;
 }
 
 /**
@@ -1000,10 +975,7 @@ functions
  *         the configuration information for OTFDEC module
  * @retval HAL state
  */
-HAL_OTFDEC_StateTypeDef
-HAL_OTFDEC_GetState(const OTFDEC_HandleTypeDef *hotfdec) {
-  return hotfdec->State;
-}
+HAL_OTFDEC_StateTypeDef HAL_OTFDEC_GetState(const OTFDEC_HandleTypeDef *hotfdec) { return hotfdec->State; }
 
 /**
  * @brief  Get OTFDEC configuration attributes.
@@ -1018,21 +990,20 @@ HAL_OTFDEC_GetState(const OTFDEC_HandleTypeDef *hotfdec) {
  * protection
  * @retval HAL state
  */
-HAL_StatusTypeDef HAL_OTFDEC_GetConfigAttributes(OTFDEC_HandleTypeDef *hotfdec,
-                                                 uint32_t *Attributes) {
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+HAL_StatusTypeDef HAL_OTFDEC_GetConfigAttributes(OTFDEC_HandleTypeDef *hotfdec, uint32_t *Attributes) {
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
 
-  /* Take Lock */
-  __HAL_LOCK(hotfdec);
+    /* Take Lock */
+    __HAL_LOCK(hotfdec);
 
-  *Attributes = READ_BIT(hotfdec->Instance->PRIVCFGR, OTFDEC_PRIVCFGR_PRIV);
+    *Attributes = READ_BIT(hotfdec->Instance->PRIVCFGR, OTFDEC_PRIVCFGR_PRIV);
 
-  /* Release Lock */
-  __HAL_UNLOCK(hotfdec);
+    /* Release Lock */
+    __HAL_UNLOCK(hotfdec);
 
-  /* Status is okay */
-  return HAL_OK;
+    /* Status is okay */
+    return HAL_OK;
 }
 
 /**
@@ -1042,24 +1013,23 @@ HAL_StatusTypeDef HAL_OTFDEC_GetConfigAttributes(OTFDEC_HandleTypeDef *hotfdec,
  * @param  RegionIndex index of region the keys CRC of which is read
  * @retval Key CRC
  */
-uint32_t HAL_OTFDEC_RegionGetKeyCRC(const OTFDEC_HandleTypeDef *hotfdec,
-                                    uint32_t RegionIndex) {
-  const OTFDEC_Region_TypeDef *region;
-  uint32_t address;
-  uint32_t keycrc;
+uint32_t HAL_OTFDEC_RegionGetKeyCRC(const OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex) {
+    const OTFDEC_Region_TypeDef *region;
+    uint32_t address;
+    uint32_t keycrc;
 
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-  assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
 
-  address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
-  region = (OTFDEC_Region_TypeDef *)address;
+    address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
+    region = (OTFDEC_Region_TypeDef *)address;
 
-  keycrc = (READ_REG(region->REG_CONFIGR))&OTFDEC_REG_CONFIGR_KEYCRC;
+    keycrc = (READ_REG(region->REG_CONFIGR))&OTFDEC_REG_CONFIGR_KEYCRC;
 
-  keycrc >>= OTFDEC_REG_CONFIGR_KEYCRC_Pos;
+    keycrc >>= OTFDEC_REG_CONFIGR_KEYCRC_Pos;
 
-  return keycrc;
+    return keycrc;
 }
 
 /**
@@ -1071,44 +1041,42 @@ uint32_t HAL_OTFDEC_RegionGetKeyCRC(const OTFDEC_HandleTypeDef *hotfdec,
  * configuration parameters
  * @retval HAL state
  */
-HAL_StatusTypeDef
-HAL_OTFDEC_RegionGetConfig(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex,
-                           OTFDEC_RegionConfigTypeDef *Config) {
-  OTFDEC_Region_TypeDef *region;
-  uint32_t address;
+HAL_StatusTypeDef HAL_OTFDEC_RegionGetConfig(OTFDEC_HandleTypeDef *hotfdec, uint32_t RegionIndex,
+                                             OTFDEC_RegionConfigTypeDef *Config) {
+    OTFDEC_Region_TypeDef *region;
+    uint32_t address;
 
-  /* Check the parameters */
-  assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
-  assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
+    /* Check the parameters */
+    assert_param(IS_OTFDEC_ALL_INSTANCE(hotfdec->Instance));
+    assert_param(IS_OTFDEC_REGIONINDEX(RegionIndex));
 
-  if (Config == NULL) {
-    return HAL_ERROR;
-  } else {
-    /* Take Lock */
-    __HAL_LOCK(hotfdec);
+    if (Config == NULL) {
+        return HAL_ERROR;
+    } else {
+        /* Take Lock */
+        __HAL_LOCK(hotfdec);
 
-    address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
-    region = (OTFDEC_Region_TypeDef *)address;
+        address = (uint32_t)(hotfdec->Instance) + 0x20U + (0x30U * RegionIndex);
+        region = (OTFDEC_Region_TypeDef *)address;
 
-    /* Read Nonce */
-    Config->Nonce[0] = READ_REG(region->REG_NONCER0);
-    Config->Nonce[1] = READ_REG(region->REG_NONCER1);
+        /* Read Nonce */
+        Config->Nonce[0] = READ_REG(region->REG_NONCER0);
+        Config->Nonce[1] = READ_REG(region->REG_NONCER1);
 
-    /* Read Addresses */
-    Config->StartAddress = READ_REG(region->REG_START_ADDR);
-    Config->EndAddress = READ_REG(region->REG_END_ADDR);
+        /* Read Addresses */
+        Config->StartAddress = READ_REG(region->REG_START_ADDR);
+        Config->EndAddress = READ_REG(region->REG_END_ADDR);
 
-    /* Read Version */
-    Config->Version = (uint16_t)(READ_REG(region->REG_CONFIGR) &
-                                 OTFDEC_REG_CONFIGR_VERSION) >>
-                      OTFDEC_REG_CONFIGR_VERSION_Pos;
+        /* Read Version */
+        Config->Version =
+            (uint16_t)(READ_REG(region->REG_CONFIGR) & OTFDEC_REG_CONFIGR_VERSION) >> OTFDEC_REG_CONFIGR_VERSION_Pos;
 
-    /* Release Lock */
-    __HAL_UNLOCK(hotfdec);
+        /* Release Lock */
+        __HAL_UNLOCK(hotfdec);
 
-    /* Status is okay */
-    return HAL_OK;
-  }
+        /* Status is okay */
+        return HAL_OK;
+    }
 }
 
 /**

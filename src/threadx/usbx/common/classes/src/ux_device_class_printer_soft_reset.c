@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_printer.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -71,25 +69,23 @@
 /*                                            resulting in version 6.2.0  */
 /*                                                                        */
 /**************************************************************************/
-VOID _ux_device_class_printer_soft_reset(UX_DEVICE_CLASS_PRINTER *printer)
-{
+VOID _ux_device_class_printer_soft_reset(UX_DEVICE_CLASS_PRINTER *printer) {
 
-UX_SLAVE_ENDPOINT                       *endpoint;
+    UX_SLAVE_ENDPOINT *endpoint;
 
     /* Stop OUT.  */
-    endpoint = printer -> ux_device_class_printer_endpoint_out;
+    endpoint = printer->ux_device_class_printer_endpoint_out;
     _ux_device_stack_transfer_all_request_abort(endpoint, UX_ENDPOINT_RESET);
 #if defined(UX_DEVICE_STANDALONE)
-    printer -> ux_device_class_printer_write_state = UX_STATE_RESET;
+    printer->ux_device_class_printer_write_state = UX_STATE_RESET;
 #endif
 
     /* Stop IN (optional).  */
-    endpoint = printer -> ux_device_class_printer_endpoint_in;
-    if (endpoint != UX_NULL)
-    {
+    endpoint = printer->ux_device_class_printer_endpoint_in;
+    if (endpoint != UX_NULL) {
         _ux_device_stack_transfer_all_request_abort(endpoint, UX_ENDPOINT_RESET);
 #if defined(UX_DEVICE_STANDALONE)
-        printer -> ux_device_class_printer_read_state = UX_STATE_RESET;
+        printer->ux_device_class_printer_read_state = UX_STATE_RESET;
 #endif
     }
 }

@@ -76,9 +76,9 @@ UINT fx_media_format_volume_id_set(ULONG new_volume_id);
 /**************************************************************************/
 UINT fx_media_format_volume_id_set(ULONG new_volume_id) {
 
-  /* Simply copy the new media volume ID into the default location.  */
-  _fx_media_format_volume_id = new_volume_id;
+    /* Simply copy the new media volume ID into the default location.  */
+    _fx_media_format_volume_id = new_volume_id;
 
-  /* Return success.  */
-  return (FX_SUCCESS);
+    /* Return success.  */
+    return (FX_SUCCESS);
 }

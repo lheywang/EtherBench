@@ -87,17 +87,17 @@
 
 typedef struct NX_MD5_STRUCT {
 
-  ULONG nx_md5_states[4];    /* Contains each state (A,B,C,D)    */
-  ULONG nx_md5_bit_count[2]; /* Contains the 64-bit total bit    */
-                             /*   count, where index 0 holds the */
-                             /*   least significant bit count and*/
-                             /*   index 1 contains the most      */
-                             /*   significant portion of the bit */
-                             /*   count                          */
-  UCHAR nx_md5_buffer[64];   /* Working buffer for MD5 algorithm */
-                             /*   where partial buffers are      */
-                             /*   accumulated until a full block */
-                             /*   can be processed               */
+    ULONG nx_md5_states[4];    /* Contains each state (A,B,C,D)    */
+    ULONG nx_md5_bit_count[2]; /* Contains the 64-bit total bit    */
+                               /*   count, where index 0 holds the */
+                               /*   least significant bit count and*/
+                               /*   index 1 contains the most      */
+                               /*   significant portion of the bit */
+                               /*   count                          */
+    UCHAR nx_md5_buffer[64];   /* Working buffer for MD5 algorithm */
+                               /*   where partial buffers are      */
+                               /*   accumulated until a full block */
+                               /*   can be processed               */
 } NX_MD5;
 
 /* Define the function prototypes for MD5.  */

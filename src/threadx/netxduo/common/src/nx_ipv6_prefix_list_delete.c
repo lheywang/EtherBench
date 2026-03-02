@@ -76,34 +76,32 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID _nx_ipv6_prefix_list_delete(NX_IP *ip_ptr, ULONG *prefix,
-                                 INT prefix_length) {
+VOID _nx_ipv6_prefix_list_delete(NX_IP *ip_ptr, ULONG *prefix, INT prefix_length) {
 
-  NX_IPV6_PREFIX_ENTRY *current;
+    NX_IPV6_PREFIX_ENTRY *current;
 
-  /* Quick reference to the head of the prefix list. */
-  current = ip_ptr->nx_ipv6_prefix_list_ptr;
+    /* Quick reference to the head of the prefix list. */
+    current = ip_ptr->nx_ipv6_prefix_list_ptr;
 
-  /* Go through all the entries. */
-  while (current) {
+    /* Go through all the entries. */
+    while (current) {
 
-    /* If prefix length matches, and the prefix addresses also match...*/
-    if ((current->nx_ipv6_prefix_entry_prefix_length == (ULONG)prefix_length) &&
-        CHECK_IPV6_ADDRESSES_SAME(
-            prefix, current->nx_ipv6_prefix_entry_network_address)) {
+        /* If prefix length matches, and the prefix addresses also match...*/
+        if ((current->nx_ipv6_prefix_entry_prefix_length == (ULONG)prefix_length) &&
+            CHECK_IPV6_ADDRESSES_SAME(prefix, current->nx_ipv6_prefix_entry_network_address)) {
 
-      /* Delete this entry. */
-      _nx_ipv6_prefix_list_delete_entry(ip_ptr, current);
+            /* Delete this entry. */
+            _nx_ipv6_prefix_list_delete_entry(ip_ptr, current);
 
-      /* All done. return */
-      return;
+            /* All done. return */
+            return;
+        }
+        /* Move to the next entry. */
+        current = current->nx_ipv6_prefix_entry_next;
     }
-    /* Move to the next entry. */
-    current = current->nx_ipv6_prefix_entry_next;
-  }
 
-  /* No match was found. */
-  return;
+    /* No match was found. */
+    return;
 }
 
 #endif /* FEATURE_NX_IPV6 */

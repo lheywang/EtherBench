@@ -72,48 +72,46 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_udp_source_extract(NX_PACKET *packet_ptr, ULONG *ip_address,
-                             UINT *port) {
+UINT _nxe_udp_source_extract(NX_PACKET *packet_ptr, ULONG *ip_address, UINT *port) {
 
 #ifndef NX_DISABLE_IPV4
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((packet_ptr == NX_NULL) || (ip_address == NX_NULL) || (port == NX_NULL)) {
+    /* Check for invalid input pointers.  */
+    if ((packet_ptr == NX_NULL) || (ip_address == NX_NULL) || (port == NX_NULL)) {
 
-    return (NX_PTR_ERROR);
-  }
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for invalid packet pointer.  */
-  if (packet_ptr->nx_packet_ip_header == NX_NULL) {
+    /* Check for invalid packet pointer.  */
+    if (packet_ptr->nx_packet_ip_header == NX_NULL) {
 
-    return (NX_INVALID_PACKET);
-  }
+        return (NX_INVALID_PACKET);
+    }
 
-  if (packet_ptr->nx_packet_ip_version != NX_IP_VERSION_V4) {
+    if (packet_ptr->nx_packet_ip_version != NX_IP_VERSION_V4) {
 
-    return (NX_INVALID_PACKET);
-  }
+        return (NX_INVALID_PACKET);
+    }
 
-  /* Check to see if the packet has enough room in front for backing up.  */
-  /*lint -e{946} -e{947} suppress pointer subtraction, since it is necessary. */
-  if ((UINT)(packet_ptr->nx_packet_prepend_ptr -
-             packet_ptr->nx_packet_data_start) <
-      (sizeof(NX_UDP_HEADER) + sizeof(NX_IPV4_HEADER))) {
+    /* Check to see if the packet has enough room in front for backing up.  */
+    /*lint -e{946} -e{947} suppress pointer subtraction, since it is necessary. */
+    if ((UINT)(packet_ptr->nx_packet_prepend_ptr - packet_ptr->nx_packet_data_start) <
+        (sizeof(NX_UDP_HEADER) + sizeof(NX_IPV4_HEADER))) {
 
-    return (NX_INVALID_PACKET);
-  }
+        return (NX_INVALID_PACKET);
+    }
 
-  /* Call actual UDP source extract function.  */
-  status = _nx_udp_source_extract(packet_ptr, ip_address, port);
+    /* Call actual UDP source extract function.  */
+    status = _nx_udp_source_extract(packet_ptr, ip_address, port);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 #else
-  NX_PARAMETER_NOT_USED(packet_ptr);
-  NX_PARAMETER_NOT_USED(ip_address);
-  NX_PARAMETER_NOT_USED(port);
+    NX_PARAMETER_NOT_USED(packet_ptr);
+    NX_PARAMETER_NOT_USED(ip_address);
+    NX_PARAMETER_NOT_USED(port);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

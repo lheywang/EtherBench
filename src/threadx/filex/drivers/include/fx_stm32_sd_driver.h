@@ -73,15 +73,13 @@ extern TX_SEMAPHORE sd_rx_semaphore;
  * e.g. create a semaphore used for transfer notification */
 /* USER CODE BEGIN FX_STM32_SD_PRE_INIT_TX */
 
-#define FX_STM32_SD_PRE_INIT(_media_ptr)                                       \
-  do {                                                                         \
-    if ((tx_semaphore_create(&sd_rx_semaphore, "sd rx transfer semaphore",     \
-                             0) != TX_SUCCESS) ||                              \
-        (tx_semaphore_create(&sd_tx_semaphore, "sd tx transfer semaphore",     \
-                             0) != TX_SUCCESS)) {                              \
-      _media_ptr->fx_media_driver_status = FX_IO_ERROR;                        \
-    }                                                                          \
-  } while (0)
+#define FX_STM32_SD_PRE_INIT(_media_ptr)                                                                               \
+    do {                                                                                                               \
+        if ((tx_semaphore_create(&sd_rx_semaphore, "sd rx transfer semaphore", 0) != TX_SUCCESS) ||                    \
+            (tx_semaphore_create(&sd_tx_semaphore, "sd tx transfer semaphore", 0) != TX_SUCCESS)) {                    \
+            _media_ptr->fx_media_driver_status = FX_IO_ERROR;                                                          \
+        }                                                                                                              \
+    } while (0)
 
 /* USER CODE END FX_STM32_SD_PRE_INIT_TX */
 
@@ -96,11 +94,11 @@ extern TX_SEMAPHORE sd_rx_semaphore;
 
 /* USER CODE BEGIN FX_STM32_SD_POST_DEINIT_TX */
 
-#define FX_STM32_SD_POST_DEINIT(_media_ptr)                                    \
-  do {                                                                         \
-    tx_semaphore_delete(&sd_rx_semaphore);                                     \
-    tx_semaphore_delete(&sd_tx_semaphore);                                     \
-  } while (0)
+#define FX_STM32_SD_POST_DEINIT(_media_ptr)                                                                            \
+    do {                                                                                                               \
+        tx_semaphore_delete(&sd_rx_semaphore);                                                                         \
+        tx_semaphore_delete(&sd_tx_semaphore);                                                                         \
+    } while (0)
 
 /* USER CODE END FX_STM32_SD_POST_DEINIT_TX */
 
@@ -134,26 +132,24 @@ extern TX_SEMAPHORE sd_rx_semaphore;
 /* Define how to notify about Read completion operation */
 /* USER CODE BEGIN FX_STM32_SD_READ_CPLT_NOTIFY_TX */
 
-#define FX_STM32_SD_READ_CPLT_NOTIFY()                                         \
-  do {                                                                         \
-    if (tx_semaphore_get(&sd_rx_semaphore, FX_STM32_SD_DEFAULT_TIMEOUT) !=     \
-        TX_SUCCESS) {                                                          \
-      return FX_IO_ERROR;                                                      \
-    }                                                                          \
-  } while (0)
+#define FX_STM32_SD_READ_CPLT_NOTIFY()                                                                                 \
+    do {                                                                                                               \
+        if (tx_semaphore_get(&sd_rx_semaphore, FX_STM32_SD_DEFAULT_TIMEOUT) != TX_SUCCESS) {                           \
+            return FX_IO_ERROR;                                                                                        \
+        }                                                                                                              \
+    } while (0)
 
 /* USER CODE END FX_STM32_SD_READ_CPLT_NOTIFY_TX */
 
 /* Define how to notify about write completion operation */
 /* USER CODE BEGIN FX_STM32_SD_WRITE_CPLT_NOTIFY_TX */
 
-#define FX_STM32_SD_WRITE_CPLT_NOTIFY()                                        \
-  do {                                                                         \
-    if (tx_semaphore_get(&sd_tx_semaphore, FX_STM32_SD_DEFAULT_TIMEOUT) !=     \
-        TX_SUCCESS) {                                                          \
-      return FX_IO_ERROR;                                                      \
-    }                                                                          \
-  } while (0)
+#define FX_STM32_SD_WRITE_CPLT_NOTIFY()                                                                                \
+    do {                                                                                                               \
+        if (tx_semaphore_get(&sd_tx_semaphore, FX_STM32_SD_DEFAULT_TIMEOUT) != TX_SUCCESS) {                           \
+            return FX_IO_ERROR;                                                                                        \
+        }                                                                                                              \
+    } while (0)
 
 /* USER CODE END FX_STM32_SD_WRITE_CPLT_NOTIFY_TX */
 
@@ -185,10 +181,8 @@ INT fx_stm32_sd_deinit(UINT instance);
 
 INT fx_stm32_sd_get_status(UINT instance);
 
-INT fx_stm32_sd_read_blocks(UINT instance, UINT *buffer, UINT start_block,
-                            UINT total_blocks);
-INT fx_stm32_sd_write_blocks(UINT instance, UINT *buffer, UINT start_block,
-                             UINT total_blocks);
+INT fx_stm32_sd_read_blocks(UINT instance, UINT *buffer, UINT start_block, UINT total_blocks);
+INT fx_stm32_sd_write_blocks(UINT instance, UINT *buffer, UINT start_block, UINT total_blocks);
 
 VOID fx_stm32_sd_driver(FX_MEDIA *media_ptr);
 

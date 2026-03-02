@@ -73,14 +73,12 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxd_ip_raw_packet_send(NX_IP *ip_ptr, NX_PACKET *packet_ptr,
-                             NXD_ADDRESS *destination_ip, ULONG protocol,
+UINT _nxd_ip_raw_packet_send(NX_IP *ip_ptr, NX_PACKET *packet_ptr, NXD_ADDRESS *destination_ip, ULONG protocol,
                              UINT ttl, ULONG tos) {
 
-  UINT status;
+    UINT status;
 
-  status = _nxd_ip_raw_packet_source_send(ip_ptr, packet_ptr, destination_ip, 0,
-                                          protocol, ttl, tos);
+    status = _nxd_ip_raw_packet_source_send(ip_ptr, packet_ptr, destination_ip, 0, protocol, ttl, tos);
 
-  return (status);
+    return (status);
 }

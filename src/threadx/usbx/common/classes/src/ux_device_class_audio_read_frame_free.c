@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_audio.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -70,63 +68,57 @@
 /*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_audio_read_frame_free(UX_DEVICE_CLASS_AUDIO_STREAM *stream)
-{
+UINT _ux_device_class_audio_read_frame_free(UX_DEVICE_CLASS_AUDIO_STREAM *stream) {
 
-UX_SLAVE_ENDPOINT           *endpoint;
-UX_SLAVE_DEVICE             *device;
-UCHAR                       *next_frame;
-
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_SLAVE_DEVICE *device;
+    UCHAR *next_frame;
 
     /* Get the pointer to the device.  */
-    device =  &_ux_system_slave -> ux_system_slave_device;
+    device = &_ux_system_slave->ux_system_slave_device;
 
     /* As long as the device is in the CONFIGURED state.  */
-    if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
-    {
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
 
         /* Cannot proceed with command, the interface is down.  */
-        return(UX_CONFIGURATION_HANDLE_UNKNOWN);
+        return (UX_CONFIGURATION_HANDLE_UNKNOWN);
     }
 
     /* Check if endpoint is available.  */
-    endpoint = stream -> ux_device_class_audio_stream_endpoint;
+    endpoint = stream->ux_device_class_audio_stream_endpoint;
     if (endpoint == UX_NULL)
-        return(UX_ERROR);
+        return (UX_ERROR);
 
     /* Check if endpoint direction is OK.  */
-    if ((endpoint -> ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_OUT)
-        return(UX_ERROR);
+    if ((endpoint->ux_slave_endpoint_descriptor.bEndpointAddress & UX_ENDPOINT_DIRECTION) != UX_ENDPOINT_OUT)
+        return (UX_ERROR);
 
     /* Underflow!!  */
-    if (stream -> ux_device_class_audio_stream_access_pos -> ux_device_class_audio_frame_length == 0)
-    {
-        return(UX_BUFFER_OVERFLOW);
+    if (stream->ux_device_class_audio_stream_access_pos->ux_device_class_audio_frame_length == 0) {
+        return (UX_BUFFER_OVERFLOW);
     }
 
     /* Calculate next frame.  */
-    if (stream -> ux_device_class_audio_stream_access_pos != stream -> ux_device_class_audio_stream_transfer_pos)
-    {
-        next_frame = (UCHAR *)stream -> ux_device_class_audio_stream_access_pos;
-        next_frame += stream -> ux_device_class_audio_stream_frame_buffer_size;
-        if (next_frame >= stream -> ux_device_class_audio_stream_buffer + stream -> ux_device_class_audio_stream_buffer_size)
-            next_frame = stream -> ux_device_class_audio_stream_buffer;
+    if (stream->ux_device_class_audio_stream_access_pos != stream->ux_device_class_audio_stream_transfer_pos) {
+        next_frame = (UCHAR *)stream->ux_device_class_audio_stream_access_pos;
+        next_frame += stream->ux_device_class_audio_stream_frame_buffer_size;
+        if (next_frame >=
+            stream->ux_device_class_audio_stream_buffer + stream->ux_device_class_audio_stream_buffer_size)
+            next_frame = stream->ux_device_class_audio_stream_buffer;
 
         /* Re-free current frame.  */
-        stream -> ux_device_class_audio_stream_access_pos -> ux_device_class_audio_frame_length = 0;
+        stream->ux_device_class_audio_stream_access_pos->ux_device_class_audio_frame_length = 0;
 
         /* Move to next frame.  */
-        stream -> ux_device_class_audio_stream_access_pos = (UX_DEVICE_CLASS_AUDIO_FRAME *)next_frame;
-        stream -> ux_device_class_audio_stream_access_pos -> ux_device_class_audio_frame_pos = 0;
-    }
-    else
+        stream->ux_device_class_audio_stream_access_pos = (UX_DEVICE_CLASS_AUDIO_FRAME *)next_frame;
+        stream->ux_device_class_audio_stream_access_pos->ux_device_class_audio_frame_pos = 0;
+    } else
 
         /* Just re-free current frame.  */
-        stream -> ux_device_class_audio_stream_access_pos -> ux_device_class_audio_frame_length = 0;
+        stream->ux_device_class_audio_stream_access_pos->ux_device_class_audio_frame_length = 0;
 
-    return(UX_SUCCESS);
+    return (UX_SUCCESS);
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -167,13 +159,12 @@ UCHAR                       *next_frame;
 /*  03-08-2023     Chaoqiong Xiao           Initial Version 6.2.1         */
 /*                                                                        */
 /**************************************************************************/
-UINT _uxe_device_class_audio_read_frame_free(UX_DEVICE_CLASS_AUDIO_STREAM *stream)
-{
+UINT _uxe_device_class_audio_read_frame_free(UX_DEVICE_CLASS_AUDIO_STREAM *stream) {
 
     /* Sanity check.  */
     if (stream == UX_NULL)
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Free frame buffer.  */
-    return(_ux_device_class_audio_read_frame_free(stream));
+    return (_ux_device_class_audio_read_frame_free(stream));
 }

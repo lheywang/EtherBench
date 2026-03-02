@@ -117,21 +117,21 @@ VOID _tx_byte_pool_initialize(VOID) {
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-  /* Initialize the head pointer of the created byte pools list and the
-     number of byte pools created.  */
-  _tx_byte_pool_created_ptr = TX_NULL;
-  _tx_byte_pool_created_count = TX_EMPTY;
+    /* Initialize the head pointer of the created byte pools list and the
+       number of byte pools created.  */
+    _tx_byte_pool_created_ptr = TX_NULL;
+    _tx_byte_pool_created_count = TX_EMPTY;
 
 #ifdef TX_BYTE_POOL_ENABLE_PERFORMANCE_INFO
 
-  /* Initialize byte pool performance counters.  */
-  _tx_byte_pool_performance_allocate_count = ((ULONG)0);
-  _tx_byte_pool_performance_release_count = ((ULONG)0);
-  _tx_byte_pool_performance_merge_count = ((ULONG)0);
-  _tx_byte_pool_performance_split_count = ((ULONG)0);
-  _tx_byte_pool_performance_search_count = ((ULONG)0);
-  _tx_byte_pool_performance_suspension_count = ((ULONG)0);
-  _tx_byte_pool_performance_timeout_count = ((ULONG)0);
+    /* Initialize byte pool performance counters.  */
+    _tx_byte_pool_performance_allocate_count = ((ULONG)0);
+    _tx_byte_pool_performance_release_count = ((ULONG)0);
+    _tx_byte_pool_performance_merge_count = ((ULONG)0);
+    _tx_byte_pool_performance_split_count = ((ULONG)0);
+    _tx_byte_pool_performance_search_count = ((ULONG)0);
+    _tx_byte_pool_performance_suspension_count = ((ULONG)0);
+    _tx_byte_pool_performance_timeout_count = ((ULONG)0);
 #endif
 #endif
 }

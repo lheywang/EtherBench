@@ -20,13 +20,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_ccid.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -69,38 +67,35 @@
 /*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_ccid_response(UX_DEVICE_CLASS_CCID *ccid, UCHAR *buffer, ULONG length)
-{
+UINT _ux_device_class_ccid_response(UX_DEVICE_CLASS_CCID *ccid, UCHAR *buffer, ULONG length) {
 
-UX_SLAVE_ENDPOINT               *endpoint;
-UX_SLAVE_TRANSFER               *transfer;
-UINT                            status;
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_SLAVE_TRANSFER *transfer;
+    UINT status;
 
     /* Get bulk IN endpoint.  */
-    endpoint = ccid -> ux_device_class_ccid_endpoint_in;
+    endpoint = ccid->ux_device_class_ccid_endpoint_in;
 
     /* Get transfer request.  */
-    transfer = &endpoint -> ux_slave_endpoint_transfer_request;
+    transfer = &endpoint->ux_slave_endpoint_transfer_request;
 
     /* Lock bulk IN.  */
-    _ux_device_mutex_on(&ccid -> ux_device_class_ccid_response_mutex);
+    _ux_device_mutex_on(&ccid->ux_device_class_ccid_response_mutex);
 
     /* Prepare data to transfer.  */
-    if (length > 0 && buffer != UX_NULL &&
-        transfer -> ux_slave_transfer_request_data_pointer != buffer)
-    {
-        _ux_utility_memory_copy(transfer -> ux_slave_transfer_request_data_pointer,
-                                buffer, length); /* Use case of memcpy is verified. */
+    if (length > 0 && buffer != UX_NULL && transfer->ux_slave_transfer_request_data_pointer != buffer) {
+        _ux_utility_memory_copy(transfer->ux_slave_transfer_request_data_pointer, buffer,
+                                length); /* Use case of memcpy is verified. */
     }
 
 #if defined(UX_DEVICE_STANDALONE)
 
     /* Setup transfer struct for running.  */
     UX_SLAVE_TRANSFER_STATE_RESET(transfer);
-    transfer -> ux_slave_transfer_request_requested_length = length;
+    transfer->ux_slave_transfer_request_requested_length = length;
     status = UX_SUCCESS;
 
-    ccid -> ux_device_class_ccid_rsp_state = UX_DEVICE_CLASS_CCID_RSP_START;
+    ccid->ux_device_class_ccid_rsp_state = UX_DEVICE_CLASS_CCID_RSP_START;
 #else
 
     /* Transfer data.  */
@@ -108,8 +103,8 @@ UINT                            status;
 #endif
 
     /* Unlock bulk IN.  */
-    _ux_device_mutex_off(&ccid -> ux_device_class_ccid_response_mutex);
+    _ux_device_mutex_off(&ccid->ux_device_class_ccid_response_mutex);
 
     /* Return transfer status.  */
-    return(status);
+    return (status);
 }

@@ -72,12 +72,12 @@
 /* Define various constants for the port.  */
 
 #ifndef NX_IP_PERIODIC_RATE
-#define NX_IP_PERIODIC_RATE                                                    \
-  100 /* Default IP periodic rate of 1 second for                              \
-         ports with 10ms timer interrupts.  This                               \
-         value may be defined instead at the                                   \
-         command line and this value will not be                               \
-         used.  */
+#define NX_IP_PERIODIC_RATE                                                                                            \
+    100 /* Default IP periodic rate of 1 second for                                                                    \
+           ports with 10ms timer interrupts.  This                                                                     \
+           value may be defined instead at the                                                                         \
+           command line and this value will not be                                                                     \
+           used.  */
 #endif
 
 /* Define macros that swap the endian for little endian ports.  */
@@ -125,57 +125,51 @@
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-#define NX_CALLER_CHECKING_EXTERNS                                             \
-  extern TX_THREAD *_tx_thread_current_ptr;                                    \
-  extern TX_THREAD _tx_timer_thread;                                           \
-  extern volatile ULONG _tx_thread_system_state;
+#define NX_CALLER_CHECKING_EXTERNS                                                                                     \
+    extern TX_THREAD *_tx_thread_current_ptr;                                                                          \
+    extern TX_THREAD _tx_timer_thread;                                                                                 \
+    extern volatile ULONG _tx_thread_system_state;
 
-#define NX_THREADS_ONLY_CALLER_CHECKING                                        \
-  if ((TX_THREAD_GET_SYSTEM_STATE()) || (_tx_thread_current_ptr == TX_NULL) || \
-      (_tx_thread_current_ptr == &_tx_timer_thread))                           \
-    return (NX_CALLER_ERROR);
+#define NX_THREADS_ONLY_CALLER_CHECKING                                                                                \
+    if ((TX_THREAD_GET_SYSTEM_STATE()) || (_tx_thread_current_ptr == TX_NULL) ||                                       \
+        (_tx_thread_current_ptr == &_tx_timer_thread))                                                                 \
+        return (NX_CALLER_ERROR);
 
-#define NX_INIT_AND_THREADS_CALLER_CHECKING                                    \
-  if (((TX_THREAD_GET_SYSTEM_STATE()) &&                                       \
-       (TX_THREAD_GET_SYSTEM_STATE() < ((ULONG)0xF0F0F0F0))) ||                \
-      (_tx_thread_current_ptr == &_tx_timer_thread))                           \
-    return (NX_CALLER_ERROR);
+#define NX_INIT_AND_THREADS_CALLER_CHECKING                                                                            \
+    if (((TX_THREAD_GET_SYSTEM_STATE()) && (TX_THREAD_GET_SYSTEM_STATE() < ((ULONG)0xF0F0F0F0))) ||                    \
+        (_tx_thread_current_ptr == &_tx_timer_thread))                                                                 \
+        return (NX_CALLER_ERROR);
 
-#define NX_NOT_ISR_CALLER_CHECKING                                             \
-  if ((TX_THREAD_GET_SYSTEM_STATE()) &&                                        \
-      (TX_THREAD_GET_SYSTEM_STATE() < ((ULONG)0xF0F0F0F0)))                    \
-    return (NX_CALLER_ERROR);
+#define NX_NOT_ISR_CALLER_CHECKING                                                                                     \
+    if ((TX_THREAD_GET_SYSTEM_STATE()) && (TX_THREAD_GET_SYSTEM_STATE() < ((ULONG)0xF0F0F0F0)))                        \
+        return (NX_CALLER_ERROR);
 
-#define NX_THREAD_WAIT_CALLER_CHECKING                                         \
-  if ((wait_option) && ((_tx_thread_current_ptr == NX_NULL) ||                 \
-                        (TX_THREAD_GET_SYSTEM_STATE()) ||                      \
-                        (_tx_thread_current_ptr == &_tx_timer_thread)))        \
-    return (NX_CALLER_ERROR);
+#define NX_THREAD_WAIT_CALLER_CHECKING                                                                                 \
+    if ((wait_option) && ((_tx_thread_current_ptr == NX_NULL) || (TX_THREAD_GET_SYSTEM_STATE()) ||                     \
+                          (_tx_thread_current_ptr == &_tx_timer_thread)))                                              \
+        return (NX_CALLER_ERROR);
 
 #else
 
-#define NX_CALLER_CHECKING_EXTERNS                                             \
-  extern TX_THREAD *_tx_thread_current_ptr;                                    \
-  extern volatile ULONG _tx_thread_system_state;
+#define NX_CALLER_CHECKING_EXTERNS                                                                                     \
+    extern TX_THREAD *_tx_thread_current_ptr;                                                                          \
+    extern volatile ULONG _tx_thread_system_state;
 
-#define NX_THREADS_ONLY_CALLER_CHECKING                                        \
-  if ((TX_THREAD_GET_SYSTEM_STATE()) || (_tx_thread_current_ptr == TX_NULL))   \
-    return (NX_CALLER_ERROR);
+#define NX_THREADS_ONLY_CALLER_CHECKING                                                                                \
+    if ((TX_THREAD_GET_SYSTEM_STATE()) || (_tx_thread_current_ptr == TX_NULL))                                         \
+        return (NX_CALLER_ERROR);
 
-#define NX_INIT_AND_THREADS_CALLER_CHECKING                                    \
-  if (((TX_THREAD_GET_SYSTEM_STATE()) &&                                       \
-       (TX_THREAD_GET_SYSTEM_STATE() < ((ULONG)0xF0F0F0F0))))                  \
-    return (NX_CALLER_ERROR);
+#define NX_INIT_AND_THREADS_CALLER_CHECKING                                                                            \
+    if (((TX_THREAD_GET_SYSTEM_STATE()) && (TX_THREAD_GET_SYSTEM_STATE() < ((ULONG)0xF0F0F0F0))))                      \
+        return (NX_CALLER_ERROR);
 
-#define NX_NOT_ISR_CALLER_CHECKING                                             \
-  if ((TX_THREAD_GET_SYSTEM_STATE()) &&                                        \
-      (TX_THREAD_GET_SYSTEM_STATE() < ((ULONG)0xF0F0F0F0)))                    \
-    return (NX_CALLER_ERROR);
+#define NX_NOT_ISR_CALLER_CHECKING                                                                                     \
+    if ((TX_THREAD_GET_SYSTEM_STATE()) && (TX_THREAD_GET_SYSTEM_STATE() < ((ULONG)0xF0F0F0F0)))                        \
+        return (NX_CALLER_ERROR);
 
-#define NX_THREAD_WAIT_CALLER_CHECKING                                         \
-  if ((wait_option) &&                                                         \
-      ((_tx_thread_current_ptr == NX_NULL) || (TX_THREAD_GET_SYSTEM_STATE()))) \
-    return (NX_CALLER_ERROR);
+#define NX_THREAD_WAIT_CALLER_CHECKING                                                                                 \
+    if ((wait_option) && ((_tx_thread_current_ptr == NX_NULL) || (TX_THREAD_GET_SYSTEM_STATE())))                      \
+        return (NX_CALLER_ERROR);
 
 #endif
 

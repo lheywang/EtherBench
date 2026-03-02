@@ -21,13 +21,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_video.h"
 #include "ux_device_stack.h"
-
 
 #if defined(UX_DEVICE_STANDALONE)
 /**************************************************************************/
@@ -78,63 +76,61 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT _ux_device_class_video_write_task_function(UX_DEVICE_CLASS_VIDEO_STREAM *stream)
-{
-UX_SLAVE_DEVICE                 *device;
-UX_SLAVE_ENDPOINT               *endpoint;
-UX_SLAVE_TRANSFER               *transfer;
-UCHAR                           *next_pos;
-UX_DEVICE_CLASS_VIDEO_PAYLOAD   *next_payload;
-ULONG                           transfer_length;
-ULONG                           actual_length;
-UINT                            status;
-
+UINT _ux_device_class_video_write_task_function(UX_DEVICE_CLASS_VIDEO_STREAM *stream) {
+    UX_SLAVE_DEVICE *device;
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_SLAVE_TRANSFER *transfer;
+    UCHAR *next_pos;
+    UX_DEVICE_CLASS_VIDEO_PAYLOAD *next_payload;
+    ULONG transfer_length;
+    ULONG actual_length;
+    UINT status;
 
     /* Get the pointer to the device.  */
-    device = stream -> ux_device_class_video_stream_video -> ux_device_class_video_device;
+    device = stream->ux_device_class_video_stream_video->ux_device_class_video_device;
 
     /* Check if the device is configured.  */
-    if (device -> ux_slave_device_state != UX_DEVICE_CONFIGURED)
-    {
-        stream -> ux_device_class_video_stream_task_state = UX_STATE_EXIT;
-        return(UX_STATE_EXIT);
+    if (device->ux_slave_device_state != UX_DEVICE_CONFIGURED) {
+        stream->ux_device_class_video_stream_task_state = UX_STATE_EXIT;
+        return (UX_STATE_EXIT);
     }
 
     /* Get the endpoint.  */
-    endpoint = stream -> ux_device_class_video_stream_endpoint;
+    endpoint = stream->ux_device_class_video_stream_endpoint;
 
     /* No endpoint ready, maybe it's alternate setting 0.  */
     if (endpoint == UX_NULL)
-        return(UX_STATE_IDLE);
+        return (UX_STATE_IDLE);
 
     /* Check if background transfer task is started.  */
-    if (stream -> ux_device_class_video_stream_task_state == UX_DEVICE_CLASS_VIDEO_STREAM_RW_STOP)
-        return(UX_STATE_IDLE);
+    if (stream->ux_device_class_video_stream_task_state == UX_DEVICE_CLASS_VIDEO_STREAM_RW_STOP)
+        return (UX_STATE_IDLE);
 
     /* Get transfer instance.  */
-    transfer = &endpoint -> ux_slave_endpoint_transfer_request;
+    transfer = &endpoint->ux_slave_endpoint_transfer_request;
 
     /* If not started yet, prepare data, reset transfer and start polling.  */
-    if (stream -> ux_device_class_video_stream_task_state == UX_DEVICE_CLASS_VIDEO_STREAM_RW_START)
-    {
+    if (stream->ux_device_class_video_stream_task_state == UX_DEVICE_CLASS_VIDEO_STREAM_RW_START) {
 
         /* Next state: transfer wait.  */
-        stream -> ux_device_class_video_stream_task_state = UX_DEVICE_CLASS_VIDEO_STREAM_RW_WAIT;
+        stream->ux_device_class_video_stream_task_state = UX_DEVICE_CLASS_VIDEO_STREAM_RW_WAIT;
 
         /* Start payload transfer anyway (even ZLP).  */
-        transfer_length = stream -> ux_device_class_video_stream_transfer_pos -> ux_device_class_video_payload_length;
+        transfer_length = stream->ux_device_class_video_stream_transfer_pos->ux_device_class_video_payload_length;
 
 #if UX_DEVICE_ENDPOINT_BUFFER_OWNER == 1
 
         /* Zero copy: directly use frame buffer for transfer.  */
-        transfer -> ux_slave_transfer_request_data_pointer = stream ->
-                    ux_device_class_video_stream_transfer_pos -> ux_device_class_video_payload_data;
+        transfer->ux_slave_transfer_request_data_pointer =
+            stream->ux_device_class_video_stream_transfer_pos->ux_device_class_video_payload_data;
 #else
 
         /* Copy frame buffer to transfer buffer.  */
         if (transfer_length)
-            _ux_utility_memory_copy(transfer -> ux_slave_transfer_request_data_pointer,
-                stream -> ux_device_class_video_stream_transfer_pos -> ux_device_class_video_payload_data, transfer_length); /* Use case of memcpy is verified. */
+            _ux_utility_memory_copy(
+                transfer->ux_slave_transfer_request_data_pointer,
+                stream->ux_device_class_video_stream_transfer_pos->ux_device_class_video_payload_data,
+                transfer_length); /* Use case of memcpy is verified. */
 #endif
 
         /* Reset transfer state.  */
@@ -142,82 +138,74 @@ UINT                            status;
     }
 
     /* Get current transfer length.  */
-    transfer_length = stream -> ux_device_class_video_stream_transfer_pos -> ux_device_class_video_payload_length;
+    transfer_length = stream->ux_device_class_video_stream_transfer_pos->ux_device_class_video_payload_length;
 
     /* Run transfer states.  */
     status = _ux_device_stack_transfer_run(transfer, transfer_length, transfer_length);
 
     /* Error case.  */
-    if (status < UX_STATE_NEXT)
-    {
+    if (status < UX_STATE_NEXT) {
 
         /* Error on background transfer task start.  */
-        stream -> ux_device_class_video_stream_task_state = UX_STATE_RESET;
-        stream -> ux_device_class_video_stream_task_status =
-                        transfer -> ux_slave_transfer_request_completion_code;
+        stream->ux_device_class_video_stream_task_state = UX_STATE_RESET;
+        stream->ux_device_class_video_stream_task_status = transfer->ux_slave_transfer_request_completion_code;
 
         /* Error notification!  */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_TRANSFER_ERROR);
-        return(UX_STATE_EXIT);
+        return (UX_STATE_EXIT);
     }
 
     /* Success case.  */
-    if (status == UX_STATE_NEXT)
-    {
+    if (status == UX_STATE_NEXT) {
 
         /* Next state: start.  */
-        stream -> ux_device_class_video_stream_task_state = UX_DEVICE_CLASS_VIDEO_STREAM_RW_START;
-        stream -> ux_device_class_video_stream_task_status =
-                        transfer -> ux_slave_transfer_request_completion_code;
+        stream->ux_device_class_video_stream_task_state = UX_DEVICE_CLASS_VIDEO_STREAM_RW_START;
+        stream->ux_device_class_video_stream_task_status = transfer->ux_slave_transfer_request_completion_code;
 
         /* Frame sent, free it.  */
-        stream -> ux_device_class_video_stream_transfer_pos -> ux_device_class_video_payload_length = 0;
+        stream->ux_device_class_video_stream_transfer_pos->ux_device_class_video_payload_length = 0;
 
         /* Get actual transfer length.  */
-        actual_length = transfer -> ux_slave_transfer_request_actual_length;
+        actual_length = transfer->ux_slave_transfer_request_actual_length;
 
         /* Calculate next position.  */
-        next_pos = (UCHAR *)stream -> ux_device_class_video_stream_transfer_pos;
-        next_pos += stream -> ux_device_class_video_stream_payload_buffer_size;
-        if (next_pos >= stream -> ux_device_class_video_stream_buffer + stream -> ux_device_class_video_stream_buffer_size)
-            next_pos = stream -> ux_device_class_video_stream_buffer;
+        next_pos = (UCHAR *)stream->ux_device_class_video_stream_transfer_pos;
+        next_pos += stream->ux_device_class_video_stream_payload_buffer_size;
+        if (next_pos >= stream->ux_device_class_video_stream_buffer + stream->ux_device_class_video_stream_buffer_size)
+            next_pos = stream->ux_device_class_video_stream_buffer;
         next_payload = (UX_DEVICE_CLASS_VIDEO_PAYLOAD *)next_pos;
 
         /* Underflow check!  */
-        if (transfer_length)
-        {
+        if (transfer_length) {
 
             /* Advance position.  */
-            stream -> ux_device_class_video_stream_transfer_pos = next_payload;
+            stream->ux_device_class_video_stream_transfer_pos = next_payload;
 
             /* Error trap!  */
-            if (next_payload -> ux_device_class_video_payload_length == 0)
-            {
-                stream -> ux_device_class_video_stream_buffer_error_count ++;
+            if (next_payload->ux_device_class_video_payload_length == 0) {
+                stream->ux_device_class_video_stream_buffer_error_count++;
                 _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_BUFFER_OVERFLOW);
             }
-        }
-        else
-        {
+        } else {
 
             /* Advance position if next payload available.  */
-            if (next_payload -> ux_device_class_video_payload_length)
-                stream -> ux_device_class_video_stream_transfer_pos = next_payload;
-            else
-            {
+            if (next_payload->ux_device_class_video_payload_length)
+                stream->ux_device_class_video_stream_transfer_pos = next_payload;
+            else {
 
                 /* Error trap!  */
-                stream -> ux_device_class_video_stream_buffer_error_count ++;
+                stream->ux_device_class_video_stream_buffer_error_count++;
                 _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_BUFFER_OVERFLOW);
             }
         }
 
         /* Invoke notification callback.  */
-        if (stream -> ux_device_class_video_stream_callbacks.ux_device_class_video_stream_payload_done != UX_NULL)
-            stream -> ux_device_class_video_stream_callbacks.ux_device_class_video_stream_payload_done(stream, actual_length);
+        if (stream->ux_device_class_video_stream_callbacks.ux_device_class_video_stream_payload_done != UX_NULL)
+            stream->ux_device_class_video_stream_callbacks.ux_device_class_video_stream_payload_done(stream,
+                                                                                                     actual_length);
     }
 
     /* Keep waiting.  */
-    return(UX_STATE_WAIT);
+    return (UX_STATE_WAIT);
 }
 #endif

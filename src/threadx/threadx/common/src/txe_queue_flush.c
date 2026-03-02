@@ -69,26 +69,26 @@
 /**************************************************************************/
 UINT _txe_queue_flush(TX_QUEUE *queue_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid queue pointer.  */
-  if (queue_ptr == TX_NULL) {
+    /* Check for an invalid queue pointer.  */
+    if (queue_ptr == TX_NULL) {
 
-    /* Queue pointer is invalid, return appropriate error code.  */
-    status = TX_QUEUE_ERROR;
-  }
+        /* Queue pointer is invalid, return appropriate error code.  */
+        status = TX_QUEUE_ERROR;
+    }
 
-  /* Now check for invalid queue ID.  */
-  else if (queue_ptr->tx_queue_id != TX_QUEUE_ID) {
+    /* Now check for invalid queue ID.  */
+    else if (queue_ptr->tx_queue_id != TX_QUEUE_ID) {
 
-    /* Queue pointer is invalid, return appropriate error code.  */
-    status = TX_QUEUE_ERROR;
-  } else {
+        /* Queue pointer is invalid, return appropriate error code.  */
+        status = TX_QUEUE_ERROR;
+    } else {
 
-    /* Call actual queue flush function.  */
-    status = _tx_queue_flush(queue_ptr);
-  }
+        /* Call actual queue flush function.  */
+        status = _tx_queue_flush(queue_ptr);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

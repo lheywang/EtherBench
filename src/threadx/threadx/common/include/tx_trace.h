@@ -144,19 +144,19 @@ address 0x0a800024 and is 16-bits in size, the clock source constants would be:
 
 typedef struct TX_TRACE_HEADER_STRUCT {
 
-  ULONG tx_trace_header_id;
-  ULONG tx_trace_header_timer_valid_mask;
-  ULONG tx_trace_header_trace_base_address;
-  ULONG tx_trace_header_registry_start_pointer;
-  USHORT tx_trace_header_reserved1;
-  USHORT tx_trace_header_object_name_size;
-  ULONG tx_trace_header_registry_end_pointer;
-  ULONG tx_trace_header_buffer_start_pointer;
-  ULONG tx_trace_header_buffer_end_pointer;
-  ULONG tx_trace_header_buffer_current_pointer;
-  ULONG tx_trace_header_reserved2;
-  ULONG tx_trace_header_reserved3;
-  ULONG tx_trace_header_reserved4;
+    ULONG tx_trace_header_id;
+    ULONG tx_trace_header_timer_valid_mask;
+    ULONG tx_trace_header_trace_base_address;
+    ULONG tx_trace_header_registry_start_pointer;
+    USHORT tx_trace_header_reserved1;
+    USHORT tx_trace_header_object_name_size;
+    ULONG tx_trace_header_registry_end_pointer;
+    ULONG tx_trace_header_buffer_start_pointer;
+    ULONG tx_trace_header_buffer_end_pointer;
+    ULONG tx_trace_header_buffer_current_pointer;
+    ULONG tx_trace_header_reserved2;
+    ULONG tx_trace_header_reserved3;
+    ULONG tx_trace_header_reserved4;
 } TX_TRACE_HEADER;
 
 /* Trace Object Registry. The Trace Object Registry is used to map the object
@@ -170,38 +170,29 @@ typedef struct TX_TRACE_HEADER_STRUCT {
 /* Define the object name types as well as the contents of any additional
    parameters that might be useful in trace analysis.  */
 
-#define TX_TRACE_OBJECT_TYPE_NOT_VALID                                         \
-  ((UCHAR)0) /* Object is not valid                               */
-#define TX_TRACE_OBJECT_TYPE_THREAD                                            \
-  ((UCHAR)1) /* P1 = stack start address, P2 = stack size         */
-#define TX_TRACE_OBJECT_TYPE_TIMER                                             \
-  ((UCHAR)2) /* P1 = initial ticks, P2 = reschedule ticks         */
-#define TX_TRACE_OBJECT_TYPE_QUEUE                                             \
-  ((UCHAR)3) /* P1 = queue size, P2 = message size                */
-#define TX_TRACE_OBJECT_TYPE_SEMAPHORE                                         \
-  ((UCHAR)4) /* P1 = initial instances                            */
-#define TX_TRACE_OBJECT_TYPE_MUTEX                                             \
-  ((UCHAR)5) /* P1 = priority inheritance flag                    */
-#define TX_TRACE_OBJECT_TYPE_EVENT_FLAGS                                       \
-  ((UCHAR)6) /* none                                              */
-#define TX_TRACE_OBJECT_TYPE_BLOCK_POOL                                        \
-  ((UCHAR)7) /* P1 = total blocks, P2 = block size                */
-#define TX_TRACE_OBJECT_TYPE_BYTE_POOL                                         \
-  ((UCHAR)8) /* P1 = total bytes                                  */
+#define TX_TRACE_OBJECT_TYPE_NOT_VALID ((UCHAR)0)   /* Object is not valid                               */
+#define TX_TRACE_OBJECT_TYPE_THREAD ((UCHAR)1)      /* P1 = stack start address, P2 = stack size         */
+#define TX_TRACE_OBJECT_TYPE_TIMER ((UCHAR)2)       /* P1 = initial ticks, P2 = reschedule ticks         */
+#define TX_TRACE_OBJECT_TYPE_QUEUE ((UCHAR)3)       /* P1 = queue size, P2 = message size                */
+#define TX_TRACE_OBJECT_TYPE_SEMAPHORE ((UCHAR)4)   /* P1 = initial instances                            */
+#define TX_TRACE_OBJECT_TYPE_MUTEX ((UCHAR)5)       /* P1 = priority inheritance flag                    */
+#define TX_TRACE_OBJECT_TYPE_EVENT_FLAGS ((UCHAR)6) /* none                                              */
+#define TX_TRACE_OBJECT_TYPE_BLOCK_POOL ((UCHAR)7)  /* P1 = total blocks, P2 = block size                */
+#define TX_TRACE_OBJECT_TYPE_BYTE_POOL ((UCHAR)8)   /* P1 = total bytes                                  */
 
 typedef struct TX_TRACE_OBJECT_ENTRY_STRUCT {
 
-  UCHAR tx_trace_object_entry_available; /* TX_TRUE -> available */
-  UCHAR tx_trace_object_entry_type; /* Types defined above                  */
-  UCHAR
-  tx_trace_object_entry_reserved1; /* Should be zero - except for thread */
-  UCHAR
-  tx_trace_object_entry_reserved2; /* Should be zero - except for thread */
-  ULONG tx_trace_object_entry_thread_pointer; /* ThreadX object pointer */
-  ULONG tx_trace_object_entry_param_1; /* Parameter value defined        */
-  ULONG tx_trace_object_entry_param_2; /*   according to type above        */
-  UCHAR tx_trace_object_entry_name[TX_TRACE_OBJECT_REGISTRY_NAME]; /* Object
-                                                                      name */
+    UCHAR tx_trace_object_entry_available; /* TX_TRUE -> available */
+    UCHAR tx_trace_object_entry_type;      /* Types defined above                  */
+    UCHAR
+    tx_trace_object_entry_reserved1; /* Should be zero - except for thread */
+    UCHAR
+    tx_trace_object_entry_reserved2;                                 /* Should be zero - except for thread */
+    ULONG tx_trace_object_entry_thread_pointer;                      /* ThreadX object pointer */
+    ULONG tx_trace_object_entry_param_1;                             /* Parameter value defined        */
+    ULONG tx_trace_object_entry_param_2;                             /*   according to type above        */
+    UCHAR tx_trace_object_entry_name[TX_TRACE_OBJECT_REGISTRY_NAME]; /* Object
+                                                                        name */
 } TX_TRACE_OBJECT_ENTRY;
 
 /* Trace Buffer Entry. The Trace Buffer Entry contains information about a
@@ -255,154 +246,128 @@ typedef struct TX_TRACE_OBJECT_ENTRY_STRUCT {
 
 /* Define the basic ThreadX thread scheduling events first.  */
 
-#define TX_TRACE_THREAD_RESUME                                                 \
-  1 /* I1 = thread ptr, I2 = previous_state, I3 = stack ptr, I4 = next thread  \
-     */
-#define TX_TRACE_THREAD_SUSPEND                                                \
-  2 /* I1 = thread ptr, I2 = new_state, I3 = stack ptr  I4 = next thread */
-#define TX_TRACE_ISR_ENTER                                                     \
-  3 /* I1 = stack_ptr, I2 = ISR number, I3 = system state, I4 = preempt        \
-       disable */
-#define TX_TRACE_ISR_EXIT                                                      \
-  4 /* I1 = stack_ptr, I2 = ISR number, I3 = system state, I4 = preempt        \
-       disable */
-#define TX_TRACE_TIME_SLICE                                                    \
-  5 /* I1 = next thread ptr, I2 = system state, I3 = preempt disable, I4 =     \
-       stack*/
+#define TX_TRACE_THREAD_RESUME                                                                                         \
+    1                             /* I1 = thread ptr, I2 = previous_state, I3 = stack ptr, I4 = next thread            \
+                                   */
+#define TX_TRACE_THREAD_SUSPEND 2 /* I1 = thread ptr, I2 = new_state, I3 = stack ptr  I4 = next thread */
+#define TX_TRACE_ISR_ENTER                                                                                             \
+    3 /* I1 = stack_ptr, I2 = ISR number, I3 = system state, I4 = preempt                                              \
+         disable */
+#define TX_TRACE_ISR_EXIT                                                                                              \
+    4 /* I1 = stack_ptr, I2 = ISR number, I3 = system state, I4 = preempt                                              \
+         disable */
+#define TX_TRACE_TIME_SLICE                                                                                            \
+    5                      /* I1 = next thread ptr, I2 = system state, I3 = preempt disable, I4 =                      \
+                              stack*/
 #define TX_TRACE_RUNNING 6 /* None */
 
 /* Define the rest of the ThreadX system events.  */
 
-#define TX_TRACE_BLOCK_ALLOCATE                                                \
-  10 /* I1 = pool ptr, I2 = memory ptr, I3 = wait option, I4 = remaining       \
-        blocks  */
-#define TX_TRACE_BLOCK_POOL_CREATE                                             \
-  11 /* I1 = pool ptr, I2 = pool_start, I3 = total blocks, I4 = block size */
+#define TX_TRACE_BLOCK_ALLOCATE                                                                                        \
+    10                                  /* I1 = pool ptr, I2 = memory ptr, I3 = wait option, I4 = remaining            \
+                                           blocks  */
+#define TX_TRACE_BLOCK_POOL_CREATE 11   /* I1 = pool ptr, I2 = pool_start, I3 = total blocks, I4 = block size */
 #define TX_TRACE_BLOCK_POOL_DELETE 12   /* I1 = pool ptr, I2 = stack ptr */
 #define TX_TRACE_BLOCK_POOL_INFO_GET 13 /* I1 = pool ptr */
 #define TX_TRACE_BLOCK_POOL_PERFORMANCE_INFO_GET 14         /* I1 = pool ptr */
 #define TX_TRACE_BLOCK_POOL__PERFORMANCE_SYSTEM_INFO_GET 15 /* None */
-#define TX_TRACE_BLOCK_POOL_PRIORITIZE                                         \
-  16 /* I1 = pool ptr, I2 = suspended count, I3 = stack ptr */
-#define TX_TRACE_BLOCK_RELEASE                                                 \
-  17 /* I1 = pool ptr, I2 = memory ptr, I3 = suspended, I4 = stack ptr */
-#define TX_TRACE_BYTE_ALLOCATE                                                 \
-  20 /* I1 = pool ptr, I2 = memory ptr, I3 = size requested, I4 = wait option  \
-      */
-#define TX_TRACE_BYTE_POOL_CREATE                                              \
-  21 /* I1 = pool ptr, I2 = start ptr, I3 = pool size, I4 = stack ptr */
+#define TX_TRACE_BLOCK_POOL_PRIORITIZE 16                   /* I1 = pool ptr, I2 = suspended count, I3 = stack ptr */
+#define TX_TRACE_BLOCK_RELEASE 17 /* I1 = pool ptr, I2 = memory ptr, I3 = suspended, I4 = stack ptr */
+#define TX_TRACE_BYTE_ALLOCATE                                                                                         \
+    20                                 /* I1 = pool ptr, I2 = memory ptr, I3 = size requested, I4 = wait option        \
+                                        */
+#define TX_TRACE_BYTE_POOL_CREATE 21   /* I1 = pool ptr, I2 = start ptr, I3 = pool size, I4 = stack ptr */
 #define TX_TRACE_BYTE_POOL_DELETE 22   /* I1 = pool ptr, I2 = stack ptr */
 #define TX_TRACE_BYTE_POOL_INFO_GET 23 /* I1 = pool ptr */
 #define TX_TRACE_BYTE_POOL_PERFORMANCE_INFO_GET 24         /* I1 = pool ptr */
 #define TX_TRACE_BYTE_POOL__PERFORMANCE_SYSTEM_INFO_GET 25 /* None */
-#define TX_TRACE_BYTE_POOL_PRIORITIZE                                          \
-  26 /* I1 = pool ptr, I2 = suspended count, I3 = stack ptr */
-#define TX_TRACE_BYTE_RELEASE                                                  \
-  27 /* I1 = pool ptr, I2 = memory ptr, I3 = suspended, I4 = available bytes   \
-      */
+#define TX_TRACE_BYTE_POOL_PRIORITIZE 26                   /* I1 = pool ptr, I2 = suspended count, I3 = stack ptr */
+#define TX_TRACE_BYTE_RELEASE                                                                                          \
+    27                                 /* I1 = pool ptr, I2 = memory ptr, I3 = suspended, I4 = available bytes         \
+                                        */
 #define TX_TRACE_EVENT_FLAGS_CREATE 30 /* I1 = group ptr, I2 = stack ptr */
 #define TX_TRACE_EVENT_FLAGS_DELETE 31 /* I1 = group ptr, I2 = stack ptr */
-#define TX_TRACE_EVENT_FLAGS_GET                                               \
-  32 /* I1 = group ptr, I2 = requested flags, I3 = current flags, I4 = get     \
-        option*/
-#define TX_TRACE_EVENT_FLAGS_INFO_GET 33             /* I1 = group ptr */
-#define TX_TRACE_EVENT_FLAGS_PERFORMANCE_INFO_GET 34 /* I1 = group ptr */
+#define TX_TRACE_EVENT_FLAGS_GET                                                                                       \
+    32                                   /* I1 = group ptr, I2 = requested flags, I3 = current flags, I4 = get         \
+                                            option*/
+#define TX_TRACE_EVENT_FLAGS_INFO_GET 33 /* I1 = group ptr */
+#define TX_TRACE_EVENT_FLAGS_PERFORMANCE_INFO_GET 34         /* I1 = group ptr */
 #define TX_TRACE_EVENT_FLAGS__PERFORMANCE_SYSTEM_INFO_GET 35 /* None */
-#define TX_TRACE_EVENT_FLAGS_SET                                               \
-  36 /* I1 = group ptr, I2 = flags to set, I3 = set option, I4= suspended      \
-        count  */
+#define TX_TRACE_EVENT_FLAGS_SET                                                                                       \
+    36                                     /* I1 = group ptr, I2 = flags to set, I3 = set option, I4= suspended        \
+                                              count  */
 #define TX_TRACE_EVENT_FLAGS_SET_NOTIFY 37 /* I1 = group ptr */
-#define TX_TRACE_INTERRUPT_CONTROL                                             \
-  40 /* I1 = new interrupt posture, I2 = stack ptr */
-#define TX_TRACE_MUTEX_CREATE                                                  \
-  50 /* I1 = mutex ptr, I2 = inheritance, I3 = stack ptr */
-#define TX_TRACE_MUTEX_DELETE 51 /* I1 = mutex ptr, I2 = stack ptr */
-#define TX_TRACE_MUTEX_GET                                                     \
-  52 /* I1 = mutex ptr, I2 = wait option, I3 = owning thread, I4 = own count   \
-      */
-#define TX_TRACE_MUTEX_INFO_GET 53                    /* I1 = mutex ptr */
-#define TX_TRACE_MUTEX_PERFORMANCE_INFO_GET 54        /* I1 = mutex ptr */
+#define TX_TRACE_INTERRUPT_CONTROL 40      /* I1 = new interrupt posture, I2 = stack ptr */
+#define TX_TRACE_MUTEX_CREATE 50           /* I1 = mutex ptr, I2 = inheritance, I3 = stack ptr */
+#define TX_TRACE_MUTEX_DELETE 51           /* I1 = mutex ptr, I2 = stack ptr */
+#define TX_TRACE_MUTEX_GET                                                                                             \
+    52                                         /* I1 = mutex ptr, I2 = wait option, I3 = owning thread, I4 = own count \
+                                                */
+#define TX_TRACE_MUTEX_INFO_GET 53             /* I1 = mutex ptr */
+#define TX_TRACE_MUTEX_PERFORMANCE_INFO_GET 54 /* I1 = mutex ptr */
 #define TX_TRACE_MUTEX_PERFORMANCE_SYSTEM_INFO_GET 55 /* None */
-#define TX_TRACE_MUTEX_PRIORITIZE                                              \
-  56 /* I1 = mutex ptr, I2 = suspended count, I3 = stack ptr */
-#define TX_TRACE_MUTEX_PUT                                                     \
-  57 /* I1 = mutex ptr, I2 = owning thread, I3 = own count, I4 = stack ptr */
-#define TX_TRACE_QUEUE_CREATE                                                  \
-  60 /* I1 = queue ptr, I2 = message size, I3 = queue start, I4 = queue size   \
-      */
-#define TX_TRACE_QUEUE_DELETE 61 /* I1 = queue ptr, I2 = stack ptr */
-#define TX_TRACE_QUEUE_FLUSH 62  /* I1 = queue ptr, I2 = stack ptr */
-#define TX_TRACE_QUEUE_FRONT_SEND                                              \
-  63 /* I1 = queue ptr, I2 = source ptr, I3 = wait option, I4 = enqueued */
-#define TX_TRACE_QUEUE_INFO_GET 64                    /* I1 = queue ptr */
-#define TX_TRACE_QUEUE_PERFORMANCE_INFO_GET 65        /* I1 = queue ptr */
+#define TX_TRACE_MUTEX_PRIORITIZE 56                  /* I1 = mutex ptr, I2 = suspended count, I3 = stack ptr */
+#define TX_TRACE_MUTEX_PUT 57 /* I1 = mutex ptr, I2 = owning thread, I3 = own count, I4 = stack ptr */
+#define TX_TRACE_QUEUE_CREATE                                                                                          \
+    60                                         /* I1 = queue ptr, I2 = message size, I3 = queue start, I4 = queue size \
+                                                */
+#define TX_TRACE_QUEUE_DELETE 61               /* I1 = queue ptr, I2 = stack ptr */
+#define TX_TRACE_QUEUE_FLUSH 62                /* I1 = queue ptr, I2 = stack ptr */
+#define TX_TRACE_QUEUE_FRONT_SEND 63           /* I1 = queue ptr, I2 = source ptr, I3 = wait option, I4 = enqueued */
+#define TX_TRACE_QUEUE_INFO_GET 64             /* I1 = queue ptr */
+#define TX_TRACE_QUEUE_PERFORMANCE_INFO_GET 65 /* I1 = queue ptr */
 #define TX_TRACE_QUEUE_PERFORMANCE_SYSTEM_INFO_GET 66 /* None */
-#define TX_TRACE_QUEUE_PRIORITIZE                                              \
-  67 /* I1 = queue ptr, I2 = suspended count, I3 = stack ptr */
-#define TX_TRACE_QUEUE_RECEIVE                                                 \
-  68 /* I1 = queue ptr, I2 = destination ptr, I3 = wait option, I4 = enqueued  \
-      */
-#define TX_TRACE_QUEUE_SEND                                                    \
-  69 /* I1 = queue ptr, I2 = source ptr, I3 = wait option, I4 = enqueued */
+#define TX_TRACE_QUEUE_PRIORITIZE 67                  /* I1 = queue ptr, I2 = suspended count, I3 = stack ptr */
+#define TX_TRACE_QUEUE_RECEIVE                                                                                         \
+    68                                /* I1 = queue ptr, I2 = destination ptr, I3 = wait option, I4 = enqueued         \
+                                       */
+#define TX_TRACE_QUEUE_SEND 69        /* I1 = queue ptr, I2 = source ptr, I3 = wait option, I4 = enqueued */
 #define TX_TRACE_QUEUE_SEND_NOTIFY 70 /* I1 = queue ptr */
-#define TX_TRACE_SEMAPHORE_CEILING_PUT                                         \
-  80 /* I1 = semaphore ptr, I2 = current count, I3 = suspended count,I4        \
-        =ceiling */
-#define TX_TRACE_SEMAPHORE_CREATE                                              \
-  81 /* I1 = semaphore ptr, I2 = initial count, I3 = stack ptr */
+#define TX_TRACE_SEMAPHORE_CEILING_PUT                                                                                 \
+    80                               /* I1 = semaphore ptr, I2 = current count, I3 = suspended count,I4                \
+                                        =ceiling */
+#define TX_TRACE_SEMAPHORE_CREATE 81 /* I1 = semaphore ptr, I2 = initial count, I3 = stack ptr */
 #define TX_TRACE_SEMAPHORE_DELETE 82 /* I1 = semaphore ptr, I2 = stack ptr */
-#define TX_TRACE_SEMAPHORE_GET                                                 \
-  83 /* I1 = semaphore ptr, I2 = wait option, I3 = current count, I4 = stack   \
-        ptr */
-#define TX_TRACE_SEMAPHORE_INFO_GET 84             /* I1 = semaphore ptr */
-#define TX_TRACE_SEMAPHORE_PERFORMANCE_INFO_GET 85 /* I1 = semaphore ptr */
+#define TX_TRACE_SEMAPHORE_GET                                                                                         \
+    83                                 /* I1 = semaphore ptr, I2 = wait option, I3 = current count, I4 = stack         \
+                                          ptr */
+#define TX_TRACE_SEMAPHORE_INFO_GET 84 /* I1 = semaphore ptr */
+#define TX_TRACE_SEMAPHORE_PERFORMANCE_INFO_GET 85         /* I1 = semaphore ptr */
 #define TX_TRACE_SEMAPHORE__PERFORMANCE_SYSTEM_INFO_GET 86 /* None */
-#define TX_TRACE_SEMAPHORE_PRIORITIZE                                          \
-  87 /* I1 = semaphore ptr, I2 = suspended count, I2 = stack ptr */
-#define TX_TRACE_SEMAPHORE_PUT                                                 \
-  88 /* I1 = semaphore ptr, I2 = current count, I3 = suspended count,I4=stack  \
-        ptr*/
-#define TX_TRACE_SEMAPHORE_PUT_NOTIFY 89 /* I1 = semaphore ptr */
-#define TX_TRACE_THREAD_CREATE                                                 \
-  100 /* I1 = thread ptr, I2 = priority, I3 = stack ptr, I4 = stack_size */
-#define TX_TRACE_THREAD_DELETE 101 /* I1 = thread ptr, I2 = stack ptr */
-#define TX_TRACE_THREAD_ENTRY_EXIT_NOTIFY                                      \
-  102 /* I1 = thread ptr, I2 = thread state, I3 = stack ptr */
-#define TX_TRACE_THREAD_IDENTIFY 103 /* None */
-#define TX_TRACE_THREAD_INFO_GET 104 /* I1 = thread ptr, I2 = thread state */
-#define TX_TRACE_THREAD_PERFORMANCE_INFO_GET                                   \
-  105 /* I1 = thread ptr, I2 = thread state */
+#define TX_TRACE_SEMAPHORE_PRIORITIZE 87 /* I1 = semaphore ptr, I2 = suspended count, I2 = stack ptr */
+#define TX_TRACE_SEMAPHORE_PUT                                                                                         \
+    88                                        /* I1 = semaphore ptr, I2 = current count, I3 = suspended count,I4=stack \
+                                                 ptr*/
+#define TX_TRACE_SEMAPHORE_PUT_NOTIFY 89      /* I1 = semaphore ptr */
+#define TX_TRACE_THREAD_CREATE 100            /* I1 = thread ptr, I2 = priority, I3 = stack ptr, I4 = stack_size */
+#define TX_TRACE_THREAD_DELETE 101            /* I1 = thread ptr, I2 = stack ptr */
+#define TX_TRACE_THREAD_ENTRY_EXIT_NOTIFY 102 /* I1 = thread ptr, I2 = thread state, I3 = stack ptr */
+#define TX_TRACE_THREAD_IDENTIFY 103          /* None */
+#define TX_TRACE_THREAD_INFO_GET 104          /* I1 = thread ptr, I2 = thread state */
+#define TX_TRACE_THREAD_PERFORMANCE_INFO_GET 105        /* I1 = thread ptr, I2 = thread state */
 #define TX_TRACE_THREAD_PERFORMANCE_SYSTEM_INFO_GET 106 /* None */
-#define TX_TRACE_THREAD_PREEMPTION_CHANGE                                      \
-  107 /* I1 = thread ptr, I2 = new threshold, I3 = old threshold, I4 =thread   \
-         state*/
-#define TX_TRACE_THREAD_PRIORITY_CHANGE                                        \
-  108 /* I1 = thread ptr, I2 = new priority, I3 = old priority, I4 = thread    \
-         state */
-#define TX_TRACE_THREAD_RELINQUISH                                             \
-  109                             /* I1 = stack ptr, I2 = next thread ptr */
-#define TX_TRACE_THREAD_RESET 110 /* I1 = thread ptr, I2 = thread state */
-#define TX_TRACE_THREAD_RESUME_API                                             \
-  111 /* I1 = thread ptr, I2 = thread state, I3 = stack ptr */
-#define TX_TRACE_THREAD_SLEEP                                                  \
-  112 /* I1 = sleep value, I2 = thread state, I3 = stack ptr */
+#define TX_TRACE_THREAD_PREEMPTION_CHANGE                                                                              \
+    107 /* I1 = thread ptr, I2 = new threshold, I3 = old threshold, I4 =thread                                         \
+           state*/
+#define TX_TRACE_THREAD_PRIORITY_CHANGE                                                                                \
+    108                                        /* I1 = thread ptr, I2 = new priority, I3 = old priority, I4 = thread   \
+                                                  state */
+#define TX_TRACE_THREAD_RELINQUISH 109         /* I1 = stack ptr, I2 = next thread ptr */
+#define TX_TRACE_THREAD_RESET 110              /* I1 = thread ptr, I2 = thread state */
+#define TX_TRACE_THREAD_RESUME_API 111         /* I1 = thread ptr, I2 = thread state, I3 = stack ptr */
+#define TX_TRACE_THREAD_SLEEP 112              /* I1 = sleep value, I2 = thread state, I3 = stack ptr */
 #define TX_TRACE_THREAD_STACK_ERROR_NOTIFY 113 /* None */
-#define TX_TRACE_THREAD_SUSPEND_API                                            \
-  114 /* I1 = thread ptr, I2 = thread state, I3 = stack ptr */
-#define TX_TRACE_THREAD_TERMINATE                                              \
-  115 /* I1 = thread ptr, I2 = thread state, I3 = stack ptr */
-#define TX_TRACE_THREAD_TIME_SLICE_CHANGE                                      \
-  116 /* I1 = thread ptr, I2 = new timeslice, I3 = old timeslice */
-#define TX_TRACE_THREAD_WAIT_ABORT                                             \
-  117 /* I1 = thread ptr, I2 = thread state, I3 = stack ptr */
-#define TX_TRACE_TIME_GET 120       /* I1 = current time, I2 = stack ptr */
-#define TX_TRACE_TIME_SET 121       /* I1 = new time */
-#define TX_TRACE_TIMER_ACTIVATE 122 /* I1 = timer ptr */
-#define TX_TRACE_TIMER_CHANGE                                                  \
-  123 /* I1 = timer ptr, I2 = initial ticks, I3= reschedule ticks */
-#define TX_TRACE_TIMER_CREATE                                                  \
-  124 /* I1 = timer ptr, I2 = initial ticks, I3= reschedule ticks, I4 = enable \
-       */
+#define TX_TRACE_THREAD_SUSPEND_API 114        /* I1 = thread ptr, I2 = thread state, I3 = stack ptr */
+#define TX_TRACE_THREAD_TERMINATE 115          /* I1 = thread ptr, I2 = thread state, I3 = stack ptr */
+#define TX_TRACE_THREAD_TIME_SLICE_CHANGE 116  /* I1 = thread ptr, I2 = new timeslice, I3 = old timeslice */
+#define TX_TRACE_THREAD_WAIT_ABORT 117         /* I1 = thread ptr, I2 = thread state, I3 = stack ptr */
+#define TX_TRACE_TIME_GET 120                  /* I1 = current time, I2 = stack ptr */
+#define TX_TRACE_TIME_SET 121                  /* I1 = new time */
+#define TX_TRACE_TIMER_ACTIVATE 122            /* I1 = timer ptr */
+#define TX_TRACE_TIMER_CHANGE 123              /* I1 = timer ptr, I2 = initial ticks, I3= reschedule ticks */
+#define TX_TRACE_TIMER_CREATE                                                                                          \
+    124                               /* I1 = timer ptr, I2 = initial ticks, I3= reschedule ticks, I4 = enable         \
+                                       */
 #define TX_TRACE_TIMER_DEACTIVATE 125 /* I1 = timer ptr, I2 = stack ptr */
 #define TX_TRACE_TIMER_DELETE 126     /* I1 = timer ptr */
 #define TX_TRACE_TIMER_INFO_GET 127   /* I1 = timer ptr, I2 = stack ptr */
@@ -413,20 +378,20 @@ typedef struct TX_TRACE_OBJECT_ENTRY_STRUCT {
 
 typedef struct TX_TRACE_BUFFER_ENTRY_STRUCT {
 
-  ULONG tx_trace_buffer_entry_thread_pointer;
-  ULONG tx_trace_buffer_entry_thread_priority;
-  ULONG tx_trace_buffer_entry_event_id;
-  ULONG tx_trace_buffer_entry_time_stamp;
+    ULONG tx_trace_buffer_entry_thread_pointer;
+    ULONG tx_trace_buffer_entry_thread_priority;
+    ULONG tx_trace_buffer_entry_event_id;
+    ULONG tx_trace_buffer_entry_time_stamp;
 #ifdef TX_MISRA_ENABLE
-  ULONG tx_trace_buffer_entry_info_1;
-  ULONG tx_trace_buffer_entry_info_2;
-  ULONG tx_trace_buffer_entry_info_3;
-  ULONG tx_trace_buffer_entry_info_4;
+    ULONG tx_trace_buffer_entry_info_1;
+    ULONG tx_trace_buffer_entry_info_2;
+    ULONG tx_trace_buffer_entry_info_3;
+    ULONG tx_trace_buffer_entry_info_4;
 #else
-  ULONG tx_trace_buffer_entry_information_field_1;
-  ULONG tx_trace_buffer_entry_information_field_2;
-  ULONG tx_trace_buffer_entry_information_field_3;
-  ULONG tx_trace_buffer_entry_information_field_4;
+    ULONG tx_trace_buffer_entry_information_field_1;
+    ULONG tx_trace_buffer_entry_information_field_2;
+    ULONG tx_trace_buffer_entry_information_field_3;
+    ULONG tx_trace_buffer_entry_information_field_4;
 #endif
 } TX_TRACE_BUFFER_ENTRY;
 
@@ -505,72 +470,65 @@ TRACE_DECLARE ULONG _tx_trace_registry_search_start;
  * enabled.  */
 
 #ifdef TX_MISRA_ENABLE
-#define TX_TRACE_INFO_FIELD_ASSIGNMENT(a, b, c, d)                             \
-  trace_event_ptr->tx_trace_buffer_entry_info_1 = (ULONG)(a);                  \
-  trace_event_ptr->tx_trace_buffer_entry_info_2 = (ULONG)(b);                  \
-  trace_event_ptr->tx_trace_buffer_entry_info_3 = (ULONG)(c);                  \
-  trace_event_ptr->tx_trace_buffer_entry_info_4 = (ULONG)(d);
+#define TX_TRACE_INFO_FIELD_ASSIGNMENT(a, b, c, d)                                                                     \
+    trace_event_ptr->tx_trace_buffer_entry_info_1 = (ULONG)(a);                                                        \
+    trace_event_ptr->tx_trace_buffer_entry_info_2 = (ULONG)(b);                                                        \
+    trace_event_ptr->tx_trace_buffer_entry_info_3 = (ULONG)(c);                                                        \
+    trace_event_ptr->tx_trace_buffer_entry_info_4 = (ULONG)(d);
 #else
-#define TX_TRACE_INFO_FIELD_ASSIGNMENT(a, b, c, d)                             \
-  trace_event_ptr->tx_trace_buffer_entry_information_field_1 = (ULONG)(a);     \
-  trace_event_ptr->tx_trace_buffer_entry_information_field_2 = (ULONG)(b);     \
-  trace_event_ptr->tx_trace_buffer_entry_information_field_3 = (ULONG)(c);     \
-  trace_event_ptr->tx_trace_buffer_entry_information_field_4 = (ULONG)(d);
+#define TX_TRACE_INFO_FIELD_ASSIGNMENT(a, b, c, d)                                                                     \
+    trace_event_ptr->tx_trace_buffer_entry_information_field_1 = (ULONG)(a);                                           \
+    trace_event_ptr->tx_trace_buffer_entry_information_field_2 = (ULONG)(b);                                           \
+    trace_event_ptr->tx_trace_buffer_entry_information_field_3 = (ULONG)(c);                                           \
+    trace_event_ptr->tx_trace_buffer_entry_information_field_4 = (ULONG)(d);
 #endif
 
 #define TX_TRACE_INITIALIZE _tx_trace_initialize();
-#define TX_TRACE_OBJECT_REGISTER(t, p, n, a, b)                                \
-  _tx_trace_object_register((UCHAR)(t), (VOID *)(p), (CHAR *)(n), (ULONG)(a),  \
-                            (ULONG)(b));
+#define TX_TRACE_OBJECT_REGISTER(t, p, n, a, b)                                                                        \
+    _tx_trace_object_register((UCHAR)(t), (VOID *)(p), (CHAR *)(n), (ULONG)(a), (ULONG)(b));
 #define TX_TRACE_OBJECT_UNREGISTER(o) _tx_trace_object_unregister((VOID *)(o));
 #ifndef TX_TRACE_IN_LINE_INSERT
-#define TX_TRACE_IN_LINE_INSERT(i, a, b, c, d, e)                              \
-  {                                                                            \
-    TX_TRACE_BUFFER_ENTRY *trace_event_ptr;                                    \
-    ULONG trace_system_state;                                                  \
-    ULONG trace_priority;                                                      \
-    TX_THREAD *trace_thread_ptr;                                               \
-    trace_event_ptr = _tx_trace_buffer_current_ptr;                            \
-    if ((trace_event_ptr) && (_tx_trace_event_enable_bits & ((ULONG)(e)))) {   \
-      TX_TRACE_PORT_EXTENSION                                                  \
-      trace_system_state = (ULONG)TX_THREAD_GET_SYSTEM_STATE();                \
-      TX_THREAD_GET_CURRENT(trace_thread_ptr)                                  \
-                                                                               \
-      if (trace_system_state == 0) {                                           \
-        trace_priority = trace_thread_ptr->tx_thread_priority;                 \
-        trace_priority =                                                       \
-            trace_priority | 0x80000000UL |                                    \
-            (trace_thread_ptr->tx_thread_preempt_threshold << 16);             \
-      } else if (trace_system_state < 0xF0F0F0F0UL) {                          \
-        trace_priority = (ULONG)trace_thread_ptr;                              \
-        trace_thread_ptr = (TX_THREAD *)0xFFFFFFFFUL;                          \
-      } else {                                                                 \
-        trace_thread_ptr = (TX_THREAD *)0xF0F0F0F0UL;                          \
-        trace_priority = 0;                                                    \
-      }                                                                        \
-      trace_event_ptr->tx_trace_buffer_entry_thread_pointer =                  \
-          (ULONG)trace_thread_ptr;                                             \
-      trace_event_ptr->tx_trace_buffer_entry_thread_priority =                 \
-          (ULONG)trace_priority;                                               \
-      trace_event_ptr->tx_trace_buffer_entry_event_id = (ULONG)(i);            \
-      trace_event_ptr->tx_trace_buffer_entry_time_stamp =                      \
-          (ULONG)TX_TRACE_TIME_SOURCE;                                         \
-      TX_TRACE_INFO_FIELD_ASSIGNMENT((a), (b), (c), (d))                       \
-      trace_event_ptr++;                                                       \
-      if (trace_event_ptr >= _tx_trace_buffer_end_ptr) {                       \
-        trace_event_ptr = _tx_trace_buffer_start_ptr;                          \
-        _tx_trace_buffer_current_ptr = trace_event_ptr;                        \
-        _tx_trace_header_ptr->tx_trace_header_buffer_current_pointer =         \
-            (ULONG)trace_event_ptr;                                            \
-        if (_tx_trace_full_notify_function)                                    \
-          (_tx_trace_full_notify_function)((VOID *)_tx_trace_header_ptr);      \
-      } else {                                                                 \
-        _tx_trace_buffer_current_ptr = trace_event_ptr;                        \
-        _tx_trace_header_ptr->tx_trace_header_buffer_current_pointer =         \
-            (ULONG)trace_event_ptr;                                            \
-      }                                                                        \
-    }                                                                          \
-  }
+#define TX_TRACE_IN_LINE_INSERT(i, a, b, c, d, e)                                                                      \
+    {                                                                                                                  \
+        TX_TRACE_BUFFER_ENTRY *trace_event_ptr;                                                                        \
+        ULONG trace_system_state;                                                                                      \
+        ULONG trace_priority;                                                                                          \
+        TX_THREAD *trace_thread_ptr;                                                                                   \
+        trace_event_ptr = _tx_trace_buffer_current_ptr;                                                                \
+        if ((trace_event_ptr) && (_tx_trace_event_enable_bits & ((ULONG)(e)))) {                                       \
+            TX_TRACE_PORT_EXTENSION                                                                                    \
+            trace_system_state = (ULONG)TX_THREAD_GET_SYSTEM_STATE();                                                  \
+            TX_THREAD_GET_CURRENT(trace_thread_ptr)                                                                    \
+                                                                                                                       \
+            if (trace_system_state == 0) {                                                                             \
+                trace_priority = trace_thread_ptr->tx_thread_priority;                                                 \
+                trace_priority =                                                                                       \
+                    trace_priority | 0x80000000UL | (trace_thread_ptr->tx_thread_preempt_threshold << 16);             \
+            } else if (trace_system_state < 0xF0F0F0F0UL) {                                                            \
+                trace_priority = (ULONG)trace_thread_ptr;                                                              \
+                trace_thread_ptr = (TX_THREAD *)0xFFFFFFFFUL;                                                          \
+            } else {                                                                                                   \
+                trace_thread_ptr = (TX_THREAD *)0xF0F0F0F0UL;                                                          \
+                trace_priority = 0;                                                                                    \
+            }                                                                                                          \
+            trace_event_ptr->tx_trace_buffer_entry_thread_pointer = (ULONG)trace_thread_ptr;                           \
+            trace_event_ptr->tx_trace_buffer_entry_thread_priority = (ULONG)trace_priority;                            \
+            trace_event_ptr->tx_trace_buffer_entry_event_id = (ULONG)(i);                                              \
+            trace_event_ptr->tx_trace_buffer_entry_time_stamp = (ULONG)TX_TRACE_TIME_SOURCE;                           \
+            TX_TRACE_INFO_FIELD_ASSIGNMENT((a), (b), (c), (d))                                                         \
+            trace_event_ptr++;                                                                                         \
+            if (trace_event_ptr >= _tx_trace_buffer_end_ptr) {                                                         \
+                trace_event_ptr = _tx_trace_buffer_start_ptr;                                                          \
+                _tx_trace_buffer_current_ptr = trace_event_ptr;                                                        \
+                _tx_trace_header_ptr->tx_trace_header_buffer_current_pointer = (ULONG)trace_event_ptr;                 \
+                if (_tx_trace_full_notify_function)                                                                    \
+                    (_tx_trace_full_notify_function)((VOID *)_tx_trace_header_ptr);                                    \
+            } else {                                                                                                   \
+                _tx_trace_buffer_current_ptr = trace_event_ptr;                                                        \
+                _tx_trace_header_ptr->tx_trace_header_buffer_current_pointer = (ULONG)trace_event_ptr;                 \
+            }                                                                                                          \
+        }                                                                                                              \
+    }
 #endif
 #endif
 
@@ -580,8 +538,7 @@ TRACE_DECLARE ULONG _tx_trace_registry_search_start;
  * ThreadX source code.  */
 
 VOID _tx_trace_initialize(VOID);
-VOID _tx_trace_object_register(UCHAR object_type, VOID *object_ptr,
-                               CHAR *object_name, ULONG parameter_1,
+VOID _tx_trace_object_register(UCHAR object_type, VOID *object_ptr, CHAR *object_name, ULONG parameter_1,
                                ULONG parameter_2);
 VOID _tx_trace_object_unregister(VOID *object_ptr);
 
@@ -593,33 +550,24 @@ VOID _tx_trace_object_unregister(VOID *object_ptr);
 
 /* Define MISRA-specific routines.  */
 
-UCHAR *
-_tx_misra_object_to_uchar_pointer_convert(TX_TRACE_OBJECT_ENTRY *pointer);
-TX_TRACE_OBJECT_ENTRY *
-_tx_misra_uchar_to_object_pointer_convert(UCHAR *pointer);
+UCHAR *_tx_misra_object_to_uchar_pointer_convert(TX_TRACE_OBJECT_ENTRY *pointer);
+TX_TRACE_OBJECT_ENTRY *_tx_misra_uchar_to_object_pointer_convert(UCHAR *pointer);
 TX_TRACE_HEADER *_tx_misra_uchar_to_header_pointer_convert(UCHAR *pointer);
 TX_TRACE_BUFFER_ENTRY *_tx_misra_uchar_to_entry_pointer_convert(UCHAR *pointer);
 UCHAR *_tx_misra_entry_to_uchar_pointer_convert(TX_TRACE_BUFFER_ENTRY *pointer);
 
-#define TX_OBJECT_TO_UCHAR_POINTER_CONVERT(a)                                  \
-  _tx_misra_object_to_uchar_pointer_convert((a))
-#define TX_UCHAR_TO_OBJECT_POINTER_CONVERT(a)                                  \
-  _tx_misra_uchar_to_object_pointer_convert((a))
-#define TX_UCHAR_TO_HEADER_POINTER_CONVERT(a)                                  \
-  _tx_misra_uchar_to_header_pointer_convert((a))
-#define TX_UCHAR_TO_ENTRY_POINTER_CONVERT(a)                                   \
-  _tx_misra_uchar_to_entry_pointer_convert((a))
-#define TX_ENTRY_TO_UCHAR_POINTER_CONVERT(a)                                   \
-  _tx_misra_entry_to_uchar_pointer_convert((a))
+#define TX_OBJECT_TO_UCHAR_POINTER_CONVERT(a) _tx_misra_object_to_uchar_pointer_convert((a))
+#define TX_UCHAR_TO_OBJECT_POINTER_CONVERT(a) _tx_misra_uchar_to_object_pointer_convert((a))
+#define TX_UCHAR_TO_HEADER_POINTER_CONVERT(a) _tx_misra_uchar_to_header_pointer_convert((a))
+#define TX_UCHAR_TO_ENTRY_POINTER_CONVERT(a) _tx_misra_uchar_to_entry_pointer_convert((a))
+#define TX_ENTRY_TO_UCHAR_POINTER_CONVERT(a) _tx_misra_entry_to_uchar_pointer_convert((a))
 
 #else
 
 #define TX_OBJECT_TO_UCHAR_POINTER_CONVERT(a) ((UCHAR *)((VOID *)(a)))
-#define TX_UCHAR_TO_OBJECT_POINTER_CONVERT(a)                                  \
-  ((TX_TRACE_OBJECT_ENTRY *)((VOID *)(a)))
+#define TX_UCHAR_TO_OBJECT_POINTER_CONVERT(a) ((TX_TRACE_OBJECT_ENTRY *)((VOID *)(a)))
 #define TX_UCHAR_TO_HEADER_POINTER_CONVERT(a) ((TX_TRACE_HEADER *)((VOID *)(a)))
-#define TX_UCHAR_TO_ENTRY_POINTER_CONVERT(a)                                   \
-  ((TX_TRACE_BUFFER_ENTRY *)((VOID *)(a)))
+#define TX_UCHAR_TO_ENTRY_POINTER_CONVERT(a) ((TX_TRACE_BUFFER_ENTRY *)((VOID *)(a)))
 #define TX_ENTRY_TO_UCHAR_POINTER_CONVERT(a) ((UCHAR *)((VOID *)(a)))
 
 #endif

@@ -75,113 +75,112 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _txe_event_flags_create(TX_EVENT_FLAGS_GROUP *group_ptr, CHAR *name_ptr,
-                             UINT event_control_block_size) {
+UINT _txe_event_flags_create(TX_EVENT_FLAGS_GROUP *group_ptr, CHAR *name_ptr, UINT event_control_block_size) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  UINT status;
-  ULONG i;
-  TX_EVENT_FLAGS_GROUP *next_group;
+    UINT status;
+    ULONG i;
+    TX_EVENT_FLAGS_GROUP *next_group;
 #ifndef TX_TIMER_PROCESS_IN_ISR
-  TX_THREAD *thread_ptr;
+    TX_THREAD *thread_ptr;
 #endif
 
-  /* Default status to success.  */
-  status = TX_SUCCESS;
+    /* Default status to success.  */
+    status = TX_SUCCESS;
 
-  /* Check for an invalid event flags group pointer.  */
-  if (group_ptr == TX_NULL) {
+    /* Check for an invalid event flags group pointer.  */
+    if (group_ptr == TX_NULL) {
 
-    /* Event flags group pointer is invalid, return appropriate error code.  */
-    status = TX_GROUP_ERROR;
-  }
-
-  /* Now check for proper control block size.  */
-  else if (event_control_block_size != (sizeof(TX_EVENT_FLAGS_GROUP))) {
-
-    /* Event flags group pointer is invalid, return appropriate error code.  */
-    status = TX_GROUP_ERROR;
-  } else {
-
-    /* Disable interrupts.  */
-    TX_DISABLE
-
-    /* Increment the preempt disable flag.  */
-    _tx_thread_preempt_disable++;
-
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Next see if it is already in the created list.  */
-    next_group = _tx_event_flags_created_ptr;
-    for (i = ((ULONG)0); i < _tx_event_flags_created_count; i++) {
-
-      /* Determine if this group matches the event flags group in the list.  */
-      if (group_ptr == next_group) {
-
-        break;
-      } else {
-
-        /* Move to the next group.  */
-        next_group = next_group->tx_event_flags_group_created_next;
-      }
+        /* Event flags group pointer is invalid, return appropriate error code.  */
+        status = TX_GROUP_ERROR;
     }
 
-    /* Disable interrupts.  */
-    TX_DISABLE
+    /* Now check for proper control block size.  */
+    else if (event_control_block_size != (sizeof(TX_EVENT_FLAGS_GROUP))) {
 
-    /* Decrement the preempt disable flag.  */
-    _tx_thread_preempt_disable--;
-
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Check for preemption.  */
-    _tx_thread_system_preempt_check();
-
-    /* At this point, check to see if there is a duplicate event flag group.  */
-    if (group_ptr == next_group) {
-
-      /* Group is already created, return appropriate error code.  */
-      status = TX_GROUP_ERROR;
+        /* Event flags group pointer is invalid, return appropriate error code.  */
+        status = TX_GROUP_ERROR;
     } else {
 
+        /* Disable interrupts.  */
+        TX_DISABLE
+
+        /* Increment the preempt disable flag.  */
+        _tx_thread_preempt_disable++;
+
+        /* Restore interrupts.  */
+        TX_RESTORE
+
+        /* Next see if it is already in the created list.  */
+        next_group = _tx_event_flags_created_ptr;
+        for (i = ((ULONG)0); i < _tx_event_flags_created_count; i++) {
+
+            /* Determine if this group matches the event flags group in the list.  */
+            if (group_ptr == next_group) {
+
+                break;
+            } else {
+
+                /* Move to the next group.  */
+                next_group = next_group->tx_event_flags_group_created_next;
+            }
+        }
+
+        /* Disable interrupts.  */
+        TX_DISABLE
+
+        /* Decrement the preempt disable flag.  */
+        _tx_thread_preempt_disable--;
+
+        /* Restore interrupts.  */
+        TX_RESTORE
+
+        /* Check for preemption.  */
+        _tx_thread_system_preempt_check();
+
+        /* At this point, check to see if there is a duplicate event flag group.  */
+        if (group_ptr == next_group) {
+
+            /* Group is already created, return appropriate error code.  */
+            status = TX_GROUP_ERROR;
+        } else {
+
 #ifndef TX_TIMER_PROCESS_IN_ISR
 
-      /* Pickup thread pointer.  */
-      TX_THREAD_GET_CURRENT(thread_ptr)
+            /* Pickup thread pointer.  */
+            TX_THREAD_GET_CURRENT(thread_ptr)
 
-      /* Check for invalid caller of this function.  First check for a calling
-       * thread.  */
-      if (thread_ptr == &_tx_timer_thread) {
+            /* Check for invalid caller of this function.  First check for a calling
+             * thread.  */
+            if (thread_ptr == &_tx_timer_thread) {
 
-        /* Invalid caller of this function, return appropriate error code.  */
-        status = TX_CALLER_ERROR;
-      }
+                /* Invalid caller of this function, return appropriate error code.  */
+                status = TX_CALLER_ERROR;
+            }
 #endif
 
-      /* Check for interrupt call.  */
-      if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
+            /* Check for interrupt call.  */
+            if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-        /* Now, make sure the call is from an interrupt and not initialization.
-         */
-        if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS) {
+                /* Now, make sure the call is from an interrupt and not initialization.
+                 */
+                if (TX_THREAD_GET_SYSTEM_STATE() < TX_INITIALIZE_IN_PROGRESS) {
 
-          /* Invalid caller of this function, return appropriate error code.  */
-          status = TX_CALLER_ERROR;
+                    /* Invalid caller of this function, return appropriate error code.  */
+                    status = TX_CALLER_ERROR;
+                }
+            }
         }
-      }
     }
-  }
 
-  /* Determine if everything is okay.  */
-  if (status == TX_SUCCESS) {
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
 
-    /* Call actual event flags create function.  */
-    status = _tx_event_flags_create(group_ptr, name_ptr);
-  }
+        /* Call actual event flags create function.  */
+        status = _tx_event_flags_create(group_ptr, name_ptr);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

@@ -69,20 +69,18 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_packet_data_retrieve(NX_PACKET *packet_ptr, VOID *buffer_start,
-                               ULONG *bytes_copied) {
+UINT _nxe_packet_data_retrieve(NX_PACKET *packet_ptr, VOID *buffer_start, ULONG *bytes_copied) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((packet_ptr == NX_NULL) || (buffer_start == NX_NULL) ||
-      (bytes_copied == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((packet_ptr == NX_NULL) || (buffer_start == NX_NULL) || (bytes_copied == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Call actual packet data retrieve function.  */
-  status = _nx_packet_data_retrieve(packet_ptr, buffer_start, bytes_copied);
+    /* Call actual packet data retrieve function.  */
+    status = _nx_packet_data_retrieve(packet_ptr, buffer_start, bytes_copied);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

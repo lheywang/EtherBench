@@ -237,8 +237,7 @@ VOID outpl(ULONG, ULONG);
    which could happen under ISR in the device stack.  */
 
 #define UX_INT_SAVE_AREA unsigned int old_interrupt_posture;
-#define UX_DISABLE_INTS                                                        \
-  old_interrupt_posture = tx_interrupt_control(TX_INT_DISABLE);
+#define UX_DISABLE_INTS old_interrupt_posture = tx_interrupt_control(TX_INT_DISABLE);
 #define UX_RESTORE_INTS tx_interrupt_control(old_interrupt_posture);
 
 /* Define the version ID of USBX.  This may be utilized by the application.  */

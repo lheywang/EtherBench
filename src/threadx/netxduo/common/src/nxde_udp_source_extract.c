@@ -75,26 +75,25 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxde_udp_source_extract(NX_PACKET *packet_ptr, NXD_ADDRESS *ip_address,
-                              UINT *port) {
+UINT _nxde_udp_source_extract(NX_PACKET *packet_ptr, NXD_ADDRESS *ip_address, UINT *port) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((packet_ptr == NX_NULL) || (ip_address == NX_NULL) || (port == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((packet_ptr == NX_NULL) || (ip_address == NX_NULL) || (port == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  if (packet_ptr->nx_packet_ip_header == NX_NULL) {
-    return (NX_INVALID_PACKET);
-  }
+    if (packet_ptr->nx_packet_ip_header == NX_NULL) {
+        return (NX_INVALID_PACKET);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call actual UDP source extract function.  */
-  status = _nxd_udp_source_extract(packet_ptr, ip_address, port);
+    /* Call actual UDP source extract function.  */
+    status = _nxd_udp_source_extract(packet_ptr, ip_address, port);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

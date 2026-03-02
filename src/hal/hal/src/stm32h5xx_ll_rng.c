@@ -44,14 +44,12 @@
 /** @defgroup RNG_LL_Private_Macros RNG Private Macros
  * @{
  */
-#define IS_LL_RNG_CED(__MODE__)                                                \
-  (((__MODE__) == LL_RNG_CED_ENABLE) || ((__MODE__) == LL_RNG_CED_DISABLE))
+#define IS_LL_RNG_CED(__MODE__) (((__MODE__) == LL_RNG_CED_ENABLE) || ((__MODE__) == LL_RNG_CED_DISABLE))
 
 #define IS_LL_RNG_CLOCK_DIVIDER(__CLOCK_DIV__) ((__CLOCK_DIV__) <= 0x0Fu)
 
-#define IS_LL_RNG_NIST_COMPLIANCE(__NIST_COMPLIANCE__)                         \
-  (((__NIST_COMPLIANCE__) == LL_RNG_NIST_COMPLIANT) ||                         \
-   ((__NIST_COMPLIANCE__) == LL_RNG_NOTNIST_COMPLIANT))
+#define IS_LL_RNG_NIST_COMPLIANCE(__NIST_COMPLIANCE__)                                                                 \
+    (((__NIST_COMPLIANCE__) == LL_RNG_NIST_COMPLIANT) || ((__NIST_COMPLIANCE__) == LL_RNG_NOTNIST_COMPLIANT))
 
 #define IS_LL_RNG_CONFIG1 (__CONFIG1__)((__CONFIG1__) <= 0x3FUL)
 
@@ -81,21 +79,21 @@
  *          - ERROR: not applicable
  */
 ErrorStatus LL_RNG_DeInit(const RNG_TypeDef *RNGx) {
-  ErrorStatus status = SUCCESS;
+    ErrorStatus status = SUCCESS;
 
-  /* Check the parameters */
-  assert_param(IS_RNG_ALL_INSTANCE(RNGx));
-  if (RNGx == RNG) {
-    /* Enable RNG reset state */
-    LL_AHB2_GRP1_ForceReset(LL_AHB2_GRP1_PERIPH_RNG);
+    /* Check the parameters */
+    assert_param(IS_RNG_ALL_INSTANCE(RNGx));
+    if (RNGx == RNG) {
+        /* Enable RNG reset state */
+        LL_AHB2_GRP1_ForceReset(LL_AHB2_GRP1_PERIPH_RNG);
 
-    /* Release RNG from reset state */
-    LL_AHB2_GRP1_ReleaseReset(LL_AHB2_GRP1_PERIPH_RNG);
-  } else {
-    status = ERROR;
-  }
+        /* Release RNG from reset state */
+        LL_AHB2_GRP1_ReleaseReset(LL_AHB2_GRP1_PERIPH_RNG);
+    } else {
+        status = ERROR;
+    }
 
-  return status;
+    return status;
 }
 
 /**
@@ -110,19 +108,17 @@ ErrorStatus LL_RNG_DeInit(const RNG_TypeDef *RNGx) {
  * content
  *          - ERROR: not applicable
  */
-ErrorStatus LL_RNG_Init(RNG_TypeDef *RNGx,
-                        const LL_RNG_InitTypeDef *RNG_InitStruct) {
-  /* Check the parameters */
-  assert_param(IS_RNG_ALL_INSTANCE(RNGx));
-  assert_param(IS_LL_RNG_CED(RNG_InitStruct->ClockErrorDetection));
+ErrorStatus LL_RNG_Init(RNG_TypeDef *RNGx, const LL_RNG_InitTypeDef *RNG_InitStruct) {
+    /* Check the parameters */
+    assert_param(IS_RNG_ALL_INSTANCE(RNGx));
+    assert_param(IS_LL_RNG_CED(RNG_InitStruct->ClockErrorDetection));
 
-  /* Clock Error Detection Configuration when CONDRT bit is set to 1 */
-  MODIFY_REG(RNGx->CR, RNG_CR_CED | RNG_CR_CONDRST,
-             RNG_InitStruct->ClockErrorDetection | RNG_CR_CONDRST);
-  /* Writing bits CONDRST=0*/
-  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
+    /* Clock Error Detection Configuration when CONDRT bit is set to 1 */
+    MODIFY_REG(RNGx->CR, RNG_CR_CED | RNG_CR_CONDRST, RNG_InitStruct->ClockErrorDetection | RNG_CR_CONDRST);
+    /* Writing bits CONDRST=0*/
+    CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 
-  return (SUCCESS);
+    return (SUCCESS);
 }
 
 /**
@@ -132,8 +128,8 @@ ErrorStatus LL_RNG_Init(RNG_TypeDef *RNGx,
  * @retval None
  */
 void LL_RNG_StructInit(LL_RNG_InitTypeDef *RNG_InitStruct) {
-  /* Set RNG_InitStruct fields to default values */
-  RNG_InitStruct->ClockErrorDetection = LL_RNG_CED_ENABLE;
+    /* Set RNG_InitStruct fields to default values */
+    RNG_InitStruct->ClockErrorDetection = LL_RNG_CED_ENABLE;
 }
 /**
  * @}

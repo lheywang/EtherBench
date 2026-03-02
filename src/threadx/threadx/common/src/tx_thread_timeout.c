@@ -75,85 +75,84 @@
 /**************************************************************************/
 VOID _tx_thread_timeout(ULONG timeout_input) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  TX_THREAD *thread_ptr;
-  VOID (*suspend_cleanup)(struct TX_THREAD_STRUCT *suspend_thread_ptr,
-                          ULONG suspension_sequence);
-  ULONG suspension_sequence;
+    TX_THREAD *thread_ptr;
+    VOID (*suspend_cleanup)(struct TX_THREAD_STRUCT *suspend_thread_ptr, ULONG suspension_sequence);
+    ULONG suspension_sequence;
 
-  /* Pickup the thread pointer.  */
-  TX_THREAD_TIMEOUT_POINTER_SETUP(thread_ptr)
+    /* Pickup the thread pointer.  */
+    TX_THREAD_TIMEOUT_POINTER_SETUP(thread_ptr)
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Determine how the thread is currently suspended.  */
-  if (thread_ptr->tx_thread_state == TX_SLEEP) {
+    /* Determine how the thread is currently suspended.  */
+    if (thread_ptr->tx_thread_state == TX_SLEEP) {
 
 #ifdef TX_NOT_INTERRUPTABLE
 
-    /* Resume the thread!  */
-    _tx_thread_system_ni_resume(thread_ptr);
+        /* Resume the thread!  */
+        _tx_thread_system_ni_resume(thread_ptr);
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+        /* Restore interrupts.  */
+        TX_RESTORE
 #else
 
-    /* Increment the disable preemption flag.  */
-    _tx_thread_preempt_disable++;
+        /* Increment the disable preemption flag.  */
+        _tx_thread_preempt_disable++;
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+        /* Restore interrupts.  */
+        TX_RESTORE
 
-    /* Lift the suspension on the sleeping thread.  */
-    _tx_thread_system_resume(thread_ptr);
+        /* Lift the suspension on the sleeping thread.  */
+        _tx_thread_system_resume(thread_ptr);
 #endif
-  } else {
+    } else {
 
-    /* Process all other suspension timeouts.  */
+        /* Process all other suspension timeouts.  */
 
 #ifdef TX_THREAD_ENABLE_PERFORMANCE_INFO
 
-    /* Increment the total number of thread timeouts.  */
-    _tx_thread_performance_timeout_count++;
+        /* Increment the total number of thread timeouts.  */
+        _tx_thread_performance_timeout_count++;
 
-    /* Increment the number of timeouts for this thread.  */
-    thread_ptr->tx_thread_performance_timeout_count++;
+        /* Increment the number of timeouts for this thread.  */
+        thread_ptr->tx_thread_performance_timeout_count++;
 #endif
 
-    /* Pickup the cleanup routine address.  */
-    suspend_cleanup = thread_ptr->tx_thread_suspend_cleanup;
+        /* Pickup the cleanup routine address.  */
+        suspend_cleanup = thread_ptr->tx_thread_suspend_cleanup;
 
 #ifndef TX_NOT_INTERRUPTABLE
 
-    /* Pickup the suspension sequence number that is used later to verify that
-       the cleanup is still necessary.  */
-    suspension_sequence = thread_ptr->tx_thread_suspension_sequence;
+        /* Pickup the suspension sequence number that is used later to verify that
+           the cleanup is still necessary.  */
+        suspension_sequence = thread_ptr->tx_thread_suspension_sequence;
 #else
 
-    /* When not interruptable is selected, the suspension sequence is not used -
-     * just set to 0.  */
-    suspension_sequence = ((ULONG)0);
+        /* When not interruptable is selected, the suspension sequence is not used -
+         * just set to 0.  */
+        suspension_sequence = ((ULONG)0);
 #endif
 
 #ifndef TX_NOT_INTERRUPTABLE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+        /* Restore interrupts.  */
+        TX_RESTORE
 #endif
 
-    /* Call any cleanup routines.  */
-    if (suspend_cleanup != TX_NULL) {
+        /* Call any cleanup routines.  */
+        if (suspend_cleanup != TX_NULL) {
 
-      /* Yes, there is a function to call.  */
-      (suspend_cleanup)(thread_ptr, suspension_sequence);
-    }
+            /* Yes, there is a function to call.  */
+            (suspend_cleanup)(thread_ptr, suspension_sequence);
+        }
 
 #ifdef TX_NOT_INTERRUPTABLE
 
-    /* Restore interrupts.  */
-    TX_RESTORE
+        /* Restore interrupts.  */
+        TX_RESTORE
 #endif
-  }
+    }
 }

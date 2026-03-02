@@ -42,3 +42,6 @@
 
 # STM32 build files
 src/build/*
+
+# Formatter outputs
+*/.cache/*

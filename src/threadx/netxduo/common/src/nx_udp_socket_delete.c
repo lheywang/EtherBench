@@ -71,75 +71,73 @@
 /**************************************************************************/
 UINT _nx_udp_socket_delete(NX_UDP_SOCKET *socket_ptr) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  NX_IP *ip_ptr;
+    NX_IP *ip_ptr;
 
-  /* Setup the pointer to the associated IP instance.  */
-  ip_ptr = socket_ptr->nx_udp_socket_ip_ptr;
+    /* Setup the pointer to the associated IP instance.  */
+    ip_ptr = socket_ptr->nx_udp_socket_ip_ptr;
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOCKET_DELETE, ip_ptr, socket_ptr, 0, 0,
-                          NX_TRACE_UDP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_UDP_SOCKET_DELETE, ip_ptr, socket_ptr, 0, 0, NX_TRACE_UDP_EVENTS, 0, 0);
 
-  /* Obtain the IP mutex so we can process the socket delete request.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Obtain the IP mutex so we can process the socket delete request.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Determine if the socket is still bound to port.  */
-  if (socket_ptr->nx_udp_socket_bound_next) {
+    /* Determine if the socket is still bound to port.  */
+    if (socket_ptr->nx_udp_socket_bound_next) {
 
-    /* Release the protection mutex.  */
+        /* Release the protection mutex.  */
+        tx_mutex_put(&(ip_ptr->nx_ip_protection));
+
+        /* Return a still bound error code.  */
+        return (NX_STILL_BOUND);
+    }
+
+    /* Disable interrupts.  */
+    TX_DISABLE
+
+    /* Now, remove the UDP socket from the created socket list.  */
+
+    /* Clear the socket ID to make it invalid.  */
+    socket_ptr->nx_udp_socket_id = 0;
+
+    /* See if the socket is the only one on the list.  */
+    if (socket_ptr == socket_ptr->nx_udp_socket_created_next) {
+
+        /* Only created socket, just set the created list to NULL.  */
+        ip_ptr->nx_ip_udp_created_sockets_ptr = NX_NULL;
+    } else {
+
+        /* Link-up the neighbors.  */
+        (socket_ptr->nx_udp_socket_created_next)->nx_udp_socket_created_previous =
+            socket_ptr->nx_udp_socket_created_previous;
+        (socket_ptr->nx_udp_socket_created_previous)->nx_udp_socket_created_next =
+            socket_ptr->nx_udp_socket_created_next;
+
+        /* See if we have to update the created list head pointer.  */
+        if (ip_ptr->nx_ip_udp_created_sockets_ptr == socket_ptr) {
+
+            /* Yes, move the head pointer to the next link. */
+            ip_ptr->nx_ip_udp_created_sockets_ptr = socket_ptr->nx_udp_socket_created_next;
+        }
+    }
+
+    /* Decrease the created sockets count.  */
+    ip_ptr->nx_ip_udp_created_sockets_count--;
+
+    /* Restore interrupts.  */
+    TX_RESTORE
+
+    /* If trace is enabled, unregister this object.  */
+    NX_TRACE_OBJECT_UNREGISTER(socket_ptr);
+
+    /* Release the IP protection mutex.  */
     tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-    /* Return a still bound error code.  */
-    return (NX_STILL_BOUND);
-  }
+    /* Check for preemption.  */
+    _tx_thread_system_preempt_check();
 
-  /* Disable interrupts.  */
-  TX_DISABLE
-
-  /* Now, remove the UDP socket from the created socket list.  */
-
-  /* Clear the socket ID to make it invalid.  */
-  socket_ptr->nx_udp_socket_id = 0;
-
-  /* See if the socket is the only one on the list.  */
-  if (socket_ptr == socket_ptr->nx_udp_socket_created_next) {
-
-    /* Only created socket, just set the created list to NULL.  */
-    ip_ptr->nx_ip_udp_created_sockets_ptr = NX_NULL;
-  } else {
-
-    /* Link-up the neighbors.  */
-    (socket_ptr->nx_udp_socket_created_next)->nx_udp_socket_created_previous =
-        socket_ptr->nx_udp_socket_created_previous;
-    (socket_ptr->nx_udp_socket_created_previous)->nx_udp_socket_created_next =
-        socket_ptr->nx_udp_socket_created_next;
-
-    /* See if we have to update the created list head pointer.  */
-    if (ip_ptr->nx_ip_udp_created_sockets_ptr == socket_ptr) {
-
-      /* Yes, move the head pointer to the next link. */
-      ip_ptr->nx_ip_udp_created_sockets_ptr =
-          socket_ptr->nx_udp_socket_created_next;
-    }
-  }
-
-  /* Decrease the created sockets count.  */
-  ip_ptr->nx_ip_udp_created_sockets_count--;
-
-  /* Restore interrupts.  */
-  TX_RESTORE
-
-  /* If trace is enabled, unregister this object.  */
-  NX_TRACE_OBJECT_UNREGISTER(socket_ptr);
-
-  /* Release the IP protection mutex.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
-
-  /* Check for preemption.  */
-  _tx_thread_system_preempt_check();
-
-  /* Return success.  */
-  return (NX_SUCCESS);
+    /* Return success.  */
+    return (NX_SUCCESS);
 }

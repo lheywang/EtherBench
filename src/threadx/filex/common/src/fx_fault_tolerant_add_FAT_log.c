@@ -69,47 +69,39 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_fault_tolerant_add_FAT_log(FX_MEDIA *media_ptr, ULONG cluster,
-                                    ULONG value) {
-  ULONG file_size;
-  FX_FAULT_TOLERANT_FAT_LOG *fat_log;
+UINT _fx_fault_tolerant_add_FAT_log(FX_MEDIA *media_ptr, ULONG cluster, ULONG value) {
+    ULONG file_size;
+    FX_FAULT_TOLERANT_FAT_LOG *fat_log;
 
-  /* Increment the size of the log file. */
-  file_size = media_ptr->fx_media_fault_tolerant_file_size +
-              FX_FAULT_TOLERANT_FAT_LOG_ENTRY_SIZE;
+    /* Increment the size of the log file. */
+    file_size = media_ptr->fx_media_fault_tolerant_file_size + FX_FAULT_TOLERANT_FAT_LOG_ENTRY_SIZE;
 
-  /* Check whether log file exceeds the buffer. */
-  if (file_size > media_ptr->fx_media_fault_tolerant_memory_buffer_size) {
+    /* Check whether log file exceeds the buffer. */
+    if (file_size > media_ptr->fx_media_fault_tolerant_memory_buffer_size) {
 
-    /*  Log file exceeds the size of the log buffer.  This is a failure. */
-    return (FX_NO_MORE_SPACE);
-  }
+        /*  Log file exceeds the size of the log buffer.  This is a failure. */
+        return (FX_NO_MORE_SPACE);
+    }
 
-  /* Set log pointer. */
-  fat_log = (FX_FAULT_TOLERANT_FAT_LOG
-                 *)(media_ptr->fx_media_fault_tolerant_memory_buffer +
-                    media_ptr->fx_media_fault_tolerant_file_size);
+    /* Set log pointer. */
+    fat_log = (FX_FAULT_TOLERANT_FAT_LOG *)(media_ptr->fx_media_fault_tolerant_memory_buffer +
+                                            media_ptr->fx_media_fault_tolerant_file_size);
 
-  /* Set log type. */
-  _fx_utility_16_unsigned_write(
-      (UCHAR *)&fat_log->fx_fault_tolerant_FAT_log_type,
-      FX_FAULT_TOLERANT_FAT_LOG_TYPE);
+    /* Set log type. */
+    _fx_utility_16_unsigned_write((UCHAR *)&fat_log->fx_fault_tolerant_FAT_log_type, FX_FAULT_TOLERANT_FAT_LOG_TYPE);
 
-  /* Size of log. */
-  _fx_utility_16_unsigned_write(
-      (UCHAR *)&fat_log->fx_fault_tolerant_FAT_log_size,
-      FX_FAULT_TOLERANT_FAT_LOG_ENTRY_SIZE);
+    /* Size of log. */
+    _fx_utility_16_unsigned_write((UCHAR *)&fat_log->fx_fault_tolerant_FAT_log_size,
+                                  FX_FAULT_TOLERANT_FAT_LOG_ENTRY_SIZE);
 
-  /* Set cluster and value. */
-  _fx_utility_32_unsigned_write(
-      (UCHAR *)&fat_log->fx_fault_tolerant_FAT_log_cluster, cluster);
-  _fx_utility_32_unsigned_write(
-      (UCHAR *)&fat_log->fx_fault_tolerant_FAT_log_value, value);
+    /* Set cluster and value. */
+    _fx_utility_32_unsigned_write((UCHAR *)&fat_log->fx_fault_tolerant_FAT_log_cluster, cluster);
+    _fx_utility_32_unsigned_write((UCHAR *)&fat_log->fx_fault_tolerant_FAT_log_value, value);
 
-  /* Update log information. */
-  media_ptr->fx_media_fault_tolerant_file_size = (USHORT)file_size;
-  media_ptr->fx_media_fault_tolerant_total_logs += 1;
+    /* Update log information. */
+    media_ptr->fx_media_fault_tolerant_file_size = (USHORT)file_size;
+    media_ptr->fx_media_fault_tolerant_total_logs += 1;
 
-  return (FX_SUCCESS);
+    return (FX_SUCCESS);
 }
 #endif /* FX_ENABLE_FAULT_TOLERANT */

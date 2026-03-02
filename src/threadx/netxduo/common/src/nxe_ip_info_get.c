@@ -90,31 +90,28 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_ip_info_get(
-    NX_IP *ip_ptr, ULONG *ip_total_packets_sent, ULONG *ip_total_bytes_sent,
-    ULONG *ip_total_packets_received, ULONG *ip_total_bytes_received,
-    ULONG *ip_invalid_packets, ULONG *ip_receive_packets_dropped,
-    ULONG *ip_receive_checksum_errors, ULONG *ip_send_packets_dropped,
-    ULONG *ip_total_fragments_sent, ULONG *ip_total_fragments_received) {
+UINT _nxe_ip_info_get(NX_IP *ip_ptr, ULONG *ip_total_packets_sent, ULONG *ip_total_bytes_sent,
+                      ULONG *ip_total_packets_received, ULONG *ip_total_bytes_received, ULONG *ip_invalid_packets,
+                      ULONG *ip_receive_packets_dropped, ULONG *ip_receive_checksum_errors,
+                      ULONG *ip_send_packets_dropped, ULONG *ip_total_fragments_sent,
+                      ULONG *ip_total_fragments_received) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call actual IP information get function.  */
-  status =
-      _nx_ip_info_get(ip_ptr, ip_total_packets_sent, ip_total_bytes_sent,
-                      ip_total_packets_received, ip_total_bytes_received,
-                      ip_invalid_packets, ip_receive_packets_dropped,
-                      ip_receive_checksum_errors, ip_send_packets_dropped,
-                      ip_total_fragments_sent, ip_total_fragments_received);
+    /* Call actual IP information get function.  */
+    status = _nx_ip_info_get(ip_ptr, ip_total_packets_sent, ip_total_bytes_sent, ip_total_packets_received,
+                             ip_total_bytes_received, ip_invalid_packets, ip_receive_packets_dropped,
+                             ip_receive_checksum_errors, ip_send_packets_dropped, ip_total_fragments_sent,
+                             ip_total_fragments_received);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

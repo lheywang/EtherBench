@@ -72,16 +72,16 @@
 /**************************************************************************/
 void _nx_icmpv6_DAD_clear_NDCache_entry(NX_IP *ip_ptr, ULONG *ip_addr) {
 
-  ND_CACHE_ENTRY *NDCacheEntry;
+    ND_CACHE_ENTRY *NDCacheEntry;
 
-  /* Find the ND CACHE entry.  */
-  if (_nx_nd_cache_find_entry(ip_ptr, ip_addr, &NDCacheEntry) == NX_SUCCESS) {
+    /* Find the ND CACHE entry.  */
+    if (_nx_nd_cache_find_entry(ip_ptr, ip_addr, &NDCacheEntry) == NX_SUCCESS) {
 
-    /*lint -e{644} suppress variable might not be initialized, since
-     * "NDCacheEntry" was initialized in _nx_nd_cache_find_entry. */
-    NDCacheEntry->nx_nd_cache_nd_status = ND_CACHE_STATE_INVALID;
-  }
+        /*lint -e{644} suppress variable might not be initialized, since
+         * "NDCacheEntry" was initialized in _nx_nd_cache_find_entry. */
+        NDCacheEntry->nx_nd_cache_nd_status = ND_CACHE_STATE_INVALID;
+    }
 
-  return;
+    return;
 }
 #endif /* FEATURE_NX_IPV6 */

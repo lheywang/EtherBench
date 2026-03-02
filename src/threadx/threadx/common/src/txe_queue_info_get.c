@@ -75,31 +75,30 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _txe_queue_info_get(TX_QUEUE *queue_ptr, CHAR **name, ULONG *enqueued,
-                         ULONG *available_storage, TX_THREAD **first_suspended,
-                         ULONG *suspended_count, TX_QUEUE **next_queue) {
+UINT _txe_queue_info_get(TX_QUEUE *queue_ptr, CHAR **name, ULONG *enqueued, ULONG *available_storage,
+                         TX_THREAD **first_suspended, ULONG *suspended_count, TX_QUEUE **next_queue) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid queue pointer.  */
-  if (queue_ptr == TX_NULL) {
+    /* Check for an invalid queue pointer.  */
+    if (queue_ptr == TX_NULL) {
 
-    /* Queue pointer is invalid, return appropriate error code.  */
-    status = TX_QUEUE_ERROR;
-  }
+        /* Queue pointer is invalid, return appropriate error code.  */
+        status = TX_QUEUE_ERROR;
+    }
 
-  /* Now check for a valid queue ID.  */
-  else if (queue_ptr->tx_queue_id != TX_QUEUE_ID) {
+    /* Now check for a valid queue ID.  */
+    else if (queue_ptr->tx_queue_id != TX_QUEUE_ID) {
 
-    /* Queue pointer is invalid, return appropriate error code.  */
-    status = TX_QUEUE_ERROR;
-  } else {
+        /* Queue pointer is invalid, return appropriate error code.  */
+        status = TX_QUEUE_ERROR;
+    } else {
 
-    /* Otherwise, call the actual queue information get service.  */
-    status = _tx_queue_info_get(queue_ptr, name, enqueued, available_storage,
-                                first_suspended, suspended_count, next_queue);
-  }
+        /* Otherwise, call the actual queue information get service.  */
+        status = _tx_queue_info_get(queue_ptr, name, enqueued, available_storage, first_suspended, suspended_count,
+                                    next_queue);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

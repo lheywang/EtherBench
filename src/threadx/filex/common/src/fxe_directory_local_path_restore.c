@@ -69,19 +69,18 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_directory_local_path_restore(FX_MEDIA *media_ptr,
-                                       FX_LOCAL_PATH *local_path_ptr) {
+UINT _fxe_directory_local_path_restore(FX_MEDIA *media_ptr, FX_LOCAL_PATH *local_path_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null media pointer or a null local path.  */
-  if ((media_ptr == FX_NULL) || (local_path_ptr == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null media pointer or a null local path.  */
+    if ((media_ptr == FX_NULL) || (local_path_ptr == FX_NULL)) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Call actual local path restore service.  */
-  status = _fx_directory_local_path_restore(media_ptr, local_path_ptr);
+    /* Call actual local path restore service.  */
+    status = _fx_directory_local_path_restore(media_ptr, local_path_ptr);
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }

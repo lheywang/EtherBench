@@ -113,20 +113,20 @@ VOID _tx_mutex_initialize(VOID) {
 
 #ifndef TX_DISABLE_REDUNDANT_CLEARING
 
-  /* Initialize the head pointer of the created mutexes list and the
-     number of mutexes created.  */
-  _tx_mutex_created_ptr = TX_NULL;
-  _tx_mutex_created_count = TX_EMPTY;
+    /* Initialize the head pointer of the created mutexes list and the
+       number of mutexes created.  */
+    _tx_mutex_created_ptr = TX_NULL;
+    _tx_mutex_created_count = TX_EMPTY;
 
 #ifdef TX_MUTEX_ENABLE_PERFORMANCE_INFO
 
-  /* Initialize the mutex performance counters.  */
-  _tx_mutex_performance_put_count = ((ULONG)0);
-  _tx_mutex_performance_get_count = ((ULONG)0);
-  _tx_mutex_performance_suspension_count = ((ULONG)0);
-  _tx_mutex_performance_timeout_count = ((ULONG)0);
-  _tx_mutex_performance_priority_inversion_count = ((ULONG)0);
-  _tx_mutex_performance__priority_inheritance_count = ((ULONG)0);
+    /* Initialize the mutex performance counters.  */
+    _tx_mutex_performance_put_count = ((ULONG)0);
+    _tx_mutex_performance_get_count = ((ULONG)0);
+    _tx_mutex_performance_suspension_count = ((ULONG)0);
+    _tx_mutex_performance_timeout_count = ((ULONG)0);
+    _tx_mutex_performance_priority_inversion_count = ((ULONG)0);
+    _tx_mutex_performance__priority_inheritance_count = ((ULONG)0);
 #endif
 #endif
 }

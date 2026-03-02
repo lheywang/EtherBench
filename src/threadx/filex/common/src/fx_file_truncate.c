@@ -72,8 +72,5 @@
 /*                                                                        */
 /**************************************************************************/
 #ifndef FX_DISABLE_ONE_LINE_FUNCTION
-UINT _fx_file_truncate(FX_FILE *file_ptr, ULONG size) {
-
-  return (_fx_file_extended_truncate(file_ptr, (ULONG64)size));
-}
+UINT _fx_file_truncate(FX_FILE *file_ptr, ULONG size) { return (_fx_file_extended_truncate(file_ptr, (ULONG64)size)); }
 #endif /* FX_DISABLE_ONE_LINE_FUNCTION */

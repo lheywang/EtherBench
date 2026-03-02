@@ -75,85 +75,83 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_tcp_window_scaling_option_get(UCHAR *option_ptr,
-                                       ULONG option_area_size,
-                                       ULONG *window_scale) {
+UINT _nx_tcp_window_scaling_option_get(UCHAR *option_ptr, ULONG option_area_size, ULONG *window_scale) {
 
-  ULONG option_length;
+    ULONG option_length;
 
-  /* Set invalid window scaling, in case the SYN message does not contain Window
-   * Scaling feature. */
-  *window_scale = 0xFF;
+    /* Set invalid window scaling, in case the SYN message does not contain Window
+     * Scaling feature. */
+    *window_scale = 0xFF;
 
-  /* Loop through the option area looking for the window scaling option.  */
-  while (option_area_size >= 3) {
+    /* Loop through the option area looking for the window scaling option.  */
+    while (option_area_size >= 3) {
 
-    /* Is the current character the window scaling type?  */
-    if (*option_ptr == NX_TCP_RWIN_KIND) {
+        /* Is the current character the window scaling type?  */
+        if (*option_ptr == NX_TCP_RWIN_KIND) {
 
-      /* Yes, we found it!  */
+            /* Yes, we found it!  */
 
-      /* Move the pointer forward by one.  */
-      option_ptr++;
+            /* Move the pointer forward by one.  */
+            option_ptr++;
 
-      /* Check the option length, if option length is not equal to 3, return
-       * NX_FALSE.  */
-      if (*option_ptr++ != 3) {
-        return (NX_FALSE);
-      }
+            /* Check the option length, if option length is not equal to 3, return
+             * NX_FALSE.  */
+            if (*option_ptr++ != 3) {
+                return (NX_FALSE);
+            }
 
-      /* Get the window scale size.  */
-      *window_scale = (ULONG)*option_ptr;
+            /* Get the window scale size.  */
+            *window_scale = (ULONG)*option_ptr;
 
-      if (*window_scale > 14) {
+            if (*window_scale > 14) {
 
-        /* Make sure window scale is limited to 14, per RFC 1323 pp.11 */
-        *window_scale = 14;
-      }
+                /* Make sure window scale is limited to 14, per RFC 1323 pp.11 */
+                *window_scale = 14;
+            }
 
-      break;
+            break;
+        }
+
+        /* Otherwise, process relative to the option type.  */
+
+        /* Check for end of list.  */
+        if (*option_ptr == NX_TCP_EOL_KIND) {
+
+            /* Yes, end of list, get out!  */
+            break;
+        }
+
+        /* Check for NOP.  */
+        if (*option_ptr == NX_TCP_NOP_KIND) {
+            /* One character option!  Skip this option and move to the next entry. */
+            option_ptr++;
+
+            option_area_size--;
+        } else {
+
+            /* Derive the option length.  All options *fields* area 32-bits,
+               but the options themselves may be padded by NOP's.   Determine
+               the option size based on alignment of the option ptr */
+            option_length = *(option_ptr + 1);
+
+            if (option_length == 0) {
+                /* Illegal option length. */
+                return (NX_FALSE);
+            }
+
+            /* Move the option pointer forward.  */
+            option_ptr = option_ptr + option_length;
+
+            /* Determine if this is greater than the option area size.  */
+            if (option_length > option_area_size) {
+                return (NX_FALSE);
+            } else {
+                option_area_size = option_area_size - option_length;
+            }
+        }
     }
 
-    /* Otherwise, process relative to the option type.  */
-
-    /* Check for end of list.  */
-    if (*option_ptr == NX_TCP_EOL_KIND) {
-
-      /* Yes, end of list, get out!  */
-      break;
-    }
-
-    /* Check for NOP.  */
-    if (*option_ptr == NX_TCP_NOP_KIND) {
-      /* One character option!  Skip this option and move to the next entry. */
-      option_ptr++;
-
-      option_area_size--;
-    } else {
-
-      /* Derive the option length.  All options *fields* area 32-bits,
-         but the options themselves may be padded by NOP's.   Determine
-         the option size based on alignment of the option ptr */
-      option_length = *(option_ptr + 1);
-
-      if (option_length == 0) {
-        /* Illegal option length. */
-        return (NX_FALSE);
-      }
-
-      /* Move the option pointer forward.  */
-      option_ptr = option_ptr + option_length;
-
-      /* Determine if this is greater than the option area size.  */
-      if (option_length > option_area_size) {
-        return (NX_FALSE);
-      } else {
-        option_area_size = option_area_size - option_length;
-      }
-    }
-  }
-
-  /* Return.  */
-  return (NX_TRUE);
+    /* Return.  */
+    return (NX_TRUE);
 }
 #endif /* NX_ENABLE_TCP_WINDOW_SCALING */

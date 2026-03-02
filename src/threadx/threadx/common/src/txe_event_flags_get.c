@@ -78,87 +78,85 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _txe_event_flags_get(TX_EVENT_FLAGS_GROUP *group_ptr,
-                          ULONG requested_flags, UINT get_option,
+UINT _txe_event_flags_get(TX_EVENT_FLAGS_GROUP *group_ptr, ULONG requested_flags, UINT get_option,
                           ULONG *actual_flags_ptr, ULONG wait_option) {
 
-  UINT status;
+    UINT status;
 
 #ifndef TX_TIMER_PROCESS_IN_ISR
-  TX_THREAD *current_thread;
+    TX_THREAD *current_thread;
 #endif
 
-  /* Default status to success.  */
-  status = TX_SUCCESS;
+    /* Default status to success.  */
+    status = TX_SUCCESS;
 
-  /* Check for an invalid event flag group pointer.  */
-  if (group_ptr == TX_NULL) {
+    /* Check for an invalid event flag group pointer.  */
+    if (group_ptr == TX_NULL) {
 
-    /* Event flags group pointer is invalid, return appropriate error code.  */
-    status = TX_GROUP_ERROR;
-  }
+        /* Event flags group pointer is invalid, return appropriate error code.  */
+        status = TX_GROUP_ERROR;
+    }
 
-  /* Now check for invalid event group ID.  */
-  else if (group_ptr->tx_event_flags_group_id != TX_EVENT_FLAGS_ID) {
+    /* Now check for invalid event group ID.  */
+    else if (group_ptr->tx_event_flags_group_id != TX_EVENT_FLAGS_ID) {
 
-    /* Event flags group pointer is invalid, return appropriate error code.  */
-    status = TX_GROUP_ERROR;
-  }
+        /* Event flags group pointer is invalid, return appropriate error code.  */
+        status = TX_GROUP_ERROR;
+    }
 
-  /* Check for an invalid destination for actual flags.  */
-  else if (actual_flags_ptr == TX_NULL) {
+    /* Check for an invalid destination for actual flags.  */
+    else if (actual_flags_ptr == TX_NULL) {
 
-    /* Null destination pointer, return appropriate error.  */
-    status = TX_PTR_ERROR;
-  } else {
+        /* Null destination pointer, return appropriate error.  */
+        status = TX_PTR_ERROR;
+    } else {
 
-    /* Check for a wait option error.  Only threads are allowed any form of
-       suspension.  */
-    if (wait_option != TX_NO_WAIT) {
+        /* Check for a wait option error.  Only threads are allowed any form of
+           suspension.  */
+        if (wait_option != TX_NO_WAIT) {
 
-      /* Is the call from an ISR or Initialization?  */
-      if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
+            /* Is the call from an ISR or Initialization?  */
+            if (TX_THREAD_GET_SYSTEM_STATE() != ((ULONG)0)) {
 
-        /* A non-thread is trying to suspend, return appropriate error code.  */
-        status = TX_WAIT_ERROR;
-      }
+                /* A non-thread is trying to suspend, return appropriate error code.  */
+                status = TX_WAIT_ERROR;
+            }
 #ifndef TX_TIMER_PROCESS_IN_ISR
-      else {
+            else {
 
-        /* Pickup thread pointer.  */
-        TX_THREAD_GET_CURRENT(current_thread)
+                /* Pickup thread pointer.  */
+                TX_THREAD_GET_CURRENT(current_thread)
 
-        /* Is the current thread the timer thread?  */
-        if (current_thread == &_tx_timer_thread) {
+                /* Is the current thread the timer thread?  */
+                if (current_thread == &_tx_timer_thread) {
 
-          /* A non-thread is trying to suspend, return appropriate error code.
-           */
-          status = TX_WAIT_ERROR;
+                    /* A non-thread is trying to suspend, return appropriate error code.
+                     */
+                    status = TX_WAIT_ERROR;
+                }
+            }
+#endif
         }
-      }
-#endif
     }
-  }
 
-  /* Is everything still okay?  */
-  if (status == TX_SUCCESS) {
+    /* Is everything still okay?  */
+    if (status == TX_SUCCESS) {
 
-    /* Check for invalid get option.  */
-    if (get_option > TX_AND_CLEAR) {
+        /* Check for invalid get option.  */
+        if (get_option > TX_AND_CLEAR) {
 
-      /* Invalid get events option, return appropriate error.  */
-      status = TX_OPTION_ERROR;
+            /* Invalid get events option, return appropriate error.  */
+            status = TX_OPTION_ERROR;
+        }
     }
-  }
 
-  /* Determine if everything is okay.  */
-  if (status == TX_SUCCESS) {
+    /* Determine if everything is okay.  */
+    if (status == TX_SUCCESS) {
 
-    /* Call actual event flags get function.  */
-    status = _tx_event_flags_get(group_ptr, requested_flags, get_option,
-                                 actual_flags_ptr, wait_option);
-  }
+        /* Call actual event flags get function.  */
+        status = _tx_event_flags_get(group_ptr, requested_flags, get_option, actual_flags_ptr, wait_option);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

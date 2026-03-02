@@ -81,35 +81,32 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_tcp_socket_transmit_configure(NX_TCP_SOCKET *socket_ptr,
-                                        ULONG max_queue_depth, ULONG timeout,
-                                        ULONG max_retries,
-                                        ULONG timeout_shift) {
+UINT _nxe_tcp_socket_transmit_configure(NX_TCP_SOCKET *socket_ptr, ULONG max_queue_depth, ULONG timeout,
+                                        ULONG max_retries, ULONG timeout_shift) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointer.  */
-  if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointer.  */
+    if ((socket_ptr == NX_NULL) || (socket_ptr->nx_tcp_socket_id != NX_TCP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for valid options.  */
-  if (!max_queue_depth) {
-    return (NX_OPTION_ERROR);
-  }
+    /* Check for valid options.  */
+    if (!max_queue_depth) {
+        return (NX_OPTION_ERROR);
+    }
 
-  /* Check to see if TCP is enabled.  */
-  if (!(socket_ptr->nx_tcp_socket_ip_ptr)->nx_ip_tcp_packet_receive) {
-    return (NX_NOT_ENABLED);
-  }
+    /* Check to see if TCP is enabled.  */
+    if (!(socket_ptr->nx_tcp_socket_ip_ptr)->nx_ip_tcp_packet_receive) {
+        return (NX_NOT_ENABLED);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call actual socket transmit configure service.  */
-  status = _nx_tcp_socket_transmit_configure(
-      socket_ptr, max_queue_depth, timeout, max_retries, timeout_shift);
+    /* Call actual socket transmit configure service.  */
+    status = _nx_tcp_socket_transmit_configure(socket_ptr, max_queue_depth, timeout, max_retries, timeout_shift);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

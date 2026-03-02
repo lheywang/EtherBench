@@ -67,29 +67,27 @@
 /**************************************************************************/
 UINT _nxe_packet_vlan_priority_set(NX_PACKET *packet_ptr, UINT vlan_priority) {
 #ifdef NX_ENABLE_VLAN
-  UINT status;
+    UINT status;
 
-  /* Simple integrity check on the packet.  */
-  if ((packet_ptr == NX_NULL) ||
-      (packet_ptr->nx_packet_pool_owner == NX_NULL) ||
-      ((packet_ptr->nx_packet_pool_owner)->nx_packet_pool_id !=
-       NX_PACKET_POOL_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Simple integrity check on the packet.  */
+    if ((packet_ptr == NX_NULL) || (packet_ptr->nx_packet_pool_owner == NX_NULL) ||
+        ((packet_ptr->nx_packet_pool_owner)->nx_packet_pool_id != NX_PACKET_POOL_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  if (vlan_priority > NX_VLAN_PRIORITY_MAX) {
+    if (vlan_priority > NX_VLAN_PRIORITY_MAX) {
 
-    return (NX_INVALID_PARAMETERS);
-  }
+        return (NX_INVALID_PARAMETERS);
+    }
 
-  /* Call actual packet vlan priority set function.  */
-  status = _nx_packet_vlan_priority_set(packet_ptr, vlan_priority);
+    /* Call actual packet vlan priority set function.  */
+    status = _nx_packet_vlan_priority_set(packet_ptr, vlan_priority);
 
-  return (status);
+    return (status);
 #else
-  NX_PARAMETER_NOT_USED(packet_ptr);
-  NX_PARAMETER_NOT_USED(vlan_priority);
+    NX_PARAMETER_NOT_USED(packet_ptr);
+    NX_PARAMETER_NOT_USED(vlan_priority);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* NX_ENABLE_VLAN */
 }

@@ -244,12 +244,10 @@ typedef unsigned long long ULONG64;
 #endif
 #define LX_NOR_SECTOR_MAPPING_CACHE_DEPTH 4
 #ifndef LX_NOR_SECTOR_MAPPING_CACHE_SIZE
-#define LX_NOR_SECTOR_MAPPING_CACHE_SIZE                                       \
-  16 /* Minimum value of 8, all sizes must be a power of 2.  */
+#define LX_NOR_SECTOR_MAPPING_CACHE_SIZE 16 /* Minimum value of 8, all sizes must be a power of 2.  */
 #endif
 #ifndef LX_NOR_EXTENDED_CACHE_SIZE
-#define LX_NOR_EXTENDED_CACHE_SIZE                                             \
-  8 /* Maximum number of extended cache sectors.            */
+#define LX_NOR_EXTENDED_CACHE_SIZE 8 /* Maximum number of extended cache sectors.            */
 #endif
 #ifdef LX_NOR_ENABLE_OBSOLETE_COUNT_CACHE
 #ifndef LX_NOR_OBSOLETE_COUNT_CACHE_TYPE
@@ -267,8 +265,8 @@ typedef unsigned long long ULONG64;
    The LX_NOR_SECTOR_MAPPING_CACHE_DEPTH define must not be changed unless the
    related source code is also changed.  */
 
-#define LX_NOR_SECTOR_MAPPING_CACHE_HASH_MASK                                  \
-  ((LX_NOR_SECTOR_MAPPING_CACHE_SIZE / LX_NOR_SECTOR_MAPPING_CACHE_DEPTH) - 1)
+#define LX_NOR_SECTOR_MAPPING_CACHE_HASH_MASK                                                                          \
+    ((LX_NOR_SECTOR_MAPPING_CACHE_SIZE / LX_NOR_SECTOR_MAPPING_CACHE_DEPTH) - 1)
 #define LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_MASK 0x7FFFFFFF
 #define LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_VALID 0x80000000
 
@@ -282,13 +280,11 @@ typedef unsigned long long ULONG64;
 #ifdef LX_NOR_DISABLE_EXTENDED_CACHE
 
 #ifdef LX_NOR_ENABLE_MAPPING_BITMAP
-#error                                                                         \
-    "To enable mapping bitmap, you need to undefine LX_NOR_DISABLE_EXTENDED_CACHE."
+#error "To enable mapping bitmap, you need to undefine LX_NOR_DISABLE_EXTENDED_CACHE."
 #endif
 
 #ifdef LX_NOR_ENABLE_OBSOLETE_COUNT_CACHE
-#error                                                                         \
-    "To enable obsolete count cache, you need to undefine LX_NOR_DISABLE_EXTENDED_CACHE."
+#error "To enable obsolete count cache, you need to undefine LX_NOR_DISABLE_EXTENDED_CACHE."
 #endif
 
 #endif
@@ -305,16 +301,14 @@ typedef unsigned long long ULONG64;
 
 /* Define the NAND sector mapping cache.  */
 
-#define LX_NAND_SECTOR_MAPPING_CACHE_DEPTH                                     \
-  4 /* Not required if LX_NAND_FLASH_DIRECT_MAPPING_CACHE is defined.  */
+#define LX_NAND_SECTOR_MAPPING_CACHE_DEPTH 4 /* Not required if LX_NAND_FLASH_DIRECT_MAPPING_CACHE is defined.  */
 #ifndef LX_NAND_SECTOR_MAPPING_CACHE_SIZE
-#define LX_NAND_SECTOR_MAPPING_CACHE_SIZE                                      \
-  128 /* Minimum value of 8, all sizes must be a power of 2, unless direct     \
-         mapping is defined, in which there is no power of 2 requirement.  */
+#define LX_NAND_SECTOR_MAPPING_CACHE_SIZE                                                                              \
+    128 /* Minimum value of 8, all sizes must be a power of 2, unless direct                                           \
+           mapping is defined, in which there is no power of 2 requirement.  */
 #endif
 #ifndef LX_NAND_ERASE_COUNT_WRITE_SIZE
-#define LX_NAND_ERASE_COUNT_WRITE_SIZE                                         \
-  (nand_flash->lx_nand_flash_pages_per_block + 1)
+#define LX_NAND_ERASE_COUNT_WRITE_SIZE (nand_flash->lx_nand_flash_pages_per_block + 1)
 #endif
 
 #ifndef LX_NAND_FLASH_MAPPING_LIST_UPDATE_DISABLE
@@ -326,13 +320,11 @@ typedef unsigned long long ULONG64;
 #endif
 
 #ifndef LX_UTILITY_SHORT_SET
-#define LX_UTILITY_SHORT_SET(address, value)                                   \
-  *((USHORT *)(address)) = (USHORT)(value)
+#define LX_UTILITY_SHORT_SET(address, value) *((USHORT *)(address)) = (USHORT)(value)
 #endif
 
 #ifndef LX_UTILITY_LONG_SET
-#define LX_UTILITY_LONG_SET(address, value)                                    \
-  *((ULONG *)(address)) = (ULONG)(value)
+#define LX_UTILITY_LONG_SET(address, value) *((ULONG *)(address)) = (ULONG)(value)
 #endif
 
 #ifndef LX_UTILITY_SHORT_GET
@@ -353,8 +345,8 @@ typedef unsigned long long ULONG64;
    The LX_NAND_SECTOR_MAPPING_CACHE_DEPTH define must not be changed unless the
    related source code is also changed.  */
 
-#define LX_NAND_SECTOR_MAPPING_CACHE_HASH_MASK                                 \
-  ((LX_NAND_SECTOR_MAPPING_CACHE_SIZE / LX_NAND_SECTOR_MAPPING_CACHE_DEPTH) - 1)
+#define LX_NAND_SECTOR_MAPPING_CACHE_HASH_MASK                                                                         \
+    ((LX_NAND_SECTOR_MAPPING_CACHE_SIZE / LX_NAND_SECTOR_MAPPING_CACHE_DEPTH) - 1)
 #define LX_NAND_SECTOR_MAPPING_CACHE_ENTRY_MASK 0x7FFFFFFF
 #define LX_NAND_SECTOR_MAPPING_CACHE_ENTRY_VALID 0x80000000
 
@@ -408,14 +400,14 @@ typedef unsigned long long ULONG64;
  * area.  */
 
 typedef struct LX_NAND_DEVICE_INFO_STRUCT {
-  ULONG lx_nand_device_info_signature1;
-  ULONG lx_nand_device_info_signature2;
-  ULONG lx_nand_device_info_major_version;
-  ULONG lx_nand_device_info_minor_version;
-  ULONG lx_nand_device_info_patch_version;
-  ULONG lx_nand_device_info_metadata_block_number;
-  ULONG lx_nand_device_info_backup_metadata_block_number;
-  ULONG lx_nand_device_info_base_erase_count;
+    ULONG lx_nand_device_info_signature1;
+    ULONG lx_nand_device_info_signature2;
+    ULONG lx_nand_device_info_major_version;
+    ULONG lx_nand_device_info_minor_version;
+    ULONG lx_nand_device_info_patch_version;
+    ULONG lx_nand_device_info_metadata_block_number;
+    ULONG lx_nand_device_info_backup_metadata_block_number;
+    ULONG lx_nand_device_info_base_erase_count;
 } LX_NAND_DEVICE_INFO;
 
 /* Determine if the flash control block has an extension defined. If not,
@@ -428,175 +420,150 @@ typedef struct LX_NAND_DEVICE_INFO_STRUCT {
 /* Define the NAND flash control block structure.  */
 
 typedef struct LX_NAND_FLASH_STRUCT {
-  ULONG lx_nand_flash_state;
-  ULONG lx_nand_flash_total_blocks;
-  ULONG lx_nand_flash_pages_per_block;
-  ULONG lx_nand_flash_bytes_per_page;
-  ULONG lx_nand_flash_words_per_block;
-  ULONG lx_nand_flash_words_per_page;
-  ULONG lx_nand_flash_total_pages;
+    ULONG lx_nand_flash_state;
+    ULONG lx_nand_flash_total_blocks;
+    ULONG lx_nand_flash_pages_per_block;
+    ULONG lx_nand_flash_bytes_per_page;
+    ULONG lx_nand_flash_words_per_block;
+    ULONG lx_nand_flash_words_per_page;
+    ULONG lx_nand_flash_total_pages;
 
-  ULONG lx_nand_flash_bad_blocks;
-  ULONG lx_nand_flash_base_erase_count;
+    ULONG lx_nand_flash_bad_blocks;
+    ULONG lx_nand_flash_base_erase_count;
 
-  ULONG lx_nand_flash_page_corrections;
-  ULONG lx_nand_flash_last_block_correction;
-  ULONG lx_nand_flash_last_page_correction;
+    ULONG lx_nand_flash_page_corrections;
+    ULONG lx_nand_flash_last_block_correction;
+    ULONG lx_nand_flash_last_page_correction;
 
-  USHORT *lx_nand_flash_block_mapping_table;
-  ULONG lx_nand_flash_block_mapping_table_size;
-  USHORT *lx_nand_flash_block_status_table;
-  ULONG lx_nand_flash_block_status_table_size;
-  UCHAR *lx_nand_flash_erase_count_table;
-  ULONG lx_nand_flash_erase_count_table_size;
-  USHORT *lx_nand_flash_block_list;
-  ULONG lx_nand_flash_block_list_size;
-  ULONG lx_nand_flash_free_block_list_tail;
-  ULONG lx_nand_flash_mapped_block_list_head;
+    USHORT *lx_nand_flash_block_mapping_table;
+    ULONG lx_nand_flash_block_mapping_table_size;
+    USHORT *lx_nand_flash_block_status_table;
+    ULONG lx_nand_flash_block_status_table_size;
+    UCHAR *lx_nand_flash_erase_count_table;
+    ULONG lx_nand_flash_erase_count_table_size;
+    USHORT *lx_nand_flash_block_list;
+    ULONG lx_nand_flash_block_list_size;
+    ULONG lx_nand_flash_free_block_list_tail;
+    ULONG lx_nand_flash_mapped_block_list_head;
 
-  ULONG lx_nand_flash_metadata_block_number;
-  ULONG lx_nand_flash_metadata_block_number_current;
-  ULONG lx_nand_flash_metadata_block_number_next;
-  ULONG lx_nand_flash_metadata_block_current_page;
-  ULONG lx_nand_flash_metadata_block_count;
-  USHORT lx_nand_flash_metadata_block[LX_NAND_FLASH_MAX_METADATA_BLOCKS];
+    ULONG lx_nand_flash_metadata_block_number;
+    ULONG lx_nand_flash_metadata_block_number_current;
+    ULONG lx_nand_flash_metadata_block_number_next;
+    ULONG lx_nand_flash_metadata_block_current_page;
+    ULONG lx_nand_flash_metadata_block_count;
+    USHORT lx_nand_flash_metadata_block[LX_NAND_FLASH_MAX_METADATA_BLOCKS];
 
-  ULONG lx_nand_flash_backup_metadata_block_number;
-  ULONG lx_nand_flash_backup_metadata_block_number_current;
-  ULONG lx_nand_flash_backup_metadata_block_number_next;
-  ULONG lx_nand_flash_backup_metadata_block_current_page;
-  USHORT lx_nand_flash_backup_metadata_block[LX_NAND_FLASH_MAX_METADATA_BLOCKS];
+    ULONG lx_nand_flash_backup_metadata_block_number;
+    ULONG lx_nand_flash_backup_metadata_block_number_current;
+    ULONG lx_nand_flash_backup_metadata_block_number_next;
+    ULONG lx_nand_flash_backup_metadata_block_current_page;
+    USHORT lx_nand_flash_backup_metadata_block[LX_NAND_FLASH_MAX_METADATA_BLOCKS];
 
-  ULONG lx_nand_flash_spare_data1_offset;
-  ULONG lx_nand_flash_spare_data1_length;
-  ULONG lx_nand_flash_spare_data2_offset;
-  ULONG lx_nand_flash_spare_data2_length;
-  ULONG lx_nand_flash_spare_total_length;
+    ULONG lx_nand_flash_spare_data1_offset;
+    ULONG lx_nand_flash_spare_data1_length;
+    ULONG lx_nand_flash_spare_data2_offset;
+    ULONG lx_nand_flash_spare_data2_length;
+    ULONG lx_nand_flash_spare_total_length;
 
-  ULONG lx_nand_flash_diagnostic_system_errors;
-  ULONG lx_nand_flash_diagnostic_system_error;
-  ULONG lx_nand_flash_diagnostic_sector_write_requests;
-  ULONG lx_nand_flash_diagnostic_sector_read_requests;
-  ULONG lx_nand_flash_diagnostic_sector_release_requests;
-  ULONG lx_nand_flash_diagnostic_page_allocates;
-  ULONG lx_nand_flash_diagnostic_page_allocate_errors;
+    ULONG lx_nand_flash_diagnostic_system_errors;
+    ULONG lx_nand_flash_diagnostic_system_error;
+    ULONG lx_nand_flash_diagnostic_sector_write_requests;
+    ULONG lx_nand_flash_diagnostic_sector_read_requests;
+    ULONG lx_nand_flash_diagnostic_sector_release_requests;
+    ULONG lx_nand_flash_diagnostic_page_allocates;
+    ULONG lx_nand_flash_diagnostic_page_allocate_errors;
 
-  ULONG lx_nand_flash_diagnostic_block_reclaim_attempts;
-  ULONG lx_nand_flash_diagnostic_block_erases;
-  ULONG lx_nand_flash_diagnostic_block_status_gets;
-  ULONG lx_nand_flash_diagnostic_block_status_sets;
-  ULONG lx_nand_flash_diagnostic_page_extra_bytes_sets;
-  ULONG lx_nand_flash_diagnostic_page_writes;
-  ULONG lx_nand_flash_diagnostic_page_extra_bytes_gets;
-  ULONG lx_nand_flash_diagnostic_page_reads;
-  ULONG lx_nand_flash_diagnostic_moved_pages;
-  ULONG lx_nand_flash_diagnostic_block_erased_verifies;
-  ULONG lx_nand_flash_diagnostic_page_erased_verifies;
+    ULONG lx_nand_flash_diagnostic_block_reclaim_attempts;
+    ULONG lx_nand_flash_diagnostic_block_erases;
+    ULONG lx_nand_flash_diagnostic_block_status_gets;
+    ULONG lx_nand_flash_diagnostic_block_status_sets;
+    ULONG lx_nand_flash_diagnostic_page_extra_bytes_sets;
+    ULONG lx_nand_flash_diagnostic_page_writes;
+    ULONG lx_nand_flash_diagnostic_page_extra_bytes_gets;
+    ULONG lx_nand_flash_diagnostic_page_reads;
+    ULONG lx_nand_flash_diagnostic_moved_pages;
+    ULONG lx_nand_flash_diagnostic_block_erased_verifies;
+    ULONG lx_nand_flash_diagnostic_page_erased_verifies;
 
 #ifdef LX_NAND_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-  UINT (*lx_nand_flash_driver_read)(struct LX_NAND_FLASH_STRUCT *nand_flash,
-                                    ULONG block, ULONG page, ULONG *destination,
-                                    ULONG words);
-  UINT (*lx_nand_flash_driver_write)(struct LX_NAND_FLASH_STRUCT *nand_flash,
-                                     ULONG block, ULONG page, ULONG *source,
-                                     ULONG words);
-  UINT (*lx_nand_flash_driver_block_erase)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG erase_count);
-  UINT (*lx_nand_flash_driver_block_erased_verify)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block);
-  UINT (*lx_nand_flash_driver_page_erased_verify)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page);
-  UINT (*lx_nand_flash_driver_block_status_get)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block,
-      UCHAR *bad_block_flag);
-  UINT (*lx_nand_flash_driver_block_status_set)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block,
-      UCHAR bad_block_flag);
-  UINT (*lx_nand_flash_driver_extra_bytes_get)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page,
-      UCHAR *destination, UINT size);
-  UINT (*lx_nand_flash_driver_extra_bytes_set)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page,
-      UCHAR *source, UINT size);
-  UINT (*lx_nand_flash_driver_system_error)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, UINT error_code, ULONG block,
-      ULONG page);
+    UINT (*lx_nand_flash_driver_read)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page,
+                                      ULONG *destination, ULONG words);
+    UINT (*lx_nand_flash_driver_write)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page, ULONG *source,
+                                       ULONG words);
+    UINT (*lx_nand_flash_driver_block_erase)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG erase_count);
+    UINT (*lx_nand_flash_driver_block_erased_verify)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block);
+    UINT (*lx_nand_flash_driver_page_erased_verify)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page);
+    UINT (*lx_nand_flash_driver_block_status_get)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block,
+                                                  UCHAR *bad_block_flag);
+    UINT (*lx_nand_flash_driver_block_status_set)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block,
+                                                  UCHAR bad_block_flag);
+    UINT (*lx_nand_flash_driver_extra_bytes_get)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page,
+                                                 UCHAR *destination, UINT size);
+    UINT (*lx_nand_flash_driver_extra_bytes_set)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page,
+                                                 UCHAR *source, UINT size);
+    UINT (*lx_nand_flash_driver_system_error)(struct LX_NAND_FLASH_STRUCT *nand_flash, UINT error_code, ULONG block,
+                                              ULONG page);
 
-  UINT (*lx_nand_flash_driver_pages_read)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page,
-      UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
-  UINT (*lx_nand_flash_driver_pages_write)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page,
-      UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
-  UINT (*lx_nand_flash_driver_pages_copy)(
-      struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG source_block,
-      ULONG source_page, ULONG destination_block, ULONG destination_page,
-      ULONG pages, UCHAR *data_buffer);
+    UINT (*lx_nand_flash_driver_pages_read)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page,
+                                            UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
+    UINT (*lx_nand_flash_driver_pages_write)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG block, ULONG page,
+                                             UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
+    UINT (*lx_nand_flash_driver_pages_copy)(struct LX_NAND_FLASH_STRUCT *nand_flash, ULONG source_block,
+                                            ULONG source_page, ULONG destination_block, ULONG destination_page,
+                                            ULONG pages, UCHAR *data_buffer);
 #else
-  UINT (*lx_nand_flash_driver_read)(ULONG block, ULONG page, ULONG *destination,
-                                    ULONG words);
-  UINT (*lx_nand_flash_driver_write)(ULONG block, ULONG page, ULONG *source,
-                                     ULONG words);
-  UINT (*lx_nand_flash_driver_block_erase)(ULONG block, ULONG erase_count);
-  UINT (*lx_nand_flash_driver_block_erased_verify)(ULONG block);
-  UINT (*lx_nand_flash_driver_page_erased_verify)(ULONG block, ULONG page);
-  UINT (*lx_nand_flash_driver_block_status_get)(ULONG block,
-                                                UCHAR *bad_block_flag);
-  UINT (*lx_nand_flash_driver_block_status_set)(ULONG block,
-                                                UCHAR bad_block_flag);
-  UINT (*lx_nand_flash_driver_extra_bytes_get)(ULONG block, ULONG page,
-                                               UCHAR *destination, UINT size);
-  UINT (*lx_nand_flash_driver_extra_bytes_set)(ULONG block, ULONG page,
-                                               UCHAR *source, UINT size);
-  UINT (*lx_nand_flash_driver_system_error)(UINT error_code, ULONG block,
-                                            ULONG page);
+    UINT (*lx_nand_flash_driver_read)(ULONG block, ULONG page, ULONG *destination, ULONG words);
+    UINT (*lx_nand_flash_driver_write)(ULONG block, ULONG page, ULONG *source, ULONG words);
+    UINT (*lx_nand_flash_driver_block_erase)(ULONG block, ULONG erase_count);
+    UINT (*lx_nand_flash_driver_block_erased_verify)(ULONG block);
+    UINT (*lx_nand_flash_driver_page_erased_verify)(ULONG block, ULONG page);
+    UINT (*lx_nand_flash_driver_block_status_get)(ULONG block, UCHAR *bad_block_flag);
+    UINT (*lx_nand_flash_driver_block_status_set)(ULONG block, UCHAR bad_block_flag);
+    UINT (*lx_nand_flash_driver_extra_bytes_get)(ULONG block, ULONG page, UCHAR *destination, UINT size);
+    UINT (*lx_nand_flash_driver_extra_bytes_set)(ULONG block, ULONG page, UCHAR *source, UINT size);
+    UINT (*lx_nand_flash_driver_system_error)(UINT error_code, ULONG block, ULONG page);
 
-  UINT (*lx_nand_flash_driver_pages_read)(ULONG block, ULONG page,
-                                          UCHAR *main_buffer,
-                                          UCHAR *spare_buffer, ULONG pages);
-  UINT (*lx_nand_flash_driver_pages_write)(ULONG block, ULONG page,
-                                           UCHAR *main_buffer,
-                                           UCHAR *spare_buffer, ULONG pages);
-  UINT (*lx_nand_flash_driver_pages_copy)(ULONG source_block, ULONG source_page,
-                                          ULONG destination_block,
-                                          ULONG destination_page, ULONG pages,
-                                          UCHAR *data_buffer);
+    UINT (*lx_nand_flash_driver_pages_read)(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer,
+                                            ULONG pages);
+    UINT (*lx_nand_flash_driver_pages_write)(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer,
+                                             ULONG pages);
+    UINT (*lx_nand_flash_driver_pages_copy)(ULONG source_block, ULONG source_page, ULONG destination_block,
+                                            ULONG destination_page, ULONG pages, UCHAR *data_buffer);
 #endif
-  UCHAR *lx_nand_flash_page_buffer;
-  UINT lx_nand_flash_page_buffer_size;
+    UCHAR *lx_nand_flash_page_buffer;
+    UINT lx_nand_flash_page_buffer_size;
 
 #ifdef LX_THREAD_SAFE_ENABLE
 
-  /* When this conditional is used, the LevelX code utilizes a ThreadX mutex for
-     thread safe operation. Generally, this is not required since FileX ensures
-     thread safe operation at a higher layer.  */
-  TX_MUTEX lx_nand_flash_mutex;
+    /* When this conditional is used, the LevelX code utilizes a ThreadX mutex for
+       thread safe operation. Generally, this is not required since FileX ensures
+       thread safe operation at a higher layer.  */
+    TX_MUTEX lx_nand_flash_mutex;
 #endif
 
-  /* Define the NAND flash control block open next/previous pointers.  */
-  struct LX_NAND_FLASH_STRUCT *lx_nand_flash_open_next,
-      *lx_nand_flash_open_previous;
+    /* Define the NAND flash control block open next/previous pointers.  */
+    struct LX_NAND_FLASH_STRUCT *lx_nand_flash_open_next, *lx_nand_flash_open_previous;
 
-  /* Define the user extension in the flash control block. This
-     is typically defined in lx_user.h.  */
-  LX_NAND_FLASH_USER_EXTENSION
+    /* Define the user extension in the flash control block. This
+       is typically defined in lx_user.h.  */
+    LX_NAND_FLASH_USER_EXTENSION
 
 } LX_NAND_FLASH;
 
 /* Define the NOR flash sector cache entry structure.  */
 
 typedef struct LX_NOR_SECTOR_MAPPING_CACHE_ENTRY_STRUCT {
-  ULONG lx_nor_sector_mapping_cache_logical_sector;
-  ULONG *lx_nor_sector_mapping_cache_physical_sector_map_entry;
-  ULONG *lx_nor_sector_mapping_cache_physical_sector_address;
+    ULONG lx_nor_sector_mapping_cache_logical_sector;
+    ULONG *lx_nor_sector_mapping_cache_physical_sector_map_entry;
+    ULONG *lx_nor_sector_mapping_cache_physical_sector_address;
 } LX_NOR_SECTOR_MAPPING_CACHE_ENTRY;
 
 /* Define the NOR flash extended cache entry structure.  */
 
 typedef struct LX_NOR_FLASH_EXTENDED_CACHE_ENTRY_STRUCT {
-  ULONG *lx_nor_flash_extended_cache_entry_sector_address;
-  ULONG *lx_nor_flash_extended_cache_entry_sector_memory;
-  ULONG lx_nor_flash_extended_cache_entry_access_count;
+    ULONG *lx_nor_flash_extended_cache_entry_sector_address;
+    ULONG *lx_nor_flash_extended_cache_entry_sector_memory;
+    ULONG lx_nor_flash_extended_cache_entry_access_count;
 } LX_NOR_FLASH_EXTENDED_CACHE_ENTRY;
 
 /* Determine if the flash control block has an extension defined. If not,
@@ -609,109 +576,101 @@ typedef struct LX_NOR_FLASH_EXTENDED_CACHE_ENTRY_STRUCT {
 /* Define the NOR flash control block structure.  */
 
 typedef struct LX_NOR_FLASH_STRUCT {
-  ULONG lx_nor_flash_state;
-  ULONG lx_nor_flash_total_blocks;
-  ULONG lx_nor_flash_words_per_block;
-  ULONG lx_nor_flash_total_physical_sectors;
-  ULONG lx_nor_flash_physical_sectors_per_block;
+    ULONG lx_nor_flash_state;
+    ULONG lx_nor_flash_total_blocks;
+    ULONG lx_nor_flash_words_per_block;
+    ULONG lx_nor_flash_total_physical_sectors;
+    ULONG lx_nor_flash_physical_sectors_per_block;
 
-  ULONG *lx_nor_flash_base_address;
-  ULONG lx_nor_flash_block_free_bit_map_offset;
-  ULONG lx_nor_flash_block_bit_map_words;
-  ULONG lx_nor_flash_block_bit_map_mask;
-  ULONG lx_nor_flash_block_physical_sector_mapping_offset;
-  ULONG lx_nor_flash_block_physical_sector_offset;
+    ULONG *lx_nor_flash_base_address;
+    ULONG lx_nor_flash_block_free_bit_map_offset;
+    ULONG lx_nor_flash_block_bit_map_words;
+    ULONG lx_nor_flash_block_bit_map_mask;
+    ULONG lx_nor_flash_block_physical_sector_mapping_offset;
+    ULONG lx_nor_flash_block_physical_sector_offset;
 
-  ULONG lx_nor_flash_free_physical_sectors;
-  ULONG lx_nor_flash_mapped_physical_sectors;
-  ULONG lx_nor_flash_obsolete_physical_sectors;
-  ULONG lx_nor_flash_minimum_erase_count;
-  ULONG lx_nor_flash_minimum_erased_blocks;
-  ULONG lx_nor_flash_maximum_erase_count;
+    ULONG lx_nor_flash_free_physical_sectors;
+    ULONG lx_nor_flash_mapped_physical_sectors;
+    ULONG lx_nor_flash_obsolete_physical_sectors;
+    ULONG lx_nor_flash_minimum_erase_count;
+    ULONG lx_nor_flash_minimum_erased_blocks;
+    ULONG lx_nor_flash_maximum_erase_count;
 
-  ULONG lx_nor_flash_free_block_search;
-  ULONG lx_nor_flash_found_block_search;
-  ULONG lx_nor_flash_found_sector_search;
+    ULONG lx_nor_flash_free_block_search;
+    ULONG lx_nor_flash_found_block_search;
+    ULONG lx_nor_flash_found_sector_search;
 
-  ULONG lx_nor_flash_write_requests;
-  ULONG lx_nor_flash_read_requests;
-  ULONG lx_nor_flash_sector_mapping_cache_hits;
-  ULONG lx_nor_flash_sector_mapping_cache_misses;
-  ULONG lx_nor_flash_physical_block_allocates;
-  ULONG lx_nor_flash_physical_block_allocate_errors;
-  ULONG lx_nor_flash_diagnostic_system_errors;
-  ULONG lx_nor_flash_diagnostic_system_error;
-  ULONG lx_nor_flash_diagnostic_initial_format;
-  ULONG lx_nor_flash_diagnostic_erased_block;
-  ULONG lx_nor_flash_diagnostic_re_erase_block;
-  ULONG lx_nor_flash_diagnostic_sector_being_obsoleted;
-  ULONG lx_nor_flash_diagnostic_sector_obsoleted;
-  ULONG lx_nor_flash_diagnostic_mapping_invalidated;
-  ULONG lx_nor_flash_diagnostic_mapping_write_interrupted;
-  ULONG lx_nor_flash_diagnostic_sector_not_free;
-  ULONG lx_nor_flash_diagnostic_sector_data_not_free;
+    ULONG lx_nor_flash_write_requests;
+    ULONG lx_nor_flash_read_requests;
+    ULONG lx_nor_flash_sector_mapping_cache_hits;
+    ULONG lx_nor_flash_sector_mapping_cache_misses;
+    ULONG lx_nor_flash_physical_block_allocates;
+    ULONG lx_nor_flash_physical_block_allocate_errors;
+    ULONG lx_nor_flash_diagnostic_system_errors;
+    ULONG lx_nor_flash_diagnostic_system_error;
+    ULONG lx_nor_flash_diagnostic_initial_format;
+    ULONG lx_nor_flash_diagnostic_erased_block;
+    ULONG lx_nor_flash_diagnostic_re_erase_block;
+    ULONG lx_nor_flash_diagnostic_sector_being_obsoleted;
+    ULONG lx_nor_flash_diagnostic_sector_obsoleted;
+    ULONG lx_nor_flash_diagnostic_mapping_invalidated;
+    ULONG lx_nor_flash_diagnostic_mapping_write_interrupted;
+    ULONG lx_nor_flash_diagnostic_sector_not_free;
+    ULONG lx_nor_flash_diagnostic_sector_data_not_free;
 
 #ifdef LX_NOR_ENABLE_CONTROL_BLOCK_FOR_DRIVER_INTERFACE
-  UINT (*lx_nor_flash_driver_read)(struct LX_NOR_FLASH_STRUCT *nor_flash,
-                                   ULONG *flash_address, ULONG *destination,
-                                   ULONG words);
-  UINT (*lx_nor_flash_driver_write)(struct LX_NOR_FLASH_STRUCT *nor_flash,
-                                    ULONG *flash_address, ULONG *source,
-                                    ULONG words);
-  UINT (*lx_nor_flash_driver_block_erase)(struct LX_NOR_FLASH_STRUCT *nor_flash,
-                                          ULONG block, ULONG erase_count);
-  UINT (*lx_nor_flash_driver_block_erased_verify)(
-      struct LX_NOR_FLASH_STRUCT *nor_flash, ULONG block);
-  UINT (*lx_nor_flash_driver_system_error)(
-      struct LX_NOR_FLASH_STRUCT *nor_flash, UINT error_code);
+    UINT (*lx_nor_flash_driver_read)(struct LX_NOR_FLASH_STRUCT *nor_flash, ULONG *flash_address, ULONG *destination,
+                                     ULONG words);
+    UINT (*lx_nor_flash_driver_write)(struct LX_NOR_FLASH_STRUCT *nor_flash, ULONG *flash_address, ULONG *source,
+                                      ULONG words);
+    UINT (*lx_nor_flash_driver_block_erase)(struct LX_NOR_FLASH_STRUCT *nor_flash, ULONG block, ULONG erase_count);
+    UINT (*lx_nor_flash_driver_block_erased_verify)(struct LX_NOR_FLASH_STRUCT *nor_flash, ULONG block);
+    UINT (*lx_nor_flash_driver_system_error)(struct LX_NOR_FLASH_STRUCT *nor_flash, UINT error_code);
 #else
-  UINT (*lx_nor_flash_driver_read)(ULONG *flash_address, ULONG *destination,
-                                   ULONG words);
-  UINT (*lx_nor_flash_driver_write)(ULONG *flash_address, ULONG *source,
-                                    ULONG words);
-  UINT (*lx_nor_flash_driver_block_erase)(ULONG block, ULONG erase_count);
-  UINT (*lx_nor_flash_driver_block_erased_verify)(ULONG block);
-  UINT (*lx_nor_flash_driver_system_error)(UINT error_code);
+    UINT (*lx_nor_flash_driver_read)(ULONG *flash_address, ULONG *destination, ULONG words);
+    UINT (*lx_nor_flash_driver_write)(ULONG *flash_address, ULONG *source, ULONG words);
+    UINT (*lx_nor_flash_driver_block_erase)(ULONG block, ULONG erase_count);
+    UINT (*lx_nor_flash_driver_block_erased_verify)(ULONG block);
+    UINT (*lx_nor_flash_driver_system_error)(UINT error_code);
 #endif
 
-  ULONG *lx_nor_flash_sector_buffer;
-  UINT lx_nor_flash_sector_mapping_cache_enabled;
-  LX_NOR_SECTOR_MAPPING_CACHE_ENTRY
-  lx_nor_flash_sector_mapping_cache[LX_NOR_SECTOR_MAPPING_CACHE_SIZE];
+    ULONG *lx_nor_flash_sector_buffer;
+    UINT lx_nor_flash_sector_mapping_cache_enabled;
+    LX_NOR_SECTOR_MAPPING_CACHE_ENTRY
+    lx_nor_flash_sector_mapping_cache[LX_NOR_SECTOR_MAPPING_CACHE_SIZE];
 
 #ifndef LX_NOR_DISABLE_EXTENDED_CACHE
 
-  UINT lx_nor_flash_extended_cache_entries;
-  LX_NOR_FLASH_EXTENDED_CACHE_ENTRY
-  lx_nor_flash_extended_cache[LX_NOR_EXTENDED_CACHE_SIZE];
-  ULONG lx_nor_flash_extended_cache_hits;
-  ULONG lx_nor_flash_extended_cache_misses;
+    UINT lx_nor_flash_extended_cache_entries;
+    LX_NOR_FLASH_EXTENDED_CACHE_ENTRY
+    lx_nor_flash_extended_cache[LX_NOR_EXTENDED_CACHE_SIZE];
+    ULONG lx_nor_flash_extended_cache_hits;
+    ULONG lx_nor_flash_extended_cache_misses;
 #ifdef LX_NOR_ENABLE_MAPPING_BITMAP
-  ULONG *lx_nor_flash_extended_cache_mapping_bitmap;
-  ULONG lx_nor_flash_extended_cache_mapping_bitmap_max_logical_sector;
+    ULONG *lx_nor_flash_extended_cache_mapping_bitmap;
+    ULONG lx_nor_flash_extended_cache_mapping_bitmap_max_logical_sector;
 #endif
 #ifdef LX_NOR_ENABLE_OBSOLETE_COUNT_CACHE
-  LX_NOR_OBSOLETE_COUNT_CACHE_TYPE
-  *lx_nor_flash_extended_cache_obsolete_count;
-  ULONG lx_nor_flash_extended_cache_obsolete_count_max_block;
+    LX_NOR_OBSOLETE_COUNT_CACHE_TYPE
+    *lx_nor_flash_extended_cache_obsolete_count;
+    ULONG lx_nor_flash_extended_cache_obsolete_count_max_block;
 #endif
 #endif
 
 #ifdef LX_THREAD_SAFE_ENABLE
 
-  /* When this conditional is used, the LevelX code utilizes a ThreadX mutex for
-     thread safe operation. Generally, this is not required since FileX ensures
-     thread safe operation at a higher layer.  */
-  TX_MUTEX lx_nor_flash_mutex;
+    /* When this conditional is used, the LevelX code utilizes a ThreadX mutex for
+       thread safe operation. Generally, this is not required since FileX ensures
+       thread safe operation at a higher layer.  */
+    TX_MUTEX lx_nor_flash_mutex;
 #endif
 
-  /* Define the NOR flash control block open next/previous pointers.  */
-  struct LX_NOR_FLASH_STRUCT *lx_nor_flash_open_next,
-      *lx_nor_flash_open_previous;
+    /* Define the NOR flash control block open next/previous pointers.  */
+    struct LX_NOR_FLASH_STRUCT *lx_nor_flash_open_next, *lx_nor_flash_open_previous;
 
-  /* Define the user extension in the flash control block. This
-     is typically defined in lx_user.h.  */
-  LX_NOR_FLASH_USER_EXTENSION
+    /* Define the user extension in the flash control block. This
+       is typically defined in lx_user.h.  */
+    LX_NOR_FLASH_USER_EXTENSION
 
 } LX_NOR_FLASH;
 
@@ -739,11 +698,11 @@ typedef struct LX_NOR_FLASH_STRUCT {
 */
 
 typedef struct LX_NOR_FLASH_BLOCK_HEADER_STRUCT {
-  ULONG lx_nor_flash_block_erase_count; /* Bit 31: 1 -> not used, 0 -> used */
-  ULONG lx_nor_flash_block_min_logical_sector; /* On full block, minimum valid
-                                                  sector   */
-  ULONG lx_nor_flash_block_max_logical_sector; /* On full block, maximum valid
-                                                  sector   */
+    ULONG lx_nor_flash_block_erase_count;        /* Bit 31: 1 -> not used, 0 -> used */
+    ULONG lx_nor_flash_block_min_logical_sector; /* On full block, minimum valid
+                                                    sector   */
+    ULONG lx_nor_flash_block_max_logical_sector; /* On full block, maximum valid
+                                                    sector   */
 } LX_NOR_FLASH_BLOCK_HEADER;
 
 /* Define external structure references.   */
@@ -790,122 +749,74 @@ extern ULONG _lx_nor_flash_opened_count;
 UINT _lx_nand_flash_close(LX_NAND_FLASH *nand_flash);
 UINT _lx_nand_flash_defragment(LX_NAND_FLASH *nand_flash);
 UINT _lx_nand_flash_initialize(void);
-UINT _lx_nand_flash_extended_cache_enable(LX_NAND_FLASH *nand_flash,
-                                          VOID *memory, ULONG size);
-UINT _lx_nand_flash_format(LX_NAND_FLASH *nand_flash, CHAR *name,
-                           UINT (*nand_driver_initialize)(LX_NAND_FLASH *),
+UINT _lx_nand_flash_extended_cache_enable(LX_NAND_FLASH *nand_flash, VOID *memory, ULONG size);
+UINT _lx_nand_flash_format(LX_NAND_FLASH *nand_flash, CHAR *name, UINT (*nand_driver_initialize)(LX_NAND_FLASH *),
                            ULONG *memory_ptr, UINT memory_size);
-UINT _lx_nand_flash_open(LX_NAND_FLASH *nand_flash, CHAR *name,
-                         UINT (*nand_driver_initialize)(LX_NAND_FLASH *),
+UINT _lx_nand_flash_open(LX_NAND_FLASH *nand_flash, CHAR *name, UINT (*nand_driver_initialize)(LX_NAND_FLASH *),
                          ULONG *memory_ptr, UINT memory_size);
-UINT _lx_nand_flash_page_ecc_check(LX_NAND_FLASH *nand_flash,
-                                   UCHAR *page_buffer, UCHAR *ecc_buffer);
-UINT _lx_nand_flash_page_ecc_compute(LX_NAND_FLASH *nand_flash,
-                                     UCHAR *page_buffer, UCHAR *ecc_buffer);
-UINT _lx_nand_flash_partial_defragment(LX_NAND_FLASH *nand_flash,
-                                       UINT max_blocks);
-UINT _lx_nand_flash_sector_read(LX_NAND_FLASH *nand_flash, ULONG logical_sector,
-                                VOID *buffer);
-UINT _lx_nand_flash_sector_release(LX_NAND_FLASH *nand_flash,
-                                   ULONG logical_sector);
-UINT _lx_nand_flash_sector_write(LX_NAND_FLASH *nand_flash,
-                                 ULONG logical_sector, VOID *buffer);
-UINT _lx_nand_flash_sectors_read(LX_NAND_FLASH *nand_flash,
-                                 ULONG logical_sector, VOID *buffer,
-                                 ULONG sector_count);
-UINT _lx_nand_flash_sectors_release(LX_NAND_FLASH *nand_flash,
-                                    ULONG logical_sector, ULONG sector_count);
-UINT _lx_nand_flash_sectors_write(LX_NAND_FLASH *nand_flash,
-                                  ULONG logical_sector, VOID *buffer,
-                                  ULONG sector_count);
+UINT _lx_nand_flash_page_ecc_check(LX_NAND_FLASH *nand_flash, UCHAR *page_buffer, UCHAR *ecc_buffer);
+UINT _lx_nand_flash_page_ecc_compute(LX_NAND_FLASH *nand_flash, UCHAR *page_buffer, UCHAR *ecc_buffer);
+UINT _lx_nand_flash_partial_defragment(LX_NAND_FLASH *nand_flash, UINT max_blocks);
+UINT _lx_nand_flash_sector_read(LX_NAND_FLASH *nand_flash, ULONG logical_sector, VOID *buffer);
+UINT _lx_nand_flash_sector_release(LX_NAND_FLASH *nand_flash, ULONG logical_sector);
+UINT _lx_nand_flash_sector_write(LX_NAND_FLASH *nand_flash, ULONG logical_sector, VOID *buffer);
+UINT _lx_nand_flash_sectors_read(LX_NAND_FLASH *nand_flash, ULONG logical_sector, VOID *buffer, ULONG sector_count);
+UINT _lx_nand_flash_sectors_release(LX_NAND_FLASH *nand_flash, ULONG logical_sector, ULONG sector_count);
+UINT _lx_nand_flash_sectors_write(LX_NAND_FLASH *nand_flash, ULONG logical_sector, VOID *buffer, ULONG sector_count);
 
 UINT _lx_nor_flash_close(LX_NOR_FLASH *nor_flash);
 UINT _lx_nor_flash_defragment(LX_NOR_FLASH *nor_flash);
-UINT _lx_nor_flash_extended_cache_enable(LX_NOR_FLASH *nor_flash, VOID *memory,
-                                         ULONG size);
+UINT _lx_nor_flash_extended_cache_enable(LX_NOR_FLASH *nor_flash, VOID *memory, ULONG size);
 UINT _lx_nor_flash_initialize(void);
-UINT _lx_nor_flash_open(LX_NOR_FLASH *nor_flash, CHAR *name,
-                        UINT (*nor_driver_initialize)(LX_NOR_FLASH *));
+UINT _lx_nor_flash_open(LX_NOR_FLASH *nor_flash, CHAR *name, UINT (*nor_driver_initialize)(LX_NOR_FLASH *));
 UINT _lx_nor_flash_partial_defragment(LX_NOR_FLASH *nor_flash, UINT max_blocks);
-UINT _lx_nor_flash_sector_read(LX_NOR_FLASH *nor_flash, ULONG logical_sector,
-                               VOID *buffer);
-UINT _lx_nor_flash_sector_release(LX_NOR_FLASH *nor_flash,
-                                  ULONG logical_sector);
-UINT _lx_nor_flash_sector_write(LX_NOR_FLASH *nor_flash, ULONG logical_sector,
-                                VOID *buffer);
+UINT _lx_nor_flash_sector_read(LX_NOR_FLASH *nor_flash, ULONG logical_sector, VOID *buffer);
+UINT _lx_nor_flash_sector_release(LX_NOR_FLASH *nor_flash, ULONG logical_sector);
+UINT _lx_nor_flash_sector_write(LX_NOR_FLASH *nor_flash, ULONG logical_sector, VOID *buffer);
 
 /* Internal LevelX prototypes.  */
 
-UINT _lx_nand_flash_driver_block_erase(LX_NAND_FLASH *nand_flash, ULONG block,
-                                       ULONG erase_count);
-UINT _lx_nand_flash_driver_block_erased_verify(LX_NAND_FLASH *nand_flash,
-                                               ULONG block);
-UINT _lx_nand_flash_driver_page_erased_verify(LX_NAND_FLASH *nand_flash,
-                                              ULONG block, ULONG page);
-UINT _lx_nand_flash_driver_block_status_get(LX_NAND_FLASH *nand_flash,
-                                            ULONG block, UCHAR *bad_block_flag);
-UINT _lx_nand_flash_driver_block_status_set(LX_NAND_FLASH *nand_flash,
-                                            ULONG block, UCHAR bad_block_flag);
+UINT _lx_nand_flash_driver_block_erase(LX_NAND_FLASH *nand_flash, ULONG block, ULONG erase_count);
+UINT _lx_nand_flash_driver_block_erased_verify(LX_NAND_FLASH *nand_flash, ULONG block);
+UINT _lx_nand_flash_driver_page_erased_verify(LX_NAND_FLASH *nand_flash, ULONG block, ULONG page);
+UINT _lx_nand_flash_driver_block_status_get(LX_NAND_FLASH *nand_flash, ULONG block, UCHAR *bad_block_flag);
+UINT _lx_nand_flash_driver_block_status_set(LX_NAND_FLASH *nand_flash, ULONG block, UCHAR bad_block_flag);
 
 VOID _lx_nand_flash_internal_error(LX_NAND_FLASH *nand_flash, ULONG error_code);
-UINT _lx_nand_flash_block_find(LX_NAND_FLASH *nand_flash, ULONG logical_sector,
-                               ULONG *block, USHORT *block_status);
+UINT _lx_nand_flash_block_find(LX_NAND_FLASH *nand_flash, ULONG logical_sector, ULONG *block, USHORT *block_status);
 UINT _lx_nand_flash_block_allocate(LX_NAND_FLASH *nand_flash, ULONG *block);
 UINT _lx_nand_flash_block_data_move(LX_NAND_FLASH *nand_flash, ULONG new_block);
-UINT _lx_nand_flash_block_status_set(LX_NAND_FLASH *nand_flash, ULONG block,
-                                     ULONG block_status);
-UINT _lx_nand_flash_erase_count_set(LX_NAND_FLASH *nand_flash, ULONG block,
-                                    UCHAR erase_count);
-UINT _lx_nand_flash_block_mapping_set(LX_NAND_FLASH *nand_flash,
-                                      ULONG logical_sector, ULONG block);
-UINT _lx_nand_flash_data_page_copy(LX_NAND_FLASH *nand_flash,
-                                   ULONG logical_sector, ULONG source_block,
-                                   USHORT src_block_status,
-                                   ULONG destination_block,
-                                   USHORT *dest_block_status_ptr,
+UINT _lx_nand_flash_block_status_set(LX_NAND_FLASH *nand_flash, ULONG block, ULONG block_status);
+UINT _lx_nand_flash_erase_count_set(LX_NAND_FLASH *nand_flash, ULONG block, UCHAR erase_count);
+UINT _lx_nand_flash_block_mapping_set(LX_NAND_FLASH *nand_flash, ULONG logical_sector, ULONG block);
+UINT _lx_nand_flash_data_page_copy(LX_NAND_FLASH *nand_flash, ULONG logical_sector, ULONG source_block,
+                                   USHORT src_block_status, ULONG destination_block, USHORT *dest_block_status_ptr,
                                    ULONG sectors);
 UINT _lx_nand_flash_free_block_list_add(LX_NAND_FLASH *nand_flash, ULONG block);
-UINT _lx_nand_flash_mapped_block_list_add(LX_NAND_FLASH *nand_flash,
-                                          ULONG block_mapping_index);
-UINT _lx_nand_flash_mapped_block_list_get(LX_NAND_FLASH *nand_flash,
-                                          ULONG *block_mapping_index);
-UINT _lx_nand_flash_mapped_block_list_remove(LX_NAND_FLASH *nand_flash,
-                                             ULONG block_mapping_index);
-UINT _lx_nand_flash_memory_initialize(LX_NAND_FLASH *nand_flash,
-                                      ULONG *memory_ptr, UINT memory_size);
+UINT _lx_nand_flash_mapped_block_list_add(LX_NAND_FLASH *nand_flash, ULONG block_mapping_index);
+UINT _lx_nand_flash_mapped_block_list_get(LX_NAND_FLASH *nand_flash, ULONG *block_mapping_index);
+UINT _lx_nand_flash_mapped_block_list_remove(LX_NAND_FLASH *nand_flash, ULONG block_mapping_index);
+UINT _lx_nand_flash_memory_initialize(LX_NAND_FLASH *nand_flash, ULONG *memory_ptr, UINT memory_size);
 UINT _lx_nand_flash_metadata_allocate(LX_NAND_FLASH *nand_flash);
 UINT _lx_nand_flash_metadata_build(LX_NAND_FLASH *nand_flash);
-UINT _lx_nand_flash_metadata_write(LX_NAND_FLASH *nand_flash,
-                                   UCHAR *main_buffer, ULONG spare_value);
-VOID _lx_nand_flash_system_error(LX_NAND_FLASH *nand_flash, UINT error_code,
-                                 ULONG block, ULONG page);
+UINT _lx_nand_flash_metadata_write(LX_NAND_FLASH *nand_flash, UCHAR *main_buffer, ULONG spare_value);
+VOID _lx_nand_flash_system_error(LX_NAND_FLASH *nand_flash, UINT error_code, ULONG block, ULONG page);
 UINT _lx_nand_flash_256byte_ecc_check(UCHAR *page_buffer, UCHAR *ecc_buffer);
 UINT _lx_nand_flash_256byte_ecc_compute(UCHAR *page_buffer, UCHAR *ecc_buffer);
 
 UINT _lx_nor_flash_block_reclaim(LX_NOR_FLASH *nor_flash);
-UINT _lx_nor_flash_driver_block_erase(LX_NOR_FLASH *nor_flash, ULONG block,
-                                      ULONG erase_count);
-UINT _lx_nor_flash_driver_read(LX_NOR_FLASH *nor_flash, ULONG *flash_address,
-                               ULONG *destination, ULONG words);
-UINT _lx_nor_flash_driver_write(LX_NOR_FLASH *nor_flash, ULONG *flash_address,
-                                ULONG *source, ULONG words);
+UINT _lx_nor_flash_driver_block_erase(LX_NOR_FLASH *nor_flash, ULONG block, ULONG erase_count);
+UINT _lx_nor_flash_driver_read(LX_NOR_FLASH *nor_flash, ULONG *flash_address, ULONG *destination, ULONG words);
+UINT _lx_nor_flash_driver_write(LX_NOR_FLASH *nor_flash, ULONG *flash_address, ULONG *source, ULONG words);
 VOID _lx_nor_flash_internal_error(LX_NOR_FLASH *nor_flash, ULONG error_code);
-UINT _lx_nor_flash_logical_sector_find(LX_NOR_FLASH *nor_flash,
-                                       ULONG logical_sector,
-                                       ULONG superceded_check,
-                                       ULONG **physical_sector_map_entry,
-                                       ULONG **physical_sector_address);
-UINT _lx_nor_flash_next_block_to_erase_find(LX_NOR_FLASH *nor_flash,
-                                            ULONG *return_erase_block,
-                                            ULONG *return_erase_count,
-                                            ULONG *return_mapped_sectors,
+UINT _lx_nor_flash_logical_sector_find(LX_NOR_FLASH *nor_flash, ULONG logical_sector, ULONG superceded_check,
+                                       ULONG **physical_sector_map_entry, ULONG **physical_sector_address);
+UINT _lx_nor_flash_next_block_to_erase_find(LX_NOR_FLASH *nor_flash, ULONG *return_erase_block,
+                                            ULONG *return_erase_count, ULONG *return_mapped_sectors,
                                             ULONG *return_obsolete_sectors);
-UINT _lx_nor_flash_physical_sector_allocate(LX_NOR_FLASH *nor_flash,
-                                            ULONG logical_sector,
-                                            ULONG **physical_sector_map_entry,
-                                            ULONG **physical_sector_address);
-VOID _lx_nor_flash_sector_mapping_cache_invalidate(LX_NOR_FLASH *nor_flash,
-                                                   ULONG logical_sector);
+UINT _lx_nor_flash_physical_sector_allocate(LX_NOR_FLASH *nor_flash, ULONG logical_sector,
+                                            ULONG **physical_sector_map_entry, ULONG **physical_sector_address);
+VOID _lx_nor_flash_sector_mapping_cache_invalidate(LX_NOR_FLASH *nor_flash, ULONG logical_sector);
 VOID _lx_nor_flash_system_error(LX_NOR_FLASH *nor_flash, UINT error_code);
 
 #ifdef __cplusplus

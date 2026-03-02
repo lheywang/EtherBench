@@ -73,59 +73,57 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_packet_pool_info_get(NX_PACKET_POOL *pool_ptr, ULONG *total_packets,
-                              ULONG *free_packets, ULONG *empty_pool_requests,
-                              ULONG *empty_pool_suspensions,
+UINT _nx_packet_pool_info_get(NX_PACKET_POOL *pool_ptr, ULONG *total_packets, ULONG *free_packets,
+                              ULONG *empty_pool_requests, ULONG *empty_pool_suspensions,
                               ULONG *invalid_packet_releases) {
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts to get packet pool information.  */
-  TX_DISABLE
+    /* Disable interrupts to get packet pool information.  */
+    TX_DISABLE
 
-  /* Determine if pool total packets is wanted.  */
-  if (total_packets) {
+    /* Determine if pool total packets is wanted.  */
+    if (total_packets) {
 
-    /* Return the number of total packets in this pool.  */
-    *total_packets = pool_ptr->nx_packet_pool_total;
-  }
+        /* Return the number of total packets in this pool.  */
+        *total_packets = pool_ptr->nx_packet_pool_total;
+    }
 
-  /* Determine if pool free packets is wanted.  */
-  if (free_packets) {
+    /* Determine if pool free packets is wanted.  */
+    if (free_packets) {
 
-    /* Return the number of free packets in this pool.  */
-    *free_packets = pool_ptr->nx_packet_pool_available;
-  }
+        /* Return the number of free packets in this pool.  */
+        *free_packets = pool_ptr->nx_packet_pool_available;
+    }
 
-  /* Determine if empty pool requests is wanted.  */
-  if (empty_pool_requests) {
+    /* Determine if empty pool requests is wanted.  */
+    if (empty_pool_requests) {
 
-    /* Return the number of empty pool requests made in this pool.  */
-    *empty_pool_requests = pool_ptr->nx_packet_pool_empty_requests;
-  }
+        /* Return the number of empty pool requests made in this pool.  */
+        *empty_pool_requests = pool_ptr->nx_packet_pool_empty_requests;
+    }
 
-  /* Determine if empty pool suspensions is wanted.  */
-  if (empty_pool_suspensions) {
+    /* Determine if empty pool suspensions is wanted.  */
+    if (empty_pool_suspensions) {
 
-    /* Return the number of empty pool suspensions made in this pool.  */
-    *empty_pool_suspensions = pool_ptr->nx_packet_pool_empty_suspensions;
-  }
+        /* Return the number of empty pool suspensions made in this pool.  */
+        *empty_pool_suspensions = pool_ptr->nx_packet_pool_empty_suspensions;
+    }
 
-  /* Determine if invalid packet releases is wanted.  */
-  if (invalid_packet_releases) {
+    /* Determine if invalid packet releases is wanted.  */
+    if (invalid_packet_releases) {
 
-    /* Return the number of invalid packet releases made in this pool.  */
-    *invalid_packet_releases = pool_ptr->nx_packet_pool_invalid_releases;
-  }
+        /* Return the number of invalid packet releases made in this pool.  */
+        *invalid_packet_releases = pool_ptr->nx_packet_pool_invalid_releases;
+    }
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(
-      NX_TRACE_PACKET_POOL_INFO_GET, pool_ptr, pool_ptr->nx_packet_pool_total,
-      pool_ptr->nx_packet_pool_available,
-      pool_ptr->nx_packet_pool_empty_requests, NX_TRACE_PACKET_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_PACKET_POOL_INFO_GET, pool_ptr, pool_ptr->nx_packet_pool_total,
+                            pool_ptr->nx_packet_pool_available, pool_ptr->nx_packet_pool_empty_requests,
+                            NX_TRACE_PACKET_EVENTS, 0, 0);
 
-  /* Return completion status.  */
-  return (NX_SUCCESS);
+    /* Return completion status.  */
+    return (NX_SUCCESS);
 }

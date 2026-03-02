@@ -67,31 +67,29 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_ip_raw_packet_filter_set(NX_IP *ip_ptr,
-                                  UINT (*raw_packet_filter)(NX_IP *, ULONG,
-                                                            NX_PACKET *)) {
+UINT _nx_ip_raw_packet_filter_set(NX_IP *ip_ptr, UINT (*raw_packet_filter)(NX_IP *, ULONG, NX_PACKET *)) {
 
 #ifdef NX_ENABLE_IP_RAW_PACKET_FILTER
 
-  /* Obtain the IP internal mutex. */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Obtain the IP internal mutex. */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IP_RAW_PACKET_FILTER_SET, ip_ptr,
-                          raw_packet_filter, 0, 0, NX_TRACE_IP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NXD_TRACE_IP_RAW_PACKET_FILTER_SET, ip_ptr, raw_packet_filter, 0, 0, NX_TRACE_IP_EVENTS, 0,
+                            0);
 
-  /* Enable raw IP packet sending/receiving.  */
-  ip_ptr->nx_ip_raw_packet_filter = raw_packet_filter;
+    /* Enable raw IP packet sending/receiving.  */
+    ip_ptr->nx_ip_raw_packet_filter = raw_packet_filter;
 
-  /* Release the IP internal mutex. */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release the IP internal mutex. */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /* Return a successful status!  */
-  return (NX_SUCCESS);
+    /* Return a successful status!  */
+    return (NX_SUCCESS);
 #else  /* NX_ENABLE_IP_RAW_PACKET_FILTER */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(raw_packet_filter);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(raw_packet_filter);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* NX_ENABLE_IP_RAW_PACKET_FILTER */
 }

@@ -70,95 +70,94 @@
 /**************************************************************************/
 UINT _nx_packet_pool_delete(NX_PACKET_POOL *pool_ptr) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  TX_THREAD *thread_ptr; /* Working thread pointer  */
+    TX_THREAD *thread_ptr; /* Working thread pointer  */
 
-  /* Disable interrupts to remove the packet pool from the created list.  */
-  TX_DISABLE
-
-  /* Decrement the number of packet pools created.  */
-  _nx_packet_pool_created_count--;
-
-  /* Clear the packet pool ID to make it invalid.  */
-  pool_ptr->nx_packet_pool_id = 0;
-
-  /* See if the packet pool only one on the list.  */
-  if (pool_ptr == pool_ptr->nx_packet_pool_created_next) {
-
-    /* Only created packet pool, just set the created list to NULL.  */
-    _nx_packet_pool_created_ptr = NX_NULL;
-  } else {
-
-    /* Link-up the neighbors.  */
-    (pool_ptr->nx_packet_pool_created_next)->nx_packet_pool_created_previous =
-        pool_ptr->nx_packet_pool_created_previous;
-    (pool_ptr->nx_packet_pool_created_previous)->nx_packet_pool_created_next =
-        pool_ptr->nx_packet_pool_created_next;
-
-    /* See if we have to update the created list head pointer.  */
-    if (_nx_packet_pool_created_ptr == pool_ptr) {
-
-      /* Yes, move the head pointer to the next link. */
-      _nx_packet_pool_created_ptr = pool_ptr->nx_packet_pool_created_next;
-    }
-  }
-
-  /* Temporarily disable preemption.  */
-  _tx_thread_preempt_disable++;
-
-  /* Restore interrupts.  */
-  TX_RESTORE
-
-  /* Walk through the packet pool suspension list to resume any and all
-     threads suspended on this packet pool.  */
-  thread_ptr = pool_ptr->nx_packet_pool_suspension_list;
-  while (pool_ptr->nx_packet_pool_suspended_count) {
-    /* Lockout interrupts.  */
+    /* Disable interrupts to remove the packet pool from the created list.  */
     TX_DISABLE
 
-    /* Clear the cleanup pointer, this prevents the timeout from doing
-       anything.  */
-    thread_ptr->tx_thread_suspend_cleanup = TX_NULL;
+    /* Decrement the number of packet pools created.  */
+    _nx_packet_pool_created_count--;
 
-    /* Temporarily disable preemption again.  */
+    /* Clear the packet pool ID to make it invalid.  */
+    pool_ptr->nx_packet_pool_id = 0;
+
+    /* See if the packet pool only one on the list.  */
+    if (pool_ptr == pool_ptr->nx_packet_pool_created_next) {
+
+        /* Only created packet pool, just set the created list to NULL.  */
+        _nx_packet_pool_created_ptr = NX_NULL;
+    } else {
+
+        /* Link-up the neighbors.  */
+        (pool_ptr->nx_packet_pool_created_next)->nx_packet_pool_created_previous =
+            pool_ptr->nx_packet_pool_created_previous;
+        (pool_ptr->nx_packet_pool_created_previous)->nx_packet_pool_created_next =
+            pool_ptr->nx_packet_pool_created_next;
+
+        /* See if we have to update the created list head pointer.  */
+        if (_nx_packet_pool_created_ptr == pool_ptr) {
+
+            /* Yes, move the head pointer to the next link. */
+            _nx_packet_pool_created_ptr = pool_ptr->nx_packet_pool_created_next;
+        }
+    }
+
+    /* Temporarily disable preemption.  */
     _tx_thread_preempt_disable++;
 
     /* Restore interrupts.  */
     TX_RESTORE
 
-    /* Set the return status in the thread to NX_POOL_DELETED.  */
-    thread_ptr->tx_thread_suspend_status = NX_POOL_DELETED;
+    /* Walk through the packet pool suspension list to resume any and all
+       threads suspended on this packet pool.  */
+    thread_ptr = pool_ptr->nx_packet_pool_suspension_list;
+    while (pool_ptr->nx_packet_pool_suspended_count) {
+        /* Lockout interrupts.  */
+        TX_DISABLE
 
-    /* Move the thread pointer ahead.  */
-    thread_ptr = thread_ptr->tx_thread_suspended_next;
+        /* Clear the cleanup pointer, this prevents the timeout from doing
+           anything.  */
+        thread_ptr->tx_thread_suspend_cleanup = TX_NULL;
 
-    /* Resume the thread.  */
-    _tx_thread_system_resume(thread_ptr->tx_thread_suspended_previous);
+        /* Temporarily disable preemption again.  */
+        _tx_thread_preempt_disable++;
 
-    /* Decrease the suspended count.  */
-    pool_ptr->nx_packet_pool_suspended_count--;
-  }
+        /* Restore interrupts.  */
+        TX_RESTORE
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+        /* Set the return status in the thread to NX_POOL_DELETED.  */
+        thread_ptr->tx_thread_suspend_status = NX_POOL_DELETED;
 
-  /* Release previous preempt disable.  */
-  _tx_thread_preempt_disable--;
+        /* Move the thread pointer ahead.  */
+        thread_ptr = thread_ptr->tx_thread_suspended_next;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+        /* Resume the thread.  */
+        _tx_thread_system_resume(thread_ptr->tx_thread_suspended_previous);
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_PACKET_POOL_DELETE, pool_ptr, 0, 0, 0,
-                          NX_TRACE_PACKET_EVENTS, 0, 0);
+        /* Decrease the suspended count.  */
+        pool_ptr->nx_packet_pool_suspended_count--;
+    }
 
-  /* If trace is enabled, unregister this object.  */
-  NX_TRACE_OBJECT_UNREGISTER(pool_ptr);
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Check for preemption.  */
-  _tx_thread_system_preempt_check();
+    /* Release previous preempt disable.  */
+    _tx_thread_preempt_disable--;
 
-  /* Return NX_SUCCESS.  */
-  return (NX_SUCCESS);
+    /* Restore interrupts.  */
+    TX_RESTORE
+
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_PACKET_POOL_DELETE, pool_ptr, 0, 0, 0, NX_TRACE_PACKET_EVENTS, 0, 0);
+
+    /* If trace is enabled, unregister this object.  */
+    NX_TRACE_OBJECT_UNREGISTER(pool_ptr);
+
+    /* Check for preemption.  */
+    _tx_thread_system_preempt_check();
+
+    /* Return NX_SUCCESS.  */
+    return (NX_SUCCESS);
 }

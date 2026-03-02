@@ -74,43 +74,38 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_unicode_directory_rename(FX_MEDIA *media_ptr, UCHAR *old_unicode_name,
-                                   ULONG old_unicode_length,
-                                   UCHAR *new_unicode_name,
-                                   ULONG new_unicode_length,
-                                   CHAR *new_short_name) {
+UINT _fxe_unicode_directory_rename(FX_MEDIA *media_ptr, UCHAR *old_unicode_name, ULONG old_unicode_length,
+                                   UCHAR *new_unicode_name, ULONG new_unicode_length, CHAR *new_short_name) {
 
-  UINT status, i;
+    UINT status, i;
 
-  /* Check for a NULL media or name pointers.  */
-  if ((media_ptr == FX_NULL) || (old_unicode_name == FX_NULL) ||
-      (old_unicode_length == 0) || (new_unicode_name == FX_NULL) ||
-      (new_unicode_length == 0) || (new_short_name == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
-
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
-
-  /* Check unicode zero in old_unicode_name */
-  for (i = 0; i < (old_unicode_length << 1); i += 2) {
-    if ((old_unicode_name[i] == 0) && (old_unicode_name[i + 1] == 0)) {
-      return (FX_INVALID_NAME);
+    /* Check for a NULL media or name pointers.  */
+    if ((media_ptr == FX_NULL) || (old_unicode_name == FX_NULL) || (old_unicode_length == 0) ||
+        (new_unicode_name == FX_NULL) || (new_unicode_length == 0) || (new_short_name == FX_NULL)) {
+        return (FX_PTR_ERROR);
     }
-  }
 
-  /* Check unicode zero in new_unicode_name */
-  for (i = 0; i < (new_unicode_length << 1); i += 2) {
-    if ((new_unicode_name[i] == 0) && (new_unicode_name[i + 1] == 0)) {
-      return (FX_INVALID_NAME);
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
+
+    /* Check unicode zero in old_unicode_name */
+    for (i = 0; i < (old_unicode_length << 1); i += 2) {
+        if ((old_unicode_name[i] == 0) && (old_unicode_name[i + 1] == 0)) {
+            return (FX_INVALID_NAME);
+        }
     }
-  }
 
-  /* Call actual Unicode directory rename service.  */
-  status = _fx_unicode_directory_rename(media_ptr, old_unicode_name,
-                                        old_unicode_length, new_unicode_name,
-                                        new_unicode_length, new_short_name);
+    /* Check unicode zero in new_unicode_name */
+    for (i = 0; i < (new_unicode_length << 1); i += 2) {
+        if ((new_unicode_name[i] == 0) && (new_unicode_name[i + 1] == 0)) {
+            return (FX_INVALID_NAME);
+        }
+    }
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Call actual Unicode directory rename service.  */
+    status = _fx_unicode_directory_rename(media_ptr, old_unicode_name, old_unicode_length, new_unicode_name,
+                                          new_unicode_length, new_short_name);
+
+    /* Return status to the caller.  */
+    return (status);
 }

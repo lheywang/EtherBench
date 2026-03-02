@@ -477,8 +477,7 @@
  * @retval The value of PID Return value between Min_Data=0x00 and
  * Max_Data=0xFFFFFFFFFFFF.
  */
-#define I3C_GET_PID(__PAYLOAD__)                                               \
-  ((uint64_t)(__PAYLOAD__) & I3C_PID_IN_PAYLOAD_MASK)
+#define I3C_GET_PID(__PAYLOAD__) ((uint64_t)(__PAYLOAD__) & I3C_PID_IN_PAYLOAD_MASK)
 
 /** @brief  Get MIPI Manufacturer ID in PID (48bits).
  * @param  __PID__ specifies the Provisioned ID retrieve during ENTDAA
@@ -487,9 +486,7 @@
  * @retval The value of MIPI ID Return value between Min_Data=0x00 and
  * Max_Data=0x7FFF.
  */
-#define I3C_GET_MIPIMID(__PID__)                                               \
-  ((uint16_t)((uint64_t)(__PID__) >> I3C_MIPIMID_PID_SHIFT) &                  \
-   I3C_MIPIMID_PID_MASK)
+#define I3C_GET_MIPIMID(__PID__) ((uint16_t)((uint64_t)(__PID__) >> I3C_MIPIMID_PID_SHIFT) & I3C_MIPIMID_PID_MASK)
 
 /** @brief  Get Type Selector in PID (48bits).
  * @param  __PID__ specifies the Provisioned ID retrieve during ENTDAA
@@ -497,8 +494,7 @@
  * and Max_Data=0xFFFFFFFFFFFF.
  * @retval The value of Type Selector Return 0 or 1.
  */
-#define I3C_GET_IDTSEL(__PID__)                                                \
-  ((uint8_t)((uint64_t)(__PID__) >> I3C_IDTSEL_PID_SHIFT) & I3C_IDTSEL_PID_MASK)
+#define I3C_GET_IDTSEL(__PID__) ((uint8_t)((uint64_t)(__PID__) >> I3C_IDTSEL_PID_SHIFT) & I3C_IDTSEL_PID_MASK)
 
 /** @brief  Get Part ID in PID (48bits).
  * @param  __PID__ specifies the Provisioned ID retrieve during ENTDAA
@@ -507,9 +503,7 @@
  * @retval The value of Part ID Return value between Min_Data=0x00 and
  * Max_Data=0xFFFF.
  */
-#define I3C_GET_PART_ID(__PID__)                                               \
-  ((uint16_t)((uint64_t)(__PID__) >> I3C_PART_ID_PID_SHIFT) &                  \
-   I3C_PART_ID_PID_MASK)
+#define I3C_GET_PART_ID(__PID__) ((uint16_t)((uint64_t)(__PID__) >> I3C_PART_ID_PID_SHIFT) & I3C_PART_ID_PID_MASK)
 
 /** @brief  Get Instance ID in PID (48bits).
  * @param  __PID__ specifies the Provisioned ID retrieve during ENTDAA
@@ -518,8 +512,7 @@
  * @retval The value of Instance ID Return value between Min_Data=0x00 and
  * Max_Data=0xF.
  */
-#define I3C_GET_MIPIID(__PID__)                                                \
-  ((uint8_t)((uint64_t)(__PID__) >> I3C_MIPIID_PID_SHIFT) & I3C_MIPIID_PID_MASK)
+#define I3C_GET_MIPIID(__PID__) ((uint8_t)((uint64_t)(__PID__) >> I3C_MIPIID_PID_SHIFT) & I3C_MIPIID_PID_MASK)
 
 /** @brief  Get Device Characterics in payload (64bits) receive during ENTDAA
  * procedure.
@@ -529,9 +522,7 @@
  * @retval The value of BCR Return value between Min_Data=0x00 and
  * Max_Data=0xFF.
  */
-#define I3C_GET_DCR(__PAYLOAD__)                                               \
-  (((uint32_t)((uint64_t)(__PAYLOAD__) >> I3C_DCR_IN_PAYLOAD_SHIFT)) &         \
-   I3C_DCR_DCR)
+#define I3C_GET_DCR(__PAYLOAD__) (((uint32_t)((uint64_t)(__PAYLOAD__) >> I3C_DCR_IN_PAYLOAD_SHIFT)) & I3C_DCR_DCR)
 
 /** @brief  Get Advanced Capabilities.
  * @param  __BCR__ specifies the Bus Characteristics capabilities retrieve
@@ -541,9 +532,8 @@
  *           ENABLE: supports optional advanced capabilities.
  *           DISABLE: not supports optional advanced capabilities.
  */
-#define I3C_GET_ADVANCED_CAPABLE(__BCR__)                                      \
-  (((((__BCR__) & I3C_BCR_BCR5_Msk) >> I3C_BCR_BCR5_Pos) == 1U) ? ENABLE       \
-                                                                : DISABLE)
+#define I3C_GET_ADVANCED_CAPABLE(__BCR__)                                                                              \
+    (((((__BCR__) & I3C_BCR_BCR5_Msk) >> I3C_BCR_BCR5_Pos) == 1U) ? ENABLE : DISABLE)
 
 /** @brief  Get virtual target support.
  * @param  __BCR__ specifies the Bus Characteristics capabilities retrieve
@@ -553,9 +543,7 @@
  *           ENABLE: is a Virtual Target
  *           DISABLE: is not a Virtual Target
  */
-#define I3C_GET_VIRTUAL_TGT(__BCR__)                                           \
-  (((((__BCR__) & I3C_BCR_BCR4_Msk) >> I3C_BCR_BCR4_Pos) == 1U) ? ENABLE       \
-                                                                : DISABLE)
+#define I3C_GET_VIRTUAL_TGT(__BCR__) (((((__BCR__) & I3C_BCR_BCR4_Msk) >> I3C_BCR_BCR4_Pos) == 1U) ? ENABLE : DISABLE)
 
 /** @brief  Get offline capable.
  * @param  __BCR__ specifies the Bus Characteristics capabilities retrieve
@@ -565,9 +553,8 @@
  *           ENABLE: Device will not always respond to I3C Bus commands
  *           DISABLE: Device will always respond to I3C Bus commands
  */
-#define I3C_GET_OFFLINE_CAPABLE(__BCR__)                                       \
-  (((((__BCR__) & I3C_BCR_BCR3_Msk) >> I3C_BCR_BCR3_Pos) == 1U) ? ENABLE       \
-                                                                : DISABLE)
+#define I3C_GET_OFFLINE_CAPABLE(__BCR__)                                                                               \
+    (((((__BCR__) & I3C_BCR_BCR3_Msk) >> I3C_BCR_BCR3_Pos) == 1U) ? ENABLE : DISABLE)
 
 /** @brief  Get Max data speed limitation.
  * @param  __BCR__ specifies the Bus Characteristics capabilities retrieve
@@ -577,9 +564,8 @@
  *           ENABLE: Limitation
  *           DISABLE: No Limitation
  */
-#define I3C_GET_MAX_DATA_SPEED_LIMIT(__BCR__)                                  \
-  (((((__BCR__) & I3C_BCR_BCR0_Msk) >> I3C_BCR_BCR0_Pos) == 1U) ? ENABLE       \
-                                                                : DISABLE)
+#define I3C_GET_MAX_DATA_SPEED_LIMIT(__BCR__)                                                                          \
+    (((((__BCR__) & I3C_BCR_BCR0_Msk) >> I3C_BCR_BCR0_Pos) == 1U) ? ENABLE : DISABLE)
 
 /** @brief  Change uint32_t variable form big endian to little endian.
  * @param  __DATA__ .uint32_t variable in big endian.
@@ -587,11 +573,9 @@
  * Max_Data=0xFFFFFFFF.
  * @retval uint32_t variable in little endian.
  */
-#define I3C_BIG_TO_LITTLE_ENDIAN(__DATA__)                                     \
-  ((uint32_t)((((__DATA__) & 0xff000000U) >> 24) |                             \
-              (((__DATA__) & 0x00ff0000U) >> 8) |                              \
-              (((__DATA__) & 0x0000ff00U) << 8) |                              \
-              (((__DATA__) & 0x000000ffU) << 24)))
+#define I3C_BIG_TO_LITTLE_ENDIAN(__DATA__)                                                                             \
+    ((uint32_t)((((__DATA__) & 0xff000000U) >> 24) | (((__DATA__) & 0x00ff0000U) >> 8) |                               \
+                (((__DATA__) & 0x0000ff00U) << 8) | (((__DATA__) & 0x000000ffU) << 24)))
 
 /* Private variables
  * -------------------------------------------------------------------------------------------------*/
@@ -601,8 +585,8 @@
 /* Structure containing address device and message type used for the private
  * function I3C_Ctrl_IsDevice_Ready() */
 typedef struct {
-  uint8_t Address;      /* Dynamic or Static target Address */
-  uint32_t MessageType; /* Message Type */
+    uint8_t Address;      /* Dynamic or Static target Address */
+    uint32_t MessageType; /* Message Type */
 
 } I3C_DeviceTypeDef;
 /**
@@ -614,63 +598,34 @@ typedef struct {
 /** @addtogroup I3C_Private_Functions
  * @{
  */
-static HAL_StatusTypeDef I3C_Tgt_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                           uint32_t itMasks);
-static HAL_StatusTypeDef I3C_Ctrl_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                            uint32_t itMasks);
-static HAL_StatusTypeDef I3C_Tgt_Tx_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                        uint32_t itMasks);
-static HAL_StatusTypeDef I3C_Tgt_Rx_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                        uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Tgt_Event_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_Event_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Tgt_Tx_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Tgt_Rx_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
 #if defined(HAL_DMA_MODULE_ENABLED)
-static HAL_StatusTypeDef I3C_Tgt_Tx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                            uint32_t itMasks);
-static HAL_StatusTypeDef I3C_Tgt_Rx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                            uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Tgt_Tx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Tgt_Rx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
 #endif /* HAL_DMA_MODULE_ENABLED */
-static HAL_StatusTypeDef I3C_Tgt_HotJoin_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                             uint32_t itMasks);
-static HAL_StatusTypeDef I3C_Tgt_CtrlRole_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                              uint32_t itMasks);
-static HAL_StatusTypeDef I3C_Tgt_IBI_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                         uint32_t itMasks);
-static HAL_StatusTypeDef I3C_Ctrl_Tx_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                         uint32_t itMasks);
-static HAL_StatusTypeDef I3C_Ctrl_Rx_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                         uint32_t itMasks);
-static HAL_StatusTypeDef
-I3C_Ctrl_Multiple_Xfer_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
-static HAL_StatusTypeDef
-I3C_Ctrl_Tx_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
-                             uint32_t itMasks);
-static HAL_StatusTypeDef
-I3C_Ctrl_Rx_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
-                             uint32_t itMasks);
-static HAL_StatusTypeDef
-I3C_Ctrl_Multiple_Xfer_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                        uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Tgt_HotJoin_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Tgt_CtrlRole_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Tgt_IBI_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_Tx_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_Rx_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_Multiple_Xfer_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_Tx_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_Rx_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_Multiple_Xfer_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
 #if defined(HAL_DMA_MODULE_ENABLED)
-static HAL_StatusTypeDef I3C_Ctrl_Tx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                             uint32_t itMasks);
-static HAL_StatusTypeDef I3C_Ctrl_Rx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                             uint32_t itMasks);
-static HAL_StatusTypeDef
-I3C_Ctrl_Multiple_Xfer_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                               uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_Tx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_Rx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_Multiple_Xfer_DMA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
 #endif /* HAL_DMA_MODULE_ENABLED */
-static HAL_StatusTypeDef I3C_Ctrl_DAA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                          uint32_t itMasks);
-static HAL_StatusTypeDef I3C_Abort_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                       uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Ctrl_DAA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
+static HAL_StatusTypeDef I3C_Abort_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks);
 
-static HAL_StatusTypeDef I3C_WaitOnDAAUntilTimeout(I3C_HandleTypeDef *hi3c,
-                                                   uint32_t timeout,
-                                                   uint32_t tickstart);
-static HAL_StatusTypeDef I3C_WaitOnFlagUntilTimeout(I3C_HandleTypeDef *hi3c,
-                                                    uint32_t flag,
-                                                    FlagStatus flagstatus,
-                                                    uint32_t timeout,
-                                                    uint32_t tickstart);
+static HAL_StatusTypeDef I3C_WaitOnDAAUntilTimeout(I3C_HandleTypeDef *hi3c, uint32_t timeout, uint32_t tickstart);
+static HAL_StatusTypeDef I3C_WaitOnFlagUntilTimeout(I3C_HandleTypeDef *hi3c, uint32_t flag, FlagStatus flagstatus,
+                                                    uint32_t timeout, uint32_t tickstart);
 static void I3C_TransmitByteTreatment(I3C_HandleTypeDef *hi3c);
 static void I3C_TransmitWordTreatment(I3C_HandleTypeDef *hi3c);
 static void I3C_ReceiveByteTreatment(I3C_HandleTypeDef *hi3c);
@@ -688,22 +643,14 @@ static void I3C_DMAError(DMA_HandleTypeDef *hdma);
 #endif /* HAL_DMA_MODULE_ENABLED */
 static void I3C_Enable_IRQ(I3C_HandleTypeDef *hi3c, uint32_t InterruptRequest);
 static void I3C_Disable_IRQ(I3C_HandleTypeDef *hi3c, uint32_t InterruptRequest);
-static HAL_StatusTypeDef I3C_Xfer_PriorPreparation(I3C_HandleTypeDef *hi3c,
-                                                   uint8_t counter,
-                                                   uint32_t option);
-static uint32_t I3C_FillTxBuffer_CCC(I3C_HandleTypeDef *hi3c,
-                                     uint32_t indexDesc, uint32_t txSize,
+static HAL_StatusTypeDef I3C_Xfer_PriorPreparation(I3C_HandleTypeDef *hi3c, uint8_t counter, uint32_t option);
+static uint32_t I3C_FillTxBuffer_CCC(I3C_HandleTypeDef *hi3c, uint32_t indexDesc, uint32_t txSize,
                                      uint32_t txCurrentIndex);
-static uint32_t I3C_FillTxBuffer_Private(I3C_HandleTypeDef *hi3c,
-                                         uint32_t indexDesc, uint32_t txSize,
+static uint32_t I3C_FillTxBuffer_Private(I3C_HandleTypeDef *hi3c, uint32_t indexDesc, uint32_t txSize,
                                          uint32_t txCurrentIndex);
-static HAL_StatusTypeDef
-I3C_ControlBuffer_PriorPreparation(I3C_HandleTypeDef *hi3c, uint8_t counter,
-                                   uint32_t option);
-static HAL_StatusTypeDef
-I3C_Ctrl_IsDevice_Ready(I3C_HandleTypeDef *hi3c,
-                        const I3C_DeviceTypeDef *pDevice, uint32_t trials,
-                        uint32_t timeout);
+static HAL_StatusTypeDef I3C_ControlBuffer_PriorPreparation(I3C_HandleTypeDef *hi3c, uint8_t counter, uint32_t option);
+static HAL_StatusTypeDef I3C_Ctrl_IsDevice_Ready(I3C_HandleTypeDef *hi3c, const I3C_DeviceTypeDef *pDevice,
+                                                 uint32_t trials, uint32_t timeout);
 static void I3C_TreatErrorCallback(I3C_HandleTypeDef *hi3c);
 /**
  * @}
@@ -765,126 +712,118 @@ configuration of the selected I3Cx peripheral.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_Init(I3C_HandleTypeDef *hi3c) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t waveform_value;
-  uint32_t timing_value;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t waveform_value;
+    uint32_t timing_value;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-    /* Check the I3C state */
-    if (hi3c->State == HAL_I3C_STATE_RESET) {
+        /* Check the I3C state */
+        if (hi3c->State == HAL_I3C_STATE_RESET) {
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-      /* Init the I3C Callback settings */
-      /* Legacy weak CtrlTxCpltCallback            */
-      hi3c->CtrlTxCpltCallback = HAL_I3C_CtrlTxCpltCallback;
-      /* Legacy weak CtrlRxCpltCallback            */
-      hi3c->CtrlRxCpltCallback = HAL_I3C_CtrlRxCpltCallback;
-      /* Legacy weak CtrlMultipleXferCpltCallback  */
-      hi3c->CtrlMultipleXferCpltCallback = HAL_I3C_CtrlMultipleXferCpltCallback;
-      /* Legacy weak CtrlDAACpltCallback           */
-      hi3c->CtrlDAACpltCallback = HAL_I3C_CtrlDAACpltCallback;
-      /* Legacy weak TgtReqDynamicAddrCallback     */
-      hi3c->TgtReqDynamicAddrCallback = HAL_I3C_TgtReqDynamicAddrCallback;
-      /* Legacy weak TgtTxCpltCallback             */
-      hi3c->TgtTxCpltCallback = HAL_I3C_TgtTxCpltCallback;
-      /* Legacy weak TgtRxCpltCallback             */
-      hi3c->TgtRxCpltCallback = HAL_I3C_TgtRxCpltCallback;
-      /* Legacy weak TgtHotJoinCallback            */
-      hi3c->TgtHotJoinCallback = HAL_I3C_TgtHotJoinCallback;
-      /* Legacy weak NotifyCallback                */
-      hi3c->NotifyCallback = HAL_I3C_NotifyCallback;
-      /* Legacy weak ErrorCallback                 */
-      hi3c->ErrorCallback = HAL_I3C_ErrorCallback;
-      /* Legacy weak AbortCpltCallback             */
-      hi3c->AbortCpltCallback = HAL_I3C_AbortCpltCallback;
+            /* Init the I3C Callback settings */
+            /* Legacy weak CtrlTxCpltCallback            */
+            hi3c->CtrlTxCpltCallback = HAL_I3C_CtrlTxCpltCallback;
+            /* Legacy weak CtrlRxCpltCallback            */
+            hi3c->CtrlRxCpltCallback = HAL_I3C_CtrlRxCpltCallback;
+            /* Legacy weak CtrlMultipleXferCpltCallback  */
+            hi3c->CtrlMultipleXferCpltCallback = HAL_I3C_CtrlMultipleXferCpltCallback;
+            /* Legacy weak CtrlDAACpltCallback           */
+            hi3c->CtrlDAACpltCallback = HAL_I3C_CtrlDAACpltCallback;
+            /* Legacy weak TgtReqDynamicAddrCallback     */
+            hi3c->TgtReqDynamicAddrCallback = HAL_I3C_TgtReqDynamicAddrCallback;
+            /* Legacy weak TgtTxCpltCallback             */
+            hi3c->TgtTxCpltCallback = HAL_I3C_TgtTxCpltCallback;
+            /* Legacy weak TgtRxCpltCallback             */
+            hi3c->TgtRxCpltCallback = HAL_I3C_TgtRxCpltCallback;
+            /* Legacy weak TgtHotJoinCallback            */
+            hi3c->TgtHotJoinCallback = HAL_I3C_TgtHotJoinCallback;
+            /* Legacy weak NotifyCallback                */
+            hi3c->NotifyCallback = HAL_I3C_NotifyCallback;
+            /* Legacy weak ErrorCallback                 */
+            hi3c->ErrorCallback = HAL_I3C_ErrorCallback;
+            /* Legacy weak AbortCpltCallback             */
+            hi3c->AbortCpltCallback = HAL_I3C_AbortCpltCallback;
 
-      /* Check on the MSP init callback */
-      if (hi3c->MspInitCallback == NULL) {
-        /* Legacy weak MspInit  */
-        hi3c->MspInitCallback = HAL_I3C_MspInit;
-      }
+            /* Check on the MSP init callback */
+            if (hi3c->MspInitCallback == NULL) {
+                /* Legacy weak MspInit  */
+                hi3c->MspInitCallback = HAL_I3C_MspInit;
+            }
 
-      /* Init the low level hardware : GPIO, CLOCK, CORTEX...etc */
-      hi3c->MspInitCallback(hi3c);
+            /* Init the low level hardware : GPIO, CLOCK, CORTEX...etc */
+            hi3c->MspInitCallback(hi3c);
 #else
-      /* Init the low level hardware : GPIO, CLOCK, CORTEX...etc */
-      HAL_I3C_MspInit(hi3c);
+            /* Init the low level hardware : GPIO, CLOCK, CORTEX...etc */
+            HAL_I3C_MspInit(hi3c);
 
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS */
+        }
+
+        /* Update the I3C state to busy */
+        hi3c->State = HAL_I3C_STATE_BUSY;
+
+        /* Disable the selected I3C peripheral */
+        LL_I3C_Disable(hi3c->Instance);
+
+        /* Check on the I3C mode: initialization depends on the mode */
+        if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
+            /* Check the parameters */
+            assert_param(IS_I3C_SDAHOLDTIME_VALUE(hi3c->Init.CtrlBusCharacteristic.SDAHoldTime));
+            assert_param(IS_I3C_WAITTIME_VALUE(hi3c->Init.CtrlBusCharacteristic.WaitTime));
+
+            /* Set Controller mode */
+            LL_I3C_SetMode(hi3c->Instance, LL_I3C_MODE_CONTROLLER);
+
+            /*----------------- SCL signal waveform configuration : I3C timing
+             * register 0 (I3C_TIMINGR0) ------------------ */
+            /* Set the controller SCL waveform */
+            waveform_value =
+                ((uint32_t)hi3c->Init.CtrlBusCharacteristic.SCLPPLowDuration |
+                 ((uint32_t)hi3c->Init.CtrlBusCharacteristic.SCLI3CHighDuration << I3C_TIMINGR0_SCLH_I3C_Pos) |
+                 ((uint32_t)hi3c->Init.CtrlBusCharacteristic.SCLODLowDuration << I3C_TIMINGR0_SCLL_OD_Pos) |
+                 ((uint32_t)hi3c->Init.CtrlBusCharacteristic.SCLI2CHighDuration << I3C_TIMINGR0_SCLH_I2C_Pos));
+
+            LL_I3C_ConfigClockWaveForm(hi3c->Instance, waveform_value);
+
+            /*------------------ Timing configuration : I3C timing register 1
+             * (I3C_TIMINGR1) ------------------------------ */
+            /* Set SDA hold time, activity state, bus free duration and bus available
+             * duration */
+            timing_value = ((uint32_t)hi3c->Init.CtrlBusCharacteristic.SDAHoldTime |
+                            (uint32_t)hi3c->Init.CtrlBusCharacteristic.WaitTime |
+                            ((uint32_t)hi3c->Init.CtrlBusCharacteristic.BusFreeDuration << I3C_TIMINGR1_FREE_Pos) |
+                            (uint32_t)hi3c->Init.CtrlBusCharacteristic.BusIdleDuration);
+
+            LL_I3C_SetCtrlBusCharacteristic(hi3c->Instance, timing_value);
+        } else {
+            /* Set target mode */
+            LL_I3C_SetMode(hi3c->Instance, LL_I3C_MODE_TARGET);
+
+            /*------------------ Timing configuration : I3C timing register 1
+             * (I3C_TIMINGR1) ------------------------------ */
+            /* Set the number of kernel clocks cycles for the bus available condition
+             * time */
+            LL_I3C_SetAvalTiming(hi3c->Instance, hi3c->Init.TgtBusCharacteristic.BusAvailableDuration);
+        }
+
+        /* Enable the selected I3C peripheral */
+        LL_I3C_Enable(hi3c->Instance);
+
+        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+
+        /* Update I3C state */
+        hi3c->State = HAL_I3C_STATE_READY;
+        hi3c->PreviousState = HAL_I3C_STATE_READY;
     }
 
-    /* Update the I3C state to busy */
-    hi3c->State = HAL_I3C_STATE_BUSY;
-
-    /* Disable the selected I3C peripheral */
-    LL_I3C_Disable(hi3c->Instance);
-
-    /* Check on the I3C mode: initialization depends on the mode */
-    if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
-      /* Check the parameters */
-      assert_param(IS_I3C_SDAHOLDTIME_VALUE(
-          hi3c->Init.CtrlBusCharacteristic.SDAHoldTime));
-      assert_param(
-          IS_I3C_WAITTIME_VALUE(hi3c->Init.CtrlBusCharacteristic.WaitTime));
-
-      /* Set Controller mode */
-      LL_I3C_SetMode(hi3c->Instance, LL_I3C_MODE_CONTROLLER);
-
-      /*----------------- SCL signal waveform configuration : I3C timing
-       * register 0 (I3C_TIMINGR0) ------------------ */
-      /* Set the controller SCL waveform */
-      waveform_value =
-          ((uint32_t)hi3c->Init.CtrlBusCharacteristic.SCLPPLowDuration |
-           ((uint32_t)hi3c->Init.CtrlBusCharacteristic.SCLI3CHighDuration
-            << I3C_TIMINGR0_SCLH_I3C_Pos) |
-           ((uint32_t)hi3c->Init.CtrlBusCharacteristic.SCLODLowDuration
-            << I3C_TIMINGR0_SCLL_OD_Pos) |
-           ((uint32_t)hi3c->Init.CtrlBusCharacteristic.SCLI2CHighDuration
-            << I3C_TIMINGR0_SCLH_I2C_Pos));
-
-      LL_I3C_ConfigClockWaveForm(hi3c->Instance, waveform_value);
-
-      /*------------------ Timing configuration : I3C timing register 1
-       * (I3C_TIMINGR1) ------------------------------ */
-      /* Set SDA hold time, activity state, bus free duration and bus available
-       * duration */
-      timing_value =
-          ((uint32_t)hi3c->Init.CtrlBusCharacteristic.SDAHoldTime |
-           (uint32_t)hi3c->Init.CtrlBusCharacteristic.WaitTime |
-           ((uint32_t)hi3c->Init.CtrlBusCharacteristic.BusFreeDuration
-            << I3C_TIMINGR1_FREE_Pos) |
-           (uint32_t)hi3c->Init.CtrlBusCharacteristic.BusIdleDuration);
-
-      LL_I3C_SetCtrlBusCharacteristic(hi3c->Instance, timing_value);
-    } else {
-      /* Set target mode */
-      LL_I3C_SetMode(hi3c->Instance, LL_I3C_MODE_TARGET);
-
-      /*------------------ Timing configuration : I3C timing register 1
-       * (I3C_TIMINGR1) ------------------------------ */
-      /* Set the number of kernel clocks cycles for the bus available condition
-       * time */
-      LL_I3C_SetAvalTiming(
-          hi3c->Instance, hi3c->Init.TgtBusCharacteristic.BusAvailableDuration);
-    }
-
-    /* Enable the selected I3C peripheral */
-    LL_I3C_Enable(hi3c->Instance);
-
-    hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-
-    /* Update I3C state */
-    hi3c->State = HAL_I3C_STATE_READY;
-    hi3c->PreviousState = HAL_I3C_STATE_READY;
-  }
-
-  return status;
+    return status;
 }
 
 /**
@@ -894,44 +833,44 @@ HAL_StatusTypeDef HAL_I3C_Init(I3C_HandleTypeDef *hi3c) {
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_DeInit(I3C_HandleTypeDef *hi3c) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
+    } else {
+        /* Check the parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
 
-    /* Update the I3C state to busy */
-    hi3c->State = HAL_I3C_STATE_BUSY;
+        /* Update the I3C state to busy */
+        hi3c->State = HAL_I3C_STATE_BUSY;
 
-    /* Disable the selected I3C peripheral */
-    LL_I3C_Disable(hi3c->Instance);
+        /* Disable the selected I3C peripheral */
+        LL_I3C_Disable(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Check on the MSP init callback */
-    if (hi3c->MspDeInitCallback == NULL) {
-      /* Legacy weak MspDeInit  */
-      hi3c->MspDeInitCallback = HAL_I3C_MspDeInit;
-    }
+        /* Check on the MSP init callback */
+        if (hi3c->MspDeInitCallback == NULL) {
+            /* Legacy weak MspDeInit  */
+            hi3c->MspDeInitCallback = HAL_I3C_MspDeInit;
+        }
 
-    /* DeInit the low level hardware: GPIO, CLOCK, NVIC */
-    hi3c->MspDeInitCallback(hi3c);
+        /* DeInit the low level hardware: GPIO, CLOCK, NVIC */
+        hi3c->MspDeInitCallback(hi3c);
 #else
-    /* DeInit the low level hardware: GPIO, CLOCK, NVIC */
-    HAL_I3C_MspDeInit(hi3c);
+        /* DeInit the low level hardware: GPIO, CLOCK, NVIC */
+        HAL_I3C_MspDeInit(hi3c);
 
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS */
 
-    /* Update the I3C Error code, state and mode */
-    hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-    hi3c->State = HAL_I3C_STATE_RESET;
-    hi3c->PreviousState = HAL_I3C_STATE_RESET;
-    hi3c->Mode = HAL_I3C_MODE_NONE;
-  }
+        /* Update the I3C Error code, state and mode */
+        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+        hi3c->State = HAL_I3C_STATE_RESET;
+        hi3c->PreviousState = HAL_I3C_STATE_RESET;
+        hi3c->Mode = HAL_I3C_MODE_NONE;
+    }
 
-  return status;
+    return status;
 }
 
 /**
@@ -941,11 +880,11 @@ HAL_StatusTypeDef HAL_I3C_DeInit(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 __weak void HAL_I3C_MspInit(I3C_HandleTypeDef *hi3c) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
 
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_I3C_MspInit could be implemented in the user file */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_I3C_MspInit could be implemented in the user file */
 }
 
 /**
@@ -955,11 +894,11 @@ __weak void HAL_I3C_MspInit(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 __weak void HAL_I3C_MspDeInit(I3C_HandleTypeDef *hi3c) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
 
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_I3C_MspDeInit could be implemented in the user file */
+    /* NOTE : This function should not be modified, when the callback is needed,
+              the HAL_I3C_MspDeInit could be implemented in the user file */
 }
 /**
  * @}
@@ -1058,88 +997,87 @@ handle I3C event interrupts request.
  * @param  pCallback  : [IN]  Pointer to the Callback function.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_RegisterCallback(I3C_HandleTypeDef *hi3c,
-                                           HAL_I3C_CallbackIDTypeDef callbackID,
+HAL_StatusTypeDef HAL_I3C_RegisterCallback(I3C_HandleTypeDef *hi3c, HAL_I3C_CallbackIDTypeDef callbackID,
                                            pI3C_CallbackTypeDef pCallback) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the user callback allocation */
-    if (pCallback == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    } else if (HAL_I3C_STATE_READY == hi3c->State) {
-      switch (callbackID) {
-      case HAL_I3C_CTRL_TX_COMPLETE_CB_ID:
-        hi3c->CtrlTxCpltCallback = pCallback;
-        break;
-
-      case HAL_I3C_CTRL_RX_COMPLETE_CB_ID:
-        hi3c->CtrlRxCpltCallback = pCallback;
-        break;
-
-      case HAL_I3C_CTRL_MULTIPLE_XFER_COMPLETE_CB_ID:
-        hi3c->CtrlMultipleXferCpltCallback = pCallback;
-        break;
-
-      case HAL_I3C_CTRL_DAA_COMPLETE_CB_ID:
-        hi3c->CtrlDAACpltCallback = pCallback;
-        break;
-
-      case HAL_I3C_TGT_TX_COMPLETE_CB_ID:
-        hi3c->TgtTxCpltCallback = pCallback;
-        break;
-
-      case HAL_I3C_TGT_RX_COMPLETE_CB_ID:
-        hi3c->TgtRxCpltCallback = pCallback;
-        break;
-
-      case HAL_I3C_ERROR_CB_ID:
-        hi3c->ErrorCallback = pCallback;
-        break;
-
-      case HAL_I3C_ABORT_CB_ID:
-        hi3c->AbortCpltCallback = pCallback;
-        break;
-
-      case HAL_I3C_MSPINIT_CB_ID:
-        hi3c->MspInitCallback = pCallback;
-        break;
-
-      case HAL_I3C_MSPDEINIT_CB_ID:
-        hi3c->MspDeInitCallback = pCallback;
-        break;
-
-      default:
-        hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_CALLBACK;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
-        break;
-      }
-    } else if (HAL_I3C_STATE_RESET == hi3c->State) {
-      switch (callbackID) {
-      case HAL_I3C_MSPINIT_CB_ID:
-        hi3c->MspInitCallback = pCallback;
-        break;
-
-      case HAL_I3C_MSPDEINIT_CB_ID:
-        hi3c->MspDeInitCallback = pCallback;
-        break;
-
-      default:
-        hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_CALLBACK;
-        status = HAL_ERROR;
-        break;
-      }
     } else {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-  }
+        /* Check the user callback allocation */
+        if (pCallback == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        } else if (HAL_I3C_STATE_READY == hi3c->State) {
+            switch (callbackID) {
+            case HAL_I3C_CTRL_TX_COMPLETE_CB_ID:
+                hi3c->CtrlTxCpltCallback = pCallback;
+                break;
 
-  return status;
+            case HAL_I3C_CTRL_RX_COMPLETE_CB_ID:
+                hi3c->CtrlRxCpltCallback = pCallback;
+                break;
+
+            case HAL_I3C_CTRL_MULTIPLE_XFER_COMPLETE_CB_ID:
+                hi3c->CtrlMultipleXferCpltCallback = pCallback;
+                break;
+
+            case HAL_I3C_CTRL_DAA_COMPLETE_CB_ID:
+                hi3c->CtrlDAACpltCallback = pCallback;
+                break;
+
+            case HAL_I3C_TGT_TX_COMPLETE_CB_ID:
+                hi3c->TgtTxCpltCallback = pCallback;
+                break;
+
+            case HAL_I3C_TGT_RX_COMPLETE_CB_ID:
+                hi3c->TgtRxCpltCallback = pCallback;
+                break;
+
+            case HAL_I3C_ERROR_CB_ID:
+                hi3c->ErrorCallback = pCallback;
+                break;
+
+            case HAL_I3C_ABORT_CB_ID:
+                hi3c->AbortCpltCallback = pCallback;
+                break;
+
+            case HAL_I3C_MSPINIT_CB_ID:
+                hi3c->MspInitCallback = pCallback;
+                break;
+
+            case HAL_I3C_MSPDEINIT_CB_ID:
+                hi3c->MspDeInitCallback = pCallback;
+                break;
+
+            default:
+                hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_CALLBACK;
+                status = HAL_ERROR;
+                break;
+            }
+        } else if (HAL_I3C_STATE_RESET == hi3c->State) {
+            switch (callbackID) {
+            case HAL_I3C_MSPINIT_CB_ID:
+                hi3c->MspInitCallback = pCallback;
+                break;
+
+            case HAL_I3C_MSPDEINIT_CB_ID:
+                hi3c->MspDeInitCallback = pCallback;
+                break;
+
+            default:
+                hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_CALLBACK;
+                status = HAL_ERROR;
+                break;
+            }
+        } else {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -1150,28 +1088,26 @@ HAL_StatusTypeDef HAL_I3C_RegisterCallback(I3C_HandleTypeDef *hi3c,
  * @param  pNotifyCallback : [IN]  Pointer to the Callback function.
  * @retval HAL Status      :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef
-HAL_I3C_RegisterNotifyCallback(I3C_HandleTypeDef *hi3c,
-                               pI3C_NotifyCallbackTypeDef pNotifyCallback) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_RegisterNotifyCallback(I3C_HandleTypeDef *hi3c, pI3C_NotifyCallbackTypeDef pNotifyCallback) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the user callback allocation */
-    if (pNotifyCallback == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    } else if (HAL_I3C_STATE_READY == hi3c->State) {
-      hi3c->NotifyCallback = pNotifyCallback;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+        /* Check the user callback allocation */
+        if (pNotifyCallback == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        } else if (HAL_I3C_STATE_READY == hi3c->State) {
+            hi3c->NotifyCallback = pNotifyCallback;
+        } else {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -1182,28 +1118,27 @@ HAL_I3C_RegisterNotifyCallback(I3C_HandleTypeDef *hi3c,
  * @param  pTgtReqAddrCallback : [IN]  Pointer to the Callback function.
  * @retval HAL Status          :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_RegisterTgtReqDynamicAddrCallback(
-    I3C_HandleTypeDef *hi3c,
-    pI3C_TgtReqDynamicAddrCallbackTypeDef pTgtReqAddrCallback) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_RegisterTgtReqDynamicAddrCallback(I3C_HandleTypeDef *hi3c,
+                                                            pI3C_TgtReqDynamicAddrCallbackTypeDef pTgtReqAddrCallback) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the user callback allocation */
-    if (pTgtReqAddrCallback == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    } else if (HAL_I3C_STATE_READY == hi3c->State) {
-      hi3c->TgtReqDynamicAddrCallback = pTgtReqAddrCallback;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+        /* Check the user callback allocation */
+        if (pTgtReqAddrCallback == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        } else if (HAL_I3C_STATE_READY == hi3c->State) {
+            hi3c->TgtReqDynamicAddrCallback = pTgtReqAddrCallback;
+        } else {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -1214,28 +1149,27 @@ HAL_StatusTypeDef HAL_I3C_RegisterTgtReqDynamicAddrCallback(
  * @param  pTgtHotJoinCallback : [IN]  Pointer to the Callback function.
  * @retval HAL Status          :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_RegisterTgtHotJoinCallback(
-    I3C_HandleTypeDef *hi3c,
-    pI3C_TgtHotJoinCallbackTypeDef pTgtHotJoinCallback) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_RegisterTgtHotJoinCallback(I3C_HandleTypeDef *hi3c,
+                                                     pI3C_TgtHotJoinCallbackTypeDef pTgtHotJoinCallback) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the user callback allocation */
-    if (pTgtHotJoinCallback == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    } else if (HAL_I3C_STATE_READY == hi3c->State) {
-      hi3c->TgtHotJoinCallback = pTgtHotJoinCallback;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+        /* Check the user callback allocation */
+        if (pTgtHotJoinCallback == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        } else if (HAL_I3C_STATE_READY == hi3c->State) {
+            hi3c->TgtHotJoinCallback = pTgtHotJoinCallback;
+        } else {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -1264,112 +1198,109 @@ HAL_StatusTypeDef HAL_I3C_RegisterTgtHotJoinCallback(
  *                            @arg @ref HAL_I3C_MSPDEINIT_CB_ID
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef
-HAL_I3C_UnRegisterCallback(I3C_HandleTypeDef *hi3c,
-                           HAL_I3C_CallbackIDTypeDef callbackID) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_UnRegisterCallback(I3C_HandleTypeDef *hi3c, HAL_I3C_CallbackIDTypeDef callbackID) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    if (HAL_I3C_STATE_READY == hi3c->State) {
-      switch (callbackID) {
-      case HAL_I3C_CTRL_TX_COMPLETE_CB_ID:
-        /* Legacy weak CtrlTxCpltCallback               */
-        hi3c->CtrlTxCpltCallback = HAL_I3C_CtrlTxCpltCallback;
-        break;
-
-      case HAL_I3C_CTRL_RX_COMPLETE_CB_ID:
-        /* Legacy weak CtrlRxCpltCallback               */
-        hi3c->CtrlRxCpltCallback = HAL_I3C_CtrlRxCpltCallback;
-        break;
-
-      case HAL_I3C_CTRL_MULTIPLE_XFER_COMPLETE_CB_ID:
-        /* Legacy weak CtrlMultipleXferCpltCallback     */
-        hi3c->CtrlMultipleXferCpltCallback =
-            HAL_I3C_CtrlMultipleXferCpltCallback;
-        break;
-
-      case HAL_I3C_CTRL_DAA_COMPLETE_CB_ID:
-        /* Legacy weak CtrlDAACpltCallback              */
-        hi3c->CtrlDAACpltCallback = HAL_I3C_CtrlDAACpltCallback;
-        break;
-
-      case HAL_I3C_TGT_REQ_DYNAMIC_ADDR_CB_ID:
-        /*Legacy weak TgtReqDynamicAddrCallback          */
-        hi3c->TgtReqDynamicAddrCallback = HAL_I3C_TgtReqDynamicAddrCallback;
-        break;
-
-      case HAL_I3C_TGT_TX_COMPLETE_CB_ID:
-        /* Legacy weak TgtTxCpltCallback                 */
-        hi3c->TgtTxCpltCallback = HAL_I3C_TgtTxCpltCallback;
-        break;
-
-      case HAL_I3C_TGT_RX_COMPLETE_CB_ID:
-        /* Legacy weak TgtRxCpltCallback                 */
-        hi3c->TgtRxCpltCallback = HAL_I3C_TgtRxCpltCallback;
-        break;
-
-      case HAL_I3C_TGT_HOTJOIN_CB_ID:
-        /* Legacy weak TgtHotJoinCallback                */
-        hi3c->TgtHotJoinCallback = HAL_I3C_TgtHotJoinCallback;
-        break;
-
-      case HAL_I3C_NOTIFY_CB_ID:
-        /* Legacy weak NotifyCallback                    */
-        hi3c->NotifyCallback = HAL_I3C_NotifyCallback;
-        break;
-
-      case HAL_I3C_ERROR_CB_ID:
-        /* Legacy weak ErrorCallback                     */
-        hi3c->ErrorCallback = HAL_I3C_ErrorCallback;
-        break;
-
-      case HAL_I3C_ABORT_CB_ID:
-        /* Legacy weak AbortCpltCallback                 */
-        hi3c->AbortCpltCallback = HAL_I3C_AbortCpltCallback;
-        break;
-
-      case HAL_I3C_MSPINIT_CB_ID:
-        /* Legacy weak MspInit                           */
-        hi3c->MspInitCallback = HAL_I3C_MspInit;
-        break;
-
-      case HAL_I3C_MSPDEINIT_CB_ID:
-        /* Legacy weak MspDeInit                         */
-        hi3c->MspDeInitCallback = HAL_I3C_MspDeInit;
-        break;
-
-      default:
-        hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_CALLBACK;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
-        break;
-      }
-    } else if (HAL_I3C_STATE_RESET == hi3c->State) {
-      switch (callbackID) {
-      case HAL_I3C_MSPINIT_CB_ID:
-        /* Legacy weak MspInit                           */
-        hi3c->MspInitCallback = HAL_I3C_MspInit;
-        break;
-
-      case HAL_I3C_MSPDEINIT_CB_ID:
-        /* Legacy weak MspDeInit                         */
-        hi3c->MspDeInitCallback = HAL_I3C_MspDeInit;
-        break;
-
-      default:
-        hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_CALLBACK;
-        status = HAL_ERROR;
-        break;
-      }
     } else {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-  }
+        if (HAL_I3C_STATE_READY == hi3c->State) {
+            switch (callbackID) {
+            case HAL_I3C_CTRL_TX_COMPLETE_CB_ID:
+                /* Legacy weak CtrlTxCpltCallback               */
+                hi3c->CtrlTxCpltCallback = HAL_I3C_CtrlTxCpltCallback;
+                break;
 
-  return status;
+            case HAL_I3C_CTRL_RX_COMPLETE_CB_ID:
+                /* Legacy weak CtrlRxCpltCallback               */
+                hi3c->CtrlRxCpltCallback = HAL_I3C_CtrlRxCpltCallback;
+                break;
+
+            case HAL_I3C_CTRL_MULTIPLE_XFER_COMPLETE_CB_ID:
+                /* Legacy weak CtrlMultipleXferCpltCallback     */
+                hi3c->CtrlMultipleXferCpltCallback = HAL_I3C_CtrlMultipleXferCpltCallback;
+                break;
+
+            case HAL_I3C_CTRL_DAA_COMPLETE_CB_ID:
+                /* Legacy weak CtrlDAACpltCallback              */
+                hi3c->CtrlDAACpltCallback = HAL_I3C_CtrlDAACpltCallback;
+                break;
+
+            case HAL_I3C_TGT_REQ_DYNAMIC_ADDR_CB_ID:
+                /*Legacy weak TgtReqDynamicAddrCallback          */
+                hi3c->TgtReqDynamicAddrCallback = HAL_I3C_TgtReqDynamicAddrCallback;
+                break;
+
+            case HAL_I3C_TGT_TX_COMPLETE_CB_ID:
+                /* Legacy weak TgtTxCpltCallback                 */
+                hi3c->TgtTxCpltCallback = HAL_I3C_TgtTxCpltCallback;
+                break;
+
+            case HAL_I3C_TGT_RX_COMPLETE_CB_ID:
+                /* Legacy weak TgtRxCpltCallback                 */
+                hi3c->TgtRxCpltCallback = HAL_I3C_TgtRxCpltCallback;
+                break;
+
+            case HAL_I3C_TGT_HOTJOIN_CB_ID:
+                /* Legacy weak TgtHotJoinCallback                */
+                hi3c->TgtHotJoinCallback = HAL_I3C_TgtHotJoinCallback;
+                break;
+
+            case HAL_I3C_NOTIFY_CB_ID:
+                /* Legacy weak NotifyCallback                    */
+                hi3c->NotifyCallback = HAL_I3C_NotifyCallback;
+                break;
+
+            case HAL_I3C_ERROR_CB_ID:
+                /* Legacy weak ErrorCallback                     */
+                hi3c->ErrorCallback = HAL_I3C_ErrorCallback;
+                break;
+
+            case HAL_I3C_ABORT_CB_ID:
+                /* Legacy weak AbortCpltCallback                 */
+                hi3c->AbortCpltCallback = HAL_I3C_AbortCpltCallback;
+                break;
+
+            case HAL_I3C_MSPINIT_CB_ID:
+                /* Legacy weak MspInit                           */
+                hi3c->MspInitCallback = HAL_I3C_MspInit;
+                break;
+
+            case HAL_I3C_MSPDEINIT_CB_ID:
+                /* Legacy weak MspDeInit                         */
+                hi3c->MspDeInitCallback = HAL_I3C_MspDeInit;
+                break;
+
+            default:
+                hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_CALLBACK;
+                status = HAL_ERROR;
+                break;
+            }
+        } else if (HAL_I3C_STATE_RESET == hi3c->State) {
+            switch (callbackID) {
+            case HAL_I3C_MSPINIT_CB_ID:
+                /* Legacy weak MspInit                           */
+                hi3c->MspInitCallback = HAL_I3C_MspInit;
+                break;
+
+            case HAL_I3C_MSPDEINIT_CB_ID:
+                /* Legacy weak MspDeInit                         */
+                hi3c->MspDeInitCallback = HAL_I3C_MspDeInit;
+                break;
+
+            default:
+                hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_CALLBACK;
+                status = HAL_ERROR;
+                break;
+            }
+        } else {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+    }
+
+    return status;
 }
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
 
@@ -1386,72 +1317,68 @@ HAL_I3C_UnRegisterCallback(I3C_HandleTypeDef *hi3c,
  * I3C_CONTROLLER_INTERRUPT when it is in controller mode.
  * @retval HAL Status    :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_ActivateNotification(I3C_HandleTypeDef *hi3c,
-                                               I3C_XferTypeDef *pXferData,
+HAL_StatusTypeDef HAL_I3C_ActivateNotification(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData,
                                                uint32_t interruptMask) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-    assert_param(IS_I3C_INTERRUPTMASK(hi3c->Mode, interruptMask));
-
-    /* Check the I3C state and mode */
-    if ((hi3c->State == HAL_I3C_STATE_RESET) ||
-        ((hi3c->Mode != HAL_I3C_MODE_CONTROLLER) &&
-         (hi3c->Mode != HAL_I3C_MODE_TARGET))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* Check the I3C mode */
-    else if ((hi3c->Mode == HAL_I3C_MODE_TARGET) &&
-             ((interruptMask & (HAL_I3C_IT_DEFIE | HAL_I3C_IT_GRPIE)) != 0U) &&
-             (pXferData == NULL)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
+    /* Check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Check the I3C mode */
-      if (hi3c->Mode == HAL_I3C_MODE_TARGET) {
-        if ((interruptMask & (HAL_I3C_IT_DEFIE | HAL_I3C_IT_GRPIE)) != 0U) {
-          hi3c->pXferData = pXferData;
-          hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
+        assert_param(IS_I3C_INTERRUPTMASK(hi3c->Mode, interruptMask));
 
-          /* Check on the Rx threshold to know the Rx treatment process : byte
-           * or word */
-          if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-              LL_I3C_RXFIFO_THRESHOLD_1_4) {
-            /* Set byte treatment function pointer */
-            hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
-          } else {
-            /* Set word treatment function pointer */
-            hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
-          }
+        /* Check the I3C state and mode */
+        if ((hi3c->State == HAL_I3C_STATE_RESET) ||
+            ((hi3c->Mode != HAL_I3C_MODE_CONTROLLER) && (hi3c->Mode != HAL_I3C_MODE_TARGET))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
         }
-        /* Store the target event treatment function */
-        hi3c->XferISR = I3C_Tgt_Event_ISR;
-      } else {
-        /* Store the controller event treatment function */
-        hi3c->XferISR = I3C_Ctrl_Event_ISR;
-      }
+        /* Check the I3C mode */
+        else if ((hi3c->Mode == HAL_I3C_MODE_TARGET) &&
+                 ((interruptMask & (HAL_I3C_IT_DEFIE | HAL_I3C_IT_GRPIE)) != 0U) && (pXferData == NULL)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        } else {
+            /* Check the I3C mode */
+            if (hi3c->Mode == HAL_I3C_MODE_TARGET) {
+                if ((interruptMask & (HAL_I3C_IT_DEFIE | HAL_I3C_IT_GRPIE)) != 0U) {
+                    hi3c->pXferData = pXferData;
+                    hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
 
-      /* Update handle parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_LISTEN;
-      hi3c->PreviousState = HAL_I3C_STATE_LISTEN;
+                    /* Check on the Rx threshold to know the Rx treatment process : byte
+                     * or word */
+                    if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                        /* Set byte treatment function pointer */
+                        hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
+                    } else {
+                        /* Set word treatment function pointer */
+                        hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
+                    }
+                }
+                /* Store the target event treatment function */
+                hi3c->XferISR = I3C_Tgt_Event_ISR;
+            } else {
+                /* Store the controller event treatment function */
+                hi3c->XferISR = I3C_Ctrl_Event_ISR;
+            }
 
-      /* Note : The I3C interrupts must be enabled after unlocking current
-      process to avoid the risk of I3C interrupt handle execution before current
-      process unlock */
-      /* Enable selected notifications */
-      I3C_Enable_IRQ(hi3c, (interruptMask | I3C_XFER_LISTEN_IT));
+            /* Update handle parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_LISTEN;
+            hi3c->PreviousState = HAL_I3C_STATE_LISTEN;
+
+            /* Note : The I3C interrupts must be enabled after unlocking current
+            process to avoid the risk of I3C interrupt handle execution before current
+            process unlock */
+            /* Enable selected notifications */
+            I3C_Enable_IRQ(hi3c, (interruptMask | I3C_XFER_LISTEN_IT));
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -1464,37 +1391,36 @@ HAL_StatusTypeDef HAL_I3C_ActivateNotification(I3C_HandleTypeDef *hi3c,
  * I3C_CONTROLLER_INTERRUPT when it is in controller mode.
  * @retval HAL Status    :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_DeactivateNotification(I3C_HandleTypeDef *hi3c,
-                                                 uint32_t interruptMask) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_DeactivateNotification(I3C_HandleTypeDef *hi3c, uint32_t interruptMask) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance parameter */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-
-    /* Check on the State */
-    if (hi3c->State == HAL_I3C_STATE_RESET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Disable selected notifications */
-      I3C_Disable_IRQ(hi3c, (interruptMask | I3C_XFER_LISTEN_IT));
+        /* Check the instance parameter */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
 
-      if (READ_REG(hi3c->Instance->IER) == 0U) {
-        /* Update the XferISR pointer */
-        hi3c->XferISR = NULL;
+        /* Check on the State */
+        if (hi3c->State == HAL_I3C_STATE_RESET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Disable selected notifications */
+            I3C_Disable_IRQ(hi3c, (interruptMask | I3C_XFER_LISTEN_IT));
 
-        /* Update I3C state */
-        hi3c->State = HAL_I3C_STATE_READY;
-        hi3c->PreviousState = HAL_I3C_STATE_READY;
-      }
+            if (READ_REG(hi3c->Instance->IER) == 0U) {
+                /* Update the XferISR pointer */
+                hi3c->XferISR = NULL;
+
+                /* Update I3C state */
+                hi3c->State = HAL_I3C_STATE_READY;
+                hi3c->PreviousState = HAL_I3C_STATE_READY;
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -1504,12 +1430,12 @@ HAL_StatusTypeDef HAL_I3C_DeactivateNotification(I3C_HandleTypeDef *hi3c,
  * @retval None
  */
 __weak void HAL_I3C_CtrlTxCpltCallback(I3C_HandleTypeDef *hi3c) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_CtrlTxCpltCallback could be implemented in the user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_CtrlTxCpltCallback could be implemented in the user file
+     */
 }
 
 /**
@@ -1519,12 +1445,12 @@ __weak void HAL_I3C_CtrlTxCpltCallback(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 __weak void HAL_I3C_CtrlRxCpltCallback(I3C_HandleTypeDef *hi3c) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_CtrlRxCpltCallback could be implemented in the user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_CtrlRxCpltCallback could be implemented in the user file
+     */
 }
 
 /**
@@ -1535,13 +1461,13 @@ __weak void HAL_I3C_CtrlRxCpltCallback(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 __weak void HAL_I3C_CtrlMultipleXferCpltCallback(I3C_HandleTypeDef *hi3c) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_CtrlMultipleXferCpltCallback could be implemented in the
-     user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_CtrlMultipleXferCpltCallback could be implemented in the
+       user file
+     */
 }
 
 /**
@@ -1551,13 +1477,13 @@ __weak void HAL_I3C_CtrlMultipleXferCpltCallback(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 __weak void HAL_I3C_CtrlDAACpltCallback(I3C_HandleTypeDef *hi3c) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_CtrlDAACpltCallback could be implemented in the user
-     file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_CtrlDAACpltCallback could be implemented in the user
+       file
+     */
 }
 
 /**
@@ -1567,16 +1493,15 @@ __weak void HAL_I3C_CtrlDAACpltCallback(I3C_HandleTypeDef *hi3c) {
  * @param  targetPayload : [IN] Parameter indicates the target payload.
  * @retval None
  */
-__weak void HAL_I3C_TgtReqDynamicAddrCallback(I3C_HandleTypeDef *hi3c,
-                                              uint64_t targetPayload) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
-  UNUSED(targetPayload);
+__weak void HAL_I3C_TgtReqDynamicAddrCallback(I3C_HandleTypeDef *hi3c, uint64_t targetPayload) {
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
+    UNUSED(targetPayload);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_TgtReqDynamicAddrCallback could be implemented in the
-     user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_TgtReqDynamicAddrCallback could be implemented in the
+       user file
+     */
 }
 
 /**
@@ -1586,12 +1511,12 @@ __weak void HAL_I3C_TgtReqDynamicAddrCallback(I3C_HandleTypeDef *hi3c,
  * @retval None
  */
 __weak void HAL_I3C_TgtTxCpltCallback(I3C_HandleTypeDef *hi3c) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_TgtTxCpltCallback could be implemented in the user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_TgtTxCpltCallback could be implemented in the user file
+     */
 }
 
 /**
@@ -1601,12 +1526,12 @@ __weak void HAL_I3C_TgtTxCpltCallback(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 __weak void HAL_I3C_TgtRxCpltCallback(I3C_HandleTypeDef *hi3c) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_TgtRxCpltCallback could be implemented in the user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_TgtRxCpltCallback could be implemented in the user file
+     */
 }
 
 /**
@@ -1617,15 +1542,14 @@ __weak void HAL_I3C_TgtRxCpltCallback(I3C_HandleTypeDef *hi3c) {
  * hot join process.
  * @retval None
  */
-__weak void HAL_I3C_TgtHotJoinCallback(I3C_HandleTypeDef *hi3c,
-                                       uint8_t dynamicAddress) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
-  UNUSED(dynamicAddress);
+__weak void HAL_I3C_TgtHotJoinCallback(I3C_HandleTypeDef *hi3c, uint8_t dynamicAddress) {
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
+    UNUSED(dynamicAddress);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_TgtHotJoinCallback could be implemented in the user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_TgtHotJoinCallback could be implemented in the user file
+     */
 }
 
 /**
@@ -1638,13 +1562,13 @@ __weak void HAL_I3C_TgtHotJoinCallback(I3C_HandleTypeDef *hi3c,
  * @retval None
  */
 __weak void HAL_I3C_NotifyCallback(I3C_HandleTypeDef *hi3c, uint32_t eventId) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
-  UNUSED(eventId);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
+    UNUSED(eventId);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_NotifyCallback could be implemented in the user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_NotifyCallback could be implemented in the user file
+     */
 }
 
 /**
@@ -1654,12 +1578,12 @@ __weak void HAL_I3C_NotifyCallback(I3C_HandleTypeDef *hi3c, uint32_t eventId) {
  * @retval None
  */
 __weak void HAL_I3C_AbortCpltCallback(I3C_HandleTypeDef *hi3c) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_AbortCpltCallback could be implemented in the user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_AbortCpltCallback could be implemented in the user file
+     */
 }
 
 /**
@@ -1669,12 +1593,12 @@ __weak void HAL_I3C_AbortCpltCallback(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 __weak void HAL_I3C_ErrorCallback(I3C_HandleTypeDef *hi3c) {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hi3c);
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hi3c);
 
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_I3C_ErrorCallback could be implemented in the user file
-   */
+    /* NOTE : This function Should not be modified, when the callback is needed,
+              the HAL_I3C_ErrorCallback could be implemented in the user file
+     */
 }
 
 /**
@@ -1684,23 +1608,23 @@ __weak void HAL_I3C_ErrorCallback(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 void HAL_I3C_ER_IRQHandler(I3C_HandleTypeDef *hi3c) {
-  uint32_t it_flag = READ_REG(hi3c->Instance->EVR);
-  uint32_t it_source = READ_REG(hi3c->Instance->IER);
+    uint32_t it_flag = READ_REG(hi3c->Instance->EVR);
+    uint32_t it_source = READ_REG(hi3c->Instance->IER);
 
-  /* Check on the error interrupt flag and source */
-  if ((I3C_CHECK_FLAG(it_flag, HAL_I3C_FLAG_ERRF) != RESET) &&
-      (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_ERRIE) != RESET)) {
-    /* Clear the error flag */
-    LL_I3C_ClearFlag_ERR(hi3c->Instance);
+    /* Check on the error interrupt flag and source */
+    if ((I3C_CHECK_FLAG(it_flag, HAL_I3C_FLAG_ERRF) != RESET) &&
+        (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_ERRIE) != RESET)) {
+        /* Clear the error flag */
+        LL_I3C_ClearFlag_ERR(hi3c->Instance);
 
-    if (hi3c->State != HAL_I3C_STATE_ABORT) {
-      /* Get error sources */
-      I3C_GetErrorSources(hi3c);
+        if (hi3c->State != HAL_I3C_STATE_ABORT) {
+            /* Get error sources */
+            I3C_GetErrorSources(hi3c);
+        }
+
+        /* Errors treatment */
+        I3C_ErrorTreatment(hi3c);
     }
-
-    /* Errors treatment */
-    I3C_ErrorTreatment(hi3c);
-  }
 }
 
 /**
@@ -1709,18 +1633,17 @@ void HAL_I3C_ER_IRQHandler(I3C_HandleTypeDef *hi3c) {
  * the configuration information for the specified I3C.
  * @retval None
  */
-void HAL_I3C_EV_IRQHandler(
-    I3C_HandleTypeDef *hi3c) /* Derogation MISRAC2012-Rule-8.13 */
+void HAL_I3C_EV_IRQHandler(I3C_HandleTypeDef *hi3c) /* Derogation MISRAC2012-Rule-8.13 */
 {
-  uint32_t it_flags = READ_REG(hi3c->Instance->EVR);
-  uint32_t it_sources = READ_REG(hi3c->Instance->IER);
+    uint32_t it_flags = READ_REG(hi3c->Instance->EVR);
+    uint32_t it_sources = READ_REG(hi3c->Instance->IER);
 
-  uint32_t it_masks = (uint32_t)(it_flags & it_sources);
+    uint32_t it_masks = (uint32_t)(it_flags & it_sources);
 
-  /* I3C events treatment */
-  if (hi3c->XferISR != NULL) {
-    hi3c->XferISR(hi3c, it_masks);
-  }
+    /* I3C events treatment */
+    if (hi3c->XferISR != NULL) {
+        hi3c->XferISR(hi3c, it_masks);
+    }
 }
 /**
  * @}
@@ -1784,69 +1707,63 @@ current reset pattern configuration
  * contains controller bus configuration.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef
-HAL_I3C_Ctrl_BusCharacteristicConfig(I3C_HandleTypeDef *hi3c,
-                                     const LL_I3C_CtrlBusConfTypeDef *pConfig) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t waveform_value;
-  uint32_t timing_value;
+HAL_StatusTypeDef HAL_I3C_Ctrl_BusCharacteristicConfig(I3C_HandleTypeDef *hi3c,
+                                                       const LL_I3C_CtrlBusConfTypeDef *pConfig) {
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t waveform_value;
+    uint32_t timing_value;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check on user parameters */
-    if (pConfig == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check the I3C state and mode */
-    else if ((hi3c->State != HAL_I3C_STATE_READY) ||
-             (hi3c->Mode != HAL_I3C_MODE_CONTROLLER)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Check the parameters */
-      assert_param(IS_I3C_SDAHOLDTIME_VALUE(pConfig->SDAHoldTime));
-      assert_param(IS_I3C_WAITTIME_VALUE(pConfig->WaitTime));
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Disable the selected I3C peripheral */
-      LL_I3C_Disable(hi3c->Instance);
+        /* Check on user parameters */
+        if (pConfig == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check the I3C state and mode */
+        else if ((hi3c->State != HAL_I3C_STATE_READY) || (hi3c->Mode != HAL_I3C_MODE_CONTROLLER)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Check the parameters */
+            assert_param(IS_I3C_SDAHOLDTIME_VALUE(pConfig->SDAHoldTime));
+            assert_param(IS_I3C_WAITTIME_VALUE(pConfig->WaitTime));
 
-      /*----------------- SCL signal waveform configuration : I3C timing
-       * register 0 (I3C_TIMINGR0) ------------------ */
-      /* Set the controller SCL waveform */
-      waveform_value =
-          ((uint32_t)pConfig->SCLPPLowDuration |
-           ((uint32_t)pConfig->SCLI3CHighDuration
-            << I3C_TIMINGR0_SCLH_I3C_Pos) |
-           ((uint32_t)pConfig->SCLODLowDuration << I3C_TIMINGR0_SCLL_OD_Pos) |
-           ((uint32_t)pConfig->SCLI2CHighDuration
-            << I3C_TIMINGR0_SCLH_I2C_Pos));
+            /* Disable the selected I3C peripheral */
+            LL_I3C_Disable(hi3c->Instance);
 
-      LL_I3C_ConfigClockWaveForm(hi3c->Instance, waveform_value);
+            /*----------------- SCL signal waveform configuration : I3C timing
+             * register 0 (I3C_TIMINGR0) ------------------ */
+            /* Set the controller SCL waveform */
+            waveform_value = ((uint32_t)pConfig->SCLPPLowDuration |
+                              ((uint32_t)pConfig->SCLI3CHighDuration << I3C_TIMINGR0_SCLH_I3C_Pos) |
+                              ((uint32_t)pConfig->SCLODLowDuration << I3C_TIMINGR0_SCLL_OD_Pos) |
+                              ((uint32_t)pConfig->SCLI2CHighDuration << I3C_TIMINGR0_SCLH_I2C_Pos));
 
-      /*------------------ Timing configuration : I3C timing register 1
-       * (I3C_TIMINGR1) ------------------------------ */
-      /* Set SDA hold time, activity state, bus free duration and bus available
-       * duration */
-      timing_value =
-          ((uint32_t)pConfig->SDAHoldTime | (uint32_t)pConfig->WaitTime |
-           ((uint32_t)pConfig->BusFreeDuration << I3C_TIMINGR1_FREE_Pos) |
-           (uint32_t)pConfig->BusIdleDuration);
+            LL_I3C_ConfigClockWaveForm(hi3c->Instance, waveform_value);
 
-      LL_I3C_SetCtrlBusCharacteristic(hi3c->Instance, timing_value);
+            /*------------------ Timing configuration : I3C timing register 1
+             * (I3C_TIMINGR1) ------------------------------ */
+            /* Set SDA hold time, activity state, bus free duration and bus available
+             * duration */
+            timing_value =
+                ((uint32_t)pConfig->SDAHoldTime | (uint32_t)pConfig->WaitTime |
+                 ((uint32_t)pConfig->BusFreeDuration << I3C_TIMINGR1_FREE_Pos) | (uint32_t)pConfig->BusIdleDuration);
 
-      /* Enable the selected I3C peripheral */
-      LL_I3C_Enable(hi3c->Instance);
+            LL_I3C_SetCtrlBusCharacteristic(hi3c->Instance, timing_value);
+
+            /* Enable the selected I3C peripheral */
+            LL_I3C_Enable(hi3c->Instance);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -1857,46 +1774,44 @@ HAL_I3C_Ctrl_BusCharacteristicConfig(I3C_HandleTypeDef *hi3c,
  * contains target bus configuration.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef
-HAL_I3C_Tgt_BusCharacteristicConfig(I3C_HandleTypeDef *hi3c,
-                                    const LL_I3C_TgtBusConfTypeDef *pConfig) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Tgt_BusCharacteristicConfig(I3C_HandleTypeDef *hi3c,
+                                                      const LL_I3C_TgtBusConfTypeDef *pConfig) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check on user parameters */
-    if (pConfig == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    } else {
-      /* Check the instance and the mode parameters */
-      assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-      assert_param(IS_I3C_MODE(hi3c->Mode));
-
-      /* Check the I3C state and mode */
-      if ((hi3c->State != HAL_I3C_STATE_READY) ||
-          (hi3c->Mode != HAL_I3C_MODE_TARGET)) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
-      } else {
-        /* Disable the selected I3C peripheral */
-        LL_I3C_Disable(hi3c->Instance);
+    } else {
+        /* Check on user parameters */
+        if (pConfig == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        } else {
+            /* Check the instance and the mode parameters */
+            assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+            assert_param(IS_I3C_MODE(hi3c->Mode));
 
-        /*------------------ Timing configuration : I3C timing register 1
-         * (I3C_TIMINGR1) ---------------------------- */
-        /* Set the number of kernel clocks cycles for the bus available
-         * condition time */
-        LL_I3C_SetAvalTiming(hi3c->Instance, pConfig->BusAvailableDuration);
+            /* Check the I3C state and mode */
+            if ((hi3c->State != HAL_I3C_STATE_READY) || (hi3c->Mode != HAL_I3C_MODE_TARGET)) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+                status = HAL_ERROR;
+            } else {
+                /* Disable the selected I3C peripheral */
+                LL_I3C_Disable(hi3c->Instance);
 
-        /* Enable the selected I3C peripheral */
-        LL_I3C_Enable(hi3c->Instance);
-      }
+                /*------------------ Timing configuration : I3C timing register 1
+                 * (I3C_TIMINGR1) ---------------------------- */
+                /* Set the number of kernel clocks cycles for the bus available
+                 * condition time */
+                LL_I3C_SetAvalTiming(hi3c->Instance, pConfig->BusAvailableDuration);
+
+                /* Enable the selected I3C peripheral */
+                LL_I3C_Enable(hi3c->Instance);
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -1907,56 +1822,55 @@ HAL_I3C_Tgt_BusCharacteristicConfig(I3C_HandleTypeDef *hi3c,
  * contains FIFOs configuration.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_SetConfigFifo(I3C_HandleTypeDef *hi3c,
-                                        const I3C_FifoConfTypeDef *pConfig) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t cfgr_value;
-  uint32_t cfgr_mask;
+HAL_StatusTypeDef HAL_I3C_SetConfigFifo(I3C_HandleTypeDef *hi3c, const I3C_FifoConfTypeDef *pConfig) {
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t cfgr_value;
+    uint32_t cfgr_mask;
 
-  /* Check the I3C handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check on user parameters */
-    if (pConfig == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check the I3C state */
-    else if (hi3c->State == HAL_I3C_STATE_RESET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Check the instance and the mode parameters */
-      assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-      assert_param(IS_I3C_MODE(hi3c->Mode));
+        /* Check on user parameters */
+        if (pConfig == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check the I3C state */
+        else if (hi3c->State == HAL_I3C_STATE_RESET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Check the instance and the mode parameters */
+            assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+            assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check configuration parameters */
-      assert_param(IS_I3C_TXFIFOTHRESHOLD_VALUE(pConfig->TxFifoThreshold));
-      assert_param(IS_I3C_RXFIFOTHRESHOLD_VALUE(pConfig->RxFifoThreshold));
+            /* Check configuration parameters */
+            assert_param(IS_I3C_TXFIFOTHRESHOLD_VALUE(pConfig->TxFifoThreshold));
+            assert_param(IS_I3C_RXFIFOTHRESHOLD_VALUE(pConfig->RxFifoThreshold));
 
-      /* Set Tx and Rx Fifo threshold */
-      cfgr_value = (pConfig->TxFifoThreshold | pConfig->RxFifoThreshold);
-      cfgr_mask = (I3C_CFGR_TXTHRES | I3C_CFGR_RXTHRES);
+            /* Set Tx and Rx Fifo threshold */
+            cfgr_value = (pConfig->TxFifoThreshold | pConfig->RxFifoThreshold);
+            cfgr_mask = (I3C_CFGR_TXTHRES | I3C_CFGR_RXTHRES);
 
-      /* Check on the I3C mode: Control and status FIFOs available only with
-       * controller mode */
-      if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
-        /* Check configuration parameters */
-        assert_param(IS_I3C_CONTROLFIFOSTATE_VALUE(pConfig->ControlFifo));
-        assert_param(IS_I3C_STATUSFIFOSTATE_VALUE(pConfig->StatusFifo));
+            /* Check on the I3C mode: Control and status FIFOs available only with
+             * controller mode */
+            if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
+                /* Check configuration parameters */
+                assert_param(IS_I3C_CONTROLFIFOSTATE_VALUE(pConfig->ControlFifo));
+                assert_param(IS_I3C_STATUSFIFOSTATE_VALUE(pConfig->StatusFifo));
 
-        /* Set Control and Status Fifo states */
-        cfgr_value |= (pConfig->StatusFifo | pConfig->ControlFifo);
-        cfgr_mask |= (I3C_CFGR_TMODE | I3C_CFGR_SMODE);
-      }
+                /* Set Control and Status Fifo states */
+                cfgr_value |= (pConfig->StatusFifo | pConfig->ControlFifo);
+                cfgr_mask |= (I3C_CFGR_TMODE | I3C_CFGR_SMODE);
+            }
 
-      /* Set configuration in the CFGR register */
-      MODIFY_REG(hi3c->Instance->CFGR, cfgr_mask, cfgr_value);
+            /* Set configuration in the CFGR register */
+            MODIFY_REG(hi3c->Instance->CFGR, cfgr_mask, cfgr_value);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -1969,74 +1883,70 @@ HAL_StatusTypeDef HAL_I3C_SetConfigFifo(I3C_HandleTypeDef *hi3c,
  * contains controller configuration.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_Config(I3C_HandleTypeDef *hi3c,
-                                      const I3C_CtrlConfTypeDef *pConfig) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t timing2_value;
-  uint32_t cfgr_value;
+HAL_StatusTypeDef HAL_I3C_Ctrl_Config(I3C_HandleTypeDef *hi3c, const I3C_CtrlConfTypeDef *pConfig) {
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t timing2_value;
+    uint32_t cfgr_value;
 
-  /* Check the I3C handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check on user parameters */
-    if (pConfig == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check the I3C state and mode */
-    else if ((hi3c->State == HAL_I3C_STATE_RESET) ||
-             (hi3c->Mode != HAL_I3C_MODE_CONTROLLER)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Check configuration parameters values */
-      assert_param(IS_I3C_DYNAMICADDRESS_VALUE(pConfig->DynamicAddr));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->HighKeeperSDA));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->HotJoinAllowed));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->ACKStallState));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->CCCStallState));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->TxStallState));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->RxStallState));
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Disable the selected I3C peripheral */
-      LL_I3C_Disable(hi3c->Instance);
+        /* Check on user parameters */
+        if (pConfig == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check the I3C state and mode */
+        else if ((hi3c->State == HAL_I3C_STATE_RESET) || (hi3c->Mode != HAL_I3C_MODE_CONTROLLER)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Check configuration parameters values */
+            assert_param(IS_I3C_DYNAMICADDRESS_VALUE(pConfig->DynamicAddr));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->HighKeeperSDA));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->HotJoinAllowed));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->ACKStallState));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->CCCStallState));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->TxStallState));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->RxStallState));
 
-      /* Calculate value to be written in timing register 2 */
-      timing2_value =
-          (((uint32_t)pConfig->StallTime << I3C_TIMINGR2_STALL_Pos) |
-           ((uint32_t)pConfig->ACKStallState << I3C_TIMINGR2_STALLA_Pos) |
-           ((uint32_t)pConfig->CCCStallState << I3C_TIMINGR2_STALLC_Pos) |
-           ((uint32_t)pConfig->TxStallState << I3C_TIMINGR2_STALLD_Pos) |
-           ((uint32_t)pConfig->RxStallState << I3C_TIMINGR2_STALLT_Pos));
+            /* Disable the selected I3C peripheral */
+            LL_I3C_Disable(hi3c->Instance);
 
-      /* Set value in timing 2 register */
-      WRITE_REG(hi3c->Instance->TIMINGR2, timing2_value);
+            /* Calculate value to be written in timing register 2 */
+            timing2_value = (((uint32_t)pConfig->StallTime << I3C_TIMINGR2_STALL_Pos) |
+                             ((uint32_t)pConfig->ACKStallState << I3C_TIMINGR2_STALLA_Pos) |
+                             ((uint32_t)pConfig->CCCStallState << I3C_TIMINGR2_STALLC_Pos) |
+                             ((uint32_t)pConfig->TxStallState << I3C_TIMINGR2_STALLD_Pos) |
+                             ((uint32_t)pConfig->RxStallState << I3C_TIMINGR2_STALLT_Pos));
 
-      /* Calculate value to be written in CFGR register */
-      cfgr_value = (((uint32_t)pConfig->HighKeeperSDA << I3C_CFGR_HKSDAEN_Pos) |
-                    ((uint32_t)pConfig->HotJoinAllowed << I3C_CFGR_HJACK_Pos));
+            /* Set value in timing 2 register */
+            WRITE_REG(hi3c->Instance->TIMINGR2, timing2_value);
 
-      /* Set hot join acknowledge and high keeper values */
-      MODIFY_REG(hi3c->Instance->CFGR, I3C_CFGR_HKSDAEN | I3C_CFGR_HJACK,
-                 cfgr_value);
+            /* Calculate value to be written in CFGR register */
+            cfgr_value = (((uint32_t)pConfig->HighKeeperSDA << I3C_CFGR_HKSDAEN_Pos) |
+                          ((uint32_t)pConfig->HotJoinAllowed << I3C_CFGR_HJACK_Pos));
 
-      /* Set dynamic address value */
-      LL_I3C_SetOwnDynamicAddress(hi3c->Instance, pConfig->DynamicAddr);
+            /* Set hot join acknowledge and high keeper values */
+            MODIFY_REG(hi3c->Instance->CFGR, I3C_CFGR_HKSDAEN | I3C_CFGR_HJACK, cfgr_value);
 
-      /* Validate the controller dynamic address */
-      LL_I3C_EnableOwnDynAddress(hi3c->Instance);
+            /* Set dynamic address value */
+            LL_I3C_SetOwnDynamicAddress(hi3c->Instance, pConfig->DynamicAddr);
 
-      /* Enable the selected I3C peripheral */
-      LL_I3C_Enable(hi3c->Instance);
+            /* Validate the controller dynamic address */
+            LL_I3C_EnableOwnDynAddress(hi3c->Instance);
+
+            /* Enable the selected I3C peripheral */
+            LL_I3C_Enable(hi3c->Instance);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -2049,119 +1959,107 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_Config(I3C_HandleTypeDef *hi3c,
  * contains target configuration.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_Config(I3C_HandleTypeDef *hi3c,
-                                     const I3C_TgtConfTypeDef *pConfig) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t getmxdsr_value;
-  uint32_t maxrlr_value;
-  uint32_t crccapr_value;
-  uint32_t bcr_value;
-  uint32_t devr0_value;
+HAL_StatusTypeDef HAL_I3C_Tgt_Config(I3C_HandleTypeDef *hi3c, const I3C_TgtConfTypeDef *pConfig) {
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t getmxdsr_value;
+    uint32_t maxrlr_value;
+    uint32_t crccapr_value;
+    uint32_t bcr_value;
+    uint32_t devr0_value;
 
-  /* Check the I3C handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check on user parameters */
-    if (pConfig == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check the I3C state and mode */
-    else if ((hi3c->State == HAL_I3C_STATE_RESET) ||
-             (hi3c->Mode != HAL_I3C_MODE_TARGET)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Check configuration parameters values */
-      assert_param(
-          IS_I3C_HANDOFFACTIVITYSTATE_VALUE(pConfig->HandOffActivityState));
-      assert_param(IS_I3C_TSCOTIME_VALUE(pConfig->DataTurnAroundDuration));
-      assert_param(IS_I3C_MAXSPEEDDATA_VALUE(pConfig->MaxDataSpeed));
-      assert_param(IS_I3C_IBIPAYLOADSIZE_VALUE(pConfig->IBIPayloadSize));
-      assert_param(IS_I3C_MIPIIDENTIFIER_VALUE(pConfig->MIPIIdentifier));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->HandOffDelay));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->GroupAddrCapability));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->PendingReadMDB));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->IBIPayload));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->MaxSpeedLimitation));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->CtrlCapability));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->IBIRequest));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->CtrlRoleRequest));
-      assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->HotJoinRequest));
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Disable the selected I3C peripheral */
-      LL_I3C_Disable(hi3c->Instance);
+        /* Check on user parameters */
+        if (pConfig == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check the I3C state and mode */
+        else if ((hi3c->State == HAL_I3C_STATE_RESET) || (hi3c->Mode != HAL_I3C_MODE_TARGET)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Check configuration parameters values */
+            assert_param(IS_I3C_HANDOFFACTIVITYSTATE_VALUE(pConfig->HandOffActivityState));
+            assert_param(IS_I3C_TSCOTIME_VALUE(pConfig->DataTurnAroundDuration));
+            assert_param(IS_I3C_MAXSPEEDDATA_VALUE(pConfig->MaxDataSpeed));
+            assert_param(IS_I3C_IBIPAYLOADSIZE_VALUE(pConfig->IBIPayloadSize));
+            assert_param(IS_I3C_MIPIIDENTIFIER_VALUE(pConfig->MIPIIdentifier));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->HandOffDelay));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->GroupAddrCapability));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->PendingReadMDB));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->IBIPayload));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->MaxSpeedLimitation));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->CtrlCapability));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->IBIRequest));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->CtrlRoleRequest));
+            assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pConfig->HotJoinRequest));
 
-      /* Calculate value to be written in the GETMXDSR register */
-      getmxdsr_value =
-          (pConfig->HandOffActivityState | pConfig->MaxDataSpeed |
-           pConfig->DataTurnAroundDuration |
-           ((uint32_t)pConfig->MaxReadTurnAround << I3C_GETMXDSR_RDTURN_Pos));
+            /* Disable the selected I3C peripheral */
+            LL_I3C_Disable(hi3c->Instance);
 
-      /* Set value in GETMXDSR register */
-      WRITE_REG(hi3c->Instance->GETMXDSR, getmxdsr_value);
+            /* Calculate value to be written in the GETMXDSR register */
+            getmxdsr_value = (pConfig->HandOffActivityState | pConfig->MaxDataSpeed | pConfig->DataTurnAroundDuration |
+                              ((uint32_t)pConfig->MaxReadTurnAround << I3C_GETMXDSR_RDTURN_Pos));
 
-      /* Calculate value to be written in MAXRLR register */
-      maxrlr_value = (pConfig->IBIPayloadSize |
-                      (pConfig->MaxReadDataSize & I3C_MAXRLR_MRL));
+            /* Set value in GETMXDSR register */
+            WRITE_REG(hi3c->Instance->GETMXDSR, getmxdsr_value);
 
-      /* Set payload size and max read data size in MAXRLR register */
-      WRITE_REG(hi3c->Instance->MAXRLR, maxrlr_value);
+            /* Calculate value to be written in MAXRLR register */
+            maxrlr_value = (pConfig->IBIPayloadSize | (pConfig->MaxReadDataSize & I3C_MAXRLR_MRL));
 
-      /* Set max write data size in MAXWLR register */
-      LL_I3C_SetMaxWriteLength(hi3c->Instance, pConfig->MaxWriteDataSize);
+            /* Set payload size and max read data size in MAXRLR register */
+            WRITE_REG(hi3c->Instance->MAXRLR, maxrlr_value);
 
-      /* Set MIPI identifier value in EPIDR register */
-      LL_I3C_SetMIPIInstanceID(hi3c->Instance, pConfig->MIPIIdentifier);
+            /* Set max write data size in MAXWLR register */
+            LL_I3C_SetMaxWriteLength(hi3c->Instance, pConfig->MaxWriteDataSize);
 
-      /* Set identifier value in DCR register */
-      LL_I3C_SetDeviceCharacteristics(hi3c->Instance, pConfig->Identifier);
+            /* Set MIPI identifier value in EPIDR register */
+            LL_I3C_SetMIPIInstanceID(hi3c->Instance, pConfig->MIPIIdentifier);
 
-      /* Calculate value to be written in CRCCAPR register */
-      crccapr_value =
-          (((uint32_t)pConfig->HandOffDelay << I3C_CRCAPR_CAPDHOFF_Pos) |
-           ((uint32_t)pConfig->GroupAddrCapability << I3C_CRCAPR_CAPGRP_Pos));
+            /* Set identifier value in DCR register */
+            LL_I3C_SetDeviceCharacteristics(hi3c->Instance, pConfig->Identifier);
 
-      /* Set hand off dealy and group address capability in CRCCAPR register */
-      WRITE_REG(hi3c->Instance->CRCAPR, crccapr_value);
+            /* Calculate value to be written in CRCCAPR register */
+            crccapr_value = (((uint32_t)pConfig->HandOffDelay << I3C_CRCAPR_CAPDHOFF_Pos) |
+                             ((uint32_t)pConfig->GroupAddrCapability << I3C_CRCAPR_CAPGRP_Pos));
 
-      /* Set pending read MDB notification value in GETCAPR register */
-      LL_I3C_SetPendingReadMDB(
-          hi3c->Instance,
-          ((uint32_t)pConfig->PendingReadMDB << I3C_GETCAPR_CAPPEND_Pos));
+            /* Set hand off dealy and group address capability in CRCCAPR register */
+            WRITE_REG(hi3c->Instance->CRCAPR, crccapr_value);
 
-      /* Calculate value to be written in BCR register */
-      bcr_value = (((uint32_t)pConfig->MaxSpeedLimitation << I3C_BCR_BCR0_Pos) |
-                   ((uint32_t)pConfig->IBIPayload << I3C_BCR_BCR2_Pos) |
-                   ((uint32_t)pConfig->CtrlCapability << I3C_BCR_BCR6_Pos));
+            /* Set pending read MDB notification value in GETCAPR register */
+            LL_I3C_SetPendingReadMDB(hi3c->Instance, ((uint32_t)pConfig->PendingReadMDB << I3C_GETCAPR_CAPPEND_Pos));
 
-      /* Set control capability, IBI payload support and max speed limitation in
-       * BCR register */
-      WRITE_REG(hi3c->Instance->BCR, bcr_value);
+            /* Calculate value to be written in BCR register */
+            bcr_value = (((uint32_t)pConfig->MaxSpeedLimitation << I3C_BCR_BCR0_Pos) |
+                         ((uint32_t)pConfig->IBIPayload << I3C_BCR_BCR2_Pos) |
+                         ((uint32_t)pConfig->CtrlCapability << I3C_BCR_BCR6_Pos));
 
-      /* Calculate value to be written in CFGR register */
-      devr0_value =
-          (((uint32_t)pConfig->IBIRequest << I3C_DEVR0_IBIEN_Pos) |
-           ((uint32_t)pConfig->CtrlRoleRequest << I3C_DEVR0_CREN_Pos) |
-           ((uint32_t)pConfig->HotJoinRequest << I3C_DEVR0_HJEN_Pos));
+            /* Set control capability, IBI payload support and max speed limitation in
+             * BCR register */
+            WRITE_REG(hi3c->Instance->BCR, bcr_value);
 
-      /* Set IBI request, control role request and hot join request in DEVR0
-       * register */
-      MODIFY_REG(hi3c->Instance->DEVR0,
-                 (I3C_DEVR0_HJEN | I3C_DEVR0_IBIEN | I3C_DEVR0_CREN),
-                 devr0_value);
+            /* Calculate value to be written in CFGR register */
+            devr0_value = (((uint32_t)pConfig->IBIRequest << I3C_DEVR0_IBIEN_Pos) |
+                           ((uint32_t)pConfig->CtrlRoleRequest << I3C_DEVR0_CREN_Pos) |
+                           ((uint32_t)pConfig->HotJoinRequest << I3C_DEVR0_HJEN_Pos));
 
-      /* Enable the selected I3C peripheral */
-      LL_I3C_Enable(hi3c->Instance);
+            /* Set IBI request, control role request and hot join request in DEVR0
+             * register */
+            MODIFY_REG(hi3c->Instance->DEVR0, (I3C_DEVR0_HJEN | I3C_DEVR0_IBIEN | I3C_DEVR0_CREN), devr0_value);
+
+            /* Enable the selected I3C peripheral */
+            LL_I3C_Enable(hi3c->Instance);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -2178,61 +2076,54 @@ HAL_StatusTypeDef HAL_I3C_Tgt_Config(I3C_HandleTypeDef *hi3c,
  * treated. This parameter must be a number between Min_Data=1U and Max_Data=4U.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef
-HAL_I3C_Ctrl_ConfigBusDevices(I3C_HandleTypeDef *hi3c,
-                              const I3C_DeviceConfTypeDef *pDesc,
-                              uint8_t nbDevice) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t write_value;
+HAL_StatusTypeDef HAL_I3C_Ctrl_ConfigBusDevices(I3C_HandleTypeDef *hi3c, const I3C_DeviceConfTypeDef *pDesc,
+                                                uint8_t nbDevice) {
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t write_value;
 
-  /* Check the I3C handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check on user parameters */
-    if (pDesc == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check the I3C state and mode */
-    else if ((hi3c->State == HAL_I3C_STATE_RESET) ||
-             (hi3c->Mode != HAL_I3C_MODE_CONTROLLER)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Check the instance and the mode parameters */
-      assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-      assert_param(IS_I3C_MODE(hi3c->Mode));
-      assert_param(IS_I3C_DEVICE_VALUE(nbDevice));
+        /* Check on user parameters */
+        if (pDesc == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check the I3C state and mode */
+        else if ((hi3c->State == HAL_I3C_STATE_RESET) || (hi3c->Mode != HAL_I3C_MODE_CONTROLLER)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Check the instance and the mode parameters */
+            assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+            assert_param(IS_I3C_MODE(hi3c->Mode));
+            assert_param(IS_I3C_DEVICE_VALUE(nbDevice));
 
-      /* Loop on the nbDevice to be treated */
-      for (uint32_t index = 0U; index < nbDevice; index++) {
-        /* Check configuration parameters values */
-        assert_param(IS_I3C_DEVICE_VALUE(pDesc[index].DeviceIndex));
-        assert_param(
-            IS_I3C_DYNAMICADDRESS_VALUE(pDesc[index].TargetDynamicAddr));
-        assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pDesc[index].IBIAck));
-        assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pDesc[index].CtrlRoleReqAck));
-        assert_param(
-            IS_I3C_FUNCTIONALSTATE_VALUE(pDesc[index].CtrlStopTransfer));
-        assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pDesc[index].IBIPayload));
+            /* Loop on the nbDevice to be treated */
+            for (uint32_t index = 0U; index < nbDevice; index++) {
+                /* Check configuration parameters values */
+                assert_param(IS_I3C_DEVICE_VALUE(pDesc[index].DeviceIndex));
+                assert_param(IS_I3C_DYNAMICADDRESS_VALUE(pDesc[index].TargetDynamicAddr));
+                assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pDesc[index].IBIAck));
+                assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pDesc[index].CtrlRoleReqAck));
+                assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pDesc[index].CtrlStopTransfer));
+                assert_param(IS_I3C_FUNCTIONALSTATE_VALUE(pDesc[index].IBIPayload));
 
-        /* Set value to be written */
-        write_value =
-            (((uint32_t)pDesc[index].TargetDynamicAddr << I3C_DEVRX_DA_Pos) |
-             ((uint32_t)pDesc[index].IBIAck << I3C_DEVRX_IBIACK_Pos) |
-             ((uint32_t)pDesc[index].CtrlRoleReqAck << I3C_DEVRX_CRACK_Pos) |
-             ((uint32_t)pDesc[index].CtrlStopTransfer << I3C_DEVRX_SUSP_Pos) |
-             ((uint32_t)pDesc[index].IBIPayload << I3C_DEVRX_IBIDEN_Pos));
+                /* Set value to be written */
+                write_value = (((uint32_t)pDesc[index].TargetDynamicAddr << I3C_DEVRX_DA_Pos) |
+                               ((uint32_t)pDesc[index].IBIAck << I3C_DEVRX_IBIACK_Pos) |
+                               ((uint32_t)pDesc[index].CtrlRoleReqAck << I3C_DEVRX_CRACK_Pos) |
+                               ((uint32_t)pDesc[index].CtrlStopTransfer << I3C_DEVRX_SUSP_Pos) |
+                               ((uint32_t)pDesc[index].IBIPayload << I3C_DEVRX_IBIDEN_Pos));
 
-        /* Write configuration in the DEVRx register */
-        WRITE_REG(hi3c->Instance->DEVRX[(pDesc[index].DeviceIndex - 1U)],
-                  write_value);
-      }
+                /* Write configuration in the DEVRx register */
+                WRITE_REG(hi3c->Instance->DEVRX[(pDesc[index].DeviceIndex - 1U)], write_value);
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -2259,71 +2150,66 @@ HAL_I3C_Ctrl_ConfigBusDevices(I3C_HandleTypeDef *hi3c,
  * one value of @ref I3C_OPTION_DEFINITION
  * @retval HAL Status    :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_AddDescToFrame(I3C_HandleTypeDef *hi3c,
-                                         const I3C_CCCTypeDef *pCCCDesc,
-                                         const I3C_PrivateTypeDef *pPrivateDesc,
-                                         I3C_XferTypeDef *pXferData,
+HAL_StatusTypeDef HAL_I3C_AddDescToFrame(I3C_HandleTypeDef *hi3c, const I3C_CCCTypeDef *pCCCDesc,
+                                         const I3C_PrivateTypeDef *pPrivateDesc, I3C_XferTypeDef *pXferData,
                                          uint8_t nbFrame, uint32_t option) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Set handle transfer parameters */
-    hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-    hi3c->pCCCDesc = pCCCDesc;
-    hi3c->pPrivateDesc = pPrivateDesc;
-    hi3c->pXferData = pXferData;
-    hi3c->RxXferCount = 0;
-    hi3c->TxXferCount = 0;
-
-    /* Prepare Direction, and Check on user parameters */
-    if (((option & I3C_OPERATION_TYPE_MASK) == LL_I3C_CONTROLLER_MTYPE_CCC) ||
-        ((option & I3C_OPERATION_TYPE_MASK) ==
-         LL_I3C_CONTROLLER_MTYPE_DIRECT)) {
-      /* Check on user parameters */
-      if ((pCCCDesc == NULL) || (pXferData == NULL) || (nbFrame < 1U) ||
-          (((option & (I3C_OPERATION_TYPE_MASK | I3C_DEFINE_BYTE_MASK)) ==
-            (LL_I3C_CONTROLLER_MTYPE_DIRECT | I3C_DEFINE_BYTE_MASK)) &&
-           (pCCCDesc->CCCBuf.Size == 0U))) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
-      }
     } else {
-      /* Check on user parameters */
-      if ((pPrivateDesc == NULL) || (pXferData == NULL) || (nbFrame <= 0U)) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-        status = HAL_ERROR;
-      }
-    }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-    if (status == HAL_OK) {
-      /* check on the State */
-      if ((handle_state == HAL_I3C_STATE_READY) ||
-          (handle_state == HAL_I3C_STATE_LISTEN)) {
-        /* I3C control buffer prior preparation */
-        if (I3C_ControlBuffer_PriorPreparation(hi3c, nbFrame, option) !=
-            HAL_OK) {
-          hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-          status = HAL_ERROR;
+        /* Set handle transfer parameters */
+        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+        hi3c->pCCCDesc = pCCCDesc;
+        hi3c->pPrivateDesc = pPrivateDesc;
+        hi3c->pXferData = pXferData;
+        hi3c->RxXferCount = 0;
+        hi3c->TxXferCount = 0;
+
+        /* Prepare Direction, and Check on user parameters */
+        if (((option & I3C_OPERATION_TYPE_MASK) == LL_I3C_CONTROLLER_MTYPE_CCC) ||
+            ((option & I3C_OPERATION_TYPE_MASK) == LL_I3C_CONTROLLER_MTYPE_DIRECT)) {
+            /* Check on user parameters */
+            if ((pCCCDesc == NULL) || (pXferData == NULL) || (nbFrame < 1U) ||
+                (((option & (I3C_OPERATION_TYPE_MASK | I3C_DEFINE_BYTE_MASK)) ==
+                  (LL_I3C_CONTROLLER_MTYPE_DIRECT | I3C_DEFINE_BYTE_MASK)) &&
+                 (pCCCDesc->CCCBuf.Size == 0U))) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                status = HAL_ERROR;
+            }
+        } else {
+            /* Check on user parameters */
+            if ((pPrivateDesc == NULL) || (pXferData == NULL) || (nbFrame <= 0U)) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                status = HAL_ERROR;
+            }
         }
 
-        /* I3C Tx Buffer prior preparation, set and check RxCount */
-        if (I3C_Xfer_PriorPreparation(hi3c, nbFrame, option) != HAL_OK) {
-          status = HAL_ERROR;
-        }
-      } else {
-        status = HAL_BUSY;
-      }
-    }
-  }
+        if (status == HAL_OK) {
+            /* check on the State */
+            if ((handle_state == HAL_I3C_STATE_READY) || (handle_state == HAL_I3C_STATE_LISTEN)) {
+                /* I3C control buffer prior preparation */
+                if (I3C_ControlBuffer_PriorPreparation(hi3c, nbFrame, option) != HAL_OK) {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                    status = HAL_ERROR;
+                }
 
-  return status;
+                /* I3C Tx Buffer prior preparation, set and check RxCount */
+                if (I3C_Xfer_PriorPreparation(hi3c, nbFrame, option) != HAL_OK) {
+                    status = HAL_ERROR;
+                }
+            } else {
+                status = HAL_BUSY;
+            }
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -2337,47 +2223,45 @@ HAL_StatusTypeDef HAL_I3C_AddDescToFrame(I3C_HandleTypeDef *hi3c,
  *                             It can be a value of @ref I3C_RESET_PATTERN
  * @retval HAL Status   :      Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_SetConfigResetPattern(I3C_HandleTypeDef *hi3c,
-                                                     uint32_t resetPattern) {
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
+HAL_StatusTypeDef HAL_I3C_Ctrl_SetConfigResetPattern(I3C_HandleTypeDef *hi3c, uint32_t resetPattern) {
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-    assert_param(IS_I3C_RESET_PATTERN(resetPattern));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* check on the Mode */
-    if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      hi3c->State = HAL_I3C_STATE_BUSY;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
+        assert_param(IS_I3C_RESET_PATTERN(resetPattern));
 
-      if (resetPattern == HAL_I3C_RESET_PATTERN_ENABLE) {
-        LL_I3C_EnableResetPattern(hi3c->Instance);
-      } else {
-        LL_I3C_DisableResetPattern(hi3c->Instance);
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* At the end of process update state to Previous state */
-      I3C_StateUpdate(hi3c);
+        /* check on the Mode */
+        if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            hi3c->State = HAL_I3C_STATE_BUSY;
+
+            if (resetPattern == HAL_I3C_RESET_PATTERN_ENABLE) {
+                LL_I3C_EnableResetPattern(hi3c->Instance);
+            } else {
+                LL_I3C_DisableResetPattern(hi3c->Instance);
+            }
+
+            /* At the end of process update state to Previous state */
+            I3C_StateUpdate(hi3c);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -2389,31 +2273,30 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_SetConfigResetPattern(I3C_HandleTypeDef *hi3c,
  * configuration. It can be a value of @ref I3C_RESET_PATTERN
  * @retval HAL Status    :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_GetConfigResetPattern(I3C_HandleTypeDef *hi3c,
-                                                     uint32_t *pResetPattern) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Ctrl_GetConfigResetPattern(I3C_HandleTypeDef *hi3c, uint32_t *pResetPattern) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  }
-  /* Check on user parameters */
-  else if (pResetPattern == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check if the reset pattern configuration is enabled */
-    if (LL_I3C_IsEnabledResetPattern(hi3c->Instance) == 1U) {
-      *pResetPattern = HAL_I3C_RESET_PATTERN_ENABLE;
-    } else {
-      *pResetPattern = HAL_I3C_RESET_PATTERN_DISABLE;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     }
-  }
+    /* Check on user parameters */
+    else if (pResetPattern == NULL) {
+        status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-  return status;
+        /* Check if the reset pattern configuration is enabled */
+        if (LL_I3C_IsEnabledResetPattern(hi3c->Instance) == 1U) {
+            *pResetPattern = HAL_I3C_RESET_PATTERN_ENABLE;
+        } else {
+            *pResetPattern = HAL_I3C_RESET_PATTERN_DISABLE;
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -2461,38 +2344,38 @@ starting a transfer or in case of bus failure and error detection.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_FlushAllFifo(I3C_HandleTypeDef *hi3c) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t cfgr_value;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t cfgr_value;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check the I3C state */
-    if (hi3c->State == HAL_I3C_STATE_RESET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Flush the content of Tx and Rx Fifo */
-      cfgr_value = (I3C_CFGR_TXFLUSH | I3C_CFGR_RXFLUSH);
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the I3C mode: Control and status FIFOs available only with
-       * controller mode */
-      if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
-        /* Flush the content of Control and Status Fifo */
-        cfgr_value = (I3C_CFGR_SFLUSH | I3C_CFGR_CFLUSH);
-      }
+        /* Check the I3C state */
+        if (hi3c->State == HAL_I3C_STATE_RESET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Flush the content of Tx and Rx Fifo */
+            cfgr_value = (I3C_CFGR_TXFLUSH | I3C_CFGR_RXFLUSH);
 
-      /* Set configuration in the CFGR register */
-      MODIFY_REG(hi3c->Instance->CFGR, cfgr_value, cfgr_value);
+            /* Check on the I3C mode: Control and status FIFOs available only with
+             * controller mode */
+            if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
+                /* Flush the content of Control and Status Fifo */
+                cfgr_value = (I3C_CFGR_SFLUSH | I3C_CFGR_CFLUSH);
+            }
+
+            /* Set configuration in the CFGR register */
+            MODIFY_REG(hi3c->Instance->CFGR, cfgr_value, cfgr_value);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -2502,27 +2385,27 @@ HAL_StatusTypeDef HAL_I3C_FlushAllFifo(I3C_HandleTypeDef *hi3c) {
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_FlushTxFifo(I3C_HandleTypeDef *hi3c) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check the I3C state */
-    if (hi3c->State == HAL_I3C_STATE_RESET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Flush the content of Tx Fifo */
-      LL_I3C_RequestTxFIFOFlush(hi3c->Instance);
-    }
-  }
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-  return status;
+        /* Check the I3C state */
+        if (hi3c->State == HAL_I3C_STATE_RESET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Flush the content of Tx Fifo */
+            LL_I3C_RequestTxFIFOFlush(hi3c->Instance);
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -2532,28 +2415,28 @@ HAL_StatusTypeDef HAL_I3C_FlushTxFifo(I3C_HandleTypeDef *hi3c) {
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_FlushRxFifo(I3C_HandleTypeDef *hi3c) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check the I3C state */
-    if (hi3c->State == HAL_I3C_STATE_RESET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Flush the content of Rx Fifo */
-      LL_I3C_RequestRxFIFOFlush(hi3c->Instance);
-    }
-  }
 
-  return status;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
+
+        /* Check the I3C state */
+        if (hi3c->State == HAL_I3C_STATE_RESET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Flush the content of Rx Fifo */
+            LL_I3C_RequestRxFIFOFlush(hi3c->Instance);
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -2563,28 +2446,27 @@ HAL_StatusTypeDef HAL_I3C_FlushRxFifo(I3C_HandleTypeDef *hi3c) {
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_FlushControlFifo(I3C_HandleTypeDef *hi3c) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check the I3C state and mode */
-    if ((hi3c->State == HAL_I3C_STATE_RESET) ||
-        (hi3c->Mode != HAL_I3C_MODE_CONTROLLER)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Flush the content of Control Fifo */
-      LL_I3C_RequestControlFIFOFlush(hi3c->Instance);
-    }
-  }
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-  return status;
+        /* Check the I3C state and mode */
+        if ((hi3c->State == HAL_I3C_STATE_RESET) || (hi3c->Mode != HAL_I3C_MODE_CONTROLLER)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Flush the content of Control Fifo */
+            LL_I3C_RequestControlFIFOFlush(hi3c->Instance);
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -2594,28 +2476,27 @@ HAL_StatusTypeDef HAL_I3C_FlushControlFifo(I3C_HandleTypeDef *hi3c) {
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_FlushStatusFifo(I3C_HandleTypeDef *hi3c) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check the I3C state and mode */
-    if ((hi3c->State == HAL_I3C_STATE_RESET) ||
-        (hi3c->Mode != HAL_I3C_MODE_CONTROLLER)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Flush the content of Control Fifo */
-      LL_I3C_RequestStatusFIFOFlush(hi3c->Instance);
-    }
-  }
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-  return status;
+        /* Check the I3C state and mode */
+        if ((hi3c->State == HAL_I3C_STATE_RESET) || (hi3c->Mode != HAL_I3C_MODE_CONTROLLER)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Flush the content of Control Fifo */
+            LL_I3C_RequestStatusFIFOFlush(hi3c->Instance);
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -2625,42 +2506,41 @@ HAL_StatusTypeDef HAL_I3C_FlushStatusFifo(I3C_HandleTypeDef *hi3c) {
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_ClearConfigFifo(I3C_HandleTypeDef *hi3c) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t cfgr_value;
-  uint32_t cfgr_mask;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t cfgr_value;
+    uint32_t cfgr_mask;
 
-  /* Check the I3C handle allocation */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check the I3C state */
-    if (hi3c->State == HAL_I3C_STATE_RESET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle allocation */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Clear Tx Fifo and Rx Fifo threshold and set it to default value */
-      cfgr_value = (LL_I3C_TXFIFO_THRESHOLD_1_4 | LL_I3C_RXFIFO_THRESHOLD_1_4);
-      cfgr_mask = (I3C_CFGR_TXTHRES | I3C_CFGR_RXTHRES);
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the I3C mode: Control and status FIFOs available only with
-       * controller mode */
-      if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
-        /* Disable the status and Control Fifo state */
-        cfgr_value |=
-            (HAL_I3C_STATUSFIFO_DISABLE | HAL_I3C_CONTROLFIFO_DISABLE);
-        cfgr_mask |= (I3C_CFGR_TMODE | I3C_CFGR_SMODE);
-      }
+        /* Check the I3C state */
+        if (hi3c->State == HAL_I3C_STATE_RESET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Clear Tx Fifo and Rx Fifo threshold and set it to default value */
+            cfgr_value = (LL_I3C_TXFIFO_THRESHOLD_1_4 | LL_I3C_RXFIFO_THRESHOLD_1_4);
+            cfgr_mask = (I3C_CFGR_TXTHRES | I3C_CFGR_RXTHRES);
 
-      /* Set configuration in the CFGR register */
-      MODIFY_REG(hi3c->Instance->CFGR, cfgr_mask, cfgr_value);
+            /* Check on the I3C mode: Control and status FIFOs available only with
+             * controller mode */
+            if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
+                /* Disable the status and Control Fifo state */
+                cfgr_value |= (HAL_I3C_STATUSFIFO_DISABLE | HAL_I3C_CONTROLFIFO_DISABLE);
+                cfgr_mask |= (I3C_CFGR_TMODE | I3C_CFGR_SMODE);
+            }
+
+            /* Set configuration in the CFGR register */
+            MODIFY_REG(hi3c->Instance->CFGR, cfgr_mask, cfgr_value);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -2671,47 +2551,42 @@ HAL_StatusTypeDef HAL_I3C_ClearConfigFifo(I3C_HandleTypeDef *hi3c) {
  * that returns current FIFOs configuration.
  * @retval HAL Status :          Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_GetConfigFifo(I3C_HandleTypeDef *hi3c,
-                                        I3C_FifoConfTypeDef *pConfig) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_GetConfigFifo(I3C_HandleTypeDef *hi3c, I3C_FifoConfTypeDef *pConfig) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* Check the I3C handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Check on user parameters */
-    if (pConfig == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check the I3C state */
-    else if (hi3c->State == HAL_I3C_STATE_RESET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* Check the I3C handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Get Tx Fifo threshold */
-      pConfig->TxFifoThreshold = LL_I3C_GetTxFIFOThreshold(hi3c->Instance);
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Get Rx Fifo threshold */
-      pConfig->RxFifoThreshold = LL_I3C_GetRxFIFOThreshold(hi3c->Instance);
+        /* Check on user parameters */
+        if (pConfig == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check the I3C state */
+        else if (hi3c->State == HAL_I3C_STATE_RESET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Get Tx Fifo threshold */
+            pConfig->TxFifoThreshold = LL_I3C_GetTxFIFOThreshold(hi3c->Instance);
 
-      /* Get the Control Fifo state */
-      pConfig->ControlFifo =
-          (uint32_t)(LL_I3C_IsEnabledControlFIFO(hi3c->Instance)
-                     << I3C_CFGR_TMODE_Pos);
+            /* Get Rx Fifo threshold */
+            pConfig->RxFifoThreshold = LL_I3C_GetRxFIFOThreshold(hi3c->Instance);
 
-      /* Get the status Fifo state */
-      pConfig->StatusFifo =
-          (uint32_t)(LL_I3C_IsEnabledStatusFIFO(hi3c->Instance)
-                     << I3C_CFGR_SMODE_Pos);
+            /* Get the Control Fifo state */
+            pConfig->ControlFifo = (uint32_t)(LL_I3C_IsEnabledControlFIFO(hi3c->Instance) << I3C_CFGR_TMODE_Pos);
+
+            /* Get the status Fifo state */
+            pConfig->StatusFifo = (uint32_t)(LL_I3C_IsEnabledStatusFIFO(hi3c->Instance) << I3C_CFGR_SMODE_Pos);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 /**
  * @}
@@ -2790,138 +2665,130 @@ arbitration (message header {S + 0x7E + W + STOP}) in polling mode
  * @param  timeout    : [IN]  Timeout duration in millisecond.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_TransmitCCC(I3C_HandleTypeDef *hi3c,
-                                           I3C_XferTypeDef *pXferData,
-                                           uint32_t timeout) {
-  uint32_t tickstart;
-  uint32_t exit_condition;
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
+HAL_StatusTypeDef HAL_I3C_Ctrl_TransmitCCC(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData, uint32_t timeout) {
+    uint32_t tickstart;
+    uint32_t exit_condition;
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) ||
-        ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      /* Update returned status value */
-      status = HAL_BUSY;
-    } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX;
-      hi3c->pXferData = pXferData;
-
-      /* Check on the Tx threshold to know the Tx treatment process : byte or
-       * word */
-      if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_TXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
-      }
-
-      /* Init tickstart for timeout management */
-      tickstart = HAL_GetTick();
-
-      /* Check on control FIFO enable/disable state */
-      if (LL_I3C_IsEnabledControlFIFO(hi3c->Instance) == 1U) {
-        /* Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      } else {
-        /* Decrement remaining control buffer data counter */
-        hi3c->ControlXferCount--;
-
-        /* Initiate a start condition by writing in the CR register */
-        WRITE_REG(hi3c->Instance->CR, *hi3c->pXferData->CtrlBuf.pBuffer);
-
-        /* Increment Buffer pointer */
-        hi3c->pXferData->CtrlBuf.pBuffer++;
-      }
-
-      /* Do while until FC (Frame Complete) is set or timeout */
-      do {
-        /* Check if hardware asks for control data */
-        if (hi3c->ControlXferCount > 0U) {
-          /* Call control data treatment function */
-          I3C_ControlDataTreatment(hi3c);
-        }
-
-        /* Check if hardware asks for Tx data */
-        if (hi3c->TxXferCount > 0U) {
-          /* Call transmit treatment function */
-          hi3c->ptrTxFunc(hi3c);
-        }
-
-        /* Check for the timeout */
-        if (timeout != HAL_MAX_DELAY) {
-          if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
-            hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
-            status = HAL_TIMEOUT;
-            break;
-          }
-        }
-
-        if ((__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) &&
-            (hi3c->ControlXferCount > 0U)) {
-          /* Clear frame complete flag */
-          LL_I3C_ClearFlag_FC(hi3c->Instance);
-
-          /* Then Initiate a Start condition */
-          LL_I3C_RequestTransfer(hi3c->Instance);
-        }
-
-        /* Calculate exit_condition value based on Frame complete and error
-         * flags */
-        exit_condition =
-            (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
-      } while ((exit_condition == 0U) || ((exit_condition == I3C_EVR_FCF) &&
-                                          (hi3c->ControlXferCount > 0U)));
-
-      /* Clear frame complete flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
-        LL_I3C_ClearFlag_FC(hi3c->Instance);
-      }
-
-      /* Check on error flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-        /* Clear error flag */
-        LL_I3C_ClearFlag_ERR(hi3c->Instance);
-
-        /* Update handle error code parameter */
-        I3C_GetErrorSources(hi3c);
-
-        /* Update returned status value */
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
-      }
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* At the end of Tx process update state to Previous state */
-      I3C_StateUpdate(hi3c);
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on user parameters */
+        if ((pXferData == NULL) || ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            /* Update returned status value */
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX;
+            hi3c->pXferData = pXferData;
+
+            /* Check on the Tx threshold to know the Tx treatment process : byte or
+             * word */
+            if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+            }
+
+            /* Init tickstart for timeout management */
+            tickstart = HAL_GetTick();
+
+            /* Check on control FIFO enable/disable state */
+            if (LL_I3C_IsEnabledControlFIFO(hi3c->Instance) == 1U) {
+                /* Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            } else {
+                /* Decrement remaining control buffer data counter */
+                hi3c->ControlXferCount--;
+
+                /* Initiate a start condition by writing in the CR register */
+                WRITE_REG(hi3c->Instance->CR, *hi3c->pXferData->CtrlBuf.pBuffer);
+
+                /* Increment Buffer pointer */
+                hi3c->pXferData->CtrlBuf.pBuffer++;
+            }
+
+            /* Do while until FC (Frame Complete) is set or timeout */
+            do {
+                /* Check if hardware asks for control data */
+                if (hi3c->ControlXferCount > 0U) {
+                    /* Call control data treatment function */
+                    I3C_ControlDataTreatment(hi3c);
+                }
+
+                /* Check if hardware asks for Tx data */
+                if (hi3c->TxXferCount > 0U) {
+                    /* Call transmit treatment function */
+                    hi3c->ptrTxFunc(hi3c);
+                }
+
+                /* Check for the timeout */
+                if (timeout != HAL_MAX_DELAY) {
+                    if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
+                        hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
+                        status = HAL_TIMEOUT;
+                        break;
+                    }
+                }
+
+                if ((__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) && (hi3c->ControlXferCount > 0U)) {
+                    /* Clear frame complete flag */
+                    LL_I3C_ClearFlag_FC(hi3c->Instance);
+
+                    /* Then Initiate a Start condition */
+                    LL_I3C_RequestTransfer(hi3c->Instance);
+                }
+
+                /* Calculate exit_condition value based on Frame complete and error
+                 * flags */
+                exit_condition = (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
+            } while ((exit_condition == 0U) || ((exit_condition == I3C_EVR_FCF) && (hi3c->ControlXferCount > 0U)));
+
+            /* Clear frame complete flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
+                LL_I3C_ClearFlag_FC(hi3c->Instance);
+            }
+
+            /* Check on error flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+                /* Clear error flag */
+                LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                /* Update handle error code parameter */
+                I3C_GetErrorSources(hi3c);
+
+                /* Update returned status value */
+                status = HAL_ERROR;
+            }
+
+            /* At the end of Tx process update state to Previous state */
+            I3C_StateUpdate(hi3c);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -2939,74 +2806,70 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_TransmitCCC(I3C_HandleTypeDef *hi3c,
  * HAL_I3C_AddDescToFrame().
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_TransmitCCC_IT(I3C_HandleTypeDef *hi3c,
-                                              I3C_XferTypeDef *pXferData) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Ctrl_TransmitCCC_IT(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) ||
-        ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      if (handle_state == HAL_I3C_STATE_LISTEN) {
-        hi3c->XferISR = I3C_Ctrl_Tx_Listen_Event_ISR;
-      } else {
-        hi3c->XferISR = I3C_Ctrl_Tx_ISR;
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      hi3c->pXferData = pXferData;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX;
+        /* Check on user parameters */
+        if ((pXferData == NULL) || ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-      /* Check on the Tx threshold to know the Tx treatment process : byte or
-       * word */
-      if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_TXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
-      }
+            if (handle_state == HAL_I3C_STATE_LISTEN) {
+                hi3c->XferISR = I3C_Ctrl_Tx_Listen_Event_ISR;
+            } else {
+                hi3c->XferISR = I3C_Ctrl_Tx_ISR;
+            }
 
-      /* Note : The I3C interrupts must be enabled after unlocking current
-      process to avoid the risk of I3C interrupt handle execution before current
-      process unlock */
+            hi3c->pXferData = pXferData;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX;
 
-      /* Enable Tx process interrupts */
-      I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_TX_IT);
+            /* Check on the Tx threshold to know the Tx treatment process : byte or
+             * word */
+            if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+            }
 
-      /* Initiate a Start condition */
-      LL_I3C_RequestTransfer(hi3c->Instance);
+            /* Note : The I3C interrupts must be enabled after unlocking current
+            process to avoid the risk of I3C interrupt handle execution before current
+            process unlock */
+
+            /* Enable Tx process interrupts */
+            I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_TX_IT);
+
+            /* Initiate a Start condition */
+            LL_I3C_RequestTransfer(hi3c->Instance);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
@@ -3025,177 +2888,164 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_TransmitCCC_IT(I3C_HandleTypeDef *hi3c,
  * HAL_I3C_AddDescToFrame().
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_TransmitCCC_DMA(I3C_HandleTypeDef *hi3c,
-                                               I3C_XferTypeDef *pXferData) {
-  HAL_StatusTypeDef control_dma_status;
-  HAL_StatusTypeDef tx_dma_status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t size_align_word;
+HAL_StatusTypeDef HAL_I3C_Ctrl_TransmitCCC_DMA(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_StatusTypeDef control_dma_status;
+    HAL_StatusTypeDef tx_dma_status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t size_align_word;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) ||
-        ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check on hdmatx and hdmacr handle */
-    else if ((hi3c->hdmatx == NULL) || (hi3c->hdmacr == NULL)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->XferISR = I3C_Ctrl_Tx_DMA_ISR;
-      hi3c->pXferData = pXferData;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX;
-
-      /*------------------------------------ I3C DMA channel for Control Data
-       * ----------------------------------------*/
-      /* Set the I3C DMA transfer complete callback */
-      hi3c->hdmacr->XferCpltCallback = I3C_DMAControlTransmitCplt;
-
-      /* Set the DMA error callback */
-      hi3c->hdmacr->XferErrorCallback = I3C_DMAError;
-
-      /* Set the unused DMA callbacks to NULL */
-      hi3c->hdmacr->XferHalfCpltCallback = NULL;
-      hi3c->hdmacr->XferAbortCallback = NULL;
-
-      /* assert that DMA source and destination width are configured in word */
-      assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmacr->Init.SrcDataWidth));
-      assert_param(
-          IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmacr->Init.DestDataWidth));
-
-      /* Enable the control data DMA channel */
-      control_dma_status = HAL_DMA_Start_IT(
-          hi3c->hdmacr, (uint32_t)hi3c->pXferData->CtrlBuf.pBuffer,
-          (uint32_t)&hi3c->Instance->CR, (hi3c->ControlXferCount * 4U));
-
-      /*------------------------------------ I3C DMA channel for the Tx Data
-       * -----------------------------------------*/
-      /* Check if Tx counter different from zero */
-      if (hi3c->TxXferCount != 0U) {
-        /* Set the I3C DMA transfer complete callback */
-        hi3c->hdmatx->XferCpltCallback = I3C_DMADataTransmitCplt;
-
-        /* Set the DMA error callback */
-        hi3c->hdmatx->XferErrorCallback = I3C_DMAError;
-
-        /* Set the unused DMA callbacks to NULL */
-        hi3c->hdmatx->XferHalfCpltCallback = NULL;
-        hi3c->hdmatx->XferAbortCallback = NULL;
-
-        /* Check on the Tx threshold to know the Tx treatment process : byte or
-         * word */
-        if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-            LL_I3C_TXFIFO_THRESHOLD_1_4) {
-          /* assert that DMA source and destination width are configured in byte
-           */
-          assert_param(
-              IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(
-              hi3c->hdmatx->Init.DestDataWidth));
-
-          /* Enable the Tx data DMA channel */
-          tx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
-              (uint32_t)&hi3c->Instance->TDR, hi3c->pXferData->TxBuf.Size);
-        } else {
-          /* assert that DMA source and destination width are configured in word
-           */
-          assert_param(
-              IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(
-              hi3c->hdmatx->Init.DestDataWidth));
-
-          /* Check to align data size in words */
-          if ((hi3c->pXferData->TxBuf.Size % 4U) == 0U) {
-            /* Keep the same size */
-            size_align_word = hi3c->pXferData->TxBuf.Size;
-          } else {
-            /* Modify size to be multiple of 4 */
-            size_align_word = ((hi3c->pXferData->TxBuf.Size + 4U) -
-                               (hi3c->pXferData->TxBuf.Size % 4U));
-          }
-
-          /* Enable the Tx data DMA channel */
-          tx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
-              (uint32_t)&hi3c->Instance->TDWR, size_align_word);
-        }
-      }
-
-      /* Check if DMA process is well started */
-      if ((control_dma_status == HAL_OK) && (tx_dma_status == HAL_OK)) {
-        /* Note : The I3C interrupts must be enabled after unlocking current
-        process to avoid the risk of I3C interrupt handle execution before
-        current process unlock */
-
-        /* Enable Tx process interrupts */
-        I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
-
-        /* Update the number of remaining data bytes */
-        hi3c->ControlXferCount = 0U;
-
-        /* Enable control DMA Request */
-        LL_I3C_EnableDMAReq_Control(hi3c->Instance);
-
-        /* Check if Tx counter different from zero */
-        if (hi3c->TxXferCount != 0U) {
-          /* Update the number of remaining data bytes */
-          hi3c->TxXferCount = 0U;
-
-          /* Enable Tx data DMA Request */
-          LL_I3C_EnableDMAReq_TX(hi3c->Instance);
-        }
-
-        /* Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      } else {
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmacr) == HAL_OK) {
-          hi3c->hdmacr->XferCpltCallback = NULL;
-          hi3c->hdmacr->XferErrorCallback = NULL;
-        }
-
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmatx) == HAL_OK) {
-          hi3c->hdmatx->XferCpltCallback = NULL;
-          hi3c->hdmatx->XferErrorCallback = NULL;
-        }
-
-        hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on user parameters */
+        if ((pXferData == NULL) || ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check on hdmatx and hdmacr handle */
+        else if ((hi3c->hdmatx == NULL) || (hi3c->hdmacr == NULL)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->XferISR = I3C_Ctrl_Tx_DMA_ISR;
+            hi3c->pXferData = pXferData;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX;
+
+            /*------------------------------------ I3C DMA channel for Control Data
+             * ----------------------------------------*/
+            /* Set the I3C DMA transfer complete callback */
+            hi3c->hdmacr->XferCpltCallback = I3C_DMAControlTransmitCplt;
+
+            /* Set the DMA error callback */
+            hi3c->hdmacr->XferErrorCallback = I3C_DMAError;
+
+            /* Set the unused DMA callbacks to NULL */
+            hi3c->hdmacr->XferHalfCpltCallback = NULL;
+            hi3c->hdmacr->XferAbortCallback = NULL;
+
+            /* assert that DMA source and destination width are configured in word */
+            assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmacr->Init.SrcDataWidth));
+            assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmacr->Init.DestDataWidth));
+
+            /* Enable the control data DMA channel */
+            control_dma_status = HAL_DMA_Start_IT(hi3c->hdmacr, (uint32_t)hi3c->pXferData->CtrlBuf.pBuffer,
+                                                  (uint32_t)&hi3c->Instance->CR, (hi3c->ControlXferCount * 4U));
+
+            /*------------------------------------ I3C DMA channel for the Tx Data
+             * -----------------------------------------*/
+            /* Check if Tx counter different from zero */
+            if (hi3c->TxXferCount != 0U) {
+                /* Set the I3C DMA transfer complete callback */
+                hi3c->hdmatx->XferCpltCallback = I3C_DMADataTransmitCplt;
+
+                /* Set the DMA error callback */
+                hi3c->hdmatx->XferErrorCallback = I3C_DMAError;
+
+                /* Set the unused DMA callbacks to NULL */
+                hi3c->hdmatx->XferHalfCpltCallback = NULL;
+                hi3c->hdmatx->XferAbortCallback = NULL;
+
+                /* Check on the Tx threshold to know the Tx treatment process : byte or
+                 * word */
+                if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                    /* assert that DMA source and destination width are configured in byte
+                     */
+                    assert_param(IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmatx->Init.DestDataWidth));
+
+                    /* Enable the Tx data DMA channel */
+                    tx_dma_status = HAL_DMA_Start_IT(hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
+                                                     (uint32_t)&hi3c->Instance->TDR, hi3c->pXferData->TxBuf.Size);
+                } else {
+                    /* assert that DMA source and destination width are configured in word
+                     */
+                    assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmatx->Init.DestDataWidth));
+
+                    /* Check to align data size in words */
+                    if ((hi3c->pXferData->TxBuf.Size % 4U) == 0U) {
+                        /* Keep the same size */
+                        size_align_word = hi3c->pXferData->TxBuf.Size;
+                    } else {
+                        /* Modify size to be multiple of 4 */
+                        size_align_word = ((hi3c->pXferData->TxBuf.Size + 4U) - (hi3c->pXferData->TxBuf.Size % 4U));
+                    }
+
+                    /* Enable the Tx data DMA channel */
+                    tx_dma_status = HAL_DMA_Start_IT(hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
+                                                     (uint32_t)&hi3c->Instance->TDWR, size_align_word);
+                }
+            }
+
+            /* Check if DMA process is well started */
+            if ((control_dma_status == HAL_OK) && (tx_dma_status == HAL_OK)) {
+                /* Note : The I3C interrupts must be enabled after unlocking current
+                process to avoid the risk of I3C interrupt handle execution before
+                current process unlock */
+
+                /* Enable Tx process interrupts */
+                I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
+
+                /* Update the number of remaining data bytes */
+                hi3c->ControlXferCount = 0U;
+
+                /* Enable control DMA Request */
+                LL_I3C_EnableDMAReq_Control(hi3c->Instance);
+
+                /* Check if Tx counter different from zero */
+                if (hi3c->TxXferCount != 0U) {
+                    /* Update the number of remaining data bytes */
+                    hi3c->TxXferCount = 0U;
+
+                    /* Enable Tx data DMA Request */
+                    LL_I3C_EnableDMAReq_TX(hi3c->Instance);
+                }
+
+                /* Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            } else {
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmacr) == HAL_OK) {
+                    hi3c->hdmacr->XferCpltCallback = NULL;
+                    hi3c->hdmacr->XferErrorCallback = NULL;
+                }
+
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmatx) == HAL_OK) {
+                    hi3c->hdmatx->XferCpltCallback = NULL;
+                    hi3c->hdmatx->XferErrorCallback = NULL;
+                }
+
+                hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+                status = HAL_ERROR;
+
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
 
@@ -3214,158 +3064,150 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_TransmitCCC_DMA(I3C_HandleTypeDef *hi3c,
  * @param  timeout    : [IN]  Timeout duration in millisecond.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_ReceiveCCC(I3C_HandleTypeDef *hi3c,
-                                          I3C_XferTypeDef *pXferData,
-                                          uint32_t timeout) {
-  uint32_t tickstart;
-  uint32_t exit_condition;
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
+HAL_StatusTypeDef HAL_I3C_Ctrl_ReceiveCCC(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData, uint32_t timeout) {
+    uint32_t tickstart;
+    uint32_t exit_condition;
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) ||
-        ((pXferData->TxBuf.pBuffer == NULL) && (hi3c->TxXferCount != 0U))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_RX;
-      hi3c->pXferData = pXferData;
-      hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on CCC defining byte */
-      if (hi3c->TxXferCount != 0U) {
-        /* Check on the Tx threshold to know the Tx treatment process : byte or
-         * word */
-        if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-            LL_I3C_TXFIFO_THRESHOLD_1_4) {
-          /* Set byte treatment function pointer */
-          hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) ||
+            ((pXferData->TxBuf.pBuffer == NULL) && (hi3c->TxXferCount != 0U))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
         } else {
-          /* Set word treatment function pointer */
-          hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_RX;
+            hi3c->pXferData = pXferData;
+            hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
+
+            /* Check on CCC defining byte */
+            if (hi3c->TxXferCount != 0U) {
+                /* Check on the Tx threshold to know the Tx treatment process : byte or
+                 * word */
+                if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                    /* Set byte treatment function pointer */
+                    hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
+                } else {
+                    /* Set word treatment function pointer */
+                    hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+                }
+            }
+
+            /* Check on the Rx threshold to know the Rx treatment process : byte or
+             * word */
+            if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
+            }
+
+            /* Init tickstart for timeout management */
+            tickstart = HAL_GetTick();
+
+            /* Check on control FIFO enable/disable state */
+            if (LL_I3C_IsEnabledControlFIFO(hi3c->Instance) == 1U) {
+                /* Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            } else {
+                /* Decrement remaining control buffer data counter */
+                hi3c->ControlXferCount--;
+
+                /* Initiate a start condition by writing in the CR register */
+                WRITE_REG(hi3c->Instance->CR, *hi3c->pXferData->CtrlBuf.pBuffer);
+
+                /* Increment Buffer pointer */
+                hi3c->pXferData->CtrlBuf.pBuffer++;
+            }
+
+            /* Do while until FC (Frame Complete) is set or timeout */
+            do {
+                /* Call control data treatment function */
+                I3C_ControlDataTreatment(hi3c);
+
+                if (hi3c->TxXferCount != 0U) {
+                    /* Call transmit treatment function */
+                    hi3c->ptrTxFunc(hi3c);
+                }
+
+                /* Call receive treatment function */
+                hi3c->ptrRxFunc(hi3c);
+
+                /* Check for the timeout */
+                if (timeout != HAL_MAX_DELAY) {
+                    if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
+                        hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
+                        status = HAL_TIMEOUT;
+
+                        break;
+                    }
+                }
+
+                if ((__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) && (hi3c->ControlXferCount > 0U)) {
+                    /* Clear frame complete flag */
+                    LL_I3C_ClearFlag_FC(hi3c->Instance);
+
+                    /* Then Initiate a Start condition */
+                    LL_I3C_RequestTransfer(hi3c->Instance);
+                }
+
+                /* Calculate exit_condition value based on Frame complete and error
+                 * flags */
+                exit_condition = (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
+            } while ((exit_condition == 0U) || ((exit_condition == I3C_EVR_FCF) && (hi3c->ControlXferCount > 0U)));
+
+            /* Clear frame complete flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
+                LL_I3C_ClearFlag_FC(hi3c->Instance);
+            }
+
+            /* Check if all data bytes are received */
+            if ((hi3c->RxXferCount != 0U) && (status == HAL_OK)) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+                status = HAL_ERROR;
+            }
+
+            /* Check on error flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+                /* Clear error flag */
+                LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                /* Update handle error code parameter */
+                I3C_GetErrorSources(hi3c);
+
+                /* Update returned status value */
+                status = HAL_ERROR;
+            }
+
+            /* At the end of Rx process update state to Previous state */
+            I3C_StateUpdate(hi3c);
         }
-      }
-
-      /* Check on the Rx threshold to know the Rx treatment process : byte or
-       * word */
-      if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_RXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
-      }
-
-      /* Init tickstart for timeout management */
-      tickstart = HAL_GetTick();
-
-      /* Check on control FIFO enable/disable state */
-      if (LL_I3C_IsEnabledControlFIFO(hi3c->Instance) == 1U) {
-        /* Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      } else {
-        /* Decrement remaining control buffer data counter */
-        hi3c->ControlXferCount--;
-
-        /* Initiate a start condition by writing in the CR register */
-        WRITE_REG(hi3c->Instance->CR, *hi3c->pXferData->CtrlBuf.pBuffer);
-
-        /* Increment Buffer pointer */
-        hi3c->pXferData->CtrlBuf.pBuffer++;
-      }
-
-      /* Do while until FC (Frame Complete) is set or timeout */
-      do {
-        /* Call control data treatment function */
-        I3C_ControlDataTreatment(hi3c);
-
-        if (hi3c->TxXferCount != 0U) {
-          /* Call transmit treatment function */
-          hi3c->ptrTxFunc(hi3c);
-        }
-
-        /* Call receive treatment function */
-        hi3c->ptrRxFunc(hi3c);
-
-        /* Check for the timeout */
-        if (timeout != HAL_MAX_DELAY) {
-          if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
-            hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
-            status = HAL_TIMEOUT;
-
-            break;
-          }
-        }
-
-        if ((__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) &&
-            (hi3c->ControlXferCount > 0U)) {
-          /* Clear frame complete flag */
-          LL_I3C_ClearFlag_FC(hi3c->Instance);
-
-          /* Then Initiate a Start condition */
-          LL_I3C_RequestTransfer(hi3c->Instance);
-        }
-
-        /* Calculate exit_condition value based on Frame complete and error
-         * flags */
-        exit_condition =
-            (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
-      } while ((exit_condition == 0U) || ((exit_condition == I3C_EVR_FCF) &&
-                                          (hi3c->ControlXferCount > 0U)));
-
-      /* Clear frame complete flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
-        LL_I3C_ClearFlag_FC(hi3c->Instance);
-      }
-
-      /* Check if all data bytes are received */
-      if ((hi3c->RxXferCount != 0U) && (status == HAL_OK)) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
-        status = HAL_ERROR;
-      }
-
-      /* Check on error flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-        /* Clear error flag */
-        LL_I3C_ClearFlag_ERR(hi3c->Instance);
-
-        /* Update handle error code parameter */
-        I3C_GetErrorSources(hi3c);
-
-        /* Update returned status value */
-        status = HAL_ERROR;
-      }
-
-      /* At the end of Rx process update state to Previous state */
-      I3C_StateUpdate(hi3c);
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -3382,87 +3224,83 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_ReceiveCCC(I3C_HandleTypeDef *hi3c,
  * HAL_I3C_AddDescToFrame().
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_ReceiveCCC_IT(I3C_HandleTypeDef *hi3c,
-                                             I3C_XferTypeDef *pXferData) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Ctrl_ReceiveCCC_IT(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) ||
-        ((pXferData->TxBuf.pBuffer == NULL) && (hi3c->TxXferCount != 0U))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      if (handle_state == HAL_I3C_STATE_LISTEN) {
-        hi3c->XferISR = I3C_Ctrl_Rx_Listen_Event_ISR;
-      } else {
-        hi3c->XferISR = I3C_Ctrl_Rx_ISR;
-      }
-      hi3c->pXferData = pXferData;
-      hi3c->RxXferCount = pXferData->RxBuf.Size;
-      hi3c->State = HAL_I3C_STATE_BUSY_RX;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on CCC defining byte */
-      if (hi3c->TxXferCount != 0U) {
-        /* Check on the Tx threshold to know the Tx treatment process : byte or
-         * word */
-        if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-            LL_I3C_TXFIFO_THRESHOLD_1_4) {
-          /* Set byte treatment function pointer */
-          hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
-        } else {
-          /* Set word treatment function pointer */
-          hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) ||
+            ((pXferData->TxBuf.pBuffer == NULL) && (hi3c->TxXferCount != 0U))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
         }
-      }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            if (handle_state == HAL_I3C_STATE_LISTEN) {
+                hi3c->XferISR = I3C_Ctrl_Rx_Listen_Event_ISR;
+            } else {
+                hi3c->XferISR = I3C_Ctrl_Rx_ISR;
+            }
+            hi3c->pXferData = pXferData;
+            hi3c->RxXferCount = pXferData->RxBuf.Size;
+            hi3c->State = HAL_I3C_STATE_BUSY_RX;
 
-      /* Check on the Rx threshold to know the Rx treatment process : byte or
-       * word */
-      if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_RXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
-      }
+            /* Check on CCC defining byte */
+            if (hi3c->TxXferCount != 0U) {
+                /* Check on the Tx threshold to know the Tx treatment process : byte or
+                 * word */
+                if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                    /* Set byte treatment function pointer */
+                    hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
+                } else {
+                    /* Set word treatment function pointer */
+                    hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+                }
+            }
 
-      /* Note : The I3C interrupts must be enabled after unlocking current
-      process to avoid the risk of I3C interrupt handle execution before current
-      process unlock */
+            /* Check on the Rx threshold to know the Rx treatment process : byte or
+             * word */
+            if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
+            }
 
-      /* Enable Rx process interrupts */
-      I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_CCC_IT);
+            /* Note : The I3C interrupts must be enabled after unlocking current
+            process to avoid the risk of I3C interrupt handle execution before current
+            process unlock */
 
-      /* Initiate a Start condition */
-      LL_I3C_RequestTransfer(hi3c->Instance);
+            /* Enable Rx process interrupts */
+            I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_CCC_IT);
+
+            /* Initiate a Start condition */
+            LL_I3C_RequestTransfer(hi3c->Instance);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
@@ -3478,246 +3316,225 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_ReceiveCCC_IT(I3C_HandleTypeDef *hi3c,
  * HAL_I3C_AddDescToFrame().
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_ReceiveCCC_DMA(I3C_HandleTypeDef *hi3c,
-                                              I3C_XferTypeDef *pXferData) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_StatusTypeDef control_dma_status;
-  HAL_StatusTypeDef tx_dma_status = HAL_OK;
-  HAL_StatusTypeDef rx_dma_status = HAL_OK;
-  uint32_t size_align_word;
+HAL_StatusTypeDef HAL_I3C_Ctrl_ReceiveCCC_DMA(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef control_dma_status;
+    HAL_StatusTypeDef tx_dma_status = HAL_OK;
+    HAL_StatusTypeDef rx_dma_status = HAL_OK;
+    uint32_t size_align_word;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) ||
-        ((pXferData->TxBuf.pBuffer == NULL) && (hi3c->TxXferCount != 0U))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check on hdmarx and hdmacr handle */
-    else if ((hi3c->hdmarx == NULL) || (hi3c->hdmacr == NULL)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
-      status = HAL_ERROR;
-    } else if ((hi3c->TxXferCount != 0U) && (hi3c->hdmatx == NULL)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->XferISR = I3C_Ctrl_Rx_DMA_ISR;
-      hi3c->pXferData = pXferData;
-      hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
-      hi3c->State = HAL_I3C_STATE_BUSY_RX;
-
-      /*------------------------------------ I3C DMA channel for Control Data
-       * ----------------------------------------*/
-      /* Set the I3C DMA transfer complete callback */
-      hi3c->hdmacr->XferCpltCallback = I3C_DMAControlTransmitCplt;
-
-      /* Set the DMA error callback */
-      hi3c->hdmacr->XferErrorCallback = I3C_DMAError;
-
-      /* Set the unused DMA callbacks to NULL */
-      hi3c->hdmacr->XferHalfCpltCallback = NULL;
-      hi3c->hdmacr->XferAbortCallback = NULL;
-
-      /* assert that DMA source and destination width are configured in word */
-      assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmacr->Init.SrcDataWidth));
-      assert_param(
-          IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmacr->Init.DestDataWidth));
-
-      /* Enable the control data DMA channel */
-      control_dma_status = HAL_DMA_Start_IT(
-          hi3c->hdmacr, (uint32_t)hi3c->pXferData->CtrlBuf.pBuffer,
-          (uint32_t)&hi3c->Instance->CR, (hi3c->ControlXferCount * 4U));
-
-      /*------------------------------------ I3C DMA channel for defining byte
-       * ---------------------------------------*/
-      /* Check if Tx counter different from zero */
-      if (hi3c->TxXferCount != 0U) {
-        /* Set the I3C DMA transfer complete callback */
-        hi3c->hdmatx->XferCpltCallback = I3C_DMADataTransmitCplt;
-
-        /* Set the DMA error callback */
-        hi3c->hdmatx->XferErrorCallback = I3C_DMAError;
-
-        /* Set the unused DMA callbacks to NULL */
-        hi3c->hdmatx->XferHalfCpltCallback = NULL;
-        hi3c->hdmatx->XferAbortCallback = NULL;
-
-        /* Check on the Tx threshold to know the Tx treatment process : byte or
-         * word */
-        if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-            LL_I3C_TXFIFO_THRESHOLD_1_4) {
-          /* assert that DMA source and destination width are configured in byte
-           */
-          assert_param(
-              IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(
-              hi3c->hdmatx->Init.DestDataWidth));
-
-          /* Enable the Tx data DMA channel */
-          tx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
-              (uint32_t)&hi3c->Instance->TDR, hi3c->pXferData->TxBuf.Size);
-        } else {
-          /* assert that DMA source and destination width are configured in word
-           */
-          assert_param(
-              IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(
-              hi3c->hdmatx->Init.DestDataWidth));
-
-          /* Modify size to be multiple of 4 */
-          size_align_word = ((hi3c->pXferData->TxBuf.Size + 4U) -
-                             (hi3c->pXferData->TxBuf.Size % 4U));
-
-          /* Enable the Tx data DMA channel */
-          tx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
-              (uint32_t)&hi3c->Instance->TDWR, size_align_word);
-        }
-      }
-      /*------------------------------------ I3C DMA channel for the Rx Data
-       * -----------------------------------------*/
-      /* Check if Rx counter different from zero */
-      if (hi3c->RxXferCount != 0U) {
-        /* Set the I3C DMA transfer complete callback */
-        hi3c->hdmarx->XferCpltCallback = I3C_DMADataReceiveCplt;
-
-        /* Set the DMA error callback */
-        hi3c->hdmarx->XferErrorCallback = I3C_DMAError;
-
-        /* Set the unused DMA callbacks to NULL */
-        hi3c->hdmarx->XferHalfCpltCallback = NULL;
-        hi3c->hdmarx->XferAbortCallback = NULL;
-
-        /* Check on the Rx threshold to know the Rx treatment process : byte or
-         * word */
-        if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-            LL_I3C_RXFIFO_THRESHOLD_1_4) {
-          /* assert that DMA source and destination width are configured in byte
-           */
-          assert_param(
-              IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(
-              hi3c->hdmarx->Init.DestDataWidth));
-
-          /* Enable the Rx data DMA channel */
-          rx_dma_status =
-              HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDR,
-                               (uint32_t)hi3c->pXferData->RxBuf.pBuffer,
-                               hi3c->pXferData->RxBuf.Size);
-        } else {
-          /* assert that DMA source and destination width are configured in word
-           */
-          assert_param(
-              IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(
-              hi3c->hdmarx->Init.DestDataWidth));
-
-          /* Check to align data size in words */
-          if ((hi3c->pXferData->RxBuf.Size % 4U) == 0U) {
-            /* Keep the same size */
-            size_align_word = hi3c->pXferData->RxBuf.Size;
-          } else {
-            /* Modify size to be multiple of 4 */
-            size_align_word = ((hi3c->pXferData->RxBuf.Size + 4U) -
-                               (hi3c->pXferData->RxBuf.Size % 4U));
-          }
-
-          /* Enable the Rx data DMA channel */
-          rx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDWR,
-              (uint32_t)hi3c->pXferData->RxBuf.pBuffer, size_align_word);
-        }
-      }
-
-      /* Check if DMA process is well started */
-      if ((control_dma_status == HAL_OK) && (tx_dma_status == HAL_OK) &&
-          (rx_dma_status == HAL_OK)) {
-        /* Note : The I3C interrupts must be enabled after unlocking current
-        process to avoid the risk of I3C interrupt handle execution before
-        current process unlock */
-
-        /* Enable Rx process interrupts */
-        I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
-
-        /* Update the number of remaining data bytes */
-        hi3c->ControlXferCount = 0U;
-
-        /* Enable control DMA Request */
-        LL_I3C_EnableDMAReq_Control(hi3c->Instance);
-
-        /* Check if Tx counter different from zero */
-        if (hi3c->TxXferCount != 0U) {
-          /* Update the number of remaining data bytes */
-          hi3c->TxXferCount = 0U;
-
-          /* Enable Tx data DMA Request */
-          LL_I3C_EnableDMAReq_TX(hi3c->Instance);
-        }
-
-        /* Check if Rx counter different from zero */
-        if (hi3c->RxXferCount != 0U) {
-          /* Update the number of remaining data bytes */
-          hi3c->RxXferCount = 0U;
-
-          /* Enable Rx data DMA Request */
-          LL_I3C_EnableDMAReq_RX(hi3c->Instance);
-        }
-
-        /* Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      } else {
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmacr) == HAL_OK) {
-          hi3c->hdmacr->XferCpltCallback = NULL;
-          hi3c->hdmacr->XferErrorCallback = NULL;
-        }
-
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmatx) == HAL_OK) {
-          hi3c->hdmatx->XferCpltCallback = NULL;
-          hi3c->hdmatx->XferErrorCallback = NULL;
-        }
-
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmarx) == HAL_OK) {
-          hi3c->hdmarx->XferCpltCallback = NULL;
-          hi3c->hdmarx->XferErrorCallback = NULL;
-        }
-
-        hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) ||
+            ((pXferData->TxBuf.pBuffer == NULL) && (hi3c->TxXferCount != 0U))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check on hdmarx and hdmacr handle */
+        else if ((hi3c->hdmarx == NULL) || (hi3c->hdmacr == NULL)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
+            status = HAL_ERROR;
+        } else if ((hi3c->TxXferCount != 0U) && (hi3c->hdmatx == NULL)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->XferISR = I3C_Ctrl_Rx_DMA_ISR;
+            hi3c->pXferData = pXferData;
+            hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
+            hi3c->State = HAL_I3C_STATE_BUSY_RX;
+
+            /*------------------------------------ I3C DMA channel for Control Data
+             * ----------------------------------------*/
+            /* Set the I3C DMA transfer complete callback */
+            hi3c->hdmacr->XferCpltCallback = I3C_DMAControlTransmitCplt;
+
+            /* Set the DMA error callback */
+            hi3c->hdmacr->XferErrorCallback = I3C_DMAError;
+
+            /* Set the unused DMA callbacks to NULL */
+            hi3c->hdmacr->XferHalfCpltCallback = NULL;
+            hi3c->hdmacr->XferAbortCallback = NULL;
+
+            /* assert that DMA source and destination width are configured in word */
+            assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmacr->Init.SrcDataWidth));
+            assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmacr->Init.DestDataWidth));
+
+            /* Enable the control data DMA channel */
+            control_dma_status = HAL_DMA_Start_IT(hi3c->hdmacr, (uint32_t)hi3c->pXferData->CtrlBuf.pBuffer,
+                                                  (uint32_t)&hi3c->Instance->CR, (hi3c->ControlXferCount * 4U));
+
+            /*------------------------------------ I3C DMA channel for defining byte
+             * ---------------------------------------*/
+            /* Check if Tx counter different from zero */
+            if (hi3c->TxXferCount != 0U) {
+                /* Set the I3C DMA transfer complete callback */
+                hi3c->hdmatx->XferCpltCallback = I3C_DMADataTransmitCplt;
+
+                /* Set the DMA error callback */
+                hi3c->hdmatx->XferErrorCallback = I3C_DMAError;
+
+                /* Set the unused DMA callbacks to NULL */
+                hi3c->hdmatx->XferHalfCpltCallback = NULL;
+                hi3c->hdmatx->XferAbortCallback = NULL;
+
+                /* Check on the Tx threshold to know the Tx treatment process : byte or
+                 * word */
+                if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                    /* assert that DMA source and destination width are configured in byte
+                     */
+                    assert_param(IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmatx->Init.DestDataWidth));
+
+                    /* Enable the Tx data DMA channel */
+                    tx_dma_status = HAL_DMA_Start_IT(hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
+                                                     (uint32_t)&hi3c->Instance->TDR, hi3c->pXferData->TxBuf.Size);
+                } else {
+                    /* assert that DMA source and destination width are configured in word
+                     */
+                    assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmatx->Init.DestDataWidth));
+
+                    /* Modify size to be multiple of 4 */
+                    size_align_word = ((hi3c->pXferData->TxBuf.Size + 4U) - (hi3c->pXferData->TxBuf.Size % 4U));
+
+                    /* Enable the Tx data DMA channel */
+                    tx_dma_status = HAL_DMA_Start_IT(hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
+                                                     (uint32_t)&hi3c->Instance->TDWR, size_align_word);
+                }
+            }
+            /*------------------------------------ I3C DMA channel for the Rx Data
+             * -----------------------------------------*/
+            /* Check if Rx counter different from zero */
+            if (hi3c->RxXferCount != 0U) {
+                /* Set the I3C DMA transfer complete callback */
+                hi3c->hdmarx->XferCpltCallback = I3C_DMADataReceiveCplt;
+
+                /* Set the DMA error callback */
+                hi3c->hdmarx->XferErrorCallback = I3C_DMAError;
+
+                /* Set the unused DMA callbacks to NULL */
+                hi3c->hdmarx->XferHalfCpltCallback = NULL;
+                hi3c->hdmarx->XferAbortCallback = NULL;
+
+                /* Check on the Rx threshold to know the Rx treatment process : byte or
+                 * word */
+                if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                    /* assert that DMA source and destination width are configured in byte
+                     */
+                    assert_param(IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmarx->Init.DestDataWidth));
+
+                    /* Enable the Rx data DMA channel */
+                    rx_dma_status =
+                        HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDR,
+                                         (uint32_t)hi3c->pXferData->RxBuf.pBuffer, hi3c->pXferData->RxBuf.Size);
+                } else {
+                    /* assert that DMA source and destination width are configured in word
+                     */
+                    assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmarx->Init.DestDataWidth));
+
+                    /* Check to align data size in words */
+                    if ((hi3c->pXferData->RxBuf.Size % 4U) == 0U) {
+                        /* Keep the same size */
+                        size_align_word = hi3c->pXferData->RxBuf.Size;
+                    } else {
+                        /* Modify size to be multiple of 4 */
+                        size_align_word = ((hi3c->pXferData->RxBuf.Size + 4U) - (hi3c->pXferData->RxBuf.Size % 4U));
+                    }
+
+                    /* Enable the Rx data DMA channel */
+                    rx_dma_status = HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDWR,
+                                                     (uint32_t)hi3c->pXferData->RxBuf.pBuffer, size_align_word);
+                }
+            }
+
+            /* Check if DMA process is well started */
+            if ((control_dma_status == HAL_OK) && (tx_dma_status == HAL_OK) && (rx_dma_status == HAL_OK)) {
+                /* Note : The I3C interrupts must be enabled after unlocking current
+                process to avoid the risk of I3C interrupt handle execution before
+                current process unlock */
+
+                /* Enable Rx process interrupts */
+                I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
+
+                /* Update the number of remaining data bytes */
+                hi3c->ControlXferCount = 0U;
+
+                /* Enable control DMA Request */
+                LL_I3C_EnableDMAReq_Control(hi3c->Instance);
+
+                /* Check if Tx counter different from zero */
+                if (hi3c->TxXferCount != 0U) {
+                    /* Update the number of remaining data bytes */
+                    hi3c->TxXferCount = 0U;
+
+                    /* Enable Tx data DMA Request */
+                    LL_I3C_EnableDMAReq_TX(hi3c->Instance);
+                }
+
+                /* Check if Rx counter different from zero */
+                if (hi3c->RxXferCount != 0U) {
+                    /* Update the number of remaining data bytes */
+                    hi3c->RxXferCount = 0U;
+
+                    /* Enable Rx data DMA Request */
+                    LL_I3C_EnableDMAReq_RX(hi3c->Instance);
+                }
+
+                /* Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            } else {
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmacr) == HAL_OK) {
+                    hi3c->hdmacr->XferCpltCallback = NULL;
+                    hi3c->hdmacr->XferErrorCallback = NULL;
+                }
+
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmatx) == HAL_OK) {
+                    hi3c->hdmatx->XferCpltCallback = NULL;
+                    hi3c->hdmatx->XferErrorCallback = NULL;
+                }
+
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmarx) == HAL_OK) {
+                    hi3c->hdmarx->XferCpltCallback = NULL;
+                    hi3c->hdmarx->XferErrorCallback = NULL;
+                }
+
+                hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+                status = HAL_ERROR;
+
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
 
@@ -3738,138 +3555,130 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_ReceiveCCC_DMA(I3C_HandleTypeDef *hi3c,
  * @param  timeout    : [IN]  Timeout duration in millisecond.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_Transmit(I3C_HandleTypeDef *hi3c,
-                                        I3C_XferTypeDef *pXferData,
-                                        uint32_t timeout) {
-  uint32_t tickstart;
-  uint32_t exit_condition;
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
+HAL_StatusTypeDef HAL_I3C_Ctrl_Transmit(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData, uint32_t timeout) {
+    uint32_t tickstart;
+    uint32_t exit_condition;
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) ||
-        ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX;
-      hi3c->pXferData = pXferData;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the Tx threshold to know the Tx treatment process : byte or
-       * word */
-      if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_TXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Init tickstart for timeout management */
-      tickstart = HAL_GetTick();
-
-      /* Check on control FIFO enable/disable state */
-      if (LL_I3C_IsEnabledControlFIFO(hi3c->Instance) == 1U) {
-        /* Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      } else {
-        /* Decrement remaining control buffer data counter */
-        hi3c->ControlXferCount--;
-
-        /* Initiate a start condition by writing in the CR register */
-        WRITE_REG(hi3c->Instance->CR, *hi3c->pXferData->CtrlBuf.pBuffer);
-
-        /* Increment Buffer pointer */
-        hi3c->pXferData->CtrlBuf.pBuffer++;
-      }
-
-      /* Do while until FC (Frame Complete) is set or timeout */
-      do {
-        /* Call control data treatment function */
-        I3C_ControlDataTreatment(hi3c);
-
-        /* Call transmit treatment function */
-        hi3c->ptrTxFunc(hi3c);
-
-        /* Check for the timeout */
-        if (timeout != HAL_MAX_DELAY) {
-          if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
-            hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
-            status = HAL_TIMEOUT;
-
-            break;
-          }
+        /* Check on user parameters */
+        if ((pXferData == NULL) || ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
         }
-
-        if ((__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) &&
-            (hi3c->ControlXferCount > 0U)) {
-          /* Clear frame complete flag */
-          LL_I3C_ClearFlag_FC(hi3c->Instance);
-
-          /* Then Initiate a Start condition */
-          LL_I3C_RequestTransfer(hi3c->Instance);
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
         }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX;
+            hi3c->pXferData = pXferData;
 
-        /* Calculate exit_condition value based on Frame complete and error
-         * flags */
-        exit_condition =
-            (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
-      } while ((exit_condition == 0U) || ((exit_condition == I3C_EVR_FCF) &&
-                                          (hi3c->ControlXferCount > 0U)));
+            /* Check on the Tx threshold to know the Tx treatment process : byte or
+             * word */
+            if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+            }
 
-      /* Clear frame complete flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
-        LL_I3C_ClearFlag_FC(hi3c->Instance);
-      }
+            /* Init tickstart for timeout management */
+            tickstart = HAL_GetTick();
 
-      /* Check if all data bytes are transmitted */
-      if ((hi3c->TxXferCount != 0U) && (status == HAL_OK)) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
-        status = HAL_ERROR;
-      }
+            /* Check on control FIFO enable/disable state */
+            if (LL_I3C_IsEnabledControlFIFO(hi3c->Instance) == 1U) {
+                /* Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            } else {
+                /* Decrement remaining control buffer data counter */
+                hi3c->ControlXferCount--;
 
-      /* Check on error flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-        /* Clear error flag */
-        LL_I3C_ClearFlag_ERR(hi3c->Instance);
+                /* Initiate a start condition by writing in the CR register */
+                WRITE_REG(hi3c->Instance->CR, *hi3c->pXferData->CtrlBuf.pBuffer);
 
-        /* Update handle error code parameter */
-        I3C_GetErrorSources(hi3c);
+                /* Increment Buffer pointer */
+                hi3c->pXferData->CtrlBuf.pBuffer++;
+            }
 
-        /* Update returned status value */
-        status = HAL_ERROR;
-      }
+            /* Do while until FC (Frame Complete) is set or timeout */
+            do {
+                /* Call control data treatment function */
+                I3C_ControlDataTreatment(hi3c);
 
-      /* At the end of Tx process update state to Previous state */
-      I3C_StateUpdate(hi3c);
+                /* Call transmit treatment function */
+                hi3c->ptrTxFunc(hi3c);
+
+                /* Check for the timeout */
+                if (timeout != HAL_MAX_DELAY) {
+                    if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
+                        hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
+                        status = HAL_TIMEOUT;
+
+                        break;
+                    }
+                }
+
+                if ((__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) && (hi3c->ControlXferCount > 0U)) {
+                    /* Clear frame complete flag */
+                    LL_I3C_ClearFlag_FC(hi3c->Instance);
+
+                    /* Then Initiate a Start condition */
+                    LL_I3C_RequestTransfer(hi3c->Instance);
+                }
+
+                /* Calculate exit_condition value based on Frame complete and error
+                 * flags */
+                exit_condition = (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
+            } while ((exit_condition == 0U) || ((exit_condition == I3C_EVR_FCF) && (hi3c->ControlXferCount > 0U)));
+
+            /* Clear frame complete flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
+                LL_I3C_ClearFlag_FC(hi3c->Instance);
+            }
+
+            /* Check if all data bytes are transmitted */
+            if ((hi3c->TxXferCount != 0U) && (status == HAL_OK)) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+                status = HAL_ERROR;
+            }
+
+            /* Check on error flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+                /* Clear error flag */
+                LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                /* Update handle error code parameter */
+                I3C_GetErrorSources(hi3c);
+
+                /* Update returned status value */
+                status = HAL_ERROR;
+            }
+
+            /* At the end of Tx process update state to Previous state */
+            I3C_StateUpdate(hi3c);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -3888,72 +3697,68 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_Transmit(I3C_HandleTypeDef *hi3c,
  * HAL_I3C_AddDescToFrame().
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_Transmit_IT(I3C_HandleTypeDef *hi3c,
-                                           I3C_XferTypeDef *pXferData) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Ctrl_Transmit_IT(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) ||
-        ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      if (handle_state == HAL_I3C_STATE_LISTEN) {
-        hi3c->XferISR = I3C_Ctrl_Tx_Listen_Event_ISR;
-      } else {
-        hi3c->XferISR = I3C_Ctrl_Tx_ISR;
-      }
-      hi3c->pXferData = pXferData;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the Tx threshold to know the Tx treatment process : byte or
-       * word */
-      if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_TXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Note : The I3C interrupts must be enabled after unlocking current
-      process to avoid the risk of I3C interrupt handle execution before current
-      process unlock */
+        /* Check on user parameters */
+        if ((pXferData == NULL) || ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            if (handle_state == HAL_I3C_STATE_LISTEN) {
+                hi3c->XferISR = I3C_Ctrl_Tx_Listen_Event_ISR;
+            } else {
+                hi3c->XferISR = I3C_Ctrl_Tx_ISR;
+            }
+            hi3c->pXferData = pXferData;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX;
 
-      /* Enable Tx process interrupts */
-      I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_TX_IT);
+            /* Check on the Tx threshold to know the Tx treatment process : byte or
+             * word */
+            if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+            }
 
-      /* Initiate a Start condition */
-      LL_I3C_RequestTransfer(hi3c->Instance);
+            /* Note : The I3C interrupts must be enabled after unlocking current
+            process to avoid the risk of I3C interrupt handle execution before current
+            process unlock */
+
+            /* Enable Tx process interrupts */
+            I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_TX_IT);
+
+            /* Initiate a Start condition */
+            LL_I3C_RequestTransfer(hi3c->Instance);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
@@ -3973,177 +3778,164 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_Transmit_IT(I3C_HandleTypeDef *hi3c,
  * HAL_I3C_AddDescToFrame().
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_Transmit_DMA(I3C_HandleTypeDef *hi3c,
-                                            I3C_XferTypeDef *pXferData) {
-  HAL_StatusTypeDef control_dma_status;
-  HAL_StatusTypeDef tx_dma_status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t size_align_word;
+HAL_StatusTypeDef HAL_I3C_Ctrl_Transmit_DMA(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_StatusTypeDef control_dma_status;
+    HAL_StatusTypeDef tx_dma_status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t size_align_word;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) ||
-        ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check on hdmatx and hdmacr handle */
-    else if ((hi3c->hdmatx == NULL) || (hi3c->hdmacr == NULL)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->XferISR = I3C_Ctrl_Tx_DMA_ISR;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX;
-      hi3c->pXferData = pXferData;
-
-      /*------------------------------------ I3C DMA channel for Control Data
-       * ----------------------------------------*/
-      /* Set the I3C DMA transfer complete callback */
-      hi3c->hdmacr->XferCpltCallback = I3C_DMAControlTransmitCplt;
-
-      /* Set the DMA error callback */
-      hi3c->hdmacr->XferErrorCallback = I3C_DMAError;
-
-      /* Set the unused DMA callbacks to NULL */
-      hi3c->hdmacr->XferHalfCpltCallback = NULL;
-      hi3c->hdmacr->XferAbortCallback = NULL;
-
-      /* assert that DMA source and destination width are configured in word */
-      assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmacr->Init.SrcDataWidth));
-      assert_param(
-          IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmacr->Init.DestDataWidth));
-
-      /* Enable the control data DMA channel */
-      control_dma_status = HAL_DMA_Start_IT(
-          hi3c->hdmacr, (uint32_t)hi3c->pXferData->CtrlBuf.pBuffer,
-          (uint32_t)&hi3c->Instance->CR, (hi3c->ControlXferCount * 4U));
-
-      /*------------------------------------ I3C DMA channel for the Tx Data
-       * -----------------------------------------*/
-      /* Check if Tx counter different from zero */
-      if (hi3c->TxXferCount != 0U) {
-        /* Set the I3C DMA transfer complete callback */
-        hi3c->hdmatx->XferCpltCallback = I3C_DMADataTransmitCplt;
-
-        /* Set the DMA error callback */
-        hi3c->hdmatx->XferErrorCallback = I3C_DMAError;
-
-        /* Set the unused DMA callbacks to NULL */
-        hi3c->hdmatx->XferHalfCpltCallback = NULL;
-        hi3c->hdmatx->XferAbortCallback = NULL;
-
-        /* Check on the Tx threshold to know the Tx treatment process : byte or
-         * word */
-        if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-            LL_I3C_TXFIFO_THRESHOLD_1_4) {
-          /* assert that DMA source and destination width are configured in byte
-           */
-          assert_param(
-              IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(
-              hi3c->hdmatx->Init.DestDataWidth));
-
-          /* Enable the Tx data DMA channel */
-          tx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
-              (uint32_t)&hi3c->Instance->TDR, hi3c->pXferData->TxBuf.Size);
-        } else {
-          /* assert that DMA source and destination width are configured in word
-           */
-          assert_param(
-              IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(
-              hi3c->hdmatx->Init.DestDataWidth));
-
-          /* Check to align data size in words */
-          if ((hi3c->pXferData->TxBuf.Size % 4U) == 0U) {
-            /* Keep the same size */
-            size_align_word = hi3c->pXferData->TxBuf.Size;
-          } else {
-            /* Modify size to be multiple of 4 */
-            size_align_word = ((hi3c->pXferData->TxBuf.Size + 4U) -
-                               (hi3c->pXferData->TxBuf.Size % 4U));
-          }
-
-          /* Enable the Tx data DMA channel */
-          tx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
-              (uint32_t)&hi3c->Instance->TDWR, size_align_word);
-        }
-      }
-
-      /* Check if DMA process is well started */
-      if ((control_dma_status == HAL_OK) && (tx_dma_status == HAL_OK)) {
-        /* Note : The I3C interrupts must be enabled after unlocking current
-        process to avoid the risk of I3C interrupt handle execution before
-        current process unlock */
-
-        /* Enable Tx process interrupts */
-        I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
-
-        /* Update the number of remaining data bytes */
-        hi3c->ControlXferCount = 0U;
-
-        /* Enable control DMA Request */
-        LL_I3C_EnableDMAReq_Control(hi3c->Instance);
-
-        /* Check if Tx counter different from zero */
-        if (hi3c->TxXferCount != 0U) {
-          /* Update the number of remaining data bytes */
-          hi3c->TxXferCount = 0U;
-
-          /* Enable Tx data DMA Request */
-          LL_I3C_EnableDMAReq_TX(hi3c->Instance);
-        }
-
-        /* Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      } else {
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmacr) == HAL_OK) {
-          hi3c->hdmacr->XferCpltCallback = NULL;
-          hi3c->hdmacr->XferErrorCallback = NULL;
-        }
-
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmatx) == HAL_OK) {
-          hi3c->hdmatx->XferCpltCallback = NULL;
-          hi3c->hdmatx->XferErrorCallback = NULL;
-        }
-
-        hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on user parameters */
+        if ((pXferData == NULL) || ((hi3c->TxXferCount != 0U) && (pXferData->TxBuf.pBuffer == NULL))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check on hdmatx and hdmacr handle */
+        else if ((hi3c->hdmatx == NULL) || (hi3c->hdmacr == NULL)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->XferISR = I3C_Ctrl_Tx_DMA_ISR;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX;
+            hi3c->pXferData = pXferData;
+
+            /*------------------------------------ I3C DMA channel for Control Data
+             * ----------------------------------------*/
+            /* Set the I3C DMA transfer complete callback */
+            hi3c->hdmacr->XferCpltCallback = I3C_DMAControlTransmitCplt;
+
+            /* Set the DMA error callback */
+            hi3c->hdmacr->XferErrorCallback = I3C_DMAError;
+
+            /* Set the unused DMA callbacks to NULL */
+            hi3c->hdmacr->XferHalfCpltCallback = NULL;
+            hi3c->hdmacr->XferAbortCallback = NULL;
+
+            /* assert that DMA source and destination width are configured in word */
+            assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmacr->Init.SrcDataWidth));
+            assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmacr->Init.DestDataWidth));
+
+            /* Enable the control data DMA channel */
+            control_dma_status = HAL_DMA_Start_IT(hi3c->hdmacr, (uint32_t)hi3c->pXferData->CtrlBuf.pBuffer,
+                                                  (uint32_t)&hi3c->Instance->CR, (hi3c->ControlXferCount * 4U));
+
+            /*------------------------------------ I3C DMA channel for the Tx Data
+             * -----------------------------------------*/
+            /* Check if Tx counter different from zero */
+            if (hi3c->TxXferCount != 0U) {
+                /* Set the I3C DMA transfer complete callback */
+                hi3c->hdmatx->XferCpltCallback = I3C_DMADataTransmitCplt;
+
+                /* Set the DMA error callback */
+                hi3c->hdmatx->XferErrorCallback = I3C_DMAError;
+
+                /* Set the unused DMA callbacks to NULL */
+                hi3c->hdmatx->XferHalfCpltCallback = NULL;
+                hi3c->hdmatx->XferAbortCallback = NULL;
+
+                /* Check on the Tx threshold to know the Tx treatment process : byte or
+                 * word */
+                if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                    /* assert that DMA source and destination width are configured in byte
+                     */
+                    assert_param(IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmatx->Init.DestDataWidth));
+
+                    /* Enable the Tx data DMA channel */
+                    tx_dma_status = HAL_DMA_Start_IT(hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
+                                                     (uint32_t)&hi3c->Instance->TDR, hi3c->pXferData->TxBuf.Size);
+                } else {
+                    /* assert that DMA source and destination width are configured in word
+                     */
+                    assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmatx->Init.DestDataWidth));
+
+                    /* Check to align data size in words */
+                    if ((hi3c->pXferData->TxBuf.Size % 4U) == 0U) {
+                        /* Keep the same size */
+                        size_align_word = hi3c->pXferData->TxBuf.Size;
+                    } else {
+                        /* Modify size to be multiple of 4 */
+                        size_align_word = ((hi3c->pXferData->TxBuf.Size + 4U) - (hi3c->pXferData->TxBuf.Size % 4U));
+                    }
+
+                    /* Enable the Tx data DMA channel */
+                    tx_dma_status = HAL_DMA_Start_IT(hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
+                                                     (uint32_t)&hi3c->Instance->TDWR, size_align_word);
+                }
+            }
+
+            /* Check if DMA process is well started */
+            if ((control_dma_status == HAL_OK) && (tx_dma_status == HAL_OK)) {
+                /* Note : The I3C interrupts must be enabled after unlocking current
+                process to avoid the risk of I3C interrupt handle execution before
+                current process unlock */
+
+                /* Enable Tx process interrupts */
+                I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
+
+                /* Update the number of remaining data bytes */
+                hi3c->ControlXferCount = 0U;
+
+                /* Enable control DMA Request */
+                LL_I3C_EnableDMAReq_Control(hi3c->Instance);
+
+                /* Check if Tx counter different from zero */
+                if (hi3c->TxXferCount != 0U) {
+                    /* Update the number of remaining data bytes */
+                    hi3c->TxXferCount = 0U;
+
+                    /* Enable Tx data DMA Request */
+                    LL_I3C_EnableDMAReq_TX(hi3c->Instance);
+                }
+
+                /* Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            } else {
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmacr) == HAL_OK) {
+                    hi3c->hdmacr->XferCpltCallback = NULL;
+                    hi3c->hdmacr->XferErrorCallback = NULL;
+                }
+
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmatx) == HAL_OK) {
+                    hi3c->hdmatx->XferCpltCallback = NULL;
+                    hi3c->hdmatx->XferErrorCallback = NULL;
+                }
+
+                hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+                status = HAL_ERROR;
+
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
 
@@ -4162,138 +3954,131 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_Transmit_DMA(I3C_HandleTypeDef *hi3c,
  * @param  timeout    : [IN]  Timeout duration in millisecond.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_Receive(I3C_HandleTypeDef *hi3c,
-                                       I3C_XferTypeDef *pXferData,
-                                       uint32_t timeout) {
-  uint32_t tickstart;
-  uint32_t exit_condition;
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
+HAL_StatusTypeDef HAL_I3C_Ctrl_Receive(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData, uint32_t timeout) {
+    uint32_t tickstart;
+    uint32_t exit_condition;
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_RX;
-      hi3c->pXferData = pXferData;
-      hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the Rx threshold to know the Rx treatment process : byte or
-       * word */
-      if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_RXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Init tickstart for timeout management */
-      tickstart = HAL_GetTick();
-
-      /* Check on control FIFO enable/disable state */
-      if (LL_I3C_IsEnabledControlFIFO(hi3c->Instance) == 1U) {
-        /* Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      } else {
-        /* Decrement remaining control buffer data counter */
-        hi3c->ControlXferCount--;
-
-        /* Initiate a start condition by writing in the CR register */
-        WRITE_REG(hi3c->Instance->CR, *hi3c->pXferData->CtrlBuf.pBuffer);
-
-        /* Increment Buffer pointer */
-        hi3c->pXferData->CtrlBuf.pBuffer++;
-      }
-
-      /* Do while until FC (Frame Complete) is set or timeout */
-      do {
-        /* Call control data treatment function */
-        I3C_ControlDataTreatment(hi3c);
-
-        /* Call receive treatment function */
-        hi3c->ptrRxFunc(hi3c);
-
-        /* Check for the timeout */
-        if (timeout != HAL_MAX_DELAY) {
-          if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
-            hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
-            status = HAL_TIMEOUT;
-
-            break;
-          }
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
         }
-
-        if ((__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) &&
-            (hi3c->ControlXferCount > 0U)) {
-          /* Clear frame complete flag */
-          LL_I3C_ClearFlag_FC(hi3c->Instance);
-
-          /* Then Initiate a Start condition */
-          LL_I3C_RequestTransfer(hi3c->Instance);
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
         }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_RX;
+            hi3c->pXferData = pXferData;
+            hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
 
-        /* Calculate exit_condition value based on Frame complete and error
-         * flags */
-        exit_condition =
-            (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
-      } while ((exit_condition == 0U) || ((exit_condition == I3C_EVR_FCF) &&
-                                          (hi3c->ControlXferCount > 0U)));
+            /* Check on the Rx threshold to know the Rx treatment process : byte or
+             * word */
+            if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
+            }
 
-      /* Clear frame complete flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
-        LL_I3C_ClearFlag_FC(hi3c->Instance);
-      }
+            /* Init tickstart for timeout management */
+            tickstart = HAL_GetTick();
 
-      /* Check if all data bytes are received */
-      if ((hi3c->RxXferCount != 0U) && (status == HAL_OK)) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
-        status = HAL_ERROR;
-      }
+            /* Check on control FIFO enable/disable state */
+            if (LL_I3C_IsEnabledControlFIFO(hi3c->Instance) == 1U) {
+                /* Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            } else {
+                /* Decrement remaining control buffer data counter */
+                hi3c->ControlXferCount--;
 
-      /* Check on error flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-        /* Clear error flag */
-        LL_I3C_ClearFlag_ERR(hi3c->Instance);
+                /* Initiate a start condition by writing in the CR register */
+                WRITE_REG(hi3c->Instance->CR, *hi3c->pXferData->CtrlBuf.pBuffer);
 
-        /* Update handle error code parameter */
-        I3C_GetErrorSources(hi3c);
+                /* Increment Buffer pointer */
+                hi3c->pXferData->CtrlBuf.pBuffer++;
+            }
 
-        /* Update returned status value */
-        status = HAL_ERROR;
-      }
+            /* Do while until FC (Frame Complete) is set or timeout */
+            do {
+                /* Call control data treatment function */
+                I3C_ControlDataTreatment(hi3c);
 
-      /* At the end of Rx process update state to Previous state */
-      I3C_StateUpdate(hi3c);
+                /* Call receive treatment function */
+                hi3c->ptrRxFunc(hi3c);
+
+                /* Check for the timeout */
+                if (timeout != HAL_MAX_DELAY) {
+                    if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
+                        hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
+                        status = HAL_TIMEOUT;
+
+                        break;
+                    }
+                }
+
+                if ((__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) && (hi3c->ControlXferCount > 0U)) {
+                    /* Clear frame complete flag */
+                    LL_I3C_ClearFlag_FC(hi3c->Instance);
+
+                    /* Then Initiate a Start condition */
+                    LL_I3C_RequestTransfer(hi3c->Instance);
+                }
+
+                /* Calculate exit_condition value based on Frame complete and error
+                 * flags */
+                exit_condition = (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
+            } while ((exit_condition == 0U) || ((exit_condition == I3C_EVR_FCF) && (hi3c->ControlXferCount > 0U)));
+
+            /* Clear frame complete flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
+                LL_I3C_ClearFlag_FC(hi3c->Instance);
+            }
+
+            /* Check if all data bytes are received */
+            if ((hi3c->RxXferCount != 0U) && (status == HAL_OK)) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+                status = HAL_ERROR;
+            }
+
+            /* Check on error flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+                /* Clear error flag */
+                LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                /* Update handle error code parameter */
+                I3C_GetErrorSources(hi3c);
+
+                /* Update returned status value */
+                status = HAL_ERROR;
+            }
+
+            /* At the end of Rx process update state to Previous state */
+            I3C_StateUpdate(hi3c);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -4310,72 +4095,69 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_Receive(I3C_HandleTypeDef *hi3c,
  * HAL_I3C_AddDescToFrame().
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_Receive_IT(I3C_HandleTypeDef *hi3c,
-                                          I3C_XferTypeDef *pXferData) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Ctrl_Receive_IT(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      if (handle_state == HAL_I3C_STATE_LISTEN) {
-        hi3c->XferISR = I3C_Ctrl_Rx_Listen_Event_ISR;
-      } else {
-        hi3c->XferISR = I3C_Ctrl_Rx_ISR;
-      }
-      hi3c->pXferData = pXferData;
-      hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
-      hi3c->State = HAL_I3C_STATE_BUSY_RX;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the Rx threshold to know the Rx treatment process : byte or
-       * word */
-      if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_RXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Note : The I3C interrupts must be enabled after unlocking current
-      process to avoid the risk of I3C interrupt handle execution before current
-      process unlock */
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            if (handle_state == HAL_I3C_STATE_LISTEN) {
+                hi3c->XferISR = I3C_Ctrl_Rx_Listen_Event_ISR;
+            } else {
+                hi3c->XferISR = I3C_Ctrl_Rx_ISR;
+            }
+            hi3c->pXferData = pXferData;
+            hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
+            hi3c->State = HAL_I3C_STATE_BUSY_RX;
 
-      /* Enable Rx process interrupts */
-      I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_IT);
+            /* Check on the Rx threshold to know the Rx treatment process : byte or
+             * word */
+            if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
+            }
 
-      /* Initiate a Start condition */
-      LL_I3C_RequestTransfer(hi3c->Instance);
+            /* Note : The I3C interrupts must be enabled after unlocking current
+            process to avoid the risk of I3C interrupt handle execution before current
+            process unlock */
+
+            /* Enable Rx process interrupts */
+            I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_IT);
+
+            /* Initiate a Start condition */
+            LL_I3C_RequestTransfer(hi3c->Instance);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
@@ -4393,178 +4175,166 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_Receive_IT(I3C_HandleTypeDef *hi3c,
  * HAL_I3C_AddDescToFrame().
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_Receive_DMA(I3C_HandleTypeDef *hi3c,
-                                           I3C_XferTypeDef *pXferData) {
-  HAL_StatusTypeDef control_dma_status;
-  HAL_StatusTypeDef rx_dma_status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t size_align_word;
+HAL_StatusTypeDef HAL_I3C_Ctrl_Receive_DMA(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_StatusTypeDef control_dma_status;
+    HAL_StatusTypeDef rx_dma_status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t size_align_word;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check on hdmarx and hdmacr handle */
-    else if ((hi3c->hdmarx == NULL) || (hi3c->hdmacr == NULL)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->XferISR = I3C_Ctrl_Rx_DMA_ISR;
-      hi3c->pXferData = pXferData;
-      hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
-      hi3c->State = HAL_I3C_STATE_BUSY_RX;
-
-      /*------------------------------------ I3C DMA channel for Control Data
-       * ----------------------------------------*/
-      /* Set the I3C DMA transfer complete callback */
-      hi3c->hdmacr->XferCpltCallback = I3C_DMAControlTransmitCplt;
-
-      /* Set the DMA error callback */
-      hi3c->hdmacr->XferErrorCallback = I3C_DMAError;
-
-      /* Set the unused DMA callbacks to NULL */
-      hi3c->hdmacr->XferHalfCpltCallback = NULL;
-      hi3c->hdmacr->XferAbortCallback = NULL;
-
-      /* assert that DMA source and destination width are configured in word */
-      assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmacr->Init.SrcDataWidth));
-      assert_param(
-          IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmacr->Init.DestDataWidth));
-
-      /* Enable the control data DMA channel */
-      control_dma_status = HAL_DMA_Start_IT(
-          hi3c->hdmacr, (uint32_t)hi3c->pXferData->CtrlBuf.pBuffer,
-          (uint32_t)&hi3c->Instance->CR, (hi3c->ControlXferCount * 4U));
-
-      /*------------------------------------ I3C DMA channel for the Rx Data
-       * -----------------------------------------*/
-      /* Check if Rx counter different from zero */
-      if (hi3c->RxXferCount != 0U) {
-        /* Set the I3C DMA transfer complete callback */
-        hi3c->hdmarx->XferCpltCallback = I3C_DMADataReceiveCplt;
-
-        /* Set the DMA error callback */
-        hi3c->hdmarx->XferErrorCallback = I3C_DMAError;
-
-        /* Set the unused DMA callbacks to NULL */
-        hi3c->hdmarx->XferHalfCpltCallback = NULL;
-        hi3c->hdmarx->XferAbortCallback = NULL;
-
-        /* Check on the Rx threshold to know the Rx treatment process : byte or
-         * word */
-        if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-            LL_I3C_RXFIFO_THRESHOLD_1_4) {
-          /* assert that DMA source and destination width are configured in byte
-           */
-          assert_param(
-              IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(
-              hi3c->hdmarx->Init.DestDataWidth));
-
-          /* Enable the Rx data DMA channel */
-          rx_dma_status =
-              HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDR,
-                               (uint32_t)hi3c->pXferData->RxBuf.pBuffer,
-                               hi3c->pXferData->RxBuf.Size);
-        } else {
-          /* assert that DMA source and destination width are configured in word
-           */
-          assert_param(
-              IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(
-              hi3c->hdmarx->Init.DestDataWidth));
-
-          /* Check to align data size in words */
-          if ((hi3c->pXferData->RxBuf.Size % 4U) == 0U) {
-            /* Keep the same size */
-            size_align_word = hi3c->pXferData->RxBuf.Size;
-          } else {
-            /* Modify size to be multiple of 4 */
-            size_align_word = ((hi3c->pXferData->RxBuf.Size + 4U) -
-                               (hi3c->pXferData->RxBuf.Size % 4U));
-          }
-
-          /* Enable the Rx data DMA channel */
-          rx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDWR,
-              (uint32_t)hi3c->pXferData->RxBuf.pBuffer, size_align_word);
-        }
-      }
-
-      /* Check if DMA process is well started */
-      if ((control_dma_status == HAL_OK) && (rx_dma_status == HAL_OK)) {
-        /* Note : The I3C interrupts must be enabled after unlocking current
-        process to avoid the risk of I3C interrupt handle execution before
-        current process unlock */
-
-        /* Enable Rx process interrupts */
-        I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
-
-        /* Update the number of remaining data bytes */
-        hi3c->ControlXferCount = 0U;
-
-        /* Enable control DMA Request */
-        LL_I3C_EnableDMAReq_Control(hi3c->Instance);
-
-        /* Check if Rx counter different from zero */
-        if (hi3c->RxXferCount != 0U) {
-          /* Update the number of remaining data bytes */
-          hi3c->RxXferCount = 0U;
-
-          /* Enable Rx data DMA Request */
-          LL_I3C_EnableDMAReq_RX(hi3c->Instance);
-        }
-
-        /* Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      } else {
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmacr) == HAL_OK) {
-          hi3c->hdmacr->XferCpltCallback = NULL;
-          hi3c->hdmacr->XferErrorCallback = NULL;
-        }
-
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmarx) == HAL_OK) {
-          hi3c->hdmarx->XferCpltCallback = NULL;
-          hi3c->hdmarx->XferErrorCallback = NULL;
-        }
-
-        hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check on hdmarx and hdmacr handle */
+        else if ((hi3c->hdmarx == NULL) || (hi3c->hdmacr == NULL)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->XferISR = I3C_Ctrl_Rx_DMA_ISR;
+            hi3c->pXferData = pXferData;
+            hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
+            hi3c->State = HAL_I3C_STATE_BUSY_RX;
+
+            /*------------------------------------ I3C DMA channel for Control Data
+             * ----------------------------------------*/
+            /* Set the I3C DMA transfer complete callback */
+            hi3c->hdmacr->XferCpltCallback = I3C_DMAControlTransmitCplt;
+
+            /* Set the DMA error callback */
+            hi3c->hdmacr->XferErrorCallback = I3C_DMAError;
+
+            /* Set the unused DMA callbacks to NULL */
+            hi3c->hdmacr->XferHalfCpltCallback = NULL;
+            hi3c->hdmacr->XferAbortCallback = NULL;
+
+            /* assert that DMA source and destination width are configured in word */
+            assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmacr->Init.SrcDataWidth));
+            assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmacr->Init.DestDataWidth));
+
+            /* Enable the control data DMA channel */
+            control_dma_status = HAL_DMA_Start_IT(hi3c->hdmacr, (uint32_t)hi3c->pXferData->CtrlBuf.pBuffer,
+                                                  (uint32_t)&hi3c->Instance->CR, (hi3c->ControlXferCount * 4U));
+
+            /*------------------------------------ I3C DMA channel for the Rx Data
+             * -----------------------------------------*/
+            /* Check if Rx counter different from zero */
+            if (hi3c->RxXferCount != 0U) {
+                /* Set the I3C DMA transfer complete callback */
+                hi3c->hdmarx->XferCpltCallback = I3C_DMADataReceiveCplt;
+
+                /* Set the DMA error callback */
+                hi3c->hdmarx->XferErrorCallback = I3C_DMAError;
+
+                /* Set the unused DMA callbacks to NULL */
+                hi3c->hdmarx->XferHalfCpltCallback = NULL;
+                hi3c->hdmarx->XferAbortCallback = NULL;
+
+                /* Check on the Rx threshold to know the Rx treatment process : byte or
+                 * word */
+                if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                    /* assert that DMA source and destination width are configured in byte
+                     */
+                    assert_param(IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmarx->Init.DestDataWidth));
+
+                    /* Enable the Rx data DMA channel */
+                    rx_dma_status =
+                        HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDR,
+                                         (uint32_t)hi3c->pXferData->RxBuf.pBuffer, hi3c->pXferData->RxBuf.Size);
+                } else {
+                    /* assert that DMA source and destination width are configured in word
+                     */
+                    assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmarx->Init.DestDataWidth));
+
+                    /* Check to align data size in words */
+                    if ((hi3c->pXferData->RxBuf.Size % 4U) == 0U) {
+                        /* Keep the same size */
+                        size_align_word = hi3c->pXferData->RxBuf.Size;
+                    } else {
+                        /* Modify size to be multiple of 4 */
+                        size_align_word = ((hi3c->pXferData->RxBuf.Size + 4U) - (hi3c->pXferData->RxBuf.Size % 4U));
+                    }
+
+                    /* Enable the Rx data DMA channel */
+                    rx_dma_status = HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDWR,
+                                                     (uint32_t)hi3c->pXferData->RxBuf.pBuffer, size_align_word);
+                }
+            }
+
+            /* Check if DMA process is well started */
+            if ((control_dma_status == HAL_OK) && (rx_dma_status == HAL_OK)) {
+                /* Note : The I3C interrupts must be enabled after unlocking current
+                process to avoid the risk of I3C interrupt handle execution before
+                current process unlock */
+
+                /* Enable Rx process interrupts */
+                I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
+
+                /* Update the number of remaining data bytes */
+                hi3c->ControlXferCount = 0U;
+
+                /* Enable control DMA Request */
+                LL_I3C_EnableDMAReq_Control(hi3c->Instance);
+
+                /* Check if Rx counter different from zero */
+                if (hi3c->RxXferCount != 0U) {
+                    /* Update the number of remaining data bytes */
+                    hi3c->RxXferCount = 0U;
+
+                    /* Enable Rx data DMA Request */
+                    LL_I3C_EnableDMAReq_RX(hi3c->Instance);
+                }
+
+                /* Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            } else {
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmacr) == HAL_OK) {
+                    hi3c->hdmacr->XferCpltCallback = NULL;
+                    hi3c->hdmacr->XferErrorCallback = NULL;
+                }
+
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmarx) == HAL_OK) {
+                    hi3c->hdmarx->XferCpltCallback = NULL;
+                    hi3c->hdmarx->XferErrorCallback = NULL;
+                }
+
+                hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+                status = HAL_ERROR;
+
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
 
@@ -4589,86 +4359,80 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_Receive_DMA(I3C_HandleTypeDef *hi3c,
  * HAL_I3C_AddDescToFrame().
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_MultipleTransfer_IT(I3C_HandleTypeDef *hi3c,
-                                                   I3C_XferTypeDef *pXferData) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Ctrl_MultipleTransfer_IT(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) ||
-        ((pXferData->RxBuf.pBuffer == NULL) && (hi3c->RxXferCount != 0U)) ||
-        ((pXferData->TxBuf.pBuffer == NULL) && (hi3c->TxXferCount != 0U))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      if (handle_state == HAL_I3C_STATE_LISTEN) {
-        hi3c->XferISR = I3C_Ctrl_Multiple_Xfer_Listen_Event_ISR;
-      } else {
-        hi3c->XferISR = I3C_Ctrl_Multiple_Xfer_ISR;
-      }
-      hi3c->pXferData = pXferData;
-      hi3c->TxXferCount = hi3c->pXferData->TxBuf.Size;
-      hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX_RX;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the Tx threshold to know the Tx treatment process : byte or
-       * word */
-      if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_TXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Check on the Rx threshold to know the Rx treatment process : byte or
-       * word */
-      if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_RXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
-      }
+        /* Check on user parameters */
+        if ((pXferData == NULL) || ((pXferData->RxBuf.pBuffer == NULL) && (hi3c->RxXferCount != 0U)) ||
+            ((pXferData->TxBuf.pBuffer == NULL) && (hi3c->TxXferCount != 0U))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            if (handle_state == HAL_I3C_STATE_LISTEN) {
+                hi3c->XferISR = I3C_Ctrl_Multiple_Xfer_Listen_Event_ISR;
+            } else {
+                hi3c->XferISR = I3C_Ctrl_Multiple_Xfer_ISR;
+            }
+            hi3c->pXferData = pXferData;
+            hi3c->TxXferCount = hi3c->pXferData->TxBuf.Size;
+            hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX_RX;
 
-      /* Note : The I3C interrupts must be enabled after unlocking current
-      process to avoid the risk of I3C interrupt handle execution before current
-      process unlock */
+            /* Check on the Tx threshold to know the Tx treatment process : byte or
+             * word */
+            if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+            }
 
-      /* Enable Tx and Rx process interrupts */
-      I3C_Enable_IRQ(hi3c,
-                     (I3C_XFER_CONTROLLER_TX_IT | I3C_XFER_CONTROLLER_RX_IT));
+            /* Check on the Rx threshold to know the Rx treatment process : byte or
+             * word */
+            if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
+            }
 
-      /* Initiate a Start condition */
-      LL_I3C_RequestTransfer(hi3c->Instance);
+            /* Note : The I3C interrupts must be enabled after unlocking current
+            process to avoid the risk of I3C interrupt handle execution before current
+            process unlock */
+
+            /* Enable Tx and Rx process interrupts */
+            I3C_Enable_IRQ(hi3c, (I3C_XFER_CONTROLLER_TX_IT | I3C_XFER_CONTROLLER_RX_IT));
+
+            /* Initiate a Start condition */
+            LL_I3C_RequestTransfer(hi3c->Instance);
+        }
     }
-  }
-  return status;
+    return status;
 }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
@@ -4693,253 +4457,229 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_MultipleTransfer_IT(I3C_HandleTypeDef *hi3c,
  * HAL_I3C_AddDescToFrame().
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef
-HAL_I3C_Ctrl_MultipleTransfer_DMA(I3C_HandleTypeDef *hi3c,
-                                  I3C_XferTypeDef *pXferData) {
-  HAL_StatusTypeDef control_dma_status;
-  HAL_StatusTypeDef tx_dma_status = HAL_OK;
-  HAL_StatusTypeDef rx_dma_status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t size_align_word;
+HAL_StatusTypeDef HAL_I3C_Ctrl_MultipleTransfer_DMA(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_StatusTypeDef control_dma_status;
+    HAL_StatusTypeDef tx_dma_status = HAL_OK;
+    HAL_StatusTypeDef rx_dma_status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t size_align_word;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) ||
-        ((pXferData->RxBuf.pBuffer == NULL) && (hi3c->RxXferCount != 0U)) ||
-        ((pXferData->TxBuf.pBuffer == NULL) && (hi3c->TxXferCount != 0U))) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check on hdmatx, hdmarx and hdmacr handle */
-    else if ((hi3c->hdmatx == NULL) || (hi3c->hdmacr == NULL) ||
-             (hi3c->hdmarx == NULL)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->XferISR = I3C_Ctrl_Multiple_Xfer_DMA_ISR;
-      hi3c->pXferData = pXferData;
-      hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
-      hi3c->TxXferCount = hi3c->pXferData->TxBuf.Size;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX_RX;
-
-      /*------------------------------------ I3C DMA channel for Control Data
-       * -------------------------------------*/
-      /* Set the I3C DMA transfer complete callback */
-      hi3c->hdmacr->XferCpltCallback = I3C_DMAControlTransmitCplt;
-
-      /* Set the DMA error callback */
-      hi3c->hdmacr->XferErrorCallback = I3C_DMAError;
-
-      /* Set the unused DMA callbacks to NULL */
-      hi3c->hdmacr->XferHalfCpltCallback = NULL;
-      hi3c->hdmacr->XferAbortCallback = NULL;
-
-      /* assert that DMA source and destination width are configured in word */
-      assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmacr->Init.SrcDataWidth));
-      assert_param(
-          IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmacr->Init.DestDataWidth));
-
-      /* Enable the control data DMA channel */
-      control_dma_status = HAL_DMA_Start_IT(
-          hi3c->hdmacr, (uint32_t)hi3c->pXferData->CtrlBuf.pBuffer,
-          (uint32_t)&hi3c->Instance->CR, (hi3c->ControlXferCount * 4U));
-
-      /*------------------------------------ I3C DMA channel for the Rx Data
-       * --------------------------------*/
-      /* Check if Rx counter different from zero */
-      if (hi3c->RxXferCount != 0U) {
-        /* Set the I3C DMA transfer complete callback */
-        hi3c->hdmarx->XferCpltCallback = I3C_DMADataReceiveCplt;
-
-        /* Set the DMA error callback */
-        hi3c->hdmarx->XferErrorCallback = I3C_DMAError;
-
-        /* Set the unused DMA callbacks to NULL */
-        hi3c->hdmarx->XferHalfCpltCallback = NULL;
-        hi3c->hdmarx->XferAbortCallback = NULL;
-
-        /* Check on the Rx threshold to know the Rx treatment process : byte or
-         * word */
-        if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-            LL_I3C_RXFIFO_THRESHOLD_1_4) {
-          /* assert that DMA source and destination width are configured in byte
-           */
-          assert_param(
-              IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(
-              hi3c->hdmarx->Init.DestDataWidth));
-
-          /* Enable the Rx data DMA channel */
-          rx_dma_status =
-              HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDR,
-                               (uint32_t)hi3c->pXferData->RxBuf.pBuffer,
-                               hi3c->pXferData->RxBuf.Size);
-        } else {
-          /* assert that DMA source and destination width are configured in word
-           */
-          assert_param(
-              IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(
-              hi3c->hdmarx->Init.DestDataWidth));
-
-          /* Check to align data size in words */
-          if ((hi3c->pXferData->RxBuf.Size % 4U) == 0U) {
-            /* Keep the same size */
-            size_align_word = hi3c->pXferData->RxBuf.Size;
-          } else {
-            /* Modify size to be multiple of 4 */
-            size_align_word = ((hi3c->pXferData->RxBuf.Size + 4U) -
-                               (hi3c->pXferData->RxBuf.Size % 4U));
-          }
-
-          /* Enable the Rx data DMA channel */
-          rx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDWR,
-              (uint32_t)hi3c->pXferData->RxBuf.pBuffer, size_align_word);
-        }
-      }
-
-      /*------------------------------------ I3C DMA channel for the Tx Data
-       * --------------------------------*/
-      /* Check if Tx counter different from zero */
-      if (hi3c->TxXferCount != 0U) {
-        /* Set the I3C DMA transfer complete callback */
-        hi3c->hdmatx->XferCpltCallback = I3C_DMADataTransmitCplt;
-
-        /* Set the DMA error callback */
-        hi3c->hdmatx->XferErrorCallback = I3C_DMAError;
-
-        /* Set the unused DMA callbacks to NULL */
-        hi3c->hdmatx->XferHalfCpltCallback = NULL;
-        hi3c->hdmatx->XferAbortCallback = NULL;
-
-        /* Check on the Tx threshold to know the Tx treatment process : byte or
-         * word */
-        if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-            LL_I3C_TXFIFO_THRESHOLD_1_4) {
-          /* assert that DMA source and destination width are configured in byte
-           */
-          assert_param(
-              IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(
-              hi3c->hdmatx->Init.DestDataWidth));
-
-          /* Enable the Tx data DMA channel */
-          tx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
-              (uint32_t)&hi3c->Instance->TDR, hi3c->pXferData->TxBuf.Size);
-        } else {
-          /* assert that DMA source and destination width are configured in word
-           */
-          assert_param(
-              IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
-          assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(
-              hi3c->hdmatx->Init.DestDataWidth));
-
-          /* Check to align data size in words */
-          if ((hi3c->pXferData->TxBuf.Size % 4U) == 0U) {
-            /* Keep the same size */
-            size_align_word = hi3c->pXferData->TxBuf.Size;
-          } else {
-            /* Modify size to be multiple of 4 */
-            size_align_word = ((hi3c->pXferData->TxBuf.Size + 4U) -
-                               (hi3c->pXferData->TxBuf.Size % 4U));
-          }
-
-          /* Enable the Tx data DMA channel */
-          tx_dma_status = HAL_DMA_Start_IT(
-              hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
-              (uint32_t)&hi3c->Instance->TDWR, size_align_word);
-        }
-      }
-
-      /* Check if DMA process is well started */
-      if ((control_dma_status == HAL_OK) && (tx_dma_status == HAL_OK) &&
-          (rx_dma_status == HAL_OK)) {
-        /* Note : The I3C interrupts must be enabled after unlocking current
-        process to avoid the risk of I3C interrupt handle execution before
-        current process unlock */
-
-        /* Enable Tx process interrupts */
-        I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
-
-        /* Update the number of remaining data bytes */
-        hi3c->ControlXferCount = 0U;
-
-        /* Enable control DMA Request */
-        LL_I3C_EnableDMAReq_Control(hi3c->Instance);
-
-        /* Check if Rx counter different from zero */
-        if (hi3c->RxXferCount != 0U) {
-          /* Update the number of remaining data bytes */
-          hi3c->RxXferCount = 0U;
-
-          /* Enable Rx data DMA Request */
-          LL_I3C_EnableDMAReq_RX(hi3c->Instance);
-        }
-
-        /* Check if Tx counter different from zero */
-        if (hi3c->TxXferCount != 0U) {
-          /* Update the number of remaining data bytes */
-          hi3c->TxXferCount = 0U;
-
-          /* Enable Tx data DMA Request */
-          LL_I3C_EnableDMAReq_TX(hi3c->Instance);
-        }
-
-        /* Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      } else {
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmacr) == HAL_OK) {
-          hi3c->hdmacr->XferCpltCallback = NULL;
-          hi3c->hdmacr->XferErrorCallback = NULL;
-        }
-
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmatx) == HAL_OK) {
-          hi3c->hdmatx->XferCpltCallback = NULL;
-          hi3c->hdmatx->XferErrorCallback = NULL;
-        }
-
-        /* Set callback to NULL if DMA started */
-        if (HAL_DMA_Abort(hi3c->hdmarx) == HAL_OK) {
-          hi3c->hdmarx->XferCpltCallback = NULL;
-          hi3c->hdmarx->XferErrorCallback = NULL;
-        }
-
-        hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
-      }
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on user parameters */
+        if ((pXferData == NULL) || ((pXferData->RxBuf.pBuffer == NULL) && (hi3c->RxXferCount != 0U)) ||
+            ((pXferData->TxBuf.pBuffer == NULL) && (hi3c->TxXferCount != 0U))) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check on hdmatx, hdmarx and hdmacr handle */
+        else if ((hi3c->hdmatx == NULL) || (hi3c->hdmacr == NULL) || (hi3c->hdmarx == NULL)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->XferISR = I3C_Ctrl_Multiple_Xfer_DMA_ISR;
+            hi3c->pXferData = pXferData;
+            hi3c->RxXferCount = hi3c->pXferData->RxBuf.Size;
+            hi3c->TxXferCount = hi3c->pXferData->TxBuf.Size;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX_RX;
+
+            /*------------------------------------ I3C DMA channel for Control Data
+             * -------------------------------------*/
+            /* Set the I3C DMA transfer complete callback */
+            hi3c->hdmacr->XferCpltCallback = I3C_DMAControlTransmitCplt;
+
+            /* Set the DMA error callback */
+            hi3c->hdmacr->XferErrorCallback = I3C_DMAError;
+
+            /* Set the unused DMA callbacks to NULL */
+            hi3c->hdmacr->XferHalfCpltCallback = NULL;
+            hi3c->hdmacr->XferAbortCallback = NULL;
+
+            /* assert that DMA source and destination width are configured in word */
+            assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmacr->Init.SrcDataWidth));
+            assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmacr->Init.DestDataWidth));
+
+            /* Enable the control data DMA channel */
+            control_dma_status = HAL_DMA_Start_IT(hi3c->hdmacr, (uint32_t)hi3c->pXferData->CtrlBuf.pBuffer,
+                                                  (uint32_t)&hi3c->Instance->CR, (hi3c->ControlXferCount * 4U));
+
+            /*------------------------------------ I3C DMA channel for the Rx Data
+             * --------------------------------*/
+            /* Check if Rx counter different from zero */
+            if (hi3c->RxXferCount != 0U) {
+                /* Set the I3C DMA transfer complete callback */
+                hi3c->hdmarx->XferCpltCallback = I3C_DMADataReceiveCplt;
+
+                /* Set the DMA error callback */
+                hi3c->hdmarx->XferErrorCallback = I3C_DMAError;
+
+                /* Set the unused DMA callbacks to NULL */
+                hi3c->hdmarx->XferHalfCpltCallback = NULL;
+                hi3c->hdmarx->XferAbortCallback = NULL;
+
+                /* Check on the Rx threshold to know the Rx treatment process : byte or
+                 * word */
+                if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                    /* assert that DMA source and destination width are configured in byte
+                     */
+                    assert_param(IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmarx->Init.DestDataWidth));
+
+                    /* Enable the Rx data DMA channel */
+                    rx_dma_status =
+                        HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDR,
+                                         (uint32_t)hi3c->pXferData->RxBuf.pBuffer, hi3c->pXferData->RxBuf.Size);
+                } else {
+                    /* assert that DMA source and destination width are configured in word
+                     */
+                    assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmarx->Init.DestDataWidth));
+
+                    /* Check to align data size in words */
+                    if ((hi3c->pXferData->RxBuf.Size % 4U) == 0U) {
+                        /* Keep the same size */
+                        size_align_word = hi3c->pXferData->RxBuf.Size;
+                    } else {
+                        /* Modify size to be multiple of 4 */
+                        size_align_word = ((hi3c->pXferData->RxBuf.Size + 4U) - (hi3c->pXferData->RxBuf.Size % 4U));
+                    }
+
+                    /* Enable the Rx data DMA channel */
+                    rx_dma_status = HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDWR,
+                                                     (uint32_t)hi3c->pXferData->RxBuf.pBuffer, size_align_word);
+                }
+            }
+
+            /*------------------------------------ I3C DMA channel for the Tx Data
+             * --------------------------------*/
+            /* Check if Tx counter different from zero */
+            if (hi3c->TxXferCount != 0U) {
+                /* Set the I3C DMA transfer complete callback */
+                hi3c->hdmatx->XferCpltCallback = I3C_DMADataTransmitCplt;
+
+                /* Set the DMA error callback */
+                hi3c->hdmatx->XferErrorCallback = I3C_DMAError;
+
+                /* Set the unused DMA callbacks to NULL */
+                hi3c->hdmatx->XferHalfCpltCallback = NULL;
+                hi3c->hdmatx->XferAbortCallback = NULL;
+
+                /* Check on the Tx threshold to know the Tx treatment process : byte or
+                 * word */
+                if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                    /* assert that DMA source and destination width are configured in byte
+                     */
+                    assert_param(IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmatx->Init.DestDataWidth));
+
+                    /* Enable the Tx data DMA channel */
+                    tx_dma_status = HAL_DMA_Start_IT(hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
+                                                     (uint32_t)&hi3c->Instance->TDR, hi3c->pXferData->TxBuf.Size);
+                } else {
+                    /* assert that DMA source and destination width are configured in word
+                     */
+                    assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
+                    assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmatx->Init.DestDataWidth));
+
+                    /* Check to align data size in words */
+                    if ((hi3c->pXferData->TxBuf.Size % 4U) == 0U) {
+                        /* Keep the same size */
+                        size_align_word = hi3c->pXferData->TxBuf.Size;
+                    } else {
+                        /* Modify size to be multiple of 4 */
+                        size_align_word = ((hi3c->pXferData->TxBuf.Size + 4U) - (hi3c->pXferData->TxBuf.Size % 4U));
+                    }
+
+                    /* Enable the Tx data DMA channel */
+                    tx_dma_status = HAL_DMA_Start_IT(hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
+                                                     (uint32_t)&hi3c->Instance->TDWR, size_align_word);
+                }
+            }
+
+            /* Check if DMA process is well started */
+            if ((control_dma_status == HAL_OK) && (tx_dma_status == HAL_OK) && (rx_dma_status == HAL_OK)) {
+                /* Note : The I3C interrupts must be enabled after unlocking current
+                process to avoid the risk of I3C interrupt handle execution before
+                current process unlock */
+
+                /* Enable Tx process interrupts */
+                I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
+
+                /* Update the number of remaining data bytes */
+                hi3c->ControlXferCount = 0U;
+
+                /* Enable control DMA Request */
+                LL_I3C_EnableDMAReq_Control(hi3c->Instance);
+
+                /* Check if Rx counter different from zero */
+                if (hi3c->RxXferCount != 0U) {
+                    /* Update the number of remaining data bytes */
+                    hi3c->RxXferCount = 0U;
+
+                    /* Enable Rx data DMA Request */
+                    LL_I3C_EnableDMAReq_RX(hi3c->Instance);
+                }
+
+                /* Check if Tx counter different from zero */
+                if (hi3c->TxXferCount != 0U) {
+                    /* Update the number of remaining data bytes */
+                    hi3c->TxXferCount = 0U;
+
+                    /* Enable Tx data DMA Request */
+                    LL_I3C_EnableDMAReq_TX(hi3c->Instance);
+                }
+
+                /* Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            } else {
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmacr) == HAL_OK) {
+                    hi3c->hdmacr->XferCpltCallback = NULL;
+                    hi3c->hdmacr->XferErrorCallback = NULL;
+                }
+
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmatx) == HAL_OK) {
+                    hi3c->hdmatx->XferCpltCallback = NULL;
+                    hi3c->hdmatx->XferErrorCallback = NULL;
+                }
+
+                /* Set callback to NULL if DMA started */
+                if (HAL_DMA_Abort(hi3c->hdmarx) == HAL_OK) {
+                    hi3c->hdmarx->XferCpltCallback = NULL;
+                    hi3c->hdmarx->XferErrorCallback = NULL;
+                }
+
+                hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+                status = HAL_ERROR;
+
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
+            }
+        }
     }
-  }
-  return status;
+    return status;
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
 
@@ -4956,151 +4696,140 @@ HAL_I3C_Ctrl_MultipleTransfer_DMA(I3C_HandleTypeDef *hi3c,
  * @param  timeout        : [IN]     Timeout duration in millisecond.
  * @retval HAL Status     :          Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_DynAddrAssign(I3C_HandleTypeDef *hi3c,
-                                             uint64_t *target_payload,
-                                             uint32_t dynOption,
+HAL_StatusTypeDef HAL_I3C_Ctrl_DynAddrAssign(I3C_HandleTypeDef *hi3c, uint64_t *target_payload, uint32_t dynOption,
                                              uint32_t timeout) {
-  uint32_t tickstart;
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+    uint32_t tickstart;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on parameters */
-  assert_param(IS_I3C_ENTDAA_OPTION(dynOption));
+    /* check on parameters */
+    assert_param(IS_I3C_ENTDAA_OPTION(dynOption));
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    if (target_payload == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Launch a RSTDAA procedure before launch ENTDAA */
-      if ((dynOption == I3C_RSTDAA_THEN_ENTDAA) &&
-          ((handle_state == HAL_I3C_STATE_READY) ||
-           (handle_state == HAL_I3C_STATE_LISTEN))) {
-        /* Set handle transfer parameters */
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-        hi3c->State = HAL_I3C_STATE_BUSY_DAA;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-        /* Init tickstart for timeout management */
-        tickstart = HAL_GetTick();
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-        /* Enable arbitration header */
-        LL_I3C_EnableArbitrationHeader(hi3c->Instance);
-
-        /* Write CCC information in the control register */
-        LL_I3C_ControllerHandleCCC(hi3c->Instance, I3C_BROADCAST_RSTDAA, 0U,
-                                   LL_I3C_GENERATE_STOP);
-
-        /* Wait Frame completion flag */
-        status = I3C_WaitOnFlagUntilTimeout(hi3c, HAL_I3C_FLAG_FCF, RESET,
-                                            timeout, tickstart);
-
-        /* Clear frame complete flag */
-        if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
-          LL_I3C_ClearFlag_FC(hi3c->Instance);
+        if (target_payload == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
         }
-
-        /* Check on error flag */
-        if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-          /* Clear error flag */
-          LL_I3C_ClearFlag_ERR(hi3c->Instance);
-
-          /* Update handle error code parameter */
-          I3C_GetErrorSources(hi3c);
-
-          status = HAL_ERROR;
-        }
-
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
-      }
-
-      if (status == HAL_OK) {
-        /* check on the State */
-        if ((handle_state == HAL_I3C_STATE_READY) ||
-            (handle_state == HAL_I3C_STATE_LISTEN) ||
-            (handle_state == HAL_I3C_STATE_BUSY_DAA)) {
-          /* Check on the state */
-          if (handle_state != HAL_I3C_STATE_BUSY_DAA) {
-            /* Set handle transfer parameters */
-            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-            hi3c->State = HAL_I3C_STATE_BUSY_DAA;
-
-            /* Init tickstart for timeout management */
-            tickstart = HAL_GetTick();
-
-            /* Enable arbitration header */
-            LL_I3C_EnableArbitrationHeader(hi3c->Instance);
-
-            /* Write CCC information in the control register */
-            LL_I3C_ControllerHandleCCC(hi3c->Instance, I3C_BROADCAST_ENTDAA, 0U,
-                                       LL_I3C_GENERATE_STOP);
-          } else {
-            /* Init tickstart for timeout management */
-            tickstart = HAL_GetTick();
-          }
-
-          /* Wait frame complete flag or TX FIFO not full flag until timeout */
-          status = I3C_WaitOnDAAUntilTimeout(hi3c, timeout, tickstart);
-
-          /* Check TX FIFO not full flag */
-          if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_TXFNFF) == SET) {
-            /* Check on the Rx FIFO threshold to know the Rx treatment process :
-             * byte or word */
-            if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-                LL_I3C_RXFIFO_THRESHOLD_1_4) {
-              /* For loop to get target payload */
-              for (uint32_t index = 0U; index < 8U; index++) {
-                /* Retrieve payload byte by byte */
-                *target_payload |=
-                    (uint64_t)((uint64_t)LL_I3C_ReceiveData8(hi3c->Instance)
-                               << (index * 8U));
-              }
-            } else {
-              /* Retrieve first 32 bits payload */
-              *target_payload = (uint64_t)LL_I3C_ReceiveData32(hi3c->Instance);
-
-              /* Retrieve second 32 bits payload */
-              *target_payload |=
-                  (uint64_t)((uint64_t)LL_I3C_ReceiveData32(hi3c->Instance)
-                             << 32U);
-            }
-
-            status = HAL_BUSY;
-          }
-          /* Check on frame complete flag */
-          else {
-            /* Clear frame complete flag */
-            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
-              /* Clear frame complete flag */
-              LL_I3C_ClearFlag_FC(hi3c->Instance);
-            }
-            /* Update handle state parameter */
-            I3C_StateUpdate(hi3c);
-          }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
         } else {
-          hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-          status = HAL_ERROR;
-        }
-      }
-    }
-  }
+            /* Launch a RSTDAA procedure before launch ENTDAA */
+            if ((dynOption == I3C_RSTDAA_THEN_ENTDAA) &&
+                ((handle_state == HAL_I3C_STATE_READY) || (handle_state == HAL_I3C_STATE_LISTEN))) {
+                /* Set handle transfer parameters */
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                hi3c->State = HAL_I3C_STATE_BUSY_DAA;
 
-  return status;
+                /* Init tickstart for timeout management */
+                tickstart = HAL_GetTick();
+
+                /* Enable arbitration header */
+                LL_I3C_EnableArbitrationHeader(hi3c->Instance);
+
+                /* Write CCC information in the control register */
+                LL_I3C_ControllerHandleCCC(hi3c->Instance, I3C_BROADCAST_RSTDAA, 0U, LL_I3C_GENERATE_STOP);
+
+                /* Wait Frame completion flag */
+                status = I3C_WaitOnFlagUntilTimeout(hi3c, HAL_I3C_FLAG_FCF, RESET, timeout, tickstart);
+
+                /* Clear frame complete flag */
+                if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
+                    LL_I3C_ClearFlag_FC(hi3c->Instance);
+                }
+
+                /* Check on error flag */
+                if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+                    /* Clear error flag */
+                    LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                    /* Update handle error code parameter */
+                    I3C_GetErrorSources(hi3c);
+
+                    status = HAL_ERROR;
+                }
+
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
+            }
+
+            if (status == HAL_OK) {
+                /* check on the State */
+                if ((handle_state == HAL_I3C_STATE_READY) || (handle_state == HAL_I3C_STATE_LISTEN) ||
+                    (handle_state == HAL_I3C_STATE_BUSY_DAA)) {
+                    /* Check on the state */
+                    if (handle_state != HAL_I3C_STATE_BUSY_DAA) {
+                        /* Set handle transfer parameters */
+                        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                        hi3c->State = HAL_I3C_STATE_BUSY_DAA;
+
+                        /* Init tickstart for timeout management */
+                        tickstart = HAL_GetTick();
+
+                        /* Enable arbitration header */
+                        LL_I3C_EnableArbitrationHeader(hi3c->Instance);
+
+                        /* Write CCC information in the control register */
+                        LL_I3C_ControllerHandleCCC(hi3c->Instance, I3C_BROADCAST_ENTDAA, 0U, LL_I3C_GENERATE_STOP);
+                    } else {
+                        /* Init tickstart for timeout management */
+                        tickstart = HAL_GetTick();
+                    }
+
+                    /* Wait frame complete flag or TX FIFO not full flag until timeout */
+                    status = I3C_WaitOnDAAUntilTimeout(hi3c, timeout, tickstart);
+
+                    /* Check TX FIFO not full flag */
+                    if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_TXFNFF) == SET) {
+                        /* Check on the Rx FIFO threshold to know the Rx treatment process :
+                         * byte or word */
+                        if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                            /* For loop to get target payload */
+                            for (uint32_t index = 0U; index < 8U; index++) {
+                                /* Retrieve payload byte by byte */
+                                *target_payload |=
+                                    (uint64_t)((uint64_t)LL_I3C_ReceiveData8(hi3c->Instance) << (index * 8U));
+                            }
+                        } else {
+                            /* Retrieve first 32 bits payload */
+                            *target_payload = (uint64_t)LL_I3C_ReceiveData32(hi3c->Instance);
+
+                            /* Retrieve second 32 bits payload */
+                            *target_payload |= (uint64_t)((uint64_t)LL_I3C_ReceiveData32(hi3c->Instance) << 32U);
+                        }
+
+                        status = HAL_BUSY;
+                    }
+                    /* Check on frame complete flag */
+                    else {
+                        /* Clear frame complete flag */
+                        if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
+                            /* Clear frame complete flag */
+                            LL_I3C_ClearFlag_FC(hi3c->Instance);
+                        }
+                        /* Update handle state parameter */
+                        I3C_StateUpdate(hi3c);
+                    }
+                } else {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+                    status = HAL_ERROR;
+                }
+            }
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -5112,64 +4841,60 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_DynAddrAssign(I3C_HandleTypeDef *hi3c,
  * option. It can be one value of @ref I3C_DYNAMIC_ADDRESS_OPTION_DEFINITION.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_DynAddrAssign_IT(I3C_HandleTypeDef *hi3c,
-                                                uint32_t dynOption) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Ctrl_DynAddrAssign_IT(I3C_HandleTypeDef *hi3c, uint32_t dynOption) {
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on parameters */
-  assert_param(IS_I3C_ENTDAA_OPTION(dynOption));
+    /* check on parameters */
+    assert_param(IS_I3C_ENTDAA_OPTION(dynOption));
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* check on the Mode */
-    if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_DAA;
-      hi3c->XferISR = I3C_Ctrl_DAA_ISR;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Note : The I3C interrupts must be enabled after unlocking current
-      process to avoid the risk of I3C interrupt handle execution before current
-      process unlock */
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Enable Dynamic Address Assignment process interrupts */
-      I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_DAA_IT);
+        /* check on the Mode */
+        if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_DAA;
+            hi3c->XferISR = I3C_Ctrl_DAA_ISR;
 
-      /* Enable arbitration header */
-      LL_I3C_EnableArbitrationHeader(hi3c->Instance);
+            /* Note : The I3C interrupts must be enabled after unlocking current
+            process to avoid the risk of I3C interrupt handle execution before current
+            process unlock */
 
-      /* Launch a RSTDAA procedure before launch ENTDAA */
-      if (dynOption == I3C_RSTDAA_THEN_ENTDAA) {
-        /* Write RSTDAA CCC information in the control register */
-        LL_I3C_ControllerHandleCCC(hi3c->Instance, I3C_BROADCAST_RSTDAA, 0U,
-                                   LL_I3C_GENERATE_RESTART);
-      } else {
-        /* Write ENTDAA CCC information in the control register */
-        LL_I3C_ControllerHandleCCC(hi3c->Instance, I3C_BROADCAST_ENTDAA, 0U,
-                                   LL_I3C_GENERATE_STOP);
-      }
+            /* Enable Dynamic Address Assignment process interrupts */
+            I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_DAA_IT);
+
+            /* Enable arbitration header */
+            LL_I3C_EnableArbitrationHeader(hi3c->Instance);
+
+            /* Launch a RSTDAA procedure before launch ENTDAA */
+            if (dynOption == I3C_RSTDAA_THEN_ENTDAA) {
+                /* Write RSTDAA CCC information in the control register */
+                LL_I3C_ControllerHandleCCC(hi3c->Instance, I3C_BROADCAST_RSTDAA, 0U, LL_I3C_GENERATE_RESTART);
+            } else {
+                /* Write ENTDAA CCC information in the control register */
+                LL_I3C_ControllerHandleCCC(hi3c->Instance, I3C_BROADCAST_ENTDAA, 0U, LL_I3C_GENERATE_STOP);
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -5179,24 +4904,23 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_DynAddrAssign_IT(I3C_HandleTypeDef *hi3c,
  * @param  devAddress : [IN]  Value of the dynamic address to be assigned.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_SetDynAddr(I3C_HandleTypeDef *hi3c,
-                                          uint8_t devAddress) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Ctrl_SetDynAddr(I3C_HandleTypeDef *hi3c, uint8_t devAddress) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check if Tx FIFO requests data */
-    if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_TXFNFF) == SET) {
-      /* Write device address in the TDR register */
-      LL_I3C_TransmitData8(hi3c->Instance, devAddress);
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      status = HAL_ERROR;
+        /* Check if Tx FIFO requests data */
+        if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_TXFNFF) == SET) {
+            /* Write device address in the TDR register */
+            LL_I3C_TransmitData8(hi3c->Instance, devAddress);
+        } else {
+            status = HAL_ERROR;
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -5208,32 +4932,30 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_SetDynAddr(I3C_HandleTypeDef *hi3c,
  * @param  timeout    : [IN] Timeout duration
  * @retval HAL Status :      Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_IsDeviceI3C_Ready(I3C_HandleTypeDef *hi3c,
-                                                 uint8_t devAddress,
-                                                 uint32_t trials,
+HAL_StatusTypeDef HAL_I3C_Ctrl_IsDeviceI3C_Ready(I3C_HandleTypeDef *hi3c, uint8_t devAddress, uint32_t trials,
                                                  uint32_t timeout) {
-  I3C_DeviceTypeDef device;
-  HAL_StatusTypeDef status;
+    I3C_DeviceTypeDef device;
+    HAL_StatusTypeDef status;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-    /* Initiate a device address */
-    device.Address = devAddress;
+        /* Initiate a device address */
+        device.Address = devAddress;
 
-    /* Initiate a message type */
-    device.MessageType = LL_I3C_CONTROLLER_MTYPE_PRIVATE;
+        /* Initiate a message type */
+        device.MessageType = LL_I3C_CONTROLLER_MTYPE_PRIVATE;
 
-    /* Check if the device is ready*/
-    status = I3C_Ctrl_IsDevice_Ready(hi3c, &device, trials, timeout);
-  }
+        /* Check if the device is ready*/
+        status = I3C_Ctrl_IsDevice_Ready(hi3c, &device, trials, timeout);
+    }
 
-  return status;
+    return status;
 }
 
 /**
@@ -5245,32 +4967,30 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_IsDeviceI3C_Ready(I3C_HandleTypeDef *hi3c,
  * @param  timeout    : [IN] Timeout duration
  * @retval HAL Status :      Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_IsDeviceI2C_Ready(I3C_HandleTypeDef *hi3c,
-                                                 uint8_t devAddress,
-                                                 uint32_t trials,
+HAL_StatusTypeDef HAL_I3C_Ctrl_IsDeviceI2C_Ready(I3C_HandleTypeDef *hi3c, uint8_t devAddress, uint32_t trials,
                                                  uint32_t timeout) {
-  I3C_DeviceTypeDef device;
-  HAL_StatusTypeDef status;
+    I3C_DeviceTypeDef device;
+    HAL_StatusTypeDef status;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-    /* Initiate a device address */
-    device.Address = devAddress;
+        /* Initiate a device address */
+        device.Address = devAddress;
 
-    /* Initiate a message type */
-    device.MessageType = LL_I3C_CONTROLLER_MTYPE_LEGACY_I2C;
+        /* Initiate a message type */
+        device.MessageType = LL_I3C_CONTROLLER_MTYPE_LEGACY_I2C;
 
-    /* Check if the device is ready*/
-    status = I3C_Ctrl_IsDevice_Ready(hi3c, &device, trials, timeout);
-  }
+        /* Check if the device is ready*/
+        status = I3C_Ctrl_IsDevice_Ready(hi3c, &device, trials, timeout);
+    }
 
-  return status;
+    return status;
 }
 
 /**
@@ -5281,91 +5001,86 @@ HAL_StatusTypeDef HAL_I3C_Ctrl_IsDeviceI2C_Ready(I3C_HandleTypeDef *hi3c,
  * @param  timeout    : [IN] Timeout duration
  * @retval HAL Status :      Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Ctrl_GenerateArbitration(I3C_HandleTypeDef *hi3c,
-                                                   uint32_t timeout) {
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
-  __IO uint32_t exit_condition;
-  uint32_t tickstart;
+HAL_StatusTypeDef HAL_I3C_Ctrl_GenerateArbitration(I3C_HandleTypeDef *hi3c, uint32_t timeout) {
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    __IO uint32_t exit_condition;
+    uint32_t tickstart;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* check on the Mode */
-    if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      hi3c->State = HAL_I3C_STATE_BUSY;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Disable exit pattern */
-      LL_I3C_DisableExitPattern(hi3c->Instance);
-      /* Disable reset pattern */
-      LL_I3C_DisableResetPattern(hi3c->Instance);
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Write message control register */
-      WRITE_REG(hi3c->Instance->CR,
-                LL_I3C_CONTROLLER_MTYPE_HEADER | LL_I3C_GENERATE_STOP);
-
-      /* Calculate exit_condition value based on Frame complete and error flags
-       */
-      exit_condition =
-          (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
-
-      tickstart = HAL_GetTick();
-
-      while (exit_condition == 0U) {
-        if (timeout != HAL_MAX_DELAY) {
-          if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
-            /* Update I3C error code */
-            hi3c->ErrorCode |= HAL_I3C_ERROR_TIMEOUT;
-            status = HAL_TIMEOUT;
-
-            break;
-          }
+        /* check on the Mode */
+        if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
         }
-        /* Calculate exit_condition value based on Frame complete and error
-         * flags */
-        exit_condition =
-            (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
-      }
-
-      if (status == HAL_OK) {
-        /* Check if the FCF flag has been set */
-        if (__HAL_I3C_GET_FLAG(hi3c, I3C_EVR_FCF) == SET) {
-          /* Clear frame complete flag */
-          LL_I3C_ClearFlag_FC(hi3c->Instance);
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
         } else {
-          /* Clear error flag */
-          LL_I3C_ClearFlag_ERR(hi3c->Instance);
+            hi3c->State = HAL_I3C_STATE_BUSY;
 
-          /* Update handle error code parameter */
-          I3C_GetErrorSources(hi3c);
+            /* Disable exit pattern */
+            LL_I3C_DisableExitPattern(hi3c->Instance);
+            /* Disable reset pattern */
+            LL_I3C_DisableResetPattern(hi3c->Instance);
 
-          /* Update returned status value */
-          status = HAL_ERROR;
+            /* Write message control register */
+            WRITE_REG(hi3c->Instance->CR, LL_I3C_CONTROLLER_MTYPE_HEADER | LL_I3C_GENERATE_STOP);
+
+            /* Calculate exit_condition value based on Frame complete and error flags
+             */
+            exit_condition = (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
+
+            tickstart = HAL_GetTick();
+
+            while (exit_condition == 0U) {
+                if (timeout != HAL_MAX_DELAY) {
+                    if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
+                        /* Update I3C error code */
+                        hi3c->ErrorCode |= HAL_I3C_ERROR_TIMEOUT;
+                        status = HAL_TIMEOUT;
+
+                        break;
+                    }
+                }
+                /* Calculate exit_condition value based on Frame complete and error
+                 * flags */
+                exit_condition = (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
+            }
+
+            if (status == HAL_OK) {
+                /* Check if the FCF flag has been set */
+                if (__HAL_I3C_GET_FLAG(hi3c, I3C_EVR_FCF) == SET) {
+                    /* Clear frame complete flag */
+                    LL_I3C_ClearFlag_FC(hi3c->Instance);
+                } else {
+                    /* Clear error flag */
+                    LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                    /* Update handle error code parameter */
+                    I3C_GetErrorSources(hi3c);
+
+                    /* Update returned status value */
+                    status = HAL_ERROR;
+                }
+            }
+
+            /* At the end of Rx process update state to Previous state */
+            I3C_StateUpdate(hi3c);
         }
-      }
-
-      /* At the end of Rx process update state to Previous state */
-      I3C_StateUpdate(hi3c);
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -5425,127 +5140,118 @@ interrupt mode.
  * @param  timeout    : [IN]  Timeout duration in millisecond.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_Transmit(I3C_HandleTypeDef *hi3c,
-                                       I3C_XferTypeDef *pXferData,
-                                       uint32_t timeout) {
-  uint32_t tickstart;
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
-  uint32_t it_source;
+HAL_StatusTypeDef HAL_I3C_Tgt_Transmit(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData, uint32_t timeout) {
+    uint32_t tickstart;
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    uint32_t it_source;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    it_source = READ_REG(hi3c->Instance->IER);
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->TxBuf.pBuffer == NULL) ||
-        (pXferData->TxBuf.Size == 0U)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* check if DEF or GRP CCC notifications are enabled */
-    else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
-             (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* Verify the dynamic address validity */
-    else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX;
-      hi3c->pXferData = pXferData;
-      hi3c->TxXferCount = pXferData->TxBuf.Size;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the Tx threshold to know the Tx treatment process : byte or
-       * word */
-      if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_TXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
-      }
+        it_source = READ_REG(hi3c->Instance->IER);
 
-      /* Set Preload information */
-      LL_I3C_ConfigTxPreload(hi3c->Instance,
-                             (uint16_t)hi3c->pXferData->TxBuf.Size);
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Init tickstart for timeout management */
-      tickstart = HAL_GetTick();
-
-      /* Do while until FC (Frame Complete) is set or timeout */
-      do {
-        /* Call transmit treatment function */
-        hi3c->ptrTxFunc(hi3c);
-
-        /* Check for the Timeout */
-        if (timeout != HAL_MAX_DELAY) {
-          if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
-            hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
-            status = HAL_TIMEOUT;
-
-            break;
-          }
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->TxBuf.pBuffer == NULL) || (pXferData->TxBuf.Size == 0U)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
         }
-        /* Exit loop on Frame complete or error flags */
-      } while ((READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF)) ==
-               0U);
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* check if DEF or GRP CCC notifications are enabled */
+        else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
+                 (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* Verify the dynamic address validity */
+        else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX;
+            hi3c->pXferData = pXferData;
+            hi3c->TxXferCount = pXferData->TxBuf.Size;
 
-      /* Clear frame complete flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
-        LL_I3C_ClearFlag_FC(hi3c->Instance);
-      }
+            /* Check on the Tx threshold to know the Tx treatment process : byte or
+             * word */
+            if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+            }
 
-      /* Check if all data bytes are transmitted */
-      if ((LL_I3C_GetXferDataCount(hi3c->Instance) !=
-           hi3c->pXferData->TxBuf.Size) &&
-          (status == HAL_OK)) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
-        status = HAL_ERROR;
-      }
+            /* Set Preload information */
+            LL_I3C_ConfigTxPreload(hi3c->Instance, (uint16_t)hi3c->pXferData->TxBuf.Size);
 
-      /* Check on error flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-        /* Clear error flag */
-        LL_I3C_ClearFlag_ERR(hi3c->Instance);
+            /* Init tickstart for timeout management */
+            tickstart = HAL_GetTick();
 
-        /* Update handle error code parameter */
-        I3C_GetErrorSources(hi3c);
+            /* Do while until FC (Frame Complete) is set or timeout */
+            do {
+                /* Call transmit treatment function */
+                hi3c->ptrTxFunc(hi3c);
 
-        /* Update returned status value */
-        status = HAL_ERROR;
-      }
+                /* Check for the Timeout */
+                if (timeout != HAL_MAX_DELAY) {
+                    if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
+                        hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
+                        status = HAL_TIMEOUT;
 
-      /* At the end of Tx process update state to Previous state */
-      I3C_StateUpdate(hi3c);
+                        break;
+                    }
+                }
+                /* Exit loop on Frame complete or error flags */
+            } while ((READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF)) == 0U);
+
+            /* Clear frame complete flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
+                LL_I3C_ClearFlag_FC(hi3c->Instance);
+            }
+
+            /* Check if all data bytes are transmitted */
+            if ((LL_I3C_GetXferDataCount(hi3c->Instance) != hi3c->pXferData->TxBuf.Size) && (status == HAL_OK)) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+                status = HAL_ERROR;
+            }
+
+            /* Check on error flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+                /* Clear error flag */
+                LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                /* Update handle error code parameter */
+                I3C_GetErrorSources(hi3c);
+
+                /* Update returned status value */
+                status = HAL_ERROR;
+            }
+
+            /* At the end of Tx process update state to Previous state */
+            I3C_StateUpdate(hi3c);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -5557,85 +5263,80 @@ HAL_StatusTypeDef HAL_I3C_Tgt_Transmit(I3C_HandleTypeDef *hi3c,
  * (TxBuf.pBuffer) and size of data to transmit in bytes (TxBuf.Size)).
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_Transmit_IT(I3C_HandleTypeDef *hi3c,
-                                          I3C_XferTypeDef *pXferData) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t it_source;
+HAL_StatusTypeDef HAL_I3C_Tgt_Transmit_IT(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t it_source;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    it_source = READ_REG(hi3c->Instance->IER);
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->TxBuf.pBuffer == NULL) ||
-        (pXferData->TxBuf.Size == 0U)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* check if DEF and GRP CCC notifications are enabled */
-    else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
-             (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* Verify the dynamic address validity */
-    else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-
-      status = HAL_ERROR;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX;
-      hi3c->pXferData = pXferData;
-      hi3c->TxXferCount = pXferData->TxBuf.Size;
-      hi3c->XferISR = I3C_Tgt_Tx_ISR;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the Tx threshold to know the Tx treatment process : byte or
-       * word */
-      if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_TXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
-      }
+        it_source = READ_REG(hi3c->Instance->IER);
 
-      /* Set Preload information */
-      LL_I3C_ConfigTxPreload(hi3c->Instance,
-                             (uint16_t)hi3c->pXferData->TxBuf.Size);
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Note : The I3C interrupts must be enabled after unlocking current
-      process to avoid the risk of I3C interrupt handle execution before current
-      process unlock */
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->TxBuf.pBuffer == NULL) || (pXferData->TxBuf.Size == 0U)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* check if DEF and GRP CCC notifications are enabled */
+        else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
+                 (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* Verify the dynamic address validity */
+        else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
 
-      /* Enable Tx process interrupts */
-      I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_TX_IT);
+            status = HAL_ERROR;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX;
+            hi3c->pXferData = pXferData;
+            hi3c->TxXferCount = pXferData->TxBuf.Size;
+            hi3c->XferISR = I3C_Tgt_Tx_ISR;
+
+            /* Check on the Tx threshold to know the Tx treatment process : byte or
+             * word */
+            if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrTxFunc = &I3C_TransmitWordTreatment;
+            }
+
+            /* Set Preload information */
+            LL_I3C_ConfigTxPreload(hi3c->Instance, (uint16_t)hi3c->pXferData->TxBuf.Size);
+
+            /* Note : The I3C interrupts must be enabled after unlocking current
+            process to avoid the risk of I3C interrupt handle execution before current
+            process unlock */
+
+            /* Enable Tx process interrupts */
+            I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_TX_IT);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
@@ -5648,150 +5349,138 @@ HAL_StatusTypeDef HAL_I3C_Tgt_Transmit_IT(I3C_HandleTypeDef *hi3c,
  * (TxBuf.pBuffer) and size of data to transmit in bytes (TxBuf.Size)).
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_Transmit_DMA(I3C_HandleTypeDef *hi3c,
-                                           I3C_XferTypeDef *pXferData) {
-  HAL_StatusTypeDef tx_dma_status;
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t size_align_word;
-  uint32_t it_source;
+HAL_StatusTypeDef HAL_I3C_Tgt_Transmit_DMA(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_StatusTypeDef tx_dma_status;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t size_align_word;
+    uint32_t it_source;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    it_source = READ_REG(hi3c->Instance->IER);
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->TxBuf.pBuffer == NULL) ||
-        (pXferData->TxBuf.Size == 0U)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check on hdmatx handle */
-    else if (hi3c->hdmatx == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* check if DEF and GRP CCC notifications are enabled */
-    else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
-             (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* Verify the dynamic address validity */
-    else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_TX;
-      hi3c->pXferData = pXferData;
-      hi3c->TxXferCount = pXferData->TxBuf.Size;
-      hi3c->XferISR = I3C_Tgt_Tx_DMA_ISR;
-
-      /* Set Preload information */
-      LL_I3C_ConfigTxPreload(hi3c->Instance,
-                             (uint16_t)hi3c->pXferData->TxBuf.Size);
-
-      /*------------------------------------ I3C DMA channel for the Tx Data
-       * -----------------------------------------*/
-      /* Set the I3C DMA transfer complete callback */
-      hi3c->hdmatx->XferCpltCallback = I3C_DMADataTransmitCplt;
-
-      /* Set the DMA error callback */
-      hi3c->hdmatx->XferErrorCallback = I3C_DMAError;
-
-      /* Set the unused DMA callbacks to NULL */
-      hi3c->hdmatx->XferHalfCpltCallback = NULL;
-      hi3c->hdmatx->XferAbortCallback = NULL;
-
-      /* Check on the Tx threshold to know the Tx treatment process : byte or
-       * word */
-      if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_TXFIFO_THRESHOLD_1_4) {
-        /* assert that DMA source and destination width are configured in byte
-         */
-        assert_param(
-            IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
-        assert_param(
-            IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmatx->Init.DestDataWidth));
-
-        /* Enable the Tx data DMA channel */
-        tx_dma_status = HAL_DMA_Start_IT(
-            hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
-            (uint32_t)&hi3c->Instance->TDR, hi3c->pXferData->TxBuf.Size);
-      } else {
-        /* assert that DMA source and destination width are configured in word
-         */
-        assert_param(
-            IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
-        assert_param(
-            IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmatx->Init.DestDataWidth));
-
-        /* Check to align data size in words */
-        if ((hi3c->pXferData->TxBuf.Size % 4U) == 0U) {
-          /* Keep the same size */
-          size_align_word = hi3c->pXferData->TxBuf.Size;
-        } else {
-          /* Modify size to be multiple of 4 */
-          size_align_word = ((hi3c->pXferData->TxBuf.Size + 4U) -
-                             (hi3c->pXferData->TxBuf.Size % 4U));
-        }
-
-        /* Enable the Tx data DMA channel */
-        tx_dma_status = HAL_DMA_Start_IT(
-            hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
-            (uint32_t)&hi3c->Instance->TDWR, size_align_word);
-      }
-
-      /* Check if DMA process is well started */
-      if (tx_dma_status == HAL_OK) {
-        /* Note : The I3C interrupts must be enabled after unlocking current
-        process to avoid the risk of I3C interrupt handle execution before
-        current process unlock */
-
-        /* Enable Tx process interrupts */
-        I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
-
-        /* Update the number of remaining data bytes */
-        hi3c->TxXferCount = 0U;
-
-        /* Enable Tx data DMA Request */
-        LL_I3C_EnableDMAReq_TX(hi3c->Instance);
-      } else {
-        /* Set callback to NULL if DMA started */
-        hi3c->hdmatx->XferCpltCallback = NULL;
-        hi3c->hdmatx->XferErrorCallback = NULL;
-
-        hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
-      }
+        it_source = READ_REG(hi3c->Instance->IER);
+
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->TxBuf.pBuffer == NULL) || (pXferData->TxBuf.Size == 0U)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check on hdmatx handle */
+        else if (hi3c->hdmatx == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* check if DEF and GRP CCC notifications are enabled */
+        else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
+                 (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* Verify the dynamic address validity */
+        else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_TX;
+            hi3c->pXferData = pXferData;
+            hi3c->TxXferCount = pXferData->TxBuf.Size;
+            hi3c->XferISR = I3C_Tgt_Tx_DMA_ISR;
+
+            /* Set Preload information */
+            LL_I3C_ConfigTxPreload(hi3c->Instance, (uint16_t)hi3c->pXferData->TxBuf.Size);
+
+            /*------------------------------------ I3C DMA channel for the Tx Data
+             * -----------------------------------------*/
+            /* Set the I3C DMA transfer complete callback */
+            hi3c->hdmatx->XferCpltCallback = I3C_DMADataTransmitCplt;
+
+            /* Set the DMA error callback */
+            hi3c->hdmatx->XferErrorCallback = I3C_DMAError;
+
+            /* Set the unused DMA callbacks to NULL */
+            hi3c->hdmatx->XferHalfCpltCallback = NULL;
+            hi3c->hdmatx->XferAbortCallback = NULL;
+
+            /* Check on the Tx threshold to know the Tx treatment process : byte or
+             * word */
+            if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_1_4) {
+                /* assert that DMA source and destination width are configured in byte
+                 */
+                assert_param(IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
+                assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmatx->Init.DestDataWidth));
+
+                /* Enable the Tx data DMA channel */
+                tx_dma_status = HAL_DMA_Start_IT(hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
+                                                 (uint32_t)&hi3c->Instance->TDR, hi3c->pXferData->TxBuf.Size);
+            } else {
+                /* assert that DMA source and destination width are configured in word
+                 */
+                assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmatx->Init.SrcDataWidth));
+                assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmatx->Init.DestDataWidth));
+
+                /* Check to align data size in words */
+                if ((hi3c->pXferData->TxBuf.Size % 4U) == 0U) {
+                    /* Keep the same size */
+                    size_align_word = hi3c->pXferData->TxBuf.Size;
+                } else {
+                    /* Modify size to be multiple of 4 */
+                    size_align_word = ((hi3c->pXferData->TxBuf.Size + 4U) - (hi3c->pXferData->TxBuf.Size % 4U));
+                }
+
+                /* Enable the Tx data DMA channel */
+                tx_dma_status = HAL_DMA_Start_IT(hi3c->hdmatx, (uint32_t)hi3c->pXferData->TxBuf.pBuffer,
+                                                 (uint32_t)&hi3c->Instance->TDWR, size_align_word);
+            }
+
+            /* Check if DMA process is well started */
+            if (tx_dma_status == HAL_OK) {
+                /* Note : The I3C interrupts must be enabled after unlocking current
+                process to avoid the risk of I3C interrupt handle execution before
+                current process unlock */
+
+                /* Enable Tx process interrupts */
+                I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
+
+                /* Update the number of remaining data bytes */
+                hi3c->TxXferCount = 0U;
+
+                /* Enable Tx data DMA Request */
+                LL_I3C_EnableDMAReq_TX(hi3c->Instance);
+            } else {
+                /* Set callback to NULL if DMA started */
+                hi3c->hdmatx->XferCpltCallback = NULL;
+                hi3c->hdmatx->XferErrorCallback = NULL;
+
+                hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+                status = HAL_ERROR;
+
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
 
@@ -5805,124 +5494,116 @@ HAL_StatusTypeDef HAL_I3C_Tgt_Transmit_DMA(I3C_HandleTypeDef *hi3c,
  * @param  timeout    : [IN]  Timeout duration in millisecond.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_Receive(I3C_HandleTypeDef *hi3c,
-                                      I3C_XferTypeDef *pXferData,
-                                      uint32_t timeout) {
-  uint32_t tickstart;
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
-  uint32_t it_source;
+HAL_StatusTypeDef HAL_I3C_Tgt_Receive(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData, uint32_t timeout) {
+    uint32_t tickstart;
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    uint32_t it_source;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    it_source = READ_REG(hi3c->Instance->IER);
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) ||
-        (pXferData->RxBuf.Size == 0U)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* check if DEF and GRP CCC notifications are enabled */
-    else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
-             (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* Verify the dynamic address validity */
-    else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_RX;
-      hi3c->pXferData = pXferData;
-      hi3c->RxXferCount = pXferData->RxBuf.Size;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the Rx threshold to know the Rx treatment process : byte or
-       * word */
-      if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_RXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
-      }
+        it_source = READ_REG(hi3c->Instance->IER);
 
-      /* Init tickstart for timeout management */
-      tickstart = HAL_GetTick();
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Do while until FC (Frame Complete) is set or timeout */
-      do {
-        if (hi3c->RxXferCount > 0U) {
-          /* Call receive treatment function */
-          hi3c->ptrRxFunc(hi3c);
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) || (pXferData->RxBuf.Size == 0U)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
         }
-
-        /* Check for the Timeout */
-        if (timeout != HAL_MAX_DELAY) {
-          if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
-            hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
-            status = HAL_TIMEOUT;
-
-            break;
-          }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
         }
-        /* Exit loop on Frame complete or error flags */
-      } while ((READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF)) ==
-               0U);
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* check if DEF and GRP CCC notifications are enabled */
+        else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
+                 (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* Verify the dynamic address validity */
+        else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_RX;
+            hi3c->pXferData = pXferData;
+            hi3c->RxXferCount = pXferData->RxBuf.Size;
 
-      /* Clear frame complete flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
-        LL_I3C_ClearFlag_FC(hi3c->Instance);
-      }
+            /* Check on the Rx threshold to know the Rx treatment process : byte or
+             * word */
+            if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
+            }
 
-      /* Check if all data bytes are received */
-      if ((LL_I3C_GetXferDataCount(hi3c->Instance) !=
-           hi3c->pXferData->RxBuf.Size) &&
-          (status == HAL_OK)) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
-        status = HAL_ERROR;
-      }
+            /* Init tickstart for timeout management */
+            tickstart = HAL_GetTick();
 
-      /* Check on error flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-        /* Clear error flag */
-        LL_I3C_ClearFlag_ERR(hi3c->Instance);
+            /* Do while until FC (Frame Complete) is set or timeout */
+            do {
+                if (hi3c->RxXferCount > 0U) {
+                    /* Call receive treatment function */
+                    hi3c->ptrRxFunc(hi3c);
+                }
 
-        /* Update handle error code parameter */
-        I3C_GetErrorSources(hi3c);
+                /* Check for the Timeout */
+                if (timeout != HAL_MAX_DELAY) {
+                    if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
+                        hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
+                        status = HAL_TIMEOUT;
 
-        status = HAL_ERROR;
-      }
+                        break;
+                    }
+                }
+                /* Exit loop on Frame complete or error flags */
+            } while ((READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF)) == 0U);
 
-      /* At the end of Rx process update state to previous state */
-      I3C_StateUpdate(hi3c);
+            /* Clear frame complete flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_FCF) == SET) {
+                LL_I3C_ClearFlag_FC(hi3c->Instance);
+            }
+
+            /* Check if all data bytes are received */
+            if ((LL_I3C_GetXferDataCount(hi3c->Instance) != hi3c->pXferData->RxBuf.Size) && (status == HAL_OK)) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+                status = HAL_ERROR;
+            }
+
+            /* Check on error flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+                /* Clear error flag */
+                LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                /* Update handle error code parameter */
+                I3C_GetErrorSources(hi3c);
+
+                status = HAL_ERROR;
+            }
+
+            /* At the end of Rx process update state to previous state */
+            I3C_StateUpdate(hi3c);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -5934,80 +5615,76 @@ HAL_StatusTypeDef HAL_I3C_Tgt_Receive(I3C_HandleTypeDef *hi3c,
  * (RxBuf.pBuffer) and size of data to be received in bytes (RxBuf.Size)).
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_Receive_IT(I3C_HandleTypeDef *hi3c,
-                                         I3C_XferTypeDef *pXferData) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t it_source;
+HAL_StatusTypeDef HAL_I3C_Tgt_Receive_IT(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t it_source;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    it_source = READ_REG(hi3c->Instance->IER);
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) ||
-        (pXferData->RxBuf.Size == 0U)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* check if DEF and GRP CCC notifications are enabled */
-    else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
-             (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* Verify the dynamic address validity */
-    else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_RX;
-      hi3c->pXferData = pXferData;
-      hi3c->RxXferCount = pXferData->RxBuf.Size;
-      hi3c->XferISR = I3C_Tgt_Rx_ISR;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Check on the Rx threshold to know the Rx treatment process : byte or
-       * word */
-      if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_RXFIFO_THRESHOLD_1_4) {
-        /* Set byte treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
-      } else {
-        /* Set word treatment function pointer */
-        hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
-      }
+        it_source = READ_REG(hi3c->Instance->IER);
 
-      /* Note : The I3C interrupts must be enabled after unlocking current
-      process to avoid the risk of I3C interrupt handle execution before current
-      process unlock */
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Enable Rx process interrupts */
-      I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_RX_IT);
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) || (pXferData->RxBuf.Size == 0U)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* check if DEF and GRP CCC notifications are enabled */
+        else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
+                 (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* Verify the dynamic address validity */
+        else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_RX;
+            hi3c->pXferData = pXferData;
+            hi3c->RxXferCount = pXferData->RxBuf.Size;
+            hi3c->XferISR = I3C_Tgt_Rx_ISR;
+
+            /* Check on the Rx threshold to know the Rx treatment process : byte or
+             * word */
+            if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                /* Set byte treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveByteTreatment;
+            } else {
+                /* Set word treatment function pointer */
+                hi3c->ptrRxFunc = &I3C_ReceiveWordTreatment;
+            }
+
+            /* Note : The I3C interrupts must be enabled after unlocking current
+            process to avoid the risk of I3C interrupt handle execution before current
+            process unlock */
+
+            /* Enable Rx process interrupts */
+            I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_RX_IT);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
@@ -6020,149 +5697,137 @@ HAL_StatusTypeDef HAL_I3C_Tgt_Receive_IT(I3C_HandleTypeDef *hi3c,
  * (RxBuf.pBuffer) and size of data to be received in bytes (RxBuf.Size)).
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_Receive_DMA(I3C_HandleTypeDef *hi3c,
-                                          I3C_XferTypeDef *pXferData) {
-  HAL_StatusTypeDef rx_dma_status;
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t size_align_word;
-  uint32_t it_source;
+HAL_StatusTypeDef HAL_I3C_Tgt_Receive_DMA(I3C_HandleTypeDef *hi3c, I3C_XferTypeDef *pXferData) {
+    HAL_StatusTypeDef rx_dma_status;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t size_align_word;
+    uint32_t it_source;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    it_source = READ_REG(hi3c->Instance->IER);
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on user parameters */
-    if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) ||
-        (pXferData->RxBuf.Size == 0U)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check on hdmarx handle */
-    else if (hi3c->hdmarx == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
-      status = HAL_ERROR;
-
-      /* Update handle state parameter */
-      I3C_StateUpdate(hi3c);
-    }
-    /* check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* check if DEF and GRP CCC notifications are enabled */
-    else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
-             (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* Verify the dynamic address validity */
-    else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    } else {
-      /* Set handle transfer parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY_RX;
-      hi3c->pXferData = pXferData;
-      hi3c->RxXferCount = pXferData->RxBuf.Size;
-      hi3c->XferISR = I3C_Tgt_Rx_DMA_ISR;
-
-      /*------------------------------------ I3C DMA channel for the Rx Data
-       * ---------------------------------------*/
-      /* Set the I3C DMA transfer complete callback */
-      hi3c->hdmarx->XferCpltCallback = I3C_DMADataReceiveCplt;
-
-      /* Set the DMA error callback */
-      hi3c->hdmarx->XferErrorCallback = I3C_DMAError;
-
-      /* Set the unused DMA callbacks to NULL */
-      hi3c->hdmarx->XferHalfCpltCallback = NULL;
-      hi3c->hdmarx->XferAbortCallback = NULL;
-
-      /* Check on the Rx threshold to know the Rx treatment process : byte or
-       * word */
-      if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_RXFIFO_THRESHOLD_1_4) {
-        /* assert that DMA source and destination width are configured in byte
-         */
-        assert_param(
-            IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
-        assert_param(
-            IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmarx->Init.DestDataWidth));
-
-        /* Enable the Rx data DMA channel */
-        rx_dma_status =
-            HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDR,
-                             (uint32_t)hi3c->pXferData->RxBuf.pBuffer,
-                             hi3c->pXferData->RxBuf.Size);
-      } else {
-        /* assert that DMA source and destination width are configured in word
-         */
-        assert_param(
-            IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
-        assert_param(
-            IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmarx->Init.DestDataWidth));
-
-        /* Check to align data size in words */
-        if ((hi3c->pXferData->RxBuf.Size % 4U) == 0U) {
-          /* Keep the same size */
-          size_align_word = hi3c->pXferData->RxBuf.Size;
-        } else {
-          /* Modify size to be multiple of 4 */
-          size_align_word = ((hi3c->pXferData->RxBuf.Size + 4U) -
-                             (hi3c->pXferData->RxBuf.Size % 4U));
-        }
-
-        /* Enable the Rx data DMA channel */
-        rx_dma_status = HAL_DMA_Start_IT(
-            hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDWR,
-            (uint32_t)hi3c->pXferData->RxBuf.pBuffer, size_align_word);
-      }
-
-      if (rx_dma_status == HAL_OK) {
-        /* Note : The I3C interrupts must be enabled after unlocking current
-        process to avoid the risk of I3C interrupt handle execution before
-        current process unlock */
-
-        /* Enable Rx process interrupts */
-        I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
-
-        /* Update the number of remaining data bytes */
-        hi3c->RxXferCount = 0U;
-
-        /* Enable Rx data DMA Request */
-        LL_I3C_EnableDMAReq_RX(hi3c->Instance);
-      } else {
-        /* Set callback to NULL if DMA started */
-        hi3c->hdmarx->XferCpltCallback = NULL;
-        hi3c->hdmarx->XferErrorCallback = NULL;
-
-        hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
-      }
+        it_source = READ_REG(hi3c->Instance->IER);
+
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on user parameters */
+        if ((pXferData == NULL) || (pXferData->RxBuf.pBuffer == NULL) || (pXferData->RxBuf.Size == 0U)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check on hdmarx handle */
+        else if (hi3c->hdmarx == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
+            status = HAL_ERROR;
+
+            /* Update handle state parameter */
+            I3C_StateUpdate(hi3c);
+        }
+        /* check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* check if DEF and GRP CCC notifications are enabled */
+        else if ((I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_DEFIE) != RESET) ||
+                 (I3C_CHECK_IT_SOURCE(it_source, HAL_I3C_IT_GRPIE) != RESET)) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* Verify the dynamic address validity */
+        else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Set handle transfer parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY_RX;
+            hi3c->pXferData = pXferData;
+            hi3c->RxXferCount = pXferData->RxBuf.Size;
+            hi3c->XferISR = I3C_Tgt_Rx_DMA_ISR;
+
+            /*------------------------------------ I3C DMA channel for the Rx Data
+             * ---------------------------------------*/
+            /* Set the I3C DMA transfer complete callback */
+            hi3c->hdmarx->XferCpltCallback = I3C_DMADataReceiveCplt;
+
+            /* Set the DMA error callback */
+            hi3c->hdmarx->XferErrorCallback = I3C_DMAError;
+
+            /* Set the unused DMA callbacks to NULL */
+            hi3c->hdmarx->XferHalfCpltCallback = NULL;
+            hi3c->hdmarx->XferAbortCallback = NULL;
+
+            /* Check on the Rx threshold to know the Rx treatment process : byte or
+             * word */
+            if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                /* assert that DMA source and destination width are configured in byte
+                 */
+                assert_param(IS_I3C_DMASOURCEBYTE_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
+                assert_param(IS_I3C_DMADESTINATIONBYTE_VALUE(hi3c->hdmarx->Init.DestDataWidth));
+
+                /* Enable the Rx data DMA channel */
+                rx_dma_status = HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDR,
+                                                 (uint32_t)hi3c->pXferData->RxBuf.pBuffer, hi3c->pXferData->RxBuf.Size);
+            } else {
+                /* assert that DMA source and destination width are configured in word
+                 */
+                assert_param(IS_I3C_DMASOURCEWORD_VALUE(hi3c->hdmarx->Init.SrcDataWidth));
+                assert_param(IS_I3C_DMADESTINATIONWORD_VALUE(hi3c->hdmarx->Init.DestDataWidth));
+
+                /* Check to align data size in words */
+                if ((hi3c->pXferData->RxBuf.Size % 4U) == 0U) {
+                    /* Keep the same size */
+                    size_align_word = hi3c->pXferData->RxBuf.Size;
+                } else {
+                    /* Modify size to be multiple of 4 */
+                    size_align_word = ((hi3c->pXferData->RxBuf.Size + 4U) - (hi3c->pXferData->RxBuf.Size % 4U));
+                }
+
+                /* Enable the Rx data DMA channel */
+                rx_dma_status = HAL_DMA_Start_IT(hi3c->hdmarx, (uint32_t)&hi3c->Instance->RDWR,
+                                                 (uint32_t)hi3c->pXferData->RxBuf.pBuffer, size_align_word);
+            }
+
+            if (rx_dma_status == HAL_OK) {
+                /* Note : The I3C interrupts must be enabled after unlocking current
+                process to avoid the risk of I3C interrupt handle execution before
+                current process unlock */
+
+                /* Enable Rx process interrupts */
+                I3C_Enable_IRQ(hi3c, I3C_XFER_DMA);
+
+                /* Update the number of remaining data bytes */
+                hi3c->RxXferCount = 0U;
+
+                /* Enable Rx data DMA Request */
+                LL_I3C_EnableDMAReq_RX(hi3c->Instance);
+            } else {
+                /* Set callback to NULL if DMA started */
+                hi3c->hdmarx->XferCpltCallback = NULL;
+                hi3c->hdmarx->XferErrorCallback = NULL;
+
+                hi3c->ErrorCode = HAL_I3C_ERROR_DMA;
+                status = HAL_ERROR;
+
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
 
@@ -6173,85 +5838,81 @@ HAL_StatusTypeDef HAL_I3C_Tgt_Receive_DMA(I3C_HandleTypeDef *hi3c,
  * @param  timeout    : [IN]  Timeout duration in millisecond.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_ControlRoleReq(I3C_HandleTypeDef *hi3c,
-                                             uint32_t timeout) {
-  uint32_t tickstart;
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Tgt_ControlRoleReq(I3C_HandleTypeDef *hi3c, uint32_t timeout) {
+    uint32_t tickstart;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* check on the Mode */
-    if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* Verify the dynamic address validity */
-    else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Verify if control role request feature is enabled */
-      if (LL_I3C_IsEnabledControllerRoleReq(hi3c->Instance) != 1U) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-        status = HAL_ERROR;
-      }
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
+
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* check on the Mode */
+        if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* Verify the dynamic address validity */
+        else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Verify if control role request feature is enabled */
+            if (LL_I3C_IsEnabledControllerRoleReq(hi3c->Instance) != 1U) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+                status = HAL_ERROR;
+            }
+        }
+
+        if (status == HAL_OK) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY;
+
+            /* Init tickstart for timeout management */
+            tickstart = HAL_GetTick();
+
+            /* Request Controllership */
+            LL_I3C_TargetHandleMessage(hi3c->Instance, LL_I3C_TARGET_MTYPE_CONTROLLER_ROLE_REQ, 0U);
+
+            /* Wait Controllership completion confirmation flag */
+            status = I3C_WaitOnFlagUntilTimeout(hi3c, HAL_I3C_FLAG_CRUPDF, RESET, timeout, tickstart);
+
+            /* Clear Control role request flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_CRUPDF) == SET) {
+                LL_I3C_ClearFlag_CRUPD(hi3c->Instance);
+            }
+
+            /* Check on error flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+                /* Clear error flag */
+                LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                /* Update handle error code parameter */
+                I3C_GetErrorSources(hi3c);
+
+                /* Update handle state parameter to previous state */
+                I3C_StateUpdate(hi3c);
+
+                status = HAL_ERROR;
+            } else {
+                /* Update handle state parameter to previous state */
+                I3C_StateUpdate(hi3c);
+            }
+        }
     }
 
-    if (status == HAL_OK) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY;
-
-      /* Init tickstart for timeout management */
-      tickstart = HAL_GetTick();
-
-      /* Request Controllership */
-      LL_I3C_TargetHandleMessage(hi3c->Instance,
-                                 LL_I3C_TARGET_MTYPE_CONTROLLER_ROLE_REQ, 0U);
-
-      /* Wait Controllership completion confirmation flag */
-      status = I3C_WaitOnFlagUntilTimeout(hi3c, HAL_I3C_FLAG_CRUPDF, RESET,
-                                          timeout, tickstart);
-
-      /* Clear Control role request flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_CRUPDF) == SET) {
-        LL_I3C_ClearFlag_CRUPD(hi3c->Instance);
-      }
-
-      /* Check on error flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-        /* Clear error flag */
-        LL_I3C_ClearFlag_ERR(hi3c->Instance);
-
-        /* Update handle error code parameter */
-        I3C_GetErrorSources(hi3c);
-
-        /* Update handle state parameter to previous state */
-        I3C_StateUpdate(hi3c);
-
-        status = HAL_ERROR;
-      } else {
-        /* Update handle state parameter to previous state */
-        I3C_StateUpdate(hi3c);
-      }
-    }
-  }
-
-  return status;
+    return status;
 }
 
 /**
@@ -6261,58 +5922,56 @@ HAL_StatusTypeDef HAL_I3C_Tgt_ControlRoleReq(I3C_HandleTypeDef *hi3c,
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_Tgt_ControlRoleReq_IT(I3C_HandleTypeDef *hi3c) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on the Mode */
-    if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* Verify the dynamic address validity */
-    else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    } else {
-      /* Verify if control role request feature is enabled */
-      if (LL_I3C_IsEnabledControllerRoleReq(hi3c->Instance) != 1U) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
-      }
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
+
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on the Mode */
+        if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* Verify the dynamic address validity */
+        else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Verify if control role request feature is enabled */
+            if (LL_I3C_IsEnabledControllerRoleReq(hi3c->Instance) != 1U) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+                status = HAL_ERROR;
+            }
+        }
+
+        if (status == HAL_OK) {
+            /* Update handle parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY;
+            hi3c->XferISR = I3C_Tgt_CtrlRole_ISR;
+
+            /* Enable controller-role update and error interrupts */
+            I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_CTRLROLE);
+
+            /* Request Controllership */
+            LL_I3C_TargetHandleMessage(hi3c->Instance, LL_I3C_TARGET_MTYPE_CONTROLLER_ROLE_REQ, 0U);
+        }
     }
 
-    if (status == HAL_OK) {
-      /* Update handle parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY;
-      hi3c->XferISR = I3C_Tgt_CtrlRole_ISR;
-
-      /* Enable controller-role update and error interrupts */
-      I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_CTRLROLE);
-
-      /* Request Controllership */
-      LL_I3C_TargetHandleMessage(hi3c->Instance,
-                                 LL_I3C_TARGET_MTYPE_CONTROLLER_ROLE_REQ, 0U);
-    }
-  }
-
-  return status;
+    return status;
 }
 
 /**
@@ -6324,100 +5983,96 @@ HAL_StatusTypeDef HAL_I3C_Tgt_ControlRoleReq_IT(I3C_HandleTypeDef *hi3c) {
  * @param  timeout    : [IN]     Timeout duration in millisecond.
  * @retval HAL Status :          Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_HotJoinReq(I3C_HandleTypeDef *hi3c,
-                                         uint8_t *pAddress, uint32_t timeout) {
-  uint32_t tickstart;
-  HAL_I3C_StateTypeDef handle_state;
-  uint32_t valid_dynamic_address;
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Tgt_HotJoinReq(I3C_HandleTypeDef *hi3c, uint8_t *pAddress, uint32_t timeout) {
+    uint32_t tickstart;
+    HAL_I3C_StateTypeDef handle_state;
+    uint32_t valid_dynamic_address;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on the pAddress value */
-    if (pAddress == NULL) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check on the Mode */
-    else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Check on the hot join request feature */
-      if (LL_I3C_IsEnabledHotJoin(hi3c->Instance) != 1U) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-        status = HAL_ERROR;
-      }
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
+
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on the pAddress value */
+        if (pAddress == NULL) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check on the Mode */
+        else if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        } else {
+            /* Check on the hot join request feature */
+            if (LL_I3C_IsEnabledHotJoin(hi3c->Instance) != 1U) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+                status = HAL_ERROR;
+            }
+        }
+
+        if (status == HAL_OK) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY;
+
+            /* Init tickstart for timeout management */
+            tickstart = HAL_GetTick();
+
+            /* Request hot join */
+            LL_I3C_TargetHandleMessage(hi3c->Instance, LL_I3C_TARGET_MTYPE_HOT_JOIN, 0U);
+
+            /* Wait hot join completion confirmation flag */
+            status = I3C_WaitOnFlagUntilTimeout(hi3c, HAL_I3C_FLAG_DAUPDF, RESET, timeout, tickstart);
+
+            /* Clear dynamic address update flag */
+            if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_DAUPDF) == SET) {
+                LL_I3C_ClearFlag_DAUPD(hi3c->Instance);
+            }
+
+            /* Get dynamic address validity flag */
+            valid_dynamic_address = LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance);
+
+            /* Check the validity of the own dynamic address */
+            if (valid_dynamic_address == 0U) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_DYNAMIC_ADDR;
+                status = HAL_ERROR;
+
+                /* Update handle state parameter to previous state */
+                I3C_StateUpdate(hi3c);
+            }
+            /* Check on error flag */
+            else if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+                /* Clear error flag */
+                LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                /* Update handle error code parameter */
+                I3C_GetErrorSources(hi3c);
+
+                /* Update handle state parameter to previous state */
+                I3C_StateUpdate(hi3c);
+
+                status = HAL_ERROR;
+            } else {
+                /* Update handle state parameter to previous state */
+                I3C_StateUpdate(hi3c);
+
+                /* Get assigned dynamic address */
+                *pAddress = LL_I3C_GetOwnDynamicAddress(hi3c->Instance);
+            }
+        }
     }
 
-    if (status == HAL_OK) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY;
-
-      /* Init tickstart for timeout management */
-      tickstart = HAL_GetTick();
-
-      /* Request hot join */
-      LL_I3C_TargetHandleMessage(hi3c->Instance, LL_I3C_TARGET_MTYPE_HOT_JOIN,
-                                 0U);
-
-      /* Wait hot join completion confirmation flag */
-      status = I3C_WaitOnFlagUntilTimeout(hi3c, HAL_I3C_FLAG_DAUPDF, RESET,
-                                          timeout, tickstart);
-
-      /* Clear dynamic address update flag */
-      if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_DAUPDF) == SET) {
-        LL_I3C_ClearFlag_DAUPD(hi3c->Instance);
-      }
-
-      /* Get dynamic address validity flag */
-      valid_dynamic_address = LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance);
-
-      /* Check the validity of the own dynamic address */
-      if (valid_dynamic_address == 0U) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_DYNAMIC_ADDR;
-        status = HAL_ERROR;
-
-        /* Update handle state parameter to previous state */
-        I3C_StateUpdate(hi3c);
-      }
-      /* Check on error flag */
-      else if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-        /* Clear error flag */
-        LL_I3C_ClearFlag_ERR(hi3c->Instance);
-
-        /* Update handle error code parameter */
-        I3C_GetErrorSources(hi3c);
-
-        /* Update handle state parameter to previous state */
-        I3C_StateUpdate(hi3c);
-
-        status = HAL_ERROR;
-      } else {
-        /* Update handle state parameter to previous state */
-        I3C_StateUpdate(hi3c);
-
-        /* Get assigned dynamic address */
-        *pAddress = LL_I3C_GetOwnDynamicAddress(hi3c->Instance);
-      }
-    }
-  }
-
-  return status;
+    return status;
 }
 
 /**
@@ -6427,50 +6082,48 @@ HAL_StatusTypeDef HAL_I3C_Tgt_HotJoinReq(I3C_HandleTypeDef *hi3c,
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_Tgt_HotJoinReq_IT(I3C_HandleTypeDef *hi3c) {
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on the Mode */
-    if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* Check on the hot join request feature */
-    else if (LL_I3C_IsEnabledHotJoin(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Update handle parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY;
-      hi3c->XferISR = I3C_Tgt_HotJoin_ISR;
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-      /* Enable dynamic address update and error interrupts */
-      I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_HOTJOIN);
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Request hot join */
-      LL_I3C_TargetHandleMessage(hi3c->Instance, LL_I3C_TARGET_MTYPE_HOT_JOIN,
-                                 0U);
+        /* Check on the Mode */
+        if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* Check on the hot join request feature */
+        else if (LL_I3C_IsEnabledHotJoin(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Update handle parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY;
+            hi3c->XferISR = I3C_Tgt_HotJoin_ISR;
+
+            /* Enable dynamic address update and error interrupts */
+            I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_HOTJOIN);
+
+            /* Request hot join */
+            LL_I3C_TargetHandleMessage(hi3c->Instance, LL_I3C_TARGET_MTYPE_HOT_JOIN, 0U);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -6482,111 +6135,106 @@ HAL_StatusTypeDef HAL_I3C_Tgt_HotJoinReq_IT(I3C_HandleTypeDef *hi3c) {
  * @param  timeout     : [IN]  Timeout duration in millisecond.
  * @retval HAL Status  :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_IBIReq(I3C_HandleTypeDef *hi3c,
-                                     const uint8_t *pPayload,
-                                     uint8_t payloadSize, uint32_t timeout) {
-  uint32_t tickstart;
-  uint32_t payload_value = 0U;
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Tgt_IBIReq(I3C_HandleTypeDef *hi3c, const uint8_t *pPayload, uint8_t payloadSize,
+                                     uint32_t timeout) {
+    uint32_t tickstart;
+    uint32_t payload_value = 0U;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on the Mode */
-    if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* Verify the dynamic address validity */
-    else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    } else {
-      /* Verify if IBI request feature is enabled*/
-      if (LL_I3C_IsEnabledIBI(hi3c->Instance) != 1U) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
-      }
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
+
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
+
+        /* Check on the Mode */
+        if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* Verify the dynamic address validity */
+        else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Verify if IBI request feature is enabled*/
+            if (LL_I3C_IsEnabledIBI(hi3c->Instance) != 1U) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+                status = HAL_ERROR;
+            }
+        }
+
+        if (status == HAL_OK) {
+            /* Update handle parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY;
+
+            /* Check on the IBI additional data */
+            if (LL_I3C_GetDeviceIBIPayload(hi3c->Instance) == LL_I3C_IBI_ADDITIONAL_DATA) {
+                /* Check on the pPayload and payloadSize values */
+                if ((pPayload == NULL) || (payloadSize == 0U)) {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                    status = HAL_ERROR;
+
+                    /* Update handle state parameter */
+                    I3C_StateUpdate(hi3c);
+                } else {
+                    /* For loop to calculate the payload value */
+                    for (uint32_t index = 0U; index < payloadSize; index++) {
+                        payload_value |= ((uint32_t)pPayload[index] << (index * 8U));
+                    }
+
+                    /* Load IBI payload data */
+                    LL_I3C_SetIBIPayload(hi3c->Instance, payload_value);
+                }
+            }
+
+            if (status == HAL_OK) {
+                /* Init tickstart for timeout management */
+                tickstart = HAL_GetTick();
+
+                /* Request IBI */
+                LL_I3C_TargetHandleMessage(hi3c->Instance, LL_I3C_TARGET_MTYPE_IBI, payloadSize);
+
+                /* Wait IBI completion confirmation flag */
+                status = I3C_WaitOnFlagUntilTimeout(hi3c, HAL_I3C_FLAG_IBIENDF, RESET, timeout, tickstart);
+
+                if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_IBIENDF) == SET) {
+                    /* Clear IBI end process flag */
+                    LL_I3C_ClearFlag_IBIEND(hi3c->Instance);
+                }
+
+                /* Check on error flag value */
+                if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+                    /* Clear error flag */
+                    LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+                    /* Update handle error code parameter */
+                    I3C_GetErrorSources(hi3c);
+
+                    /* Update handle state parameter to previous state */
+                    I3C_StateUpdate(hi3c);
+
+                    status = HAL_ERROR;
+                } else {
+                    /* Update handle state parameter to previous state */
+                    I3C_StateUpdate(hi3c);
+                }
+            }
+        }
     }
 
-    if (status == HAL_OK) {
-      /* Update handle parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY;
-
-      /* Check on the IBI additional data */
-      if (LL_I3C_GetDeviceIBIPayload(hi3c->Instance) ==
-          LL_I3C_IBI_ADDITIONAL_DATA) {
-        /* Check on the pPayload and payloadSize values */
-        if ((pPayload == NULL) || (payloadSize == 0U)) {
-          hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-          status = HAL_ERROR;
-
-          /* Update handle state parameter */
-          I3C_StateUpdate(hi3c);
-        } else {
-          /* For loop to calculate the payload value */
-          for (uint32_t index = 0U; index < payloadSize; index++) {
-            payload_value |= ((uint32_t)pPayload[index] << (index * 8U));
-          }
-
-          /* Load IBI payload data */
-          LL_I3C_SetIBIPayload(hi3c->Instance, payload_value);
-        }
-      }
-
-      if (status == HAL_OK) {
-        /* Init tickstart for timeout management */
-        tickstart = HAL_GetTick();
-
-        /* Request IBI */
-        LL_I3C_TargetHandleMessage(hi3c->Instance, LL_I3C_TARGET_MTYPE_IBI,
-                                   payloadSize);
-
-        /* Wait IBI completion confirmation flag */
-        status = I3C_WaitOnFlagUntilTimeout(hi3c, HAL_I3C_FLAG_IBIENDF, RESET,
-                                            timeout, tickstart);
-
-        if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_IBIENDF) == SET) {
-          /* Clear IBI end process flag */
-          LL_I3C_ClearFlag_IBIEND(hi3c->Instance);
-        }
-
-        /* Check on error flag value */
-        if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-          /* Clear error flag */
-          LL_I3C_ClearFlag_ERR(hi3c->Instance);
-
-          /* Update handle error code parameter */
-          I3C_GetErrorSources(hi3c);
-
-          /* Update handle state parameter to previous state */
-          I3C_StateUpdate(hi3c);
-
-          status = HAL_ERROR;
-        } else {
-          /* Update handle state parameter to previous state */
-          I3C_StateUpdate(hi3c);
-        }
-      }
-    }
-  }
-
-  return status;
+    return status;
 }
 
 /**
@@ -6597,83 +6245,78 @@ HAL_StatusTypeDef HAL_I3C_Tgt_IBIReq(I3C_HandleTypeDef *hi3c,
  * @param  payloadSize : [IN]  Payload buffer size in bytes.
  * @retval HAL Status  :       Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_Tgt_IBIReq_IT(I3C_HandleTypeDef *hi3c,
-                                        const uint8_t *pPayload,
-                                        uint8_t payloadSize) {
-  uint32_t payload_value = 0U;
-  HAL_I3C_StateTypeDef handle_state;
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_Tgt_IBIReq_IT(I3C_HandleTypeDef *hi3c, const uint8_t *pPayload, uint8_t payloadSize) {
+    uint32_t payload_value = 0U;
+    HAL_I3C_StateTypeDef handle_state;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check the instance and the mode parameters */
-    assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
-    assert_param(IS_I3C_MODE(hi3c->Mode));
-
-    /* Get I3C handle state */
-    handle_state = hi3c->State;
-
-    /* Check on the Mode */
-    if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    }
-    /* check on the State */
-    else if ((handle_state != HAL_I3C_STATE_READY) &&
-             (handle_state != HAL_I3C_STATE_LISTEN)) {
-      status = HAL_BUSY;
-    }
-    /* Verify the dynamic address validity */
-    else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
-    } else {
-      /* Verify if IBI request feature is enabled */
-      if (LL_I3C_IsEnabledIBI(hi3c->Instance) != 1U) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+    /* check on the handle */
+    if (hi3c == NULL) {
         status = HAL_ERROR;
-      }
-    }
+    } else {
+        /* Check the instance and the mode parameters */
+        assert_param(IS_I3C_ALL_INSTANCE(hi3c->Instance));
+        assert_param(IS_I3C_MODE(hi3c->Mode));
 
-    if (status == HAL_OK) {
-      /* Update handle parameters */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-      hi3c->State = HAL_I3C_STATE_BUSY;
-      hi3c->XferISR = I3C_Tgt_IBI_ISR;
+        /* Get I3C handle state */
+        handle_state = hi3c->State;
 
-      /* Check on the IBI additional data */
-      if (LL_I3C_GetDeviceIBIPayload(hi3c->Instance) ==
-          LL_I3C_IBI_ADDITIONAL_DATA) {
-        /* Check on the pPayload and payloadSize values */
-        if ((pPayload == NULL) || (payloadSize == 0U)) {
-          hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-          status = HAL_ERROR;
-
-          /* Update handle state parameter */
-          I3C_StateUpdate(hi3c);
-        } else {
-          /* For loop to calculate the payload value */
-          for (uint32_t index = 0U; index < payloadSize; index++) {
-            payload_value |= ((uint32_t)pPayload[index] << (index * 8U));
-          }
-
-          /* Load IBI payload data */
-          LL_I3C_SetIBIPayload(hi3c->Instance, payload_value);
+        /* Check on the Mode */
+        if (hi3c->Mode != HAL_I3C_MODE_TARGET) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
         }
-      }
+        /* check on the State */
+        else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+            status = HAL_BUSY;
+        }
+        /* Verify the dynamic address validity */
+        else if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) != 1U) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Verify if IBI request feature is enabled */
+            if (LL_I3C_IsEnabledIBI(hi3c->Instance) != 1U) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+                status = HAL_ERROR;
+            }
+        }
 
-      /* Enable IBI end and error interrupts */
-      I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_IBI);
+        if (status == HAL_OK) {
+            /* Update handle parameters */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->State = HAL_I3C_STATE_BUSY;
+            hi3c->XferISR = I3C_Tgt_IBI_ISR;
 
-      /* Request IBI */
-      LL_I3C_TargetHandleMessage(hi3c->Instance, LL_I3C_TARGET_MTYPE_IBI,
-                                 payloadSize);
+            /* Check on the IBI additional data */
+            if (LL_I3C_GetDeviceIBIPayload(hi3c->Instance) == LL_I3C_IBI_ADDITIONAL_DATA) {
+                /* Check on the pPayload and payloadSize values */
+                if ((pPayload == NULL) || (payloadSize == 0U)) {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                    status = HAL_ERROR;
+
+                    /* Update handle state parameter */
+                    I3C_StateUpdate(hi3c);
+                } else {
+                    /* For loop to calculate the payload value */
+                    for (uint32_t index = 0U; index < payloadSize; index++) {
+                        payload_value |= ((uint32_t)pPayload[index] << (index * 8U));
+                    }
+
+                    /* Load IBI payload data */
+                    LL_I3C_SetIBIPayload(hi3c->Instance, payload_value);
+                }
+            }
+
+            /* Enable IBI end and error interrupts */
+            I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_IBI);
+
+            /* Request IBI */
+            LL_I3C_TargetHandleMessage(hi3c->Instance, LL_I3C_TARGET_MTYPE_IBI, payloadSize);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 /**
  * @}
@@ -6708,62 +6351,62 @@ and PID information after ENTDAA.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
 HAL_StatusTypeDef HAL_I3C_Abort_IT(I3C_HandleTypeDef *hi3c) {
-  HAL_StatusTypeDef status = HAL_OK;
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    if (hi3c->State != HAL_I3C_STATE_ABORT) {
-      /* Set State at HAL_I3C_STATE_ABORT */
-      hi3c->State = HAL_I3C_STATE_ABORT;
-
-      /* Disable Error Interrupts */
-      __HAL_I3C_DISABLE_IT(hi3c, HAL_I3C_IT_ERRIE);
-
-      hi3c->XferISR = I3C_Abort_ISR;
-
-      /* Flush the different Fifos to generate an automatic stop mode link to
-       * underflow or overflow detection timeout */
-      /* Flush the content of Tx Fifo */
-      LL_I3C_RequestTxFIFOFlush(hi3c->Instance);
-
-      /* Flush the content of Rx Fifo */
-      LL_I3C_RequestRxFIFOFlush(hi3c->Instance);
-
-      /* Check on the I3C mode: Control and status FIFOs available only with
-       * controller mode */
-      if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
-        /* Flush the content of Control Fifo */
-        LL_I3C_RequestControlFIFOFlush(hi3c->Instance);
-
-        /* Flush the content of Status Fifo */
-        LL_I3C_RequestStatusFIFOFlush(hi3c->Instance);
-      }
-
-      /* Disable all DMA Requests */
-      LL_I3C_DisableDMAReq_Control(hi3c->Instance);
-      LL_I3C_DisableDMAReq_RX(hi3c->Instance);
-      LL_I3C_DisableDMAReq_TX(hi3c->Instance);
-      LL_I3C_DisableDMAReq_Status(hi3c->Instance);
-
-      if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
-        /* Note : The I3C interrupts must be enabled after unlocking current
-        process to avoid the risk of I3C interrupt handle execution before
-        current process unlock */
-        I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_CCC_IT);
-      } else {
-        /* Note : The I3C interrupts must be enabled after unlocking current
-        process to avoid the risk of I3C interrupt handle execution before
-        current process unlock */
-        I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_RX_IT);
-      }
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      return HAL_BUSY;
-    }
-  }
+        if (hi3c->State != HAL_I3C_STATE_ABORT) {
+            /* Set State at HAL_I3C_STATE_ABORT */
+            hi3c->State = HAL_I3C_STATE_ABORT;
 
-  return status;
+            /* Disable Error Interrupts */
+            __HAL_I3C_DISABLE_IT(hi3c, HAL_I3C_IT_ERRIE);
+
+            hi3c->XferISR = I3C_Abort_ISR;
+
+            /* Flush the different Fifos to generate an automatic stop mode link to
+             * underflow or overflow detection timeout */
+            /* Flush the content of Tx Fifo */
+            LL_I3C_RequestTxFIFOFlush(hi3c->Instance);
+
+            /* Flush the content of Rx Fifo */
+            LL_I3C_RequestRxFIFOFlush(hi3c->Instance);
+
+            /* Check on the I3C mode: Control and status FIFOs available only with
+             * controller mode */
+            if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
+                /* Flush the content of Control Fifo */
+                LL_I3C_RequestControlFIFOFlush(hi3c->Instance);
+
+                /* Flush the content of Status Fifo */
+                LL_I3C_RequestStatusFIFOFlush(hi3c->Instance);
+            }
+
+            /* Disable all DMA Requests */
+            LL_I3C_DisableDMAReq_Control(hi3c->Instance);
+            LL_I3C_DisableDMAReq_RX(hi3c->Instance);
+            LL_I3C_DisableDMAReq_TX(hi3c->Instance);
+            LL_I3C_DisableDMAReq_Status(hi3c->Instance);
+
+            if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
+                /* Note : The I3C interrupts must be enabled after unlocking current
+                process to avoid the risk of I3C interrupt handle execution before
+                current process unlock */
+                I3C_Enable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_CCC_IT);
+            } else {
+                /* Note : The I3C interrupts must be enabled after unlocking current
+                process to avoid the risk of I3C interrupt handle execution before
+                current process unlock */
+                I3C_Enable_IRQ(hi3c, I3C_XFER_TARGET_RX_IT);
+            }
+        } else {
+            return HAL_BUSY;
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -6772,9 +6415,7 @@ HAL_StatusTypeDef HAL_I3C_Abort_IT(I3C_HandleTypeDef *hi3c) {
  * contains the configuration information for the specified I3C.
  * @retval HAL State : [OUT] Value from HAL_I3C_StateTypeDef enumeration.
  */
-HAL_I3C_StateTypeDef HAL_I3C_GetState(const I3C_HandleTypeDef *hi3c) {
-  return hi3c->State;
-}
+HAL_I3C_StateTypeDef HAL_I3C_GetState(const I3C_HandleTypeDef *hi3c) { return hi3c->State; }
 
 /**
  * @brief  Returns the I3C handle mode.
@@ -6782,9 +6423,7 @@ HAL_I3C_StateTypeDef HAL_I3C_GetState(const I3C_HandleTypeDef *hi3c) {
  * contains the configuration information for the specified I3C.
  * @retval HAL Mode : [OUT] Value from HAL_I3C_ModeTypeDef enumeration.
  */
-HAL_I3C_ModeTypeDef HAL_I3C_GetMode(const I3C_HandleTypeDef *hi3c) {
-  return hi3c->Mode;
-}
+HAL_I3C_ModeTypeDef HAL_I3C_GetMode(const I3C_HandleTypeDef *hi3c) { return hi3c->Mode; }
 
 /**
  * @brief  Return the I3C error code.
@@ -6792,9 +6431,7 @@ HAL_I3C_ModeTypeDef HAL_I3C_GetMode(const I3C_HandleTypeDef *hi3c) {
  * contains the configuration information for the specified I3C.
  * @retval I3C Error Code : [OUT] Value from @ref I3C_ERROR_CODE_DEFINITION.
  */
-uint32_t HAL_I3C_GetError(const I3C_HandleTypeDef *hi3c) {
-  return hi3c->ErrorCode;
-}
+uint32_t HAL_I3C_GetError(const I3C_HandleTypeDef *hi3c) { return hi3c->ErrorCode; }
 
 /**
  * @brief  Target/Controller Get Common Command Code Information updated after
@@ -6808,77 +6445,74 @@ uint32_t HAL_I3C_GetError(const I3C_HandleTypeDef *hi3c) {
  * contains the CCC information updated after CCC event.
  * @retval HAL Status : Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef HAL_I3C_GetCCCInfo(I3C_HandleTypeDef *hi3c, uint32_t notifyId,
-                                     I3C_CCCInfoTypeDef *pCCCInfo) {
-  HAL_StatusTypeDef status = HAL_OK;
+HAL_StatusTypeDef HAL_I3C_GetCCCInfo(I3C_HandleTypeDef *hi3c, uint32_t notifyId, I3C_CCCInfoTypeDef *pCCCInfo) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check on user parameters */
-    if (pCCCInfo == NULL) {
-      /* Update handle error code parameter */
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    }
-    /* Check the I3C state */
-    else if (hi3c->State == HAL_I3C_STATE_RESET) {
-      /* Update handle error code parameter */
-      hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-      status = HAL_ERROR;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Retrieve Target Dynamic Address value and Validity (target/controller)
-       */
-      if ((notifyId & EVENT_ID_DAU) == EVENT_ID_DAU) {
-        pCCCInfo->DynamicAddrValid =
-            LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance);
-        pCCCInfo->DynamicAddr = LL_I3C_GetOwnDynamicAddress(hi3c->Instance);
-      }
+        /* Check on user parameters */
+        if (pCCCInfo == NULL) {
+            /* Update handle error code parameter */
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        }
+        /* Check the I3C state */
+        else if (hi3c->State == HAL_I3C_STATE_RESET) {
+            /* Update handle error code parameter */
+            hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+            status = HAL_ERROR;
+        } else {
+            /* Retrieve Target Dynamic Address value and Validity (target/controller)
+             */
+            if ((notifyId & EVENT_ID_DAU) == EVENT_ID_DAU) {
+                pCCCInfo->DynamicAddrValid = LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance);
+                pCCCInfo->DynamicAddr = LL_I3C_GetOwnDynamicAddress(hi3c->Instance);
+            }
 
-      /* Retrieve Maximum Write Data Length (target) */
-      if ((notifyId & EVENT_ID_SETMWL) == EVENT_ID_SETMWL) {
-        pCCCInfo->MaxWriteLength = LL_I3C_GetMaxWriteLength(hi3c->Instance);
-      }
+            /* Retrieve Maximum Write Data Length (target) */
+            if ((notifyId & EVENT_ID_SETMWL) == EVENT_ID_SETMWL) {
+                pCCCInfo->MaxWriteLength = LL_I3C_GetMaxWriteLength(hi3c->Instance);
+            }
 
-      /* Retrieve Maximum Read Data Length (target) */
-      if ((notifyId & EVENT_ID_SETMRL) == EVENT_ID_SETMRL) {
-        pCCCInfo->MaxReadLength = LL_I3C_GetMaxReadLength(hi3c->Instance);
-      }
+            /* Retrieve Maximum Read Data Length (target) */
+            if ((notifyId & EVENT_ID_SETMRL) == EVENT_ID_SETMRL) {
+                pCCCInfo->MaxReadLength = LL_I3C_GetMaxReadLength(hi3c->Instance);
+            }
 
-      /* Retrieve Reset Action/Level on received reset pattern (target) */
-      if ((notifyId & EVENT_ID_RSTACT) == EVENT_ID_RSTACT) {
-        pCCCInfo->ResetAction = LL_I3C_GetResetAction(hi3c->Instance);
-      }
+            /* Retrieve Reset Action/Level on received reset pattern (target) */
+            if ((notifyId & EVENT_ID_RSTACT) == EVENT_ID_RSTACT) {
+                pCCCInfo->ResetAction = LL_I3C_GetResetAction(hi3c->Instance);
+            }
 
-      /* Retrieve Activity State (target) */
-      if ((notifyId & EVENT_ID_ENTASx) == EVENT_ID_ENTASx) {
-        pCCCInfo->ActivityState = LL_I3C_GetActivityState(hi3c->Instance);
-      }
+            /* Retrieve Activity State (target) */
+            if ((notifyId & EVENT_ID_ENTASx) == EVENT_ID_ENTASx) {
+                pCCCInfo->ActivityState = LL_I3C_GetActivityState(hi3c->Instance);
+            }
 
-      /* Retrieve Interrupt allowed status (target) */
-      if ((notifyId & EVENT_ID_ENEC_DISEC) == EVENT_ID_ENEC_DISEC) {
-        pCCCInfo->HotJoinAllowed = LL_I3C_IsEnabledHotJoin(hi3c->Instance);
-        pCCCInfo->InBandAllowed = LL_I3C_IsEnabledIBI(hi3c->Instance);
-        pCCCInfo->CtrlRoleAllowed =
-            LL_I3C_IsEnabledControllerRoleReq(hi3c->Instance);
-      }
+            /* Retrieve Interrupt allowed status (target) */
+            if ((notifyId & EVENT_ID_ENEC_DISEC) == EVENT_ID_ENEC_DISEC) {
+                pCCCInfo->HotJoinAllowed = LL_I3C_IsEnabledHotJoin(hi3c->Instance);
+                pCCCInfo->InBandAllowed = LL_I3C_IsEnabledIBI(hi3c->Instance);
+                pCCCInfo->CtrlRoleAllowed = LL_I3C_IsEnabledControllerRoleReq(hi3c->Instance);
+            }
 
-      /* Retrieve In Band Interrupt information (controller) */
-      if ((notifyId & EVENT_ID_IBI) == EVENT_ID_IBI) {
-        pCCCInfo->IBICRTgtAddr = LL_I3C_GetIBITargetAddr(hi3c->Instance);
-        pCCCInfo->IBITgtNbPayload = LL_I3C_GetNbIBIAddData(hi3c->Instance);
-        pCCCInfo->IBITgtPayload = LL_I3C_GetIBIPayload(hi3c->Instance);
-      }
+            /* Retrieve In Band Interrupt information (controller) */
+            if ((notifyId & EVENT_ID_IBI) == EVENT_ID_IBI) {
+                pCCCInfo->IBICRTgtAddr = LL_I3C_GetIBITargetAddr(hi3c->Instance);
+                pCCCInfo->IBITgtNbPayload = LL_I3C_GetNbIBIAddData(hi3c->Instance);
+                pCCCInfo->IBITgtPayload = LL_I3C_GetIBIPayload(hi3c->Instance);
+            }
 
-      /* Retrieve Controller role request Interrupt information (controller) */
-      if ((notifyId & EVENT_ID_CR) == EVENT_ID_CR) {
-        pCCCInfo->IBICRTgtAddr = LL_I3C_GetIBITargetAddr(hi3c->Instance);
-      }
+            /* Retrieve Controller role request Interrupt information (controller) */
+            if ((notifyId & EVENT_ID_CR) == EVENT_ID_CR) {
+                pCCCInfo->IBICRTgtAddr = LL_I3C_GetIBITargetAddr(hi3c->Instance);
+            }
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -6890,59 +6524,54 @@ HAL_StatusTypeDef HAL_I3C_GetCCCInfo(I3C_HandleTypeDef *hi3c, uint32_t notifyId,
  * structure that contains the BCR, DCR and PID information.
  * @retval HAL Status : Value from HAL_StatusTypeDef enumeration.
  */
-HAL_StatusTypeDef
-HAL_I3C_Get_ENTDAA_Payload_Info(I3C_HandleTypeDef *hi3c,
-                                uint64_t ENTDAA_payload,
-                                I3C_ENTDAAPayloadTypeDef *pENTDAA_payload) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t BCR;
-  uint64_t PID;
+HAL_StatusTypeDef HAL_I3C_Get_ENTDAA_Payload_Info(I3C_HandleTypeDef *hi3c, uint64_t ENTDAA_payload,
+                                                  I3C_ENTDAAPayloadTypeDef *pENTDAA_payload) {
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t BCR;
+    uint64_t PID;
 
-  /* check on the handle */
-  if (hi3c == NULL) {
-    status = HAL_ERROR;
-  } else {
-    /* Check on user parameters */
-    if (pENTDAA_payload == NULL) {
-      /* Update handle error code parameter */
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
+    /* check on the handle */
+    if (hi3c == NULL) {
+        status = HAL_ERROR;
     } else {
-      /* Get Bus Characterics */
-      BCR = __HAL_I3C_GET_BCR(ENTDAA_payload);
+        /* Check on user parameters */
+        if (pENTDAA_payload == NULL) {
+            /* Update handle error code parameter */
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        } else {
+            /* Get Bus Characterics */
+            BCR = __HAL_I3C_GET_BCR(ENTDAA_payload);
 
-      /* Retrieve BCR information */
-      pENTDAA_payload->BCR.IBIPayload = __HAL_I3C_GET_IBI_PAYLOAD(BCR);
-      pENTDAA_payload->BCR.IBIRequestCapable = __HAL_I3C_GET_IBI_CAPABLE(BCR);
-      pENTDAA_payload->BCR.DeviceRole = __HAL_I3C_GET_CR_CAPABLE(BCR);
-      pENTDAA_payload->BCR.AdvancedCapabilities = I3C_GET_ADVANCED_CAPABLE(BCR);
-      pENTDAA_payload->BCR.OfflineCapable = I3C_GET_OFFLINE_CAPABLE(BCR);
-      pENTDAA_payload->BCR.VirtualTargetSupport = I3C_GET_VIRTUAL_TGT(BCR);
-      pENTDAA_payload->BCR.MaxDataSpeedLimitation =
-          I3C_GET_MAX_DATA_SPEED_LIMIT(BCR);
+            /* Retrieve BCR information */
+            pENTDAA_payload->BCR.IBIPayload = __HAL_I3C_GET_IBI_PAYLOAD(BCR);
+            pENTDAA_payload->BCR.IBIRequestCapable = __HAL_I3C_GET_IBI_CAPABLE(BCR);
+            pENTDAA_payload->BCR.DeviceRole = __HAL_I3C_GET_CR_CAPABLE(BCR);
+            pENTDAA_payload->BCR.AdvancedCapabilities = I3C_GET_ADVANCED_CAPABLE(BCR);
+            pENTDAA_payload->BCR.OfflineCapable = I3C_GET_OFFLINE_CAPABLE(BCR);
+            pENTDAA_payload->BCR.VirtualTargetSupport = I3C_GET_VIRTUAL_TGT(BCR);
+            pENTDAA_payload->BCR.MaxDataSpeedLimitation = I3C_GET_MAX_DATA_SPEED_LIMIT(BCR);
 
-      /* Get Device Characterics */
-      pENTDAA_payload->DCR = I3C_GET_DCR(ENTDAA_payload);
+            /* Get Device Characterics */
+            pENTDAA_payload->DCR = I3C_GET_DCR(ENTDAA_payload);
 
-      /* Get Provisioned ID */
-      PID = I3C_GET_PID(ENTDAA_payload);
+            /* Get Provisioned ID */
+            PID = I3C_GET_PID(ENTDAA_payload);
 
-      /* Change PID from BigEndian to litlleEndian */
-      PID = (uint64_t)((((uint64_t)I3C_BIG_TO_LITTLE_ENDIAN((uint32_t)PID)
-                         << 32) |
-                        ((uint64_t)I3C_BIG_TO_LITTLE_ENDIAN(
-                            (uint32_t)(PID >> 32)))) >>
-                       16);
+            /* Change PID from BigEndian to litlleEndian */
+            PID = (uint64_t)((((uint64_t)I3C_BIG_TO_LITTLE_ENDIAN((uint32_t)PID) << 32) |
+                              ((uint64_t)I3C_BIG_TO_LITTLE_ENDIAN((uint32_t)(PID >> 32)))) >>
+                             16);
 
-      /* Retrieve PID information*/
-      pENTDAA_payload->PID.MIPIMID = I3C_GET_MIPIMID(PID);
-      pENTDAA_payload->PID.IDTSEL = I3C_GET_IDTSEL(PID);
-      pENTDAA_payload->PID.PartID = I3C_GET_PART_ID(PID);
-      pENTDAA_payload->PID.MIPIID = I3C_GET_MIPIID(PID);
+            /* Retrieve PID information*/
+            pENTDAA_payload->PID.MIPIMID = I3C_GET_MIPIMID(PID);
+            pENTDAA_payload->PID.IDTSEL = I3C_GET_IDTSEL(PID);
+            pENTDAA_payload->PID.PartID = I3C_GET_PART_ID(PID);
+            pENTDAA_payload->PID.MIPIID = I3C_GET_MIPIID(PID);
+        }
     }
-  }
 
-  return status;
+    return status;
 }
 
 /**
@@ -6966,149 +6595,148 @@ HAL_I3C_Get_ENTDAA_Payload_Info(I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Tgt_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                           uint32_t itMasks) {
-  uint32_t tmpevent = 0U;
+static HAL_StatusTypeDef I3C_Tgt_Event_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    uint32_t tmpevent = 0U;
 
-  /* I3C Rx FIFO not empty interrupt Check */
-  if (I3C_CHECK_FLAG(itMasks, HAL_I3C_FLAG_RXFNEF) != RESET) {
-    /* Call receive treatment function */
-    hi3c->ptrRxFunc(hi3c);
-  }
+    /* I3C Rx FIFO not empty interrupt Check */
+    if (I3C_CHECK_FLAG(itMasks, HAL_I3C_FLAG_RXFNEF) != RESET) {
+        /* Call receive treatment function */
+        hi3c->ptrRxFunc(hi3c);
+    }
 
-  /* I3C target complete controller-role hand-off procedure (direct GETACCR CCC)
-   * event management --------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRUPDF) != RESET) {
-    /* Clear controller-role update flag */
-    LL_I3C_ClearFlag_CRUPD(hi3c->Instance);
+    /* I3C target complete controller-role hand-off procedure (direct GETACCR CCC)
+     * event management --------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRUPDF) != RESET) {
+        /* Clear controller-role update flag */
+        LL_I3C_ClearFlag_CRUPD(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_GETACCCR */
-    tmpevent |= EVENT_ID_GETACCCR;
-  }
+        /* Set Identifier EVENT_ID_GETACCCR */
+        tmpevent |= EVENT_ID_GETACCCR;
+    }
 
-  /* I3C target receive any direct GETxxx CCC event management
-   * -------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_GETF) != RESET) {
-    /* Clear GETxxx CCC flag */
-    LL_I3C_ClearFlag_GET(hi3c->Instance);
+    /* I3C target receive any direct GETxxx CCC event management
+     * -------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_GETF) != RESET) {
+        /* Clear GETxxx CCC flag */
+        LL_I3C_ClearFlag_GET(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_GETx */
-    tmpevent |= EVENT_ID_GETx;
-  }
+        /* Set Identifier EVENT_ID_GETx */
+        tmpevent |= EVENT_ID_GETx;
+    }
 
-  /* I3C target receive get status command (direct GETSTATUS CCC) event
-   * management -----------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_STAF) != RESET) {
-    /* Clear GETSTATUS CCC flag */
-    LL_I3C_ClearFlag_STA(hi3c->Instance);
+    /* I3C target receive get status command (direct GETSTATUS CCC) event
+     * management -----------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_STAF) != RESET) {
+        /* Clear GETSTATUS CCC flag */
+        LL_I3C_ClearFlag_STA(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_GETSTATUS */
-    tmpevent |= EVENT_ID_GETSTATUS;
-  }
+        /* Set Identifier EVENT_ID_GETSTATUS */
+        tmpevent |= EVENT_ID_GETSTATUS;
+    }
 
-  /* I3C target receive a dynamic address update (ENTDAA/RSTDAA/SETNEWDA CCC)
-   * event management -----------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_DAUPDF) != RESET) {
-    /* Clear dynamic address update flag */
-    LL_I3C_ClearFlag_DAUPD(hi3c->Instance);
+    /* I3C target receive a dynamic address update (ENTDAA/RSTDAA/SETNEWDA CCC)
+     * event management -----------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_DAUPDF) != RESET) {
+        /* Clear dynamic address update flag */
+        LL_I3C_ClearFlag_DAUPD(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_DAU */
-    tmpevent |= EVENT_ID_DAU;
-  }
+        /* Set Identifier EVENT_ID_DAU */
+        tmpevent |= EVENT_ID_DAU;
+    }
 
-  /* I3C target receive maximum write length update (direct SETMWL CCC) event
-   * management -----------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_MWLUPDF) != RESET) {
-    /* Clear SETMWL CCC flag */
-    LL_I3C_ClearFlag_MWLUPD(hi3c->Instance);
+    /* I3C target receive maximum write length update (direct SETMWL CCC) event
+     * management -----------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_MWLUPDF) != RESET) {
+        /* Clear SETMWL CCC flag */
+        LL_I3C_ClearFlag_MWLUPD(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_SETMWL */
-    tmpevent |= EVENT_ID_SETMWL;
-  }
+        /* Set Identifier EVENT_ID_SETMWL */
+        tmpevent |= EVENT_ID_SETMWL;
+    }
 
-  /* I3C target receive maximum read length update(direct SETMRL CCC) event
-   * management -------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_MRLUPDF) != RESET) {
-    /* Clear SETMRL CCC flag */
-    LL_I3C_ClearFlag_MRLUPD(hi3c->Instance);
+    /* I3C target receive maximum read length update(direct SETMRL CCC) event
+     * management -------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_MRLUPDF) != RESET) {
+        /* Clear SETMRL CCC flag */
+        LL_I3C_ClearFlag_MRLUPD(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_SETMRL */
-    tmpevent |= EVENT_ID_SETMRL;
-  }
+        /* Set Identifier EVENT_ID_SETMRL */
+        tmpevent |= EVENT_ID_SETMRL;
+    }
 
-  /* I3C target detect reset pattern (broadcast or direct RSTACT CCC) event
-   * management -------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_RSTF) != RESET) {
-    /* Clear reset pattern flag */
-    LL_I3C_ClearFlag_RST(hi3c->Instance);
+    /* I3C target detect reset pattern (broadcast or direct RSTACT CCC) event
+     * management -------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_RSTF) != RESET) {
+        /* Clear reset pattern flag */
+        LL_I3C_ClearFlag_RST(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_RSTACT */
-    tmpevent |= EVENT_ID_RSTACT;
-  }
+        /* Set Identifier EVENT_ID_RSTACT */
+        tmpevent |= EVENT_ID_RSTACT;
+    }
 
-  /* I3C target receive activity state update (direct or broadcast ENTASx) CCC
-   * event management ----------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_ASUPDF) != RESET) {
-    /* Clear ENTASx CCC flag */
-    LL_I3C_ClearFlag_ASUPD(hi3c->Instance);
+    /* I3C target receive activity state update (direct or broadcast ENTASx) CCC
+     * event management ----------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_ASUPDF) != RESET) {
+        /* Clear ENTASx CCC flag */
+        LL_I3C_ClearFlag_ASUPD(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_ENTASx */
-    tmpevent |= EVENT_ID_ENTASx;
-  }
+        /* Set Identifier EVENT_ID_ENTASx */
+        tmpevent |= EVENT_ID_ENTASx;
+    }
 
-  /* I3C target receive a direct or broadcast ENEC/DISEC CCC event management
-   * ----------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_INTUPDF) != RESET) {
-    /* Clear ENEC/DISEC CCC flag */
-    LL_I3C_ClearFlag_INTUPD(hi3c->Instance);
+    /* I3C target receive a direct or broadcast ENEC/DISEC CCC event management
+     * ----------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_INTUPDF) != RESET) {
+        /* Clear ENEC/DISEC CCC flag */
+        LL_I3C_ClearFlag_INTUPD(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_ENEC_DISEC */
-    tmpevent |= EVENT_ID_ENEC_DISEC;
-  }
+        /* Set Identifier EVENT_ID_ENEC_DISEC */
+        tmpevent |= EVENT_ID_ENEC_DISEC;
+    }
 
-  /* I3C target receive a broadcast DEFTGTS CCC event management
-   * -----------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_DEFF) != RESET) {
-    /* Clear DEFTGTS CCC flag */
-    LL_I3C_ClearFlag_DEF(hi3c->Instance);
+    /* I3C target receive a broadcast DEFTGTS CCC event management
+     * -----------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_DEFF) != RESET) {
+        /* Clear DEFTGTS CCC flag */
+        LL_I3C_ClearFlag_DEF(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_DEFTGTS */
-    tmpevent |= EVENT_ID_DEFTGTS;
-  }
+        /* Set Identifier EVENT_ID_DEFTGTS */
+        tmpevent |= EVENT_ID_DEFTGTS;
+    }
 
-  /* I3C target receive a group addressing (broadcast DEFGRPA CCC) event
-   * management ----------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_GRPF) != RESET) {
-    /* Clear DEFGRPA CCC flag */
-    LL_I3C_ClearFlag_GRP(hi3c->Instance);
+    /* I3C target receive a group addressing (broadcast DEFGRPA CCC) event
+     * management ----------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_GRPF) != RESET) {
+        /* Clear DEFGRPA CCC flag */
+        LL_I3C_ClearFlag_GRP(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_DEFGRPA */
-    tmpevent |= EVENT_ID_DEFGRPA;
-  }
+        /* Set Identifier EVENT_ID_DEFGRPA */
+        tmpevent |= EVENT_ID_DEFGRPA;
+    }
 
-  /* I3C target wakeup event management ----------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_WKPF) != RESET) {
-    /* Clear WKP flag */
-    LL_I3C_ClearFlag_WKP(hi3c->Instance);
+    /* I3C target wakeup event management ----------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_WKPF) != RESET) {
+        /* Clear WKP flag */
+        LL_I3C_ClearFlag_WKP(hi3c->Instance);
 
-    /* Set Identifier EVENT_ID_WKP */
-    tmpevent |= EVENT_ID_WKP;
-  }
+        /* Set Identifier EVENT_ID_WKP */
+        tmpevent |= EVENT_ID_WKP;
+    }
 
-  if (tmpevent != 0U) {
+    if (tmpevent != 0U) {
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, tmpevent);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, tmpevent);
 #else
-    /* Asynchronous receive CCC event Callback */
-    HAL_I3C_NotifyCallback(hi3c, tmpevent);
+        /* Asynchronous receive CCC event Callback */
+        HAL_I3C_NotifyCallback(hi3c, tmpevent);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* Update handle state parameter */
-  I3C_StateUpdate(hi3c);
+    /* Update handle state parameter */
+    I3C_StateUpdate(hi3c);
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -7118,57 +6746,56 @@ static HAL_StatusTypeDef I3C_Tgt_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Ctrl_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                            uint32_t itMasks) {
-  /* I3C controller receive IBI event management
-   * ---------------------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_IBIF) != RESET) {
-    /* Clear IBI request flag */
-    LL_I3C_ClearFlag_IBI(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Ctrl_Event_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* I3C controller receive IBI event management
+     * ---------------------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_IBIF) != RESET) {
+        /* Clear IBI request flag */
+        LL_I3C_ClearFlag_IBI(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_IBI);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_IBI);
 #else
-    /* Asynchronous IBI event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_IBI);
+        /* Asynchronous IBI event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_IBI);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* I3C controller controller-role request event management
-   * ---------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRF) != RESET) {
-    /* Clear controller-role request flag */
-    LL_I3C_ClearFlag_CR(hi3c->Instance);
+    /* I3C controller controller-role request event management
+     * ---------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRF) != RESET) {
+        /* Clear controller-role request flag */
+        LL_I3C_ClearFlag_CR(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_CR);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_CR);
 #else
-    /* Asynchronous controller-role event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_CR);
+        /* Asynchronous controller-role event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_CR);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* I3C controller hot-join event management
-   * ------------------------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_HJF) != RESET) {
-    /* Clear hot-join flag */
-    LL_I3C_ClearFlag_HJ(hi3c->Instance);
+    /* I3C controller hot-join event management
+     * ------------------------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_HJF) != RESET) {
+        /* Clear hot-join flag */
+        LL_I3C_ClearFlag_HJ(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_HJ);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_HJ);
 #else
-    /* Asynchronous hot-join event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_HJ);
+        /* Asynchronous hot-join event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_HJ);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* Update handle state parameter */
-  I3C_StateUpdate(hi3c);
+    /* Update handle state parameter */
+    I3C_StateUpdate(hi3c);
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -7178,40 +6805,37 @@ static HAL_StatusTypeDef I3C_Ctrl_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Tgt_HotJoin_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                             uint32_t itMasks) {
-  /* I3C target receive a dynamic address update event management */
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_DAUPDF) != RESET) {
-    /* Clear dynamic address update flag */
-    LL_I3C_ClearFlag_DAUPD(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Tgt_HotJoin_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* I3C target receive a dynamic address update event management */
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_DAUPDF) != RESET) {
+        /* Clear dynamic address update flag */
+        LL_I3C_ClearFlag_DAUPD(hi3c->Instance);
 
-    /* Disable dynamic address update and error interrupts */
-    I3C_Disable_IRQ(hi3c, I3C_XFER_TARGET_HOTJOIN);
+        /* Disable dynamic address update and error interrupts */
+        I3C_Disable_IRQ(hi3c, I3C_XFER_TARGET_HOTJOIN);
 
-    /* Check the validity of the own dynamic address */
-    if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) == 1U) {
-      /* Update handle state parameter */
-      I3C_StateUpdate(hi3c);
+        /* Check the validity of the own dynamic address */
+        if (LL_I3C_IsEnabledOwnDynAddress(hi3c->Instance) == 1U) {
+            /* Update handle state parameter */
+            I3C_StateUpdate(hi3c);
 
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-      /* Call registered callback */
-      hi3c->TgtHotJoinCallback(
-          hi3c, (uint8_t)LL_I3C_GetOwnDynamicAddress(hi3c->Instance));
+            /* Call registered callback */
+            hi3c->TgtHotJoinCallback(hi3c, (uint8_t)LL_I3C_GetOwnDynamicAddress(hi3c->Instance));
 #else
-      /* Asynchronous receive ENTDAA/RSTDAA/SETNEWDA CCC event Callback */
-      HAL_I3C_TgtHotJoinCallback(
-          hi3c, (uint8_t)LL_I3C_GetOwnDynamicAddress(hi3c->Instance));
+            /* Asynchronous receive ENTDAA/RSTDAA/SETNEWDA CCC event Callback */
+            HAL_I3C_TgtHotJoinCallback(hi3c, (uint8_t)LL_I3C_GetOwnDynamicAddress(hi3c->Instance));
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-    } else {
-      hi3c->ErrorCode = HAL_I3C_ERROR_DYNAMIC_ADDR;
+        } else {
+            hi3c->ErrorCode = HAL_I3C_ERROR_DYNAMIC_ADDR;
 
-      /* Call error treatment function */
-      I3C_ErrorTreatment(hi3c);
+            /* Call error treatment function */
+            I3C_ErrorTreatment(hi3c);
+        }
     }
-  }
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -7221,31 +6845,30 @@ static HAL_StatusTypeDef I3C_Tgt_HotJoin_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Tgt_CtrlRole_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                              uint32_t itMasks) {
-  /* I3C target complete controller-role hand-off procedure (direct GETACCR CCC)
-   * event management -------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRUPDF) != RESET) {
-    /* Clear controller-role update flag */
-    LL_I3C_ClearFlag_CRUPD(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Tgt_CtrlRole_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* I3C target complete controller-role hand-off procedure (direct GETACCR CCC)
+     * event management -------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRUPDF) != RESET) {
+        /* Clear controller-role update flag */
+        LL_I3C_ClearFlag_CRUPD(hi3c->Instance);
 
-    /* Disable controller-role update and error interrupts */
-    I3C_Disable_IRQ(hi3c, I3C_XFER_TARGET_CTRLROLE);
+        /* Disable controller-role update and error interrupts */
+        I3C_Disable_IRQ(hi3c, I3C_XFER_TARGET_CTRLROLE);
 
-    /* Update handle state parameter */
-    I3C_StateUpdate(hi3c);
+        /* Update handle state parameter */
+        I3C_StateUpdate(hi3c);
 
-    hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_GETACCCR);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_GETACCCR);
 #else
-    /* Asynchronous receive GETACCR CCC event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_GETACCCR);
+        /* Asynchronous receive GETACCR CCC event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_GETACCCR);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
-  return HAL_OK;
+    }
+    return HAL_OK;
 }
 
 /**
@@ -7255,31 +6878,30 @@ static HAL_StatusTypeDef I3C_Tgt_CtrlRole_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Tgt_IBI_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                         uint32_t itMasks) {
-  /* I3C target IBI end process event management
-   * ---------------------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_IBIENDF) != RESET) {
-    /* Clear IBI end flag */
-    LL_I3C_ClearFlag_IBIEND(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Tgt_IBI_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* I3C target IBI end process event management
+     * ---------------------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_IBIENDF) != RESET) {
+        /* Clear IBI end flag */
+        LL_I3C_ClearFlag_IBIEND(hi3c->Instance);
 
-    /* Disable IBI end and error interrupts */
-    I3C_Disable_IRQ(hi3c, I3C_XFER_TARGET_IBI);
+        /* Disable IBI end and error interrupts */
+        I3C_Disable_IRQ(hi3c, I3C_XFER_TARGET_IBI);
 
-    /* Update handle state parameter */
-    I3C_StateUpdate(hi3c);
+        /* Update handle state parameter */
+        I3C_StateUpdate(hi3c);
 
-    hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_IBIEND);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_IBIEND);
 #else
-    /* Asynchronous IBI end event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_IBIEND);
+        /* Asynchronous IBI end event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_IBIEND);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
-  return HAL_OK;
+    }
+    return HAL_OK;
 }
 
 /**
@@ -7290,65 +6912,63 @@ static HAL_StatusTypeDef I3C_Tgt_IBI_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Tgt_Tx_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                        uint32_t itMasks) {
-  /* Check that a Tx process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_TX) {
-    /* I3C Tx FIFO not full interrupt Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_TXFNFF) != RESET) {
-      if (hi3c->TxXferCount > 0U) {
-        /* Call transmit treatment function */
-        hi3c->ptrTxFunc(hi3c);
-      }
-    }
+static HAL_StatusTypeDef I3C_Tgt_Tx_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that a Tx process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_TX) {
+        /* I3C Tx FIFO not full interrupt Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_TXFNFF) != RESET) {
+            if (hi3c->TxXferCount > 0U) {
+                /* Call transmit treatment function */
+                hi3c->ptrTxFunc(hi3c);
+            }
+        }
 
-    /* I3C target frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+        /* I3C target frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      /* Check if all data bytes are transmitted */
-      if (LL_I3C_GetXferDataCount(hi3c->Instance) ==
-          hi3c->pXferData->TxBuf.Size) {
-        /* Disable Tx process interrupts */
-        I3C_Disable_IRQ(hi3c, I3C_XFER_TARGET_TX_IT);
+            /* Check if all data bytes are transmitted */
+            if (LL_I3C_GetXferDataCount(hi3c->Instance) == hi3c->pXferData->TxBuf.Size) {
+                /* Disable Tx process interrupts */
+                I3C_Disable_IRQ(hi3c, I3C_XFER_TARGET_TX_IT);
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
 
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-        /* Call the transmit complete callback to inform upper layer of End of
-         * Transfer */
+                /* Call the transmit complete callback to inform upper layer of End of
+                 * Transfer */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->TgtTxCpltCallback(hi3c);
+                hi3c->TgtTxCpltCallback(hi3c);
 #else
-        HAL_I3C_TgtTxCpltCallback(hi3c);
+                HAL_I3C_TgtTxCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-      } else {
-        hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+            } else {
+                hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
 
-        /* Call error treatment function */
-        I3C_ErrorTreatment(hi3c);
-      }
-    }
+                /* Call error treatment function */
+                I3C_ErrorTreatment(hi3c);
+            }
+        }
 
-    /* I3C target wakeup event management ----------------------------------*/
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_WKPF) != RESET) {
-      /* Clear WKP flag */
-      LL_I3C_ClearFlag_WKP(hi3c->Instance);
+        /* I3C target wakeup event management ----------------------------------*/
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_WKPF) != RESET) {
+            /* Clear WKP flag */
+            LL_I3C_ClearFlag_WKP(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-      /* Call registered callback */
-      hi3c->NotifyCallback(hi3c, EVENT_ID_WKP);
+            /* Call registered callback */
+            hi3c->NotifyCallback(hi3c, EVENT_ID_WKP);
 #else
-      /* Asynchronous receive CCC event Callback */
-      HAL_I3C_NotifyCallback(hi3c, EVENT_ID_WKP);
+            /* Asynchronous receive CCC event Callback */
+            HAL_I3C_NotifyCallback(hi3c, EVENT_ID_WKP);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
+        }
     }
-  }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -7359,65 +6979,63 @@ static HAL_StatusTypeDef I3C_Tgt_Tx_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Tgt_Rx_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                        uint32_t itMasks) {
-  /* Check that an Rx process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_RX) {
-    /* I3C Rx FIFO not empty interrupt Check */
-    if (I3C_CHECK_FLAG(itMasks, HAL_I3C_FLAG_RXFNEF) != RESET) {
-      if (hi3c->RxXferCount > 0U) {
-        /* Call receive treatment function */
-        hi3c->ptrRxFunc(hi3c);
-      }
-    }
+static HAL_StatusTypeDef I3C_Tgt_Rx_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that an Rx process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_RX) {
+        /* I3C Rx FIFO not empty interrupt Check */
+        if (I3C_CHECK_FLAG(itMasks, HAL_I3C_FLAG_RXFNEF) != RESET) {
+            if (hi3c->RxXferCount > 0U) {
+                /* Call receive treatment function */
+                hi3c->ptrRxFunc(hi3c);
+            }
+        }
 
-    /* I3C target frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+        /* I3C target frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      /* Check if all data bytes are received */
-      if (LL_I3C_GetXferDataCount(hi3c->Instance) ==
-          hi3c->pXferData->RxBuf.Size) {
-        /* Disable Rx process interrupts */
-        I3C_Disable_IRQ(hi3c, I3C_XFER_TARGET_RX_IT);
+            /* Check if all data bytes are received */
+            if (LL_I3C_GetXferDataCount(hi3c->Instance) == hi3c->pXferData->RxBuf.Size) {
+                /* Disable Rx process interrupts */
+                I3C_Disable_IRQ(hi3c, I3C_XFER_TARGET_RX_IT);
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
 
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-        /* Call the receive complete callback to inform upper layer of End of
-         * Transfer */
+                /* Call the receive complete callback to inform upper layer of End of
+                 * Transfer */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->TgtRxCpltCallback(hi3c);
+                hi3c->TgtRxCpltCallback(hi3c);
 #else
-        HAL_I3C_TgtRxCpltCallback(hi3c);
+                HAL_I3C_TgtRxCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-      } else {
-        hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+            } else {
+                hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
 
-        /* Call error treatment function */
-        I3C_ErrorTreatment(hi3c);
-      }
-    }
+                /* Call error treatment function */
+                I3C_ErrorTreatment(hi3c);
+            }
+        }
 
-    /* I3C target wakeup event management ----------------------------------*/
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_WKPF) != RESET) {
-      /* Clear WKP flag */
-      LL_I3C_ClearFlag_WKP(hi3c->Instance);
+        /* I3C target wakeup event management ----------------------------------*/
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_WKPF) != RESET) {
+            /* Clear WKP flag */
+            LL_I3C_ClearFlag_WKP(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-      /* Call registered callback */
-      hi3c->NotifyCallback(hi3c, EVENT_ID_WKP);
+            /* Call registered callback */
+            hi3c->NotifyCallback(hi3c, EVENT_ID_WKP);
 #else
-      /* Asynchronous receive CCC event Callback */
-      HAL_I3C_NotifyCallback(hi3c, EVENT_ID_WKP);
+            /* Asynchronous receive CCC event Callback */
+            HAL_I3C_NotifyCallback(hi3c, EVENT_ID_WKP);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
+        }
     }
-  }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
@@ -7428,59 +7046,58 @@ static HAL_StatusTypeDef I3C_Tgt_Rx_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Tgt_Tx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                            uint32_t itMasks) {
-  /* Check that a Tx process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_TX) {
-    /* I3C target frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Tgt_Tx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that a Tx process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_TX) {
+        /* I3C target frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      /* Check if all data bytes are transmitted */
-      if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmatx) == 0U) {
-        /* Disable Tx process interrupts */
-        I3C_Disable_IRQ(hi3c, I3C_XFER_DMA);
+            /* Check if all data bytes are transmitted */
+            if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmatx) == 0U) {
+                /* Disable Tx process interrupts */
+                I3C_Disable_IRQ(hi3c, I3C_XFER_DMA);
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
 
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-        /* Update the number of remaining data bytes */
-        hi3c->TxXferCount = 0U;
+                /* Update the number of remaining data bytes */
+                hi3c->TxXferCount = 0U;
 
-        /* Call target transmit complete callback to inform upper layer of End
-         * of Transfer */
+                /* Call target transmit complete callback to inform upper layer of End
+                 * of Transfer */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->TgtTxCpltCallback(hi3c);
+                hi3c->TgtTxCpltCallback(hi3c);
 #else
-        HAL_I3C_TgtTxCpltCallback(hi3c);
+                HAL_I3C_TgtTxCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-      } else {
-        hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+            } else {
+                hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
 
-        /* Call error treatment function */
-        I3C_ErrorTreatment(hi3c);
-      }
+                /* Call error treatment function */
+                I3C_ErrorTreatment(hi3c);
+            }
+        }
+
+        /* I3C target wakeup event management ----------------------------------*/
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_WKPF) != RESET) {
+            /* Clear WKP flag */
+            LL_I3C_ClearFlag_WKP(hi3c->Instance);
+
+#if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
+            /* Call registered callback */
+            hi3c->NotifyCallback(hi3c, EVENT_ID_WKP);
+#else
+            /* Asynchronous receive CCC event Callback */
+            HAL_I3C_NotifyCallback(hi3c, EVENT_ID_WKP);
+#endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
+        }
     }
 
-    /* I3C target wakeup event management ----------------------------------*/
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_WKPF) != RESET) {
-      /* Clear WKP flag */
-      LL_I3C_ClearFlag_WKP(hi3c->Instance);
-
-#if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-      /* Call registered callback */
-      hi3c->NotifyCallback(hi3c, EVENT_ID_WKP);
-#else
-      /* Asynchronous receive CCC event Callback */
-      HAL_I3C_NotifyCallback(hi3c, EVENT_ID_WKP);
-#endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-    }
-  }
-
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -7490,59 +7107,58 @@ static HAL_StatusTypeDef I3C_Tgt_Tx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Tgt_Rx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                            uint32_t itMasks) {
-  /* Check that a Rx process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_RX) {
-    /* I3C target frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Tgt_Rx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that a Rx process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_RX) {
+        /* I3C target frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      /* Check if all data bytes are received */
-      if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmarx) == 0U) {
-        /* Disable Rx process interrupts */
-        I3C_Disable_IRQ(hi3c, I3C_XFER_DMA);
+            /* Check if all data bytes are received */
+            if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmarx) == 0U) {
+                /* Disable Rx process interrupts */
+                I3C_Disable_IRQ(hi3c, I3C_XFER_DMA);
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
 
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-        /* Update the number of remaining data bytes */
-        hi3c->RxXferCount = 0U;
+                /* Update the number of remaining data bytes */
+                hi3c->RxXferCount = 0U;
 
-        /* Call target receive complete callback to inform upper layer of End of
-         * Transfer */
+                /* Call target receive complete callback to inform upper layer of End of
+                 * Transfer */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->TgtRxCpltCallback(hi3c);
+                hi3c->TgtRxCpltCallback(hi3c);
 #else
-        HAL_I3C_TgtRxCpltCallback(hi3c);
+                HAL_I3C_TgtRxCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-      } else {
-        hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+            } else {
+                hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
 
-        /* Call error treatment function */
-        I3C_ErrorTreatment(hi3c);
-      }
+                /* Call error treatment function */
+                I3C_ErrorTreatment(hi3c);
+            }
+        }
+
+        /* I3C target wakeup event management ----------------------------------*/
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_WKPF) != RESET) {
+            /* Clear WKP flag */
+            LL_I3C_ClearFlag_WKP(hi3c->Instance);
+
+#if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
+            /* Call registered callback */
+            hi3c->NotifyCallback(hi3c, EVENT_ID_WKP);
+#else
+            /* Asynchronous receive CCC event Callback */
+            HAL_I3C_NotifyCallback(hi3c, EVENT_ID_WKP);
+#endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
+        }
     }
 
-    /* I3C target wakeup event management ----------------------------------*/
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_WKPF) != RESET) {
-      /* Clear WKP flag */
-      LL_I3C_ClearFlag_WKP(hi3c->Instance);
-
-#if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-      /* Call registered callback */
-      hi3c->NotifyCallback(hi3c, EVENT_ID_WKP);
-#else
-      /* Asynchronous receive CCC event Callback */
-      HAL_I3C_NotifyCallback(hi3c, EVENT_ID_WKP);
-#endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-    }
-  }
-
-  return HAL_OK;
+    return HAL_OK;
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
 
@@ -7554,63 +7170,62 @@ static HAL_StatusTypeDef I3C_Tgt_Rx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Ctrl_Tx_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                         uint32_t itMasks) {
-  /* Check that a Tx process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_TX) {
-    /* Check if Control FIFO requests data */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CFNFF) != RESET) {
-      if (hi3c->ControlXferCount > 0U) {
-        /* Call control data treatment function */
-        I3C_ControlDataTreatment(hi3c);
-      }
-    }
+static HAL_StatusTypeDef I3C_Ctrl_Tx_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that a Tx process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_TX) {
+        /* Check if Control FIFO requests data */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CFNFF) != RESET) {
+            if (hi3c->ControlXferCount > 0U) {
+                /* Call control data treatment function */
+                I3C_ControlDataTreatment(hi3c);
+            }
+        }
 
-    /* I3C Tx FIFO not full interrupt Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_TXFNFF) != RESET) {
-      if (hi3c->TxXferCount > 0U) {
-        /* Call Transmit treatment function */
-        hi3c->ptrTxFunc(hi3c);
-      }
-    }
+        /* I3C Tx FIFO not full interrupt Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_TXFNFF) != RESET) {
+            if (hi3c->TxXferCount > 0U) {
+                /* Call Transmit treatment function */
+                hi3c->ptrTxFunc(hi3c);
+            }
+        }
 
-    /* I3C target frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+        /* I3C target frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      if (hi3c->ControlXferCount == 0U) {
-        /* Disable Tx process interrupts */
-        I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_TX_IT);
+            if (hi3c->ControlXferCount == 0U) {
+                /* Disable Tx process interrupts */
+                I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_TX_IT);
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
 
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-        /* Call the transmit complete callback to inform upper layer of End of
-         * Transfer */
+                /* Call the transmit complete callback to inform upper layer of End of
+                 * Transfer */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->CtrlTxCpltCallback(hi3c);
+                hi3c->CtrlTxCpltCallback(hi3c);
 #else
-        HAL_I3C_CtrlTxCpltCallback(hi3c);
+                HAL_I3C_CtrlTxCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-      } else {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            } else {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-        /* Call the transmit complete callback */
+                /* Call the transmit complete callback */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->CtrlTxCpltCallback(hi3c);
+                hi3c->CtrlTxCpltCallback(hi3c);
 #else
-        HAL_I3C_CtrlTxCpltCallback(hi3c);
+                HAL_I3C_CtrlTxCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
 
-        /* Then Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      }
+                /* Then Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            }
+        }
     }
-  }
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -7621,70 +7236,69 @@ static HAL_StatusTypeDef I3C_Ctrl_Tx_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Ctrl_Rx_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                         uint32_t itMasks) {
-  /* Check that an Rx process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_RX) {
-    /* Check if Control FIFO requests data */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CFNFF) != RESET) {
-      if (hi3c->ControlXferCount > 0U) {
-        /* Call control data treatment function */
-        I3C_ControlDataTreatment(hi3c);
-      }
-    }
+static HAL_StatusTypeDef I3C_Ctrl_Rx_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that an Rx process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_RX) {
+        /* Check if Control FIFO requests data */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CFNFF) != RESET) {
+            if (hi3c->ControlXferCount > 0U) {
+                /* Call control data treatment function */
+                I3C_ControlDataTreatment(hi3c);
+            }
+        }
 
-    /* I3C Rx FIFO not empty interrupt Check */
-    if (I3C_CHECK_FLAG(itMasks, HAL_I3C_FLAG_RXFNEF) != RESET) {
-      if (hi3c->RxXferCount > 0U) {
-        /* Call receive treatment function */
-        hi3c->ptrRxFunc(hi3c);
-      }
-    }
+        /* I3C Rx FIFO not empty interrupt Check */
+        if (I3C_CHECK_FLAG(itMasks, HAL_I3C_FLAG_RXFNEF) != RESET) {
+            if (hi3c->RxXferCount > 0U) {
+                /* Call receive treatment function */
+                hi3c->ptrRxFunc(hi3c);
+            }
+        }
 
-    /* I3C Tx FIFO not full interrupt Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_TXFNFF) != RESET) {
-      if (hi3c->TxXferCount > 0U) {
-        /* Call Transmit treatment function */
-        hi3c->ptrTxFunc(hi3c);
-      }
-    }
+        /* I3C Tx FIFO not full interrupt Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_TXFNFF) != RESET) {
+            if (hi3c->TxXferCount > 0U) {
+                /* Call Transmit treatment function */
+                hi3c->ptrTxFunc(hi3c);
+            }
+        }
 
-    /* I3C target frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+        /* I3C target frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      if (hi3c->ControlXferCount == 0U) {
-        /* Disable Rx process interrupts */
-        I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_CCC_IT);
+            if (hi3c->ControlXferCount == 0U) {
+                /* Disable Rx process interrupts */
+                I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_CCC_IT);
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
 
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-        /* Call the receive complete callback */
+                /* Call the receive complete callback */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->CtrlRxCpltCallback(hi3c);
+                hi3c->CtrlRxCpltCallback(hi3c);
 #else
-        HAL_I3C_CtrlRxCpltCallback(hi3c);
+                HAL_I3C_CtrlRxCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-      } else {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            } else {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-        /* Call the receive complete callback */
+                /* Call the receive complete callback */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->CtrlRxCpltCallback(hi3c);
+                hi3c->CtrlRxCpltCallback(hi3c);
 #else
-        HAL_I3C_CtrlRxCpltCallback(hi3c);
+                HAL_I3C_CtrlRxCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
 
-        /* Then Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      }
+                /* Then Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            }
+        }
     }
-  }
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -7695,67 +7309,66 @@ static HAL_StatusTypeDef I3C_Ctrl_Rx_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef
-I3C_Ctrl_Multiple_Xfer_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
-  /* Check that a Tx/Rx process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_TX_RX) {
-    /* Check if Control FIFO requests data */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CFNFF) != RESET) {
-      if (hi3c->ControlXferCount > 0U) {
-        /* Call control data treatment function */
-        I3C_ControlDataTreatment(hi3c);
-      }
-    }
+static HAL_StatusTypeDef I3C_Ctrl_Multiple_Xfer_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that a Tx/Rx process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_TX_RX) {
+        /* Check if Control FIFO requests data */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CFNFF) != RESET) {
+            if (hi3c->ControlXferCount > 0U) {
+                /* Call control data treatment function */
+                I3C_ControlDataTreatment(hi3c);
+            }
+        }
 
-    /* I3C Tx FIFO not full interrupt Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_TXFNFF) != RESET) {
-      if (hi3c->TxXferCount > 0U) {
-        /* Call Transmit treatment function */
-        hi3c->ptrTxFunc(hi3c);
-      }
-    }
+        /* I3C Tx FIFO not full interrupt Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_TXFNFF) != RESET) {
+            if (hi3c->TxXferCount > 0U) {
+                /* Call Transmit treatment function */
+                hi3c->ptrTxFunc(hi3c);
+            }
+        }
 
-    /* I3C Rx FIFO not empty interrupt Check */
-    if (I3C_CHECK_FLAG(itMasks, HAL_I3C_FLAG_RXFNEF) != RESET) {
-      if (hi3c->RxXferCount > 0U) {
-        /* Call receive treatment function */
-        hi3c->ptrRxFunc(hi3c);
-      }
-    }
+        /* I3C Rx FIFO not empty interrupt Check */
+        if (I3C_CHECK_FLAG(itMasks, HAL_I3C_FLAG_RXFNEF) != RESET) {
+            if (hi3c->RxXferCount > 0U) {
+                /* Call receive treatment function */
+                hi3c->ptrRxFunc(hi3c);
+            }
+        }
 
-    /* I3C target frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+        /* I3C target frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      if (hi3c->ControlXferCount == 0U) {
-        /* Disable Tx process interrupts */
-        I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_TX_IT);
+            if (hi3c->ControlXferCount == 0U) {
+                /* Disable Tx process interrupts */
+                I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_TX_IT);
 
-        /* Disable Rx process interrupts */
-        I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_CCC_IT);
+                /* Disable Rx process interrupts */
+                I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_CCC_IT);
 
-        /* Update handle state parameter */
-        I3C_StateUpdate(hi3c);
+                /* Update handle state parameter */
+                I3C_StateUpdate(hi3c);
 
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-        /* Call the transmit, receive complete callback to inform upper layer of
-         * End of Transfer */
+                /* Call the transmit, receive complete callback to inform upper layer of
+                 * End of Transfer */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->CtrlMultipleXferCpltCallback(hi3c);
+                hi3c->CtrlMultipleXferCpltCallback(hi3c);
 #else
-        HAL_I3C_CtrlMultipleXferCpltCallback(hi3c);
+                HAL_I3C_CtrlMultipleXferCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-      } else {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            } else {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-        /* Then Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      }
+                /* Then Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            }
+        }
     }
-  }
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -7766,56 +7379,54 @@ I3C_Ctrl_Multiple_Xfer_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef
-I3C_Ctrl_Tx_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
-                             uint32_t itMasks) {
-  /* I3C controller receive IBI event management
-   * ---------------------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_IBIF) != RESET) {
-    /* Clear IBI request flag */
-    LL_I3C_ClearFlag_IBI(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Ctrl_Tx_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* I3C controller receive IBI event management
+     * ---------------------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_IBIF) != RESET) {
+        /* Clear IBI request flag */
+        LL_I3C_ClearFlag_IBI(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_IBI);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_IBI);
 #else
-    /* Asynchronous IBI event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_IBI);
+        /* Asynchronous IBI event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_IBI);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* I3C controller controller-role request event management
-   * ---------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRF) != RESET) {
-    /* Clear controller-role request flag */
-    LL_I3C_ClearFlag_CR(hi3c->Instance);
+    /* I3C controller controller-role request event management
+     * ---------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRF) != RESET) {
+        /* Clear controller-role request flag */
+        LL_I3C_ClearFlag_CR(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_CR);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_CR);
 #else
-    /* Asynchronous controller-role event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_CR);
+        /* Asynchronous controller-role event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_CR);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* I3C controller hot-join event management
-   * ------------------------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_HJF) != RESET) {
-    /* Clear hot-join flag */
-    LL_I3C_ClearFlag_HJ(hi3c->Instance);
+    /* I3C controller hot-join event management
+     * ------------------------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_HJF) != RESET) {
+        /* Clear hot-join flag */
+        LL_I3C_ClearFlag_HJ(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_HJ);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_HJ);
 #else
-    /* Asynchronous hot-join event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_HJ);
+        /* Asynchronous hot-join event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_HJ);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* ISR controller transmission */
-  return (I3C_Ctrl_Tx_ISR(hi3c, itMasks));
+    /* ISR controller transmission */
+    return (I3C_Ctrl_Tx_ISR(hi3c, itMasks));
 }
 
 /**
@@ -7826,56 +7437,54 @@ I3C_Ctrl_Tx_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef
-I3C_Ctrl_Rx_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
-                             uint32_t itMasks) {
-  /* I3C controller receive IBI event management
-   * ---------------------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_IBIF) != RESET) {
-    /* Clear IBI request flag */
-    LL_I3C_ClearFlag_IBI(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Ctrl_Rx_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* I3C controller receive IBI event management
+     * ---------------------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_IBIF) != RESET) {
+        /* Clear IBI request flag */
+        LL_I3C_ClearFlag_IBI(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_IBI);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_IBI);
 #else
-    /* Asynchronous IBI event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_IBI);
+        /* Asynchronous IBI event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_IBI);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* I3C controller controller-role request event management
-   * ---------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRF) != RESET) {
-    /* Clear controller-role request flag */
-    LL_I3C_ClearFlag_CR(hi3c->Instance);
+    /* I3C controller controller-role request event management
+     * ---------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRF) != RESET) {
+        /* Clear controller-role request flag */
+        LL_I3C_ClearFlag_CR(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_CR);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_CR);
 #else
-    /* Asynchronous controller-role event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_CR);
+        /* Asynchronous controller-role event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_CR);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* I3C controller hot-join event management
-   * ------------------------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_HJF) != RESET) {
-    /* Clear hot-join flag */
-    LL_I3C_ClearFlag_HJ(hi3c->Instance);
+    /* I3C controller hot-join event management
+     * ------------------------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_HJF) != RESET) {
+        /* Clear hot-join flag */
+        LL_I3C_ClearFlag_HJ(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_HJ);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_HJ);
 #else
-    /* Asynchronous hot-join event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_HJ);
+        /* Asynchronous hot-join event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_HJ);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* ISR controller reception */
-  return (I3C_Ctrl_Rx_ISR(hi3c, itMasks));
+    /* ISR controller reception */
+    return (I3C_Ctrl_Rx_ISR(hi3c, itMasks));
 }
 
 /**
@@ -7886,56 +7495,54 @@ I3C_Ctrl_Rx_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef
-I3C_Ctrl_Multiple_Xfer_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                        uint32_t itMasks) {
-  /* I3C controller receive IBI event management
-   * ---------------------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_IBIF) != RESET) {
-    /* Clear IBI request flag */
-    LL_I3C_ClearFlag_IBI(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Ctrl_Multiple_Xfer_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* I3C controller receive IBI event management
+     * ---------------------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_IBIF) != RESET) {
+        /* Clear IBI request flag */
+        LL_I3C_ClearFlag_IBI(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_IBI);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_IBI);
 #else
-    /* Asynchronous IBI event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_IBI);
+        /* Asynchronous IBI event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_IBI);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* I3C controller controller-role request event management
-   * ---------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRF) != RESET) {
-    /* Clear controller-role request flag */
-    LL_I3C_ClearFlag_CR(hi3c->Instance);
+    /* I3C controller controller-role request event management
+     * ---------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CRF) != RESET) {
+        /* Clear controller-role request flag */
+        LL_I3C_ClearFlag_CR(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_CR);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_CR);
 #else
-    /* Asynchronous controller-role event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_CR);
+        /* Asynchronous controller-role event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_CR);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* I3C controller hot-join event management
-   * ------------------------------------------------------------------------*/
-  if (I3C_CHECK_FLAG(itMasks, I3C_EVR_HJF) != RESET) {
-    /* Clear hot-join flag */
-    LL_I3C_ClearFlag_HJ(hi3c->Instance);
+    /* I3C controller hot-join event management
+     * ------------------------------------------------------------------------*/
+    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_HJF) != RESET) {
+        /* Clear hot-join flag */
+        LL_I3C_ClearFlag_HJ(hi3c->Instance);
 
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-    /* Call registered callback */
-    hi3c->NotifyCallback(hi3c, EVENT_ID_HJ);
+        /* Call registered callback */
+        hi3c->NotifyCallback(hi3c, EVENT_ID_HJ);
 #else
-    /* Asynchronous hot-join event Callback */
-    HAL_I3C_NotifyCallback(hi3c, EVENT_ID_HJ);
+        /* Asynchronous hot-join event Callback */
+        HAL_I3C_NotifyCallback(hi3c, EVENT_ID_HJ);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-  }
+    }
 
-  /* ISR controller transmission/reception */
-  return (I3C_Ctrl_Multiple_Xfer_ISR(hi3c, itMasks));
+    /* ISR controller transmission/reception */
+    return (I3C_Ctrl_Multiple_Xfer_ISR(hi3c, itMasks));
 }
 /**
  * @brief  Interrupt Sub-Routine which handles controller CCC Dynamic Address
@@ -7945,71 +7552,65 @@ I3C_Ctrl_Multiple_Xfer_Listen_Event_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Ctrl_DAA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                          uint32_t itMasks) {
-  uint64_t target_payload = 0U;
+static HAL_StatusTypeDef I3C_Ctrl_DAA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    uint64_t target_payload = 0U;
 
-  /* Check that a Dynamic Address Assignment process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_DAA) {
-    /* I3C Control FIFO not full interrupt Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CFNFF) != RESET) {
-      /* Write ENTDAA CCC information in the control register */
-      LL_I3C_ControllerHandleCCC(hi3c->Instance, I3C_BROADCAST_ENTDAA, 0U,
-                                 LL_I3C_GENERATE_STOP);
-    }
-
-    /* I3C Tx FIFO not full interrupt Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_TXFNFF) != RESET) {
-      /* Check on the Rx FIFO threshold to know the Dynamic Address Assignment
-       * treatment process : byte or word */
-      if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) ==
-          LL_I3C_RXFIFO_THRESHOLD_1_4) {
-        /* For loop to get target payload */
-        for (uint32_t index = 0U; index < 8U; index++) {
-          /* Retrieve payload byte by byte */
-          target_payload |=
-              (uint64_t)((uint64_t)LL_I3C_ReceiveData8(hi3c->Instance)
-                         << (index * 8U));
+    /* Check that a Dynamic Address Assignment process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_DAA) {
+        /* I3C Control FIFO not full interrupt Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_CFNFF) != RESET) {
+            /* Write ENTDAA CCC information in the control register */
+            LL_I3C_ControllerHandleCCC(hi3c->Instance, I3C_BROADCAST_ENTDAA, 0U, LL_I3C_GENERATE_STOP);
         }
-      } else {
-        /* Retrieve first 32 bits payload */
-        target_payload = (uint64_t)LL_I3C_ReceiveData32(hi3c->Instance);
 
-        /* Retrieve second 32 bits payload */
-        target_payload |=
-            (uint64_t)((uint64_t)LL_I3C_ReceiveData32(hi3c->Instance) << 32U);
-      }
+        /* I3C Tx FIFO not full interrupt Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_TXFNFF) != RESET) {
+            /* Check on the Rx FIFO threshold to know the Dynamic Address Assignment
+             * treatment process : byte or word */
+            if (LL_I3C_GetRxFIFOThreshold(hi3c->Instance) == LL_I3C_RXFIFO_THRESHOLD_1_4) {
+                /* For loop to get target payload */
+                for (uint32_t index = 0U; index < 8U; index++) {
+                    /* Retrieve payload byte by byte */
+                    target_payload |= (uint64_t)((uint64_t)LL_I3C_ReceiveData8(hi3c->Instance) << (index * 8U));
+                }
+            } else {
+                /* Retrieve first 32 bits payload */
+                target_payload = (uint64_t)LL_I3C_ReceiveData32(hi3c->Instance);
 
-      /* Call the corresponding callback */
+                /* Retrieve second 32 bits payload */
+                target_payload |= (uint64_t)((uint64_t)LL_I3C_ReceiveData32(hi3c->Instance) << 32U);
+            }
+
+            /* Call the corresponding callback */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-      hi3c->TgtReqDynamicAddrCallback(hi3c, target_payload);
+            hi3c->TgtReqDynamicAddrCallback(hi3c, target_payload);
 #else
-      HAL_I3C_TgtReqDynamicAddrCallback(hi3c, target_payload);
+            HAL_I3C_TgtReqDynamicAddrCallback(hi3c, target_payload);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS */
-    }
+        }
 
-    /* I3C frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+        /* I3C frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      /* Disable Dynamic Address Assignment process interrupts */
-      I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_DAA_IT);
+            /* Disable Dynamic Address Assignment process interrupts */
+            I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_DAA_IT);
 
-      /* Update handle state parameter */
-      I3C_StateUpdate(hi3c);
+            /* Update handle state parameter */
+            I3C_StateUpdate(hi3c);
 
-      hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-      /* Call the Dynamic Address Assignment complete callback */
+            /* Call the Dynamic Address Assignment complete callback */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-      hi3c->CtrlDAACpltCallback(hi3c);
+            hi3c->CtrlDAACpltCallback(hi3c);
 #else
-      HAL_I3C_CtrlDAACpltCallback(hi3c);
+            HAL_I3C_CtrlDAACpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
+        }
     }
-  }
-  return HAL_OK;
+    return HAL_OK;
 }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
@@ -8021,58 +7622,57 @@ static HAL_StatusTypeDef I3C_Ctrl_DAA_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Ctrl_Tx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                             uint32_t itMasks) {
-  /* Check that a Tx process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_TX) {
-    /* I3C target frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Ctrl_Tx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that a Tx process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_TX) {
+        /* I3C target frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmacr) == 0U) {
-        /* Check if all data bytes are transmitted */
-        if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmatx) == 0U) {
-          /* Disable Tx process interrupts */
-          I3C_Disable_IRQ(hi3c, I3C_XFER_DMA);
+            if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmacr) == 0U) {
+                /* Check if all data bytes are transmitted */
+                if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmatx) == 0U) {
+                    /* Disable Tx process interrupts */
+                    I3C_Disable_IRQ(hi3c, I3C_XFER_DMA);
 
-          /* Update handle state parameter */
-          I3C_StateUpdate(hi3c);
+                    /* Update handle state parameter */
+                    I3C_StateUpdate(hi3c);
 
-          hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                    hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-          /* Update the number of remaining data bytes */
-          hi3c->TxXferCount = 0U;
+                    /* Update the number of remaining data bytes */
+                    hi3c->TxXferCount = 0U;
 
-          /* Call controller transmit complete callback to inform upper layer of
-           * End of Transfer */
+                    /* Call controller transmit complete callback to inform upper layer of
+                     * End of Transfer */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-          hi3c->CtrlTxCpltCallback(hi3c);
+                    hi3c->CtrlTxCpltCallback(hi3c);
 #else
-          HAL_I3C_CtrlTxCpltCallback(hi3c);
+                    HAL_I3C_CtrlTxCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-        } else {
-          hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+                } else {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
 
-          /* Call error treatment function */
-          I3C_ErrorTreatment(hi3c);
+                    /* Call error treatment function */
+                    I3C_ErrorTreatment(hi3c);
+                }
+            } else {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+
+                /* Call the transmit complete callback */
+#if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
+                hi3c->CtrlTxCpltCallback(hi3c);
+#else
+                HAL_I3C_CtrlTxCpltCallback(hi3c);
+#endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
+
+                /* Then Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            }
         }
-      } else {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-
-        /* Call the transmit complete callback */
-#if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->CtrlTxCpltCallback(hi3c);
-#else
-        HAL_I3C_CtrlTxCpltCallback(hi3c);
-#endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-
-        /* Then Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      }
     }
-  }
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -8083,57 +7683,56 @@ static HAL_StatusTypeDef I3C_Ctrl_Tx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Ctrl_Rx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                             uint32_t itMasks) {
-  /* Check that an Rx process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_RX) {
-    /* I3C target frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Ctrl_Rx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that an Rx process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_RX) {
+        /* I3C target frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmacr) == 0U) {
-        /* Check if all data bytes are received */
-        if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmarx) == 0U) {
-          /* Disable Rx process interrupts */
-          I3C_Disable_IRQ(hi3c, I3C_XFER_DMA);
+            if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmacr) == 0U) {
+                /* Check if all data bytes are received */
+                if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmarx) == 0U) {
+                    /* Disable Rx process interrupts */
+                    I3C_Disable_IRQ(hi3c, I3C_XFER_DMA);
 
-          /* Update handle state parameter */
-          I3C_StateUpdate(hi3c);
+                    /* Update handle state parameter */
+                    I3C_StateUpdate(hi3c);
 
-          hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                    hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-          /* Update the number of remaining data bytes */
-          hi3c->RxXferCount = 0U;
+                    /* Update the number of remaining data bytes */
+                    hi3c->RxXferCount = 0U;
 
-          /* Call controller receive complete callback */
+                    /* Call controller receive complete callback */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-          hi3c->CtrlRxCpltCallback(hi3c);
+                    hi3c->CtrlRxCpltCallback(hi3c);
 #else
-          HAL_I3C_CtrlRxCpltCallback(hi3c);
+                    HAL_I3C_CtrlRxCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-        } else {
-          hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+                } else {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
 
-          /* Call error treatment function */
-          I3C_ErrorTreatment(hi3c);
+                    /* Call error treatment function */
+                    I3C_ErrorTreatment(hi3c);
+                }
+            } else {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+
+                /* Call the receive complete callback */
+#if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
+                hi3c->CtrlRxCpltCallback(hi3c);
+#else
+                HAL_I3C_CtrlRxCpltCallback(hi3c);
+#endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
+
+                /* Then Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            }
         }
-      } else {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-
-        /* Call the receive complete callback */
-#if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-        hi3c->CtrlRxCpltCallback(hi3c);
-#else
-        HAL_I3C_CtrlRxCpltCallback(hi3c);
-#endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-
-        /* Then Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      }
     }
-  }
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -8144,62 +7743,60 @@ static HAL_StatusTypeDef I3C_Ctrl_Rx_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef
-I3C_Ctrl_Multiple_Xfer_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
-                               uint32_t itMasks) {
-  /* Check that an Rx or Tx process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_BUSY_TX_RX) {
-    /* I3C target frame complete event Check */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+static HAL_StatusTypeDef I3C_Ctrl_Multiple_Xfer_DMA_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that an Rx or Tx process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_BUSY_TX_RX) {
+        /* I3C target frame complete event Check */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmacr) == 0U) {
-        /* Check if all data bytes are received or transmitted */
-        if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmarx) == 0U) {
-          if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmatx) == 0U) {
-            /* Disable transfer Tx/Rx process interrupts */
-            I3C_Disable_IRQ(hi3c, I3C_XFER_DMA);
+            if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmacr) == 0U) {
+                /* Check if all data bytes are received or transmitted */
+                if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmarx) == 0U) {
+                    if (I3C_GET_DMA_REMAIN_DATA(hi3c->hdmatx) == 0U) {
+                        /* Disable transfer Tx/Rx process interrupts */
+                        I3C_Disable_IRQ(hi3c, I3C_XFER_DMA);
 
-            /* Update handle state parameter */
-            I3C_StateUpdate(hi3c);
+                        /* Update handle state parameter */
+                        I3C_StateUpdate(hi3c);
 
-            hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+                        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
 
-            /* Update the number of remaining data bytes */
-            hi3c->RxXferCount = 0U;
+                        /* Update the number of remaining data bytes */
+                        hi3c->RxXferCount = 0U;
 
-            /* Update the number of remaining data bytes */
-            hi3c->TxXferCount = 0U;
+                        /* Update the number of remaining data bytes */
+                        hi3c->TxXferCount = 0U;
 
-            /* Call controller transmit, receive complete callback to inform
-             * upper layer of End of Transfer */
+                        /* Call controller transmit, receive complete callback to inform
+                         * upper layer of End of Transfer */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1U)
-            hi3c->CtrlMultipleXferCpltCallback(hi3c);
+                        hi3c->CtrlMultipleXferCpltCallback(hi3c);
 #else
-            HAL_I3C_CtrlMultipleXferCpltCallback(hi3c);
+                        HAL_I3C_CtrlMultipleXferCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS == 1U */
-          } else {
-            hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+                    } else {
+                        hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
 
-            /* Call error treatment function */
-            I3C_ErrorTreatment(hi3c);
-          }
-        } else {
-          hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
+                        /* Call error treatment function */
+                        I3C_ErrorTreatment(hi3c);
+                    }
+                } else {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_SIZE;
 
-          /* Call error treatment function */
-          I3C_ErrorTreatment(hi3c);
+                    /* Call error treatment function */
+                    I3C_ErrorTreatment(hi3c);
+                }
+            } else {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+
+                /* Then Initiate a Start condition */
+                LL_I3C_RequestTransfer(hi3c->Instance);
+            }
         }
-      } else {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-
-        /* Then Initiate a Start condition */
-        LL_I3C_RequestTransfer(hi3c->Instance);
-      }
     }
-  }
-  return HAL_OK;
+    return HAL_OK;
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
 
@@ -8210,32 +7807,31 @@ I3C_Ctrl_Multiple_Xfer_DMA_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @param  itMasks    : [IN]  Flag Interrupt Masks flags to handle.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Abort_ISR(struct __I3C_HandleTypeDef *hi3c,
-                                       uint32_t itMasks) {
-  /* Check that an Abort process is ongoing */
-  if (hi3c->State == HAL_I3C_STATE_ABORT) {
-    /* I3C Rx FIFO not empty interrupt Check */
-    if (I3C_CHECK_FLAG(itMasks, HAL_I3C_FLAG_RXFNEF) != RESET) {
-      if (LL_I3C_IsActiveFlag_DOVR(hi3c->Instance) == 1U) {
-        /* Flush remaining Rx data */
-        LL_I3C_RequestRxFIFOFlush(hi3c->Instance);
-      }
-    }
+static HAL_StatusTypeDef I3C_Abort_ISR(struct __I3C_HandleTypeDef *hi3c, uint32_t itMasks) {
+    /* Check that an Abort process is ongoing */
+    if (hi3c->State == HAL_I3C_STATE_ABORT) {
+        /* I3C Rx FIFO not empty interrupt Check */
+        if (I3C_CHECK_FLAG(itMasks, HAL_I3C_FLAG_RXFNEF) != RESET) {
+            if (LL_I3C_IsActiveFlag_DOVR(hi3c->Instance) == 1U) {
+                /* Flush remaining Rx data */
+                LL_I3C_RequestRxFIFOFlush(hi3c->Instance);
+            }
+        }
 
-    /* I3C Abort frame complete event Check */
-    /* Evenif abort is called, the Frame completion can arrive if abort is
-     * requested at the end of the processus */
-    /* Evenif completion occurs, treat this end of processus as abort completion
-     * process */
-    if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
-      /* Clear frame complete flag */
-      LL_I3C_ClearFlag_FC(hi3c->Instance);
+        /* I3C Abort frame complete event Check */
+        /* Evenif abort is called, the Frame completion can arrive if abort is
+         * requested at the end of the processus */
+        /* Evenif completion occurs, treat this end of processus as abort completion
+         * process */
+        if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+            /* Clear frame complete flag */
+            LL_I3C_ClearFlag_FC(hi3c->Instance);
 
-      /* Call error treatment function */
-      I3C_ErrorTreatment(hi3c);
+            /* Call error treatment function */
+            I3C_ErrorTreatment(hi3c);
+        }
     }
-  }
-  return HAL_OK;
+    return HAL_OK;
 }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
@@ -8246,12 +7842,11 @@ static HAL_StatusTypeDef I3C_Abort_ISR(struct __I3C_HandleTypeDef *hi3c,
  * @retval None
  */
 static void I3C_DMAControlTransmitCplt(DMA_HandleTypeDef *hdma) {
-  /* Get the address of the I3C handle : Derogation MISRAC2012-Rule-11.5 */
-  I3C_HandleTypeDef *hi3c =
-      (I3C_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent);
+    /* Get the address of the I3C handle : Derogation MISRAC2012-Rule-11.5 */
+    I3C_HandleTypeDef *hi3c = (I3C_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent);
 
-  /* Disable control DMA Request */
-  LL_I3C_DisableDMAReq_Control(hi3c->Instance);
+    /* Disable control DMA Request */
+    LL_I3C_DisableDMAReq_Control(hi3c->Instance);
 }
 
 /**
@@ -8261,12 +7856,11 @@ static void I3C_DMAControlTransmitCplt(DMA_HandleTypeDef *hdma) {
  * @retval None
  */
 static void I3C_DMADataTransmitCplt(DMA_HandleTypeDef *hdma) {
-  /* Get the address of the I3C handle : Derogation MISRAC2012-Rule-11.5 */
-  I3C_HandleTypeDef *hi3c =
-      (I3C_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent);
+    /* Get the address of the I3C handle : Derogation MISRAC2012-Rule-11.5 */
+    I3C_HandleTypeDef *hi3c = (I3C_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent);
 
-  /* Disable Tx DMA Request */
-  LL_I3C_DisableDMAReq_TX(hi3c->Instance);
+    /* Disable Tx DMA Request */
+    LL_I3C_DisableDMAReq_TX(hi3c->Instance);
 }
 
 /**
@@ -8276,12 +7870,11 @@ static void I3C_DMADataTransmitCplt(DMA_HandleTypeDef *hdma) {
  * @retval None
  */
 static void I3C_DMADataReceiveCplt(DMA_HandleTypeDef *hdma) {
-  /* Get the address of the I3C handle : Derogation MISRAC2012-Rule-11.5 */
-  I3C_HandleTypeDef *hi3c =
-      (I3C_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent);
+    /* Get the address of the I3C handle : Derogation MISRAC2012-Rule-11.5 */
+    I3C_HandleTypeDef *hi3c = (I3C_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent);
 
-  /* Disable Rx DMA Request */
-  LL_I3C_DisableDMAReq_RX(hi3c->Instance);
+    /* Disable Rx DMA Request */
+    LL_I3C_DisableDMAReq_RX(hi3c->Instance);
 }
 
 /**
@@ -8291,12 +7884,11 @@ static void I3C_DMADataReceiveCplt(DMA_HandleTypeDef *hdma) {
  * @retval None
  */
 static void I3C_DMAError(DMA_HandleTypeDef *hdma) {
-  /* Just to solve MisraC error then to be removed */
-  /* Derogation MISRAC2012-Rule-11.5 */
-  I3C_HandleTypeDef *hi3c =
-      (I3C_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent);
+    /* Just to solve MisraC error then to be removed */
+    /* Derogation MISRAC2012-Rule-11.5 */
+    I3C_HandleTypeDef *hi3c = (I3C_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent);
 
-  hi3c->ErrorCode |= HAL_I3C_ERROR_DMA;
+    hi3c->ErrorCode |= HAL_I3C_ERROR_DMA;
 }
 
 /**
@@ -8307,26 +7899,25 @@ static void I3C_DMAError(DMA_HandleTypeDef *hdma) {
  * @retval None
  */
 static void I3C_DMAAbort(DMA_HandleTypeDef *hdma) {
-  /* Derogation MISRAC2012-Rule-11.5 */
-  I3C_HandleTypeDef *hi3c =
-      (I3C_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent);
+    /* Derogation MISRAC2012-Rule-11.5 */
+    I3C_HandleTypeDef *hi3c = (I3C_HandleTypeDef *)(((DMA_HandleTypeDef *)hdma)->Parent);
 
-  /* Reset Tx DMA AbortCpltCallback */
-  if (hi3c->hdmatx != NULL) {
-    hi3c->hdmatx->XferAbortCallback = NULL;
-  }
+    /* Reset Tx DMA AbortCpltCallback */
+    if (hi3c->hdmatx != NULL) {
+        hi3c->hdmatx->XferAbortCallback = NULL;
+    }
 
-  /* Reset Rx DMA AbortCpltCallback */
-  if (hi3c->hdmarx != NULL) {
-    hi3c->hdmarx->XferAbortCallback = NULL;
-  }
+    /* Reset Rx DMA AbortCpltCallback */
+    if (hi3c->hdmarx != NULL) {
+        hi3c->hdmarx->XferAbortCallback = NULL;
+    }
 
-  /* Reset control DMA AbortCpltCallback */
-  if (hi3c->hdmacr != NULL) {
-    hi3c->hdmacr->XferAbortCallback = NULL;
-  }
+    /* Reset control DMA AbortCpltCallback */
+    if (hi3c->hdmacr != NULL) {
+        hi3c->hdmacr->XferAbortCallback = NULL;
+    }
 
-  I3C_TreatErrorCallback(hi3c);
+    I3C_TreatErrorCallback(hi3c);
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
 
@@ -8340,36 +7931,33 @@ static void I3C_DMAAbort(DMA_HandleTypeDef *hdma) {
  * @param  tickstart  : [IN]  Tick start value
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_WaitOnFlagUntilTimeout(I3C_HandleTypeDef *hi3c,
-                                                    uint32_t flag,
-                                                    FlagStatus flagstatus,
-                                                    uint32_t timeout,
-                                                    uint32_t tickstart) {
-  HAL_StatusTypeDef status = HAL_OK;
+static HAL_StatusTypeDef I3C_WaitOnFlagUntilTimeout(I3C_HandleTypeDef *hi3c, uint32_t flag, FlagStatus flagstatus,
+                                                    uint32_t timeout, uint32_t tickstart) {
+    HAL_StatusTypeDef status = HAL_OK;
 
-  while ((__HAL_I3C_GET_FLAG(hi3c, flag) == flagstatus) && (status == HAL_OK)) {
-    /* Check for the Timeout */
-    if (timeout != HAL_MAX_DELAY) {
-      if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
-        if (__HAL_I3C_GET_FLAG(hi3c, flag) == flagstatus) {
-          hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
-          status = HAL_TIMEOUT;
+    while ((__HAL_I3C_GET_FLAG(hi3c, flag) == flagstatus) && (status == HAL_OK)) {
+        /* Check for the Timeout */
+        if (timeout != HAL_MAX_DELAY) {
+            if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
+                if (__HAL_I3C_GET_FLAG(hi3c, flag) == flagstatus) {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_TIMEOUT;
+                    status = HAL_TIMEOUT;
+                }
+            }
         }
-      }
+
+        /* Check if an error occurs during Flag waiting */
+        if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+            /* Clear error flag */
+            LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+            /* Update handle error code parameter */
+            I3C_GetErrorSources(hi3c);
+
+            status = HAL_ERROR;
+        }
     }
-
-    /* Check if an error occurs during Flag waiting */
-    if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-      /* Clear error flag */
-      LL_I3C_ClearFlag_ERR(hi3c->Instance);
-
-      /* Update handle error code parameter */
-      I3C_GetErrorSources(hi3c);
-
-      status = HAL_ERROR;
-    }
-  }
-  return status;
+    return status;
 }
 
 /**
@@ -8380,39 +7968,36 @@ static HAL_StatusTypeDef I3C_WaitOnFlagUntilTimeout(I3C_HandleTypeDef *hi3c,
  * @param  tickstart  : [IN]  Tick start value
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_WaitOnDAAUntilTimeout(I3C_HandleTypeDef *hi3c,
-                                                   uint32_t timeout,
-                                                   uint32_t tickstart) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t active_flags = READ_REG(hi3c->Instance->EVR);
+static HAL_StatusTypeDef I3C_WaitOnDAAUntilTimeout(I3C_HandleTypeDef *hi3c, uint32_t timeout, uint32_t tickstart) {
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t active_flags = READ_REG(hi3c->Instance->EVR);
 
-  while (((active_flags & (HAL_I3C_FLAG_FCF | HAL_I3C_FLAG_TXFNFF)) == 0U) &&
-         (status == HAL_OK)) {
-    /* Check for the Timeout */
-    if (timeout != HAL_MAX_DELAY) {
-      if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
-        if ((active_flags & (HAL_I3C_FLAG_FCF | HAL_I3C_FLAG_TXFNFF)) == 0U) {
-          hi3c->ErrorCode |= HAL_I3C_ERROR_TIMEOUT;
-          status = HAL_TIMEOUT;
+    while (((active_flags & (HAL_I3C_FLAG_FCF | HAL_I3C_FLAG_TXFNFF)) == 0U) && (status == HAL_OK)) {
+        /* Check for the Timeout */
+        if (timeout != HAL_MAX_DELAY) {
+            if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
+                if ((active_flags & (HAL_I3C_FLAG_FCF | HAL_I3C_FLAG_TXFNFF)) == 0U) {
+                    hi3c->ErrorCode |= HAL_I3C_ERROR_TIMEOUT;
+                    status = HAL_TIMEOUT;
+                }
+            }
         }
-      }
+
+        /* Check if an error occurs during Flag waiting */
+        if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
+            /* Clear error flag */
+            LL_I3C_ClearFlag_ERR(hi3c->Instance);
+
+            /* Update handle error code parameter */
+            I3C_GetErrorSources(hi3c);
+
+            status = HAL_ERROR;
+        }
+
+        /* Read active flags from EVR register */
+        active_flags = READ_REG(hi3c->Instance->EVR);
     }
-
-    /* Check if an error occurs during Flag waiting */
-    if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_ERRF) == SET) {
-      /* Clear error flag */
-      LL_I3C_ClearFlag_ERR(hi3c->Instance);
-
-      /* Update handle error code parameter */
-      I3C_GetErrorSources(hi3c);
-
-      status = HAL_ERROR;
-    }
-
-    /* Read active flags from EVR register */
-    active_flags = READ_REG(hi3c->Instance->EVR);
-  }
-  return status;
+    return status;
 }
 
 /**
@@ -8422,18 +8007,17 @@ static HAL_StatusTypeDef I3C_WaitOnDAAUntilTimeout(I3C_HandleTypeDef *hi3c,
  * @retval None
  */
 static void I3C_TransmitByteTreatment(I3C_HandleTypeDef *hi3c) {
-  /* Check TX FIFO not full flag */
-  while ((__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_TXFNFF) == SET) &&
-         (hi3c->TxXferCount > 0U)) {
-    /* Write Tx buffer data to transmit register */
-    LL_I3C_TransmitData8(hi3c->Instance, *hi3c->pXferData->TxBuf.pBuffer);
+    /* Check TX FIFO not full flag */
+    while ((__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_TXFNFF) == SET) && (hi3c->TxXferCount > 0U)) {
+        /* Write Tx buffer data to transmit register */
+        LL_I3C_TransmitData8(hi3c->Instance, *hi3c->pXferData->TxBuf.pBuffer);
 
-    /* Increment Buffer pointer */
-    hi3c->pXferData->TxBuf.pBuffer++;
+        /* Increment Buffer pointer */
+        hi3c->pXferData->TxBuf.pBuffer++;
 
-    /* Decrement remaining bytes counter */
-    hi3c->TxXferCount--;
-  }
+        /* Decrement remaining bytes counter */
+        hi3c->TxXferCount--;
+    }
 }
 
 /**
@@ -8443,22 +8027,21 @@ static void I3C_TransmitByteTreatment(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 static void I3C_TransmitWordTreatment(I3C_HandleTypeDef *hi3c) {
-  /* Check TX FIFO not full flag */
-  while (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_TXFNFF) == SET) {
-    /* Write Tx buffer data to transmit register */
-    LL_I3C_TransmitData32(hi3c->Instance,
-                          *((uint32_t *)hi3c->pXferData->TxBuf.pBuffer));
+    /* Check TX FIFO not full flag */
+    while (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_TXFNFF) == SET) {
+        /* Write Tx buffer data to transmit register */
+        LL_I3C_TransmitData32(hi3c->Instance, *((uint32_t *)hi3c->pXferData->TxBuf.pBuffer));
 
-    /* Increment Buffer pointer */
-    hi3c->pXferData->TxBuf.pBuffer += sizeof(uint32_t);
+        /* Increment Buffer pointer */
+        hi3c->pXferData->TxBuf.pBuffer += sizeof(uint32_t);
 
-    if (hi3c->TxXferCount < sizeof(uint32_t)) {
-      hi3c->TxXferCount = 0U;
-    } else {
-      /* Decrement remaining bytes counter */
-      hi3c->TxXferCount -= sizeof(uint32_t);
+        if (hi3c->TxXferCount < sizeof(uint32_t)) {
+            hi3c->TxXferCount = 0U;
+        } else {
+            /* Decrement remaining bytes counter */
+            hi3c->TxXferCount -= sizeof(uint32_t);
+        }
     }
-  }
 }
 
 /**
@@ -8468,17 +8051,17 @@ static void I3C_TransmitWordTreatment(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 static void I3C_ReceiveByteTreatment(I3C_HandleTypeDef *hi3c) {
-  /* Check RX FIFO not empty flag */
-  while (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_RXFNEF) == SET) {
-    /* Store received bytes in the Rx buffer */
-    *hi3c->pXferData->RxBuf.pBuffer = LL_I3C_ReceiveData8(hi3c->Instance);
+    /* Check RX FIFO not empty flag */
+    while (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_RXFNEF) == SET) {
+        /* Store received bytes in the Rx buffer */
+        *hi3c->pXferData->RxBuf.pBuffer = LL_I3C_ReceiveData8(hi3c->Instance);
 
-    /* Increment Buffer pointer */
-    hi3c->pXferData->RxBuf.pBuffer++;
+        /* Increment Buffer pointer */
+        hi3c->pXferData->RxBuf.pBuffer++;
 
-    /* Decrement remaining bytes counter */
-    hi3c->RxXferCount--;
-  }
+        /* Decrement remaining bytes counter */
+        hi3c->RxXferCount--;
+    }
 }
 
 /**
@@ -8488,23 +8071,22 @@ static void I3C_ReceiveByteTreatment(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 static void I3C_ReceiveWordTreatment(I3C_HandleTypeDef *hi3c) {
-  /* Check RX FIFO not empty flag */
-  while (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_RXFNEF) == SET) {
-    /* Store received bytes in the Rx buffer */
-    *((uint32_t *)hi3c->pXferData->RxBuf.pBuffer) =
-        LL_I3C_ReceiveData32(hi3c->Instance);
+    /* Check RX FIFO not empty flag */
+    while (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_RXFNEF) == SET) {
+        /* Store received bytes in the Rx buffer */
+        *((uint32_t *)hi3c->pXferData->RxBuf.pBuffer) = LL_I3C_ReceiveData32(hi3c->Instance);
 
-    /* Increment Buffer pointer */
-    hi3c->pXferData->RxBuf.pBuffer += sizeof(uint32_t);
+        /* Increment Buffer pointer */
+        hi3c->pXferData->RxBuf.pBuffer += sizeof(uint32_t);
 
-    if (hi3c->RxXferCount > sizeof(uint32_t)) {
-      /* Decrement remaining bytes counter */
-      hi3c->RxXferCount -= sizeof(uint32_t);
-    } else {
-      /* Reset counter as last modulo word Rx data received */
-      hi3c->RxXferCount = 0U;
+        if (hi3c->RxXferCount > sizeof(uint32_t)) {
+            /* Decrement remaining bytes counter */
+            hi3c->RxXferCount -= sizeof(uint32_t);
+        } else {
+            /* Reset counter as last modulo word Rx data received */
+            hi3c->RxXferCount = 0U;
+        }
     }
-  }
 }
 
 /**
@@ -8514,17 +8096,17 @@ static void I3C_ReceiveWordTreatment(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 static void I3C_ControlDataTreatment(I3C_HandleTypeDef *hi3c) {
-  /* Check if Control FIFO requests data */
-  if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_CFNFF) == SET) {
-    /* Decrement remaining control buffer data counter */
-    hi3c->ControlXferCount--;
+    /* Check if Control FIFO requests data */
+    if (__HAL_I3C_GET_FLAG(hi3c, HAL_I3C_FLAG_CFNFF) == SET) {
+        /* Decrement remaining control buffer data counter */
+        hi3c->ControlXferCount--;
 
-    /* Write Control buffer data to control register */
-    WRITE_REG(hi3c->Instance->CR, *hi3c->pXferData->CtrlBuf.pBuffer);
+        /* Write Control buffer data to control register */
+        WRITE_REG(hi3c->Instance->CR, *hi3c->pXferData->CtrlBuf.pBuffer);
 
-    /* Increment Buffer pointer */
-    hi3c->pXferData->CtrlBuf.pBuffer++;
-  }
+        /* Increment Buffer pointer */
+        hi3c->pXferData->CtrlBuf.pBuffer++;
+    }
 }
 
 /**
@@ -8534,26 +8116,26 @@ static void I3C_ControlDataTreatment(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 static void I3C_StateUpdate(I3C_HandleTypeDef *hi3c) {
-  /* Check on previous state */
-  if (hi3c->PreviousState == HAL_I3C_STATE_LISTEN) {
-    /* Set state to listen */
-    hi3c->State = HAL_I3C_STATE_LISTEN;
+    /* Check on previous state */
+    if (hi3c->PreviousState == HAL_I3C_STATE_LISTEN) {
+        /* Set state to listen */
+        hi3c->State = HAL_I3C_STATE_LISTEN;
 
-    /* Check the I3C mode */
-    if (hi3c->Mode == HAL_I3C_MODE_TARGET) {
-      /* Store the target event treatment function */
-      hi3c->XferISR = I3C_Tgt_Event_ISR;
+        /* Check the I3C mode */
+        if (hi3c->Mode == HAL_I3C_MODE_TARGET) {
+            /* Store the target event treatment function */
+            hi3c->XferISR = I3C_Tgt_Event_ISR;
+        } else {
+            /* Store the controller event treatment function */
+            hi3c->XferISR = I3C_Ctrl_Event_ISR;
+        }
     } else {
-      /* Store the controller event treatment function */
-      hi3c->XferISR = I3C_Ctrl_Event_ISR;
-    }
-  } else {
-    /* Set state to ready */
-    hi3c->State = HAL_I3C_STATE_READY;
+        /* Set state to ready */
+        hi3c->State = HAL_I3C_STATE_READY;
 
-    /* Reset XferISR */
-    hi3c->XferISR = NULL;
-  }
+        /* Reset XferISR */
+        hi3c->XferISR = NULL;
+    }
 }
 
 /**
@@ -8563,56 +8145,55 @@ static void I3C_StateUpdate(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 static void I3C_GetErrorSources(I3C_HandleTypeDef *hi3c) {
-  /* Check on the I3C mode */
-  switch (hi3c->Mode) {
-  case HAL_I3C_MODE_CONTROLLER: {
-    /* I3C data error during controller-role hand-off procedure */
-    if (LL_I3C_IsActiveFlag_DERR(hi3c->Instance) == 1U) {
-      hi3c->ErrorCode |= HAL_I3C_ERROR_DATA_HAND_OFF;
+    /* Check on the I3C mode */
+    switch (hi3c->Mode) {
+    case HAL_I3C_MODE_CONTROLLER: {
+        /* I3C data error during controller-role hand-off procedure */
+        if (LL_I3C_IsActiveFlag_DERR(hi3c->Instance) == 1U) {
+            hi3c->ErrorCode |= HAL_I3C_ERROR_DATA_HAND_OFF;
+        }
+
+        /* I3C data not acknowledged error */
+        if (LL_I3C_IsActiveFlag_DNACK(hi3c->Instance) == 1U) {
+            hi3c->ErrorCode |= HAL_I3C_ERROR_DATA_NACK;
+        }
+
+        /* I3C address not acknowledged error */
+        if (LL_I3C_IsActiveFlag_ANACK(hi3c->Instance) == 1U) {
+            hi3c->ErrorCode |= HAL_I3C_ERROR_ADDRESS_NACK;
+        }
+
+        /* I3C Status FIFO Over-Run or Control FIFO Under-Run error */
+        if (LL_I3C_IsActiveFlag_COVR(hi3c->Instance) == 1U) {
+            hi3c->ErrorCode |= HAL_I3C_ERROR_COVR;
+        }
+
+        break;
     }
 
-    /* I3C data not acknowledged error */
-    if (LL_I3C_IsActiveFlag_DNACK(hi3c->Instance) == 1U) {
-      hi3c->ErrorCode |= HAL_I3C_ERROR_DATA_NACK;
+    case HAL_I3C_MODE_TARGET: {
+        /* I3C SCL stall error */
+        if (LL_I3C_IsActiveFlag_STALL(hi3c->Instance) == 1U) {
+            hi3c->ErrorCode |= HAL_I3C_ERROR_STALL;
+        }
+
+        break;
     }
 
-    /* I3C address not acknowledged error */
-    if (LL_I3C_IsActiveFlag_ANACK(hi3c->Instance) == 1U) {
-      hi3c->ErrorCode |= HAL_I3C_ERROR_ADDRESS_NACK;
+    default: {
+        break;
+    }
     }
 
-    /* I3C Status FIFO Over-Run or Control FIFO Under-Run error */
-    if (LL_I3C_IsActiveFlag_COVR(hi3c->Instance) == 1U) {
-      hi3c->ErrorCode |= HAL_I3C_ERROR_COVR;
+    /* I3C Rx FIFO Over-Run or Tx FIFO Under-Run error */
+    if (LL_I3C_IsActiveFlag_DOVR(hi3c->Instance) == 1U) {
+        hi3c->ErrorCode |= HAL_I3C_ERROR_DOVR;
     }
 
-    break;
-  }
-
-  case HAL_I3C_MODE_TARGET: {
-    /* I3C SCL stall error */
-    if (LL_I3C_IsActiveFlag_STALL(hi3c->Instance) == 1U) {
-      hi3c->ErrorCode |= HAL_I3C_ERROR_STALL;
+    /* I3C Protocol error */
+    if (LL_I3C_IsActiveFlag_PERR(hi3c->Instance) == 1U) {
+        hi3c->ErrorCode |= (I3C_SER_PERR | LL_I3C_GetMessageErrorCode(hi3c->Instance));
     }
-
-    break;
-  }
-
-  default: {
-    break;
-  }
-  }
-
-  /* I3C Rx FIFO Over-Run or Tx FIFO Under-Run error */
-  if (LL_I3C_IsActiveFlag_DOVR(hi3c->Instance) == 1U) {
-    hi3c->ErrorCode |= HAL_I3C_ERROR_DOVR;
-  }
-
-  /* I3C Protocol error */
-  if (LL_I3C_IsActiveFlag_PERR(hi3c->Instance) == 1U) {
-    hi3c->ErrorCode |=
-        (I3C_SER_PERR | LL_I3C_GetMessageErrorCode(hi3c->Instance));
-  }
 }
 
 /**
@@ -8623,160 +8204,147 @@ static void I3C_GetErrorSources(I3C_HandleTypeDef *hi3c) {
  * @param  option     : [IN]  Parameter indicates the transfer option.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef I3C_Xfer_PriorPreparation(I3C_HandleTypeDef *hi3c,
-                                                   uint8_t counter,
-                                                   uint32_t option) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t current_tx_index = 0U;
-  uint32_t global_tx_size = 0U;
-  uint32_t global_rx_size = 0U;
-  uint32_t nb_tx_frame = 0U;
-  uint32_t direction;
+static HAL_StatusTypeDef I3C_Xfer_PriorPreparation(I3C_HandleTypeDef *hi3c, uint8_t counter, uint32_t option) {
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t current_tx_index = 0U;
+    uint32_t global_tx_size = 0U;
+    uint32_t global_rx_size = 0U;
+    uint32_t nb_tx_frame = 0U;
+    uint32_t direction;
 
-  for (uint32_t descr_index = 0U; descr_index < counter; descr_index++) {
-    /* Direct CCC command */
-    if ((option & I3C_OPERATION_TYPE_MASK) == LL_I3C_CONTROLLER_MTYPE_DIRECT) {
-      /* Update direction of frame */
-      direction = hi3c->pCCCDesc[descr_index].Direction;
+    for (uint32_t descr_index = 0U; descr_index < counter; descr_index++) {
+        /* Direct CCC command */
+        if ((option & I3C_OPERATION_TYPE_MASK) == LL_I3C_CONTROLLER_MTYPE_DIRECT) {
+            /* Update direction of frame */
+            direction = hi3c->pCCCDesc[descr_index].Direction;
 
-      /* Direction read with Define byte */
-      if (((option & I3C_DEFINE_BYTE_MASK) != 0U) &&
-          (direction == HAL_I3C_DIRECTION_READ)) {
-        nb_tx_frame += 1U;
+            /* Direction read with Define byte */
+            if (((option & I3C_DEFINE_BYTE_MASK) != 0U) && (direction == HAL_I3C_DIRECTION_READ)) {
+                nb_tx_frame += 1U;
 
-        global_tx_size += 1U;
+                global_tx_size += 1U;
 
-        global_rx_size += hi3c->pCCCDesc[descr_index].CCCBuf.Size - 1U;
+                global_rx_size += hi3c->pCCCDesc[descr_index].CCCBuf.Size - 1U;
 
-        /* Check on the global size and on the Tx buffer pointer */
-        if ((global_tx_size > hi3c->pXferData->TxBuf.Size) ||
-            (current_tx_index > hi3c->pXferData->TxBuf.Size) ||
-            (hi3c->pXferData->TxBuf.pBuffer == NULL)) {
-          hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                /* Check on the global size and on the Tx buffer pointer */
+                if ((global_tx_size > hi3c->pXferData->TxBuf.Size) ||
+                    (current_tx_index > hi3c->pXferData->TxBuf.Size) || (hi3c->pXferData->TxBuf.pBuffer == NULL)) {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
 
-          status = HAL_ERROR;
-        } else {
-          /* Fill global Tx buffer with data and update the current index of the
-           * Tx buffer */
-          current_tx_index =
-              I3C_FillTxBuffer_CCC(hi3c, descr_index, 1U, current_tx_index);
+                    status = HAL_ERROR;
+                } else {
+                    /* Fill global Tx buffer with data and update the current index of the
+                     * Tx buffer */
+                    current_tx_index = I3C_FillTxBuffer_CCC(hi3c, descr_index, 1U, current_tx_index);
+                }
+            } else if (direction == HAL_I3C_DIRECTION_WRITE) {
+                nb_tx_frame += 1U;
+
+                global_tx_size += hi3c->pCCCDesc[descr_index].CCCBuf.Size;
+
+                /* Check on the global size and on the Tx buffer pointer */
+                if ((global_tx_size > hi3c->pXferData->TxBuf.Size) ||
+                    (current_tx_index > hi3c->pXferData->TxBuf.Size) || (hi3c->pXferData->TxBuf.pBuffer == NULL)) {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+
+                    status = HAL_ERROR;
+                } else {
+                    /* Fill global Tx buffer with data and update the current index of the
+                     * Tx buffer */
+                    current_tx_index = I3C_FillTxBuffer_CCC(hi3c, descr_index, hi3c->pCCCDesc[descr_index].CCCBuf.Size,
+                                                            current_tx_index);
+                }
+            }
+            /* Direction read without Define byte */
+            else {
+                global_rx_size += hi3c->pCCCDesc[descr_index].CCCBuf.Size;
+            }
         }
-      } else if (direction == HAL_I3C_DIRECTION_WRITE) {
-        nb_tx_frame += 1U;
+        /* Broadcast CCC command */
+        else if ((option & I3C_OPERATION_TYPE_MASK) == LL_I3C_CONTROLLER_MTYPE_CCC) {
+            /* Update direction of frame */
+            direction = hi3c->pCCCDesc[descr_index].Direction;
 
-        global_tx_size += hi3c->pCCCDesc[descr_index].CCCBuf.Size;
+            if (direction == HAL_I3C_DIRECTION_WRITE) {
+                nb_tx_frame += 1U;
 
-        /* Check on the global size and on the Tx buffer pointer */
-        if ((global_tx_size > hi3c->pXferData->TxBuf.Size) ||
-            (current_tx_index > hi3c->pXferData->TxBuf.Size) ||
-            (hi3c->pXferData->TxBuf.pBuffer == NULL)) {
-          hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                global_tx_size += hi3c->pCCCDesc[descr_index].CCCBuf.Size;
 
-          status = HAL_ERROR;
-        } else {
-          /* Fill global Tx buffer with data and update the current index of the
-           * Tx buffer */
-          current_tx_index = I3C_FillTxBuffer_CCC(
-              hi3c, descr_index, hi3c->pCCCDesc[descr_index].CCCBuf.Size,
-              current_tx_index);
+                /* Check on the global size and on the Tx buffer pointer */
+                if ((global_tx_size > hi3c->pXferData->TxBuf.Size) ||
+                    (current_tx_index > hi3c->pXferData->TxBuf.Size) || (hi3c->pXferData->TxBuf.pBuffer == NULL)) {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+
+                    status = HAL_ERROR;
+                } else {
+                    /* Fill global Tx buffer with data and update the current index of the
+                     * Tx buffer */
+                    current_tx_index = I3C_FillTxBuffer_CCC(hi3c, descr_index, hi3c->pCCCDesc[descr_index].CCCBuf.Size,
+                                                            current_tx_index);
+                }
+            } else {
+                status = HAL_ERROR;
+            }
         }
-      }
-      /* Direction read without Define byte */
-      else {
-        global_rx_size += hi3c->pCCCDesc[descr_index].CCCBuf.Size;
-      }
-    }
-    /* Broadcast CCC command */
-    else if ((option & I3C_OPERATION_TYPE_MASK) ==
-             LL_I3C_CONTROLLER_MTYPE_CCC) {
-      /* Update direction of frame */
-      direction = hi3c->pCCCDesc[descr_index].Direction;
+        /* Private */
+        else {
+            /* Update direction of frame */
+            direction = hi3c->pPrivateDesc[descr_index].Direction;
 
-      if (direction == HAL_I3C_DIRECTION_WRITE) {
-        nb_tx_frame += 1U;
+            if (direction == HAL_I3C_DIRECTION_WRITE) {
+                nb_tx_frame += 1U;
 
-        global_tx_size += hi3c->pCCCDesc[descr_index].CCCBuf.Size;
+                global_tx_size += hi3c->pPrivateDesc[descr_index].TxBuf.Size;
 
-        /* Check on the global size and on the Tx buffer pointer */
-        if ((global_tx_size > hi3c->pXferData->TxBuf.Size) ||
-            (current_tx_index > hi3c->pXferData->TxBuf.Size) ||
-            (hi3c->pXferData->TxBuf.pBuffer == NULL)) {
-          hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                /* Check on the global size and on the Tx buffer pointer */
+                if ((global_tx_size > hi3c->pXferData->TxBuf.Size) ||
+                    (current_tx_index > hi3c->pXferData->TxBuf.Size) || (hi3c->pXferData->TxBuf.pBuffer == NULL)) {
+                    hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
 
-          status = HAL_ERROR;
-        } else {
-          /* Fill global Tx buffer with data and update the current index of the
-           * Tx buffer */
-          current_tx_index = I3C_FillTxBuffer_CCC(
-              hi3c, descr_index, hi3c->pCCCDesc[descr_index].CCCBuf.Size,
-              current_tx_index);
+                    status = HAL_ERROR;
+                } else {
+                    /* Fill global Tx buffer with data and update the current index of the
+                     * Tx buffer */
+                    current_tx_index = I3C_FillTxBuffer_Private(
+                        hi3c, descr_index, hi3c->pPrivateDesc[descr_index].TxBuf.Size, current_tx_index);
+                }
+            } else {
+                global_rx_size += hi3c->pPrivateDesc[descr_index].RxBuf.Size;
+            }
         }
-      } else {
-        status = HAL_ERROR;
-      }
-    }
-    /* Private */
-    else {
-      /* Update direction of frame */
-      direction = hi3c->pPrivateDesc[descr_index].Direction;
 
-      if (direction == HAL_I3C_DIRECTION_WRITE) {
-        nb_tx_frame += 1U;
-
-        global_tx_size += hi3c->pPrivateDesc[descr_index].TxBuf.Size;
-
-        /* Check on the global size and on the Tx buffer pointer */
-        if ((global_tx_size > hi3c->pXferData->TxBuf.Size) ||
-            (current_tx_index > hi3c->pXferData->TxBuf.Size) ||
-            (hi3c->pXferData->TxBuf.pBuffer == NULL)) {
-          hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-
-          status = HAL_ERROR;
-        } else {
-          /* Fill global Tx buffer with data and update the current index of the
-           * Tx buffer */
-          current_tx_index = I3C_FillTxBuffer_Private(
-              hi3c, descr_index, hi3c->pPrivateDesc[descr_index].TxBuf.Size,
-              current_tx_index);
+        /* Check if there is an error in the Tx Buffer*/
+        if (status == HAL_ERROR) {
+            break;
         }
-      } else {
-        global_rx_size += hi3c->pPrivateDesc[descr_index].RxBuf.Size;
-      }
     }
 
-    /* Check if there is an error in the Tx Buffer*/
-    if (status == HAL_ERROR) {
-      break;
-    }
-  }
-
-  if (status == HAL_OK) {
-    /* Check on the Tx threshold and the number of Tx frame */
-    if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) ==
-        LL_I3C_TXFIFO_THRESHOLD_4_4) {
-      /* LL_I3C_TXFIFO_THRESHOLD_4_4 is not allowed when the transfer descriptor
-         contains multiple transmission frames */
-      if (nb_tx_frame > 1U) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-        status = HAL_ERROR;
-      }
-    }
-  }
-
-  if (status == HAL_OK) {
-    /* Check on the size Rx buffer */
-    if (global_rx_size > hi3c->pXferData->RxBuf.Size) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-      status = HAL_ERROR;
-    } else {
-      hi3c->RxXferCount = global_rx_size;
+    if (status == HAL_OK) {
+        /* Check on the Tx threshold and the number of Tx frame */
+        if (LL_I3C_GetTxFIFOThreshold(hi3c->Instance) == LL_I3C_TXFIFO_THRESHOLD_4_4) {
+            /* LL_I3C_TXFIFO_THRESHOLD_4_4 is not allowed when the transfer descriptor
+               contains multiple transmission frames */
+            if (nb_tx_frame > 1U) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+                status = HAL_ERROR;
+            }
+        }
     }
 
-    /* Set handle transfer parameters */
-    hi3c->TxXferCount = global_tx_size;
-  }
+    if (status == HAL_OK) {
+        /* Check on the size Rx buffer */
+        if (global_rx_size > hi3c->pXferData->RxBuf.Size) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+            status = HAL_ERROR;
+        } else {
+            hi3c->RxXferCount = global_rx_size;
+        }
 
-  return status;
+        /* Set handle transfer parameters */
+        hi3c->TxXferCount = global_tx_size;
+    }
+
+    return status;
 }
 
 /**
@@ -8788,19 +8356,17 @@ static HAL_StatusTypeDef I3C_Xfer_PriorPreparation(I3C_HandleTypeDef *hi3c,
  * @param  txCurrentIndex : [IN]  Current Index of TxBuffer.
  * @retval index_tx       : [OUT] New current Index of TxBuffer.
  */
-static uint32_t I3C_FillTxBuffer_CCC(I3C_HandleTypeDef *hi3c,
-                                     uint32_t indexDesc, uint32_t txSize,
+static uint32_t I3C_FillTxBuffer_CCC(I3C_HandleTypeDef *hi3c, uint32_t indexDesc, uint32_t txSize,
                                      uint32_t txCurrentIndex) {
-  uint32_t index_tx = txCurrentIndex;
+    uint32_t index_tx = txCurrentIndex;
 
-  for (uint32_t index = 0U; index < txSize; index++) {
-    hi3c->pXferData->TxBuf.pBuffer[index_tx] =
-        hi3c->pCCCDesc[indexDesc].CCCBuf.pBuffer[index];
+    for (uint32_t index = 0U; index < txSize; index++) {
+        hi3c->pXferData->TxBuf.pBuffer[index_tx] = hi3c->pCCCDesc[indexDesc].CCCBuf.pBuffer[index];
 
-    index_tx++;
-  }
+        index_tx++;
+    }
 
-  return index_tx;
+    return index_tx;
 }
 
 /**
@@ -8812,19 +8378,17 @@ static uint32_t I3C_FillTxBuffer_CCC(I3C_HandleTypeDef *hi3c,
  * @param  txCurrentIndex : [IN]  Current Index of TxBuffer.
  * @retval index_tx       : [OUT] New current Index of TxBuffer.
  */
-static uint32_t I3C_FillTxBuffer_Private(I3C_HandleTypeDef *hi3c,
-                                         uint32_t indexDesc, uint32_t txSize,
+static uint32_t I3C_FillTxBuffer_Private(I3C_HandleTypeDef *hi3c, uint32_t indexDesc, uint32_t txSize,
                                          uint32_t txCurrentIndex) {
-  uint32_t index_tx = txCurrentIndex;
+    uint32_t index_tx = txCurrentIndex;
 
-  for (uint32_t index = 0U; index < txSize; index++) {
-    hi3c->pXferData->TxBuf.pBuffer[index_tx] =
-        hi3c->pPrivateDesc[indexDesc].TxBuf.pBuffer[index];
+    for (uint32_t index = 0U; index < txSize; index++) {
+        hi3c->pXferData->TxBuf.pBuffer[index_tx] = hi3c->pPrivateDesc[indexDesc].TxBuf.pBuffer[index];
 
-    index_tx++;
-  }
+        index_tx++;
+    }
 
-  return index_tx;
+    return index_tx;
 }
 
 /**
@@ -8835,151 +8399,138 @@ static uint32_t I3C_FillTxBuffer_Private(I3C_HandleTypeDef *hi3c,
  * @param  option     : [IN]  Parameter indicates the transfer option.
  * @retval HAL Status :       Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef
-I3C_ControlBuffer_PriorPreparation(I3C_HandleTypeDef *hi3c, uint8_t counter,
-                                   uint32_t option) {
-  HAL_StatusTypeDef status = HAL_OK;
-  uint32_t nb_define_bytes;
-  uint32_t stop_condition;
-  uint32_t nb_data_bytes;
-  uint32_t index;
+static HAL_StatusTypeDef I3C_ControlBuffer_PriorPreparation(I3C_HandleTypeDef *hi3c, uint8_t counter, uint32_t option) {
+    HAL_StatusTypeDef status = HAL_OK;
+    uint32_t nb_define_bytes;
+    uint32_t stop_condition;
+    uint32_t nb_data_bytes;
+    uint32_t index;
 
-  /* Check on the control buffer pointer */
-  if (hi3c->pXferData->CtrlBuf.pBuffer == NULL) {
-    hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-    status = HAL_ERROR;
-  } else {
-    /* Extract from option required information */
-    nb_define_bytes = (option & I3C_DEFINE_BYTE_MASK);
-    stop_condition = (option & I3C_RESTART_STOP_MASK);
-
-    /* Check on the deactivation of the arbitration */
-    if ((option & I3C_ARBITRATION_HEADER_MASK) == I3C_ARBITRATION_HEADER_MASK) {
-      /* Disable arbitration header */
-      LL_I3C_DisableArbitrationHeader(hi3c->Instance);
+    /* Check on the control buffer pointer */
+    if (hi3c->pXferData->CtrlBuf.pBuffer == NULL) {
+        hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+        status = HAL_ERROR;
     } else {
-      /* Enable arbitration header */
-      LL_I3C_EnableArbitrationHeader(hi3c->Instance);
-    }
+        /* Extract from option required information */
+        nb_define_bytes = (option & I3C_DEFINE_BYTE_MASK);
+        stop_condition = (option & I3C_RESTART_STOP_MASK);
 
-    /* Check on the operation type */
-    if ((option & I3C_OPERATION_TYPE_MASK) == LL_I3C_CONTROLLER_MTYPE_CCC) {
-      /*------------------------------------------ Broadcast CCC
-       * -----------------------------------------------------*/
-      /* Check on the control buffer size */
-      if (hi3c->pXferData->CtrlBuf.Size < (uint32_t)counter) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-        status = HAL_ERROR;
-      } else {
-        /* Set remaining control buffer data counter */
-        hi3c->ControlXferCount = (uint32_t)counter;
-
-        /* For loop on the number of commands */
-        for (index = 0U; index < ((uint32_t)counter - 1U); index++) {
-          /* Update control buffer value */
-          hi3c->pXferData->CtrlBuf.pBuffer[index] =
-              ((uint32_t)hi3c->pCCCDesc[index].CCCBuf.Size |
-               ((uint32_t)hi3c->pCCCDesc[index].CCC << I3C_CR_CCC_Pos) |
-               LL_I3C_CONTROLLER_MTYPE_CCC | stop_condition);
-        }
-
-        /* At the last device we should generate a stop condition */
-        hi3c->pXferData->CtrlBuf.pBuffer[index] =
-            ((uint32_t)hi3c->pCCCDesc[index].CCCBuf.Size |
-             ((uint32_t)hi3c->pCCCDesc[index].CCC << I3C_CR_CCC_Pos) |
-             LL_I3C_CONTROLLER_MTYPE_CCC | LL_I3C_GENERATE_STOP);
-      }
-    } else if ((option & I3C_OPERATION_TYPE_MASK) ==
-               LL_I3C_CONTROLLER_MTYPE_DIRECT) {
-      /*------------------------------------------ Direct CCC
-       * --------------------------------------------------------*/
-      /* Check on the control buffer size */
-      if (hi3c->pXferData->CtrlBuf.Size < ((uint32_t)counter * 2U)) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-        status = HAL_ERROR;
-      } else {
-        /* Set remaining control buffer data counter */
-        hi3c->ControlXferCount = ((uint32_t)counter * 2U);
-
-        /* For loop on the number of (devices or commands) * 2 */
-        for (index = 0U; index < (((uint32_t)counter * 2U) - 2U); index += 2U) {
-          /* Step 1 : update control buffer value for the CCC command */
-          hi3c->pXferData->CtrlBuf.pBuffer[index] =
-              (nb_define_bytes |
-               ((uint32_t)hi3c->pCCCDesc[index / 2U].CCC << I3C_CR_CCC_Pos) |
-               LL_I3C_CONTROLLER_MTYPE_CCC | LL_I3C_GENERATE_RESTART);
-
-          /* Step 2 : update control buffer value for target address */
-          hi3c->pXferData->CtrlBuf.pBuffer[index + 1U] =
-              (((uint32_t)hi3c->pCCCDesc[index / 2U].CCCBuf.Size -
-                nb_define_bytes) |
-               hi3c->pCCCDesc[index / 2U].Direction |
-               ((uint32_t)hi3c->pCCCDesc[index / 2U].TargetAddr
-                << I3C_CR_ADD_Pos) |
-               LL_I3C_CONTROLLER_MTYPE_DIRECT | stop_condition);
-        }
-
-        /* Update control buffer value for the last CCC command */
-        hi3c->pXferData->CtrlBuf.pBuffer[index] =
-            (nb_define_bytes |
-             ((uint32_t)hi3c->pCCCDesc[index / 2U].CCC << I3C_CR_CCC_Pos) |
-             LL_I3C_CONTROLLER_MTYPE_CCC | LL_I3C_GENERATE_RESTART);
-
-        /* At the last device we should generate a stop condition */
-        hi3c->pXferData->CtrlBuf.pBuffer[index + 1U] =
-            (((uint32_t)hi3c->pCCCDesc[index / 2U].CCCBuf.Size -
-              nb_define_bytes) |
-             hi3c->pCCCDesc[index / 2U].Direction |
-             ((uint32_t)hi3c->pCCCDesc[index / 2U].TargetAddr
-              << I3C_CR_ADD_Pos) |
-             LL_I3C_CONTROLLER_MTYPE_DIRECT | LL_I3C_GENERATE_STOP);
-      }
-    } else {
-      /*------------------------------------------ Private I3C/I2C
-       * ---------------------------------------------------*/
-      /* Check on the control buffer size */
-      if (hi3c->pXferData->CtrlBuf.Size < (uint32_t)counter) {
-        hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
-        status = HAL_ERROR;
-      } else {
-        /* Set remaining control buffer data counter */
-        hi3c->ControlXferCount = (uint32_t)counter;
-
-        /* For loop on the number of devices */
-        for (index = 0U; index < ((uint32_t)counter - 1U); index++) {
-          /* Check on transfer direction */
-          if (hi3c->pPrivateDesc[index].Direction == HAL_I3C_DIRECTION_READ) {
-            nb_data_bytes = hi3c->pPrivateDesc[index].RxBuf.Size;
-          } else {
-            nb_data_bytes = hi3c->pPrivateDesc[index].TxBuf.Size;
-          }
-
-          /* Update control buffer value */
-          hi3c->pXferData->CtrlBuf.pBuffer[index] =
-              (nb_data_bytes | hi3c->pPrivateDesc[index].Direction |
-               ((uint32_t)hi3c->pPrivateDesc[index].TargetAddr
-                << I3C_CR_ADD_Pos) |
-               (option & I3C_OPERATION_TYPE_MASK) | stop_condition);
-        }
-
-        /* Check on transfer direction */
-        if (hi3c->pPrivateDesc[index].Direction == HAL_I3C_DIRECTION_READ) {
-          nb_data_bytes = hi3c->pPrivateDesc[index].RxBuf.Size;
+        /* Check on the deactivation of the arbitration */
+        if ((option & I3C_ARBITRATION_HEADER_MASK) == I3C_ARBITRATION_HEADER_MASK) {
+            /* Disable arbitration header */
+            LL_I3C_DisableArbitrationHeader(hi3c->Instance);
         } else {
-          nb_data_bytes = hi3c->pPrivateDesc[index].TxBuf.Size;
+            /* Enable arbitration header */
+            LL_I3C_EnableArbitrationHeader(hi3c->Instance);
         }
 
-        /* At the last device we should generate a stop condition */
-        hi3c->pXferData->CtrlBuf.pBuffer[index] =
-            (nb_data_bytes | hi3c->pPrivateDesc[index].Direction |
-             ((uint32_t)hi3c->pPrivateDesc[index].TargetAddr
-              << I3C_CR_ADD_Pos) |
-             (option & I3C_OPERATION_TYPE_MASK) | LL_I3C_GENERATE_STOP);
-      }
-    }
-  }
+        /* Check on the operation type */
+        if ((option & I3C_OPERATION_TYPE_MASK) == LL_I3C_CONTROLLER_MTYPE_CCC) {
+            /*------------------------------------------ Broadcast CCC
+             * -----------------------------------------------------*/
+            /* Check on the control buffer size */
+            if (hi3c->pXferData->CtrlBuf.Size < (uint32_t)counter) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                status = HAL_ERROR;
+            } else {
+                /* Set remaining control buffer data counter */
+                hi3c->ControlXferCount = (uint32_t)counter;
 
-  return status;
+                /* For loop on the number of commands */
+                for (index = 0U; index < ((uint32_t)counter - 1U); index++) {
+                    /* Update control buffer value */
+                    hi3c->pXferData->CtrlBuf.pBuffer[index] = ((uint32_t)hi3c->pCCCDesc[index].CCCBuf.Size |
+                                                               ((uint32_t)hi3c->pCCCDesc[index].CCC << I3C_CR_CCC_Pos) |
+                                                               LL_I3C_CONTROLLER_MTYPE_CCC | stop_condition);
+                }
+
+                /* At the last device we should generate a stop condition */
+                hi3c->pXferData->CtrlBuf.pBuffer[index] = ((uint32_t)hi3c->pCCCDesc[index].CCCBuf.Size |
+                                                           ((uint32_t)hi3c->pCCCDesc[index].CCC << I3C_CR_CCC_Pos) |
+                                                           LL_I3C_CONTROLLER_MTYPE_CCC | LL_I3C_GENERATE_STOP);
+            }
+        } else if ((option & I3C_OPERATION_TYPE_MASK) == LL_I3C_CONTROLLER_MTYPE_DIRECT) {
+            /*------------------------------------------ Direct CCC
+             * --------------------------------------------------------*/
+            /* Check on the control buffer size */
+            if (hi3c->pXferData->CtrlBuf.Size < ((uint32_t)counter * 2U)) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                status = HAL_ERROR;
+            } else {
+                /* Set remaining control buffer data counter */
+                hi3c->ControlXferCount = ((uint32_t)counter * 2U);
+
+                /* For loop on the number of (devices or commands) * 2 */
+                for (index = 0U; index < (((uint32_t)counter * 2U) - 2U); index += 2U) {
+                    /* Step 1 : update control buffer value for the CCC command */
+                    hi3c->pXferData->CtrlBuf.pBuffer[index] =
+                        (nb_define_bytes | ((uint32_t)hi3c->pCCCDesc[index / 2U].CCC << I3C_CR_CCC_Pos) |
+                         LL_I3C_CONTROLLER_MTYPE_CCC | LL_I3C_GENERATE_RESTART);
+
+                    /* Step 2 : update control buffer value for target address */
+                    hi3c->pXferData->CtrlBuf.pBuffer[index + 1U] =
+                        (((uint32_t)hi3c->pCCCDesc[index / 2U].CCCBuf.Size - nb_define_bytes) |
+                         hi3c->pCCCDesc[index / 2U].Direction |
+                         ((uint32_t)hi3c->pCCCDesc[index / 2U].TargetAddr << I3C_CR_ADD_Pos) |
+                         LL_I3C_CONTROLLER_MTYPE_DIRECT | stop_condition);
+                }
+
+                /* Update control buffer value for the last CCC command */
+                hi3c->pXferData->CtrlBuf.pBuffer[index] =
+                    (nb_define_bytes | ((uint32_t)hi3c->pCCCDesc[index / 2U].CCC << I3C_CR_CCC_Pos) |
+                     LL_I3C_CONTROLLER_MTYPE_CCC | LL_I3C_GENERATE_RESTART);
+
+                /* At the last device we should generate a stop condition */
+                hi3c->pXferData->CtrlBuf.pBuffer[index + 1U] =
+                    (((uint32_t)hi3c->pCCCDesc[index / 2U].CCCBuf.Size - nb_define_bytes) |
+                     hi3c->pCCCDesc[index / 2U].Direction |
+                     ((uint32_t)hi3c->pCCCDesc[index / 2U].TargetAddr << I3C_CR_ADD_Pos) |
+                     LL_I3C_CONTROLLER_MTYPE_DIRECT | LL_I3C_GENERATE_STOP);
+            }
+        } else {
+            /*------------------------------------------ Private I3C/I2C
+             * ---------------------------------------------------*/
+            /* Check on the control buffer size */
+            if (hi3c->pXferData->CtrlBuf.Size < (uint32_t)counter) {
+                hi3c->ErrorCode = HAL_I3C_ERROR_INVALID_PARAM;
+                status = HAL_ERROR;
+            } else {
+                /* Set remaining control buffer data counter */
+                hi3c->ControlXferCount = (uint32_t)counter;
+
+                /* For loop on the number of devices */
+                for (index = 0U; index < ((uint32_t)counter - 1U); index++) {
+                    /* Check on transfer direction */
+                    if (hi3c->pPrivateDesc[index].Direction == HAL_I3C_DIRECTION_READ) {
+                        nb_data_bytes = hi3c->pPrivateDesc[index].RxBuf.Size;
+                    } else {
+                        nb_data_bytes = hi3c->pPrivateDesc[index].TxBuf.Size;
+                    }
+
+                    /* Update control buffer value */
+                    hi3c->pXferData->CtrlBuf.pBuffer[index] =
+                        (nb_data_bytes | hi3c->pPrivateDesc[index].Direction |
+                         ((uint32_t)hi3c->pPrivateDesc[index].TargetAddr << I3C_CR_ADD_Pos) |
+                         (option & I3C_OPERATION_TYPE_MASK) | stop_condition);
+                }
+
+                /* Check on transfer direction */
+                if (hi3c->pPrivateDesc[index].Direction == HAL_I3C_DIRECTION_READ) {
+                    nb_data_bytes = hi3c->pPrivateDesc[index].RxBuf.Size;
+                } else {
+                    nb_data_bytes = hi3c->pPrivateDesc[index].TxBuf.Size;
+                }
+
+                /* At the last device we should generate a stop condition */
+                hi3c->pXferData->CtrlBuf.pBuffer[index] =
+                    (nb_data_bytes | hi3c->pPrivateDesc[index].Direction |
+                     ((uint32_t)hi3c->pPrivateDesc[index].TargetAddr << I3C_CR_ADD_Pos) |
+                     (option & I3C_OPERATION_TYPE_MASK) | LL_I3C_GENERATE_STOP);
+            }
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -8992,108 +8543,101 @@ I3C_ControlBuffer_PriorPreparation(I3C_HandleTypeDef *hi3c, uint8_t counter,
  * @param  timeout : [IN] Timeout duration
  * @retval HAL Status :   Value from HAL_StatusTypeDef enumeration.
  */
-static HAL_StatusTypeDef
-I3C_Ctrl_IsDevice_Ready(I3C_HandleTypeDef *hi3c,
-                        const I3C_DeviceTypeDef *pDevice, uint32_t trials,
-                        uint32_t timeout) {
-  __IO uint32_t I3C_Trials = 0UL;
-  __IO uint32_t exit_condition;
-  uint32_t CR_tmp;
-  uint32_t tickstart;
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_I3C_StateTypeDef handle_state;
-  uint32_t arbitration_previous_state;
+static HAL_StatusTypeDef I3C_Ctrl_IsDevice_Ready(I3C_HandleTypeDef *hi3c, const I3C_DeviceTypeDef *pDevice,
+                                                 uint32_t trials, uint32_t timeout) {
+    __IO uint32_t I3C_Trials = 0UL;
+    __IO uint32_t exit_condition;
+    uint32_t CR_tmp;
+    uint32_t tickstart;
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_I3C_StateTypeDef handle_state;
+    uint32_t arbitration_previous_state;
 
-  /* Get I3C handle state */
-  handle_state = hi3c->State;
+    /* Get I3C handle state */
+    handle_state = hi3c->State;
 
-  /* check on the Mode */
-  if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
-    hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
-    status = HAL_ERROR;
-  }
-  /* check on the State */
-  else if ((handle_state != HAL_I3C_STATE_READY) &&
-           (handle_state != HAL_I3C_STATE_LISTEN)) {
-    status = HAL_BUSY;
-  } else {
-    /* Set handle transfer parameters */
-    hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
-    hi3c->State = HAL_I3C_STATE_BUSY;
+    /* check on the Mode */
+    if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+        hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+        status = HAL_ERROR;
+    }
+    /* check on the State */
+    else if ((handle_state != HAL_I3C_STATE_READY) && (handle_state != HAL_I3C_STATE_LISTEN)) {
+        status = HAL_BUSY;
+    } else {
+        /* Set handle transfer parameters */
+        hi3c->ErrorCode = HAL_I3C_ERROR_NONE;
+        hi3c->State = HAL_I3C_STATE_BUSY;
 
-    /* Before modify the arbitration, get the current arbitration state */
-    arbitration_previous_state =
-        LL_I3C_IsEnabledArbitrationHeader(hi3c->Instance);
+        /* Before modify the arbitration, get the current arbitration state */
+        arbitration_previous_state = LL_I3C_IsEnabledArbitrationHeader(hi3c->Instance);
 
-    /* Disable arbitration header */
-    LL_I3C_DisableArbitrationHeader(hi3c->Instance);
+        /* Disable arbitration header */
+        LL_I3C_DisableArbitrationHeader(hi3c->Instance);
 
-    CR_tmp = (HAL_I3C_DIRECTION_WRITE |
-              ((uint32_t)pDevice->Address << I3C_CR_ADD_Pos) |
-              pDevice->MessageType | LL_I3C_GENERATE_STOP);
+        CR_tmp = (HAL_I3C_DIRECTION_WRITE | ((uint32_t)pDevice->Address << I3C_CR_ADD_Pos) | pDevice->MessageType |
+                  LL_I3C_GENERATE_STOP);
 
-    do {
-      /* Initiate a start condition by writing in the CR register */
-      WRITE_REG(hi3c->Instance->CR, CR_tmp);
+        do {
+            /* Initiate a start condition by writing in the CR register */
+            WRITE_REG(hi3c->Instance->CR, CR_tmp);
 
-      /* Calculate exit_condition value based on Frame complete and error flags
-       */
-      exit_condition =
-          (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
+            /* Calculate exit_condition value based on Frame complete and error flags
+             */
+            exit_condition = (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
 
-      tickstart = HAL_GetTick();
+            tickstart = HAL_GetTick();
 
-      while (exit_condition == 0U) {
-        if (timeout != HAL_MAX_DELAY) {
-          if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
-            /* Update I3C error code */
-            hi3c->ErrorCode |= HAL_I3C_ERROR_TIMEOUT;
-            status = HAL_TIMEOUT;
+            while (exit_condition == 0U) {
+                if (timeout != HAL_MAX_DELAY) {
+                    if (((HAL_GetTick() - tickstart) > timeout) || (timeout == 0U)) {
+                        /* Update I3C error code */
+                        hi3c->ErrorCode |= HAL_I3C_ERROR_TIMEOUT;
+                        status = HAL_TIMEOUT;
 
-            break;
-          }
+                        break;
+                    }
+                }
+                /* Calculate exit_condition value based on Frame complete and error
+                 * flags */
+                exit_condition = (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
+            }
+
+            if (status == HAL_OK) {
+                /* Check if the FCF flag has been set */
+                if (__HAL_I3C_GET_FLAG(hi3c, I3C_EVR_FCF) == SET) {
+                    /* Clear frame complete flag */
+                    LL_I3C_ClearFlag_FC(hi3c->Instance);
+
+                    /* Device is ready */
+                    break;
+                } else {
+                    /* Clear ERR flag */
+                    LL_I3C_ClearFlag_ERR(hi3c->Instance);
+                }
+            }
+
+            /* Increment Trials */
+            I3C_Trials++;
+
+        } while ((I3C_Trials < trials) && (status == HAL_OK));
+
+        /* Device is not ready */
+        if (trials == I3C_Trials) {
+            hi3c->ErrorCode = HAL_I3C_ERROR_ADDRESS_NACK;
+            status = HAL_ERROR;
         }
-        /* Calculate exit_condition value based on Frame complete and error
-         * flags */
-        exit_condition =
-            (READ_REG(hi3c->Instance->EVR) & (I3C_EVR_FCF | I3C_EVR_ERRF));
-      }
 
-      if (status == HAL_OK) {
-        /* Check if the FCF flag has been set */
-        if (__HAL_I3C_GET_FLAG(hi3c, I3C_EVR_FCF) == SET) {
-          /* Clear frame complete flag */
-          LL_I3C_ClearFlag_FC(hi3c->Instance);
+        /* update state to Previous state */
+        I3C_StateUpdate(hi3c);
 
-          /* Device is ready */
-          break;
-        } else {
-          /* Clear ERR flag */
-          LL_I3C_ClearFlag_ERR(hi3c->Instance);
+        /* Check if previous arbitration state is enabled */
+        if (arbitration_previous_state == 1U) {
+            LL_I3C_EnableArbitrationHeader(hi3c->Instance);
         }
-      }
-
-      /* Increment Trials */
-      I3C_Trials++;
-
-    } while ((I3C_Trials < trials) && (status == HAL_OK));
-
-    /* Device is not ready */
-    if (trials == I3C_Trials) {
-      hi3c->ErrorCode = HAL_I3C_ERROR_ADDRESS_NACK;
-      status = HAL_ERROR;
     }
 
-    /* update state to Previous state */
-    I3C_StateUpdate(hi3c);
-
-    /* Check if previous arbitration state is enabled */
-    if (arbitration_previous_state == 1U) {
-      LL_I3C_EnableArbitrationHeader(hi3c->Instance);
-    }
-  }
-
-  return status;
+    return status;
 }
 
 /**
@@ -9104,88 +8648,84 @@ I3C_Ctrl_IsDevice_Ready(I3C_HandleTypeDef *hi3c,
  * @retval None
  */
 static void I3C_Enable_IRQ(I3C_HandleTypeDef *hi3c, uint32_t InterruptRequest) {
-  uint32_t tmpisr = 0U;
+    uint32_t tmpisr = 0U;
 
-  /* Check if requested interrupts are related to listening mode */
-  if ((InterruptRequest & I3C_XFER_LISTEN_IT) != 0U) {
-    tmpisr |= ((InterruptRequest & (~I3C_XFER_LISTEN_IT)) | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to listening mode */
+    if ((InterruptRequest & I3C_XFER_LISTEN_IT) != 0U) {
+        tmpisr |= ((InterruptRequest & (~I3C_XFER_LISTEN_IT)) | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to target transmit in IT mode */
-  if ((InterruptRequest & I3C_XFER_TARGET_TX_IT) != 0U) {
-    /* Enable frame complete, transmit FIFO not full and error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to target transmit in IT mode */
+    if ((InterruptRequest & I3C_XFER_TARGET_TX_IT) != 0U) {
+        /* Enable frame complete, transmit FIFO not full and error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to target receive in IT mode */
-  if ((InterruptRequest & I3C_XFER_TARGET_RX_IT) != 0U) {
-    /* Enable frame complete, receive FIFO not empty and error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_RXFNEIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to target receive in IT mode */
+    if ((InterruptRequest & I3C_XFER_TARGET_RX_IT) != 0U) {
+        /* Enable frame complete, receive FIFO not empty and error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_RXFNEIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to transmit/receive in DMA mode
-   */
-  if ((InterruptRequest & I3C_XFER_DMA) != 0U) {
-    /* Enable frame complete and error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to transmit/receive in DMA mode
+     */
+    if ((InterruptRequest & I3C_XFER_DMA) != 0U) {
+        /* Enable frame complete and error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to target hot join */
-  if ((InterruptRequest & I3C_XFER_TARGET_HOTJOIN) != 0U) {
-    /* Enable dynamic address update and error interrupts */
-    tmpisr |= (HAL_I3C_IT_DAUPDIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to target hot join */
+    if ((InterruptRequest & I3C_XFER_TARGET_HOTJOIN) != 0U) {
+        /* Enable dynamic address update and error interrupts */
+        tmpisr |= (HAL_I3C_IT_DAUPDIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to target control role */
-  if ((InterruptRequest & I3C_XFER_TARGET_CTRLROLE) != 0U) {
-    /* Enable control role update and error interrupts */
-    tmpisr |= (HAL_I3C_IT_CRUPDIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to target control role */
+    if ((InterruptRequest & I3C_XFER_TARGET_CTRLROLE) != 0U) {
+        /* Enable control role update and error interrupts */
+        tmpisr |= (HAL_I3C_IT_CRUPDIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to target in band interrupt */
-  if ((InterruptRequest & I3C_XFER_TARGET_IBI) != 0U) {
-    /* Enable IBI end and error interrupts */
-    tmpisr |= (HAL_I3C_IT_IBIENDIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to target in band interrupt */
+    if ((InterruptRequest & I3C_XFER_TARGET_IBI) != 0U) {
+        /* Enable IBI end and error interrupts */
+        tmpisr |= (HAL_I3C_IT_IBIENDIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to controller transmit in IT mode
-   */
-  if ((InterruptRequest & I3C_XFER_CONTROLLER_TX_IT) != 0U) {
-    /* Enable frame complete, control FIFO not full, transmit FIFO not full and
-     * error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_TXFNFIE |
-               HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to controller transmit in IT mode
+     */
+    if ((InterruptRequest & I3C_XFER_CONTROLLER_TX_IT) != 0U) {
+        /* Enable frame complete, control FIFO not full, transmit FIFO not full and
+         * error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to controller receive in IT mode
-   */
-  if ((InterruptRequest & I3C_XFER_CONTROLLER_RX_IT) != 0U) {
-    /* Enable frame complete, control FIFO not full, receive FIFO not empty and
-     * error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_RXFNEIE |
-               HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to controller receive in IT mode
+     */
+    if ((InterruptRequest & I3C_XFER_CONTROLLER_RX_IT) != 0U) {
+        /* Enable frame complete, control FIFO not full, receive FIFO not empty and
+         * error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_RXFNEIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to controller transmit read or a
-   * broadcast CCC in IT mode */
-  if ((InterruptRequest & I3C_XFER_CONTROLLER_RX_CCC_IT) != 0U) {
-    /* Enable frame complete, transmit FIFO not full, control FIFO not full,
-       receive FIFO not empty and error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_CFNFIE |
-               HAL_I3C_IT_RXFNEIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to controller transmit read or a
+     * broadcast CCC in IT mode */
+    if ((InterruptRequest & I3C_XFER_CONTROLLER_RX_CCC_IT) != 0U) {
+        /* Enable frame complete, transmit FIFO not full, control FIFO not full,
+           receive FIFO not empty and error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_RXFNEIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to controller transmit broadcast
-   * ENTDAA CCC in IT mode */
-  if ((InterruptRequest & I3C_XFER_CONTROLLER_DAA_IT) != 0U) {
-    /* Enable frame complete, control FIFO not full, transmit FIFO not full and
-     * error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_TXFNFIE |
-               HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to controller transmit broadcast
+     * ENTDAA CCC in IT mode */
+    if ((InterruptRequest & I3C_XFER_CONTROLLER_DAA_IT) != 0U) {
+        /* Enable frame complete, control FIFO not full, transmit FIFO not full and
+         * error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Enable requested interrupts */
-  __HAL_I3C_ENABLE_IT(hi3c, tmpisr);
+    /* Enable requested interrupts */
+    __HAL_I3C_ENABLE_IT(hi3c, tmpisr);
 }
 
 /**
@@ -9195,81 +8735,77 @@ static void I3C_Enable_IRQ(I3C_HandleTypeDef *hi3c, uint32_t InterruptRequest) {
  * @param  InterruptRequest : [IN] Value of the interrupt request
  * @retval None
  */
-static void I3C_Disable_IRQ(I3C_HandleTypeDef *hi3c,
-                            uint32_t InterruptRequest) {
-  uint32_t tmpisr = 0U;
+static void I3C_Disable_IRQ(I3C_HandleTypeDef *hi3c, uint32_t InterruptRequest) {
+    uint32_t tmpisr = 0U;
 
-  /* Check if requested interrupts are related to listening mode */
-  if ((InterruptRequest & I3C_XFER_LISTEN_IT) != 0U) {
-    tmpisr |= ((InterruptRequest & (~I3C_XFER_LISTEN_IT)) | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to listening mode */
+    if ((InterruptRequest & I3C_XFER_LISTEN_IT) != 0U) {
+        tmpisr |= ((InterruptRequest & (~I3C_XFER_LISTEN_IT)) | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to target transmit mode */
-  if ((InterruptRequest & I3C_XFER_TARGET_TX_IT) != 0U) {
-    /* Disable frame complete, transmit FIFO not full and error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to target transmit mode */
+    if ((InterruptRequest & I3C_XFER_TARGET_TX_IT) != 0U) {
+        /* Disable frame complete, transmit FIFO not full and error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to target receive mode */
-  if ((InterruptRequest & I3C_XFER_TARGET_RX_IT) != 0U) {
-    /* Disable frame complete, receive FIFO not empty and error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_RXFNEIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to target receive mode */
+    if ((InterruptRequest & I3C_XFER_TARGET_RX_IT) != 0U) {
+        /* Disable frame complete, receive FIFO not empty and error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_RXFNEIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to transmit/receive in DMA mode
-   */
-  if ((InterruptRequest & I3C_XFER_DMA) != 0U) {
-    /* Disable frame complete and error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to transmit/receive in DMA mode
+     */
+    if ((InterruptRequest & I3C_XFER_DMA) != 0U) {
+        /* Disable frame complete and error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to target hot join */
-  if ((InterruptRequest & I3C_XFER_TARGET_HOTJOIN) != 0U) {
-    /* Disable dynamic address update and error interrupts */
-    tmpisr |= (HAL_I3C_IT_DAUPDIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to target hot join */
+    if ((InterruptRequest & I3C_XFER_TARGET_HOTJOIN) != 0U) {
+        /* Disable dynamic address update and error interrupts */
+        tmpisr |= (HAL_I3C_IT_DAUPDIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to target control role */
-  if ((InterruptRequest & I3C_XFER_TARGET_CTRLROLE) != 0U) {
-    /* Disable control role update and error interrupts */
-    tmpisr |= (HAL_I3C_IT_CRUPDIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to target control role */
+    if ((InterruptRequest & I3C_XFER_TARGET_CTRLROLE) != 0U) {
+        /* Disable control role update and error interrupts */
+        tmpisr |= (HAL_I3C_IT_CRUPDIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to target in band interrupt */
-  if ((InterruptRequest & I3C_XFER_TARGET_IBI) != 0U) {
-    /* Disable IBI end and error interrupts */
-    tmpisr |= (HAL_I3C_IT_IBIENDIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to target in band interrupt */
+    if ((InterruptRequest & I3C_XFER_TARGET_IBI) != 0U) {
+        /* Disable IBI end and error interrupts */
+        tmpisr |= (HAL_I3C_IT_IBIENDIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to controller transmit in IT mode
-   */
-  if ((InterruptRequest & I3C_XFER_CONTROLLER_TX_IT) != 0U) {
-    /* Disable frame complete, control FIFO not full, transmit FIFO not full and
-     * error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_TXFNFIE |
-               HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to controller transmit in IT mode
+     */
+    if ((InterruptRequest & I3C_XFER_CONTROLLER_TX_IT) != 0U) {
+        /* Disable frame complete, control FIFO not full, transmit FIFO not full and
+         * error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to controller transmit read or a
-   * broadcast CCC in IT mode */
-  if ((InterruptRequest & I3C_XFER_CONTROLLER_RX_CCC_IT) != 0U) {
-    /* Disable frame complete, transmit FIFO not full, control FIFO not full,
-       receive FIFO not empty and error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_CFNFIE |
-               HAL_I3C_IT_RXFNEIE | HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to controller transmit read or a
+     * broadcast CCC in IT mode */
+    if ((InterruptRequest & I3C_XFER_CONTROLLER_RX_CCC_IT) != 0U) {
+        /* Disable frame complete, transmit FIFO not full, control FIFO not full,
+           receive FIFO not empty and error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_RXFNEIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Check if requested interrupts are related to controller transmit broadcast
-   * ENTDAA CCC in IT mode */
-  if ((InterruptRequest & I3C_XFER_CONTROLLER_DAA_IT) != 0U) {
-    /* Disable frame complete, control FIFO not full, transmit FIFO not full and
-     * error interrupts */
-    tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_TXFNFIE |
-               HAL_I3C_IT_ERRIE);
-  }
+    /* Check if requested interrupts are related to controller transmit broadcast
+     * ENTDAA CCC in IT mode */
+    if ((InterruptRequest & I3C_XFER_CONTROLLER_DAA_IT) != 0U) {
+        /* Disable frame complete, control FIFO not full, transmit FIFO not full and
+         * error interrupts */
+        tmpisr |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_CFNFIE | HAL_I3C_IT_TXFNFIE | HAL_I3C_IT_ERRIE);
+    }
 
-  /* Disable requested interrupts */
-  __HAL_I3C_DISABLE_IT(hi3c, tmpisr);
+    /* Disable requested interrupts */
+    __HAL_I3C_DISABLE_IT(hi3c, tmpisr);
 }
 
 /**
@@ -9279,130 +8815,129 @@ static void I3C_Disable_IRQ(I3C_HandleTypeDef *hi3c,
  * @retval None
  */
 static void I3C_ErrorTreatment(I3C_HandleTypeDef *hi3c) {
-  HAL_I3C_StateTypeDef tmpstate = hi3c->State;
-  uint32_t dmaabortongoing = 0U;
+    HAL_I3C_StateTypeDef tmpstate = hi3c->State;
+    uint32_t dmaabortongoing = 0U;
 
-  /* Check on the state */
-  if (tmpstate == HAL_I3C_STATE_BUSY) {
-    /* Update handle state parameter */
-    I3C_StateUpdate(hi3c);
+    /* Check on the state */
+    if (tmpstate == HAL_I3C_STATE_BUSY) {
+        /* Update handle state parameter */
+        I3C_StateUpdate(hi3c);
 
-    /* Disable all interrupts related to busy state */
-    I3C_Disable_IRQ(hi3c, (I3C_XFER_TARGET_IBI | I3C_XFER_TARGET_HOTJOIN |
-                           I3C_XFER_TARGET_CTRLROLE));
-  } else {
-    /* Disable all interrupts related to busy Tx and Rx state */
-    I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_CCC_IT);
+        /* Disable all interrupts related to busy state */
+        I3C_Disable_IRQ(hi3c, (I3C_XFER_TARGET_IBI | I3C_XFER_TARGET_HOTJOIN | I3C_XFER_TARGET_CTRLROLE));
+    } else {
+        /* Disable all interrupts related to busy Tx and Rx state */
+        I3C_Disable_IRQ(hi3c, I3C_XFER_CONTROLLER_RX_CCC_IT);
 
-    /* Reset Tx counter */
-    hi3c->TxXferCount = 0U;
+        /* Reset Tx counter */
+        hi3c->TxXferCount = 0U;
 
-    /* Reset Rx counter */
-    hi3c->RxXferCount = 0U;
+        /* Reset Rx counter */
+        hi3c->RxXferCount = 0U;
 
-    /* Reset Control counter */
-    hi3c->ControlXferCount = 0U;
+        /* Reset Control counter */
+        hi3c->ControlXferCount = 0U;
 
-    /* Reset Tx function pointer */
-    hi3c->ptrTxFunc = NULL;
+        /* Reset Tx function pointer */
+        hi3c->ptrTxFunc = NULL;
 
-    /* Reset Rx function pointer */
-    hi3c->ptrRxFunc = NULL;
+        /* Reset Rx function pointer */
+        hi3c->ptrRxFunc = NULL;
 
-    /* Reset Context pointer */
-    hi3c->pXferData = NULL;
-    hi3c->pCCCDesc = NULL;
-    hi3c->pPrivateDesc = NULL;
+        /* Reset Context pointer */
+        hi3c->pXferData = NULL;
+        hi3c->pCCCDesc = NULL;
+        hi3c->pPrivateDesc = NULL;
 
-    /* Flush all FIFOs */
-    /* Flush the content of Tx Fifo */
-    LL_I3C_RequestTxFIFOFlush(hi3c->Instance);
+        /* Flush all FIFOs */
+        /* Flush the content of Tx Fifo */
+        LL_I3C_RequestTxFIFOFlush(hi3c->Instance);
 
-    /* Flush the content of Rx Fifo */
-    LL_I3C_RequestRxFIFOFlush(hi3c->Instance);
+        /* Flush the content of Rx Fifo */
+        LL_I3C_RequestRxFIFOFlush(hi3c->Instance);
 
-    /* Check on the I3C mode: Control and status FIFOs available only with
-     * controller mode */
-    if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
-      /* Flush the content of Control Fifo */
-      LL_I3C_RequestControlFIFOFlush(hi3c->Instance);
+        /* Check on the I3C mode: Control and status FIFOs available only with
+         * controller mode */
+        if (hi3c->Mode == HAL_I3C_MODE_CONTROLLER) {
+            /* Flush the content of Control Fifo */
+            LL_I3C_RequestControlFIFOFlush(hi3c->Instance);
 
-      /* Flush the content of Status Fifo */
-      LL_I3C_RequestStatusFIFOFlush(hi3c->Instance);
-    }
+            /* Flush the content of Status Fifo */
+            LL_I3C_RequestStatusFIFOFlush(hi3c->Instance);
+        }
 
 #if defined(HAL_DMA_MODULE_ENABLED)
-    /* Abort control DMA transfer if any */
-    if (hi3c->hdmacr != NULL) {
-      /* Disable control DMA Request */
-      LL_I3C_DisableDMAReq_Control(hi3c->Instance);
+        /* Abort control DMA transfer if any */
+        if (hi3c->hdmacr != NULL) {
+            /* Disable control DMA Request */
+            LL_I3C_DisableDMAReq_Control(hi3c->Instance);
 
-      /* Check DMA state */
-      if (HAL_DMA_GetState(hi3c->hdmacr) != HAL_DMA_STATE_READY) {
-        /* Set the I3C DMA Abort callback : will lead to call
-           HAL_I3C_AbortCpltCallback() at end of DMA abort procedure */
+            /* Check DMA state */
+            if (HAL_DMA_GetState(hi3c->hdmacr) != HAL_DMA_STATE_READY) {
+                /* Set the I3C DMA Abort callback : will lead to call
+                   HAL_I3C_AbortCpltCallback() at end of DMA abort procedure */
 
-        /* DMA abort on going */
-        dmaabortongoing = 1U;
+                /* DMA abort on going */
+                dmaabortongoing = 1U;
 
-        /* Abort control DMA */
-        if (HAL_DMA_Abort_IT(hi3c->hdmacr) != HAL_OK) {
-          /* Call Directly XferAbortCallback function in case of error */
-          hi3c->hdmacr->XferAbortCallback(hi3c->hdmacr);
+                /* Abort control DMA */
+                if (HAL_DMA_Abort_IT(hi3c->hdmacr) != HAL_OK) {
+                    /* Call Directly XferAbortCallback function in case of error */
+                    hi3c->hdmacr->XferAbortCallback(hi3c->hdmacr);
+                }
+            }
         }
-      }
-    }
 
-    /* Abort RX DMA transfer if any */
-    if (hi3c->hdmarx != NULL) {
-      /* Disable Rx DMA Request */
-      LL_I3C_DisableDMAReq_RX(hi3c->Instance);
+        /* Abort RX DMA transfer if any */
+        if (hi3c->hdmarx != NULL) {
+            /* Disable Rx DMA Request */
+            LL_I3C_DisableDMAReq_RX(hi3c->Instance);
 
-      /* Check DMA state */
-      if (HAL_DMA_GetState(hi3c->hdmarx) != HAL_DMA_STATE_READY) {
-        /* Set the I3C DMA Abort callback : will lead to call
-           HAL_I3C_AbortCpltCallback() at end of DMA abort procedure */
-        hi3c->hdmarx->XferAbortCallback = I3C_DMAAbort;
+            /* Check DMA state */
+            if (HAL_DMA_GetState(hi3c->hdmarx) != HAL_DMA_STATE_READY) {
+                /* Set the I3C DMA Abort callback : will lead to call
+                   HAL_I3C_AbortCpltCallback() at end of DMA abort procedure */
+                hi3c->hdmarx->XferAbortCallback = I3C_DMAAbort;
 
-        /* DMA abort on going */
-        dmaabortongoing = 1U;
+                /* DMA abort on going */
+                dmaabortongoing = 1U;
 
-        /* Abort DMA RX */
-        if (HAL_DMA_Abort_IT(hi3c->hdmarx) != HAL_OK) {
-          /* Call Directly XferAbortCallback function in case of error */
-          hi3c->hdmarx->XferAbortCallback(hi3c->hdmarx);
+                /* Abort DMA RX */
+                if (HAL_DMA_Abort_IT(hi3c->hdmarx) != HAL_OK) {
+                    /* Call Directly XferAbortCallback function in case of error */
+                    hi3c->hdmarx->XferAbortCallback(hi3c->hdmarx);
+                }
+            }
         }
-      }
-    }
 
-    /* Abort TX DMA transfer if any */
-    if (hi3c->hdmatx != NULL) {
-      /* Disable Tx DMA Request */
-      LL_I3C_DisableDMAReq_TX(hi3c->Instance);
+        /* Abort TX DMA transfer if any */
+        if (hi3c->hdmatx != NULL) {
+            /* Disable Tx DMA Request */
+            LL_I3C_DisableDMAReq_TX(hi3c->Instance);
 
-      /* Check DMA state */
-      if (HAL_DMA_GetState(hi3c->hdmatx) != HAL_DMA_STATE_READY) {
-        /* Set the I3C DMA Abort callback : will lead to call
-           HAL_I3C_AbortCpltCallback() at end of DMA abort procedure */
-        hi3c->hdmatx->XferAbortCallback = I3C_DMAAbort;
+            /* Check DMA state */
+            if (HAL_DMA_GetState(hi3c->hdmatx) != HAL_DMA_STATE_READY) {
+                /* Set the I3C DMA Abort callback : will lead to call
+                   HAL_I3C_AbortCpltCallback() at end of DMA abort procedure */
+                hi3c->hdmatx->XferAbortCallback = I3C_DMAAbort;
 
-        /* DMA abort on going */
-        dmaabortongoing = 1U;
+                /* DMA abort on going */
+                dmaabortongoing = 1U;
 
-        /* Abort DMA TX */
-        if (HAL_DMA_Abort_IT(hi3c->hdmatx) != HAL_OK) {
-          /* Call Directly XferAbortCallback function in case of error */
-          hi3c->hdmatx->XferAbortCallback(hi3c->hdmatx);
+                /* Abort DMA TX */
+                if (HAL_DMA_Abort_IT(hi3c->hdmatx) != HAL_OK) {
+                    /* Call Directly XferAbortCallback function in case of error */
+                    hi3c->hdmatx->XferAbortCallback(hi3c->hdmatx);
+                }
+            }
         }
-      }
-    }
 #endif /* HAL_DMA_MODULE_ENABLED */
-  }
+    }
 
-  /* Call Error callback if there is no DMA abort on going */
-  if (dmaabortongoing == 0U) {
-    I3C_TreatErrorCallback(hi3c);
-  }
+    /* Call Error callback if there is no DMA abort on going */
+    if (dmaabortongoing == 0U) {
+        I3C_TreatErrorCallback(hi3c);
+    }
 }
 
 /**
@@ -9412,29 +8947,29 @@ static void I3C_ErrorTreatment(I3C_HandleTypeDef *hi3c) {
  * @retval None
  */
 static void I3C_TreatErrorCallback(I3C_HandleTypeDef *hi3c) {
-  if (hi3c->State == HAL_I3C_STATE_ABORT) {
-    /* Update handle state parameter */
-    I3C_StateUpdate(hi3c);
+    if (hi3c->State == HAL_I3C_STATE_ABORT) {
+        /* Update handle state parameter */
+        I3C_StateUpdate(hi3c);
 
-    /* Call the corresponding callback to inform upper layer of End of Transfer
-     */
+        /* Call the corresponding callback to inform upper layer of End of Transfer
+         */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1)
-    hi3c->AbortCpltCallback(hi3c);
+        hi3c->AbortCpltCallback(hi3c);
 #else
-    HAL_I3C_AbortCpltCallback(hi3c);
+        HAL_I3C_AbortCpltCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS */
-  } else {
-    /* Update handle state parameter */
-    I3C_StateUpdate(hi3c);
+    } else {
+        /* Update handle state parameter */
+        I3C_StateUpdate(hi3c);
 
-    /* Call the corresponding callback to inform upper layer of End of Transfer
-     */
+        /* Call the corresponding callback to inform upper layer of End of Transfer
+         */
 #if (USE_HAL_I3C_REGISTER_CALLBACKS == 1)
-    hi3c->ErrorCallback(hi3c);
+        hi3c->ErrorCallback(hi3c);
 #else
-    HAL_I3C_ErrorCallback(hi3c);
+        HAL_I3C_ErrorCallback(hi3c);
 #endif /* USE_HAL_I3C_REGISTER_CALLBACKS */
-  }
+    }
 }
 
 /**

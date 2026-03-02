@@ -68,13 +68,11 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-VOID _nx_tcp_packet_send_probe(NX_TCP_SOCKET *socket_ptr, ULONG tx_sequence,
-                               UCHAR data) {
+VOID _nx_tcp_packet_send_probe(NX_TCP_SOCKET *socket_ptr, ULONG tx_sequence, UCHAR data) {
 
-  _nx_tcp_packet_send_control(socket_ptr, NX_TCP_ACK_BIT, tx_sequence,
-                              socket_ptr->nx_tcp_socket_rx_sequence, 0, 0,
-                              &data);
+    _nx_tcp_packet_send_control(socket_ptr, NX_TCP_ACK_BIT, tx_sequence, socket_ptr->nx_tcp_socket_rx_sequence, 0, 0,
+                                &data);
 
-  /* Setup a new delayed ACK timeout.  */
-  socket_ptr->nx_tcp_socket_delayed_ack_timeout = _nx_tcp_ack_timer_rate;
+    /* Setup a new delayed ACK timeout.  */
+    socket_ptr->nx_tcp_socket_delayed_ack_timeout = _nx_tcp_ack_timer_rate;
 }

@@ -20,13 +20,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_dfu.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -74,21 +72,17 @@
 /*  04-02-2021     Chaoqiong Xiao           Initial Version 6.1.6         */
 /*                                                                        */
 /**************************************************************************/
-VOID _ux_device_class_dfu_state_sync(UX_SLAVE_CLASS_DFU *dfu)
-{
-UX_INTERRUPT_SAVE_AREA
+VOID _ux_device_class_dfu_state_sync(UX_SLAVE_CLASS_DFU *dfu) {
+    UX_INTERRUPT_SAVE_AREA
 
     UX_PARAMETER_NOT_USED(dfu);
     UX_DISABLE
-    switch(_ux_system_slave -> ux_system_slave_device_dfu_state_machine)
-    {
+    switch (_ux_system_slave->ux_system_slave_device_dfu_state_machine) {
     case UX_SLAVE_CLASS_DFU_STATUS_STATE_DFU_DNBUSY:
-        _ux_system_slave -> ux_system_slave_device_dfu_state_machine =
-                            UX_SLAVE_CLASS_DFU_STATUS_STATE_DFU_DNLOAD_SYNC;
+        _ux_system_slave->ux_system_slave_device_dfu_state_machine = UX_SLAVE_CLASS_DFU_STATUS_STATE_DFU_DNLOAD_SYNC;
         break;
     case UX_SLAVE_CLASS_DFU_STATUS_STATE_DFU_MANIFEST:
-        _ux_system_slave -> ux_system_slave_device_dfu_state_machine =
-                            UX_SLAVE_CLASS_DFU_STATUS_STATE_DFU_MANIFEST_SYNC;
+        _ux_system_slave->ux_system_slave_device_dfu_state_machine = UX_SLAVE_CLASS_DFU_STATUS_STATE_DFU_MANIFEST_SYNC;
         break;
     default:
         break;

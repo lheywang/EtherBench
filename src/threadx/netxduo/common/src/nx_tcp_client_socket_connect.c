@@ -71,25 +71,23 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_tcp_client_socket_connect(NX_TCP_SOCKET *socket_ptr, ULONG server_ip,
-                                   UINT server_port, ULONG wait_option) {
+UINT _nx_tcp_client_socket_connect(NX_TCP_SOCKET *socket_ptr, ULONG server_ip, UINT server_port, ULONG wait_option) {
 
 #ifndef NX_DISABLE_IPV4
-  NXD_ADDRESS server_ip_addr;
+    NXD_ADDRESS server_ip_addr;
 
-  /* Construct an IP address structure, and fill in IPv4 address information. */
-  server_ip_addr.nxd_ip_version = NX_IP_VERSION_V4;
-  server_ip_addr.nxd_ip_address.v4 = server_ip;
+    /* Construct an IP address structure, and fill in IPv4 address information. */
+    server_ip_addr.nxd_ip_version = NX_IP_VERSION_V4;
+    server_ip_addr.nxd_ip_address.v4 = server_ip;
 
-  /* Invoke the real connection call. */
-  return (_nxd_tcp_client_socket_connect(socket_ptr, &server_ip_addr,
-                                         server_port, wait_option));
+    /* Invoke the real connection call. */
+    return (_nxd_tcp_client_socket_connect(socket_ptr, &server_ip_addr, server_port, wait_option));
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(socket_ptr);
-  NX_PARAMETER_NOT_USED(server_ip);
-  NX_PARAMETER_NOT_USED(server_port);
-  NX_PARAMETER_NOT_USED(wait_option);
+    NX_PARAMETER_NOT_USED(socket_ptr);
+    NX_PARAMETER_NOT_USED(server_ip);
+    NX_PARAMETER_NOT_USED(server_port);
+    NX_PARAMETER_NOT_USED(wait_option);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

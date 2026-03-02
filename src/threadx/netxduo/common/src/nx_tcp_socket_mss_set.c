@@ -72,35 +72,35 @@
 /**************************************************************************/
 UINT _nx_tcp_socket_mss_set(NX_TCP_SOCKET *socket_ptr, ULONG mss) {
 
-  NX_IP *ip_ptr;
-  UINT status;
+    NX_IP *ip_ptr;
+    UINT status;
 
-  /* Setup IP pointer.  */
-  ip_ptr = socket_ptr->nx_tcp_socket_ip_ptr;
+    /* Setup IP pointer.  */
+    ip_ptr = socket_ptr->nx_tcp_socket_ip_ptr;
 
-  if (mss == 0) {
+    if (mss == 0) {
 
-    /* Invalid MSS, return an error.  */
-    return (NX_SIZE_ERROR);
-  }
+        /* Invalid MSS, return an error.  */
+        return (NX_SIZE_ERROR);
+    }
 
-  /* Obtain the IP mutex so we can examine the bound port.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Obtain the IP mutex so we can examine the bound port.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  if (socket_ptr->nx_tcp_socket_state < NX_TCP_SYN_SENT) {
+    if (socket_ptr->nx_tcp_socket_state < NX_TCP_SYN_SENT) {
 
-    /* Set the socket's MSS value.  */
-    socket_ptr->nx_tcp_socket_mss = mss;
-    status = NX_SUCCESS;
-  } else {
+        /* Set the socket's MSS value.  */
+        socket_ptr->nx_tcp_socket_mss = mss;
+        status = NX_SUCCESS;
+    } else {
 
-    /* MSS can not be modified when connection is started. */
-    status = NX_NOT_SUCCESSFUL;
-  }
+        /* MSS can not be modified when connection is started. */
+        status = NX_NOT_SUCCESSFUL;
+    }
 
-  /* Release protection.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release protection.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /* Return successful completion status.  */
-  return (status);
+    /* Return successful completion status.  */
+    return (status);
 }

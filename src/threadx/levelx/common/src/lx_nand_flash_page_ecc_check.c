@@ -75,50 +75,49 @@
 /*                                            resulting in version 6.1.7  */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_page_ecc_check(LX_NAND_FLASH *nand_flash,
-                                   UCHAR *page_buffer, UCHAR *ecc_buffer) {
+UINT _lx_nand_flash_page_ecc_check(LX_NAND_FLASH *nand_flash, UCHAR *page_buffer, UCHAR *ecc_buffer) {
 
-  UINT bytes_checked;
-  UINT status;
-  UINT return_status = LX_SUCCESS;
+    UINT bytes_checked;
+    UINT status;
+    UINT return_status = LX_SUCCESS;
 
-  /* Loop to check the entire NAND flash page.  */
-  bytes_checked = 0;
-  while (bytes_checked < nand_flash->lx_nand_flash_bytes_per_page) {
+    /* Loop to check the entire NAND flash page.  */
+    bytes_checked = 0;
+    while (bytes_checked < nand_flash->lx_nand_flash_bytes_per_page) {
 
-    /* Check this 256 byte piece of the NAND page.  */
-    status = _lx_nand_flash_256byte_ecc_check(page_buffer, ecc_buffer);
+        /* Check this 256 byte piece of the NAND page.  */
+        status = _lx_nand_flash_256byte_ecc_check(page_buffer, ecc_buffer);
 
-    /* Determine if there was an error.  */
-    if (status != LX_SUCCESS) {
+        /* Determine if there was an error.  */
+        if (status != LX_SUCCESS) {
 
-      /* Determine if a non-correctable error is present.  */
-      if (status == LX_NAND_ERROR_NOT_CORRECTED) {
+            /* Determine if a non-correctable error is present.  */
+            if (status == LX_NAND_ERROR_NOT_CORRECTED) {
 
-        /* Always return a non-correctable error, if present.  */
-        return_status = LX_NAND_ERROR_NOT_CORRECTED;
-        break;
-      }
+                /* Always return a non-correctable error, if present.  */
+                return_status = LX_NAND_ERROR_NOT_CORRECTED;
+                break;
+            }
 
-      /* A single-bit error was corrected, return this status
-         if there is no LX_ERROR status already detected.  */
-      else if (return_status == LX_SUCCESS) {
+            /* A single-bit error was corrected, return this status
+               if there is no LX_ERROR status already detected.  */
+            else if (return_status == LX_SUCCESS) {
 
-        /* Return a notice that the single bit error was corrected.  */
-        return_status = LX_NAND_ERROR_CORRECTED;
-      }
+                /* Return a notice that the single bit error was corrected.  */
+                return_status = LX_NAND_ERROR_CORRECTED;
+            }
+        }
+
+        /* Move to the next 256 byte portion of the page.  */
+        bytes_checked = bytes_checked + 256;
+
+        /* Move the page buffer forward.  */
+        page_buffer = page_buffer + 256;
+
+        /* Move the ECC buffer forward, note there are 3 bytes of ECC per page. */
+        ecc_buffer = ecc_buffer + 3;
     }
 
-    /* Move to the next 256 byte portion of the page.  */
-    bytes_checked = bytes_checked + 256;
-
-    /* Move the page buffer forward.  */
-    page_buffer = page_buffer + 256;
-
-    /* Move the ECC buffer forward, note there are 3 bytes of ECC per page. */
-    ecc_buffer = ecc_buffer + 3;
-  }
-
-  /* Return status.  */
-  return (return_status);
+    /* Return status.  */
+    return (return_status);
 }

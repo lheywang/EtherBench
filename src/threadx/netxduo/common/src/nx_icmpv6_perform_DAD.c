@@ -87,73 +87,66 @@
 
 VOID _nx_icmpv6_perform_DAD(NX_IP *ip_ptr) {
 
-  UINT i;
-  NXD_IPV6_ADDRESS *nx_ipv6_address_next;
+    UINT i;
+    NXD_IPV6_ADDRESS *nx_ipv6_address_next;
 
 #ifdef NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY
-  UINT ipv6_addr_index;
+    UINT ipv6_addr_index;
 #endif /* NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY */
 
-  /* Go through all addresses bound to the IP instance. */
-  for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
+    /* Go through all addresses bound to the IP instance. */
+    for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
 
-    /* Check if this interface valid. */
-    if (!ip_ptr->nx_ip_interface[i].nxd_interface_ipv6_address_list_head) {
-      continue;
-    }
-
-    /* Only interested in addresses in the tentative state. */
-    for (nx_ipv6_address_next =
-             ip_ptr->nx_ip_interface[i].nxd_interface_ipv6_address_list_head;
-         nx_ipv6_address_next;
-         nx_ipv6_address_next = nx_ipv6_address_next->nxd_ipv6_address_next) {
-
-      /* Check the address state. */
-      if (nx_ipv6_address_next->nxd_ipv6_address_state ==
-          NX_IPV6_ADDR_STATE_TENTATIVE) {
-
-        /* Check if the number of NS messages is used up. */
-        if (nx_ipv6_address_next->nxd_ipv6_address_DupAddrDetectTransmit) {
-
-          /* No. This interface is still under DAD.  Transmit a NS */
-          _nx_icmpv6_send_ns(ip_ptr, nx_ipv6_address_next->nxd_ipv6_address, 0,
-                             nx_ipv6_address_next, 0, NX_NULL);
-
-          nx_ipv6_address_next->nxd_ipv6_address_DupAddrDetectTransmit--;
-        } else {
-
-          /* So far we didn't get any conflict addresses back.
-             So promote the address to VALID */
-
-          nx_ipv6_address_next->nxd_ipv6_address_state =
-              NX_IPV6_ADDR_STATE_VALID;
-          _nx_icmpv6_DAD_clear_NDCache_entry(
-              ip_ptr, nx_ipv6_address_next->nxd_ipv6_address);
-
-#ifdef NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY
-          /* If the callback function is set, invoke the callback function . */
-          if (ip_ptr->nx_ipv6_address_change_notify) {
-            ipv6_addr_index =
-                (ULONG)nx_ipv6_address_next->nxd_ipv6_address_index;
-            ip_ptr->nx_ipv6_address_change_notify(
-                ip_ptr, NX_IPV6_ADDRESS_DAD_SUCCESSFUL, i, ipv6_addr_index,
-                &nx_ipv6_address_next->nxd_ipv6_address[0]);
-          }
-
-          /* If the internal callback function is set, invoke the callback
-           * function . */
-          if (ip_ptr->nx_ipv6_address_change_notify_internal) {
-            ipv6_addr_index =
-                (ULONG)nx_ipv6_address_next->nxd_ipv6_address_index;
-            ip_ptr->nx_ipv6_address_change_notify_internal(
-                ip_ptr, NX_IPV6_ADDRESS_DAD_SUCCESSFUL, i, ipv6_addr_index,
-                &nx_ipv6_address_next->nxd_ipv6_address[0]);
-          }
-#endif /* NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY */
+        /* Check if this interface valid. */
+        if (!ip_ptr->nx_ip_interface[i].nxd_interface_ipv6_address_list_head) {
+            continue;
         }
-      }
+
+        /* Only interested in addresses in the tentative state. */
+        for (nx_ipv6_address_next = ip_ptr->nx_ip_interface[i].nxd_interface_ipv6_address_list_head;
+             nx_ipv6_address_next; nx_ipv6_address_next = nx_ipv6_address_next->nxd_ipv6_address_next) {
+
+            /* Check the address state. */
+            if (nx_ipv6_address_next->nxd_ipv6_address_state == NX_IPV6_ADDR_STATE_TENTATIVE) {
+
+                /* Check if the number of NS messages is used up. */
+                if (nx_ipv6_address_next->nxd_ipv6_address_DupAddrDetectTransmit) {
+
+                    /* No. This interface is still under DAD.  Transmit a NS */
+                    _nx_icmpv6_send_ns(ip_ptr, nx_ipv6_address_next->nxd_ipv6_address, 0, nx_ipv6_address_next, 0,
+                                       NX_NULL);
+
+                    nx_ipv6_address_next->nxd_ipv6_address_DupAddrDetectTransmit--;
+                } else {
+
+                    /* So far we didn't get any conflict addresses back.
+                       So promote the address to VALID */
+
+                    nx_ipv6_address_next->nxd_ipv6_address_state = NX_IPV6_ADDR_STATE_VALID;
+                    _nx_icmpv6_DAD_clear_NDCache_entry(ip_ptr, nx_ipv6_address_next->nxd_ipv6_address);
+
+#ifdef NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY
+                    /* If the callback function is set, invoke the callback function . */
+                    if (ip_ptr->nx_ipv6_address_change_notify) {
+                        ipv6_addr_index = (ULONG)nx_ipv6_address_next->nxd_ipv6_address_index;
+                        ip_ptr->nx_ipv6_address_change_notify(ip_ptr, NX_IPV6_ADDRESS_DAD_SUCCESSFUL, i,
+                                                              ipv6_addr_index,
+                                                              &nx_ipv6_address_next->nxd_ipv6_address[0]);
+                    }
+
+                    /* If the internal callback function is set, invoke the callback
+                     * function . */
+                    if (ip_ptr->nx_ipv6_address_change_notify_internal) {
+                        ipv6_addr_index = (ULONG)nx_ipv6_address_next->nxd_ipv6_address_index;
+                        ip_ptr->nx_ipv6_address_change_notify_internal(ip_ptr, NX_IPV6_ADDRESS_DAD_SUCCESSFUL, i,
+                                                                       ipv6_addr_index,
+                                                                       &nx_ipv6_address_next->nxd_ipv6_address[0]);
+                    }
+#endif /* NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY */
+                }
+            }
+        }
     }
-  }
 }
 
 #endif /* NX_DISABLE_IPV6_DAD */

@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -20,14 +19,12 @@
 /**************************************************************************/
 /**************************************************************************/
 
-
 /* Include necessary system files.  */
 
 #define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -80,50 +77,49 @@
 /*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_host_stack_uninitialize(VOID)
-{
+UINT _ux_host_stack_uninitialize(VOID) {
 
     /* If trace is enabled, insert this event into the trace buffer.  */
     UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_UNINITIALIZE, 0, 0, 0, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
 
 #if !defined(UX_HOST_STANDALONE)
     /* Delete enumeration thread.  */
-    _ux_utility_thread_delete(&_ux_system_host -> ux_system_host_enum_thread);
+    _ux_utility_thread_delete(&_ux_system_host->ux_system_host_enum_thread);
 
     /* Delete enumeration semaphore.  */
-    _ux_utility_semaphore_delete(&_ux_system_host -> ux_system_host_enum_semaphore);
+    _ux_utility_semaphore_delete(&_ux_system_host->ux_system_host_enum_semaphore);
 
     /* Free enumeration thread stack.  */
-    _ux_utility_memory_free(_ux_system_host -> ux_system_host_enum_thread_stack);
+    _ux_utility_memory_free(_ux_system_host->ux_system_host_enum_thread_stack);
 
     /* Delete HCD thread.  */
-    _ux_utility_thread_delete(&_ux_system_host -> ux_system_host_hcd_thread);
+    _ux_utility_thread_delete(&_ux_system_host->ux_system_host_hcd_thread);
 
     /* Delete HCD semaphore.  */
-    _ux_utility_semaphore_delete(&_ux_system_host -> ux_system_host_hcd_semaphore);
+    _ux_utility_semaphore_delete(&_ux_system_host->ux_system_host_hcd_semaphore);
 
     /* Free HCD thread stack.  */
-    _ux_utility_memory_free(_ux_system_host -> ux_system_host_hcd_thread_stack);
+    _ux_utility_memory_free(_ux_system_host->ux_system_host_hcd_thread_stack);
 #endif
 
 #if defined(UX_OTG_SUPPORT) && !defined(UX_OTG_STANDALONE)
 
     /* Delete HNP thread.  */
-    _ux_utility_thread_delete(&_ux_system_host -> ux_system_host_hnp_polling_thread);
+    _ux_utility_thread_delete(&_ux_system_host->ux_system_host_hnp_polling_thread);
 
     /* Free HNP thread stack.  */
-    _ux_utility_memory_free(_ux_system_host -> ux_system_host_hnp_polling_thread_stack);
+    _ux_utility_memory_free(_ux_system_host->ux_system_host_hnp_polling_thread_stack);
 #endif
 
     /* Free HCD array.  */
-    _ux_utility_memory_free(_ux_system_host -> ux_system_host_hcd_array);
+    _ux_utility_memory_free(_ux_system_host->ux_system_host_hcd_array);
 
     /* Free Class array.  */
-    _ux_utility_memory_free(_ux_system_host -> ux_system_host_class_array);
+    _ux_utility_memory_free(_ux_system_host->ux_system_host_class_array);
 
     /* Free Device array.  */
-    _ux_utility_memory_free(_ux_system_host -> ux_system_host_device_array);
+    _ux_utility_memory_free(_ux_system_host->ux_system_host_device_array);
 
     /* Return success to caller.  */
-    return(UX_SUCCESS);
+    return (UX_SUCCESS);
 }

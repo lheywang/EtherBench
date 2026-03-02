@@ -9,17 +9,15 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */ 
-/** USBX Component                                                        */ 
+/**                                                                       */
+/** USBX Component                                                        */
 /**                                                                       */
 /**   Host Stack                                                          */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
-
 
 /* Include necessary system files.  */
 
@@ -28,50 +26,49 @@
 #include "ux_api.h"
 #include "ux_host_stack.h"
 
-
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _ux_host_stack_transfer_request_abort               PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _ux_host_stack_transfer_request_abort               PORTABLE C      */
 /*                                                           6.2.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This function aborts a pending transfer request that has been       */ 
-/*    previously submitted. This function only cancels the specific       */ 
+/*                                                                        */
+/*    This function aborts a pending transfer request that has been       */
+/*    previously submitted. This function only cancels the specific       */
 /*    transfer request.                                                   */
 /*                                                                        */
-/*    The call back to the function will have the                         */ 
-/*    UX_TRANSFER_STATUS_ABORT status.                                    */  
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    transfer_request                      Transfer request structure    */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    Completion Status                     If UX_SUCCESS, transfer was   */ 
-/*                                            successfully aborted        */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*    HCD Entry Function                                                  */ 
-/*    Transfer Completion Function                                        */ 
+/*    The call back to the function will have the                         */
+/*    UX_TRANSFER_STATUS_ABORT status.                                    */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    transfer_request                      Transfer request structure    */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    Completion Status                     If UX_SUCCESS, transfer was   */
+/*                                            successfully aborted        */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    HCD Entry Function                                                  */
+/*    Transfer Completion Function                                        */
 /*    _ux_utility_semaphore_put             Put semaphore                 */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
-/*    Application                                                         */ 
-/*    USBX Components                                                     */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application                                                         */
+/*    USBX Components                                                     */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            optimized based on compile  */
@@ -87,28 +84,24 @@
 /*                                            resulting in version 6.2.0  */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_host_stack_transfer_request_abort(UX_TRANSFER *transfer_request)
-{
+UINT _ux_host_stack_transfer_request_abort(UX_TRANSFER *transfer_request) {
 
-UX_HCD          *hcd;
-ULONG           completion_code;
-
+    UX_HCD *hcd;
+    ULONG completion_code;
 
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_TRANSFER_REQUEST_ABORT,
-        transfer_request -> ux_transfer_request_endpoint -> ux_endpoint_device,
-        transfer_request -> ux_transfer_request_endpoint,
-        transfer_request, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
-    
+    UX_TRACE_IN_LINE_INSERT(
+        UX_TRACE_HOST_STACK_TRANSFER_REQUEST_ABORT, transfer_request->ux_transfer_request_endpoint->ux_endpoint_device,
+        transfer_request->ux_transfer_request_endpoint, transfer_request, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
+
     /* With the device we have the pointer to the HCD.  */
-    hcd = UX_DEVICE_HCD_GET(transfer_request -> ux_transfer_request_endpoint -> ux_endpoint_device);
+    hcd = UX_DEVICE_HCD_GET(transfer_request->ux_transfer_request_endpoint->ux_endpoint_device);
 
     /* Check pending transaction.  */
-    if (transfer_request -> ux_transfer_request_completion_code == UX_TRANSFER_STATUS_PENDING)
-    {
+    if (transfer_request->ux_transfer_request_completion_code == UX_TRANSFER_STATUS_PENDING) {
 
-        /* Send the abort command to the controller.  */    
-        hcd -> ux_hcd_entry_function(hcd, UX_HCD_TRANSFER_ABORT, transfer_request);
+        /* Send the abort command to the controller.  */
+        hcd->ux_hcd_entry_function(hcd, UX_HCD_TRANSFER_ABORT, transfer_request);
 
         /* Save the completion code since we're about to set it to ABORT. The
            reason we can't just assume its value is PENDING is that in between
@@ -119,34 +112,33 @@ ULONG           completion_code;
            changed later here.
            Such a case is valid, and we want to make sure we don't put() the
            transfer request's semaphore again.  */
-        completion_code =  transfer_request -> ux_transfer_request_completion_code;
+        completion_code = transfer_request->ux_transfer_request_completion_code;
 
         /* Set the transfer_request status to abort.  */
-        transfer_request -> ux_transfer_request_completion_code =  UX_TRANSFER_STATUS_ABORT;
+        transfer_request->ux_transfer_request_completion_code = UX_TRANSFER_STATUS_ABORT;
 
-        /* We need to inform the class that owns this transfer_request of the 
+        /* We need to inform the class that owns this transfer_request of the
            abort if there is a call back mechanism.  */
-        if (transfer_request -> ux_transfer_request_completion_function != UX_NULL)
-            transfer_request -> ux_transfer_request_completion_function(transfer_request);
-       
+        if (transfer_request->ux_transfer_request_completion_function != UX_NULL)
+            transfer_request->ux_transfer_request_completion_function(transfer_request);
+
         /* Is a thread waiting on the semaphore?  */
         if (/* Is the transfer pending?  */
             completion_code == UX_TRANSFER_STATUS_PENDING &&
 #if !defined(UX_HOST_STANDALONE)
             /* Is the thread waiting not this one? (clearly we're not waiting!)  */
-            transfer_request -> ux_transfer_request_thread_pending != _ux_utility_thread_identify() && 
+            transfer_request->ux_transfer_request_thread_pending != _ux_utility_thread_identify() &&
 #endif
             /* Does the transfer request not have a completion function?  */
-            transfer_request -> ux_transfer_request_completion_function == UX_NULL)
+            transfer_request->ux_transfer_request_completion_function == UX_NULL)
 
             /* Wake up the semaphore for this request.  */
-            _ux_host_semaphore_put(&transfer_request -> ux_transfer_request_semaphore);
+            _ux_host_semaphore_put(&transfer_request->ux_transfer_request_semaphore);
     }
-    
-    /* This function never fails!  */
-    return(UX_SUCCESS);       
-}
 
+    /* This function never fails!  */
+    return (UX_SUCCESS);
+}
 
 /**************************************************************************/
 /*                                                                        */
@@ -186,19 +178,18 @@ ULONG           completion_code;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT  _uxe_host_stack_transfer_request_abort(UX_TRANSFER *transfer_request)
-{
+UINT _uxe_host_stack_transfer_request_abort(UX_TRANSFER *transfer_request) {
 
     /* Sanity checks.  */
     if (transfer_request == UX_NULL)
-        return(UX_INVALID_PARAMETER);
-    if (transfer_request -> ux_transfer_request_endpoint == UX_NULL)
-        return(UX_ENDPOINT_HANDLE_UNKNOWN);
-    if (transfer_request -> ux_transfer_request_endpoint -> ux_endpoint_device == UX_NULL)
-        return(UX_DEVICE_HANDLE_UNKNOWN);
-    if (UX_DEVICE_HCD_GET(transfer_request -> ux_transfer_request_endpoint -> ux_endpoint_device) == UX_NULL)
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
+    if (transfer_request->ux_transfer_request_endpoint == UX_NULL)
+        return (UX_ENDPOINT_HANDLE_UNKNOWN);
+    if (transfer_request->ux_transfer_request_endpoint->ux_endpoint_device == UX_NULL)
+        return (UX_DEVICE_HANDLE_UNKNOWN);
+    if (UX_DEVICE_HCD_GET(transfer_request->ux_transfer_request_endpoint->ux_endpoint_device) == UX_NULL)
+        return (UX_INVALID_PARAMETER);
 
     /* Invoke transfer abort function.  */
-    return(_ux_host_stack_transfer_request_abort(transfer_request));
+    return (_ux_host_stack_transfer_request_abort(transfer_request));
 }

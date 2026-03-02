@@ -73,56 +73,50 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxd_ipv6_destination_table_find_next_hop(NX_IP *ip_ptr,
-                                               ULONG *destination_ip,
-                                               ULONG *next_hop) {
+UINT _nxd_ipv6_destination_table_find_next_hop(NX_IP *ip_ptr, ULONG *destination_ip, ULONG *next_hop) {
 
-  UINT i, table_size;
-  UINT status;
+    UINT i, table_size;
+    UINT status;
 
-  status = NX_NOT_SUCCESSFUL;
+    status = NX_NOT_SUCCESSFUL;
 
-  /* Next hop storage must not be valid. */
-  NX_ASSERT(next_hop != NX_NULL);
+    /* Next hop storage must not be valid. */
+    NX_ASSERT(next_hop != NX_NULL);
 
-  /* Set a local variable for convenience. */
-  table_size = ip_ptr->nx_ipv6_destination_table_size;
+    /* Set a local variable for convenience. */
+    table_size = ip_ptr->nx_ipv6_destination_table_size;
 
-  /* Check the num of destination. */
-  if (table_size == 0) {
-    return (NX_NOT_SUCCESSFUL);
-  }
-
-  /* Loop through all entries. */
-  for (i = 0; table_size && (i < NX_IPV6_DESTINATION_TABLE_SIZE); i++) {
-
-    /* Skip invalid entries. */
-    if (!ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_valid) {
-      continue;
+    /* Check the num of destination. */
+    if (table_size == 0) {
+        return (NX_NOT_SUCCESSFUL);
     }
 
-    /* Keep track of valid entries we have checked. */
-    table_size--;
+    /* Loop through all entries. */
+    for (i = 0; table_size && (i < NX_IPV6_DESTINATION_TABLE_SIZE); i++) {
 
-    /* Check whether or not the address is the same. */
-    if (CHECK_IPV6_ADDRESSES_SAME(
-            ip_ptr->nx_ipv6_destination_table[i]
-                .nx_ipv6_destination_entry_destination_address,
-            destination_ip)) {
+        /* Skip invalid entries. */
+        if (!ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_valid) {
+            continue;
+        }
 
-      /* Copy next hop address to user-supplied storage. */
-      COPY_IPV6_ADDRESS(ip_ptr->nx_ipv6_destination_table[i]
-                            .nx_ipv6_destination_entry_next_hop,
-                        next_hop);
+        /* Keep track of valid entries we have checked. */
+        table_size--;
 
-      status = NX_SUCCESS;
+        /* Check whether or not the address is the same. */
+        if (CHECK_IPV6_ADDRESSES_SAME(
+                ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_destination_address, destination_ip)) {
 
-      /* break out of the for loop */
-      break;
+            /* Copy next hop address to user-supplied storage. */
+            COPY_IPV6_ADDRESS(ip_ptr->nx_ipv6_destination_table[i].nx_ipv6_destination_entry_next_hop, next_hop);
+
+            status = NX_SUCCESS;
+
+            /* break out of the for loop */
+            break;
+        }
     }
-  }
 
-  return (status);
+    return (status);
 }
 
 #endif /* FEATURE_NX_IPV6 */

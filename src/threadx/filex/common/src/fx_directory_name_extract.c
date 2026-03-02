@@ -73,75 +73,75 @@
 /**************************************************************************/
 CHAR *_fx_directory_name_extract(CHAR *source_ptr, CHAR *dest_ptr) {
 
-  UINT i;
+    UINT i;
 
-  /* Set the destination string to NULL.  */
-  dest_ptr[0] = 0;
+    /* Set the destination string to NULL.  */
+    dest_ptr[0] = 0;
 
-  /* Is a backslash present?  */
-  if ((*source_ptr == '\\') || (*source_ptr == '/')) {
-
-    /* Advance the string pointer.  */
-    source_ptr++;
-  }
-
-  /* Loop to remove any leading spaces.  */
-  while (*source_ptr == ' ') {
-
-    /* Position past leading space.  */
-    source_ptr++;
-  }
-
-  /* Loop to extract the name.  */
-  i = 0;
-  while (*source_ptr) {
-
-    /* If another backslash is present, break the loop.  */
+    /* Is a backslash present?  */
     if ((*source_ptr == '\\') || (*source_ptr == '/')) {
-      break;
+
+        /* Advance the string pointer.  */
+        source_ptr++;
     }
 
-    /* Long name can be at most 255 characters, but are further limited by the
-       FX_MAX_LONG_NAME_LEN define.  */
-    if (i == FX_MAX_LONG_NAME_LEN - 1) {
-      break;
+    /* Loop to remove any leading spaces.  */
+    while (*source_ptr == ' ') {
+
+        /* Position past leading space.  */
+        source_ptr++;
     }
 
-    /* Store the character.  */
-    dest_ptr[i] = *source_ptr++;
+    /* Loop to extract the name.  */
+    i = 0;
+    while (*source_ptr) {
 
-    /* Increment the character counter.  */
-    i++;
-  }
+        /* If another backslash is present, break the loop.  */
+        if ((*source_ptr == '\\') || (*source_ptr == '/')) {
+            break;
+        }
 
-  /* NULL-terminate the string.  */
-  dest_ptr[i] = 0;
+        /* Long name can be at most 255 characters, but are further limited by the
+           FX_MAX_LONG_NAME_LEN define.  */
+        if (i == FX_MAX_LONG_NAME_LEN - 1) {
+            break;
+        }
 
-  /* Determine if we can backup to the previous character.  */
-  if (i) {
+        /* Store the character.  */
+        dest_ptr[i] = *source_ptr++;
 
-    /* Yes, we can move backwards.  */
-    i--;
-  }
+        /* Increment the character counter.  */
+        i++;
+    }
 
-  /* Get rid of trailing blanks in the destination string.  */
-  while (dest_ptr[i] == ' ') {
-
-    /* Set this entry to NULL.  */
+    /* NULL-terminate the string.  */
     dest_ptr[i] = 0;
 
-    /* Backup to the next character. Since leading spaces have been removed,
-       we know that the index is always greater than 1.  */
-    i--;
-  }
+    /* Determine if we can backup to the previous character.  */
+    if (i) {
 
-  /* Determine if the source string is now at the end.  */
-  if (*source_ptr == 0) {
+        /* Yes, we can move backwards.  */
+        i--;
+    }
 
-    /* Yes, return a NULL pointer.  */
-    source_ptr = FX_NULL;
-  }
+    /* Get rid of trailing blanks in the destination string.  */
+    while (dest_ptr[i] == ' ') {
 
-  /* Return the last pointer position in the source.  */
-  return (source_ptr);
+        /* Set this entry to NULL.  */
+        dest_ptr[i] = 0;
+
+        /* Backup to the next character. Since leading spaces have been removed,
+           we know that the index is always greater than 1.  */
+        i--;
+    }
+
+    /* Determine if the source string is now at the end.  */
+    if (*source_ptr == 0) {
+
+        /* Yes, return a NULL pointer.  */
+        source_ptr = FX_NULL;
+    }
+
+    /* Return the last pointer position in the source.  */
+    return (source_ptr);
 }

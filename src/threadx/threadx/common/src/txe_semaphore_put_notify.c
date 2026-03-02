@@ -69,30 +69,29 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _txe_semaphore_put_notify(
-    TX_SEMAPHORE *semaphore_ptr,
-    VOID (*semaphore_put_notify)(TX_SEMAPHORE *notify_semaphore_ptr)) {
+UINT _txe_semaphore_put_notify(TX_SEMAPHORE *semaphore_ptr,
+                               VOID (*semaphore_put_notify)(TX_SEMAPHORE *notify_semaphore_ptr)) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid semaphore pointer.  */
-  if (semaphore_ptr == TX_NULL) {
+    /* Check for an invalid semaphore pointer.  */
+    if (semaphore_ptr == TX_NULL) {
 
-    /* Semaphore pointer is invalid, return appropriate error code.  */
-    status = TX_SEMAPHORE_ERROR;
-  }
+        /* Semaphore pointer is invalid, return appropriate error code.  */
+        status = TX_SEMAPHORE_ERROR;
+    }
 
-  /* Now check for invalid semaphore ID.  */
-  else if (semaphore_ptr->tx_semaphore_id != TX_SEMAPHORE_ID) {
+    /* Now check for invalid semaphore ID.  */
+    else if (semaphore_ptr->tx_semaphore_id != TX_SEMAPHORE_ID) {
 
-    /* Semaphore pointer is invalid, return appropriate error code.  */
-    status = TX_SEMAPHORE_ERROR;
-  } else {
+        /* Semaphore pointer is invalid, return appropriate error code.  */
+        status = TX_SEMAPHORE_ERROR;
+    } else {
 
-    /* Call actual semaphore put notify function.  */
-    status = _tx_semaphore_put_notify(semaphore_ptr, semaphore_put_notify);
-  }
+        /* Call actual semaphore put notify function.  */
+        status = _tx_semaphore_put_notify(semaphore_ptr, semaphore_put_notify);
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

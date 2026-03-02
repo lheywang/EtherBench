@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -20,13 +19,11 @@
 /**************************************************************************/
 /**************************************************************************/
 
-
 /* Include necessary system files.  */
 
 #define UX_SOURCE_CODE
 
 #include "ux_api.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -77,40 +74,37 @@
 /*                                            resulting in version 6.3.0  */
 /*                                                                        */
 /**************************************************************************/
-VOID  _ux_utility_descriptor_parse(UCHAR * raw_descriptor, UCHAR * descriptor_structure,
-                        UINT descriptor_entries, UCHAR * descriptor)
-{
+VOID _ux_utility_descriptor_parse(UCHAR *raw_descriptor, UCHAR *descriptor_structure, UINT descriptor_entries,
+                                  UCHAR *descriptor) {
 
     /* Loop on all the entries in this descriptor.  */
-    while(descriptor_entries--)
-    {
+    while (descriptor_entries--) {
 
         /* Get the length of that component.  */
-        switch(*descriptor_structure++)
-        {
+        switch (*descriptor_structure++) {
 
         /* Check the size then build the component from the source and
            insert it into the target descriptor.  */
         case 4:
 
             /* Padding zeros so address is aligned.  */
-            while((ALIGN_TYPE) descriptor & 3u)
-                *descriptor++ =  0;
+            while ((ALIGN_TYPE)descriptor & 3u)
+                *descriptor++ = 0;
 
             /* Save the DW.  */
-            *((ULONG *) descriptor) =  _ux_utility_long_get(raw_descriptor);
-            raw_descriptor +=  4;
+            *((ULONG *)descriptor) = _ux_utility_long_get(raw_descriptor);
+            raw_descriptor += 4;
             descriptor += 4;
             break;
 
         case 2:
 
             /* Padding zeros so address is aligned.  */
-            while((ALIGN_TYPE) descriptor & 1u)
-                *descriptor++ =  0;
+            while ((ALIGN_TYPE)descriptor & 1u)
+                *descriptor++ = 0;
 
             /* Save the word.  */
-            *((USHORT *) descriptor) = (USHORT) _ux_utility_short_get(raw_descriptor);
+            *((USHORT *)descriptor) = (USHORT)_ux_utility_short_get(raw_descriptor);
             raw_descriptor += 2;
             descriptor += 2;
             break;
@@ -118,9 +112,9 @@ VOID  _ux_utility_descriptor_parse(UCHAR * raw_descriptor, UCHAR * descriptor_st
         default:
 
             /* Save the byte.  */
-            *((UCHAR *) descriptor) =  (UCHAR) *raw_descriptor;
+            *((UCHAR *)descriptor) = (UCHAR)*raw_descriptor;
             raw_descriptor++;
-            descriptor ++;
+            descriptor++;
         }
     }
 
@@ -168,29 +162,26 @@ VOID  _ux_utility_descriptor_parse(UCHAR * raw_descriptor, UCHAR * descriptor_st
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-ULONG _ux_utility_descriptor_parse_size(UCHAR * descriptor_structure, UINT descriptor_entries, UINT size_align_mask)
-{
+ULONG _ux_utility_descriptor_parse_size(UCHAR *descriptor_structure, UINT descriptor_entries, UINT size_align_mask) {
 
-ULONG           size = 0;
-ULONG           entry_size;
+    ULONG size = 0;
+    ULONG entry_size;
 
     /* Loop on all the entries in this descriptor.  */
-    while(descriptor_entries--)
-    {
+    while (descriptor_entries--) {
 
         /* Get entry size.  */
-        entry_size = (ULONG)*descriptor_structure ++;
+        entry_size = (ULONG)*descriptor_structure++;
 
         /* Check the size then build the component from the source and
            insert it into the target descriptor.  */
-        switch(entry_size)
-        {
+        switch (entry_size) {
 
         case 4: /* Fall through.  */
         case 2:
 
             /* Padding zeros so address is aligned.  */
-            while(size & (entry_size - 1))
+            while (size & (entry_size - 1))
                 size++;
 
             /* Add to the size.  */
@@ -206,7 +197,7 @@ ULONG           entry_size;
         default:
 
             /* Invalid entry size.  */
-            return(0);
+            return (0);
         }
     }
 
@@ -214,5 +205,5 @@ ULONG           entry_size;
     size = (size + size_align_mask) & (~size_align_mask);
 
     /* Return the size.  */
-    return(size);
+    return (size);
 }

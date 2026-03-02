@@ -71,6 +71,6 @@
 /**************************************************************************/
 ULONG _fx_unicode_length_get(UCHAR *unicode_name) {
 
-  /* Call the extended version with 256 bytes maximum buffer length.  */
-  return (_fx_unicode_length_get_extended(unicode_name, 256));
+    /* Call the extended version with 256 bytes maximum buffer length.  */
+    return (_fx_unicode_length_get_extended(unicode_name, 256));
 }

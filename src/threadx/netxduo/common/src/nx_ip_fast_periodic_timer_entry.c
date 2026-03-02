@@ -71,13 +71,13 @@
 /**************************************************************************/
 static VOID _nx_ip_fast_periodic_timer_entry(ULONG ip_address) {
 
-  NX_IP *ip_ptr;
+    NX_IP *ip_ptr;
 
-  /* Setup IP pointer.  */
-  NX_TIMER_EXTENSION_PTR_GET(ip_ptr, NX_IP, ip_address)
+    /* Setup IP pointer.  */
+    NX_TIMER_EXTENSION_PTR_GET(ip_ptr, NX_IP, ip_address)
 
-  /* Wakeup this IP's helper thread.  */
-  tx_event_flags_set(&(ip_ptr->nx_ip_events), NX_IP_FAST_EVENT, TX_OR);
+    /* Wakeup this IP's helper thread.  */
+    tx_event_flags_set(&(ip_ptr->nx_ip_events), NX_IP_FAST_EVENT, TX_OR);
 }
 
 /**************************************************************************/
@@ -124,24 +124,21 @@ static VOID _nx_ip_fast_periodic_timer_entry(ULONG ip_address) {
 /**************************************************************************/
 VOID _nx_ip_fast_periodic_timer_create(NX_IP *ip_ptr) {
 
-  ULONG _nx_ip_fast_timer_rate;
+    ULONG _nx_ip_fast_timer_rate;
 
-  if (ip_ptr->nx_ip_fast_periodic_timer_created) {
-    return;
-  }
+    if (ip_ptr->nx_ip_fast_periodic_timer_created) {
+        return;
+    }
 
-  _nx_ip_fast_timer_rate = (NX_IP_PERIODIC_RATE + (NX_IP_FAST_TIMER_RATE - 1)) /
-                           NX_IP_FAST_TIMER_RATE;
+    _nx_ip_fast_timer_rate = (NX_IP_PERIODIC_RATE + (NX_IP_FAST_TIMER_RATE - 1)) / NX_IP_FAST_TIMER_RATE;
 
-  /* Create the fast TCP timer.  */
-  /*lint -e{923} suppress cast of pointer to ULONG.  */
-  tx_timer_create(&(ip_ptr->nx_ip_fast_periodic_timer), ip_ptr->nx_ip_name,
-                  _nx_ip_fast_periodic_timer_entry, (ULONG)(ALIGN_TYPE)ip_ptr,
-                  _nx_ip_fast_timer_rate, _nx_ip_fast_timer_rate,
-                  TX_AUTO_ACTIVATE);
+    /* Create the fast TCP timer.  */
+    /*lint -e{923} suppress cast of pointer to ULONG.  */
+    tx_timer_create(&(ip_ptr->nx_ip_fast_periodic_timer), ip_ptr->nx_ip_name, _nx_ip_fast_periodic_timer_entry,
+                    (ULONG)(ALIGN_TYPE)ip_ptr, _nx_ip_fast_timer_rate, _nx_ip_fast_timer_rate, TX_AUTO_ACTIVATE);
 
-  NX_TIMER_EXTENSION_PTR_SET(&(ip_ptr->nx_ip_fast_periodic_timer), ip_ptr)
+    NX_TIMER_EXTENSION_PTR_SET(&(ip_ptr->nx_ip_fast_periodic_timer), ip_ptr)
 
-  /* Set the flag to indicate that the fast timer has been created. */
-  ip_ptr->nx_ip_fast_periodic_timer_created = 1;
+    /* Set the flag to indicate that the fast timer has been created. */
+    ip_ptr->nx_ip_fast_periodic_timer_created = 1;
 }

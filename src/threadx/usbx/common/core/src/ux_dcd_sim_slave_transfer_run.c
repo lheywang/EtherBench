@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -22,12 +21,10 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_dcd_sim_slave.h"
-
 
 #if defined(UX_DEVICE_STANDALONE)
 /**************************************************************************/
@@ -79,70 +76,62 @@
 /*  01-31-2022     Chaoqiong Xiao           Initial Version 6.1.10        */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_dcd_sim_slave_transfer_run(UX_DCD_SIM_SLAVE *dcd_sim_slave, UX_SLAVE_TRANSFER *transfer_request)
-{
+UINT _ux_dcd_sim_slave_transfer_run(UX_DCD_SIM_SLAVE *dcd_sim_slave, UX_SLAVE_TRANSFER *transfer_request) {
 
-UX_INTERRUPT_SAVE_AREA
+    UX_INTERRUPT_SAVE_AREA
 
-UX_SLAVE_ENDPOINT       *endpoint;
-UX_DCD_SIM_SLAVE_ED     *ed;
-ULONG                   ed_status;
-
+    UX_SLAVE_ENDPOINT *endpoint;
+    UX_DCD_SIM_SLAVE_ED *ed;
+    ULONG ed_status;
 
     UX_PARAMETER_NOT_USED(dcd_sim_slave);
 
     /* Get the pointer to the logical endpoint from the transfer request.  */
-    endpoint =  transfer_request -> ux_slave_transfer_request_endpoint;
+    endpoint = transfer_request->ux_slave_transfer_request_endpoint;
 
     /* Get the slave endpoint.  */
-    ed = (UX_DCD_SIM_SLAVE_ED *) endpoint -> ux_slave_endpoint_ed;
+    ed = (UX_DCD_SIM_SLAVE_ED *)endpoint->ux_slave_endpoint_ed;
 
     UX_DISABLE
 
     /* Get current status.  */
-    ed_status = ed -> ux_sim_slave_ed_status;
+    ed_status = ed->ux_sim_slave_ed_status;
 
     /* ED freed, must disconnected.  */
-    if (ed_status == UX_DCD_SIM_SLAVE_ED_STATUS_UNUSED)
-    {
-        transfer_request -> ux_slave_transfer_request_status = UX_TRANSFER_BUS_RESET;
+    if (ed_status == UX_DCD_SIM_SLAVE_ED_STATUS_UNUSED) {
+        transfer_request->ux_slave_transfer_request_status = UX_TRANSFER_BUS_RESET;
         UX_RESTORE
-        return(UX_STATE_EXIT);
+        return (UX_STATE_EXIT);
     }
 
     /* For control endpoint, always go to next state.  */
-    if(ed -> ux_sim_slave_ed_index == 0)
-    {
+    if (ed->ux_sim_slave_ed_index == 0) {
         UX_RESTORE
-        return(UX_STATE_NEXT);
+        return (UX_STATE_NEXT);
     }
 
     /* ED stalled.  */
-    if (ed_status & UX_DCD_SIM_SLAVE_ED_STATUS_STALLED)
-    {
-        ed -> ux_sim_slave_ed_status = UX_DCD_SIM_SLAVE_ED_STATUS_USED;
-        transfer_request -> ux_slave_transfer_request_status = UX_TRANSFER_STALLED;
+    if (ed_status & UX_DCD_SIM_SLAVE_ED_STATUS_STALLED) {
+        ed->ux_sim_slave_ed_status = UX_DCD_SIM_SLAVE_ED_STATUS_USED;
+        transfer_request->ux_slave_transfer_request_status = UX_TRANSFER_STALLED;
         UX_RESTORE
-        return(UX_STATE_NEXT);
+        return (UX_STATE_NEXT);
     }
 
     /* Transfer started.  */
-    if (ed_status & UX_DCD_SIM_SLAVE_ED_STATUS_TRANSFER)
-    {
-        if (ed_status & UX_DCD_SIM_SLAVE_ED_STATUS_DONE)
-        {
-            ed -> ux_sim_slave_ed_status = UX_DCD_SIM_SLAVE_ED_STATUS_USED;
+    if (ed_status & UX_DCD_SIM_SLAVE_ED_STATUS_TRANSFER) {
+        if (ed_status & UX_DCD_SIM_SLAVE_ED_STATUS_DONE) {
+            ed->ux_sim_slave_ed_status = UX_DCD_SIM_SLAVE_ED_STATUS_USED;
             UX_RESTORE
-            return(UX_STATE_NEXT);
+            return (UX_STATE_NEXT);
         }
         UX_RESTORE
-        return(UX_STATE_WAIT);
+        return (UX_STATE_WAIT);
     }
 
     /* Start transfer.  */
     ed->ux_sim_slave_ed_status |= UX_DCD_SIM_SLAVE_ED_STATUS_TRANSFER;
     UX_RESTORE
-    return(UX_STATE_WAIT);
-
+    return (UX_STATE_WAIT);
 }
 #endif

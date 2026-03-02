@@ -70,20 +70,18 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_udp_socket_receive_notify(
-    NX_UDP_SOCKET *socket_ptr,
-    VOID (*udp_receive_notify)(NX_UDP_SOCKET *socket_ptr)) {
+UINT _nxe_udp_socket_receive_notify(NX_UDP_SOCKET *socket_ptr, VOID (*udp_receive_notify)(NX_UDP_SOCKET *socket_ptr)) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((socket_ptr == NX_NULL) || (socket_ptr->nx_udp_socket_id != NX_UDP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((socket_ptr == NX_NULL) || (socket_ptr->nx_udp_socket_id != NX_UDP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Call actual socket receive notify function.  */
-  status = _nx_udp_socket_receive_notify(socket_ptr, udp_receive_notify);
+    /* Call actual socket receive notify function.  */
+    status = _nx_udp_socket_receive_notify(socket_ptr, udp_receive_notify);
 
-  /* Return to caller.  */
-  return (status);
+    /* Return to caller.  */
+    return (status);
 }

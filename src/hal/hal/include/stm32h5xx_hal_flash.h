@@ -44,24 +44,23 @@ extern "C" {
  * @brief  FLASH handle Structure definition
  */
 typedef struct {
-  HAL_LockTypeDef Lock; /*!< FLASH locking object */
+    HAL_LockTypeDef Lock; /*!< FLASH locking object */
 
-  uint32_t ErrorCode; /*!< FLASH error code */
+    uint32_t ErrorCode; /*!< FLASH error code */
 
-  uint32_t ProcedureOnGoing; /*!< Internal variable to indicate which procedure
-                                is ongoing or not in IT context */
+    uint32_t ProcedureOnGoing; /*!< Internal variable to indicate which procedure
+                                  is ongoing or not in IT context */
 
-  uint32_t
-      Address; /*!< Internal variable to save address selected for program */
+    uint32_t Address; /*!< Internal variable to save address selected for program */
 
-  uint32_t Bank; /*!< Internal variable to save current bank selected during
-                    erase in IT context */
+    uint32_t Bank; /*!< Internal variable to save current bank selected during
+                      erase in IT context */
 
-  uint32_t Sector; /*!< Internal variable to define the current sector which is
-                      erasing     */
+    uint32_t Sector; /*!< Internal variable to define the current sector which is
+                        erasing     */
 
-  uint32_t NbSectorsToErase; /*!< Internal variable to save the remaining
-                                sectors to erase in IT context  */
+    uint32_t NbSectorsToErase; /*!< Internal variable to save the remaining
+                                  sectors to erase in IT context  */
 
 } FLASH_ProcessTypeDef;
 
@@ -79,41 +78,37 @@ typedef struct {
  * @{
  */
 #define FLASH_FLAG_BSY FLASH_SR_BSY /*!< FLASH Busy flag */
-#define FLASH_FLAG_WBNE                                                        \
-  FLASH_SR_WBNE                       /*!< FLASH Write Buffer Not Empty flag   \
-                                       */
-#define FLASH_FLAG_DBNE FLASH_SR_DBNE /*!< FLASH data Buffer Not Empty flag */
-#define FLASH_FLAG_EOP FLASH_SR_EOP   /*!< FLASH End Of operation flag */
-#define FLASH_FLAG_WRPERR                                                      \
-  FLASH_SR_WRPERR /*!< FLASH Write Protection Error flag */
-#define FLASH_FLAG_PGSERR                                                      \
-  FLASH_SR_PGSERR /*!< FLASH Program Sequence Error flag */
+#define FLASH_FLAG_WBNE                                                                                                \
+    FLASH_SR_WBNE                           /*!< FLASH Write Buffer Not Empty flag                                     \
+                                             */
+#define FLASH_FLAG_DBNE FLASH_SR_DBNE       /*!< FLASH data Buffer Not Empty flag */
+#define FLASH_FLAG_EOP FLASH_SR_EOP         /*!< FLASH End Of operation flag */
+#define FLASH_FLAG_WRPERR FLASH_SR_WRPERR   /*!< FLASH Write Protection Error flag */
+#define FLASH_FLAG_PGSERR FLASH_SR_PGSERR   /*!< FLASH Program Sequence Error flag */
 #define FLASH_FLAG_STRBERR FLASH_SR_STRBERR /*!< FLASH Strobe Error flag */
-#define FLASH_FLAG_INCERR                                                      \
-  FLASH_SR_INCERR /*!< FLASH Inconsistency Error flag                          \
-                   */
+#define FLASH_FLAG_INCERR                                                                                              \
+    FLASH_SR_INCERR /*!< FLASH Inconsistency Error flag                                                                \
+                     */
 #if defined(FLASH_SR_OBKERR)
-#define FLASH_FLAG_OBKERR FLASH_SR_OBKERR   /*!< FLASH OBK Error flag */
-#define FLASH_FLAG_OBKWERR FLASH_SR_OBKWERR /*!< FLASH OBK Write Error flag */
-#endif                                      /* FLASH_SR_OBKERR */
-#define FLASH_FLAG_OPTCHANGEERR                                                \
-  FLASH_SR_OPTCHANGEERR /*!< FLASH Option Byte change Error flag */
-#define FLASH_FLAG_ECCC FLASH_ECCR_ECCC /*!< FLASH ECC Correction flag */
-#define FLASH_FLAG_ECCD FLASH_ECCR_ECCD /*!< FLASH ECC Detection flag */
+#define FLASH_FLAG_OBKERR FLASH_SR_OBKERR             /*!< FLASH OBK Error flag */
+#define FLASH_FLAG_OBKWERR FLASH_SR_OBKWERR           /*!< FLASH OBK Write Error flag */
+#endif                                                /* FLASH_SR_OBKERR */
+#define FLASH_FLAG_OPTCHANGEERR FLASH_SR_OPTCHANGEERR /*!< FLASH Option Byte change Error flag */
+#define FLASH_FLAG_ECCC FLASH_ECCR_ECCC               /*!< FLASH ECC Correction flag */
+#define FLASH_FLAG_ECCD FLASH_ECCR_ECCD               /*!< FLASH ECC Detection flag */
 
 #if defined(FLASH_SR_OBKERR)
-#define FLASH_FLAG_SR_ERRORS                                                   \
-  (FLASH_SR_WRPERR | FLASH_SR_PGSERR | FLASH_SR_STRBERR | FLASH_SR_INCERR |    \
-   FLASH_SR_OBKERR | FLASH_SR_OBKWERR | FLASH_SR_OPTCHANGEERR)
+#define FLASH_FLAG_SR_ERRORS                                                                                           \
+    (FLASH_SR_WRPERR | FLASH_SR_PGSERR | FLASH_SR_STRBERR | FLASH_SR_INCERR | FLASH_SR_OBKERR | FLASH_SR_OBKWERR |     \
+     FLASH_SR_OPTCHANGEERR)
 #else
-#define FLASH_FLAG_SR_ERRORS                                                   \
-  (FLASH_SR_WRPERR | FLASH_SR_PGSERR | FLASH_SR_STRBERR | FLASH_SR_INCERR |    \
-   FLASH_SR_OPTCHANGEERR)
+#define FLASH_FLAG_SR_ERRORS                                                                                           \
+    (FLASH_SR_WRPERR | FLASH_SR_PGSERR | FLASH_SR_STRBERR | FLASH_SR_INCERR | FLASH_SR_OPTCHANGEERR)
 #endif /* FLASH_SR_OBKERR */
 #define FLASH_FLAG_ECCR_ERRORS (FLASH_FLAG_ECCC | FLASH_FLAG_ECCD)
-#define FLASH_FLAG_ALL_ERRORS                                                  \
-  (FLASH_FLAG_SR_ERRORS | FLASH_FLAG_ECCR_ERRORS) /*!< All FLASH error flags   \
-                                                   */
+#define FLASH_FLAG_ALL_ERRORS                                                                                          \
+    (FLASH_FLAG_SR_ERRORS | FLASH_FLAG_ECCR_ERRORS) /*!< All FLASH error flags                                         \
+                                                     */
 /**
  * @}
  */
@@ -122,37 +117,27 @@ typedef struct {
  * @brief FLASH Interrupt definition
  * @{
  */
-#define FLASH_IT_EOP                                                           \
-  FLASH_CR_EOPIE /*!< End of FLASH Operation interrupt enable */
-#define FLASH_IT_WRPERR                                                        \
-  FLASH_CR_WRPERRIE /*!< Write Protection Error interrupt enable */
-#define FLASH_IT_PGSERR                                                        \
-  FLASH_CR_PGSERRIE /*!< Program Sequence Error interrupt enable */
-#define FLASH_IT_STRBERR                                                       \
-  FLASH_CR_STRBERRIE /*!< Strobe Error interrupt enable */
-#define FLASH_IT_INCERR                                                        \
-  FLASH_CR_INCERRIE /*!< Inconsistency Error interrupt enable */
+#define FLASH_IT_EOP FLASH_CR_EOPIE         /*!< End of FLASH Operation interrupt enable */
+#define FLASH_IT_WRPERR FLASH_CR_WRPERRIE   /*!< Write Protection Error interrupt enable */
+#define FLASH_IT_PGSERR FLASH_CR_PGSERRIE   /*!< Program Sequence Error interrupt enable */
+#define FLASH_IT_STRBERR FLASH_CR_STRBERRIE /*!< Strobe Error interrupt enable */
+#define FLASH_IT_INCERR FLASH_CR_INCERRIE   /*!< Inconsistency Error interrupt enable */
 #if defined(FLASH_SR_OBKERR)
-#define FLASH_IT_OBKERR FLASH_CR_OBKERRIE /*!< OBK Error interrupt enable */
-#define FLASH_IT_OBKWERR                                                       \
-  FLASH_CR_OBKWERRIE /*!< OBK Write Error interrupt enable */
-#endif               /* FLASH_SR_OBKERR */
-#define FLASH_IT_OPTCHANGEERR                                                  \
-  FLASH_CR_OPTCHANGEERRIE /*!< Option Byte change Error interrupt enable */
-#define FLASH_IT_ECCC                                                          \
-  FLASH_ECCR_ECCIE /*!< Single ECC Error Correction interrupt enable */
+#define FLASH_IT_OBKERR FLASH_CR_OBKERRIE             /*!< OBK Error interrupt enable */
+#define FLASH_IT_OBKWERR FLASH_CR_OBKWERRIE           /*!< OBK Write Error interrupt enable */
+#endif                                                /* FLASH_SR_OBKERR */
+#define FLASH_IT_OPTCHANGEERR FLASH_CR_OPTCHANGEERRIE /*!< Option Byte change Error interrupt enable */
+#define FLASH_IT_ECCC FLASH_ECCR_ECCIE                /*!< Single ECC Error Correction interrupt enable */
 
 #if defined(FLASH_SR_OBKERR)
-#define FLASH_IT_ALL                                                           \
-  (FLASH_IT_EOP | FLASH_IT_WRPERR | FLASH_IT_PGSERR | FLASH_IT_STRBERR |       \
-   FLASH_IT_INCERR | FLASH_IT_OBKERR | FLASH_IT_OBKWERR |                      \
-   FLASH_IT_OPTCHANGEERR | FLASH_IT_ECCC) /*!< All Flash interrupt sources */
+#define FLASH_IT_ALL                                                                                                   \
+    (FLASH_IT_EOP | FLASH_IT_WRPERR | FLASH_IT_PGSERR | FLASH_IT_STRBERR | FLASH_IT_INCERR | FLASH_IT_OBKERR |         \
+     FLASH_IT_OBKWERR | FLASH_IT_OPTCHANGEERR | FLASH_IT_ECCC) /*!< All Flash interrupt sources */
 #else
-#define FLASH_IT_ALL                                                           \
-  (FLASH_IT_EOP | FLASH_IT_WRPERR | FLASH_IT_PGSERR | FLASH_IT_STRBERR |       \
-   FLASH_IT_INCERR | FLASH_IT_OPTCHANGEERR |                                   \
-   FLASH_IT_ECCC) /*!< All Flash interrupt sources */
-#endif            /* FLASH_SR_OBKERR */
+#define FLASH_IT_ALL                                                                                                   \
+    (FLASH_IT_EOP | FLASH_IT_WRPERR | FLASH_IT_PGSERR | FLASH_IT_STRBERR | FLASH_IT_INCERR | FLASH_IT_OPTCHANGEERR |   \
+     FLASH_IT_ECCC) /*!< All Flash interrupt sources */
+#endif              /* FLASH_SR_OBKERR */
 
 /**
  * @}
@@ -162,28 +147,18 @@ typedef struct {
  * @brief    FLASH Error Code
  * @{
  */
-#define HAL_FLASH_ERROR_NONE                                                   \
-  0x00000000U /*!< No error                              */
-#define HAL_FLASH_ERROR_WRP                                                    \
-  FLASH_FLAG_WRPERR /*!< Write Protection Error                */
-#define HAL_FLASH_ERROR_PGS                                                    \
-  FLASH_FLAG_PGSERR /*!< Program Sequence Error                */
-#define HAL_FLASH_ERROR_STRB                                                   \
-  FLASH_FLAG_STRBERR /*!< Strobe Error                          */
-#define HAL_FLASH_ERROR_INC                                                    \
-  FLASH_FLAG_INCERR /*!< Inconsistency Error                   */
+#define HAL_FLASH_ERROR_NONE 0x00000000U        /*!< No error                              */
+#define HAL_FLASH_ERROR_WRP FLASH_FLAG_WRPERR   /*!< Write Protection Error                */
+#define HAL_FLASH_ERROR_PGS FLASH_FLAG_PGSERR   /*!< Program Sequence Error                */
+#define HAL_FLASH_ERROR_STRB FLASH_FLAG_STRBERR /*!< Strobe Error                          */
+#define HAL_FLASH_ERROR_INC FLASH_FLAG_INCERR   /*!< Inconsistency Error                   */
 #if defined(FLASH_SR_OBKERR)
-#define HAL_FLASH_ERROR_OBK                                                    \
-  FLASH_FLAG_OBKERR /*!< OBK Error                             */
-#define HAL_FLASH_ERROR_OBKW                                                   \
-  FLASH_FLAG_OBKWERR /*!< OBK Write Error                       */
-#endif               /* FLASH_SR_OBKERR */
-#define HAL_FLASH_ERROR_OB_CHANGE                                              \
-  FLASH_FLAG_OPTCHANGEERR /*!< Option Byte Change Error              */
-#define HAL_FLASH_ERROR_ECCC                                                   \
-  FLASH_FLAG_ECCC /*!< ECC Single Correction Error           */
-#define HAL_FLASH_ERROR_ECCD                                                   \
-  FLASH_FLAG_ECCD /*!< ECC Double Detection Error            */
+#define HAL_FLASH_ERROR_OBK FLASH_FLAG_OBKERR             /*!< OBK Error                             */
+#define HAL_FLASH_ERROR_OBKW FLASH_FLAG_OBKWERR           /*!< OBK Write Error                       */
+#endif                                                    /* FLASH_SR_OBKERR */
+#define HAL_FLASH_ERROR_OB_CHANGE FLASH_FLAG_OPTCHANGEERR /*!< Option Byte Change Error              */
+#define HAL_FLASH_ERROR_ECCC FLASH_FLAG_ECCC              /*!< ECC Single Correction Error           */
+#define HAL_FLASH_ERROR_ECCD FLASH_FLAG_ECCD              /*!< ECC Double Detection Error            */
 /**
  * @}
  */
@@ -192,60 +167,58 @@ typedef struct {
  * @{
  */
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
-#define FLASH_TYPEPROGRAM_QUADWORD                                             \
-  FLASH_CR_PG /*!< Program a quad-word                                         \
-(128-bit) at  a specified secure address */
-#define FLASH_TYPEPROGRAM_QUADWORD_NS                                          \
-  (FLASH_CR_PG | FLASH_NON_SECURE_MASK) /*!< Program a quad-word               \
-                   (128-bit) at a specified non-secure address */
+#define FLASH_TYPEPROGRAM_QUADWORD                                                                                     \
+    FLASH_CR_PG /*!< Program a quad-word                                                                               \
+  (128-bit) at  a specified secure address */
+#define FLASH_TYPEPROGRAM_QUADWORD_NS                                                                                  \
+    (FLASH_CR_PG | FLASH_NON_SECURE_MASK) /*!< Program a quad-word                                                     \
+                     (128-bit) at a specified non-secure address */
 #if defined(FLASH_SR_OBKERR)
-#define FLASH_TYPEPROGRAM_QUADWORD_OBK                                         \
-  (FLASH_CR_PG | FLASH_OBK) /*!< Program a quad-word                           \
-                (128-bit) of OBK to current sector */
-#define FLASH_TYPEPROGRAM_QUADWORD_OBK_ALT                                     \
-  (FLASH_CR_PG | FLASH_OBK | FLASH_OBKCFGR_ALT_SECT) /*!< Program a quad-word  \
-                                       (128-bit) of OBK to alternate sector */
-#endif                                               /* FLASH_SR_OBKERR */
+#define FLASH_TYPEPROGRAM_QUADWORD_OBK                                                                                 \
+    (FLASH_CR_PG | FLASH_OBK) /*!< Program a quad-word                                                                 \
+                  (128-bit) of OBK to current sector */
+#define FLASH_TYPEPROGRAM_QUADWORD_OBK_ALT                                                                             \
+    (FLASH_CR_PG | FLASH_OBK | FLASH_OBKCFGR_ALT_SECT) /*!< Program a quad-word                                        \
+                                         (128-bit) of OBK to alternate sector */
+#endif                                                 /* FLASH_SR_OBKERR */
 #if defined(FLASH_EDATAR_EDATA_EN)
-#define FLASH_TYPEPROGRAM_HALFWORD_EDATA                                       \
-  (FLASH_CR_PG | FLASH_EDATA_HALFWORD) /*!< Program a flash                    \
-high-cycle data half-word (16-bit)at a specified secure address */
-#define FLASH_TYPEPROGRAM_HALFWORD_EDATA_NS                                    \
-  (FLASH_CR_PG | FLASH_EDATA_HALFWORD |                                        \
-   FLASH_NON_SECURE_MASK) /*!< Program a flash                                 \
-high-cycle data half-word (16-bit)at a specified non-secure address */
-#define FLASH_TYPEPROGRAM_WORD_EDATA                                           \
-  (FLASH_CR_PG | FLASH_EDATA_WORD) /*!< Program a flash                        \
-high-cycle data word (32-bit)at a specified secure address */
-#define FLASH_TYPEPROGRAM_WORD_EDATA_NS                                        \
-  (FLASH_CR_PG | FLASH_EDATA_WORD |                                            \
-   FLASH_NON_SECURE_MASK) /*!< Program a flash                                 \
-high-cycle data word (32-bit)at a specified non-secure address */
-#endif                    /* FLASH_EDATAR_EDATA_EN */
+#define FLASH_TYPEPROGRAM_HALFWORD_EDATA                                                                               \
+    (FLASH_CR_PG | FLASH_EDATA_HALFWORD) /*!< Program a flash                                                          \
+  high-cycle data half-word (16-bit)at a specified secure address */
+#define FLASH_TYPEPROGRAM_HALFWORD_EDATA_NS                                                                            \
+    (FLASH_CR_PG | FLASH_EDATA_HALFWORD | FLASH_NON_SECURE_MASK) /*!< Program a flash                                  \
+                                       high-cycle data half-word (16-bit)at a specified non-secure address */
+#define FLASH_TYPEPROGRAM_WORD_EDATA                                                                                   \
+    (FLASH_CR_PG | FLASH_EDATA_WORD) /*!< Program a flash                                                              \
+  high-cycle data word (32-bit)at a specified secure address */
+#define FLASH_TYPEPROGRAM_WORD_EDATA_NS                                                                                \
+    (FLASH_CR_PG | FLASH_EDATA_WORD | FLASH_NON_SECURE_MASK) /*!< Program a flash                                      \
+                                   high-cycle data word (32-bit)at a specified non-secure address */
+#endif                                                       /* FLASH_EDATAR_EDATA_EN */
 #else
-#define FLASH_TYPEPROGRAM_QUADWORD                                             \
-  FLASH_CR_PG /*!< Program a quad-word                                         \
-   (128-bit) at a specified address */
+#define FLASH_TYPEPROGRAM_QUADWORD                                                                                     \
+    FLASH_CR_PG /*!< Program a quad-word                                                                               \
+     (128-bit) at a specified address */
 #if defined(FLASH_SR_OBKERR)
-#define FLASH_TYPEPROGRAM_QUADWORD_OBK                                         \
-  (FLASH_CR_PG | FLASH_OBK) /*!< Program a quad-word                           \
-                (128-bit) of OBK to current sector */
-#define FLASH_TYPEPROGRAM_QUADWORD_OBK_ALT                                     \
-  (FLASH_CR_PG | FLASH_OBK | FLASH_OBKCFGR_ALT_SECT) /*!< Program a quad-word  \
-                                       (128-bit) of OBK to alternate sector */
-#endif                                               /* FLASH_SR_OBKERR */
+#define FLASH_TYPEPROGRAM_QUADWORD_OBK                                                                                 \
+    (FLASH_CR_PG | FLASH_OBK) /*!< Program a quad-word                                                                 \
+                  (128-bit) of OBK to current sector */
+#define FLASH_TYPEPROGRAM_QUADWORD_OBK_ALT                                                                             \
+    (FLASH_CR_PG | FLASH_OBK | FLASH_OBKCFGR_ALT_SECT) /*!< Program a quad-word                                        \
+                                         (128-bit) of OBK to alternate sector */
+#endif                                                 /* FLASH_SR_OBKERR */
 #if defined(FLASH_EDATAR_EDATA_EN)
-#define FLASH_TYPEPROGRAM_HALFWORD_EDATA                                       \
-  (FLASH_CR_PG | FLASH_EDATA_HALFWORD) /*!< Program a flash                    \
-    high-cycle data half-word (16-bit)at a specified address */
-#define FLASH_TYPEPROGRAM_WORD_EDATA                                           \
-  (FLASH_CR_PG | FLASH_EDATA_WORD) /*!< Program a flash                        \
-high-cycle data half-word (32-bit)at a specified address */
-#endif                             /* FLASH_EDATAR_EDATA_EN */
-#endif                             /* __ARM_FEATURE_CMSE */
-#define FLASH_TYPEPROGRAM_HALFWORD_OTP                                         \
-  (FLASH_CR_PG | FLASH_OTP | FLASH_NON_SECURE_MASK) /*!< Program an OTP        \
-                                 half-word (16-bit)at a specified address */
+#define FLASH_TYPEPROGRAM_HALFWORD_EDATA                                                                               \
+    (FLASH_CR_PG | FLASH_EDATA_HALFWORD) /*!< Program a flash                                                          \
+      high-cycle data half-word (16-bit)at a specified address */
+#define FLASH_TYPEPROGRAM_WORD_EDATA                                                                                   \
+    (FLASH_CR_PG | FLASH_EDATA_WORD) /*!< Program a flash                                                              \
+  high-cycle data half-word (32-bit)at a specified address */
+#endif                               /* FLASH_EDATAR_EDATA_EN */
+#endif                               /* __ARM_FEATURE_CMSE */
+#define FLASH_TYPEPROGRAM_HALFWORD_OTP                                                                                 \
+    (FLASH_CR_PG | FLASH_OTP | FLASH_NON_SECURE_MASK) /*!< Program an OTP                                              \
+                                   half-word (16-bit)at a specified address */
 /**
  * @}
  */
@@ -253,28 +226,22 @@ high-cycle data half-word (32-bit)at a specified address */
 /** @defgroup FLASH_Latency FLASH Latency
  * @{
  */
-#define FLASH_LATENCY_0 FLASH_ACR_LATENCY_0WS /*!< FLASH Zero wait cycle */
-#define FLASH_LATENCY_1 FLASH_ACR_LATENCY_1WS /*!< FLASH One wait cycle */
-#define FLASH_LATENCY_2 FLASH_ACR_LATENCY_2WS /*!< FLASH Two wait cycles */
-#define FLASH_LATENCY_3 FLASH_ACR_LATENCY_3WS /*!< FLASH Three wait cycles */
-#define FLASH_LATENCY_4 FLASH_ACR_LATENCY_4WS /*!< FLASH Four wait cycles */
-#define FLASH_LATENCY_5 FLASH_ACR_LATENCY_5WS /*!< FLASH Five wait cycles */
-#define FLASH_LATENCY_6 FLASH_ACR_LATENCY_6WS /*!< FLASH Six wait cycles */
-#define FLASH_LATENCY_7 FLASH_ACR_LATENCY_7WS /*!< FLASH Seven wait cycles */
-#define FLASH_LATENCY_8 FLASH_ACR_LATENCY_8WS /*!< FLASH Eight wait cycle */
-#define FLASH_LATENCY_9 FLASH_ACR_LATENCY_9WS /*!< FLASH Nine wait cycle */
-#define FLASH_LATENCY_10                                                       \
-  FLASH_ACR_LATENCY_10WS /*!< FLASH Ten wait cycles      */
-#define FLASH_LATENCY_11                                                       \
-  FLASH_ACR_LATENCY_11WS /*!< FLASH Eleven wait cycles   */
-#define FLASH_LATENCY_12                                                       \
-  FLASH_ACR_LATENCY_12WS /*!< FLASH Twelve wait cycles   */
-#define FLASH_LATENCY_13                                                       \
-  FLASH_ACR_LATENCY_13WS /*!< FLASH Thirteen wait cycles */
-#define FLASH_LATENCY_14                                                       \
-  FLASH_ACR_LATENCY_14WS /*!< FLASH Fourteen wait cycles */
-#define FLASH_LATENCY_15                                                       \
-  FLASH_ACR_LATENCY_15WS /*!< FLASH Fifteen wait cycles  */
+#define FLASH_LATENCY_0 FLASH_ACR_LATENCY_0WS   /*!< FLASH Zero wait cycle */
+#define FLASH_LATENCY_1 FLASH_ACR_LATENCY_1WS   /*!< FLASH One wait cycle */
+#define FLASH_LATENCY_2 FLASH_ACR_LATENCY_2WS   /*!< FLASH Two wait cycles */
+#define FLASH_LATENCY_3 FLASH_ACR_LATENCY_3WS   /*!< FLASH Three wait cycles */
+#define FLASH_LATENCY_4 FLASH_ACR_LATENCY_4WS   /*!< FLASH Four wait cycles */
+#define FLASH_LATENCY_5 FLASH_ACR_LATENCY_5WS   /*!< FLASH Five wait cycles */
+#define FLASH_LATENCY_6 FLASH_ACR_LATENCY_6WS   /*!< FLASH Six wait cycles */
+#define FLASH_LATENCY_7 FLASH_ACR_LATENCY_7WS   /*!< FLASH Seven wait cycles */
+#define FLASH_LATENCY_8 FLASH_ACR_LATENCY_8WS   /*!< FLASH Eight wait cycle */
+#define FLASH_LATENCY_9 FLASH_ACR_LATENCY_9WS   /*!< FLASH Nine wait cycle */
+#define FLASH_LATENCY_10 FLASH_ACR_LATENCY_10WS /*!< FLASH Ten wait cycles      */
+#define FLASH_LATENCY_11 FLASH_ACR_LATENCY_11WS /*!< FLASH Eleven wait cycles   */
+#define FLASH_LATENCY_12 FLASH_ACR_LATENCY_12WS /*!< FLASH Twelve wait cycles   */
+#define FLASH_LATENCY_13 FLASH_ACR_LATENCY_13WS /*!< FLASH Thirteen wait cycles */
+#define FLASH_LATENCY_14 FLASH_ACR_LATENCY_14WS /*!< FLASH Fourteen wait cycles */
+#define FLASH_LATENCY_15 FLASH_ACR_LATENCY_15WS /*!< FLASH Fifteen wait cycles  */
 /**
  * @}
  */
@@ -464,8 +431,7 @@ high-cycle data half-word (32-bit)at a specified address */
  *     @arg FLASH_LATENCY_15: FLASH Fifteen wait states
  * @retval none
  */
-#define __HAL_FLASH_SET_LATENCY(__LATENCY__)                                   \
-  MODIFY_REG(FLASH->ACR, FLASH_ACR_LATENCY, (__LATENCY__))
+#define __HAL_FLASH_SET_LATENCY(__LATENCY__) MODIFY_REG(FLASH->ACR, FLASH_ACR_LATENCY, (__LATENCY__))
 
 /**
  * @brief  Get the FLASH Latency.
@@ -507,40 +473,39 @@ high-cycle data half-word (32-bit)at a specified address */
  */
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
 /* Enable secure FLASH interrupts from the secure world */
-#define __HAL_FLASH_ENABLE_IT(__INTERRUPT__)                                   \
-  do {                                                                         \
-    if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                             \
-      SET_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                  \
-    }                                                                          \
-    if (((__INTERRUPT__) & FLASH_IT_OPTCHANGEERR) != 0U) {                     \
-      SET_BIT(FLASH->NSCR, FLASH_IT_OPTCHANGEERR);                             \
-    }                                                                          \
-    if (((__INTERRUPT__) & (~FLASH_IT_ECCC)) != 0U) {                          \
-      SET_BIT(FLASH->SECCR,                                                    \
-              ((__INTERRUPT__) & (~(FLASH_IT_ECCC | FLASH_IT_OPTCHANGEERR)))); \
-    }                                                                          \
-  } while (0)
+#define __HAL_FLASH_ENABLE_IT(__INTERRUPT__)                                                                           \
+    do {                                                                                                               \
+        if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                                                                 \
+            SET_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                                                    \
+        }                                                                                                              \
+        if (((__INTERRUPT__) & FLASH_IT_OPTCHANGEERR) != 0U) {                                                         \
+            SET_BIT(FLASH->NSCR, FLASH_IT_OPTCHANGEERR);                                                               \
+        }                                                                                                              \
+        if (((__INTERRUPT__) & (~FLASH_IT_ECCC)) != 0U) {                                                              \
+            SET_BIT(FLASH->SECCR, ((__INTERRUPT__) & (~(FLASH_IT_ECCC | FLASH_IT_OPTCHANGEERR))));                     \
+        }                                                                                                              \
+    } while (0)
 /* Enable non-secure FLASH interrupts from the secure world */
-#define __HAL_FLASH_ENABLE_IT_NS(__INTERRUPT__)                                \
-  do {                                                                         \
-    if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                             \
-      SET_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                  \
-    }                                                                          \
-    if (((__INTERRUPT__) & (~FLASH_IT_ECCC)) != 0U) {                          \
-      SET_BIT(FLASH->NSCR, ((__INTERRUPT__) & (~FLASH_IT_ECCC)));              \
-    }                                                                          \
-  } while (0)
+#define __HAL_FLASH_ENABLE_IT_NS(__INTERRUPT__)                                                                        \
+    do {                                                                                                               \
+        if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                                                                 \
+            SET_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                                                    \
+        }                                                                                                              \
+        if (((__INTERRUPT__) & (~FLASH_IT_ECCC)) != 0U) {                                                              \
+            SET_BIT(FLASH->NSCR, ((__INTERRUPT__) & (~FLASH_IT_ECCC)));                                                \
+        }                                                                                                              \
+    } while (0)
 #else
 /* Enable non-secure FLASH interrupts from the non-secure world */
-#define __HAL_FLASH_ENABLE_IT(__INTERRUPT__)                                   \
-  do {                                                                         \
-    if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                             \
-      SET_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                  \
-    }                                                                          \
-    if (((__INTERRUPT__) & (~FLASH_IT_ECCC)) != 0U) {                          \
-      SET_BIT(FLASH->NSCR, ((__INTERRUPT__) & (~FLASH_IT_ECCC)));              \
-    }                                                                          \
-  } while (0)
+#define __HAL_FLASH_ENABLE_IT(__INTERRUPT__)                                                                           \
+    do {                                                                                                               \
+        if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                                                                 \
+            SET_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                                                    \
+        }                                                                                                              \
+        if (((__INTERRUPT__) & (~FLASH_IT_ECCC)) != 0U) {                                                              \
+            SET_BIT(FLASH->NSCR, ((__INTERRUPT__) & (~FLASH_IT_ECCC)));                                                \
+        }                                                                                                              \
+    } while (0)
 #endif /* __ARM_FEATURE_CMSE */
 
 /**
@@ -560,41 +525,39 @@ high-cycle data half-word (32-bit)at a specified address */
  */
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
 /* Disable secure FLASH interrupts from the secure world */
-#define __HAL_FLASH_DISABLE_IT(__INTERRUPT__)                                  \
-  do {                                                                         \
-    if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                             \
-      CLEAR_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                \
-    }                                                                          \
-    if (((__INTERRUPT__) & FLASH_IT_OPTCHANGEERR) != 0U) {                     \
-      CLEAR_BIT(FLASH->NSCR, FLASH_IT_OPTCHANGEERR);                           \
-    }                                                                          \
-    if (((__INTERRUPT__) & (~(FLASH_IT_ECCC | FLASH_IT_OPTCHANGEERR))) !=      \
-        0U) {                                                                  \
-      CLEAR_BIT(FLASH->SECCR, ((__INTERRUPT__) &                               \
-                               (~(FLASH_IT_ECCC | FLASH_IT_OPTCHANGEERR))));   \
-    }                                                                          \
-  } while (0)
+#define __HAL_FLASH_DISABLE_IT(__INTERRUPT__)                                                                          \
+    do {                                                                                                               \
+        if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                                                                 \
+            CLEAR_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                                                  \
+        }                                                                                                              \
+        if (((__INTERRUPT__) & FLASH_IT_OPTCHANGEERR) != 0U) {                                                         \
+            CLEAR_BIT(FLASH->NSCR, FLASH_IT_OPTCHANGEERR);                                                             \
+        }                                                                                                              \
+        if (((__INTERRUPT__) & (~(FLASH_IT_ECCC | FLASH_IT_OPTCHANGEERR))) != 0U) {                                    \
+            CLEAR_BIT(FLASH->SECCR, ((__INTERRUPT__) & (~(FLASH_IT_ECCC | FLASH_IT_OPTCHANGEERR))));                   \
+        }                                                                                                              \
+    } while (0)
 /* Disable non-secure FLASH interrupts from the secure world */
-#define __HAL_FLASH_DISABLE_IT_NS(__INTERRUPT__)                               \
-  do {                                                                         \
-    if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                             \
-      CLEAR_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                \
-    }                                                                          \
-    if (((__INTERRUPT__) & (~FLASH_IT_ECCC)) != 0U) {                          \
-      CLEAR_BIT(FLASH->NSCR, ((__INTERRUPT__) & (~FLASH_IT_ECCC)));            \
-    }                                                                          \
-  } while (0)
+#define __HAL_FLASH_DISABLE_IT_NS(__INTERRUPT__)                                                                       \
+    do {                                                                                                               \
+        if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                                                                 \
+            CLEAR_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                                                  \
+        }                                                                                                              \
+        if (((__INTERRUPT__) & (~FLASH_IT_ECCC)) != 0U) {                                                              \
+            CLEAR_BIT(FLASH->NSCR, ((__INTERRUPT__) & (~FLASH_IT_ECCC)));                                              \
+        }                                                                                                              \
+    } while (0)
 #else
 /* Disable non-secure FLASH interrupts from the non-secure world */
-#define __HAL_FLASH_DISABLE_IT(__INTERRUPT__)                                  \
-  do {                                                                         \
-    if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                             \
-      CLEAR_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                \
-    }                                                                          \
-    if (((__INTERRUPT__) & (~FLASH_IT_ECCC)) != 0U) {                          \
-      CLEAR_BIT(FLASH->NSCR, ((__INTERRUPT__) & (~FLASH_IT_ECCC)));            \
-    }                                                                          \
-  } while (0)
+#define __HAL_FLASH_DISABLE_IT(__INTERRUPT__)                                                                          \
+    do {                                                                                                               \
+        if (((__INTERRUPT__) & FLASH_IT_ECCC) != 0U) {                                                                 \
+            CLEAR_BIT(FLASH->ECCCORR, FLASH_IT_ECCC);                                                                  \
+        }                                                                                                              \
+        if (((__INTERRUPT__) & (~FLASH_IT_ECCC)) != 0U) {                                                              \
+            CLEAR_BIT(FLASH->NSCR, ((__INTERRUPT__) & (~FLASH_IT_ECCC)));                                              \
+        }                                                                                                              \
+    } while (0)
 #endif /* __ARM_FEATURE_CMSE */
 
 /**
@@ -617,14 +580,12 @@ high-cycle data half-word (32-bit)at a specified address */
  */
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
 /* Get secure FLASH flags from the secure world */
-#define __HAL_FLASH_GET_FLAG(__FLAG__)                                         \
-  ((((__FLAG__) & (FLASH_FLAG_ECCC)) != 0U)                                    \
-       ? (READ_BIT(FLASH->ECCCORR, (__FLAG__)) == (__FLAG__))                  \
-   : (((__FLAG__) & (FLASH_FLAG_ECCD)) != 0U)                                  \
-       ? (READ_BIT(FLASH->ECCDETR, (__FLAG__)) == (__FLAG__))                  \
-       : ((((__FLAG__) & (FLASH_FLAG_OPTCHANGEERR)) != 0U)                     \
-              ? (READ_BIT(FLASH->NSSR, (__FLAG__)) == (__FLAG__))              \
-              : (READ_BIT(FLASH->SECSR, (__FLAG__)) == (__FLAG__))))
+#define __HAL_FLASH_GET_FLAG(__FLAG__)                                                                                 \
+    ((((__FLAG__) & (FLASH_FLAG_ECCC)) != 0U) ? (READ_BIT(FLASH->ECCCORR, (__FLAG__)) == (__FLAG__))                   \
+     : (((__FLAG__) & (FLASH_FLAG_ECCD)) != 0U)                                                                        \
+         ? (READ_BIT(FLASH->ECCDETR, (__FLAG__)) == (__FLAG__))                                                        \
+         : ((((__FLAG__) & (FLASH_FLAG_OPTCHANGEERR)) != 0U) ? (READ_BIT(FLASH->NSSR, (__FLAG__)) == (__FLAG__))       \
+                                                             : (READ_BIT(FLASH->SECSR, (__FLAG__)) == (__FLAG__))))
 /* Get non-secure FLASH flags from the secure world */
 #define __HAL_FLASH_GET_FLAG_NS(__FLAG__)       ((((__FLAG__) & (FLASH_FLAG_ECCC)) != 0U) ?                            \
                                                  (READ_BIT(FLASH->ECCCORR, (__FLAG__)) == (__FLAG__))  :               \
@@ -633,12 +594,10 @@ high-cycle data half-word (32-bit)at a specified address */
                                                  (READ_BIT(FLASH->NSSR, (__FLAG__)) == (__FLAG__))))
 #else
 /* Get non-secure FLASH flags from the non-secure world */
-#define __HAL_FLASH_GET_FLAG(__FLAG__)                                         \
-  ((((__FLAG__) & (FLASH_FLAG_ECCC)) != 0U)                                    \
-       ? (READ_BIT(FLASH->ECCCORR, (__FLAG__)) == (__FLAG__))                  \
-   : (((__FLAG__) & (FLASH_FLAG_ECCD)) != 0U)                                  \
-       ? (READ_BIT(FLASH->ECCDETR, (__FLAG__)) == (__FLAG__))                  \
-       : (READ_BIT(FLASH->NSSR, (__FLAG__)) == (__FLAG__)))
+#define __HAL_FLASH_GET_FLAG(__FLAG__)                                                                                 \
+    ((((__FLAG__) & (FLASH_FLAG_ECCC)) != 0U)   ? (READ_BIT(FLASH->ECCCORR, (__FLAG__)) == (__FLAG__))                 \
+     : (((__FLAG__) & (FLASH_FLAG_ECCD)) != 0U) ? (READ_BIT(FLASH->ECCDETR, (__FLAG__)) == (__FLAG__))                 \
+                                                : (READ_BIT(FLASH->NSSR, (__FLAG__)) == (__FLAG__)))
 #endif /* __ARM_FEATURE_CMSE */
 
 /**
@@ -662,50 +621,48 @@ high-cycle data half-word (32-bit)at a specified address */
  */
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
 /* Clear secure FLASH flags from the secure world */
-#define __HAL_FLASH_CLEAR_FLAG(__FLAG__)                                       \
-  do {                                                                         \
-    if (((__FLAG__) & FLASH_FLAG_ECCC) != 0U) {                                \
-      SET_BIT(FLASH->ECCCORR, ((__FLAG__) & FLASH_FLAG_ECCC));                 \
-    }                                                                          \
-    if (((__FLAG__) & FLASH_FLAG_ECCD) != 0U) {                                \
-      SET_BIT(FLASH->ECCDETR, ((__FLAG__) & FLASH_FLAG_ECCD));                 \
-    }                                                                          \
-    if (((__FLAG__) & FLASH_FLAG_OPTCHANGEERR) != 0U) {                        \
-      SET_BIT(FLASH->NSCCR, ((__FLAG__) & (FLASH_FLAG_OPTCHANGEERR)));         \
-    }                                                                          \
-    if (((__FLAG__) & ~(FLASH_FLAG_ECCR_ERRORS | FLASH_FLAG_OPTCHANGEERR)) !=  \
-        0U) {                                                                  \
-      WRITE_REG(FLASH->SECCCR, ((__FLAG__) & ~(FLASH_FLAG_ECCR_ERRORS |        \
-                                               FLASH_FLAG_OPTCHANGEERR)));     \
-    }                                                                          \
-  } while (0)
+#define __HAL_FLASH_CLEAR_FLAG(__FLAG__)                                                                               \
+    do {                                                                                                               \
+        if (((__FLAG__) & FLASH_FLAG_ECCC) != 0U) {                                                                    \
+            SET_BIT(FLASH->ECCCORR, ((__FLAG__) & FLASH_FLAG_ECCC));                                                   \
+        }                                                                                                              \
+        if (((__FLAG__) & FLASH_FLAG_ECCD) != 0U) {                                                                    \
+            SET_BIT(FLASH->ECCDETR, ((__FLAG__) & FLASH_FLAG_ECCD));                                                   \
+        }                                                                                                              \
+        if (((__FLAG__) & FLASH_FLAG_OPTCHANGEERR) != 0U) {                                                            \
+            SET_BIT(FLASH->NSCCR, ((__FLAG__) & (FLASH_FLAG_OPTCHANGEERR)));                                           \
+        }                                                                                                              \
+        if (((__FLAG__) & ~(FLASH_FLAG_ECCR_ERRORS | FLASH_FLAG_OPTCHANGEERR)) != 0U) {                                \
+            WRITE_REG(FLASH->SECCCR, ((__FLAG__) & ~(FLASH_FLAG_ECCR_ERRORS | FLASH_FLAG_OPTCHANGEERR)));              \
+        }                                                                                                              \
+    } while (0)
 /* Clear non-secure FLASH flags from the secure world */
-#define __HAL_FLASH_CLEAR_FLAG_NS(__FLAG__)                                    \
-  do {                                                                         \
-    if (((__FLAG__) & FLASH_FLAG_ECCC) != 0U) {                                \
-      SET_BIT(FLASH->ECCCORR, ((__FLAG__) & FLASH_FLAG_ECCC));                 \
-    }                                                                          \
-    if (((__FLAG__) & FLASH_FLAG_ECCD) != 0U) {                                \
-      SET_BIT(FLASH->ECCDETR, ((__FLAG__) & FLASH_FLAG_ECCD));                 \
-    }                                                                          \
-    if (((__FLAG__) & (~FLASH_FLAG_ECCR_ERRORS)) != 0U) {                      \
-      WRITE_REG(FLASH->NSCCR, ((__FLAG__) & (~FLASH_FLAG_ECCR_ERRORS)));       \
-    }                                                                          \
-  } while (0)
+#define __HAL_FLASH_CLEAR_FLAG_NS(__FLAG__)                                                                            \
+    do {                                                                                                               \
+        if (((__FLAG__) & FLASH_FLAG_ECCC) != 0U) {                                                                    \
+            SET_BIT(FLASH->ECCCORR, ((__FLAG__) & FLASH_FLAG_ECCC));                                                   \
+        }                                                                                                              \
+        if (((__FLAG__) & FLASH_FLAG_ECCD) != 0U) {                                                                    \
+            SET_BIT(FLASH->ECCDETR, ((__FLAG__) & FLASH_FLAG_ECCD));                                                   \
+        }                                                                                                              \
+        if (((__FLAG__) & (~FLASH_FLAG_ECCR_ERRORS)) != 0U) {                                                          \
+            WRITE_REG(FLASH->NSCCR, ((__FLAG__) & (~FLASH_FLAG_ECCR_ERRORS)));                                         \
+        }                                                                                                              \
+    } while (0)
 #else
 /* Clear non-secure FLASH flags from the non-secure world */
-#define __HAL_FLASH_CLEAR_FLAG(__FLAG__)                                       \
-  do {                                                                         \
-    if (((__FLAG__) & FLASH_FLAG_ECCC) != 0U) {                                \
-      SET_BIT(FLASH->ECCCORR, ((__FLAG__) & FLASH_FLAG_ECCC));                 \
-    }                                                                          \
-    if (((__FLAG__) & FLASH_FLAG_ECCD) != 0U) {                                \
-      SET_BIT(FLASH->ECCDETR, ((__FLAG__) & FLASH_FLAG_ECCD));                 \
-    }                                                                          \
-    if (((__FLAG__) & (~FLASH_FLAG_ECCR_ERRORS)) != 0U) {                      \
-      WRITE_REG(FLASH->NSCCR, ((__FLAG__) & (~FLASH_FLAG_ECCR_ERRORS)));       \
-    }                                                                          \
-  } while (0)
+#define __HAL_FLASH_CLEAR_FLAG(__FLAG__)                                                                               \
+    do {                                                                                                               \
+        if (((__FLAG__) & FLASH_FLAG_ECCC) != 0U) {                                                                    \
+            SET_BIT(FLASH->ECCCORR, ((__FLAG__) & FLASH_FLAG_ECCC));                                                   \
+        }                                                                                                              \
+        if (((__FLAG__) & FLASH_FLAG_ECCD) != 0U) {                                                                    \
+            SET_BIT(FLASH->ECCDETR, ((__FLAG__) & FLASH_FLAG_ECCD));                                                   \
+        }                                                                                                              \
+        if (((__FLAG__) & (~FLASH_FLAG_ECCR_ERRORS)) != 0U) {                                                          \
+            WRITE_REG(FLASH->NSCCR, ((__FLAG__) & (~FLASH_FLAG_ECCR_ERRORS)));                                         \
+        }                                                                                                              \
+    } while (0)
 #endif /* __ARM_FEATURE_CMSE */
 
 /**
@@ -723,11 +680,8 @@ high-cycle data half-word (32-bit)at a specified address */
  * @{
  */
 /* Program operation functions */
-HAL_StatusTypeDef HAL_FLASH_Program(uint32_t TypeProgram, uint32_t FlashAddress,
-                                    uint32_t DataAddress);
-HAL_StatusTypeDef HAL_FLASH_Program_IT(uint32_t TypeProgram,
-                                       uint32_t FlashAddress,
-                                       uint32_t DataAddress);
+HAL_StatusTypeDef HAL_FLASH_Program(uint32_t TypeProgram, uint32_t FlashAddress, uint32_t DataAddress);
+HAL_StatusTypeDef HAL_FLASH_Program_IT(uint32_t TypeProgram, uint32_t FlashAddress, uint32_t DataAddress);
 /* FLASH IRQ handler method */
 void HAL_FLASH_IRQHandler(void);
 /* Callbacks in non blocking modes */
@@ -792,8 +746,7 @@ extern FLASH_ProcessTypeDef pFlash;
 
 #define FLASH_NON_SECURE_MASK 0x80000000U
 
-#define FLASH_EDATA_SECTOR_NB                                                  \
-  8U /*!< Maximum number of FLASH high-cycle data sectors */
+#define FLASH_EDATA_SECTOR_NB 8U /*!< Maximum number of FLASH high-cycle data sectors */
 /**
  * @}
  */
@@ -804,98 +757,72 @@ extern FLASH_ProcessTypeDef pFlash;
  */
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
 #if defined(FLASH_SR_OBKERR) && defined(FLASH_EDATAR_EDATA_EN)
-#define IS_FLASH_TYPEPROGRAM(VALUE)                                            \
-  (((VALUE) == FLASH_TYPEPROGRAM_QUADWORD) ||                                  \
-   ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_NS) ||                               \
-   ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_OTP) ||                              \
-   ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_EDATA) ||                            \
-   ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_EDATA_NS) ||                         \
-   ((VALUE) == FLASH_TYPEPROGRAM_WORD_EDATA) ||                                \
-   ((VALUE) == FLASH_TYPEPROGRAM_WORD_EDATA_NS) ||                             \
-   ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_OBK) ||                              \
-   ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_OBK_ALT))
+#define IS_FLASH_TYPEPROGRAM(VALUE)                                                                                    \
+    (((VALUE) == FLASH_TYPEPROGRAM_QUADWORD) || ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_NS) ||                          \
+     ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_OTP) || ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_EDATA) ||                   \
+     ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_EDATA_NS) || ((VALUE) == FLASH_TYPEPROGRAM_WORD_EDATA) ||                  \
+     ((VALUE) == FLASH_TYPEPROGRAM_WORD_EDATA_NS) || ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_OBK) ||                    \
+     ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_OBK_ALT))
 #else
-#define IS_FLASH_TYPEPROGRAM(VALUE)                                            \
-  (((VALUE) == FLASH_TYPEPROGRAM_QUADWORD) ||                                  \
-   ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_NS) ||                               \
-   ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_OTP))
+#define IS_FLASH_TYPEPROGRAM(VALUE)                                                                                    \
+    (((VALUE) == FLASH_TYPEPROGRAM_QUADWORD) || ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_NS) ||                          \
+     ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_OTP))
 #endif /* FLASH_SR_OBKERR && FLASH_EDATAR_EDATA_EN */
 #else
 #if defined(FLASH_SR_OBKERR) && defined(FLASH_EDATAR_EDATA_EN)
-#define IS_FLASH_TYPEPROGRAM(VALUE)                                            \
-  (((VALUE) == FLASH_TYPEPROGRAM_QUADWORD) ||                                  \
-   ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_OTP) ||                              \
-   ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_EDATA) ||                            \
-   ((VALUE) == FLASH_TYPEPROGRAM_WORD_EDATA) ||                                \
-   ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_OBK) ||                              \
-   ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_OBK_ALT))
+#define IS_FLASH_TYPEPROGRAM(VALUE)                                                                                    \
+    (((VALUE) == FLASH_TYPEPROGRAM_QUADWORD) || ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_OTP) ||                         \
+     ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_EDATA) || ((VALUE) == FLASH_TYPEPROGRAM_WORD_EDATA) ||                     \
+     ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_OBK) || ((VALUE) == FLASH_TYPEPROGRAM_QUADWORD_OBK_ALT))
 #else
-#define IS_FLASH_TYPEPROGRAM(VALUE)                                            \
-  (((VALUE) == FLASH_TYPEPROGRAM_QUADWORD) ||                                  \
-   ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_OTP))
+#define IS_FLASH_TYPEPROGRAM(VALUE)                                                                                    \
+    (((VALUE) == FLASH_TYPEPROGRAM_QUADWORD) || ((VALUE) == FLASH_TYPEPROGRAM_HALFWORD_OTP))
 #endif /* FLASH_SR_OBKERR && FLASH_EDATAR_EDATA_EN */
 #endif /* __ARM_FEATURE_CMSE */
 
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
-#define IS_FLASH_USER_MEM_ADDRESS(ADDRESS)                                     \
-  ((((ADDRESS) >= FLASH_BASE) && ((ADDRESS) < (FLASH_BASE + FLASH_SIZE))) ||   \
-   (((ADDRESS) >= FLASH_BASE_NS) &&                                            \
-    ((ADDRESS) < (FLASH_BASE_NS + FLASH_SIZE))))
+#define IS_FLASH_USER_MEM_ADDRESS(ADDRESS)                                                                             \
+    ((((ADDRESS) >= FLASH_BASE) && ((ADDRESS) < (FLASH_BASE + FLASH_SIZE))) ||                                         \
+     (((ADDRESS) >= FLASH_BASE_NS) && ((ADDRESS) < (FLASH_BASE_NS + FLASH_SIZE))))
 #if defined(FLASH_SR_OBKERR)
-#define IS_FLASH_OBK_ADDRESS(ADDRESS)                                          \
-  ((((ADDRESS) >= FLASH_OBK_BASE) &&                                           \
-    ((ADDRESS) < (FLASH_OBK_BASE + FLASH_OBK_SIZE))) ||                        \
-   (((ADDRESS) >= FLASH_OBK_BASE_NS) &&                                        \
-    ((ADDRESS) < (FLASH_OBK_BASE_NS + FLASH_OBK_SIZE))))
+#define IS_FLASH_OBK_ADDRESS(ADDRESS)                                                                                  \
+    ((((ADDRESS) >= FLASH_OBK_BASE) && ((ADDRESS) < (FLASH_OBK_BASE + FLASH_OBK_SIZE))) ||                             \
+     (((ADDRESS) >= FLASH_OBK_BASE_NS) && ((ADDRESS) < (FLASH_OBK_BASE_NS + FLASH_OBK_SIZE))))
 #endif /* FLASH_SR_OBKERR */
 #if defined(FLASH_EDATAR_EDATA_EN)
-#define IS_FLASH_EDATA_ADDRESS(ADDRESS)                                        \
-  ((((ADDRESS) >= FLASH_EDATA_BASE_S) &&                                       \
-    ((ADDRESS) < (FLASH_EDATA_BASE_S + FLASH_EDATA_SIZE))) ||                  \
-   (((ADDRESS) >= FLASH_EDATA_BASE_NS) &&                                      \
-    ((ADDRESS) < (FLASH_EDATA_BASE_NS + FLASH_EDATA_SIZE))))
+#define IS_FLASH_EDATA_ADDRESS(ADDRESS)                                                                                \
+    ((((ADDRESS) >= FLASH_EDATA_BASE_S) && ((ADDRESS) < (FLASH_EDATA_BASE_S + FLASH_EDATA_SIZE))) ||                   \
+     (((ADDRESS) >= FLASH_EDATA_BASE_NS) && ((ADDRESS) < (FLASH_EDATA_BASE_NS + FLASH_EDATA_SIZE))))
 #endif /* FLASH_EDATAR_EDATA_EN */
 #else
-#define IS_FLASH_USER_MEM_ADDRESS(ADDRESS)                                     \
-  (((ADDRESS) >= FLASH_BASE) && ((ADDRESS) < (FLASH_BASE + FLASH_SIZE)))
+#define IS_FLASH_USER_MEM_ADDRESS(ADDRESS) (((ADDRESS) >= FLASH_BASE) && ((ADDRESS) < (FLASH_BASE + FLASH_SIZE)))
 #if defined(FLASH_SR_OBKERR)
-#define IS_FLASH_OBK_ADDRESS(ADDRESS)                                          \
-  (((ADDRESS) >= FLASH_OBK_BASE) &&                                            \
-   ((ADDRESS) < (FLASH_OBK_BASE + FLASH_OBK_SIZE)))
+#define IS_FLASH_OBK_ADDRESS(ADDRESS) (((ADDRESS) >= FLASH_OBK_BASE) && ((ADDRESS) < (FLASH_OBK_BASE + FLASH_OBK_SIZE)))
 #endif /* FLASH_SR_OBKERR */
 #if defined(FLASH_EDATAR_EDATA_EN)
-#define IS_FLASH_EDATA_ADDRESS(ADDRESS)                                        \
-  (((ADDRESS) >= FLASH_EDATA_BASE_NS) &&                                       \
-   ((ADDRESS) < (FLASH_EDATA_BASE_NS + FLASH_EDATA_SIZE)))
+#define IS_FLASH_EDATA_ADDRESS(ADDRESS)                                                                                \
+    (((ADDRESS) >= FLASH_EDATA_BASE_NS) && ((ADDRESS) < (FLASH_EDATA_BASE_NS + FLASH_EDATA_SIZE)))
 #endif /* FLASH_EDATAR_EDATA_EN */
 #endif /* __ARM_FEATURE_CMSE */
 
-#define IS_FLASH_OTP_ADDRESS(ADDRESS)                                          \
-  (((ADDRESS) >= FLASH_OTP_BASE) &&                                            \
-   ((ADDRESS) < (FLASH_OTP_BASE + FLASH_OTP_SIZE)))
+#define IS_FLASH_OTP_ADDRESS(ADDRESS) (((ADDRESS) >= FLASH_OTP_BASE) && ((ADDRESS) < (FLASH_OTP_BASE + FLASH_OTP_SIZE)))
 
-#define IS_FLASH_BANK(BANK)                                                    \
-  (((BANK) == FLASH_BANK_1) || ((BANK) == FLASH_BANK_2) ||                     \
-   ((BANK) == FLASH_BANK_BOTH))
+#define IS_FLASH_BANK(BANK) (((BANK) == FLASH_BANK_1) || ((BANK) == FLASH_BANK_2) || ((BANK) == FLASH_BANK_BOTH))
 
-#define IS_FLASH_BANK_EXCLUSIVE(BANK)                                          \
-  (((BANK) == FLASH_BANK_1) || ((BANK) == FLASH_BANK_2))
+#define IS_FLASH_BANK_EXCLUSIVE(BANK) (((BANK) == FLASH_BANK_1) || ((BANK) == FLASH_BANK_2))
 
 #define IS_FLASH_SECTOR(SECTOR) ((SECTOR) < FLASH_SECTOR_NB)
 
-#define IS_FLASH_LATENCY(LATENCY)                                              \
-  (((LATENCY) == FLASH_LATENCY_0) || ((LATENCY) == FLASH_LATENCY_1) ||         \
-   ((LATENCY) == FLASH_LATENCY_2) || ((LATENCY) == FLASH_LATENCY_3) ||         \
-   ((LATENCY) == FLASH_LATENCY_4) || ((LATENCY) == FLASH_LATENCY_5) ||         \
-   ((LATENCY) == FLASH_LATENCY_6) || ((LATENCY) == FLASH_LATENCY_7) ||         \
-   ((LATENCY) == FLASH_LATENCY_8) || ((LATENCY) == FLASH_LATENCY_9) ||         \
-   ((LATENCY) == FLASH_LATENCY_10) || ((LATENCY) == FLASH_LATENCY_11) ||       \
-   ((LATENCY) == FLASH_LATENCY_12) || ((LATENCY) == FLASH_LATENCY_13) ||       \
-   ((LATENCY) == FLASH_LATENCY_14) || ((LATENCY) == FLASH_LATENCY_15))
+#define IS_FLASH_LATENCY(LATENCY)                                                                                      \
+    (((LATENCY) == FLASH_LATENCY_0) || ((LATENCY) == FLASH_LATENCY_1) || ((LATENCY) == FLASH_LATENCY_2) ||             \
+     ((LATENCY) == FLASH_LATENCY_3) || ((LATENCY) == FLASH_LATENCY_4) || ((LATENCY) == FLASH_LATENCY_5) ||             \
+     ((LATENCY) == FLASH_LATENCY_6) || ((LATENCY) == FLASH_LATENCY_7) || ((LATENCY) == FLASH_LATENCY_8) ||             \
+     ((LATENCY) == FLASH_LATENCY_9) || ((LATENCY) == FLASH_LATENCY_10) || ((LATENCY) == FLASH_LATENCY_11) ||           \
+     ((LATENCY) == FLASH_LATENCY_12) || ((LATENCY) == FLASH_LATENCY_13) || ((LATENCY) == FLASH_LATENCY_14) ||          \
+     ((LATENCY) == FLASH_LATENCY_15))
 
 #if defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
-#define IS_FLASH_SECURE_OPERATION()                                            \
-  ((pFlash.ProcedureOnGoing & FLASH_NON_SECURE_MASK) == 0U)
+#define IS_FLASH_SECURE_OPERATION() ((pFlash.ProcedureOnGoing & FLASH_NON_SECURE_MASK) == 0U)
 #else
 #define IS_FLASH_SECURE_OPERATION() (1U == 0U)
 #endif /* __ARM_FEATURE_CMSE */

@@ -70,31 +70,28 @@ FX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fxe_directory_long_name_get_extended(FX_MEDIA *media_ptr,
-                                           CHAR *short_file_name,
-                                           CHAR *long_file_name,
+UINT _fxe_directory_long_name_get_extended(FX_MEDIA *media_ptr, CHAR *short_file_name, CHAR *long_file_name,
                                            UINT long_file_name_buffer_length) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a NULL media or file name pointer.  */
-  if ((media_ptr == FX_NULL) || (short_file_name == FX_NULL) ||
-      (long_file_name == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a NULL media or file name pointer.  */
+    if ((media_ptr == FX_NULL) || (short_file_name == FX_NULL) || (long_file_name == FX_NULL)) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Check for zero length buffer.  */
-  if (long_file_name_buffer_length == 0) {
-    return (FX_BUFFER_ERROR);
-  }
+    /* Check for zero length buffer.  */
+    if (long_file_name_buffer_length == 0) {
+        return (FX_BUFFER_ERROR);
+    }
 
-  /* Check for a valid caller.  */
-  FX_CALLER_CHECKING_CODE
+    /* Check for a valid caller.  */
+    FX_CALLER_CHECKING_CODE
 
-  /* Call actual long name get service.  */
-  status = _fx_directory_long_name_get_extended(
-      media_ptr, short_file_name, long_file_name, long_file_name_buffer_length);
+    /* Call actual long name get service.  */
+    status =
+        _fx_directory_long_name_get_extended(media_ptr, short_file_name, long_file_name, long_file_name_buffer_length);
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

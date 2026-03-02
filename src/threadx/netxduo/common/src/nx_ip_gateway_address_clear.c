@@ -69,34 +69,33 @@
 UINT _nx_ip_gateway_address_clear(NX_IP *ip_ptr) {
 
 #ifndef NX_DISABLE_IPV4
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_GATEWAY_ADDRESS_SET, ip_ptr, 0, 0, 0,
-                          NX_TRACE_IP_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_IP_GATEWAY_ADDRESS_SET, ip_ptr, 0, 0, 0, NX_TRACE_IP_EVENTS, 0, 0);
 
-  /* Obtain the IP internal mutex so the Gateway IP address can be cleared.  */
-  tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
+    /* Obtain the IP internal mutex so the Gateway IP address can be cleared.  */
+    tx_mutex_get(&(ip_ptr->nx_ip_protection), TX_WAIT_FOREVER);
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Clear the Gateway IP address.  */
-  ip_ptr->nx_ip_gateway_address = 0;
+    /* Clear the Gateway IP address.  */
+    ip_ptr->nx_ip_gateway_address = 0;
 
-  ip_ptr->nx_ip_gateway_interface = NX_NULL;
+    ip_ptr->nx_ip_gateway_interface = NX_NULL;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Release the protection mutex.  */
-  tx_mutex_put(&(ip_ptr->nx_ip_protection));
+    /* Release the protection mutex.  */
+    tx_mutex_put(&(ip_ptr->nx_ip_protection));
 
-  /* Return completion status.  */
-  return (NX_SUCCESS);
+    /* Return completion status.  */
+    return (NX_SUCCESS);
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_ptr);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

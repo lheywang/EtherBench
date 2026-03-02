@@ -32,8 +32,7 @@
  * @{
  */
 
-#if defined(LPTIM1) || defined(LPTIM2) || defined(LPTIM3) ||                   \
-    defined(LPTIM4) || defined(LPTIM5) || defined(LPTIM6)
+#if defined(LPTIM1) || defined(LPTIM2) || defined(LPTIM3) || defined(LPTIM4) || defined(LPTIM5) || defined(LPTIM6)
 
 /** @addtogroup LPTIM_LL
  * @{
@@ -46,23 +45,17 @@
 /** @addtogroup LPTIM_LL_Private_Macros
  * @{
  */
-#define IS_LL_LPTIM_CLOCK_SOURCE(__VALUE__)                                    \
-  (((__VALUE__) == LL_LPTIM_CLK_SOURCE_INTERNAL) ||                            \
-   ((__VALUE__) == LL_LPTIM_CLK_SOURCE_EXTERNAL))
+#define IS_LL_LPTIM_CLOCK_SOURCE(__VALUE__)                                                                            \
+    (((__VALUE__) == LL_LPTIM_CLK_SOURCE_INTERNAL) || ((__VALUE__) == LL_LPTIM_CLK_SOURCE_EXTERNAL))
 
-#define IS_LL_LPTIM_CLOCK_PRESCALER(__VALUE__)                                 \
-  (((__VALUE__) == LL_LPTIM_PRESCALER_DIV1) ||                                 \
-   ((__VALUE__) == LL_LPTIM_PRESCALER_DIV2) ||                                 \
-   ((__VALUE__) == LL_LPTIM_PRESCALER_DIV4) ||                                 \
-   ((__VALUE__) == LL_LPTIM_PRESCALER_DIV8) ||                                 \
-   ((__VALUE__) == LL_LPTIM_PRESCALER_DIV16) ||                                \
-   ((__VALUE__) == LL_LPTIM_PRESCALER_DIV32) ||                                \
-   ((__VALUE__) == LL_LPTIM_PRESCALER_DIV64) ||                                \
-   ((__VALUE__) == LL_LPTIM_PRESCALER_DIV128))
+#define IS_LL_LPTIM_CLOCK_PRESCALER(__VALUE__)                                                                         \
+    (((__VALUE__) == LL_LPTIM_PRESCALER_DIV1) || ((__VALUE__) == LL_LPTIM_PRESCALER_DIV2) ||                           \
+     ((__VALUE__) == LL_LPTIM_PRESCALER_DIV4) || ((__VALUE__) == LL_LPTIM_PRESCALER_DIV8) ||                           \
+     ((__VALUE__) == LL_LPTIM_PRESCALER_DIV16) || ((__VALUE__) == LL_LPTIM_PRESCALER_DIV32) ||                         \
+     ((__VALUE__) == LL_LPTIM_PRESCALER_DIV64) || ((__VALUE__) == LL_LPTIM_PRESCALER_DIV128))
 
-#define IS_LL_LPTIM_WAVEFORM(__VALUE__)                                        \
-  (((__VALUE__) == LL_LPTIM_OUTPUT_WAVEFORM_PWM) ||                            \
-   ((__VALUE__) == LL_LPTIM_OUTPUT_WAVEFORM_SETONCE))
+#define IS_LL_LPTIM_WAVEFORM(__VALUE__)                                                                                \
+    (((__VALUE__) == LL_LPTIM_OUTPUT_WAVEFORM_PWM) || ((__VALUE__) == LL_LPTIM_OUTPUT_WAVEFORM_SETONCE))
 
 /**
  * @}
@@ -93,47 +86,47 @@
  *          - ERROR: invalid LPTIMx instance
  */
 ErrorStatus LL_LPTIM_DeInit(const LPTIM_TypeDef *LPTIMx) {
-  ErrorStatus result = SUCCESS;
+    ErrorStatus result = SUCCESS;
 
-  /* Check the parameters */
-  assert_param(IS_LPTIM_INSTANCE(LPTIMx));
+    /* Check the parameters */
+    assert_param(IS_LPTIM_INSTANCE(LPTIMx));
 
-  if (LPTIMx == LPTIM1) {
-    LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_LPTIM1);
-    LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_LPTIM1);
-  } else if (LPTIMx == LPTIM2) {
-    LL_APB1_GRP2_ForceReset(LL_APB1_GRP2_PERIPH_LPTIM2);
-    LL_APB1_GRP2_ReleaseReset(LL_APB1_GRP2_PERIPH_LPTIM2);
-  }
+    if (LPTIMx == LPTIM1) {
+        LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_LPTIM1);
+        LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_LPTIM1);
+    } else if (LPTIMx == LPTIM2) {
+        LL_APB1_GRP2_ForceReset(LL_APB1_GRP2_PERIPH_LPTIM2);
+        LL_APB1_GRP2_ReleaseReset(LL_APB1_GRP2_PERIPH_LPTIM2);
+    }
 #if defined(LPTIM3)
-  else if (LPTIMx == LPTIM3) {
-    LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_LPTIM3);
-    LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_LPTIM3);
-  }
+    else if (LPTIMx == LPTIM3) {
+        LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_LPTIM3);
+        LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_LPTIM3);
+    }
 #endif /* LPTIM3 */
 #if defined(LPTIM4)
-  else if (LPTIMx == LPTIM4) {
-    LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_LPTIM4);
-    LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_LPTIM4);
-  }
+    else if (LPTIMx == LPTIM4) {
+        LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_LPTIM4);
+        LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_LPTIM4);
+    }
 #endif /* LPTIM4 */
 #if defined(LPTIM5)
-  else if (LPTIMx == LPTIM5) {
-    LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_LPTIM5);
-    LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_LPTIM5);
-  }
+    else if (LPTIMx == LPTIM5) {
+        LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_LPTIM5);
+        LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_LPTIM5);
+    }
 #endif /* LPTIM5 */
 #if defined(LPTIM6)
-  else if (LPTIMx == LPTIM6) {
-    LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_LPTIM6);
-    LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_LPTIM6);
-  }
+    else if (LPTIMx == LPTIM6) {
+        LL_APB3_GRP1_ForceReset(LL_APB3_GRP1_PERIPH_LPTIM6);
+        LL_APB3_GRP1_ReleaseReset(LL_APB3_GRP1_PERIPH_LPTIM6);
+    }
 #endif /* LPTIM6 */
-  else {
-    result = ERROR;
-  }
+    else {
+        result = ERROR;
+    }
 
-  return result;
+    return result;
 }
 
 /**
@@ -143,10 +136,10 @@ ErrorStatus LL_LPTIM_DeInit(const LPTIM_TypeDef *LPTIMx) {
  * @retval None
  */
 void LL_LPTIM_StructInit(LL_LPTIM_InitTypeDef *LPTIM_InitStruct) {
-  /* Set the default configuration */
-  LPTIM_InitStruct->ClockSource = LL_LPTIM_CLK_SOURCE_INTERNAL;
-  LPTIM_InitStruct->Prescaler = LL_LPTIM_PRESCALER_DIV1;
-  LPTIM_InitStruct->Waveform = LL_LPTIM_OUTPUT_WAVEFORM_PWM;
+    /* Set the default configuration */
+    LPTIM_InitStruct->ClockSource = LL_LPTIM_CLK_SOURCE_INTERNAL;
+    LPTIM_InitStruct->Prescaler = LL_LPTIM_PRESCALER_DIV1;
+    LPTIM_InitStruct->Waveform = LL_LPTIM_OUTPUT_WAVEFORM_PWM;
 }
 
 /**
@@ -160,31 +153,28 @@ void LL_LPTIM_StructInit(LL_LPTIM_InitTypeDef *LPTIM_InitStruct) {
  *          - SUCCESS: LPTIMx instance has been initialized
  *          - ERROR: LPTIMx instance hasn't been initialized
  */
-ErrorStatus LL_LPTIM_Init(LPTIM_TypeDef *LPTIMx,
-                          const LL_LPTIM_InitTypeDef *LPTIM_InitStruct) {
-  ErrorStatus result = SUCCESS;
-  /* Check the parameters */
-  assert_param(IS_LPTIM_INSTANCE(LPTIMx));
-  assert_param(IS_LL_LPTIM_CLOCK_SOURCE(LPTIM_InitStruct->ClockSource));
-  assert_param(IS_LL_LPTIM_CLOCK_PRESCALER(LPTIM_InitStruct->Prescaler));
-  assert_param(IS_LL_LPTIM_WAVEFORM(LPTIM_InitStruct->Waveform));
+ErrorStatus LL_LPTIM_Init(LPTIM_TypeDef *LPTIMx, const LL_LPTIM_InitTypeDef *LPTIM_InitStruct) {
+    ErrorStatus result = SUCCESS;
+    /* Check the parameters */
+    assert_param(IS_LPTIM_INSTANCE(LPTIMx));
+    assert_param(IS_LL_LPTIM_CLOCK_SOURCE(LPTIM_InitStruct->ClockSource));
+    assert_param(IS_LL_LPTIM_CLOCK_PRESCALER(LPTIM_InitStruct->Prescaler));
+    assert_param(IS_LL_LPTIM_WAVEFORM(LPTIM_InitStruct->Waveform));
 
-  /* The LPTIMx_CFGR register must only be modified when the LPTIM is disabled
-     (ENABLE bit is reset to 0).
-  */
-  if (LL_LPTIM_IsEnabled(LPTIMx) == 1UL) {
-    result = ERROR;
-  } else {
-    /* Set CKSEL bitfield according to ClockSource value */
-    /* Set PRESC bitfield according to Prescaler value */
-    /* Set WAVE bitfield according to Waveform value */
-    MODIFY_REG(LPTIMx->CFGR,
-               (LPTIM_CFGR_CKSEL | LPTIM_CFGR_PRESC | LPTIM_CFGR_WAVE),
-               LPTIM_InitStruct->ClockSource | LPTIM_InitStruct->Prescaler |
-                   LPTIM_InitStruct->Waveform);
-  }
+    /* The LPTIMx_CFGR register must only be modified when the LPTIM is disabled
+       (ENABLE bit is reset to 0).
+    */
+    if (LL_LPTIM_IsEnabled(LPTIMx) == 1UL) {
+        result = ERROR;
+    } else {
+        /* Set CKSEL bitfield according to ClockSource value */
+        /* Set PRESC bitfield according to Prescaler value */
+        /* Set WAVE bitfield according to Waveform value */
+        MODIFY_REG(LPTIMx->CFGR, (LPTIM_CFGR_CKSEL | LPTIM_CFGR_PRESC | LPTIM_CFGR_WAVE),
+                   LPTIM_InitStruct->ClockSource | LPTIM_InitStruct->Prescaler | LPTIM_InitStruct->Waveform);
+    }
 
-  return result;
+    return result;
 }
 
 /**

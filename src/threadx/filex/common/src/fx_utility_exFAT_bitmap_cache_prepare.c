@@ -72,38 +72,37 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_utility_exFAT_bitmap_cache_prepare(FX_MEDIA *media_ptr,
-                                            ULONG cluster) {
+UINT _fx_utility_exFAT_bitmap_cache_prepare(FX_MEDIA *media_ptr, ULONG cluster) {
 
-  UINT status;
+    UINT status;
 
-  /* Default the status to no more space.  */
-  status = FX_NO_MORE_SPACE;
+    /* Default the status to no more space.  */
+    status = FX_NO_MORE_SPACE;
 
-  /* Make sure the cluster does not exceed the total count.  */
-  if (cluster < media_ptr->fx_media_total_clusters + FX_FAT_ENTRY_START) {
+    /* Make sure the cluster does not exceed the total count.  */
+    if (cluster < media_ptr->fx_media_total_clusters + FX_FAT_ENTRY_START) {
 
-    /* Check if the request cluster is already cached.  */
-    if ((cluster >= media_ptr->fx_media_exfat_bitmap_cache_start_cluster) &&
-        (cluster <= media_ptr->fx_media_exfat_bitmap_cache_end_cluster)) {
+        /* Check if the request cluster is already cached.  */
+        if ((cluster >= media_ptr->fx_media_exfat_bitmap_cache_start_cluster) &&
+            (cluster <= media_ptr->fx_media_exfat_bitmap_cache_end_cluster)) {
 
-      /* Cluster already cached.  */
-      status = FX_SUCCESS;
-    } else {
+            /* Cluster already cached.  */
+            status = FX_SUCCESS;
+        } else {
 
-      /* Need to Cache update.  */
+            /* Need to Cache update.  */
 
-      /* Flush previous cached data if required.  */
-      if (FX_SUCCESS == (status = _fx_utility_exFAT_bitmap_flush(media_ptr))) {
+            /* Flush previous cached data if required.  */
+            if (FX_SUCCESS == (status = _fx_utility_exFAT_bitmap_flush(media_ptr))) {
 
-        /* Call utility function to update cache.  */
-        status = _fx_utility_exFAT_bitmap_cache_update(media_ptr, cluster);
-      }
+                /* Call utility function to update cache.  */
+                status = _fx_utility_exFAT_bitmap_cache_update(media_ptr, cluster);
+            }
+        }
     }
-  }
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }
 
 #endif /* FX_ENABLE_EXFAT */

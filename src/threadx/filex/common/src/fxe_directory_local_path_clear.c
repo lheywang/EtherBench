@@ -70,16 +70,16 @@
 /**************************************************************************/
 UINT _fxe_directory_local_path_clear(FX_MEDIA *media_ptr) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for a null media pointer.  */
-  if (media_ptr == FX_NULL) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for a null media pointer.  */
+    if (media_ptr == FX_NULL) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Call actual local path clear service.  */
-  status = _fx_directory_local_path_clear(media_ptr);
+    /* Call actual local path clear service.  */
+    status = _fx_directory_local_path_clear(media_ptr);
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }

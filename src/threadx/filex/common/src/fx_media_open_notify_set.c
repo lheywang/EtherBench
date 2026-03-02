@@ -67,12 +67,11 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_media_open_notify_set(FX_MEDIA *media_ptr,
-                               VOID (*media_open_notify)(FX_MEDIA *media)) {
+UINT _fx_media_open_notify_set(FX_MEDIA *media_ptr, VOID (*media_open_notify)(FX_MEDIA *media)) {
 
-  /* Set the notify function. */
-  media_ptr->fx_media_open_notify = media_open_notify;
+    /* Set the notify function. */
+    media_ptr->fx_media_open_notify = media_open_notify;
 
-  /* Return successful status.  */
-  return (FX_SUCCESS);
+    /* Return successful status.  */
+    return (FX_SUCCESS);
 }

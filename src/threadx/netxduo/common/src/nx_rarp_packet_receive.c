@@ -78,153 +78,148 @@
 /**************************************************************************/
 VOID _nx_rarp_packet_receive(NX_IP *ip_ptr, NX_PACKET *packet_ptr) {
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  ULONG *message_ptr;
-  UINT i;
-  VOID (*address_change_notify)(NX_IP *, VOID *) = NX_NULL;
-  VOID *additional_info = NX_NULL;
-  VOID (*address_change_notify_internal)(NX_IP *, VOID *) = NX_NULL;
+    ULONG *message_ptr;
+    UINT i;
+    VOID (*address_change_notify)(NX_IP *, VOID *) = NX_NULL;
+    VOID *additional_info = NX_NULL;
+    VOID (*address_change_notify_internal)(NX_IP *, VOID *) = NX_NULL;
 
 #ifndef NX_DISABLE_RX_SIZE_CHECKING
-  /* Determine if the packet length is valid.  */
-  if (packet_ptr->nx_packet_length < NX_RARP_MESSAGE_SIZE) {
+    /* Determine if the packet length is valid.  */
+    if (packet_ptr->nx_packet_length < NX_RARP_MESSAGE_SIZE) {
 
 #ifndef NX_DISABLE_RARP_INFO
-    /* Increment the RARP invalid messages count...  At least until RARP server
-       logic is added.  */
-    ip_ptr->nx_ip_rarp_invalid_messages++;
+        /* Increment the RARP invalid messages count...  At least until RARP server
+           logic is added.  */
+        ip_ptr->nx_ip_rarp_invalid_messages++;
 #endif
 
-    /* Just release the packet.  */
-    _nx_packet_release(packet_ptr);
+        /* Just release the packet.  */
+        _nx_packet_release(packet_ptr);
 
-    /* Return to caller.  */
-    return;
-  }
+        /* Return to caller.  */
+        return;
+    }
 #endif /* NX_DISABLE_RX_SIZE_CHECKING  */
 
-  /* Setup a pointer to the RARP message.  */
-  /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
-   * necessary  */
-  message_ptr = (ULONG *)packet_ptr->nx_packet_prepend_ptr;
+    /* Setup a pointer to the RARP message.  */
+    /*lint -e{927} -e{826} suppress cast of pointer to pointer, since it is
+     * necessary  */
+    message_ptr = (ULONG *)packet_ptr->nx_packet_prepend_ptr;
 
-  /* Endian swapping logic.  If NX_LITTLE_ENDIAN is specified, these macros will
-     swap the endian of the RARP message.  */
-  NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 1));
-  NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 2));
-  NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 3));
-  NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 4));
-  NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 5));
-  NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 6));
+    /* Endian swapping logic.  If NX_LITTLE_ENDIAN is specified, these macros will
+       swap the endian of the RARP message.  */
+    NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 1));
+    NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 2));
+    NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 3));
+    NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 4));
+    NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 5));
+    NX_CHANGE_ULONG_ENDIAN(*(message_ptr + 6));
 
-  /* If trace is enabled, insert this event into the trace buffer.  */
-  NX_TRACE_IN_LINE_INSERT(NX_TRACE_INTERNAL_RARP_RECEIVE, ip_ptr,
-                          *(message_ptr + 6), packet_ptr, *(message_ptr + 1),
-                          NX_TRACE_INTERNAL_EVENTS, 0, 0);
+    /* If trace is enabled, insert this event into the trace buffer.  */
+    NX_TRACE_IN_LINE_INSERT(NX_TRACE_INTERNAL_RARP_RECEIVE, ip_ptr, *(message_ptr + 6), packet_ptr, *(message_ptr + 1),
+                            NX_TRACE_INTERNAL_EVENTS, 0, 0);
 
-  /* Determine what type of RARP message this is.  Note that RARP requests must
-     also specify this IP instance's IP address.  */
-  if ((*(message_ptr + 1) & 0xFFFF) == NX_RARP_OPTION_REQUEST) {
+    /* Determine what type of RARP message this is.  Note that RARP requests must
+       also specify this IP instance's IP address.  */
+    if ((*(message_ptr + 1) & 0xFFFF) == NX_RARP_OPTION_REQUEST) {
 
 #ifndef NX_DISABLE_RARP_INFO
-    /* Increment the RARP invalid messages count...  At least until RARP server
-       logic is added.  */
-    ip_ptr->nx_ip_rarp_invalid_messages++;
+        /* Increment the RARP invalid messages count...  At least until RARP server
+           logic is added.  */
+        ip_ptr->nx_ip_rarp_invalid_messages++;
 #endif
 
-    /* Just release the packet.  */
-    _nx_packet_release(packet_ptr);
-  } else if ((*(message_ptr + 1) & 0xFFFF) == NX_RARP_OPTION_RESPONSE) {
+        /* Just release the packet.  */
+        _nx_packet_release(packet_ptr);
+    } else if ((*(message_ptr + 1) & 0xFFFF) == NX_RARP_OPTION_RESPONSE) {
 
-    /* We have a response to a previous RARP request.  */
+        /* We have a response to a previous RARP request.  */
 
 #ifndef NX_DISABLE_ARP_INFO
-    /* Increment the RARP responses received count.  */
-    ip_ptr->nx_ip_rarp_responses_received++;
+        /* Increment the RARP responses received count.  */
+        ip_ptr->nx_ip_rarp_responses_received++;
 #endif
 
-    /* Disable Interrupts.  */
-    TX_DISABLE
+        /* Disable Interrupts.  */
+        TX_DISABLE
 
-    /* Determine if the target IP address is non-zero.  */
-    if (*(message_ptr + 6) &&
-        (packet_ptr->nx_packet_address.nx_packet_interface_ptr
-             ->nx_interface_ip_address == 0)) {
+        /* Determine if the target IP address is non-zero.  */
+        if (*(message_ptr + 6) &&
+            (packet_ptr->nx_packet_address.nx_packet_interface_ptr->nx_interface_ip_address == 0)) {
 
-      /* Pickup the current notification callback and additional information
-       * pointers.  */
-      address_change_notify = ip_ptr->nx_ip_address_change_notify;
-      additional_info = ip_ptr->nx_ip_address_change_notify_additional_info;
+            /* Pickup the current notification callback and additional information
+             * pointers.  */
+            address_change_notify = ip_ptr->nx_ip_address_change_notify;
+            additional_info = ip_ptr->nx_ip_address_change_notify_additional_info;
 
-      /* Pickup the internal notification callback.  */
-      address_change_notify_internal =
-          ip_ptr->nx_ip_address_change_notify_internal;
+            /* Pickup the internal notification callback.  */
+            address_change_notify_internal = ip_ptr->nx_ip_address_change_notify_internal;
 
-      /* Set the IP address of this IP instance to the target
-         IP address in the RARP response.  */
-      packet_ptr->nx_packet_address.nx_packet_interface_ptr
-          ->nx_interface_ip_address = *(message_ptr + 6);
+            /* Set the IP address of this IP instance to the target
+               IP address in the RARP response.  */
+            packet_ptr->nx_packet_address.nx_packet_interface_ptr->nx_interface_ip_address = *(message_ptr + 6);
 
-      /* Loop through all the interfaces and check whether or not to continue
-       * periodic RARP requests. */
-      for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
+            /* Loop through all the interfaces and check whether or not to continue
+             * periodic RARP requests. */
+            for (i = 0; i < NX_MAX_PHYSICAL_INTERFACES; i++) {
 
-        /* Skip the invalid interface entry. */
-        if (ip_ptr->nx_ip_interface[i].nx_interface_valid == 0) {
-          continue;
+                /* Skip the invalid interface entry. */
+                if (ip_ptr->nx_ip_interface[i].nx_interface_valid == 0) {
+                    continue;
+                }
+
+                /* Look for any interfaces still without a valid IP address. */
+                if ((ip_ptr->nx_ip_interface[i].nx_interface_ip_address == 0) &&
+                    (ip_ptr->nx_ip_interface[i].nx_interface_address_mapping_needed == NX_TRUE)) {
+                    /* At least one interface still has non-zero IP address. Continue RARP
+                     * process. */
+                    break;
+                }
+            }
+
+            /* Do we need to continue with periodic RARP requests? */
+            if (i >= NX_MAX_PHYSICAL_INTERFACES) {
+
+                /* No, Disable the RARP activity now that we have a valid IP address. */
+                ip_ptr->nx_ip_rarp_periodic_update = NX_NULL;
+                ip_ptr->nx_ip_rarp_queue_process = NX_NULL;
+            }
         }
 
-        /* Look for any interfaces still without a valid IP address. */
-        if ((ip_ptr->nx_ip_interface[i].nx_interface_ip_address == 0) &&
-            (ip_ptr->nx_ip_interface[i].nx_interface_address_mapping_needed ==
-             NX_TRUE)) {
-          /* At least one interface still has non-zero IP address. Continue RARP
-           * process. */
-          break;
-        }
-      }
+        /* Restore interrupts.  */
+        TX_RESTORE
 
-      /* Do we need to continue with periodic RARP requests? */
-      if (i >= NX_MAX_PHYSICAL_INTERFACES) {
-
-        /* No, Disable the RARP activity now that we have a valid IP address. */
-        ip_ptr->nx_ip_rarp_periodic_update = NX_NULL;
-        ip_ptr->nx_ip_rarp_queue_process = NX_NULL;
-      }
-    }
-
-    /* Restore interrupts.  */
-    TX_RESTORE
-
-    /* Release the RARP response packet.  */
-    _nx_packet_release(packet_ptr);
-  } else {
+        /* Release the RARP response packet.  */
+        _nx_packet_release(packet_ptr);
+    } else {
 
 #ifndef NX_DISABLE_RARP_INFO
-    /* Increment the RARP invalid messages count.  */
-    ip_ptr->nx_ip_rarp_invalid_messages++;
+        /* Increment the RARP invalid messages count.  */
+        ip_ptr->nx_ip_rarp_invalid_messages++;
 #endif
 
-    /* Invalid RARP message.  Just release the packet.  */
-    _nx_packet_release(packet_ptr);
-  }
+        /* Invalid RARP message.  Just release the packet.  */
+        _nx_packet_release(packet_ptr);
+    }
 
-  /* Determine if the application should be notified of the IP address change.
-   */
-  if (address_change_notify != NX_NULL) {
-    /* Yes, call the application's IP address change notify function.  */
-    (address_change_notify)(ip_ptr, additional_info);
-  }
-
-  /* Determine if the internal application should be notified of the IP address
-   * change. */
-  if (address_change_notify_internal != NX_NULL) {
-    /* Yes, call the internal application's IP address change notify function.
+    /* Determine if the application should be notified of the IP address change.
      */
-    (address_change_notify_internal)(ip_ptr, NX_NULL);
-  }
+    if (address_change_notify != NX_NULL) {
+        /* Yes, call the application's IP address change notify function.  */
+        (address_change_notify)(ip_ptr, additional_info);
+    }
 
-  return;
+    /* Determine if the internal application should be notified of the IP address
+     * change. */
+    if (address_change_notify_internal != NX_NULL) {
+        /* Yes, call the internal application's IP address change notify function.
+         */
+        (address_change_notify_internal)(ip_ptr, NX_NULL);
+    }
+
+    return;
 }
 #endif /* !NX_DISABLE_IPV4  */

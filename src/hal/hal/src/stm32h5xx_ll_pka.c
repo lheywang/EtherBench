@@ -44,28 +44,18 @@
 /** @defgroup PKA_LL_Private_Macros PKA Private Constants
  * @{
  */
-#define IS_LL_PKA_MODE(__VALUE__)                                              \
-  (((__VALUE__) == LL_PKA_MODE_MODULAR_EXP) ||                                 \
-   ((__VALUE__) == LL_PKA_MODE_MONTGOMERY_PARAM) ||                            \
-   ((__VALUE__) == LL_PKA_MODE_MODULAR_EXP_FAST) ||                            \
-   ((__VALUE__) == LL_PKA_MODE_MODULAR_EXP_PROTECT) ||                         \
-   ((__VALUE__) == LL_PKA_MODE_ECC_MUL) ||                                     \
-   ((__VALUE__) == LL_PKA_MODE_ECC_COMPLETE_ADD) ||                            \
-   ((__VALUE__) == LL_PKA_MODE_ECDSA_SIGNATURE) ||                             \
-   ((__VALUE__) == LL_PKA_MODE_ECDSA_VERIFICATION) ||                          \
-   ((__VALUE__) == LL_PKA_MODE_POINT_CHECK) ||                                 \
-   ((__VALUE__) == LL_PKA_MODE_RSA_CRT_EXP) ||                                 \
-   ((__VALUE__) == LL_PKA_MODE_MODULAR_INV) ||                                 \
-   ((__VALUE__) == LL_PKA_MODE_ARITHMETIC_ADD) ||                              \
-   ((__VALUE__) == LL_PKA_MODE_ARITHMETIC_SUB) ||                              \
-   ((__VALUE__) == LL_PKA_MODE_ARITHMETIC_MUL) ||                              \
-   ((__VALUE__) == LL_PKA_MODE_COMPARISON) ||                                  \
-   ((__VALUE__) == LL_PKA_MODE_MODULAR_REDUC) ||                               \
-   ((__VALUE__) == LL_PKA_MODE_MODULAR_ADD) ||                                 \
-   ((__VALUE__) == LL_PKA_MODE_MODULAR_SUB) ||                                 \
-   ((__VALUE__) == LL_PKA_MODE_MONTGOMERY_MUL) ||                              \
-   ((__VALUE__) == LL_PKA_MODE_DOUBLE_BASE_LADDER) ||                          \
-   ((__VALUE__) == LL_PKA_MODE_ECC_PROJECTIVE_AFF))
+#define IS_LL_PKA_MODE(__VALUE__)                                                                                      \
+    (((__VALUE__) == LL_PKA_MODE_MODULAR_EXP) || ((__VALUE__) == LL_PKA_MODE_MONTGOMERY_PARAM) ||                      \
+     ((__VALUE__) == LL_PKA_MODE_MODULAR_EXP_FAST) || ((__VALUE__) == LL_PKA_MODE_MODULAR_EXP_PROTECT) ||              \
+     ((__VALUE__) == LL_PKA_MODE_ECC_MUL) || ((__VALUE__) == LL_PKA_MODE_ECC_COMPLETE_ADD) ||                          \
+     ((__VALUE__) == LL_PKA_MODE_ECDSA_SIGNATURE) || ((__VALUE__) == LL_PKA_MODE_ECDSA_VERIFICATION) ||                \
+     ((__VALUE__) == LL_PKA_MODE_POINT_CHECK) || ((__VALUE__) == LL_PKA_MODE_RSA_CRT_EXP) ||                           \
+     ((__VALUE__) == LL_PKA_MODE_MODULAR_INV) || ((__VALUE__) == LL_PKA_MODE_ARITHMETIC_ADD) ||                        \
+     ((__VALUE__) == LL_PKA_MODE_ARITHMETIC_SUB) || ((__VALUE__) == LL_PKA_MODE_ARITHMETIC_MUL) ||                     \
+     ((__VALUE__) == LL_PKA_MODE_COMPARISON) || ((__VALUE__) == LL_PKA_MODE_MODULAR_REDUC) ||                          \
+     ((__VALUE__) == LL_PKA_MODE_MODULAR_ADD) || ((__VALUE__) == LL_PKA_MODE_MODULAR_SUB) ||                           \
+     ((__VALUE__) == LL_PKA_MODE_MONTGOMERY_MUL) || ((__VALUE__) == LL_PKA_MODE_DOUBLE_BASE_LADDER) ||                 \
+     ((__VALUE__) == LL_PKA_MODE_ECC_PROJECTIVE_AFF))
 /**
  * @}
  */
@@ -90,22 +80,22 @@
  *          - ERROR: PKA registers are not de-initialized
  */
 ErrorStatus LL_PKA_DeInit(const PKA_TypeDef *PKAx) {
-  ErrorStatus status = SUCCESS;
+    ErrorStatus status = SUCCESS;
 
-  /* Check the parameters */
-  assert_param(IS_PKA_ALL_INSTANCE(PKAx));
+    /* Check the parameters */
+    assert_param(IS_PKA_ALL_INSTANCE(PKAx));
 
-  if (PKAx == PKA) {
-    /* Force PKA reset */
-    LL_AHB2_GRP1_ForceReset(LL_AHB2_GRP1_PERIPH_PKA);
+    if (PKAx == PKA) {
+        /* Force PKA reset */
+        LL_AHB2_GRP1_ForceReset(LL_AHB2_GRP1_PERIPH_PKA);
 
-    /* Release PKA reset */
-    LL_AHB2_GRP1_ReleaseReset(LL_AHB2_GRP1_PERIPH_PKA);
-  } else {
-    status = ERROR;
-  }
+        /* Release PKA reset */
+        LL_AHB2_GRP1_ReleaseReset(LL_AHB2_GRP1_PERIPH_PKA);
+    } else {
+        status = ERROR;
+    }
 
-  return (status);
+    return (status);
 }
 
 /**
@@ -121,12 +111,12 @@ ErrorStatus LL_PKA_DeInit(const PKA_TypeDef *PKAx) {
  *          - ERROR:   Not applicable
  */
 ErrorStatus LL_PKA_Init(PKA_TypeDef *PKAx, LL_PKA_InitTypeDef *PKA_InitStruct) {
-  assert_param(IS_PKA_ALL_INSTANCE(PKAx));
-  assert_param(IS_LL_PKA_MODE(PKA_InitStruct->Mode));
+    assert_param(IS_PKA_ALL_INSTANCE(PKAx));
+    assert_param(IS_LL_PKA_MODE(PKA_InitStruct->Mode));
 
-  LL_PKA_Config(PKAx, PKA_InitStruct->Mode);
+    LL_PKA_Config(PKAx, PKA_InitStruct->Mode);
 
-  return (SUCCESS);
+    return (SUCCESS);
 }
 
 /**
@@ -137,8 +127,8 @@ ErrorStatus LL_PKA_Init(PKA_TypeDef *PKAx, LL_PKA_InitTypeDef *PKA_InitStruct) {
  */
 
 void LL_PKA_StructInit(LL_PKA_InitTypeDef *PKA_InitStruct) {
-  /* Reset PKA init structure parameters values */
-  PKA_InitStruct->Mode = LL_PKA_MODE_MODULAR_EXP;
+    /* Reset PKA init structure parameters values */
+    PKA_InitStruct->Mode = LL_PKA_MODE_MODULAR_EXP;
 }
 
 /**

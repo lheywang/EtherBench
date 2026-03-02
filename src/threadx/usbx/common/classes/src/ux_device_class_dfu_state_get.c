@@ -20,13 +20,11 @@
 
 #define UX_SOURCE_CODE
 
-
 /* Include necessary system files.  */
 
 #include "ux_api.h"
 #include "ux_device_class_dfu.h"
 #include "ux_device_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -66,8 +64,7 @@
 /*  04-02-2021     Chaoqiong Xiao           Initial Version 6.1.6         */
 /*                                                                        */
 /**************************************************************************/
-UCHAR  _ux_device_class_dfu_state_get(UX_SLAVE_CLASS_DFU *dfu)
-{
+UCHAR _ux_device_class_dfu_state_get(UX_SLAVE_CLASS_DFU *dfu) {
     UX_PARAMETER_NOT_USED(dfu);
-    return (UCHAR)_ux_system_slave -> ux_system_slave_device_dfu_state_machine;
+    return (UCHAR)_ux_system_slave->ux_system_slave_device_dfu_state_machine;
 }

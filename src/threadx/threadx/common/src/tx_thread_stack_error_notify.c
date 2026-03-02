@@ -25,8 +25,7 @@
 
 #include "../include/tx_api.h"
 #include "../include/tx_thread.h"
-#if defined(TX_ENABLE_STACK_CHECKING) ||                                       \
-    defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
+#if defined(TX_ENABLE_STACK_CHECKING) || defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
 #include "../include/tx_trace.h"
 #endif
 
@@ -81,49 +80,46 @@
 /*                                            resulting in version 6.1.9  */
 /*                                                                        */
 /**************************************************************************/
-UINT _tx_thread_stack_error_notify(
-    VOID (*stack_error_handler)(TX_THREAD *thread_ptr)) {
+UINT _tx_thread_stack_error_notify(VOID (*stack_error_handler)(TX_THREAD *thread_ptr)) {
 
-#if !defined(TX_ENABLE_STACK_CHECKING) &&                                      \
-    !defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
+#if !defined(TX_ENABLE_STACK_CHECKING) && !defined(TX_PORT_THREAD_STACK_ERROR_HANDLING)
 
-  UINT status;
+    UINT status;
 
-  /* Access input argument just for the sake of lint, MISRA, etc.  */
-  if (stack_error_handler != TX_NULL) {
+    /* Access input argument just for the sake of lint, MISRA, etc.  */
+    if (stack_error_handler != TX_NULL) {
 
-    /* Stack checking is not enabled, just return an error.  */
-    status = TX_FEATURE_NOT_ENABLED;
-  } else {
+        /* Stack checking is not enabled, just return an error.  */
+        status = TX_FEATURE_NOT_ENABLED;
+    } else {
 
-    /* Stack checking is not enabled, just return an error.  */
-    status = TX_FEATURE_NOT_ENABLED;
-  }
+        /* Stack checking is not enabled, just return an error.  */
+        status = TX_FEATURE_NOT_ENABLED;
+    }
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 
 #else
 
-  TX_INTERRUPT_SAVE_AREA
+    TX_INTERRUPT_SAVE_AREA
 
-  /* Disable interrupts.  */
-  TX_DISABLE
+    /* Disable interrupts.  */
+    TX_DISABLE
 
-  /* Make entry in event log.  */
-  TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_STACK_ERROR_NOTIFY, 0, 0, 0, 0,
-                          TX_TRACE_THREAD_EVENTS)
+    /* Make entry in event log.  */
+    TX_TRACE_IN_LINE_INSERT(TX_TRACE_THREAD_STACK_ERROR_NOTIFY, 0, 0, 0, 0, TX_TRACE_THREAD_EVENTS)
 
-  /* Make entry in event log.  */
-  TX_EL_THREAD_STACK_ERROR_NOTIFY_INSERT
+    /* Make entry in event log.  */
+    TX_EL_THREAD_STACK_ERROR_NOTIFY_INSERT
 
-  /* Setup global thread stack error handler.  */
-  _tx_thread_application_stack_error_handler = stack_error_handler;
+    /* Setup global thread stack error handler.  */
+    _tx_thread_application_stack_error_handler = stack_error_handler;
 
-  /* Restore interrupts.  */
-  TX_RESTORE
+    /* Restore interrupts.  */
+    TX_RESTORE
 
-  /* Return success to caller.  */
-  return (TX_SUCCESS);
+    /* Return success to caller.  */
+    return (TX_SUCCESS);
 #endif
 }

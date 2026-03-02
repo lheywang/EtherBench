@@ -68,45 +68,45 @@
 /**************************************************************************/
 UINT _txe_block_release(VOID *block_ptr) {
 
-  UINT status;
-  TX_BLOCK_POOL *pool_ptr;
-  UCHAR **indirect_ptr;
-  UCHAR *work_ptr;
+    UINT status;
+    TX_BLOCK_POOL *pool_ptr;
+    UCHAR **indirect_ptr;
+    UCHAR *work_ptr;
 
-  /* First check the supplied pointer.  */
-  if (block_ptr == TX_NULL) {
+    /* First check the supplied pointer.  */
+    if (block_ptr == TX_NULL) {
 
-    /* The block pointer is invalid, return appropriate status.  */
-    status = TX_PTR_ERROR;
-  } else {
-
-    /* Pickup the pool pointer which is just previous to the starting
-       address of block that the caller sees.  */
-    work_ptr = TX_VOID_TO_UCHAR_POINTER_CONVERT(block_ptr);
-    work_ptr = TX_UCHAR_POINTER_SUB(work_ptr, (sizeof(UCHAR *)));
-    indirect_ptr = TX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(work_ptr);
-    work_ptr = *indirect_ptr;
-    pool_ptr = TX_UCHAR_TO_BLOCK_POOL_POINTER_CONVERT(work_ptr);
-
-    /* Check for an invalid pool pointer.  */
-    if (pool_ptr == TX_NULL) {
-
-      /* Pool pointer is invalid, return appropriate error code.  */
-      status = TX_PTR_ERROR;
-    }
-
-    /* Now check for invalid pool ID.  */
-    else if (pool_ptr->tx_block_pool_id != TX_BLOCK_POOL_ID) {
-
-      /* Pool pointer is invalid, return appropriate error code.  */
-      status = TX_PTR_ERROR;
+        /* The block pointer is invalid, return appropriate status.  */
+        status = TX_PTR_ERROR;
     } else {
 
-      /* Call actual block release function.  */
-      status = _tx_block_release(block_ptr);
-    }
-  }
+        /* Pickup the pool pointer which is just previous to the starting
+           address of block that the caller sees.  */
+        work_ptr = TX_VOID_TO_UCHAR_POINTER_CONVERT(block_ptr);
+        work_ptr = TX_UCHAR_POINTER_SUB(work_ptr, (sizeof(UCHAR *)));
+        indirect_ptr = TX_UCHAR_TO_INDIRECT_UCHAR_POINTER_CONVERT(work_ptr);
+        work_ptr = *indirect_ptr;
+        pool_ptr = TX_UCHAR_TO_BLOCK_POOL_POINTER_CONVERT(work_ptr);
 
-  /* Return completion status.  */
-  return (status);
+        /* Check for an invalid pool pointer.  */
+        if (pool_ptr == TX_NULL) {
+
+            /* Pool pointer is invalid, return appropriate error code.  */
+            status = TX_PTR_ERROR;
+        }
+
+        /* Now check for invalid pool ID.  */
+        else if (pool_ptr->tx_block_pool_id != TX_BLOCK_POOL_ID) {
+
+            /* Pool pointer is invalid, return appropriate error code.  */
+            status = TX_PTR_ERROR;
+        } else {
+
+            /* Call actual block release function.  */
+            status = _tx_block_release(block_ptr);
+        }
+    }
+
+    /* Return completion status.  */
+    return (status);
 }

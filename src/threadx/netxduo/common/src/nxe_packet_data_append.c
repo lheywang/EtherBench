@@ -75,43 +75,40 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_packet_data_append(NX_PACKET *packet_ptr, VOID *data_start,
-                             ULONG data_size, NX_PACKET_POOL *pool_ptr,
+UINT _nxe_packet_data_append(NX_PACKET *packet_ptr, VOID *data_start, ULONG data_size, NX_PACKET_POOL *pool_ptr,
                              ULONG wait_option) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((pool_ptr == NX_NULL) ||
-      (pool_ptr->nx_packet_pool_id != NX_PACKET_POOL_ID) ||
-      (packet_ptr == NX_NULL) || (data_start == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((pool_ptr == NX_NULL) || (pool_ptr->nx_packet_pool_id != NX_PACKET_POOL_ID) || (packet_ptr == NX_NULL) ||
+        (data_start == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for an invalid size of data to append.  */
-  if (!data_size) {
-    return (NX_SIZE_ERROR);
-  }
+    /* Check for an invalid size of data to append.  */
+    if (!data_size) {
+        return (NX_SIZE_ERROR);
+    }
 
-  /* Check for an invalid packet prepend pointer.  */
-  /*lint -e{946} suppress pointer subtraction, since it is necessary. */
-  if (packet_ptr->nx_packet_prepend_ptr < packet_ptr->nx_packet_data_start) {
-    return (NX_UNDERFLOW);
-  }
+    /* Check for an invalid packet prepend pointer.  */
+    /*lint -e{946} suppress pointer subtraction, since it is necessary. */
+    if (packet_ptr->nx_packet_prepend_ptr < packet_ptr->nx_packet_data_start) {
+        return (NX_UNDERFLOW);
+    }
 
-  /* Check for an invalid packet append pointer.  */
-  /*lint -e{946} suppress pointer subtraction, since it is necessary. */
-  if (packet_ptr->nx_packet_append_ptr > packet_ptr->nx_packet_data_end) {
-    return (NX_OVERFLOW);
-  }
+    /* Check for an invalid packet append pointer.  */
+    /*lint -e{946} suppress pointer subtraction, since it is necessary. */
+    if (packet_ptr->nx_packet_append_ptr > packet_ptr->nx_packet_data_end) {
+        return (NX_OVERFLOW);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREAD_WAIT_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREAD_WAIT_CALLER_CHECKING
 
-  /* Call actual packet data append function.  */
-  status = _nx_packet_data_append(packet_ptr, data_start, data_size, pool_ptr,
-                                  wait_option);
+    /* Call actual packet data append function.  */
+    status = _nx_packet_data_append(packet_ptr, data_start, data_size, pool_ptr, wait_option);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 }

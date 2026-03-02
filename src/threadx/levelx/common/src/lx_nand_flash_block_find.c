@@ -76,39 +76,35 @@
 /*  03-08-2023     Xiuwen Cai               Initial Version 6.2.1        */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_block_find(LX_NAND_FLASH *nand_flash, ULONG logical_sector,
-                               ULONG *block, USHORT *block_status) {
+UINT _lx_nand_flash_block_find(LX_NAND_FLASH *nand_flash, ULONG logical_sector, ULONG *block, USHORT *block_status) {
 
-  UINT block_mapping_index;
-  USHORT block_number;
+    UINT block_mapping_index;
+    USHORT block_number;
 
-  /* Get the mapping index from logic sector address.  */
-  block_mapping_index =
-      logical_sector / nand_flash->lx_nand_flash_pages_per_block;
+    /* Get the mapping index from logic sector address.  */
+    block_mapping_index = logical_sector / nand_flash->lx_nand_flash_pages_per_block;
 
-  /* Check the address range.  */
-  if (block_mapping_index >
-      nand_flash->lx_nand_flash_block_mapping_table_size /
-          sizeof(*nand_flash->lx_nand_flash_block_mapping_table)) {
+    /* Check the address range.  */
+    if (block_mapping_index >
+        nand_flash->lx_nand_flash_block_mapping_table_size / sizeof(*nand_flash->lx_nand_flash_block_mapping_table)) {
 
-    /* Out of range, return an error. */
-    return (LX_ERROR);
-  }
+        /* Out of range, return an error. */
+        return (LX_ERROR);
+    }
 
-  /* Get the block number from mapping table.  */
-  block_number =
-      nand_flash->lx_nand_flash_block_mapping_table[block_mapping_index];
+    /* Get the block number from mapping table.  */
+    block_number = nand_flash->lx_nand_flash_block_mapping_table[block_mapping_index];
 
-  /* Check if it is mapped.  */
-  if (block_number != LX_NAND_BLOCK_UNMAPPED) {
+    /* Check if it is mapped.  */
+    if (block_number != LX_NAND_BLOCK_UNMAPPED) {
 
-    /* Return the block status.  */
-    *block_status = nand_flash->lx_nand_flash_block_status_table[block_number];
-  }
+        /* Return the block status.  */
+        *block_status = nand_flash->lx_nand_flash_block_status_table[block_number];
+    }
 
-  /* Return the block number.  */
-  *block = (ULONG)block_number;
+    /* Return the block number.  */
+    *block = (ULONG)block_number;
 
-  /* Return successful completion.  */
-  return (LX_SUCCESS);
+    /* Return successful completion.  */
+    return (LX_SUCCESS);
 }

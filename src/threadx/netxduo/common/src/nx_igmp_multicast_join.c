@@ -71,12 +71,11 @@
 UINT _nx_igmp_multicast_join(NX_IP *ip_ptr, ULONG group_address) {
 
 #ifndef NX_DISABLE_IPV4
-  return (
-      _nx_igmp_multicast_interface_join_internal(ip_ptr, group_address, 0, 1));
+    return (_nx_igmp_multicast_interface_join_internal(ip_ptr, group_address, 0, 1));
 #else  /* NX_DISABLE_IPV4  */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(group_address);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(group_address);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 #endif /* !NX_DISABLE_IPV4  */
 }

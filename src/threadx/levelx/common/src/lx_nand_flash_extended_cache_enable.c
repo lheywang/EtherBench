@@ -80,13 +80,12 @@
 /*                                            resulting in version 6.2.1 */
 /*                                                                        */
 /**************************************************************************/
-UINT _lx_nand_flash_extended_cache_enable(LX_NAND_FLASH *nand_flash,
-                                          VOID *memory, ULONG size) {
+UINT _lx_nand_flash_extended_cache_enable(LX_NAND_FLASH *nand_flash, VOID *memory, ULONG size) {
 
-  LX_PARAMETER_NOT_USED(nand_flash);
-  LX_PARAMETER_NOT_USED(memory);
-  LX_PARAMETER_NOT_USED(size);
+    LX_PARAMETER_NOT_USED(nand_flash);
+    LX_PARAMETER_NOT_USED(memory);
+    LX_PARAMETER_NOT_USED(size);
 
-  /* Return not supported.  */
-  return (LX_NOT_SUPPORTED);
+    /* Return not supported.  */
+    return (LX_NOT_SUPPORTED);
 }

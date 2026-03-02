@@ -73,21 +73,19 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _fx_file_best_effort_allocate(FX_FILE *file_ptr, ULONG size,
-                                   ULONG *actual_size_allocated) {
+UINT _fx_file_best_effort_allocate(FX_FILE *file_ptr, ULONG size, ULONG *actual_size_allocated) {
 
-  UINT status;
-  ULONG64 temp_actual_size_allocated;
+    UINT status;
+    ULONG64 temp_actual_size_allocated;
 
-  /* Call actual best effort file allocate service.  */
-  status = _fx_file_extended_best_effort_allocate(file_ptr, (ULONG64)size,
-                                                  &temp_actual_size_allocated);
+    /* Call actual best effort file allocate service.  */
+    status = _fx_file_extended_best_effort_allocate(file_ptr, (ULONG64)size, &temp_actual_size_allocated);
 
-  /* Check status.  */
-  if (status == FX_SUCCESS) {
-    *actual_size_allocated = (ULONG)temp_actual_size_allocated;
-  }
+    /* Check status.  */
+    if (status == FX_SUCCESS) {
+        *actual_size_allocated = (ULONG)temp_actual_size_allocated;
+    }
 
-  /* Return status to the caller.  */
-  return (status);
+    /* Return status to the caller.  */
+    return (status);
 }

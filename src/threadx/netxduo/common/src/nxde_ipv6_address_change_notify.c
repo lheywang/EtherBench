@@ -75,32 +75,30 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxde_ipv6_address_change_notify(
-    NX_IP *ip_ptr,
-    VOID (*ip_address_change_notify)(NX_IP *ip_ptr, UINT status,
-                                     UINT interface_index, UINT address_index,
-                                     ULONG *ip_address)) {
+UINT _nxde_ipv6_address_change_notify(NX_IP *ip_ptr,
+                                      VOID (*ip_address_change_notify)(NX_IP *ip_ptr, UINT status, UINT interface_index,
+                                                                       UINT address_index, ULONG *ip_address)) {
 #if defined(NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY) && defined(FEATURE_NX_IPV6)
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call actual IP address change notify function.  */
-  status = _nxd_ipv6_address_change_notify(ip_ptr, ip_address_change_notify);
+    /* Call actual IP address change notify function.  */
+    status = _nxd_ipv6_address_change_notify(ip_ptr, ip_address_change_notify);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 #else
 
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(ip_address_change_notify);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(ip_address_change_notify);
 
-  return (NX_NOT_ENABLED);
+    return (NX_NOT_ENABLED);
 #endif /* NX_ENABLE_IPV6_ADDRESS_CHANGE_NOTIFY && FEATURE_NX_IPV6 */
 }

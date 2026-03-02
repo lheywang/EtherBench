@@ -71,8 +71,8 @@
 /**************************************************************************/
 VOID _nx_packet_pool_initialize(VOID) {
 
-  /* Initialize the head pointer of the created packet pools list and the
-     number of packet pools created.  */
-  _nx_packet_pool_created_ptr = NX_NULL;
-  _nx_packet_pool_created_count = 0;
+    /* Initialize the head pointer of the created packet pools list and the
+       number of packet pools created.  */
+    _nx_packet_pool_created_ptr = NX_NULL;
+    _nx_packet_pool_created_count = 0;
 }

@@ -74,32 +74,30 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxe_packet_pool_low_watermark_set(NX_PACKET_POOL *pool_ptr,
-                                        ULONG low_watermark) {
+UINT _nxe_packet_pool_low_watermark_set(NX_PACKET_POOL *pool_ptr, ULONG low_watermark) {
 #ifdef NX_ENABLE_LOW_WATERMARK
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers.  */
-  if ((pool_ptr == NX_NULL) ||
-      (pool_ptr->nx_packet_pool_id != NX_PACKET_POOL_ID)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers.  */
+    if ((pool_ptr == NX_NULL) || (pool_ptr->nx_packet_pool_id != NX_PACKET_POOL_ID)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_THREADS_ONLY_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_THREADS_ONLY_CALLER_CHECKING
 
-  /* Call actual packet pool low watermark set function.  */
-  status = _nx_packet_pool_low_watermark_set(pool_ptr, low_watermark);
+    /* Call actual packet pool low watermark set function.  */
+    status = _nx_packet_pool_low_watermark_set(pool_ptr, low_watermark);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 
 #else /* !NX_ENABLE_LOW_WATERMARK */
-  NX_PARAMETER_NOT_USED(pool_ptr);
-  NX_PARAMETER_NOT_USED(low_watermark);
+    NX_PARAMETER_NOT_USED(pool_ptr);
+    NX_PARAMETER_NOT_USED(low_watermark);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* NX_ENABLE_LOW_WATERMARK */
 }

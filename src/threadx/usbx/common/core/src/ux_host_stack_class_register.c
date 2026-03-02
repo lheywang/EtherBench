@@ -9,7 +9,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-
 /**************************************************************************/
 /**************************************************************************/
 /**                                                                       */
@@ -20,14 +19,12 @@
 /**************************************************************************/
 /**************************************************************************/
 
-
 /* Include necessary system files.  */
 
 #define UX_SOURCE_CODE
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -85,82 +82,81 @@
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT  _ux_host_stack_class_register(UCHAR *class_name,
-                        UINT (*class_entry_function)(struct UX_HOST_CLASS_COMMAND_STRUCT *))
-{
+UINT _ux_host_stack_class_register(UCHAR *class_name,
+                                   UINT (*class_entry_function)(struct UX_HOST_CLASS_COMMAND_STRUCT *)) {
 
-UX_HOST_CLASS       *class_inst;
+    UX_HOST_CLASS *class_inst;
 #if !defined(UX_NAME_REFERENCED_BY_POINTER)
-UINT                status;
-UINT                class_name_length =  0;
+    UINT status;
+    UINT class_name_length = 0;
 #endif
 #if UX_MAX_CLASS_DRIVER > 1
-ULONG               class_index;
+    ULONG class_index;
 #endif
 
     /* If trace is enabled, insert this event into the trace buffer.  */
-    UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_CLASS_REGISTER, class_name, class_entry_function, 0, 0, UX_TRACE_HOST_STACK_EVENTS, 0, 0)
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_STACK_CLASS_REGISTER, class_name, class_entry_function, 0, 0,
+                            UX_TRACE_HOST_STACK_EVENTS, 0, 0)
 
 #if !defined(UX_NAME_REFERENCED_BY_POINTER)
     /* Get the length of the class name (exclude null-terminator).  */
-    status =  _ux_utility_string_length_check(class_name, &class_name_length, UX_MAX_CLASS_NAME_LENGTH);
+    status = _ux_utility_string_length_check(class_name, &class_name_length, UX_MAX_CLASS_NAME_LENGTH);
     if (status)
-        return(status);
+        return (status);
 #endif
 
     /* Get first class.  */
-    class_inst =  _ux_system_host -> ux_system_host_class_array;
+    class_inst = _ux_system_host->ux_system_host_class_array;
 
 #if UX_MAX_CLASS_DRIVER > 1
     /* We need to parse the class table to find an empty spot.  */
-    for (class_index = 0; class_index < _ux_system_host -> ux_system_host_max_class; class_index++)
-    {
+    for (class_index = 0; class_index < _ux_system_host->ux_system_host_max_class; class_index++) {
 #endif
 
         /* Check if this class is already used.  */
-        if (class_inst -> ux_host_class_status == UX_UNUSED)
-        {
+        if (class_inst->ux_host_class_status == UX_UNUSED) {
 
 #if defined(UX_NAME_REFERENCED_BY_POINTER)
-            class_inst -> ux_host_class_name = (const UCHAR *) class_name;
+            class_inst->ux_host_class_name = (const UCHAR *)class_name;
 #else
 
-            /* We have found a free container for the class. Copy the name (with null-terminator).  */
-            _ux_utility_memory_copy(class_inst -> ux_host_class_name, class_name, class_name_length + 1); /* Use case of memcpy is verified. */
+        /* We have found a free container for the class. Copy the name (with null-terminator).  */
+        _ux_utility_memory_copy(class_inst->ux_host_class_name, class_name,
+                                class_name_length + 1); /* Use case of memcpy is verified. */
 #endif
 
             /* Memorize the entry function of this class.  */
-            class_inst -> ux_host_class_entry_function =  class_entry_function;
+            class_inst->ux_host_class_entry_function = class_entry_function;
 
             /* Mark it as used.  */
-            class_inst -> ux_host_class_status =  UX_USED;
+            class_inst->ux_host_class_status = UX_USED;
 
             /* Return successful completion.  */
-            return(UX_SUCCESS);
+            return (UX_SUCCESS);
         }
 
         /* Do a sanity check to make sure the class is not already installed by
            mistake. To verify this, we simple check for the class entry point.  */
-        else
-        {
+        else {
 
             /* Check for an already installed class entry function.  */
-            if(class_inst -> ux_host_class_entry_function == class_entry_function)
-            {
+            if (class_inst->ux_host_class_entry_function == class_entry_function) {
 
                 /* Error trap. */
-                _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_INIT, UX_HOST_CLASS_ALREADY_INSTALLED);
+                _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_INIT,
+                                         UX_HOST_CLASS_ALREADY_INSTALLED);
 
                 /* If trace is enabled, insert this event into the trace buffer.  */
-                UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_HOST_CLASS_ALREADY_INSTALLED, class_name, 0, 0, UX_TRACE_ERRORS, 0, 0)
+                UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_HOST_CLASS_ALREADY_INSTALLED, class_name, 0, 0,
+                                        UX_TRACE_ERRORS, 0, 0)
 
                 /* Yes, return an error.  */
-                return(UX_HOST_CLASS_ALREADY_INSTALLED);
+                return (UX_HOST_CLASS_ALREADY_INSTALLED);
             }
         }
 #if UX_MAX_CLASS_DRIVER > 1
         /* Move to the next class.  */
-        class_inst ++;
+        class_inst++;
     }
 #endif
 
@@ -171,9 +167,8 @@ ULONG               class_index;
     _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_INIT, UX_MEMORY_ARRAY_FULL);
 
     /* No more entries in the class table.  */
-    return(UX_MEMORY_ARRAY_FULL);
+    return (UX_MEMORY_ARRAY_FULL);
 }
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -214,14 +209,13 @@ ULONG               class_index;
 /*  10-31-2023     Chaoqiong Xiao           Initial Version 6.3.0         */
 /*                                                                        */
 /**************************************************************************/
-UINT  _uxe_host_stack_class_register(UCHAR *class_name,
-                        UINT (*class_entry_function)(struct UX_HOST_CLASS_COMMAND_STRUCT *))
-{
+UINT _uxe_host_stack_class_register(UCHAR *class_name,
+                                    UINT (*class_entry_function)(struct UX_HOST_CLASS_COMMAND_STRUCT *)) {
 
     /* Sanity checks.  */
     if ((class_name == UX_NULL) || (class_entry_function == UX_NULL))
-        return(UX_INVALID_PARAMETER);
+        return (UX_INVALID_PARAMETER);
 
     /* Invoke class register function.  */
-    return(_ux_host_stack_class_register(class_name, class_entry_function));
+    return (_ux_host_stack_class_register(class_name, class_entry_function));
 }

@@ -81,40 +81,36 @@ NX_CALLER_CHECKING_EXTERNS
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nxde_ipv6_default_router_number_of_entries_get(NX_IP *ip_ptr,
-                                                     UINT if_index,
-                                                     UINT *num_entries) {
+UINT _nxde_ipv6_default_router_number_of_entries_get(NX_IP *ip_ptr, UINT if_index, UINT *num_entries) {
 #ifdef FEATURE_NX_IPV6
 
-  UINT status;
+    UINT status;
 
-  /* Check for invalid input pointers. */
-  if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) ||
-      (num_entries == NX_NULL)) {
-    return (NX_PTR_ERROR);
-  }
+    /* Check for invalid input pointers. */
+    if ((ip_ptr == NX_NULL) || (ip_ptr->nx_ip_id != NX_IP_ID) || (num_entries == NX_NULL)) {
+        return (NX_PTR_ERROR);
+    }
 
-  /* Validate the interface. */
-  if (if_index >= NX_MAX_PHYSICAL_INTERFACES) {
-    return (NX_INVALID_INTERFACE);
-  }
+    /* Validate the interface. */
+    if (if_index >= NX_MAX_PHYSICAL_INTERFACES) {
+        return (NX_INVALID_INTERFACE);
+    }
 
-  /* Check for appropriate caller.  */
-  NX_INIT_AND_THREADS_CALLER_CHECKING
+    /* Check for appropriate caller.  */
+    NX_INIT_AND_THREADS_CALLER_CHECKING
 
-  /* Call actual IPv6 default router number get function.  */
-  status = _nxd_ipv6_default_router_number_of_entries_get(ip_ptr, if_index,
-                                                          num_entries);
+    /* Call actual IPv6 default router number get function.  */
+    status = _nxd_ipv6_default_router_number_of_entries_get(ip_ptr, if_index, num_entries);
 
-  /* Return completion status.  */
-  return (status);
+    /* Return completion status.  */
+    return (status);
 
 #else /* !FEATURE_NX_IPV6 */
-  NX_PARAMETER_NOT_USED(ip_ptr);
-  NX_PARAMETER_NOT_USED(if_index);
-  NX_PARAMETER_NOT_USED(num_entries);
+    NX_PARAMETER_NOT_USED(ip_ptr);
+    NX_PARAMETER_NOT_USED(if_index);
+    NX_PARAMETER_NOT_USED(num_entries);
 
-  return (NX_NOT_SUPPORTED);
+    return (NX_NOT_SUPPORTED);
 
 #endif /* FEATURE_NX_IPV6 */
 }

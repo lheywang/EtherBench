@@ -70,16 +70,16 @@
 /**************************************************************************/
 UINT _fxe_system_time_get(UINT *hour, UINT *minute, UINT *second) {
 
-  UINT status;
+    UINT status;
 
-  /* Check for an invalid destination pointer.  */
-  if ((hour == FX_NULL) || (minute == FX_NULL) || (second == FX_NULL)) {
-    return (FX_PTR_ERROR);
-  }
+    /* Check for an invalid destination pointer.  */
+    if ((hour == FX_NULL) || (minute == FX_NULL) || (second == FX_NULL)) {
+        return (FX_PTR_ERROR);
+    }
 
-  /* Call actual get time service.  */
-  status = _fx_system_time_get(hour, minute, second);
+    /* Call actual get time service.  */
+    status = _fx_system_time_get(hour, minute, second);
 
-  /* Return status.  */
-  return (status);
+    /* Return status.  */
+    return (status);
 }

@@ -71,10 +71,10 @@ ULONG _lx_nand_flash_opened_count;
 /**************************************************************************/
 UINT _lx_nand_flash_initialize(void) {
 
-  /* Clear open list head pointer and opened count.  */
-  _lx_nand_flash_opened_ptr = LX_NULL;
-  _lx_nand_flash_opened_count = 0;
+    /* Clear open list head pointer and opened count.  */
+    _lx_nand_flash_opened_ptr = LX_NULL;
+    _lx_nand_flash_opened_count = 0;
 
-  /* Return success!  */
-  return (LX_SUCCESS);
+    /* Return success!  */
+    return (LX_SUCCESS);
 }
