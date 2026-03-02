@@ -19,6 +19,10 @@ add_compile_definitions(
 	-D$<$<CONFIG:Debug>:DEBUG>
 )
 
+add_compile_options(
+    -fmacro-prefix-map=${CMAKE_SOURCE_DIR}/= 
+)
+
 # Add the config directory, which is global
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
 

@@ -28,6 +28,7 @@
 
 #include "logger.h"
 #include "task_leds.h"
+#include "tx_api.h"
 
 // ======================================================================
 //                              MEMORY AREAS
@@ -44,11 +45,23 @@ uint8_t leds_stack[IDLE_STACK_SIZE];
 TX_THREAD logger_thread;
 uint8_t logger_stack[LOGGER_STACK_SIZE];
 
+/*
+ * Semaphore
+ */
+TX_SEMAPHORE dma_trigger;
+TX_SEMAPHORE dma_tx_done;
+
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================extern
 
 uint32_t launcher(void) {
+
+    /*
+     * Create semaphores
+     */
+    tx_semaphore_create(&dma_trigger, "dma trigger", 0);
+    tx_semaphore_create(&dma_tx_done, "dma done", 0);
 
     /*
      * Launching the USBX task
@@ -63,10 +76,6 @@ uint32_t launcher(void) {
 
     tx_thread_create(&logger_thread, "Deferred Logger", logger_task, 0, logger_stack, LOGGER_STACK_SIZE, 31, 31,
                      TX_NO_TIME_SLICE, TX_AUTO_START);
-
-    tx_thread_sleep(20);
-
-    LOG("Booted HAL, %d", HAL_OK);
 
     return 0;
 }
