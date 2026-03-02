@@ -50,7 +50,8 @@ extern "C" {
 /**
  * @brief 	Send a request to log something.
  *			Logs are formatted as : [ LOG_MODULE ] (file:line)
- *"message"
+ *          "message".
+ *          Newlines aren't needed, they're automatically added to the buffer.
  *
  * @warning 	Logs can't be longer than LOG_MAX_LENGTH characters, newline
  *included.

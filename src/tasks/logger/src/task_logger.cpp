@@ -1,7 +1,7 @@
 /**
- * @file    logger.h
+ * @file    task_logger.cpp
  * @author  l.heywang <leonard.heywang@proton.me>
- * @brief   Header to define the base a logger module, which handle a fast,
+ * @brief   Implement a logger module, which handle a fast,
  * 			DMA based IO, from high level functions.
  *
  * @version 0.1
@@ -20,6 +20,8 @@
 // Local library
 #include "app_threadx.h"
 #include "main.h"
+#include "stm32h5xx_hal_uart.h"
+#include "tx_api.h"
 
 // STD
 #include <stdarg.h>
@@ -34,14 +36,14 @@
  * Buffer and related variables
  */
 static uint8_t log_buffer[2][LOG_BUFFER_SIZE] = {{0}, {0}};
-static uint8_t *head = &log_buffer[0][0];
 static uint32_t buffer_size[2] = {0};
 static uint8_t active_buffer = 0;
 
 /*
  * Thread management
  */
-TX_SEMAPHORE dma_trigger;
+extern TX_SEMAPHORE dma_trigger;
+extern TX_SEMAPHORE dma_tx_done;
 
 /*
  * HAL
@@ -60,7 +62,7 @@ uint32_t add_log(const char *module, const char *file, const int line, const cha
     uint8_t local_buffer[LOG_MAX_LENGTH];
 
     // Add the header to the buffer
-    uint32_t header_len = snprintf((char *)local_buffer, sizeof(local_buffer), "[%s] (%s%3d)", module, file, line);
+    uint32_t header_len = snprintf((char *)local_buffer, sizeof(local_buffer), "[%s] (%s:%d) ", module, file, line);
 
     // Format the ##__VA_ARGS__
     va_list args;
@@ -72,19 +74,12 @@ uint32_t add_log(const char *module, const char *file, const int line, const cha
     message_len += header_len;
 
     /*
-     * Change the used buffer, to follow the memory requests.
+     * Add a newline.
      */
-    if (LOG_BUFFER_SIZE - buffer_size[active_buffer] < message_len) {
-        switch (active_buffer) {
-        case 0:
-            active_buffer = 1;
-            break;
-        default:
-        case 1:
-            active_buffer = 0;
-            break;
-        }
-    }
+    local_buffer[message_len] = '\n';
+    local_buffer[message_len + 1] = '\r';
+    local_buffer[message_len + 2] = '\0';
+    message_len += 2;
 
     /*
      * Now, to ensure the logger module can work in any cases, we stop interrupt
@@ -92,19 +87,22 @@ uint32_t add_log(const char *module, const char *file, const int line, const cha
      */
     UINT old_posture = tx_interrupt_control(TX_INT_DISABLE);
 
-    buffer_size += message_len;
-    memcpy((void *)head, (void *)local_buffer, message_len);
+    uint32_t current_size = buffer_size[active_buffer];
 
-    head = head + message_len;
+    if ((current_size + message_len) < LOG_BUFFER_SIZE) {
+
+        // Copy the data
+        memcpy((void *)&log_buffer[active_buffer][current_size], (void *)local_buffer, (size_t)message_len);
+
+        // Update pointer and sizes.
+        buffer_size[active_buffer] += message_len;
+
+        if ((current_size < LOG_BUFFER_THRESHOLD) && (buffer_size[active_buffer] >= LOG_BUFFER_THRESHOLD)) {
+            tx_semaphore_put(&dma_trigger);
+        }
+    }
 
     tx_interrupt_control(old_posture);
-
-    /*
-     * Finish by setting up flags and others elements
-     */
-    if (buffer_size > LOG_BUFFER_THRESHOLD) {
-        tx_semaphore_put(&dma_trigger);
-    }
 
     return message_len;
 }
@@ -113,28 +111,45 @@ void logger_task(ULONG arg) {
     /*
      * Enterring main loop
      */
+
     while (1) {
         // First, wait for the semaphore. Every 250 ms, we defer all logs regardless
         // of the buffer state.
         tx_semaphore_get(&dma_trigger, 25);
-        if (tx_process == 0) {
-            tx_process = 1;
+
+        while (tx_semaphore_get(&dma_trigger, TX_NO_WAIT) == TX_SUCCESS)
+            ;
+
+        UINT old_posture = tx_interrupt_control(TX_INT_DISABLE);
+
+        uint8_t buffer_to_send = active_buffer;
+        uint32_t size_to_send = buffer_size[buffer_to_send];
+
+        // Check is THERE IS data to send.
+        if (size_to_send > 0) {
+
+            active_buffer = 1 - active_buffer;
+            buffer_size[active_buffer] = 0;
+
+            tx_interrupt_control(old_posture);
 
             // Send the buffer
-            HAL_UART_Transmit_DMA(&huart3, log_buffer, buffer_size);
+            if (HAL_UART_Transmit_DMA(&huart3, log_buffer[buffer_to_send], size_to_send) == HAL_OK) {
+                if (tx_semaphore_get(&dma_tx_done, 200) != TX_SUCCESS) {
+                    HAL_UART_AbortTransmit(&huart3);
+                }
+            } else {
+                HAL_UART_AbortTransmit(&huart3);
+            }
+
+        } else {
+            tx_interrupt_control(old_posture);
         }
     }
-
     return;
 }
 
 void dma_tx_callback() {
-    /*
-     * Clean the buffer and restore variables.
-     */
-    memset((void *)log_buffer, 0x00, (size_t)sizeof(log_buffer));
-    buffer_size = 0;
-    head = &log_buffer[0];
-    tx_process = 0;
+    tx_semaphore_put(&dma_tx_done);
     return;
 }
