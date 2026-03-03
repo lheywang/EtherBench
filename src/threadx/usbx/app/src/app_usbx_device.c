@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "descriptors.h"
+#include "descriptors2.h"
 
 // USBX Core Headers
 #include "ux_api.h"
@@ -96,10 +96,11 @@ UINT MX_USBX_Device_Init(void) {
     /*
      * Launch the USB stack init
      */
-    status =
-        ux_device_stack_initialize((UCHAR *)configuration_descriptor, CONFIG_LEN, (UCHAR *)configuration_descriptor,
-                                   CONFIG_LEN, (UCHAR *)string_framework, STRING_FRAMEWORK_LEN,
-                                   (UCHAR *)language_id_framework, LANGUAGE_ID_FRAMEWORK_LEN, USBD_ChangeFunction);
+    status = ux_device_stack_initialize((UCHAR *)&usb_device_desc, sizeof(usb_composite_configuration_tree_t),
+                                        (UCHAR *)&usb_device_desc, sizeof(usb_composite_configuration_tree_t),
+                                        (UCHAR *)&usb_device_string_framework, sizeof(usbx_string_framework_t),
+                                        (UCHAR *)&usb_device_language_framework, sizeof(usbx_language_id_framework_t),
+                                        USBD_ChangeFunction);
 
     if (status != UX_SUCCESS) {
         while (1) {
@@ -107,7 +108,7 @@ UINT MX_USBX_Device_Init(void) {
         }
     }
 
-    status = ux_device_stack_class_register((UCHAR *)"ux_device_class_cdc_acm", ux_device_class_cdc_acm_entry,
+    status = ux_device_stack_class_register((UCHAR *)"cdc_terminal", ux_device_class_cdc_acm_entry,
                                             1, // Configuration 1
                                             0, // Interface 0
                                             &cdc_mux_param);

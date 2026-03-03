@@ -455,7 +455,7 @@ list(APPEND SOURCES
 )
 
 list(APPEND SOURCES
-	descriptors/src/descriptor.c
+    descriptors/src/descriptors2.c
 )
 
 list(APPEND SOURCES
