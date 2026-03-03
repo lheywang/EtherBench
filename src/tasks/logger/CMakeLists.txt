@@ -12,7 +12,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(LOGGER OBJECT ${SOURCES})
+add_library(LOGGER STATIC ${SOURCES})
 
 target_link_libraries(LOGGER THREADX_OS)
 

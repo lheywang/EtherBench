@@ -21,7 +21,7 @@ set(SOURCES
 # )
 
 # Creating the library
-add_library(PROGRAMMER OBJECT ${SOURCES})
+add_library(PROGRAMMER STATIC ${SOURCES})
 
 # Adding the include folder
 target_include_directories(PROGRAMMER PUBLIC 

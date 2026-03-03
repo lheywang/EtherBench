@@ -258,7 +258,7 @@ list(APPEND SOURCES
 )
 
 # Creating the library
-add_library(FILEX OBJECT ${SOURCES})
+add_library(FILEX STATIC ${SOURCES})
 
 # Link against the base OS
 target_link_libraries(FILEX HAL THREADX_OS)

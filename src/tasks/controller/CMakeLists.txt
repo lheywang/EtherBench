@@ -12,7 +12,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(CONTROLLER OBJECT ${SOURCES})
+add_library(CONTROLLER STATIC ${SOURCES})
 
 # Adding the include folder
 target_include_directories(CONTROLLER PUBLIC 

@@ -532,7 +532,7 @@ list(APPEND SOURCES
 )
 
 # Creating the library
-add_library(NETXDUO OBJECT ${SOURCES})
+add_library(NETXDUO STATIC ${SOURCES})
 
 # Link against the base OS
 target_link_libraries(NETXDUO HAL BSP THREADX_OS)

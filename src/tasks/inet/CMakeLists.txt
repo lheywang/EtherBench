@@ -12,7 +12,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(INET OBJECT ${SOURCES})
+add_library(INET STATIC ${SOURCES})
 
 # Adding the include folder
 target_include_directories(INET PUBLIC 

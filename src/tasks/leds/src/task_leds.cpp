@@ -16,6 +16,7 @@
 // Header
 #include "../include/task_leds.h"
 #include "app_threadx.h"
+#include "logger.h"
 #include "main.h"
 
 // ======================================================================
@@ -28,5 +29,6 @@ void leds_task(ULONG arg) {
     while (1) {
         tx_thread_sleep(50);
         HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+        LOG("Toggled LED !");
     }
 }

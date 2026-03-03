@@ -71,7 +71,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(LEVELX OBJECT ${SOURCES})
+add_library(LEVELX STATIC ${SOURCES})
 
 # Link against the correct libraries
 target_link_libraries(LEVELX HAL THREADX_OS FILEX)

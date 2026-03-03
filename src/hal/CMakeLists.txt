@@ -18,9 +18,7 @@ add_library(HAL INTERFACE)
 # Ensure CMake will propagate objects upward
 target_sources(HAL INTERFACE
     $<TARGET_OBJECTS:SYSTEM>
-    $<TARGET_OBJECTS:INIT>
     $<TARGET_OBJECTS:INTERRUPTS>
-    $<TARGET_OBJECTS:ST_HAL>
 )
 
 # Some specific flags are required to ensure the linker won't throw away some precious interrupt handlers

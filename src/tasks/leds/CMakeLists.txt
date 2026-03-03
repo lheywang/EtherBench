@@ -12,7 +12,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(LEDS OBJECT ${SOURCES})
+add_library(LEDS STATIC ${SOURCES})
 
 # Link against the right libraries
 target_link_libraries(LEDS THREADX LOGGER)

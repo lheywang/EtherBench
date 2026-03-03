@@ -20,19 +20,6 @@ add_subdirectory(usb)
 # Creating an higher level library (to prevent from the user to link against too much libs)
 add_library(TASKS INTERFACE)
 
-# Ensure CMake will propagate objects upward
-target_sources(TASKS INTERFACE
-	$<TARGET_OBJECTS:CONTROLLER>
-	$<TARGET_OBJECTS:FILES>
-    $<TARGET_OBJECTS:HARDWARE>
-    $<TARGET_OBJECTS:INET>
-    $<TARGET_OBJECTS:LEDS>
-    $<TARGET_OBJECTS:LOGGER>
-    $<TARGET_OBJECTS:MUXER>
-    $<TARGET_OBJECTS:PROGRAMMER>
-    $<TARGET_OBJECTS:USB>
-)
-
 target_link_libraries(TASKS INTERFACE
 	CONTROLLER
 	FILES

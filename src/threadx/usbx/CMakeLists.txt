@@ -463,7 +463,7 @@ list(APPEND SOURCES
 )
 
 # Creating the library
-add_library(USBX OBJECT ${SOURCES})
+add_library(USBX STATIC ${SOURCES})
 
 # Link against the OS kernel and the HAL 
 target_link_libraries(USBX HAL THREADX_OS)

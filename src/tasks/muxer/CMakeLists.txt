@@ -12,7 +12,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(MUXER OBJECT ${SOURCES})
+add_library(MUXER STATIC ${SOURCES})
 
 # Adding the include folder
 target_include_directories(MUXER PUBLIC 

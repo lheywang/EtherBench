@@ -12,7 +12,7 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(FILES OBJECT ${SOURCES})
+add_library(FILES STATIC ${SOURCES})
 
 # Adding the include folder
 target_include_directories(FILES PUBLIC 
