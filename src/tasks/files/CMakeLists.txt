@@ -12,9 +12,9 @@ set(SOURCES
 )
 
 # Creating the library
-add_library(FILES STATIC ${SOURCES})
+add_library(FILE_IO STATIC ${SOURCES})
 
 # Adding the include folder
-target_include_directories(FILES PUBLIC 
+target_include_directories(FILE_IO PUBLIC 
 	${CMAKE_CURRENT_SOURCE_DIR}/include/
 )
