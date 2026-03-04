@@ -2,9 +2,9 @@
  * @file 	descriptors2.c
  * @brief 	Second version of the USB descriptors.
  *
- * @details This second version (and perhaps only one, if I deleted the previous one) is based on compile time
- *          resolved symbols rather than live execution ones.
- *          This is cleaner, and, a bit faster.
+ * @details This second version (and perhaps only one, if I deleted the previous
+ * one) is based on compile time resolved symbols rather than live execution
+ * ones. This is cleaner, and, a bit faster.
  *
  * @author 	l.heywang <leonard.heywang@proton.me>
  * @date 	03/03/2026
@@ -48,7 +48,9 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_config_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_CONFIGURATION,
-            .wTotalLength = (sizeof(usb_composite_configuration_tree_t) - sizeof(usb_device_descriptor_t)),
+            .wTotalLength =
+                (sizeof(usb_composite_configuration_tree_t) -
+                 sizeof(usb_device_descriptor_t)),
             .bNumInterfaces = 6,
             .bConfigurationValue = 1,
             .iConfiguration = 0,
@@ -142,7 +144,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_endpoint_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = USB_ENDP_OUT | 2,
+            .bEndpointAddress = (USB_ENDP_OUT | 2),
             .bEndpointType = USB_ENDP_BULK,
             .wMaxPacketSize = 64,
             .bInterval = 0x00,
@@ -151,7 +153,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_endpoint_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = USB_ENDP_IN | 2,
+            .bEndpointAddress = (USB_ENDP_IN | 2),
             .bEndpointType = USB_ENDP_BULK,
             .wMaxPacketSize = 64,
             .bInterval = 0x00,
@@ -183,7 +185,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
             .bNumEndpoints = 1,
             .bInterfaceClass = USB_CLASS_CDC,
             .bInterfaceSubClass = USB_SUBCLASS_CDC_ACM,
-            .bInterfaceProtocol = USB_PROTOCOL_NONE, // or 1 ?
+            .bInterfaceProtocol = USB_PROTOCOL_NONE,
             .iInterface = 0x00,
         },
     .cdc_hdr_2 =
@@ -243,7 +245,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_endpoint_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = USB_ENDP_OUT | 4,
+            .bEndpointAddress = (USB_ENDP_OUT | 4),
             .bEndpointType = USB_ENDP_BULK,
             .wMaxPacketSize = 64,
             .bInterval = 0x00,
@@ -252,7 +254,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_endpoint_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = USB_ENDP_IN | 4,
+            .bEndpointAddress = (USB_ENDP_IN | 4),
             .bEndpointType = USB_ENDP_BULK,
             .wMaxPacketSize = 64,
             .bInterval = 0x00,
@@ -277,7 +279,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_endpoint_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = USB_ENDP_OUT | 5,
+            .bEndpointAddress = (USB_ENDP_OUT | 5),
             .bEndpointType = USB_ENDP_BULK,
             .wMaxPacketSize = 64,
             .bInterval = 0x00,
@@ -286,7 +288,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_endpoint_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = USB_ENDP_IN | 5,
+            .bEndpointAddress = (USB_ENDP_IN | 5),
             .bEndpointType = USB_ENDP_BULK,
             .wMaxPacketSize = 64,
             .bInterval = 0x00,
@@ -311,7 +313,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_endpoint_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = USB_ENDP_OUT | 6,
+            .bEndpointAddress = (USB_ENDP_OUT | 6),
             .bEndpointType = USB_ENDP_BULK,
             .wMaxPacketSize = 64,
             .bInterval = 0x00,
@@ -320,7 +322,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_endpoint_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = USB_ENDP_IN | 6,
+            .bEndpointAddress = (USB_ENDP_IN | 6),
             .bEndpointType = USB_ENDP_BULK,
             .wMaxPacketSize = 64,
             .bInterval = 0x00,
@@ -386,4 +388,5 @@ const usbx_string_framework_t usb_device_string_framework = {
         },
 };
 
-const usbx_language_id_framework_t usb_device_language_framework = {.langid = USB_LANG_EN_US};
+const usbx_language_id_framework_t usb_device_language_framework = {
+    .langid = USB_LANG_EN_US};

@@ -39,10 +39,12 @@ extern "C" {
 /*
  * Configuring the logger.
  */
-#define LOG_BUFFER_SIZE 1024     ///< The buffer size used by the logger module.
-#define LOG_BUFFER_THRESHOLD 768 ///< The threshold at which the buffer will be emptied.
+#define LOG_BUFFER_SIZE 1024 ///< The buffer size used by the logger module.
+#define LOG_BUFFER_THRESHOLD                                                   \
+    768 ///< The threshold at which the buffer will be emptied.
 
-#define LOG_MAX_LENGTH 128 ///< The size of the maximal line that can be sent in a single call.
+#define LOG_MAX_LENGTH                                                         \
+    256 ///< The size of the maximal line that can be sent in a single call.
 
 // ======================================================================
 //                              MACROS
@@ -59,7 +61,8 @@ extern "C" {
  * @param[in]	format 	The format string
  * @param[in] 	... 	The list of variable arguments.
  */
-#define LOG(format, ...) add_log(LOG_MODULE, __FILE__, __LINE__, format, ##__VA_ARGS__)
+#define LOG(format, ...)                                                       \
+    add_log(LOG_MODULE, __FILE__, __LINE__, format, ##__VA_ARGS__)
 
 // ======================================================================
 //                              FUNCTIONS
@@ -93,7 +96,12 @@ void logger_task(ULONG arg);
  * @param[in] 	... 		The ##__VA_ARGS__ to be passed to the printf
  * function.
  */
-uint32_t add_log(const char *module, const char *file, const int line, const char *format, ...);
+uint32_t add_log(
+    const char *module,
+    const char *file,
+    const int line,
+    const char *format,
+    ...);
 
 /**
  * @brief 	The function called by the ISR handle, when a transmission has

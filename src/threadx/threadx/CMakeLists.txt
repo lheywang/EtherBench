@@ -189,6 +189,10 @@ list(APPEND SOURCES
 	app/src/app_threadx.c
 )
 
+list(APPEND SOURCES
+	handler/src/tx_handler.c
+)
+
 # Creating the library
 add_library(THREADX_OS STATIC ${SOURCES})
 
@@ -200,5 +204,6 @@ target_include_directories(THREADX_OS PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/ports/cortex_m33/gnu/include
 	${CMAKE_CURRENT_SOURCE_DIR}/common/include
 	${CMAKE_CURRENT_SOURCE_DIR}/app/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/handler/include
 )
 

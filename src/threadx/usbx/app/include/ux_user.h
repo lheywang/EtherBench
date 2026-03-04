@@ -175,7 +175,7 @@
 /* Defined, this value is the maximum number of classes in the device stack that
    can be loaded by USBX.  */
 
-#define UX_MAX_SLAVE_CLASS_DRIVER 1
+#define UX_MAX_SLAVE_CLASS_DRIVER 4
 
 /* Defined, this value represents the number of different host controllers
    available in the system. For USB 1.1 support, this value will usually be 1.
@@ -197,12 +197,12 @@
 /* Defined, this value is the maximum number of interfaces in the device
  * framework.  */
 
-/* #define UX_MAX_SLAVE_INTERFACES    16 */
+#define UX_MAX_SLAVE_INTERFACES 8
 
 /* Defined, this value represents the current number of SCSI logical units
    represented in the device storage class driver.  */
 
-/* #define UX_MAX_SLAVE_LUN    1 */
+#define UX_MAX_SLAVE_LUN 2
 
 /* Defined, this value represents the maximum number of SCSI logical units
    represented in the host storage class driver.  */

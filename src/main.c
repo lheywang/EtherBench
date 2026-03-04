@@ -24,14 +24,6 @@
 #include "app_threadx.h"
 
 // ======================================================================
-//                               CHECKS
-// ======================================================================
-// I'll let it, as a remainder, but this does not cause issues (for now ??)
-#if !defined(__SOFT_FP__) && defined(__ARM_FP)
-#warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
-#endif
-
-// ======================================================================
 //                              MAIN APP
 // ======================================================================
 int main(void) {
