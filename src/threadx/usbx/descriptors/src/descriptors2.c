@@ -55,7 +55,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
             .bConfigurationValue = 1,
             .iConfiguration = 0,
             .bmAttributes = USB_ATTR_BUS_POWERED,
-            .bMaxPower = USB_PWR_100MA,
+            .bMaxPower = USB_PWR_500MA,
         },
 
     // ==========================================

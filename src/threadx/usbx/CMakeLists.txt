@@ -9,6 +9,7 @@
 # Set sources (app)
 set(SOURCES 
 	app/src/app_usbx_device.c
+    app/src/app_usbx_status.c
 )
 
 # Common USBX core
@@ -466,7 +467,7 @@ list(APPEND SOURCES
 add_library(USBX STATIC ${SOURCES})
 
 # Link against the OS kernel and the HAL 
-target_link_libraries(USBX HAL THREADX_OS)
+target_link_libraries(USBX HAL THREADX_OS LOGGER)
 
 # Adding the include folder
 target_include_directories(USBX PUBLIC 

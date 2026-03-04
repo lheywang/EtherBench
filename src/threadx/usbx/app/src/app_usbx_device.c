@@ -17,6 +17,10 @@
 
 // Local libraries
 #include "app_usbx_device.h"
+#include "app_usbx_status.h"
+
+#define LOG_MODULE "USBX_APP"
+#include "logger.h"
 
 // USBX Core Headers
 #include "ux_api.h"
@@ -37,6 +41,7 @@
 // ======================================================================
 // Variables
 extern PCD_HandleTypeDef hpcd_USB_DRD_FS;
+extern TX_EVENT_FLAGS_GROUP usbx_app_flags;
 
 // Functions (as we cannot link against the HAL, otherwise --> Circular
 // dependencies)
@@ -65,7 +70,6 @@ UX_SLAVE_CLASS_DPUMP_PARAMETER cmsis_dap = {0};
 // ======================================================================
 // Static
 static VOID app_ux_device_thread_entry(ULONG thread_input);
-static UINT USBD_ChangeFunction(ULONG Device_State);
 
 // Impl
 /**
@@ -78,8 +82,7 @@ UINT MX_USBX_Device_Init(void) {
     /*
      * Initialize the USB system, and all the dedicated memory structs.
      */
-    UINT status =
-        ux_system_initialize(ux_memory, UX_SYSTEM_MEM_SIZE, UX_NULL, 0);
+    UINT status = ux_system_initialize(ux_memory, UX_SYSTEM_MEM_SIZE, UX_NULL, 0);
     if (status != UX_SUCCESS)
         Error_Handler();
 
@@ -99,33 +102,39 @@ UINT MX_USBX_Device_Init(void) {
 
     if (status != UX_SUCCESS)
         Error_Handler();
+    LOG("Initialized the USBX stack.");
 
     /*
      * Add the USB classes
      */
     // CDC TERMINAL
+    cdc_terminal.ux_slave_class_cdc_acm_instance_activate = USBX_TerminalEnable;
+    cdc_terminal.ux_slave_class_cdc_acm_instance_deactivate = USBX_TerminalDisable;
+    cdc_terminal.ux_slave_class_cdc_acm_parameter_change = USBX_TerminalChange;
+
     status = ux_device_stack_class_register(
-        (UCHAR *)"cdc_terminal",
-        ux_device_class_cdc_acm_entry,
-        1,
-        0,
-        &cdc_terminal);
+        (UCHAR *)"cdc_terminal", ux_device_class_cdc_acm_entry, 1, 0, &cdc_terminal);
 
     if (status != UX_SUCCESS)
         Error_Handler();
+    LOG("Registered CDC TERMINAL.");
 
     // USB USART BRIDGE
+    cdc_usb_usart.ux_slave_class_cdc_acm_instance_activate = USBX_USARTBridgeEnable;
+    cdc_usb_usart.ux_slave_class_cdc_acm_instance_deactivate = USBX_USARTBridgeDisable;
+    cdc_usb_usart.ux_slave_class_cdc_acm_parameter_change = USBX_USARTBridgeChange;
+
     status = ux_device_stack_class_register(
-        (UCHAR *)"cdc_vcom",
-        ux_device_class_cdc_acm_entry,
-        1,
-        2,
-        &cdc_usb_usart);
+        (UCHAR *)"cdc_vcom", ux_device_class_cdc_acm_entry, 1, 2, &cdc_usb_usart);
 
     if (status != UX_SUCCESS)
         Error_Handler();
+    LOG("Registered CDC USB UART BRIDGE.");
 
     // MSC
+    msc_files.ux_slave_class_storage_instance_activate = USBX_MSCEnable;
+    msc_files.ux_slave_class_storage_instance_deactivate = USBX_MSCDisable;
+
     // Set the LUN count
     msc_files.ux_slave_class_storage_parameter_number_lun = 2;
 
@@ -134,15 +143,15 @@ UINT MX_USBX_Device_Init(void) {
         .ux_slave_class_storage_media_last_lba = 262143;
     msc_files.ux_slave_class_storage_parameter_lun[0]
         .ux_slave_class_storage_media_block_length = 512;
-    msc_files.ux_slave_class_storage_parameter_lun[0]
-        .ux_slave_class_storage_media_type = 0;
+    msc_files.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_type =
+        0;
     msc_files.ux_slave_class_storage_parameter_lun[0]
         .ux_slave_class_storage_media_removable_flag =
         0x80; // Recommandé pour forcer l'OS à bien vider son cache
-    msc_files.ux_slave_class_storage_parameter_lun[0]
-        .ux_slave_class_storage_media_read = msc_read;
-    msc_files.ux_slave_class_storage_parameter_lun[0]
-        .ux_slave_class_storage_media_write = msc_write;
+    msc_files.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_read =
+        msc_read;
+    msc_files.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_write =
+        msc_write;
     msc_files.ux_slave_class_storage_parameter_lun[0]
         .ux_slave_class_storage_media_status = msc_status;
 
@@ -151,37 +160,34 @@ UINT MX_USBX_Device_Init(void) {
         .ux_slave_class_storage_media_last_lba = 67108863;
     msc_files.ux_slave_class_storage_parameter_lun[1]
         .ux_slave_class_storage_media_block_length = 512;
-    msc_files.ux_slave_class_storage_parameter_lun[1]
-        .ux_slave_class_storage_media_type = 0;
+    msc_files.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_type =
+        0;
     msc_files.ux_slave_class_storage_parameter_lun[1]
         .ux_slave_class_storage_media_removable_flag = 0x80;
-    msc_files.ux_slave_class_storage_parameter_lun[1]
-        .ux_slave_class_storage_media_read = msc_read;
-    msc_files.ux_slave_class_storage_parameter_lun[1]
-        .ux_slave_class_storage_media_write = msc_write;
+    msc_files.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_read =
+        msc_read;
+    msc_files.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_write =
+        msc_write;
     msc_files.ux_slave_class_storage_parameter_lun[1]
         .ux_slave_class_storage_media_status = msc_status;
 
     status = ux_device_stack_class_register(
-        (UCHAR *)"msc_storage",
-        ux_device_class_storage_entry,
-        1,
-        4,
-        (VOID *)&msc_files);
+        (UCHAR *)"msc_storage", ux_device_class_storage_entry, 1, 4, (VOID *)&msc_files);
 
     if (status != UX_SUCCESS)
         Error_Handler();
+    LOG("Registered MSC flash + SD.");
 
     // CMSIS-DEBUGGER
+    cmsis_dap.ux_slave_class_dpump_instance_activate = USBX_CMSISEnable;
+    cmsis_dap.ux_slave_class_dpump_instance_deactivate = USBX_CMSISDisable;
+
     status = ux_device_stack_class_register(
-        (UCHAR *)"cmsis_dap",
-        ux_device_class_dpump_entry,
-        1,
-        5,
-        (VOID *)&cmsis_dap);
+        (UCHAR *)"cmsis_dap", ux_device_class_dpump_entry, 1, 5, (VOID *)&cmsis_dap);
 
     if (status != UX_SUCCESS)
         Error_Handler();
+    LOG("Registered CMSIS Debugger.");
 
     /*
      * Create the main application thread
@@ -200,6 +206,12 @@ UINT MX_USBX_Device_Init(void) {
 
     if (status != UX_SUCCESS)
         Error_Handler();
+    LOG("Launched USBX task.");
+
+    /*
+     * Create the communications flags
+     */
+    tx_event_flags_create(&usbx_app_flags, "usb_app_flags");
 
     return UX_SUCCESS;
 }
@@ -218,6 +230,7 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
      */
     HAL_PWREx_EnableVddUSB();
     tx_thread_sleep(2);
+    LOG("Enabled USB peripheral power supply.");
 
     /*
      * Initialize the peripheral config and declare the endpoints.
@@ -246,27 +259,28 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
     HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x86, PCD_SNG_BUF, 0x2C0);
     HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x06, PCD_SNG_BUF, 0x300);
 
+    LOG("Configured USB peripheral and endpoints.");
+
     /*
      * Turn ON the USB peripheral.
      */
-    status =
-        ux_dcd_stm32_initialize((ULONG)USB_DRD_BASE, (ULONG)&hpcd_USB_DRD_FS);
+    status = ux_dcd_stm32_initialize((ULONG)USB_DRD_BASE, (ULONG)&hpcd_USB_DRD_FS);
     if (status != UX_SUCCESS) {
         Tx_Error_Handler(USB_HW_CONFIG_FAILED);
     }
+    LOG("Initialized USBX STM32 BSP.");
 
     /*
      * Let the peripheral start
      */
     tx_thread_sleep(10);
 
-    Tx_Error_Handler(USB_HW_CANNOT_START);
-
     /*
      * Enable the pull up (trigger enumeration) only at the end.
      */
     if (HAL_PCD_Start(&hpcd_USB_DRD_FS) != HAL_OK)
         Tx_Error_Handler(USB_HW_CANNOT_START);
+    LOG("Started USB enumeration process.");
 
     /*
      * Finally, make the thread sleep for always. We use large delays because
@@ -277,44 +291,4 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
     }
 
     return;
-}
-
-static UINT USBD_ChangeFunction(ULONG Device_State) {
-    UINT status = UX_SUCCESS;
-
-    switch (Device_State) {
-    case UX_DEVICE_ATTACHED:
-
-        break;
-
-    case UX_DEVICE_REMOVED:
-
-        break;
-
-    case UX_DCD_STM32_DEVICE_CONNECTED:
-
-        break;
-
-    case UX_DCD_STM32_DEVICE_DISCONNECTED:
-
-        break;
-
-    case UX_DCD_STM32_DEVICE_SUSPENDED:
-
-        break;
-
-    case UX_DCD_STM32_DEVICE_RESUMED:
-
-        break;
-
-    case UX_DCD_STM32_SOF_RECEIVED:
-
-        break;
-
-    default:
-
-        break;
-    }
-
-    return status;
 }

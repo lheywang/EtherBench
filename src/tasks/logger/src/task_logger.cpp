@@ -54,7 +54,8 @@ extern UART_HandleTypeDef huart3;
 //                              FUNCTIONS
 // ======================================================================
 
-uint32_t add_log(const char *module, const char *file, const int line, const char *format, ...) {
+uint32_t
+add_log(const char *module, const char *file, const int line, const char *format, ...) {
     /*
      * First section : local formatting before enterring buffer handling section.
      */
@@ -62,13 +63,17 @@ uint32_t add_log(const char *module, const char *file, const int line, const cha
     uint8_t local_buffer[LOG_MAX_LENGTH];
 
     // Add the header to the buffer
-    uint32_t header_len = snprintf((char *)local_buffer, sizeof(local_buffer), "[%s] (%s:%d) ", module, file, line);
+    uint32_t header_len = snprintf(
+        (char *)local_buffer, sizeof(local_buffer), "[%s] (%s:%d) ", module, file, line);
 
     // Format the ##__VA_ARGS__
     va_list args;
     va_start(args, format);
-    uint32_t message_len =
-        vsnprintf((char *)(local_buffer + header_len), sizeof(local_buffer) - header_len, format, args);
+    uint32_t message_len = vsnprintf(
+        (char *)(local_buffer + header_len),
+        sizeof(local_buffer) - header_len,
+        format,
+        args);
     va_end(args);
 
     message_len += header_len;
@@ -92,12 +97,16 @@ uint32_t add_log(const char *module, const char *file, const int line, const cha
     if ((current_size + message_len) < LOG_BUFFER_SIZE) {
 
         // Copy the data
-        memcpy((void *)&log_buffer[active_buffer][current_size], (void *)local_buffer, (size_t)message_len);
+        memcpy(
+            (void *)&log_buffer[active_buffer][current_size],
+            (void *)local_buffer,
+            (size_t)message_len);
 
         // Update pointer and sizes.
         buffer_size[active_buffer] += message_len;
 
-        if ((current_size < LOG_BUFFER_THRESHOLD) && (buffer_size[active_buffer] >= LOG_BUFFER_THRESHOLD)) {
+        if ((current_size < LOG_BUFFER_THRESHOLD) &&
+            (buffer_size[active_buffer] >= LOG_BUFFER_THRESHOLD)) {
             tx_semaphore_put(&dma_trigger);
         }
     }
@@ -108,6 +117,14 @@ uint32_t add_log(const char *module, const char *file, const int line, const cha
 }
 
 void logger_task(ULONG arg) {
+
+    /*
+     * Clear the main memory area
+     */
+    memset((void *)log_buffer, 0x00, sizeof(log_buffer));
+    memset((void *)buffer_size, 0x00, sizeof(buffer_size));
+    active_buffer = 0;
+
     /*
      * Enterring main loop
      */
@@ -134,7 +151,8 @@ void logger_task(ULONG arg) {
             tx_interrupt_control(old_posture);
 
             // Send the buffer
-            if (HAL_UART_Transmit_DMA(&huart3, log_buffer[buffer_to_send], size_to_send) == HAL_OK) {
+            if (HAL_UART_Transmit_DMA(
+                    &huart3, log_buffer[buffer_to_send], size_to_send) == HAL_OK) {
                 if (tx_semaphore_get(&dma_tx_done, 200) != TX_SUCCESS) {
                     HAL_UART_AbortTransmit(&huart3);
                 }
