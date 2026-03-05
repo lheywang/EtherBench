@@ -22,6 +22,7 @@
 //                              FUNCTIONS
 // ======================================================================
 void leds_task(ULONG arg) {
+    TX_PARAMETER_NOT_USED(arg);
     /*
      * That's just an infinite loop, which blink a led
      */

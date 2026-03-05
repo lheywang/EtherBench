@@ -117,6 +117,7 @@ add_log(const char *module, const char *file, const int line, const char *format
 }
 
 void logger_task(ULONG arg) {
+    TX_PARAMETER_NOT_USED(arg);
 
     /*
      * Clear the main memory area

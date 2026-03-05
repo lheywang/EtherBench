@@ -79,7 +79,6 @@ UINT MX_NetXDuo_Init() {
         &pool, "EtherBench_Pool", NX_PACKET_SIZE, packet_pool, PACKET_POOL_SIZE);
     if (status != NX_SUCCESS)
         Error_Handler();
-    LOG("Created the packet pool.");
 
     /*
      * First, create an IP instance
@@ -96,7 +95,6 @@ UINT MX_NetXDuo_Init() {
         1);
     if (status != NX_SUCCESS)
         Error_Handler();
-    LOG("Created the IP task.");
 
     /*
      * We enable the required services
@@ -104,17 +102,14 @@ UINT MX_NetXDuo_Init() {
     status = nx_arp_enable(&ip, (VOID *)arp_cache, sizeof(arp_cache));
     if (status != NX_SUCCESS)
         Error_Handler();
-    LOG("Enabled the ARP protocol.");
 
     status = nx_icmp_enable(&ip);
     if (status != NX_SUCCESS)
         Error_Handler();
-    LOG("Enabled the ICMP protocol.");
 
     status = nx_udp_enable(&ip);
     if (status != NX_SUCCESS)
         Error_Handler();
-    LOG("Enabled the UDP protocol.");
 
     /*
      * Creating the DHCP client
@@ -122,7 +117,6 @@ UINT MX_NetXDuo_Init() {
     status = nx_dhcp_create(&dhcp, &ip, "EtherBench_DHCP");
     if (status != NX_SUCCESS)
         Error_Handler();
-    LOG("Launched the DHCP client.");
 
     /*
      * Finally, creating the task for the network handling.
@@ -147,7 +141,9 @@ UINT MX_NetXDuo_Init() {
 }
 
 void app_network_thread_entry(ULONG arg) {
+    TX_PARAMETER_NOT_USED(arg);
 
+    LOG("Enterred NETX application task. Will now start the required services.");
     UINT status;
 
     status = nx_dhcp_start(&dhcp);
@@ -176,6 +172,12 @@ void app_network_thread_entry(ULONG arg) {
 
     } else {
         nx_ip_address_set(&ip, NX_FALLBACK_IP, NX_FALLBACK_MASK);
+
+        LOG("Used fallback IP : %lu.%lu.%lu.%lu",
+            (NX_FALLBACK_IP >> 24) & 0xFF,
+            (NX_FALLBACK_IP >> 16) & 0xFF,
+            (NX_FALLBACK_IP >> 8) & 0xFF,
+            (NX_FALLBACK_IP) & 0xFF);
     }
 
     /*

@@ -101,7 +101,6 @@ UINT MX_USBX_Device_Init(void) {
 
     if (status != UX_SUCCESS)
         Error_Handler();
-    LOG("Initialized the USBX stack.");
 
     /*
      * Add the USB classes
@@ -116,7 +115,6 @@ UINT MX_USBX_Device_Init(void) {
 
     if (status != UX_SUCCESS)
         Error_Handler();
-    LOG("Registered CDC TERMINAL.");
 
     // USB USART BRIDGE
     cdc_usb_usart.ux_slave_class_cdc_acm_instance_activate = USBX_USARTBridgeEnable;
@@ -128,7 +126,6 @@ UINT MX_USBX_Device_Init(void) {
 
     if (status != UX_SUCCESS)
         Error_Handler();
-    LOG("Registered CDC USB UART BRIDGE.");
 
     // CMSIS-DEBUGGER
     cmsis_dap.ux_slave_class_dpump_instance_activate = USBX_CMSISEnable;
@@ -139,7 +136,6 @@ UINT MX_USBX_Device_Init(void) {
 
     if (status != UX_SUCCESS)
         Error_Handler();
-    LOG("Registered CMSIS Debugger.");
 
     /*
      * Create the main application thread
@@ -158,7 +154,6 @@ UINT MX_USBX_Device_Init(void) {
 
     if (status != UX_SUCCESS)
         Error_Handler();
-    LOG("Launched USBX task.");
 
     /*
      * Create the communications flags
@@ -176,6 +171,8 @@ UINT MX_USBX_Device_Init(void) {
 VOID app_ux_device_thread_entry(ULONG thread_input) {
     TX_PARAMETER_NOT_USED(thread_input);
     UINT status;
+
+    LOG("Enterred USBX application task. Will now start the required classes handler.");
 
     /*
      * Enable peripheral power, and let it stabiliize.

@@ -29,10 +29,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
 # We only add the main.c file, all the remaining is built arround libraries.
 add_executable(${CMAKE_PROJECT_NAME} main.c startup/startup_stm32h563zitx.s startup/system_stm32h5xx.c)
 
-# Add the different folders
+# Add the different folders (Vendor and RTOS ones)
 add_subdirectory(hal)
 add_subdirectory(bsp)
 add_subdirectory(threadx)
+
+# Add the user builds (with a new flag, to ensure code quality)
+add_compile_options(-Wextra)
 add_subdirectory(tasks)
 add_subdirectory(launcher)
 

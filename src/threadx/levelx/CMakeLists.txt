@@ -8,7 +8,7 @@
 
 # Set sources
 set(SOURCES 
-	    common/src/fx_nand_flash_simulated_driver.c
+	common/src/fx_nand_flash_simulated_driver.c
     common/src/fx_nor_flash_simulator_driver.c
     common/src/lx_nand_flash_256byte_ecc_check.c
     common/src/lx_nand_flash_256byte_ecc_compute.c
@@ -72,6 +72,9 @@ set(SOURCES
 
 # Creating the library
 add_library(LEVELX STATIC ${SOURCES})
+
+# Clear a warning from the vendor lib
+add_compile_options(-Wno-maybe-uninitialized)
 
 # Link against the correct libraries
 target_link_libraries(LEVELX HAL THREADX_OS FILEX)
