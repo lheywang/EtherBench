@@ -1,0 +1,24 @@
+%{
+#include "parser_scpi.h"
+
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
+
+typedef int (*scpi_handler_t)(
+    char *args,
+    void *context
+);
+
+struct scpi_command_entry {
+    const char *name;
+    scpi_handler_t handler;
+};
+%}
+
+struct scpi_command_entry;
+
+%%
+*ese?,   scpi_ese_r
+*cls,    scpi_cls
+%%

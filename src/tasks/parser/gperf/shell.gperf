@@ -1,0 +1,23 @@
+%{
+#include "parser_shell.h"
+
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
+
+typedef int (*shell_handler_t)(
+    char *args,
+    void *context
+);
+
+struct shell_command_entry {
+    const char *name;
+    shell_handler_t handler;
+};
+%}
+
+struct shell_command_entry;
+
+%%
+
+%%
