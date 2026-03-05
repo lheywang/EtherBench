@@ -25,8 +25,8 @@ extern "C" {
 // ======================================================================
 
 // Standard SCPI
-uint32_t scpi_cls();
-uint32_t scpi_ese_r();
+int scpi_cls(char *args, void *context);
+int scpi_ese_r(char *args, void *context);
 
 #ifdef __cplusplus
 }

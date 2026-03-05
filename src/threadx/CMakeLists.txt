@@ -16,13 +16,10 @@ add_subdirectory(usbx)
 # Creating an higher level library (to prevent from the user to link against too much libs)
 add_library(THREADX INTERFACE)
 
-# Ensure CMake will propagate objects upward (required otherwise USB won't enumerate at all !)
+# Ensure CMake will propagate objects upward (required otherwise USB won't enumerate at all !) 
+# --> But that slow down the compilation !
 target_sources(THREADX INTERFACE
-    $<TARGET_OBJECTS:THREADX_OS>
     $<TARGET_OBJECTS:USBX>
-    $<TARGET_OBJECTS:FILEX>
-    $<TARGET_OBJECTS:LEVELX>
-    $<TARGET_OBJECTS:NETXDUO>
 )
 
 # Some arguments are needed to ensure we link against the whole lib

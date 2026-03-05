@@ -22,4 +22,4 @@
 //                              FUNCTIONS
 // ======================================================================
 
-uint32_t scpi_cls() { return 0; }
+int scpi_cls(char *args, void *context) { return 2; }

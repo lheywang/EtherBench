@@ -14,9 +14,7 @@ find_program(
 )
 
 # Set sources
-set(SOURCES 
-	src/task_parser.cpp
-)
+set(SOURCES)
 
 # Set GPERF sources
 set(
@@ -25,7 +23,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/gperf/scpi.gperf
 )
 
-foreach(GPERF_FILE IN LISTS GPERF_FILES)
+foreach(GPERF_FILE IN LISTS GPERF_INPUT)
 
     # Rename the .gperf file into it's .c equivalent
     get_filename_component(
@@ -150,8 +148,12 @@ list(APPEND SOURCES
     src/commands/shell/minimal/shell_pwd.cpp
 )
 
+list(APPEND SOURCES
+    src/task_parser.cpp
+)
+
 # Removing compilations errors from gperf
-add_compile_options(-Wno-missing-field-initializers)
+add_compile_options(-Wno-missing-field-initializers -Wno-unused-parameter)
 
 # Creating the library
 add_library(PARSER STATIC ${SOURCES})

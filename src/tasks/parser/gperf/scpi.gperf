@@ -1,9 +1,12 @@
 %{
-#include "parser_scpi.h"
+#include "commands/parser_scpi.h"
 
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
+
+// Just a trick to ensure C++17 won't complain about that.
+#define register
 
 typedef int (*scpi_handler_t)(
     char *args,

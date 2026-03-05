@@ -22,4 +22,4 @@
 //                              FUNCTIONS
 // ======================================================================
 
-uint32_t scpi_ese_r() { return 0; }
+int scpi_ese_r(char *args, void *context) { return 12; }

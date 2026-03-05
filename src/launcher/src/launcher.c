@@ -19,17 +19,19 @@
 // Local libraries
 #include "main.h"
 
-// ThreadX library
+// ThreadX libraries
 #include "app_netxduo.h"
 #include "app_threadx.h"
 #include "app_usbx_device.h"
+#include "tx_api.h"
+
+// Tasks
+#include "logger.h"
+#include "task_leds.h"
+#include "task_parser.h"
 
 // STD
 #include <stdint.h>
-
-#include "logger.h"
-#include "task_leds.h"
-#include "tx_api.h"
 
 // ======================================================================
 //                              MEMORY AREAS
@@ -38,13 +40,19 @@
  * Leds
  */
 TX_THREAD leds_thread;
-uint8_t leds_stack[IDLE_STACK_SIZE];
+static __aligned(8) uint8_t leds_stack[IDLE_STACK_SIZE];
 
 /*
  * Logger
  */
 TX_THREAD logger_thread;
-uint8_t logger_stack[LOGGER_STACK_SIZE];
+static __aligned(8) uint8_t logger_stack[LOGGER_STACK_SIZE];
+
+/*
+ * Parser
+ */
+TX_THREAD parser_thread;
+static __aligned(8) uint8_t parser_stack[PARSER_STACK_SIZE];
 
 /*
  * Semaphore
@@ -75,8 +83,8 @@ uint32_t launcher(void) {
         0,
         logger_stack,
         LOGGER_STACK_SIZE,
-        31,
-        31,
+        28,
+        28,
         TX_NO_TIME_SLICE,
         TX_AUTO_START);
 
@@ -94,14 +102,29 @@ uint32_t launcher(void) {
      * Creating the idle task
      */
     tx_thread_create(
+        &parser_thread,
+        "Parser",
+        parser_task,
+        0,
+        parser_stack,
+        PARSER_STACK_SIZE,
+        20,
+        20,
+        TX_NO_TIME_SLICE,
+        TX_AUTO_START);
+
+    /*
+     * Creating the idle task
+     */
+    tx_thread_create(
         &leds_thread,
         "Leds control",
         leds_task,
         0,
         leds_stack,
         IDLE_STACK_SIZE,
-        31,
-        31,
+        28,
+        28,
         TX_NO_TIME_SLICE,
         TX_AUTO_START);
 
