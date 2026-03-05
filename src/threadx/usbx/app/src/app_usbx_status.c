@@ -40,7 +40,6 @@ TX_EVENT_FLAGS_GROUP usbx_app_flags;
 // Handles
 UX_SLAVE_CLASS_CDC_ACM *usbx_terminal = UX_NULL;
 UX_SLAVE_CLASS_CDC_ACM *usbx_bridge = UX_NULL;
-UX_SLAVE_CLASS_STORAGE *usbx_files = UX_NULL;
 UX_SLAVE_CLASS_DPUMP *usbx_cmsis = UX_NULL;
 
 // ======================================================================
@@ -142,25 +141,6 @@ VOID USBX_USARTBridgeEnable(VOID *cdc_instance) {
 VOID USBX_USARTBridgeChange(VOID *cdc_instance) {
     tx_event_flags_set(&usbx_app_flags, USBX_STATUS_CDC_USB_USART_CHANGE_REQUIRED, TX_OR);
     LOG("USBX Changed bridge");
-    return;
-}
-
-/*
- * MSC INTERFACE
- */
-VOID USBX_MSCDisable(VOID *msc_instance) {
-
-    usbx_files = (UX_SLAVE_CLASS_STORAGE *)msc_instance;
-    tx_event_flags_set(&usbx_app_flags, ~USBX_STATUS_MSC_CONNECTED, TX_AND);
-    LOG("USBX Disabled MSC");
-    return;
-}
-
-VOID USBX_MSCEnable(VOID *msc_instance) {
-
-    usbx_files = (UX_SLAVE_CLASS_STORAGE *)msc_instance;
-    tx_event_flags_set(&usbx_app_flags, USBX_STATUS_MSC_CONNECTED, TX_OR);
-    LOG("USBX Enabled MSC");
     return;
 }
 

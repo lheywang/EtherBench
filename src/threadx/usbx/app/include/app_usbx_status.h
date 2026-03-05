@@ -33,7 +33,6 @@ extern TX_EVENT_FLAGS_GROUP usbx_app_flags;
 // Handles
 extern UX_SLAVE_CLASS_CDC_ACM *usbx_terminal;
 extern UX_SLAVE_CLASS_CDC_ACM *usbx_bridge;
-extern UX_SLAVE_CLASS_STORAGE *usbx_files;
 extern UX_SLAVE_CLASS_DPUMP *usbx_cmsis;
 // ======================================================================
 //                                EVENTS
@@ -89,9 +88,6 @@ VOID USBX_TerminalChange(VOID *cdc_instance);
 VOID USBX_USARTBridgeDisable(VOID *cdc_instance);
 VOID USBX_USARTBridgeEnable(VOID *cdc_instance);
 VOID USBX_USARTBridgeChange(VOID *cdc_instance);
-
-VOID USBX_MSCDisable(VOID *msc_instance);
-VOID USBX_MSCEnable(VOID *msc_instance);
 
 VOID USBX_CMSISDisable(VOID *cmsis_instance);
 VOID USBX_CMSISEnable(VOID *cmsis_instance);

@@ -62,7 +62,6 @@ static __aligned(8) uint8_t ux_memory[UX_SYSTEM_MEM_SIZE];
 // USBX slaves
 UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_terminal = {0};
 UX_SLAVE_CLASS_CDC_ACM_PARAMETER cdc_usb_usart = {0};
-UX_SLAVE_CLASS_STORAGE_PARAMETER msc_files = {0};
 UX_SLAVE_CLASS_DPUMP_PARAMETER cmsis_dap = {0};
 
 // ======================================================================
@@ -130,53 +129,6 @@ UINT MX_USBX_Device_Init(void) {
     if (status != UX_SUCCESS)
         Error_Handler();
     LOG("Registered CDC USB UART BRIDGE.");
-
-    // MSC
-    msc_files.ux_slave_class_storage_instance_activate = USBX_MSCEnable;
-    msc_files.ux_slave_class_storage_instance_deactivate = USBX_MSCDisable;
-
-    // Set the LUN count
-    msc_files.ux_slave_class_storage_parameter_number_lun = 2;
-
-    // --- LUN 0 : Embeddded Flash (128 MB)
-    msc_files.ux_slave_class_storage_parameter_lun[0]
-        .ux_slave_class_storage_media_last_lba = 262143;
-    msc_files.ux_slave_class_storage_parameter_lun[0]
-        .ux_slave_class_storage_media_block_length = 512;
-    msc_files.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_type =
-        0;
-    msc_files.ux_slave_class_storage_parameter_lun[0]
-        .ux_slave_class_storage_media_removable_flag =
-        0x80; // Recommandé pour forcer l'OS à bien vider son cache
-    msc_files.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_read =
-        msc_read;
-    msc_files.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_write =
-        msc_write;
-    msc_files.ux_slave_class_storage_parameter_lun[0]
-        .ux_slave_class_storage_media_status = msc_status;
-
-    // --- LUN 1 : SD Card (32 GB theoritical size, to be changed)
-    msc_files.ux_slave_class_storage_parameter_lun[1]
-        .ux_slave_class_storage_media_last_lba = 67108863;
-    msc_files.ux_slave_class_storage_parameter_lun[1]
-        .ux_slave_class_storage_media_block_length = 512;
-    msc_files.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_type =
-        0;
-    msc_files.ux_slave_class_storage_parameter_lun[1]
-        .ux_slave_class_storage_media_removable_flag = 0x80;
-    msc_files.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_read =
-        msc_read;
-    msc_files.ux_slave_class_storage_parameter_lun[1].ux_slave_class_storage_media_write =
-        msc_write;
-    msc_files.ux_slave_class_storage_parameter_lun[1]
-        .ux_slave_class_storage_media_status = msc_status;
-
-    status = ux_device_stack_class_register(
-        (UCHAR *)"msc_storage", ux_device_class_storage_entry, 1, 4, (VOID *)&msc_files);
-
-    if (status != UX_SUCCESS)
-        Error_Handler();
-    LOG("Registered MSC flash + SD.");
 
     // CMSIS-DEBUGGER
     cmsis_dap.ux_slave_class_dpump_instance_activate = USBX_CMSISEnable;

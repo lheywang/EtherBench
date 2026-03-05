@@ -2,9 +2,9 @@
  * @file 	descriptors2.h
  * @brief 	Second version of the USB descriptors.
  *
- * @details This second version (and perhaps only one, if I deleted the previous one) is based on compile time
- *          resolved symbols rather than live execution ones.
- *          This is cleaner, and, a bit faster.
+ * @details This second version (and perhaps only one, if I deleted the previous one) is
+ * based on compile time resolved symbols rather than live execution ones. This is
+ * cleaner, and, a bit faster.
  *
  * @author 	l.heywang <leonard.heywang@proton.me>
  * @date 	03/03/2026
@@ -112,7 +112,11 @@ enum bDeviceProtcol {
     USB_PROTOCOL_VENDOR = 0xFF
 };
 
-enum bmAttributes { USB_ATTR_SELF_POWERED = 0x80, USB_ATTR_BUS_POWERED = 0xC0, USB_ATTR_RMT_WAKP = 0x09 };
+enum bmAttributes {
+    USB_ATTR_SELF_POWERED = 0x80,
+    USB_ATTR_BUS_POWERED = 0xC0,
+    USB_ATTR_RMT_WAKP = 0x09
+};
 
 enum bMaxPower { USB_PWR_100MA = 0x32, USB_PWR_500MA = 0xFA };
 
@@ -162,8 +166,10 @@ enum bLANGID { USB_LANG_EN_US = 0x0409, USB_LANG_GE_DE = 0x0407 };
 
 #define USB_INTERVAL_FS_HS_ISO(x) ((x & 0x1F) | 0x01)
 #define USB_INTERVAL_FS_LS_INT(x) ((x & 0xFF))
-#define USB_INTERVAL_HS_INT(x) USB_INTERVAL_FS_HS_ISO(x)       // It's the same, prevent from copy pasting code.
-#define USB_INTERVAL_HS_BULK_CTRL(x) USB_INTERVAL_FS_LS_INT(x) // It's the same, prevent from copy pasting code.
+#define USB_INTERVAL_HS_INT(x)                                                           \
+    USB_INTERVAL_FS_HS_ISO(x) // It's the same, prevent from copy pasting code.
+#define USB_INTERVAL_HS_BULK_CTRL(x)                                                     \
+    USB_INTERVAL_FS_LS_INT(x) // It's the same, prevent from copy pasting code.
 
 #define UINT16_TO_LE(x) (((x & 0xFF00) >> 8) | (x & 0x00FF) << 8)
 #define GET_TOTAL_LE_SIZE(x) UINT16_TO_LE(x)
@@ -292,7 +298,8 @@ typedef struct __attribute__((packed)) {
 //                   THE COMPOSITE TREE (CDC-ACM)
 // ======================================================================
 /**
- * @brief That's the whole configuration. GCC does the heavy lifting by giving us everything we need !
+ * @brief That's the whole configuration. GCC does the heavy lifting by giving us
+ * everything we need !
  */
 typedef struct __attribute__((packed)) {
     usb_device_descriptor_t device;
@@ -333,9 +340,10 @@ typedef struct __attribute__((packed)) {
     // ==========================================
     // MSC DEVICE. INTERFACE 4.
     // ==========================================
-    usb_interface_descriptor_t itf_msc;
-    usb_endpoint_descriptor_t ep_msc_out;
-    usb_endpoint_descriptor_t ep_msc_in;
+    // Commented OUT in the final version. MSC won't be used.
+    // usb_interface_descriptor_t itf_msc;
+    // usb_endpoint_descriptor_t ep_msc_out;
+    // usb_endpoint_descriptor_t ep_msc_in;
 
     // ==========================================
     // CMSIS-DAP. INTERFACE 5

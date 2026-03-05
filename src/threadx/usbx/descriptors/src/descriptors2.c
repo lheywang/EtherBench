@@ -51,7 +51,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
             .wTotalLength =
                 (sizeof(usb_composite_configuration_tree_t) -
                  sizeof(usb_device_descriptor_t)),
-            .bNumInterfaces = 6,
+            .bNumInterfaces = 5,
             .bConfigurationValue = 1,
             .iConfiguration = 0,
             .bmAttributes = USB_ATTR_BUS_POWERED,
@@ -263,36 +263,37 @@ const usb_composite_configuration_tree_t usb_device_desc = {
     // ==========================================
     // MSC DEVICE. INTERFACE 4.
     // ==========================================
-    .itf_msc =
-        {
-            .bLength = sizeof(usb_interface_descriptor_t),
-            .bDescriptorType = USB_DESC_TYPE_INTERFACE,
-            .bInterfaceNumber = 4,
-            .bAlternateSetting = 0x00,
-            .bNumEndpoints = 2,
-            .bInterfaceClass = USB_CLASS_MASS_STORAGE,
-            .bInterfaceSubClass = USB_SUBCLASS_SCSI,
-            .bInterfaceProtocol = USB_PROTOCOL_MSC_BOT,
-            .iInterface = 6,
-        },
-    .ep_msc_out =
-        {
-            .bLength = sizeof(usb_endpoint_descriptor_t),
-            .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = (USB_ENDP_OUT | 5),
-            .bEndpointType = USB_ENDP_BULK,
-            .wMaxPacketSize = 64,
-            .bInterval = 0x00,
-        },
-    .ep_msc_in =
-        {
-            .bLength = sizeof(usb_endpoint_descriptor_t),
-            .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = (USB_ENDP_IN | 5),
-            .bEndpointType = USB_ENDP_BULK,
-            .wMaxPacketSize = 64,
-            .bInterval = 0x00,
-        },
+    // Commented out in the final version. MSC Won't be used.
+    // .itf_msc =
+    //     {
+    //         .bLength = sizeof(usb_interface_descriptor_t),
+    //         .bDescriptorType = USB_DESC_TYPE_INTERFACE,
+    //         .bInterfaceNumber = 4,
+    //         .bAlternateSetting = 0x00,
+    //         .bNumEndpoints = 2,
+    //         .bInterfaceClass = USB_CLASS_MASS_STORAGE,
+    //         .bInterfaceSubClass = USB_SUBCLASS_SCSI,
+    //         .bInterfaceProtocol = USB_PROTOCOL_MSC_BOT,
+    //         .iInterface = 6,
+    //     },
+    // .ep_msc_out =
+    //     {
+    //         .bLength = sizeof(usb_endpoint_descriptor_t),
+    //         .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
+    //         .bEndpointAddress = (USB_ENDP_OUT | 5),
+    //         .bEndpointType = USB_ENDP_BULK,
+    //         .wMaxPacketSize = 64,
+    //         .bInterval = 0x00,
+    //     },
+    // .ep_msc_in =
+    //     {
+    //         .bLength = sizeof(usb_endpoint_descriptor_t),
+    //         .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
+    //         .bEndpointAddress = (USB_ENDP_IN | 5),
+    //         .bEndpointType = USB_ENDP_BULK,
+    //         .wMaxPacketSize = 64,
+    //         .bInterval = 0x00,
+    //     },
 
     // ==========================================
     // CMSIS-DAP. INTERFACE 5
@@ -301,7 +302,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_interface_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_INTERFACE,
-            .bInterfaceNumber = 5,
+            .bInterfaceNumber = 4,
             .bAlternateSetting = 0x00,
             .bNumEndpoints = 2,
             .bInterfaceClass = USB_CLASS_VENDOR_SPECIFIC,
@@ -313,7 +314,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_endpoint_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = (USB_ENDP_OUT | 6),
+            .bEndpointAddress = (USB_ENDP_OUT | 5),
             .bEndpointType = USB_ENDP_BULK,
             .wMaxPacketSize = 64,
             .bInterval = 0x00,
@@ -322,7 +323,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_endpoint_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-            .bEndpointAddress = (USB_ENDP_IN | 6),
+            .bEndpointAddress = (USB_ENDP_IN | 5),
             .bEndpointType = USB_ENDP_BULK,
             .wMaxPacketSize = 64,
             .bInterval = 0x00,
