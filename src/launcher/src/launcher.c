@@ -20,8 +20,10 @@
 #include "main.h"
 
 // ThreadX library
+#include "app_netxduo.h"
 #include "app_threadx.h"
 #include "app_usbx_device.h"
+
 
 // STD
 #include <stdint.h>
@@ -69,13 +71,36 @@ uint32_t launcher(void) {
     MX_USBX_Device_Init();
 
     /*
+     * Launch the NetXDuo task
+     */
+    MX_NetXDuo_Init();
+
+    /*
      * Creating the idle task
      */
-    tx_thread_create(&leds_thread, "Leds control", leds_task, 0, leds_stack, IDLE_STACK_SIZE, 31, 31, TX_NO_TIME_SLICE,
-                     TX_AUTO_START);
+    tx_thread_create(
+        &leds_thread,
+        "Leds control",
+        leds_task,
+        0,
+        leds_stack,
+        IDLE_STACK_SIZE,
+        31,
+        31,
+        TX_NO_TIME_SLICE,
+        TX_AUTO_START);
 
-    tx_thread_create(&logger_thread, "Deferred Logger", logger_task, 0, logger_stack, LOGGER_STACK_SIZE, 31, 31,
-                     TX_NO_TIME_SLICE, TX_AUTO_START);
+    tx_thread_create(
+        &logger_thread,
+        "Deferred Logger",
+        logger_task,
+        0,
+        logger_stack,
+        LOGGER_STACK_SIZE,
+        31,
+        31,
+        TX_NO_TIME_SLICE,
+        TX_AUTO_START);
 
     return 0;
 }

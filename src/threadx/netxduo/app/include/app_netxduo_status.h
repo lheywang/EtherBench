@@ -1,7 +1,7 @@
 /**
- * @file    app_netxduo.c
+ * @file    app_netxduo_status.h
  * @author  lheywang (leonard.heywang@proton.me)
- * @brief   Implement the base init of NetXDuo stack.
+ * @brief   Define callbacks used by the netxduo stack.
  * @version 0.1
  * @date    2026-03-05
  *
@@ -9,16 +9,16 @@
  *
  */
 
+#pragma once
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // ======================================================================
 //                              INCLUDES
 // ======================================================================
-// Header
-#include "app_netxduo.h"
 
-// Local libraries
-#include "app_netxduo_status.h"
-
-// NetXDuo
 #include "nx_api.h"
 
 // ======================================================================
@@ -29,4 +29,6 @@
 //                              FUNCTIONS
 // ======================================================================
 
-UINT MX_NetXDuo_Init() { return NX_SUCCESS; }
+#ifdef __cplusplus
+}
+#endif

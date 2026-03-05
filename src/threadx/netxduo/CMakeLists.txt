@@ -9,6 +9,7 @@
 # Set sources
 set(SOURCES 
     app/src/app_netxduo.c
+    app/src/app_netxduo_status.c
 )
 
 list(APPEND SOURCES
