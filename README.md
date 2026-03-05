@@ -35,15 +35,41 @@ What would be this tool without it's software ? Nothing.
 The tool include different access ports :
 - 2x USB VCOM, directly from the hardware 
 - 1x USB VCOM, as a terminal
-- 1x USB MCS, to copy firmware and read logs.
 - 1x USB Debug probe, compatible with the industry standards.
 - 1x SSH server
 - 1x Remote debugger server, to be able to integrate the tool into standard IDEs.
 
 All of them are able to read from any ports, and write to any (in the limit of the mutexes).
 
+For theses actions, here a small tab that show what's possible, and what's not :
+
+| Technology    | Bus                         |
+| :------------ | :-------------------------- |
+| File transfer | FTP (or unplug the SD card) |
+| USART Bridge  | Both, USB preferred         |
+| Debugging     | Both                        |
+| Terminal       | Both, Ethernet preferred   |
+
 Additionally, the tool enable to follow test sequences, which include chip programming directly onboard, 
 and produce logs and test reports on the SD card, without any host needed. A single button press, and here we go !
 
 You can perfectly imagine a world where you wire the DUT, press a single button, wait, and see the result. The DUT
 is flashed, and tested. This include monitoring serial logs for you !
+
+## Memory map
+
+### SD
+
+| Volume | Size | Usage                               |
+| :----- | :--- | :---------------------------------- |
+| LOGS   | All  | Outputs (logs, measures, reports... |
+
+### Flash
+
+| Volume      | Size    | Usage                                                               |
+| :---------- | :------ | :------------------------------------------------------------------ |
+| DEV_DUMP    | 128 Ko  | Device crash dump (if any).                                         |
+| TARGET_DUMP | 896 Ko  | Target crash dump (if any).                                         |
+| DATA        | 127 Mo  | Firmwares to be flashed, sequences. Anything that may be executed.  |
+
+
