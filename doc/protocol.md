@@ -22,6 +22,7 @@ Input buffer (4 commands)
 Output buffer (8 commands).
 Policies : Ensure already present commands, returns error in case of overflow.
 
+```
 **CONFiguration** :
     VOLTage :
         level
@@ -114,5 +115,5 @@ Policies : Ensure already present commands, returns error in case of overflow.
 **SEQUences** :
     **RUN** file \[from flash\]
         CMD : run [file]
-
+```
 + standard IEEE 488.2 commands (all known and response, but not implemented (ex, \*CAL?).
