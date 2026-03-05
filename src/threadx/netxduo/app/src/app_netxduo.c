@@ -12,6 +12,7 @@
 // Just a quick logger config
 #include "nx_udp.h"
 #include "tx_api.h"
+#include <sys/cdefs.h>
 #define LOG_MODULE "NETX_APP"
 
 // ======================================================================
@@ -25,11 +26,15 @@
 #include "logger.h"
 #include "nx_stm32_eth_driver.h"
 
+// ThreadX
+#include "tx_handler.h"
+
 // NetXDuo
 #include "nx_api.h"
 
 // Addons
 #include "nxd_dhcp_client.h"
+#include "nxd_telnet_server.h"
 
 // ======================================================================
 //                               EXTERNS
@@ -41,20 +46,21 @@ extern void Error_Handler();
 //                              VARIABLES
 // ======================================================================
 // Public
+NX_IP ip;
+NX_PACKET_POOL pool;
 
 // Private
 static TX_THREAD net_thread;
-
-static NX_PACKET_POOL pool;
-static NX_IP ip;
 static NX_DHCP dhcp;
+
+static NX_TELNET_SERVER telnet_srv;
 
 static __aligned(8) ULONG ip_thread_stack[NX_IP_TASK_SIZE];
 static __aligned(8) ULONG arp_cache[NX_ARP_CACHE / sizeof(ULONG)];
 
 static __aligned(8) uint8_t packet_pool[PACKET_POOL_SIZE];
-
 static __aligned(8) uint8_t net_stack[NX_MAIN_TASK_STACK];
+static __aligned(8) uint8_t telnet_stack[NX_TELNET_STACK_SIZE];
 
 // ======================================================================
 //                              FUNCTIONS
@@ -111,12 +117,29 @@ UINT MX_NetXDuo_Init() {
     if (status != NX_SUCCESS)
         Error_Handler();
 
+    status = nx_tcp_enable(&ip);
+    if (status != NX_SUCCESS)
+        Error_Handler();
+
     /*
      * Creating the DHCP client
      */
     status = nx_dhcp_create(&dhcp, &ip, "EtherBench_DHCP");
     if (status != NX_SUCCESS)
         Error_Handler();
+
+    /*
+     * Creating the TELNET server
+     */
+    status = nx_telnet_server_create(
+        &telnet_srv,
+        "EtherBench_Telnet",
+        &ip,
+        &telnet_stack,
+        NX_TELNET_STACK_SIZE,
+        telnet_new_connection,
+        telnet_data_in,
+        telnet_close_connection);
 
     /*
      * Finally, creating the task for the network handling.
@@ -142,19 +165,36 @@ UINT MX_NetXDuo_Init() {
 
 void app_network_thread_entry(ULONG arg) {
     TX_PARAMETER_NOT_USED(arg);
-
-    LOG("Enterred NETX application task. Will now start the required services.");
     UINT status;
+    ULONG ip_status;
+    LOG("Enterred NETX application task. Will now start the required services.");
 
+    /*
+     * Wait for the link to up up. This could way for ever !
+     */
+    while (nx_ip_status_check(&ip, NX_IP_LINK_ENABLED, &ip_status, NX_LINK_TIMEOUT) !=
+           NX_SUCCESS) {
+        tx_thread_sleep(100);
+        LOG("Waiting for the link to be up ...");
+    }
+
+    // Add a bit of delay, to be sure
+    tx_thread_sleep(50); // 500 ms
+
+    /*
+     * Thus, we can start the DHCP server
+     */
     status = nx_dhcp_start(&dhcp);
     if (status != NX_SUCCESS)
-        Error_Handler();
+        Tx_Error_Handler(ETH_DHCP_FAILED);
     LOG("Started the DHCP client.");
 
     /*
-     * Then, we wait until we got un IP (or set a fallback IP !)
+     * Then, we wait until we got un IP (or timeout).
+     * - Else we got a DHCP IP, and we show it into the console. That's nice and we
+     *   pursuit.
+     * - Or we don't, and we apply the fallback IP, and stop the DHCP.
      */
-    ULONG ip_status;
     status = nx_ip_status_check(&ip, NX_IP_ADDRESS_RESOLVED, &ip_status, NX_DHCP_TIMEOUT);
 
     if (status == NX_SUCCESS) {
@@ -171,6 +211,7 @@ void app_network_thread_entry(ULONG arg) {
             (ip_addr) & 0xFF);
 
     } else {
+        nx_dhcp_stop(&dhcp);
         nx_ip_address_set(&ip, NX_FALLBACK_IP, NX_FALLBACK_MASK);
 
         LOG("Used fallback IP : %lu.%lu.%lu.%lu",
@@ -179,6 +220,14 @@ void app_network_thread_entry(ULONG arg) {
             (NX_FALLBACK_IP >> 8) & 0xFF,
             (NX_FALLBACK_IP) & 0xFF);
     }
+
+    /*
+     * In any cases, starting the servers, as required (or secondary tasks, in that case).
+     */
+    status = nx_telnet_server_start(&telnet_srv);
+    if (status != NX_SUCCESS)
+        Tx_Error_Handler(ETH_TELNET_FAILED);
+    LOG("Started Telnet server");
 
     /*
      * Infinite loop, to let the task active

@@ -32,7 +32,9 @@ enum tx_error_codes {
     EBADF = 0x00001000,
     EBUSY = 0x00002000,
     USB_HW_CONFIG_FAILED = 0x0000A000,
-    USB_HW_CANNOT_START = 0x0000A001
+    USB_HW_CANNOT_START = 0x0000A001,
+    ETH_DHCP_FAILED = 0x0000B000,
+    ETH_TELNET_FAILED = 0x0000B001
 };
 
 // ======================================================================

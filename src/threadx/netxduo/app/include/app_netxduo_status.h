@@ -19,7 +19,11 @@ extern "C" {
 //                              INCLUDES
 // ======================================================================
 
+// NetXDuo
 #include "nx_api.h"
+
+// Addons
+#include "nxd_telnet_server.h"
 
 // ======================================================================
 //                              VARIABLES
@@ -28,6 +32,11 @@ extern "C" {
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
+
+VOID telnet_new_connection(NX_TELNET_SERVER *server_ptr, UINT logical_connection);
+void telnet_data_in(
+    NX_TELNET_SERVER *server_ptr, UINT logical_connection, NX_PACKET *packet_ptr);
+void telnet_close_connection(NX_TELNET_SERVER *server_ptr, UINT logical_connection);
 
 #ifdef __cplusplus
 }
