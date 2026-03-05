@@ -147,7 +147,7 @@ UINT MX_USBX_Device_Init(void) {
         0;
     msc_files.ux_slave_class_storage_parameter_lun[0]
         .ux_slave_class_storage_media_removable_flag =
-        0x80; // Recommandé pour forcer l'OS à bien vider son cache
+        0x80;
     msc_files.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_read =
         msc_read;
     msc_files.ux_slave_class_storage_parameter_lun[0].ux_slave_class_storage_media_write =
@@ -292,3 +292,4 @@ VOID app_ux_device_thread_entry(ULONG thread_input) {
 
     return;
 }
+
