@@ -32,6 +32,11 @@ extern "C" {
 
 #define PACKET_POOL_SIZE (NX_PACKET_SIZE * NX_POOL_SIZE)
 
+#define NX_DHCP_TIMEOUT 1000
+
+#define NX_FALLBACK_IP IP_ADDRESS(192, 168, 1, 10)
+#define NX_FALLBACK_MASK IP_ADDRESS(255, 255, 255, 0)
+
 // ======================================================================
 //                              VARIABLES
 // ======================================================================

@@ -65,6 +65,22 @@ uint32_t launcher(void) {
     tx_semaphore_create(&dma_tx_done, "dma done", 0);
 
     /*
+     * Creating the deferred logging task.
+     * We do that first to ensure the messages WILL be deferred, when they could.
+     */
+    tx_thread_create(
+        &logger_thread,
+        "Deferred Logger",
+        logger_task,
+        0,
+        logger_stack,
+        LOGGER_STACK_SIZE,
+        31,
+        31,
+        TX_NO_TIME_SLICE,
+        TX_AUTO_START);
+
+    /*
      * Launching the USBX task
      */
     MX_USBX_Device_Init();
@@ -84,21 +100,6 @@ uint32_t launcher(void) {
         0,
         leds_stack,
         IDLE_STACK_SIZE,
-        31,
-        31,
-        TX_NO_TIME_SLICE,
-        TX_AUTO_START);
-
-    /*
-     * Creating the deferred logging task.
-     */
-    tx_thread_create(
-        &logger_thread,
-        "Deferred Logger",
-        logger_task,
-        0,
-        logger_stack,
-        LOGGER_STACK_SIZE,
         31,
         31,
         TX_NO_TIME_SLICE,

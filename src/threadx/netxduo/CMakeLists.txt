@@ -526,6 +526,24 @@ list(APPEND SOURCES
     common/src/nxe_udp_source_extract.c
 )
 
+# Adding all the addons
+list(APPEND SOURCES
+    addons/src/dhcp/nxd_dhcp_client.c
+    addons/src/dhcp/nxd_dhcp_server.c
+    addons/src/dhcp/nxd_dhcpv6_client.c
+    addons/src/dhcp/nxd_dhcpv6_server.c
+    addons/src/ftp/nxd_ftp_client.c
+    addons/src/ftp/nxd_ftp_server.c
+    addons/src/http/nxd_http_client.c
+    addons/src/http/nxd_http_server.c
+    addons/src/mqtt/nxd_mqtt_client.c
+    addons/src/sntp/nxd_sntp_client.c
+    addons/src/telnet/nxd_telnet_client.c
+    addons/src/telnet/nxd_telnet_server.c
+    addons/src/tftp/nxd_tftp_client.c
+    addons/src/tftp/nxd_tftp_server.c
+)
+
 # Add the drivers
 list(APPEND SOURCES
     drivers/src/nx_stm32_eth_driver.c
@@ -536,7 +554,7 @@ list(APPEND SOURCES
 add_library(NETXDUO STATIC ${SOURCES})
 
 # Link against the base OS
-target_link_libraries(NETXDUO HAL BSP THREADX_OS LOGGER)
+target_link_libraries(NETXDUO HAL BSP THREADX_OS FILEX LOGGER)
 
 # Adding the include folder
 target_include_directories(NETXDUO PUBLIC 
@@ -544,4 +562,11 @@ target_include_directories(NETXDUO PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/common/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/drivers/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/ports/cortex_m33/gnu/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/dhcp/
+    ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/ftp/
+    ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/http/
+    ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/mqtt/
+    ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/sntp/
+    ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/telnet/
+    ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/tftp/
 )

@@ -10,6 +10,7 @@
  */
 
 // Just a quick logger config
+#include "nx_udp.h"
 #define LOG_MODULE "NETX_APP"
 
 // ======================================================================
@@ -26,6 +27,9 @@
 // NetXDuo
 #include "nx_api.h"
 
+// Addons
+#include "nxd_dhcp_client.h"
+
 // ======================================================================
 //                               EXTERNS
 // ======================================================================
@@ -40,6 +44,7 @@ extern void Error_Handler();
 // Private
 static NX_PACKET_POOL pool;
 static NX_IP ip;
+static NX_DHCP dhcp;
 
 static __aligned(8) ULONG ip_thread_stack[NX_IP_TASK_SIZE];
 static __aligned(8) ULONG arp_cache[NX_ARP_CACHE / sizeof(ULONG)];
@@ -74,8 +79,8 @@ UINT MX_NetXDuo_Init() {
     status = nx_ip_create(
         &ip,
         "EtherBench_IP",
-        IP_ADDRESS(192, 168, 1, 10),
-        IP_ADDRESS(255, 255, 255, 0),
+        IP_ADDRESS(0, 0, 0, 0), // This will say "Hey, wait for the DHCP answer !"
+        IP_ADDRESS(0, 0, 0, 0),
         &pool,
         nx_stm32_eth_driver,
         (UCHAR *)ip_thread_stack,
@@ -97,6 +102,47 @@ UINT MX_NetXDuo_Init() {
     if (status != NX_SUCCESS)
         Error_Handler();
     LOG("Enabled the ICMP protocol.");
+
+    status = nx_udp_enable(&ip);
+    if (status != NX_SUCCESS)
+        Error_Handler();
+    LOG("Enabled the UDP protocol.");
+
+    /*
+     * Creating the DHCP client
+     */
+    status = nx_dhcp_create(&dhcp, &ip, "EtherBench_DHCP");
+    if (status != NX_SUCCESS)
+        Error_Handler();
+    LOG("Launched the DHCP client.");
+
+    status = nx_dhcp_start(&dhcp);
+    if (status != NX_SUCCESS)
+        Error_Handler();
+    LOG("Started the DHCP client.");
+
+    /*
+     * Then, we wait until we got un IP (or set a fallback IP !)
+     */
+    ULONG ip_status;
+    status = nx_ip_status_check(&ip, NX_IP_ADDRESS_RESOLVED, &ip_status, NX_DHCP_TIMEOUT);
+
+    if (status == NX_SUCCESS) {
+        ULONG ip_addr;
+        ULONG ip_mask;
+
+        // Fetch the parameters
+        nx_ip_address_get(&ip, &ip_addr, &ip_mask);
+
+        LOG("Got an IP : %lu.%lu.%lu.%lu",
+            (ip_addr >> 24) & 0xFF,
+            (ip_addr >> 16) & 0xFF,
+            (ip_addr >> 8) & 0xFF,
+            (ip_addr) & 0xFF);
+
+    } else {
+        nx_ip_address_set(&ip, NX_FALLBACK_IP, NX_FALLBACK_MASK);
+    }
 
     return NX_SUCCESS;
 }
