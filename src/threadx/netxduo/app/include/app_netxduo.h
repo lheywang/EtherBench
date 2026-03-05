@@ -25,6 +25,8 @@ extern "C" {
 //                              DEFINES
 // ======================================================================
 
+#define NX_MAIN_TASK_STACK 1024
+
 #define NX_PACKET_SIZE 1536
 #define NX_POOL_SIZE 10
 #define NX_ARP_CACHE 1024

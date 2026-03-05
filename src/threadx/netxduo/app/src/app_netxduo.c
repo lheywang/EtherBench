@@ -11,6 +11,7 @@
 
 // Just a quick logger config
 #include "nx_udp.h"
+#include "tx_api.h"
 #define LOG_MODULE "NETX_APP"
 
 // ======================================================================
@@ -42,6 +43,8 @@ extern void Error_Handler();
 // Public
 
 // Private
+static TX_THREAD net_thread;
+
 static NX_PACKET_POOL pool;
 static NX_IP ip;
 static NX_DHCP dhcp;
@@ -51,10 +54,15 @@ static __aligned(8) ULONG arp_cache[NX_ARP_CACHE / sizeof(ULONG)];
 
 static __aligned(8) uint8_t packet_pool[PACKET_POOL_SIZE];
 
+static __aligned(8) uint8_t net_stack[NX_MAIN_TASK_STACK];
+
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
+// Private
+static void app_network_thread_entry(ULONG arg);
 
+// Public
 UINT MX_NetXDuo_Init() {
 
     UINT status;
@@ -116,6 +124,32 @@ UINT MX_NetXDuo_Init() {
         Error_Handler();
     LOG("Launched the DHCP client.");
 
+    /*
+     * Finally, creating the task for the network handling.
+     */
+    status = tx_thread_create(
+        &net_thread,
+        "Network_Thread",
+        app_network_thread_entry,
+        0,
+        net_stack,
+        NX_MAIN_TASK_STACK,
+        5, // Priorité (à ajuster selon votre architecture)
+        5, // Preemption threshold
+        TX_NO_TIME_SLICE,
+        TX_AUTO_START);
+
+    if (status != TX_SUCCESS) {
+        Error_Handler();
+    }
+
+    return NX_SUCCESS;
+}
+
+void app_network_thread_entry(ULONG arg) {
+
+    UINT status;
+
     status = nx_dhcp_start(&dhcp);
     if (status != NX_SUCCESS)
         Error_Handler();
@@ -144,5 +178,10 @@ UINT MX_NetXDuo_Init() {
         nx_ip_address_set(&ip, NX_FALLBACK_IP, NX_FALLBACK_MASK);
     }
 
-    return NX_SUCCESS;
+    /*
+     * Infinite loop, to let the task active
+     */
+    for (;;) {
+        tx_thread_sleep(1000);
+    }
 }

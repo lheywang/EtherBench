@@ -532,6 +532,7 @@ list(APPEND SOURCES
     addons/src/dhcp/nxd_dhcp_server.c
     addons/src/dhcp/nxd_dhcpv6_client.c
     addons/src/dhcp/nxd_dhcpv6_server.c
+    addons/src/dns/nxd_dns.c
     addons/src/ftp/nxd_ftp_client.c
     addons/src/ftp/nxd_ftp_server.c
     addons/src/http/nxd_http_client.c
@@ -542,6 +543,7 @@ list(APPEND SOURCES
     addons/src/telnet/nxd_telnet_server.c
     addons/src/tftp/nxd_tftp_client.c
     addons/src/tftp/nxd_tftp_server.c
+    addons/src/dns/nxd_dns.c
 )
 
 # Add the drivers
@@ -563,6 +565,7 @@ target_include_directories(NETXDUO PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/drivers/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/ports/cortex_m33/gnu/include
     ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/dhcp/
+    ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/dns/
     ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/ftp/
     ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/http/
     ${CMAKE_CURRENT_SOURCE_DIR}/addons/include/mqtt/
