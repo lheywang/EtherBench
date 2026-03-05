@@ -45,3 +45,6 @@ src/build/*
 
 # Formatter outputs
 */.cache/*
+
+# VSCodeExtensions
+.VSCodeCounter/
