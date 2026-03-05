@@ -24,7 +24,6 @@
 #include "app_threadx.h"
 #include "app_usbx_device.h"
 
-
 // STD
 #include <stdint.h>
 
@@ -90,6 +89,9 @@ uint32_t launcher(void) {
         TX_NO_TIME_SLICE,
         TX_AUTO_START);
 
+    /*
+     * Creating the deferred logging task.
+     */
     tx_thread_create(
         &logger_thread,
         "Deferred Logger",

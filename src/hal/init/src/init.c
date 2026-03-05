@@ -21,6 +21,7 @@
 
 #include "cordic.h"
 #include "dcache.h"
+#include "eth.h"
 #include "fmac.h"
 #include "gpdma.h"
 #include "gpio.h"
@@ -28,6 +29,7 @@
 #include "rcc.h"
 #include "usart.h"
 #include "usb.h"
+
 
 // STD
 #include <stdint.h>
@@ -54,6 +56,7 @@ uint32_t init(void) {
     // Then, call the different peripherals inits :
     MX_GPIO_Init();
     MX_USART3_UART_Init();
+    MX_ETH_Init();
 
     // Computation peripherals init
     MX_CORDIC_Init();

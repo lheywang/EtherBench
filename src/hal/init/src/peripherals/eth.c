@@ -56,6 +56,7 @@ void MX_ETH_Init(void) {
     heth.Init.RxBuffLen = 1524;
 
     /* USER CODE BEGIN MACADDRESS */
+    HAL_ETH_MspInit(&heth);
 
     /* USER CODE END MACADDRESS */
 
