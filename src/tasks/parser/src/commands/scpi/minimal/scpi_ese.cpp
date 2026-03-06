@@ -22,4 +22,4 @@
 //                              FUNCTIONS
 // ======================================================================
 
-#include "commands/parser_scpi.h"
+int scpi_ese(char *args, void *context) { return 0; }

@@ -40,12 +40,12 @@ void parser_task(ULONG arg) {
     /*
      * We're good !
      */
-    struct scpi_command_entry *cmd = find_scpi_command("*cls", 4);
+    const struct scpi_command_entry *cmd = find_scpi_command("*cls", 4);
     int val = cmd->handler((char *)&args, (void *)&ctx);
     LOG("Got command : %d", val);
 
-    cmd = find_scpi_command("*ese?", 5);
-    val = cmd->handler((char *)&args, (void *)&ctx);
+    const struct scpi_command_entry *cmd2 = find_scpi_command("*ese?", 5);
+    val = cmd2->handler((char *)&args, (void *)&ctx);
     LOG("Got command : %d", val);
 
     for (;;) {

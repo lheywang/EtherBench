@@ -1,6 +1,6 @@
 /**
  * @file    scpi_hard_spi.cpp
- * @author lheywang (leonard.heywang@proton.me)
+ * @author  lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
  * @date    2026-03-05
@@ -21,3 +21,5 @@
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
+
+int scpi_hard_spi(char *args, void *context) { return 0; }

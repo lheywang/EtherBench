@@ -1,0 +1,35 @@
+%{
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
+#define register 
+
+#include "commands/shell_constants.h"
+%}
+%%
+--voltage, SHELL_VOLTAGE
+--volt, SHELL_VOLTAGE
+--i2c, SHELL_I2C
+--spi, SHELL_SPI 
+--uart, SHELL_UART
+--can, SHELL_CAN
+--temp, SHELL_TEMPERATURE
+--temperature, SHELL_TEMPERATURE
+connect, SHELL_CONNECT
+detect, SHELL_DETECT
+verify, SHELL_VERIFY
+status, SHELL_STATUS
+device, SHELL_DEVICE
+dump, SHELL_DUMP
+subscribe, SHELL_LOGGER_SUBSCRIBE
+unsubscribe, SHELL_LOGGER_UNSUBSCRIBE
+load, SHELL_LOAD
+set, SHELL_SET
+reset, SHELL_RESET
+new, SHELL_NEW
+add, SHELL_ADD
+read, SHELL_READ
+write, SHELL_WRITE
+run, SHELL_RUN
+get, SHELL_GET
+%%

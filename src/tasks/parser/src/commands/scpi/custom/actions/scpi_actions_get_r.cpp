@@ -1,5 +1,5 @@
 /**
- * @file    shell_hard_i2c.cpp
+ * @file    scpi_actions_reset.cpp
  * @author  lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
@@ -13,7 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 // Header
-#include "commands/parser_shell.h"
+#include "commands/parser_scpi.h"
 
 // STD
 #include <cstdint>
@@ -21,3 +21,5 @@
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
+
+int scpi_actions_get_r(char *args, void *context) { return 0; }

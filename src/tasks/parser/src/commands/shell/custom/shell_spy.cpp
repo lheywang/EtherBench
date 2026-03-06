@@ -1,5 +1,5 @@
 /**
- * @file    shell_hard_can_r.cpp
+ * @file    shell_spy_can.cpp
  * @author  lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
@@ -21,3 +21,5 @@
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
+
+int shell_spy(char *args, void *context) { return 0; }

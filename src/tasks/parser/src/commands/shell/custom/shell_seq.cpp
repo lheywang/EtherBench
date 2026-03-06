@@ -1,5 +1,5 @@
 /**
- * @file    shell_analog_temp_r.cpp
+ * @file    shell_seq_run.cpp
  * @author  lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
@@ -21,3 +21,5 @@
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
+
+int shell_seq(char *args, void *context) { return 0; }

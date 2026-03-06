@@ -1,5 +1,5 @@
 /**
- * @file    shell_prog_verify.cpp
+ * @file    shell_prog_connect.cpp
  * @author  lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
@@ -21,3 +21,5 @@
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
+
+int shell_prog(char *args, void *context) { return 0; }

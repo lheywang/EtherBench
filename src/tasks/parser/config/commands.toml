@@ -1,0 +1,301 @@
+# ====================================
+# IEEE 488.2 Minimal Command Set
+# ====================================
+["*cls"]
+handler_scpi_query = "scpi_cls"
+
+["*ese"]
+handler_scpi_set = "scpi_ese"
+handler_scpi_query = "scpi_ese_r"
+
+["*esr"]
+handler_scpi_query = "scpi_esr_r"
+
+["*idn"]
+handler_scpi_query = "scpi_idn_r"
+
+["*opc"]
+handler_scpi_set = "scpi_opc"
+handler_scpi_query = "scpi_opc_r"
+
+["*opt"]
+handler_scpi_set = "scpi_opt"
+
+["*rst"]
+handler_scpi_set = "scpi_rst"
+
+["*sre"]
+handler_scpi_set = "scpi_sre"
+handler_scpi_query = "scpi_sre_r"
+
+["*stb"]
+handler_scpi_query = "scpi_stb_r"
+
+["*tst"]
+handler_scpi_query = "scpi_tst_r"
+
+["*wai"]
+handler_scpi_set = "scpi_wai"
+
+# ====================================
+# SHELL Standard commands
+# ====================================
+["cat"]
+shell = "cat"
+handler_shell = "shell_cat"
+
+["cd"]
+shell = "cd"
+handler_shell = "shell_cd"
+
+["clear"]
+shell = "clear"
+handler_shell = "shell_clear"
+
+["file"]
+shell = "file"
+handler_shell = "shell_file"
+
+["ls"]
+shell = "ls"
+handler_shell = "shell_ls"
+
+["mkdir"]
+shell = "mkdir"
+handler_shell = "shell_mkdir"
+
+["mv"]
+shell = "mv"
+handler_shell = "shell_mv"
+
+["pwd"]
+shell = "pwd"
+handler_shell = "shell_pwd"
+
+# ====================================
+# SHELL / IEEE 488.2 Custom Command Set
+# ====================================
+
+# ------------------------------------
+# Board configuration
+# ------------------------------------
+[configuration.voltage]
+handler_scpi_query = "scpi_conf_volt_r"
+handler_scpi_set = "scpi_conf_volt"
+
+shell = "config"
+handler_shell = "shell_conf"
+
+[configuration.load]
+handler_scpi_query = "scpi_conf_volt_r"
+handler_scpi_set = "scpi_conf_volt"
+
+shell = "config"
+handler_shell = "shell_conf"
+
+# ------------------------------------
+# Hardware IO commands
+# ------------------------------------
+[hardware.i2c]
+handler_scpi_query = "scpi_hard_i2c_r"
+handler_scpi_set = "scpi_hard_i2c"
+
+shell = "io"
+handler_shell = "shell_io"
+
+[hardware.spi]
+handler_scpi_query = "scpi_hard_spi_r"
+handler_scpi_set = "scpi_hard_spi"
+
+shell = "io"
+handler_shell = "shell_io"
+
+[hardware.uart]
+handler_scpi_query = "scpi_hard_usart_r"
+handler_scpi_set = "scpi_hard_usart"
+
+shell = "io"
+handler_shell = "shell_io"
+
+[hardware.can]
+handler_scpi_query = "scpi_hard_can_r"
+handler_scpi_set = "scpi_hard_can"
+
+shell = "io"
+handler_shell = "shell_io"
+
+# ------------------------------------
+# SPY Module
+# ------------------------------------
+[hardware.spy.i2c]
+handler_scpi_set = "scpi_spy_i2c"
+
+shell = "spy"
+handler_shell = "shell_spy"
+
+[hardware.spy.spi]
+handler_scpi_set = "scpi_spy_spi"
+
+shell = "spy"
+handler_shell = "shell_spy"
+
+[hardware.spy.uart]
+handler_scpi_set = "scpi_spy_usart"
+
+shell = "spy"
+handler_shell = "shell_spy"
+
+[hardware.spy.can]
+handler_scpi_set = "scpi_spy_can"
+
+shell = "spy"
+handler_shell = "shell_spy"
+
+# ------------------------------------
+# Analog Module
+# ------------------------------------
+[analog]
+handler_scpi_query = "scpi_analog_input_r"
+handler_scpi_set = "scpi_analog_output"
+
+shell_ = "analog"
+handler_shell_set = "shell_analog"
+
+[analog.temperature]
+handler_scpi_query = "scpi_analog_temp_r"
+
+shell_ = "analog"
+handler_shell_set = "shell_analog"
+
+# ------------------------------------
+# FILE IO configuration
+# ------------------------------------
+[file.cd]
+handler_scpi_set = "scpi_file_cd"
+
+[file.load]
+handler_scpi_set = "scpi_file_load"
+
+[file.ls]
+handler_scpi_set = "scpi_file_ls"
+
+[file.mkdir]
+handler_scpi_set = "scpi_file_mkdir"
+
+[file.pwd]
+handler_scpi_set = "scpi_file_pwd"
+
+# ------------------------------------
+# TARGET Programmation
+# ------------------------------------
+[programmation.connect]
+handler_scpi_set = "scpi_prog_connect"
+
+shell_ = "programmer"
+handler_shell_set = "shell_prog"
+
+[programmation.flash]
+handler_scpi_set = "scpi_prog_detect"
+
+shell_ = "programmer"
+handler_shell_set = "shell_prog"
+
+[programmation.verify]
+handler_scpi_set = "scpi_prog_verify"
+
+shell_ = "programmer"
+handler_shell_set = "shell_prog"
+
+[programmation.read]
+handler_scpi_set = "scpi_prog_read"
+
+shell_ = "programmer"
+handler_shell_set = "shell_prog"
+
+[programmation.status]
+handler_scpi_set = "scpi_prog_status"
+
+shell_ = "programmer"
+handler_shell_set = "shell_prog"
+
+[programmation.device]
+handler_scpi_set = "scpi_prog_device"
+
+shell_ = "programmer"
+handler_shell_set = "shell_prog"
+
+[programmation.detect]
+handler_scpi_set = "scpi_prog_detect"
+
+shell_ = "programmer"
+handler_shell_set = "shell_prog"
+
+[programmation.dump]
+handler_scpi_set = "scpi_prog_dump"
+
+shell_ = "programmer"
+handler_shell_set = "shell_prog"
+
+# ------------------------------------
+# LOGGER Programmation
+# ------------------------------------
+[logger.subscribe]
+handler_scpi_set = "scpi_log_subscribe"
+
+shell_ = "logger"
+handler_shell_set = "shell_log"
+
+[logger.unsubscribe]
+handler_scpi_set = "scpi_log_unsubscribe"
+
+shell_set = "logger"
+handler_shell_set = "shell_log"
+
+[logger.unsubslistcribe]
+handler_scpi_set = "scpi_log_list"
+
+shell_set = "logger"
+handler_shell_set = "shell_log"
+
+# ------------------------------------
+# ACTIONS Programmation
+# ------------------------------------
+[actions]
+handler_scpi_set = "scpi_actions_set"
+handler_scpi_query = "scpi_actions_get_r"
+
+shell_set = "actions"
+handler_shell_set = "shell_actions"
+
+[actions.reset]
+handler_scpi_set = "scpi_actions_reset"
+
+shell_set = "actions"
+handler_shell_set = "shell_actions"
+
+# ------------------------------------
+# SEQUENCES
+# ------------------------------------
+[sequences.new]
+handler_scpi_set = "scpi_seq_new"
+
+shell_set = "sequence"
+handler_shell_set = "shell_actions"
+
+[sequences.add]
+handler_scpi_set = "scpi_seq_add"
+
+shell_set = "sequence"
+handler_shell_set = "shell_actions"
+
+[sequences.run]
+handler_scpi_set = "scpi_seq_run"
+
+shell_set = "sequence"
+handler_shell_set = "shell_actions"
+
+[sequences.get]
+handler_scpi_query = "scpi_seq_get_r"
+
+shell_set = "sequence"
+handler_shell_set = "shell_actions"

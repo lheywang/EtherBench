@@ -5,25 +5,69 @@
 # author : l.heywang <leonard.heywang@proton.me>
 # date : 20/02/2026
 #############################################################################################################################
-
-# Including the gperf build
+# Search for gperf
 find_program(
     GPERF_EXECUTABLE 
     gperf 
     REQUIRED
 )
 
-# Set sources
-set(SOURCES)
-
-# Set GPERF sources
-set(
-    GPERF_INPUT 
-    ${CMAKE_CURRENT_SOURCE_DIR}/gperf/shell.gperf
-    ${CMAKE_CURRENT_SOURCE_DIR}/gperf/scpi.gperf
+# Search for Python
+find_package(
+    Python3
+    REQUIRED 
+    COMPONENTS 
+    Interpreter
 )
 
-foreach(GPERF_FILE IN LISTS GPERF_INPUT)
+# ===============================================
+# FIRST : PARAMETERS
+# ===============================================
+set(CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/config")
+set(SCRIPT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/scripts")
+
+set(COMMANDS_TOML "${CONFIG_DIR}/commands.toml")
+set(GEN_SCRIPT    "${SCRIPT_DIR}/generate_gperf.py")
+
+set(SCPI_GPERF    "${CMAKE_CURRENT_BINARY_DIR}/scpi.gperf")
+set(SHELL_GPERF   "${CMAKE_CURRENT_BINARY_DIR}/shell.gperf")
+set(ARGS_GPERF    "${CMAKE_CURRENT_SOURCE_DIR}/gperf/keywords.gperf")
+
+# Set sources list
+set(SOURCES)
+
+# ===============================================
+# SECOND : TOML 2 GPERF
+# ===============================================
+add_custom_command(
+    OUTPUT
+        ${SCPI_GPERF}
+        ${SHELL_GPERF}
+    COMMAND
+        Python3::Interpreter
+        ${GEN_SCRIPT}
+        --input     ${COMMANDS_TOML}
+        --out-scpi  ${SCPI_GPERF}
+        --out-shell ${SHELL_GPERF}
+    DEPENDS
+        ${COMMANDS_TOML}
+        ${GEN_SCRIPT}
+    COMMENT
+        "Generating .gperf tables from TOML definition..."
+    VERBATIM
+)
+
+# ===============================================
+# SECOND : GPERF 2 C
+# ===============================================
+
+# Set GPERF sources
+set(GPERF_FILES 
+    ${SCPI_GPERF} 
+    ${SHELL_GPERF}    
+)
+
+foreach(GPERF_FILE IN LISTS GPERF_FILES)
 
     # Rename the .gperf file into it's .c equivalent
     get_filename_component(
@@ -42,16 +86,21 @@ foreach(GPERF_FILE IN LISTS GPERF_INPUT)
             ${GPERF_OUTPUT}
         COMMAND 
             ${GPERF_EXECUTABLE}
-        ARGS 
-            --output-file=${GPERF_OUTPUT}
-            --lookup-function-name=find_${BASE_NAME}_command
-            --hash-function-name=hash_${BASE_NAME} 
             -t
+            -C
+            -D
+            -G
+            -L C
+            -S 1
+            -N find_${BASE_NAME}_command
+            -H hash_${BASE_NAME}
+            --output-file=${GPERF_OUTPUT}
             ${GPERF_FILE}
         DEPENDS 
             ${GPERF_FILE}
         COMMENT 
-            "Generating perfect hash table using gperf for ${BASE_NAME}..."
+            "Compiling perfect hash table: ${BASENAME}.gperf -> .c"
+        VERBATIM
     )
 
     # On append ce fichier à la liste des sources
@@ -60,13 +109,66 @@ foreach(GPERF_FILE IN LISTS GPERF_INPUT)
     )
 endforeach()
 
+set(GPERF_FILES 
+    ${ARGS_GPERF} 
+)
+
+foreach(GPERF_FILE IN LISTS GPERF_FILES)
+
+    # Rename the .gperf file into it's .c equivalent
+    get_filename_component(
+        BASE_NAME 
+        ${GPERF_FILE} 
+        NAME_WE
+    )
+    set(
+        GPERF_OUTPUT 
+        ${CMAKE_CURRENT_BINARY_DIR}/${BASE_NAME}.c
+    )
+
+    # Ask gperf to build it
+    add_custom_command(
+        OUTPUT 
+            ${GPERF_OUTPUT}
+        COMMAND 
+            ${GPERF_EXECUTABLE}
+            -C
+            -D
+            -G
+            -L C
+            -S 1
+            -N find_${BASE_NAME}_command
+            -H hash_${BASE_NAME}
+            --output-file=${GPERF_OUTPUT}
+            ${GPERF_FILE}
+        DEPENDS 
+            ${GPERF_FILE}
+        COMMENT 
+            "Compiling perfect hash table: ${BASENAME}.gperf -> .c"
+        VERBATIM
+    )
+
+    # On append ce fichier à la liste des sources
+    list(APPEND SOURCES
+        ${GPERF_OUTPUT}
+    )
+endforeach()
+
+
+# ===============================================
+# FINALLY : CREATE THE LIBRARY
+# ===============================================
 # Add the common function sources
 list(APPEND SOURCES
+    src/commands/scpi/custom/actions/scpi_actions_get_r.cpp
     src/commands/scpi/custom/actions/scpi_actions_reset.cpp
     src/commands/scpi/custom/actions/scpi_actions_set.cpp
     src/commands/scpi/custom/analog/scpi_analog_input_r.cpp
     src/commands/scpi/custom/analog/scpi_analog_output.cpp
     src/commands/scpi/custom/analog/scpi_analog_temp_r.cpp
+    src/commands/scpi/custom/configuration/scpi_conf_load.cpp
+    src/commands/scpi/custom/configuration/scpi_conf_volt.cpp
+    src/commands/scpi/custom/configuration/scpi_conf_volt_r.cpp
     src/commands/scpi/custom/file/scpi_file_cd.cpp
     src/commands/scpi/custom/file/scpi_file_load.cpp
     src/commands/scpi/custom/file/scpi_file_ls.cpp
@@ -82,13 +184,18 @@ list(APPEND SOURCES
     src/commands/scpi/custom/hard/scpi_hard_usart_r.cpp
     src/commands/scpi/custom/logger/scpi_log_subscribe.cpp
     src/commands/scpi/custom/logger/scpi_log_unsubscribe.cpp
+    src/commands/scpi/custom/logger/scpi_log_list.cpp
     src/commands/scpi/custom/prog/scpi_prog_connect.cpp
     src/commands/scpi/custom/prog/scpi_prog_detect.cpp
     src/commands/scpi/custom/prog/scpi_prog_device.cpp
+    src/commands/scpi/custom/prog/scpi_prog_dump.cpp
     src/commands/scpi/custom/prog/scpi_prog_flash.cpp
     src/commands/scpi/custom/prog/scpi_prog_read.cpp
     src/commands/scpi/custom/prog/scpi_prog_status.cpp
     src/commands/scpi/custom/prog/scpi_prog_verify.cpp
+    src/commands/scpi/custom/sequence/scpi_seq_add.cpp
+    src/commands/scpi/custom/sequence/scpi_seq_get.cpp
+    src/commands/scpi/custom/sequence/scpi_seq_new.cpp
     src/commands/scpi/custom/sequence/scpi_seq_run.cpp
     src/commands/scpi/custom/spy/scpi_spy_can.cpp
     src/commands/scpi/custom/spy/scpi_spy_i2c.cpp
@@ -111,33 +218,14 @@ list(APPEND SOURCES
 )
 
 list(APPEND SOURCES
-    src/commands/shell/custom/actions/shell_actions_reset.cpp
-    src/commands/shell/custom/actions/shell_actions_set.cpp
-    src/commands/shell/custom/analog/shell_analog_input_r.cpp
-    src/commands/shell/custom/analog/shell_analog_output.cpp
-    src/commands/shell/custom/analog/shell_analog_temp_r.cpp
-    src/commands/shell/custom/hard/shell_hard_can.cpp
-    src/commands/shell/custom/hard/shell_hard_can_r.cpp
-    src/commands/shell/custom/hard/shell_hard_i2c.cpp
-    src/commands/shell/custom/hard/shell_hard_i2c_r.cpp
-    src/commands/shell/custom/hard/shell_hard_spi.cpp
-    src/commands/shell/custom/hard/shell_hard_spi_r.cpp
-    src/commands/shell/custom/hard/shell_hard_usart.cpp
-    src/commands/shell/custom/hard/shell_hard_usart_r.cpp
-    src/commands/shell/custom/logger/shell_log_subscribe.cpp
-    src/commands/shell/custom/logger/shell_log_unsubscribe.cpp
-    src/commands/shell/custom/prog/shell_prog_connect.cpp
-    src/commands/shell/custom/prog/shell_prog_detect.cpp
-    src/commands/shell/custom/prog/shell_prog_device.cpp
-    src/commands/shell/custom/prog/shell_prog_flash.cpp
-    src/commands/shell/custom/prog/shell_prog_read.cpp
-    src/commands/shell/custom/prog/shell_prog_status.cpp
-    src/commands/shell/custom/prog/shell_prog_verify.cpp
-    src/commands/shell/custom/sequence/shell_seq_run.cpp
-    src/commands/shell/custom/spy/shell_spy_can.cpp
-    src/commands/shell/custom/spy/shell_spy_i2c.cpp
-    src/commands/shell/custom/spy/shell_spy_spi.cpp
-    src/commands/shell/custom/spy/shell_spy_usart.cpp
+    src/commands/shell/custom/shell_actions.cpp
+    src/commands/shell/custom/shell_analog.cpp
+    src/commands/shell/custom/shell_conf.cpp
+    src/commands/shell/custom/shell_io.cpp
+    src/commands/shell/custom/shell_log.cpp
+    src/commands/shell/custom/shell_prog.cpp
+    src/commands/shell/custom/shell_seq.cpp
+    src/commands/shell/custom/shell_spy.cpp
     src/commands/shell/minimal/shell_cat.cpp
     src/commands/shell/minimal/shell_cd.cpp
     src/commands/shell/minimal/shell_clear.cpp

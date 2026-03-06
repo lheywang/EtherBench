@@ -1,5 +1,5 @@
 /**
- * @file    shell_spy_usart.cpp
+ * @file    scpi_hard_usart.cpp
  * @author  lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
@@ -13,7 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 // Header
-#include "commands/parser_shell.h"
+#include "commands/parser_scpi.h"
 
 // STD
 #include <cstdint>
@@ -21,3 +21,5 @@
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
+
+int shell_io(char *args, void *context) { return 0; }

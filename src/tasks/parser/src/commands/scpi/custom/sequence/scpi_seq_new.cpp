@@ -1,5 +1,5 @@
 /**
- * @file    shell_prog_read.cpp
+ * @file    scpi_seq_run.cpp
  * @author  lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
@@ -13,7 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 // Header
-#include "commands/parser_shell.h"
+#include "commands/parser_scpi.h"
 
 // STD
 #include <cstdint>
@@ -21,3 +21,5 @@
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
+
+int scpi_seq_new(char *args, void *context) { return 0; }
