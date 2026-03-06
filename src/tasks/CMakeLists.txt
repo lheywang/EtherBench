@@ -17,6 +17,7 @@ add_subdirectory(muxer)
 add_subdirectory(parser)
 add_subdirectory(programmer)
 add_subdirectory(sequences)
+add_subdirectory(shell)
 add_subdirectory(usb)
 
 # Creating an higher level library (to prevent from the user to link against too much libs)
@@ -33,5 +34,6 @@ target_link_libraries(TASKS INTERFACE
     PARSER
 	PROGRAMMER
     SEQUENCES
+    SHELL
 	USB
 )

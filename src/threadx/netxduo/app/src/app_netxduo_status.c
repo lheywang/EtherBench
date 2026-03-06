@@ -22,6 +22,10 @@
 #include "logger.h"
 #include "nx_api.h"
 
+extern void telnet_push_data(const uint8_t *data, const uint32_t len);
+extern void telnet_connect(NX_TELNET_SERVER *server_ptr, UINT logical_connection);
+extern void telnet_disconnect();
+
 // ======================================================================
 //                              VARIABLES
 // ======================================================================
@@ -36,14 +40,8 @@ extern NX_PACKET_POOL pool;
 VOID telnet_new_connection(NX_TELNET_SERVER *server_ptr, UINT logical_connection) {
     NX_PACKET *response_packet;
 
-    // On alloue un paquet pour envoyer le message de bienvenue
-    nx_packet_allocate(
-        &pool, // Votre Packet Pool global
-        &response_packet,
-        NX_TCP_PACKET,
-        NX_NO_WAIT);
-
-    // On écrit le prompt
+    // Create a welcome packet.
+    nx_packet_allocate(&pool, &response_packet, NX_TCP_PACKET, NX_NO_WAIT);
     nx_packet_data_append(
         response_packet,
         "Welcome to EtherBench CLI!\r\nEtherBench> ",
@@ -51,36 +49,39 @@ VOID telnet_new_connection(NX_TELNET_SERVER *server_ptr, UINT logical_connection
         &pool,
         NX_NO_WAIT);
 
-    // On envoie le paquet au client
+    // Send the packet to the client.
     nx_telnet_server_packet_send(
         server_ptr, logical_connection, response_packet, NX_WAIT_FOREVER);
+
+    // Connect the stream handle
+    telnet_connect(server_ptr, logical_connection);
+
+    return;
 }
 
 void telnet_data_in(
     NX_TELNET_SERVER *server_ptr, UINT logical_connection, NX_PACKET *packet_ptr) {
-    /* * 1. Astuce Zero-Copy : on ajoute le '\0' terminal.
-     */
+
     packet_ptr->nx_packet_append_ptr[0] = '\0';
 
     char *cmd_string = (char *)packet_ptr->nx_packet_prepend_ptr;
     LOG("Command received: %s", cmd_string);
 
-    /* * 2. On envoie cmd_string à execute_scpi_string() ou au parseur gperf !
-     * ...
-     */
+    // Add the data to the parser.
+    telnet_push_data(
+        (uint8_t *)packet_ptr->nx_packet_prepend_ptr,
+        (uint32_t)packet_ptr->nx_packet_length);
 
-    /*
-     * 3. On libère TOUJOURS le paquet reçu pour ne pas vider le pool.
-     */
     nx_packet_release(packet_ptr);
 
-    /*
-     * 4. (Optionnel) On renvoie le prompt "EtherBench> " pour la ligne suivante
-     * via un nx_telnet_server_packet_send() comme dans la connexion.
-     */
+    return;
 }
 
 void telnet_close_connection(NX_TELNET_SERVER *server_ptr, UINT logical_connection) {
     LOG("Telnet client disconnected.");
-    // Nettoyage si nécessaire (arrêt d'une séquence de test en cours, etc.)
+
+    // Close the stream handle
+    telnet_disconnect();
+
+    return;
 }

@@ -31,6 +31,11 @@
 // ThreadX
 #include "tx_handler.h"
 
+// Callbacks from the shell interface to the parser.
+extern void usb_push_data(const uint8_t *data, const uint32_t len);
+extern void usb_connect(UX_SLAVE_CLASS_CDC_ACM *cdc_instance);
+extern void usb_disconnect();
+
 // ======================================================================
 //                              VARIABLES
 // ======================================================================
@@ -98,22 +103,32 @@ UINT USBD_ChangeFunction(ULONG Device_State) {
  */
 VOID USBX_TerminalDisable(VOID *cdc_instance) {
 
+    // Set some flags
     usbx_terminal = (UX_SLAVE_CLASS_CDC_ACM *)cdc_instance;
     tx_event_flags_set(&usbx_app_flags, ~USBX_STATUS_CDC_TERMINAL_CONNECTED, TX_AND);
+
+    // Call the disconnection function.
+    usb_disconnect();
+
     LOG("USBX Disabled terminal");
     return;
 }
 
 VOID USBX_TerminalEnable(VOID *cdc_instance) {
 
+    // Set some flags
     usbx_terminal = (UX_SLAVE_CLASS_CDC_ACM *)cdc_instance;
     tx_event_flags_set(&usbx_app_flags, USBX_STATUS_CDC_TERMINAL_CONNECTED, TX_OR);
+
+    // Call the connection function.
+    usb_connect(usbx_terminal);
     LOG("USBX Enabled terminal");
     return;
 }
 
 VOID USBX_TerminalChange(VOID *cdc_instance) {
 
+    // Nothing to be done here !
     tx_event_flags_set(&usbx_app_flags, USBX_STATUS_CDC_TERMINAL_CHANGE_REQUIRED, TX_OR);
     LOG("USBX Changed terminal");
     return;
