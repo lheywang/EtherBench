@@ -2,7 +2,7 @@
 # IEEE 488.2 Minimal Command Set
 # ====================================
 ["*cls"]
-handler_scpi_query = "scpi_cls"
+handler_scpi_set = "scpi_cls"
 
 ["*ese"]
 handler_scpi_set = "scpi_ese"

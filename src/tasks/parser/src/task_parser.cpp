@@ -37,9 +37,6 @@ void parser_task(ULONG arg) {
     int args = 2;
     int ctx = 2;
 
-    /*
-     * We're good !
-     */
     const struct scpi_command_entry *cmd = find_scpi_command("*cls", 4);
     int val = cmd->handler((char *)&args, (void *)&ctx);
     LOG("Got command : %d", val);
