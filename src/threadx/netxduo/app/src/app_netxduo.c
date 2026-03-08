@@ -55,12 +55,17 @@ static NX_DHCP dhcp;
 
 static NX_TELNET_SERVER telnet_srv;
 
-static __aligned(8) ULONG ip_thread_stack[NX_IP_TASK_SIZE];
-static __aligned(8) ULONG arp_cache[NX_ARP_CACHE / sizeof(ULONG)];
-
-static __aligned(8) uint8_t packet_pool[PACKET_POOL_SIZE];
-static __aligned(8) uint8_t net_stack[NX_MAIN_TASK_STACK];
-static __aligned(8) uint8_t telnet_stack[NX_TELNET_STACK_SIZE];
+/*
+ * Just a note from the developper : without aligning the memory to 32 bytes
+ * boundaries, the DHCP will fail more than pass, which is not really cool.
+ *
+ * This is due to the cache invalidation that silently fail if not properly aligned !
+ */
+static __aligned(32) ULONG ip_thread_stack[NX_IP_TASK_SIZE];
+static __aligned(32) ULONG arp_cache[NX_ARP_CACHE / sizeof(ULONG)];
+static __aligned(32) uint8_t packet_pool[PACKET_POOL_SIZE];
+static __aligned(32) uint8_t net_stack[NX_MAIN_TASK_STACK];
+static __aligned(32) uint8_t telnet_stack[NX_TELNET_STACK_SIZE];
 
 // ======================================================================
 //                              FUNCTIONS

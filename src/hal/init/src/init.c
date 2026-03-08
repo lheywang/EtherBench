@@ -30,7 +30,6 @@
 #include "usart.h"
 #include "usb.h"
 
-
 // STD
 #include <stdint.h>
 
