@@ -237,7 +237,7 @@ void app_network_thread_entry(ULONG arg) {
     /*
      * Infinite loop, to let the task active
      */
-    for (;;) {
-        tx_thread_sleep(1000);
-    }
+    tx_thread_suspend(tx_thread_identify());
+
+    return;
 }

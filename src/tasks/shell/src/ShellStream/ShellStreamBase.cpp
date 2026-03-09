@@ -56,98 +56,61 @@ void ShellStreamBase::transmit(const char *str) {
     return;
 }
 
-void ShellStreamBase::process(const char c) {
+void ShellStreamBase::process(const char *c, const size_t len) {
 
-    // First, check if we're out of limits
-    if (this->current_len == (size_t)(SHELL_LINE_LENGTH - 1))
+    if (c == nullptr || len == 0) {
         return;
+    }
 
-    // First, copy the caracter into the incomming buffer.
-    this->line_buffer[this->current_len] = c;
+    for (int k = 0; k < (int)len; k += 1) {
+        char ch = c[k];
 
-    // Check for the end of line
-    int eol_len = strlen(eol);
-    if (strcmp(&this->line_buffer[this->current_len - eol_len], this->eol) != 0) {
+        if (ch == '\r' || ch == '\n') {
+            if (this->current_len == 0 && ch == '\n') {
+                continue;
+            }
 
-        // Perhaps the user did wanted to supress a char ?
-        if (c == '\b' || c == 0x7F) {
             this->line_buffer[this->current_len] = '\0';
-            this->line_buffer -= 1;
 
             if (this->echo_enabled) {
-                this->transmit('\b');
+                this->transmit("\r\n");
             }
 
-            return;
+            this->build_request();
+            
+            this->current_len = 0; 
+            continue;
         }
 
-        // Or, did he sent a normal character ?
-        if (c >= 32 && c <= 126) {
-            if (this->current_len < (size_t)(SHELL_LINE_LENGTH - 1)) {
-                this->current_len += 1;
-
-                if (this->echo_enabled) {
-                    this->transmit(c);
-                }
-            }
-
-            return;
-        }
-
-        return;
-    }
-
-    /*
-     * Build here the request to the parser input ! (As we detected an end of line !)
-     */
-    this->build_request();
-
-    return;
-}
-void ShellStreamBase::process(const char *c, const size_t len) {
-    // First, check if we're out of limits
-    if (this->current_len == (size_t)(SHELL_LINE_LENGTH - 1))
-        return;
-
-    // Check if the user did send an end of line
-    // Check for the end of line
-    int eol_len = strlen(eol);
-    if (strcmp(&c[len - eol_len], this->eol) != 0) {
-
-        for (int k = 0; k < (int)len; k += 1) {
-            // Perhaps the user did wanted to supress a char ?
-            if (c[k] == '\b' || c[k] == 0x7F) {
+        if (ch == '\b' || ch == 0x7F) {
+            if (this->current_len > 0) {
+                this->current_len -= 1;
                 this->line_buffer[this->current_len] = '\0';
-                this->line_buffer -= 1;
 
                 if (this->echo_enabled) {
-                    this->transmit('\b');
+                    this->transmit("\b \b");
                 }
-
-                return;
             }
-
-            // Or, did he sent a normal character ?
-            if (c[k] >= 32 && c[k] <= 126) {
-                if (this->current_len < (size_t)(SHELL_LINE_LENGTH - 1)) {
-                    this->current_len += 1;
-
-                    if (this->echo_enabled) {
-                        this->transmit(c);
-                    }
-                }
-
-                return;
-            }
+            continue;
         }
 
-        return;
-    }
+    if (ch >= 32 && ch <= 126) {
+        // Protection contre le buffer overflow
+        if (this->current_len < (size_t)(SHELL_LINE_LENGTH - 1)) {
+            
+            // CORRECTION : On stocke bien le caractère en RAM !
+            this->line_buffer[this->current_len] = ch;
+            this->current_len += 1;
 
-    /*
-     * Build here the request to the parser input ! (As we detected an end of line !)
-     */
-    this->build_request();
+            if (this->echo_enabled) {
+                // On n'echo QUE ce caractère, pas tout le buffer 'c'
+                char echo_char[2] = {ch, '\0'};
+                this->transmit(echo_char);
+            }
+        }
+        continue;
+        }
+    }
 }
 
 void ShellStreamBase::process(const char *str) {

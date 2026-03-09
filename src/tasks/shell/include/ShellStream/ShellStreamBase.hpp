@@ -62,7 +62,6 @@ class ShellStreamBase {
     /*
      * Reception API
      */
-    void process(const char c);
     void process(const char *c, const size_t len);
     void process(const char *str);
 };
