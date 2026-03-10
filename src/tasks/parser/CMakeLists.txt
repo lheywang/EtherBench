@@ -246,7 +246,7 @@ add_compile_options(-Wno-missing-field-initializers -Wno-unused-parameter)
 # Creating the library
 add_library(PARSER STATIC ${SOURCES})
 
-target_link_libraries(PARSER THREADX_OS LOGGER)
+target_link_libraries(PARSER THREADX_OS LOGGER SHELL)
 
 # Adding the include folder
 target_include_directories(PARSER PUBLIC 

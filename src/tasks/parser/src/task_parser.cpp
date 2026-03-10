@@ -11,6 +11,7 @@
  *
  */
 
+#define LOG_MODULE "PARSER"
 // ======================================================================
 //                              INCLUDES
 // ======================================================================
@@ -18,7 +19,9 @@
 #include "task_parser.h"
 
 // Local libraries
+#include "ShellStream/ShellStreambase.hpp"
 #include "commands/gperf.h"
+#include "logger.h"
 
 // RTOS
 #include "tx_api.h"
@@ -26,6 +29,8 @@
 // ======================================================================
 //                              VARIABLES
 // ======================================================================
+extern TX_BLOCK_POOL parser_pool;
+extern TX_QUEUE parser_input;
 
 // ======================================================================
 //                              FUNCTIONS
@@ -34,18 +39,28 @@
 void parser_task(ULONG arg) {
     TX_PARAMETER_NOT_USED(arg);
 
-    int args = 2;
-    int ctx = 2;
+    parserInput_t *cmd = nullptr;
+    char response_buffer[SHELL_LINE_LENGTH];
 
-    const struct scpi_command_entry *cmd = find_scpi_command("*cls", 4);
-    int val = cmd->handler((char *)&args, (void *)&ctx);
-    LOG("Got command : %d", val);
+    while (1) {
+        // Fetch the next message on the queue
+        tx_queue_receive(&parser_input, &cmd, TX_WAIT_FOREVER);
+        if (cmd == nullptr)
+            continue;
 
-    const struct scpi_command_entry *cmd2 = find_scpi_command("*ese?", 5);
-    val = cmd2->handler((char *)&args, (void *)&ctx);
-    LOG("Got command : %d", val);
+        // Parse it (not for now)
+        LOG("Got command : %s", cmd->command);
 
-    for (;;) {
-        tx_thread_sleep(100);
+        // Respond to it
+        if (cmd->reply_stream == nullptr)
+            continue;
+
+        // TODO : Parse the command now !
+
+        ShellStreamBase *stream = static_cast<ShellStreamBase *>(cmd->reply_stream);
+        stream->transmit("Responded !");
+
+        // Free the block we used
+        tx_block_release(cmd);
     }
 }

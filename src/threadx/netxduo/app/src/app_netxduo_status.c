@@ -38,23 +38,10 @@ extern NX_PACKET_POOL pool;
 // ======================================================================
 
 VOID telnet_new_connection(NX_TELNET_SERVER *server_ptr, UINT logical_connection) {
-    NX_PACKET *response_packet;
-
-    // Create a welcome packet.
-    nx_packet_allocate(&pool, &response_packet, NX_TCP_PACKET, NX_NO_WAIT);
-    nx_packet_data_append(
-        response_packet,
-        "Welcome to EtherBench CLI!\r\nEtherBench> ",
-        38,
-        &pool,
-        NX_NO_WAIT);
-
-    // Send the packet to the client.
-    nx_telnet_server_packet_send(
-        server_ptr, logical_connection, response_packet, NX_WAIT_FOREVER);
 
     // Connect the stream handle
     telnet_connect(server_ptr, logical_connection);
+    LOG("New client connected to the telnet server : %d", logical_connection);
 
     return;
 }
@@ -63,9 +50,6 @@ void telnet_data_in(
     NX_TELNET_SERVER *server_ptr, UINT logical_connection, NX_PACKET *packet_ptr) {
 
     packet_ptr->nx_packet_append_ptr[0] = '\0';
-
-    char *cmd_string = (char *)packet_ptr->nx_packet_prepend_ptr;
-    LOG("Command received: %s", cmd_string);
 
     // Add the data to the parser.
     telnet_push_data(
@@ -82,6 +66,7 @@ void telnet_close_connection(NX_TELNET_SERVER *server_ptr, UINT logical_connecti
 
     // Close the stream handle
     telnet_disconnect();
+    LOG("Client disconnected from the telnet server : %d", logical_connection);
 
     return;
 }

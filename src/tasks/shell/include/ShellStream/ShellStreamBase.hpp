@@ -17,10 +17,8 @@
 // STD
 #include <cstddef>
 
-// ======================================================================
-//                              DEFINES
-// ======================================================================
-#define SHELL_LINE_LENGTH 128
+// Config
+#include "ShellStreamConfig.h"
 
 // ======================================================================
 //                              CLASS
@@ -34,6 +32,7 @@ class ShellStreamBase {
     const char *eol;
     bool echo_enabled;
 
+    // Build a request and send it to the parser.
     void build_request();
 
   protected:

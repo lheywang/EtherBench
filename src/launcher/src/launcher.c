@@ -26,9 +26,11 @@
 #include "tx_api.h"
 
 // Tasks
+#include "ShellStream/ShellStreamConfig.h"
 #include "logger.h"
 #include "task_leds.h"
 #include "task_parser.h"
+
 
 // STD
 #include <stdint.h>
@@ -54,6 +56,11 @@ static __aligned(8) uint8_t logger_stack[LOGGER_STACK_SIZE];
 TX_THREAD parser_thread;
 static __aligned(8) uint8_t parser_stack[PARSER_STACK_SIZE];
 
+TX_BLOCK_POOL parser_pool;
+TX_QUEUE parser_input;
+static __aligned(8) uint8_t parser_pool_mem[SHELL_POOL_TOTAL_SIZE];
+static __aligned(8) ULONG parser_fifo_mem[SHELL_COMMAND_FIFO_DEPTH];
+
 /*
  * Semaphore
  */
@@ -71,6 +78,22 @@ uint32_t launcher(void) {
      */
     tx_semaphore_create(&dma_trigger, "dma trigger", 0);
     tx_semaphore_create(&dma_tx_done, "dma done", 0);
+
+    /*
+     * Create memory pool
+     */
+    tx_block_pool_create(
+        &parser_pool,
+        "ParserMem",
+        SHELL_STRUCT_SIZE,
+        &parser_pool_mem,
+        sizeof(parser_pool_mem));
+    tx_queue_create(
+        &parser_input,
+        "Parser command Queue",
+        TX_1_ULONG,
+        &parser_fifo_mem,
+        sizeof(parser_fifo_mem));
 
     /*
      * Creating the deferred logging task.

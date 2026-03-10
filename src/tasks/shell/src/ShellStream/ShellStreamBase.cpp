@@ -15,9 +15,21 @@
 // Header
 #include "ShellStream/ShellStreamBase.hpp"
 
+// Local libraries
+#include "task_shell.h"
+
 // STD
 #include <cstdint>
 #include <cstring>
+
+// RTOS
+#include "tx_api.h"
+
+// ======================================================================
+//                              VARIABLES
+// ======================================================================
+extern TX_BLOCK_POOL parser_pool;
+extern TX_QUEUE parser_input;
 
 // ======================================================================
 //                            CLASS IMPL
@@ -72,13 +84,16 @@ void ShellStreamBase::process(const char *c, const size_t len) {
 
             this->line_buffer[this->current_len] = '\0';
 
-            if (this->echo_enabled) {
-                this->transmit("\r\n");
-            }
+            // In case of newline, we don't transfer it. That's already handled by the
+            // ShellNewLine !
 
+            // Build the request
             this->build_request();
-            
-            this->current_len = 0; 
+            this->current_len = 0;
+
+            // Directly show the user that we're ready for the next one
+            this->transmit(ShellNewLine);
+
             continue;
         }
 
@@ -94,21 +109,19 @@ void ShellStreamBase::process(const char *c, const size_t len) {
             continue;
         }
 
-    if (ch >= 32 && ch <= 126) {
-        // Protection contre le buffer overflow
-        if (this->current_len < (size_t)(SHELL_LINE_LENGTH - 1)) {
-            
-            // CORRECTION : On stocke bien le caractère en RAM !
-            this->line_buffer[this->current_len] = ch;
-            this->current_len += 1;
+        if (ch >= 32 && ch <= 126) {
 
-            if (this->echo_enabled) {
-                // On n'echo QUE ce caractère, pas tout le buffer 'c'
-                char echo_char[2] = {ch, '\0'};
-                this->transmit(echo_char);
+            if (this->current_len < (size_t)(SHELL_LINE_LENGTH - 1)) {
+
+                this->line_buffer[this->current_len] = ch;
+                this->current_len += 1;
+
+                if (this->echo_enabled) {
+                    char echo_char[2] = {ch, '\0'};
+                    this->transmit(echo_char);
+                }
             }
-        }
-        continue;
+            continue;
         }
     }
 }
@@ -119,4 +132,52 @@ void ShellStreamBase::process(const char *str) {
     return;
 }
 
-void ShellStreamBase::build_request() { return; }
+void ShellStreamBase::build_request() {
+
+    // Return if we just received an empty enter.
+    if (this->current_len == 0) {
+        return;
+    }
+
+    // Create our struc
+    struct parserInput_t *response = nullptr;
+
+    /*
+     * First, get some memory to fill
+     */
+    UINT alloc_status = tx_block_allocate(&parser_pool, (VOID **)&response, TX_NO_WAIT);
+
+    if (alloc_status != TX_SUCCESS) {
+        if (this->echo_enabled) {
+            this->transmit(
+                "Could not transmit the command. Could not fetch enough memory.");
+        }
+        return;
+    }
+
+    /*
+     * Build the response
+     */
+    response->reply_stream = this;
+    strncpy(response->command, this->line_buffer, SHELL_LINE_LENGTH);
+
+    // Ensure we won't go too far.
+    response->command[SHELL_LINE_LENGTH - 1] = '\0';
+
+    /*
+     * Send this pointer to the queue
+     */
+    UINT send_status = tx_queue_send(&parser_input, &response, TX_NO_WAIT);
+    if (send_status != TX_SUCCESS) {
+        // Free the memory we allocated
+        tx_block_release(response);
+
+        // Eventually send a message
+        if (this->echo_enabled) {
+            this->transmit("Could not send the command to the parser. The FIFO is full.");
+        }
+        return;
+    }
+
+    return;
+}

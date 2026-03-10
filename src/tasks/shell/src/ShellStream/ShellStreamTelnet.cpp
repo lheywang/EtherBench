@@ -15,6 +15,9 @@
 // Header
 #include "ShellStream/ShellStreamTelnet.hpp"
 
+// Local Libraries
+#include "task_shell.h"
+
 // RTOS
 #include "nxd_telnet_server.h"
 #include "tx_api.h"
@@ -57,8 +60,14 @@ void ShellStreamTelnet::hw_transmit(const char *data, size_t length) {
 }
 
 void ShellStreamTelnet::connect(NX_TELNET_SERVER *instance, UINT logical_connection) {
+
+    // Update the server settings
     this->instance = instance;
     this->logical_connection = logical_connection;
+
+    // Add the welcome message
+    this->transmit(ShellWelcome);
+    this->transmit(ShellNewLine);
     return;
 }
 

@@ -7,9 +7,7 @@
 #############################################################################################################################
 
 # Set sources
-set(SOURCES 
-	src/task_shell.cpp
-)
+set(SOURCES "")
 
 list(APPEND SOURCES
     src/ShellStream/ShellStreamBase.cpp

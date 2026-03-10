@@ -15,6 +15,9 @@
 // Header
 #include "ShellStream/ShellStreamCdc.hpp"
 
+// Local Libraries
+#include "task_shell.h"
+
 // RTOS
 #include "ux_api.h"
 #include "ux_device_class_cdc_acm.h"
@@ -33,7 +36,12 @@ void ShellStreamCdc::hw_transmit(const char *data, size_t length) {
 }
 
 void ShellStreamCdc::connect(UX_SLAVE_CLASS_CDC_ACM *cdc) {
+    // Update class settings
     this->cdc_instance = cdc;
+
+    // Add the welcome message
+    this->transmit(ShellWelcome);
+    this->transmit(ShellNewLine);
     return;
 }
 
