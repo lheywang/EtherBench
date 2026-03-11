@@ -1,42 +1,27 @@
-/* USER CODE BEGIN Header */
 /**
- ******************************************************************************
  * @file    spi.c
- * @brief   This file provides code for the configuration
- *          of the SPI instances.
- ******************************************************************************
- * @attention
+ * @author  lheywang (leonard.heywang@proton.me)
+ * @brief   SPI init code
+ * @version 0.1
+ * @date    2026-03-11
  *
- * Copyright (c) 2026 STMicroelectronics.
- * All rights reserved.
+ * @copyright Copyright (c) 2026
  *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
+
+// ======================================================================
+//                              INCLUDE
+// ======================================================================
 #include "spi.h"
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi3;
 
-/* SPI1 init function */
+// ======================================================================
+//                              FUNCTIONS
+// ======================================================================
 void MX_SPI1_Init(void) {
 
-    /* USER CODE BEGIN SPI1_Init 0 */
-
-    /* USER CODE END SPI1_Init 0 */
-
-    /* USER CODE BEGIN SPI1_Init 1 */
-
-    /* USER CODE END SPI1_Init 1 */
     hspi1.Instance = SPI1;
     hspi1.Init.Mode = SPI_MODE_SLAVE;
     hspi1.Init.Direction = SPI_DIRECTION_1LINE;
@@ -61,20 +46,11 @@ void MX_SPI1_Init(void) {
     if (HAL_SPI_Init(&hspi1) != HAL_OK) {
         Error_Handler();
     }
-    /* USER CODE BEGIN SPI1_Init 2 */
-
-    /* USER CODE END SPI1_Init 2 */
+    return;
 }
-/* SPI3 init function */
+
 void MX_SPI3_Init(void) {
 
-    /* USER CODE BEGIN SPI3_Init 0 */
-
-    /* USER CODE END SPI3_Init 0 */
-
-    /* USER CODE BEGIN SPI3_Init 1 */
-
-    /* USER CODE END SPI3_Init 1 */
     hspi3.Instance = SPI3;
     hspi3.Init.Mode = SPI_MODE_MASTER;
     hspi3.Init.Direction = SPI_DIRECTION_2LINES;
@@ -100,18 +76,14 @@ void MX_SPI3_Init(void) {
     if (HAL_SPI_Init(&hspi3) != HAL_OK) {
         Error_Handler();
     }
-    /* USER CODE BEGIN SPI3_Init 2 */
-
-    /* USER CODE END SPI3_Init 2 */
+    return;
 }
 
 void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle) {
 
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     if (spiHandle->Instance == SPI1) {
-        /* USER CODE BEGIN SPI1_MspInit 0 */
 
-        /* USER CODE END SPI1_MspInit 0 */
         /* SPI1 clock enable */
         __HAL_RCC_SPI1_CLK_ENABLE();
 
@@ -135,13 +107,8 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle) {
         GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
         HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-        /* USER CODE BEGIN SPI1_MspInit 1 */
-
-        /* USER CODE END SPI1_MspInit 1 */
     } else if (spiHandle->Instance == SPI3) {
-        /* USER CODE BEGIN SPI3_MspInit 0 */
 
-        /* USER CODE END SPI3_MspInit 0 */
         /* SPI3 clock enable */
         __HAL_RCC_SPI3_CLK_ENABLE();
 
@@ -164,19 +131,14 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle) {
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
         GPIO_InitStruct.Alternate = GPIO_AF7_SPI3;
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-        /* USER CODE BEGIN SPI3_MspInit 1 */
-
-        /* USER CODE END SPI3_MspInit 1 */
     }
+    return;
 }
 
 void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle) {
 
     if (spiHandle->Instance == SPI1) {
-        /* USER CODE BEGIN SPI1_MspDeInit 0 */
 
-        /* USER CODE END SPI1_MspDeInit 0 */
         /* Peripheral clock disable */
         __HAL_RCC_SPI1_CLK_DISABLE();
 
@@ -188,13 +150,8 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle) {
 
         HAL_GPIO_DeInit(GPIOG, GPIO_PIN_9);
 
-        /* USER CODE BEGIN SPI1_MspDeInit 1 */
-
-        /* USER CODE END SPI1_MspDeInit 1 */
     } else if (spiHandle->Instance == SPI3) {
-        /* USER CODE BEGIN SPI3_MspDeInit 0 */
 
-        /* USER CODE END SPI3_MspDeInit 0 */
         /* Peripheral clock disable */
         __HAL_RCC_SPI3_CLK_DISABLE();
 
@@ -204,13 +161,6 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle) {
         PB5     ------> SPI3_MOSI
         */
         HAL_GPIO_DeInit(GPIOB, GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5);
-
-        /* USER CODE BEGIN SPI3_MspDeInit 1 */
-
-        /* USER CODE END SPI3_MspDeInit 1 */
     }
+    return;
 }
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */

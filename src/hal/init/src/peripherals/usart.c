@@ -1,44 +1,29 @@
-/* USER CODE BEGIN Header */
 /**
- ******************************************************************************
  * @file    usart.c
- * @brief   This file provides code for the configuration
- *          of the USART instances.
- ******************************************************************************
- * @attention
+ * @author  lheywang (leonard.heywang@proton.me)
+ * @brief   Usart init code
+ * @version 0.1
+ * @date    2026-03-11
  *
- * Copyright (c) 2026 STMicroelectronics.
- * All rights reserved.
+ * @copyright Copyright (c) 2026
  *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
+
+// ======================================================================
+//                              INCLUDE
+// ======================================================================
 #include "usart.h"
 #include "main.h"
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 UART_HandleTypeDef huart3;
 extern DMA_HandleTypeDef hdma_usart3_tx;
 
-/* USART3 init function */
+// ======================================================================
+//                              FUNCTIONS
+// ======================================================================
 
 void MX_USART3_UART_Init(void) {
 
-    /* USER CODE BEGIN USART3_Init 0 */
-
-    /* USER CODE END USART3_Init 0 */
-
-    /* USER CODE BEGIN USART3_Init 1 */
-
-    /* USER CODE END USART3_Init 1 */
     huart3.Instance = USART3;
     huart3.Init.BaudRate = 115200;
     huart3.Init.WordLength = UART_WORDLENGTH_8B;
@@ -80,7 +65,8 @@ void MX_USART3_UART_Init(void) {
     hdma_usart3_tx.Init.SrcBurstLength = 1;
     hdma_usart3_tx.Init.DestBurstLength = 1;
 
-    hdma_usart3_tx.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT0;
+    hdma_usart3_tx.Init.TransferAllocatedPort =
+        DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT0;
     hdma_usart3_tx.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
 
     hdma_usart3_tx.Init.Mode = DMA_NORMAL;
@@ -95,11 +81,9 @@ void MX_USART3_UART_Init(void) {
         Error_Handler();
     }
 
-    /* USER CODE BEGIN USART3_Init 2 */
     HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(USART3_IRQn);
-
-    /* USER CODE END USART3_Init 2 */
+    return;
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle) {
@@ -107,9 +91,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle) {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
     if (uartHandle->Instance == USART3) {
-        /* USER CODE BEGIN USART3_MspInit 0 */
-
-        /* USER CODE END USART3_MspInit 0 */
 
         /** Initializes the peripherals clock
          */
@@ -133,19 +114,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle) {
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
         GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
         HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-        /* USER CODE BEGIN USART3_MspInit 1 */
-
-        /* USER CODE END USART3_MspInit 1 */
     }
+    return;
 }
 
 void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle) {
 
     if (uartHandle->Instance == USART3) {
-        /* USER CODE BEGIN USART3_MspDeInit 0 */
 
-        /* USER CODE END USART3_MspDeInit 0 */
         /* Peripheral clock disable */
         __HAL_RCC_USART3_CLK_DISABLE();
 
@@ -154,13 +130,6 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle) {
         PD9     ------> USART3_RX
         */
         HAL_GPIO_DeInit(GPIOD, GPIO_PIN_8 | GPIO_PIN_9);
-
-        /* USER CODE BEGIN USART3_MspDeInit 1 */
-
-        /* USER CODE END USART3_MspDeInit 1 */
     }
+    return;
 }
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */

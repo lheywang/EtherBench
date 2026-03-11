@@ -1,43 +1,22 @@
-/* USER CODE BEGIN Header */
 /**
- ******************************************************************************
  * @file    gpio.c
- * @brief   This file provides code for the configuration
- *          of all used GPIO pins.
- ******************************************************************************
- * @attention
+ * @author  lheywang (leonard.heywang@proton.me)
+ * @brief   GPIO init code
+ * @version 0.1
+ * @date    2026-03-11
  *
- * Copyright (c) 2026 STMicroelectronics.
- * All rights reserved.
+ * @copyright Copyright (c) 2026
  *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
  */
-/* USER CODE END Header */
 
-/* Includes ------------------------------------------------------------------*/
+// ======================================================================
+//                              INCLUDE
+// ======================================================================
 #include "gpio.h"
 
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
-
-/*----------------------------------------------------------------------------*/
-/* Configure GPIO                                                             */
-/*----------------------------------------------------------------------------*/
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
-
-/** Configure pins
-     PH0-OSC_IN(PH0)   ------> RCC_OSC_IN
-     PA13(JTMS/SWDIO)   ------> DEBUG_JTMS-SWDIO
-     PA14(JTCK/SWCLK)   ------> DEBUG_JTCK-SWCLK
-     PB3(JTDO/TRACESWO)   ------> DEBUG_JTDO-SWO
-*/
+// ======================================================================
+//                              FUNCTIONS
+// ======================================================================
 void MX_GPIO_Init(void) {
 
     GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -86,8 +65,6 @@ void MX_GPIO_Init(void) {
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(LED_RED_GPIO_Port, &GPIO_InitStruct);
+
+    return;
 }
-
-/* USER CODE BEGIN 2 */
-
-/* USER CODE END 2 */

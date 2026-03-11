@@ -1,41 +1,27 @@
-/* USER CODE BEGIN Header */
 /**
- ******************************************************************************
  * @file    octospi.c
- * @brief   This file provides code for the configuration
- *          of the OCTOSPI instances.
- ******************************************************************************
- * @attention
+ * @author  lheywang (leonard.heywang@proton.me)
+ * @brief   OctoSPI init
+ * @version 0.1
+ * @date    2026-03-11
  *
- * Copyright (c) 2026 STMicroelectronics.
- * All rights reserved.
+ * @copyright Copyright (c) 2026
  *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
+
+// ======================================================================
+//                              INCLUDE
+// ======================================================================
 #include "octospi.h"
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 XSPI_HandleTypeDef hospi1;
 
-/* OCTOSPI1 init function */
+// ======================================================================
+//                              FUNCTIONS
+// ======================================================================
+
 void MX_OCTOSPI1_Init(void) {
 
-    /* USER CODE BEGIN OCTOSPI1_Init 0 */
-
-    /* USER CODE END OCTOSPI1_Init 0 */
-
-    /* USER CODE BEGIN OCTOSPI1_Init 1 */
-
-    /* USER CODE END OCTOSPI1_Init 1 */
     hospi1.Instance = OCTOSPI1;
     hospi1.Init.FifoThresholdByte = 1;
     hospi1.Init.MemoryMode = HAL_XSPI_SINGLE_MEM;
@@ -54,9 +40,7 @@ void MX_OCTOSPI1_Init(void) {
     if (HAL_XSPI_Init(&hospi1) != HAL_OK) {
         Error_Handler();
     }
-    /* USER CODE BEGIN OCTOSPI1_Init 2 */
-
-    /* USER CODE END OCTOSPI1_Init 2 */
+    return;
 }
 
 void HAL_XSPI_MspInit(XSPI_HandleTypeDef *xspiHandle) {
@@ -64,9 +48,6 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef *xspiHandle) {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
     if (xspiHandle->Instance == OCTOSPI1) {
-        /* USER CODE BEGIN OCTOSPI1_MspInit 0 */
-
-        /* USER CODE END OCTOSPI1_MspInit 0 */
 
         /** Initializes the peripherals clock
          */
@@ -116,19 +97,14 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef *xspiHandle) {
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
         GPIO_InitStruct.Alternate = GPIO_AF6_OCTOSPI1;
         HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
-        /* USER CODE BEGIN OCTOSPI1_MspInit 1 */
-
-        /* USER CODE END OCTOSPI1_MspInit 1 */
     }
+    return;
 }
 
 void HAL_XSPI_MspDeInit(XSPI_HandleTypeDef *xspiHandle) {
 
     if (xspiHandle->Instance == OCTOSPI1) {
-        /* USER CODE BEGIN OCTOSPI1_MspDeInit 0 */
 
-        /* USER CODE END OCTOSPI1_MspDeInit 0 */
         /* Peripheral clock disable */
         __HAL_RCC_OSPI1_CLK_DISABLE();
 
@@ -143,13 +119,6 @@ void HAL_XSPI_MspDeInit(XSPI_HandleTypeDef *xspiHandle) {
         HAL_GPIO_DeInit(GPIOE, GPIO_PIN_2 | GPIO_PIN_11);
 
         HAL_GPIO_DeInit(GPIOF, GPIO_PIN_6 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10);
-
-        /* USER CODE BEGIN OCTOSPI1_MspDeInit 1 */
-
-        /* USER CODE END OCTOSPI1_MspDeInit 1 */
     }
+    return;
 }
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */

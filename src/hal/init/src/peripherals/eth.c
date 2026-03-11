@@ -1,47 +1,34 @@
-/* USER CODE BEGIN Header */
 /**
- ******************************************************************************
  * @file    eth.c
- * @brief   This file provides code for the configuration
- *          of the ETH instances.
- ******************************************************************************
- * @attention
+ * @author  lheywang (leonard.heywang@proton.me)
+ * @brief   Ethernet init
+ * @version 0.1
+ * @date    2026-03-11
  *
- * Copyright (c) 2026 STMicroelectronics.
- * All rights reserved.
+ * @copyright Copyright (c) 2026
  *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
+
+// ======================================================================
+//                              INCLUDE
+// ======================================================================
 #include "eth.h"
 
 ETH_BufferTypeDef Txbuffer[ETH_TX_DESC_CNT * 2U];
 ETH_DMADescTypeDef DMARxDscrTab[ETH_RX_DESC_CNT]; /* Ethernet Rx DMA Descriptors */
 ETH_DMADescTypeDef DMATxDscrTab[ETH_TX_DESC_CNT]; /* Ethernet Tx DMA Descriptors */
 
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
+// ======================================================================
+//                              FUNCTIONS
+// ======================================================================
 
 ETH_HandleTypeDef heth;
 
 /* ETH init function */
 void MX_ETH_Init(void) {
 
-    /* USER CODE BEGIN ETH_Init 0 */
-
-    /* USER CODE END ETH_Init 0 */
-
     static uint8_t MACAddr[6];
 
-    /* USER CODE BEGIN ETH_Init 1 */
-
-    /* USER CODE END ETH_Init 1 */
     heth.Instance = ETH;
     MACAddr[0] = 0x00;
     MACAddr[1] = 0x80;
@@ -63,18 +50,14 @@ void MX_ETH_Init(void) {
     if (HAL_ETH_Init(&heth) != HAL_OK) {
         Error_Handler();
     }
-    /* USER CODE BEGIN ETH_Init 2 */
-
-    /* USER CODE END ETH_Init 2 */
+    return;
 }
 
 void HAL_ETH_MspInit(ETH_HandleTypeDef *ethHandle) {
 
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     if (ethHandle->Instance == ETH) {
-        /* USER CODE BEGIN ETH_MspInit 0 */
 
-        /* USER CODE END ETH_MspInit 0 */
         /* ETH clock enable */
         __HAL_RCC_ETH_CLK_ENABLE();
         __HAL_RCC_ETHTX_CLK_ENABLE();
@@ -84,6 +67,7 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef *ethHandle) {
         __HAL_RCC_GPIOA_CLK_ENABLE();
         __HAL_RCC_GPIOB_CLK_ENABLE();
         __HAL_RCC_GPIOG_CLK_ENABLE();
+
         /**ETH GPIO Configuration
         PC1     ------> ETH_MDC
         PA1     ------> ETH_REF_CLK
@@ -128,18 +112,14 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef *ethHandle) {
         HAL_NVIC_EnableIRQ(ETH_IRQn);
         HAL_NVIC_SetPriority(ETH_WKUP_IRQn, 0, 0);
         HAL_NVIC_EnableIRQ(ETH_WKUP_IRQn);
-        /* USER CODE BEGIN ETH_MspInit 1 */
-
-        /* USER CODE END ETH_MspInit 1 */
     }
+    return;
 }
 
 void HAL_ETH_MspDeInit(ETH_HandleTypeDef *ethHandle) {
 
     if (ethHandle->Instance == ETH) {
-        /* USER CODE BEGIN ETH_MspDeInit 0 */
 
-        /* USER CODE END ETH_MspDeInit 0 */
         /* Peripheral clock disable */
         __HAL_RCC_ETH_CLK_DISABLE();
         __HAL_RCC_ETHTX_CLK_DISABLE();
@@ -167,12 +147,6 @@ void HAL_ETH_MspDeInit(ETH_HandleTypeDef *ethHandle) {
         /* ETH interrupt Deinit */
         HAL_NVIC_DisableIRQ(ETH_IRQn);
         HAL_NVIC_DisableIRQ(ETH_WKUP_IRQn);
-        /* USER CODE BEGIN ETH_MspDeInit 1 */
-
-        /* USER CODE END ETH_MspDeInit 1 */
     }
+    return;
 }
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */

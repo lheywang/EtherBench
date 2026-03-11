@@ -1,7 +1,7 @@
 /**
- * @file    eth.h
+ * @file    tim.h
  * @author  lheywang (leonard.heywang@proton.me)
- * @brief   Ethernet peripheral init code
+ * @brief   Timer init code
  * @version 0.1
  * @date    2026-03-11
  *
@@ -19,13 +19,17 @@ extern "C" {
 // ======================================================================
 #include "main.h"
 
-extern ETH_HandleTypeDef heth;
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
 
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
 
-void MX_ETH_Init(void);
+void MX_TIM1_Init(void);
+void MX_TIM2_Init(void);
+
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 #ifdef __cplusplus
 }

@@ -1,43 +1,27 @@
-/* USER CODE BEGIN Header */
 /**
- ******************************************************************************
  * @file    adc.c
- * @brief   This file provides code for the configuration
- *          of the ADC instances.
- ******************************************************************************
- * @attention
+ * @author  lheywang (leonard.heywang@proton.me)
+ * @brief   ADC init
+ * @version 0.1
+ * @date    2026-03-11
  *
- * Copyright (c) 2026 STMicroelectronics.
- * All rights reserved.
+ * @copyright Copyright (c) 2026
  *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
+
+// ======================================================================
+//                              INCLUDE
+// ======================================================================
 #include "adc.h"
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 ADC_HandleTypeDef hadc1;
 
-/* ADC1 init function */
+// ======================================================================
+//                              FUNCTIONS
+// ======================================================================
 void MX_ADC1_Init(void) {
 
-    /* USER CODE BEGIN ADC1_Init 0 */
-
-    /* USER CODE END ADC1_Init 0 */
-
     ADC_ChannelConfTypeDef sConfig = {0};
-
-    /* USER CODE BEGIN ADC1_Init 1 */
-
-    /* USER CODE END ADC1_Init 1 */
 
     /** Common config
      */
@@ -72,9 +56,8 @@ void MX_ADC1_Init(void) {
     if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
         Error_Handler();
     }
-    /* USER CODE BEGIN ADC1_Init 2 */
 
-    /* USER CODE END ADC1_Init 2 */
+    return;
 }
 
 void HAL_ADC_MspInit(ADC_HandleTypeDef *adcHandle) {
@@ -82,9 +65,6 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef *adcHandle) {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
     if (adcHandle->Instance == ADC1) {
-        /* USER CODE BEGIN ADC1_MspInit 0 */
-
-        /* USER CODE END ADC1_MspInit 0 */
 
         /** Initializes the peripherals clock
          */
@@ -112,19 +92,14 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef *adcHandle) {
         GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-        /* USER CODE BEGIN ADC1_MspInit 1 */
-
-        /* USER CODE END ADC1_MspInit 1 */
     }
+    return;
 }
 
 void HAL_ADC_MspDeInit(ADC_HandleTypeDef *adcHandle) {
 
     if (adcHandle->Instance == ADC1) {
-        /* USER CODE BEGIN ADC1_MspDeInit 0 */
 
-        /* USER CODE END ADC1_MspDeInit 0 */
         /* Peripheral clock disable */
         __HAL_RCC_ADC_CLK_DISABLE();
 
@@ -135,13 +110,7 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef *adcHandle) {
         HAL_GPIO_DeInit(GPIOC, GPIO_PIN_0);
 
         HAL_GPIO_DeInit(GPIOA, GPIO_PIN_6);
-
-        /* USER CODE BEGIN ADC1_MspDeInit 1 */
-
-        /* USER CODE END ADC1_MspDeInit 1 */
     }
+
+    return;
 }
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
