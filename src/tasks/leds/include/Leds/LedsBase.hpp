@@ -10,6 +10,10 @@
  */
 
 #pragma once
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 // ======================================================================
 //                              INCLUDES
 // ======================================================================
@@ -30,9 +34,17 @@ class LedsBase {
   private:
     TX_TIMER *timer;
     bool timer_status;
+    ULONG timer_period_ms;
 
   protected:
-    static void timer_callback(ULONG arg);
+    static void timer_callback(ULONG arg) {
+        // When the timer does trigger, we'll just call the callback after casting it !
+        LedsBase *ClassInstance = reinterpret_cast<LedsBase *>(arg);
+        if (ClassInstance != nullptr) {
+            ClassInstance->on_timer_tick(arg);
+        }
+        return;
+    }
 
     virtual void on_timer_tick(ULONG arg) = 0;
 
@@ -45,22 +57,32 @@ class LedsBase {
     LedsBase(TX_TIMER *timer);
 
     /**
+     * @brief Destroy the Leds Base object
+     *
+     */
+    ~LedsBase();
+
+    /**
      * @brief Create and configure the timer to be used.
      *
      * @param[in] name  The name of timer to be created.
      */
-    void init_timer(const char *name);
+    UINT init_timer(const char *name);
 
     /**
      * @brief Start the timer. Will call @ref on_timer_tick() every trigger.
      *
      * @param[in] period_ms The period to be used, in ms.
      */
-    void start_timer(const ULONG period_ms);
+    UINT start_timer(const ULONG period_ms);
 
     /**
      * @brief Stop the timer.
      *
      */
-    void stop_timer();
+    UINT stop_timer();
+};
+
+#ifdef __cplusplus
 }
+#endif

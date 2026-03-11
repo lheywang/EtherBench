@@ -6,13 +6,61 @@
 # date : 20/02/2026
 #############################################################################################################################
 
+# Search python
+find_package(
+    Python3
+    REQUIRED 
+    COMPONENTS 
+    Interpreter
+)
+
+# ===============================================
+# FIRST : PARAMETERS
+# ===============================================
+set(SCRIPT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/scripts")
+set(GEN_SCRIPT    "${SCRIPT_DIR}/generate_gamma_lut.py")
+
+set(LUT_GAMMA   2.2)
+set(LUT_SIZE    256)
+set(LUT_MAXVAL  255)
+
+set(LUT_TARGET    "${CMAKE_CURRENT_BINARY_DIR}/gamma_lut.h")
+
+# ===============================================
+# SECOND : TOML 2 GPERF
+# ===============================================
+add_custom_command(
+    OUTPUT
+        ${LUT_TARGET}
+    COMMAND
+        Python3::Interpreter
+        ${GEN_SCRIPT}
+        --size      ${LUT_SIZE}
+        --gamma     ${LUT_GAMMA}
+        --maxval    ${LUT_MAXVAL}
+        --outfile   ${LUT_TARGET}
+    DEPENDS
+        ${GEN_SCRIPT}
+    COMMENT
+        "Generating gamma lut correction table ${LUT_TARGET}"
+    VERBATIM
+)
+
+# ===============================================
+# THIRD : STANDARD C / C++ WORKFLOW
+# ===============================================
 # Set sources
 set(SOURCES 
 	src/task_leds.cpp
 )
 
+list(APPEND SOURCES
+    src/Leds/LedsBase.cpp
+    src/Leds/LedsWS2812.cpp
+)
+
 # Creating the library
-add_library(LEDS STATIC ${SOURCES})
+add_library(LEDS STATIC ${SOURCES} ${LUT_TARGET})
 
 # Link against the right libraries
 target_link_libraries(LEDS THREADX HAL)
