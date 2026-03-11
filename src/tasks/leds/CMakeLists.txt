@@ -15,7 +15,7 @@ set(SOURCES
 add_library(LEDS STATIC ${SOURCES})
 
 # Link against the right libraries
-target_link_libraries(LEDS THREADX)
+target_link_libraries(LEDS THREADX HAL)
 
 # Adding the include folder
 target_include_directories(LEDS PUBLIC 
