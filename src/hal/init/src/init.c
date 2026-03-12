@@ -19,14 +19,19 @@
 // Local library
 #include "stm32h5xx_hal.h"
 
+#include "adc.h"
 #include "cordic.h"
 #include "dcache.h"
 #include "eth.h"
 #include "fmac.h"
 #include "gpdma.h"
 #include "gpio.h"
+#include "i2c.h"
 #include "icache.h"
 #include "rcc.h"
+#include "sdmmc.h"
+#include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "usb.h"
 

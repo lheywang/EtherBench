@@ -26,6 +26,7 @@ list(APPEND SOURCES
 	src/peripherals/sdmmc.c
 	src/peripherals/spi.c
 	src/peripherals/stm32h5xx_hal_msp.c
+    src/peripherals/tim.c
 	src/peripherals/usart.c
 	src/peripherals/usb.c
 )
