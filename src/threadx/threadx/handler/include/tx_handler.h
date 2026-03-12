@@ -10,6 +10,10 @@
  */
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // ======================================================================
 //                              INCLUDES
 // ======================================================================
@@ -34,7 +38,9 @@ enum tx_error_codes {
     USB_HW_CONFIG_FAILED = 0x0000A000,
     USB_HW_CANNOT_START = 0x0000A001,
     ETH_DHCP_FAILED = 0x0000B000,
-    ETH_TELNET_FAILED = 0x0000B001
+    ETH_TELNET_FAILED = 0x0000B001,
+    RING_FAIL_TIM_INIT = 0x0A000001,
+    RING_FAIL_PWM_INIT = 0x0A000002,
 };
 
 // ======================================================================
@@ -46,4 +52,8 @@ enum tx_error_codes {
  *
  * @return VOID
  */
-VOID Tx_Error_Handler(uint32_t error_code); //
+VOID Tx_Error_Handler(uint32_t error_code);
+
+#ifdef __cplusplus
+}
+#endif
