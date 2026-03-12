@@ -18,11 +18,10 @@ find_package(
 # FIRST : PARAMETERS
 # ===============================================
 set(SCRIPT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/scripts")
-set(GEN_SCRIPT    "${SCRIPT_DIR}/generate_gamma_lut.py")
+set(SCRIPT_CFG "${CMAKE_CURRENT_SOURCE_DIR}/config")
 
-set(LUT_GAMMA   2.2)
-set(LUT_SIZE    256)
-set(LUT_MAXVAL  255)
+set(GEN_SCRIPT    "${SCRIPT_DIR}/generate_gamma_lut.py")
+set(GEN_CONFIG    "${SCRIPT_CFG}/gamma_lut.toml")
 
 set(LUT_TARGET    "${CMAKE_CURRENT_BINARY_DIR}/gamma_lut.h")
 
@@ -35,12 +34,11 @@ add_custom_command(
     COMMAND
         Python3::Interpreter
         ${GEN_SCRIPT}
-        --size      ${LUT_SIZE}
-        --gamma     ${LUT_GAMMA}
-        --maxval    ${LUT_MAXVAL}
+        --cfgfile   ${GEN_CONFIG}
         --outfile   ${LUT_TARGET}
     DEPENDS
         ${GEN_SCRIPT}
+        ${GEN_CONFIG}
     COMMENT
         "Generating gamma lut correction table ${LUT_TARGET}"
     VERBATIM
