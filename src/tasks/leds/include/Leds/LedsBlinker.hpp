@@ -40,30 +40,12 @@ class LedsBlinker : public LedsBase {
     uint16_t pin;
 
   protected:
-    on_timer_tick(ULONG arg) override {
-        LedsBlinker *ClassInstance = reinterpret_cast<LedsBlinker *>(arg);
-        HAL_GPIO_TogglePin(ClassInstance->port, ClassInstance->pin);
-        return;
-    }
+    void on_timer_tick(ULONG arg) override;
 
   public:
     LedsBlinker(TX_TIMER *timer, GPIO_TypeDef *port, uint16_t pin);
-    LedsBlinker(
-        TX_TIMER *timer, const char timer_name, GPIO_TypeDef *port, uint16_t pin) {
-        // Init the base class
-        LedsBase(timer);
-        this->init_timer(&timer_name);
-
-        // Copy the new values into our custom layer
-        this->port = port;
-        this->pin = pin;
-
-        return;
-    }
-    ~LedsBlinker() {
-        ~LedsBase();
-        return;
-    }
+    LedsBlinker(TX_TIMER *timer, const char timer_name, GPIO_TypeDef *port, uint16_t pin);
+    ~LedsBlinker();
 };
 
 #ifdef __cplusplus

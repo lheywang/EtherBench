@@ -60,3 +60,9 @@ LedsBlinker::~LedsBlinker() {
     // Mother class is destructed automatically.
     return;
 }
+
+void LedsBlinker::on_timer_tick(ULONG arg) {
+    LedsBlinker *ClassInstance = reinterpret_cast<LedsBlinker *>(arg);
+    HAL_GPIO_TogglePin(ClassInstance->port, ClassInstance->pin);
+    return;
+}

@@ -121,11 +121,7 @@ class LedsWS2812 : public LedsBase {
     void refresh_leds();
 
   protected:
-    void on_timer_tick(ULONG arg) override {
-        LedsWS2812 *ClassInstance = reinterpret_cast<LedsWS2812 *>(arg);
-        ClassInstance->refresh_leds();
-        return;
-    }
+    void on_timer_tick(ULONG arg) override;
 
   public:
     LedsWS2812(TX_TIMER *timer, TIM_HandleTypeDef *htim, uint32_t TimerFreq);

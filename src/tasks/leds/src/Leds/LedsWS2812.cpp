@@ -71,6 +71,12 @@ LedsWS2812::~LedsWS2812() {
     return;
 }
 
+void LedsWS2812::on_timer_tick(ULONG arg) {
+    LedsWS2812 *ClassInstance = reinterpret_cast<LedsWS2812 *>(arg);
+    ClassInstance->refresh_leds();
+    return;
+}
+
 void LedsWS2812::init_hw_timer(uint32_t freq_kHz) {
 
     // Get the period in ns.
@@ -85,17 +91,6 @@ void LedsWS2812::init_hw_timer(uint32_t freq_kHz) {
 
     return;
 }
-
-void LedsWS2812::stop_hw_timer() { return; }
-
-void LedsWS2812::effect_flash() { return; }
-void LedsWS2812::effect_solid() { return; }
-void LedsWS2812::effect_spin() { return; }
-void LedsWS2812::effect_breathing() { return; }
-void LedsWS2812::effect_progress() { return; }
-void LedsWS2812::effect_vu_meter() { return; }
-void LedsWS2812::effect_rainbow() { return; }
-void LedsWS2812::effect_heartbeat() { return; }
 
 void LedsWS2812::refresh_leds() {
     // Update to say : Hey, I've registerd that change !
@@ -212,3 +207,14 @@ void LedsWS2812::set_effect_progress(uint8_t progress) {
     this->current_effect.progress = progress;
     return;
 }
+
+void LedsWS2812::stop_hw_timer() { return; }
+
+void LedsWS2812::effect_flash() { return; }
+void LedsWS2812::effect_solid() { return; }
+void LedsWS2812::effect_spin() { return; }
+void LedsWS2812::effect_breathing() { return; }
+void LedsWS2812::effect_progress() { return; }
+void LedsWS2812::effect_vu_meter() { return; }
+void LedsWS2812::effect_rainbow() { return; }
+void LedsWS2812::effect_heartbeat() { return; }

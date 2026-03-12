@@ -55,6 +55,7 @@ set(SOURCES
 list(APPEND SOURCES
     src/Leds/LedsBase.cpp
     src/Leds/LedsWS2812.cpp
+    src/Leds/LedsBlinker.cpp
 )
 
 # Creating the library
