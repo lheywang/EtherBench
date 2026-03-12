@@ -44,10 +44,10 @@ LedsBlinker::LedsBlinker(TX_TIMER *timer, GPIO_TypeDef *port, uint16_t pin)
 }
 
 LedsBlinker::LedsBlinker(
-    TX_TIMER *timer, const char timer_name, GPIO_TypeDef *port, uint16_t pin)
+    TX_TIMER *timer, const char *timer_name, GPIO_TypeDef *port, uint16_t pin)
     : LedsBase(timer) {
 
-    this->init_timer(&timer_name);
+    this->init_timer(timer_name);
 
     // Copy the new values into our custom layer
     this->port = port;

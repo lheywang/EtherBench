@@ -36,17 +36,29 @@ extern "C" {
 #define LED_RING_PIXEL_NB 10 // Will be 20 on the final version.
 #define LED_RING_BIT_PER_PIXEL 24
 
+// Effects configs
+#define LED_RING_BREATH_LENGTH 600
+#define LED_RING_BREATH_MAX 255
+
 // ======================================================================
 //                              STRUCTS
 // ======================================================================
+/**
+ * @brief   This struct store the data for a single pixel. It provide an
+ *          access to the data fields, as well as a raw bit stream.
+ *
+ * @details The fields into the struct are reversed, because of the endianess
+ *          of the MCU. Thus, the LSB will be RRGGBBAA, rather than AABBGGRR.
+ *
+ */
 union Pixel {
     uint32_t _raw;
 
     struct {
-        uint8_t b;
+        uint8_t alpha;
         uint8_t g;
         uint8_t r;
-        uint8_t alpha;
+        uint8_t b;
     } aRGB;
 };
 

@@ -24,23 +24,26 @@ def gen_file(file, lut, datatype, size, gamma, maxval):
 
         f.write("#pragma once\n")
         f.write("#ifdef __cplusplus\n")
+        f.write("extern \"C\" {\n")
+        f.write("#endif\n")
+        f.write("#ifdef __cplusplus\n")
         f.write("#include <cstdint>\n")
         f.write("#else\n")
         f.write("#include <stdint.h>\n")
         f.write("#endif\n\n")
 
         f.write("// PARAMETER USED : \n")
-        f.write(f"// GAMMA = {gamma}\n")
-        f.write(f"// MAXVAL = {maxval}\n")
-        f.write(f"// SIZE = {size}\n")
-        f.write(f"// TYPE = {datatype}\n\n")
+        f.write(f"#define LED_CORR_GAMMA {gamma}\n")
+        f.write(f"#define LED_CORR_MAXVAL {maxval}\n")
+        f.write(f"#define LED_CORR_SIZE {size}\n")
+        f.write(f"// TYPE :  {datatype}\n\n")
 
         f.write(f"{datatype} gamma_lut[{size}] = {"{"}\n    ")
 
         newline_index = round(math.sqrt(size))
         valuesize = len(str(size))
         for index, value in enumerate(lut):
-            f.write(f"{f"{value}".zfill(valuesize)}")
+            f.write(f"{str(value):>{valuesize}}")
 
             if index != len(lut) - 1:
                 f.write(",")
@@ -48,7 +51,12 @@ def gen_file(file, lut, datatype, size, gamma, maxval):
             if (index % newline_index) == newline_index - 1:
                 f.write("\n    ")
 
-        f.write(f"\n{"}"};\n")
+        f.write(f"\n{"}"};\n\n")
+
+        f.write("#ifdef __cplusplus\n")
+        f.write("}\n")
+        f.write("#endif\n\n")
+
         f.write("// END OF THE FILE\n")
 
     return

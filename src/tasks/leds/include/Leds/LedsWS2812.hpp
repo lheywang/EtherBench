@@ -48,14 +48,16 @@ extern "C" {
 // -------------------------------------
 // Effects parameters
 #define WS2812_FLASH_PERIOD_MS LEDS_T_Hz(5)
-#define WS2812_SOLID_PERIOD_MS LEDS_T_Hz(0) /* Actually unused, we just stop the timer*/
 #define WS2812_SPIN_PERIOD_MS LEDS_T_Hz(20)
 #define WS2812_BREATHING_PERIOD_MS LEDS_T_Hz(30)
-#define WS2812_PROGRESS_PERIOD_MS LEDS_T_Hz(30)
+
 #define WS2812_VU_METER_PERIOD_MS LEDS_T_Hz(50)
 #define WS2812_RAINBOW_PERIOD_MS LEDS_T_Hz(20)
 #define WS2812_HEARTBEAT_PERIOD_MS LEDS_T_Hz(30)
 
+/* Actually unused, we just stop the timer*/
+#define WS2812_SOLID_PERIOD_MS LEDS_T_Hz(1)
+#define WS2812_PROGRESS_PERIOD_MS LEDS_T_Hz(1)
 // ======================================================================
 //                              STRUCTS
 // ======================================================================
@@ -63,11 +65,11 @@ extern "C" {
 struct PixelEffect {
     leds_effects type; ///< Effect type
     Pixel primary;     ///< Main color effect.
-    Pixel secondary;   ///< Secondary effect color (not always used).
+    Pixel secondary;   ///< Main color effect.
     uint16_t speed;    ///< Effect speed (delay of multiplier)
     uint8_t width;     ///< Effect width (tail length)
     uint8_t progress;  ///< Effect progress, for the current value.
-    uint32_t tick;     ///< Internal tick counter, for advanced effects.
+    uint16_t tick;     ///< Internal tick counter, for advanced effects.
 };
 
 // ======================================================================
@@ -78,12 +80,14 @@ class LedsWS2812 : public LedsBase {
 
   private:
     // Raw led buffer
-    uint16_t leds_buffer[(LED_RING_BIT_PER_PIXEL * LED_RING_PIXEL_NB) + 1];
+    uint16_t __aligned(32) leds_buffer[(LED_RING_BIT_PER_PIXEL * LED_RING_PIXEL_NB) + 1];
     // Pixel buffer
     Pixel pixel_buffer[LED_RING_PIXEL_NB];
 
     // Timer handle for the output DMA
     TIM_HandleTypeDef *htim;
+    uint32_t timer_channel;
+    uint32_t timer_freq;
 
     // Internal structure for the effects.
     PixelEffect current_effect;
@@ -92,14 +96,13 @@ class LedsWS2812 : public LedsBase {
     // Internal timer configs
     uint16_t T0H;
     uint16_t T1H;
-    uint16_t Timer_Period;
 
     /**
      * @brief Configure the HW timer to match the requirements.
      *        Freq is in kHz
      *
      */
-    void init_hw_timer(uint32_t freq_kHz);
+    void init_hw_timer();
     void stop_hw_timer();
 
     /*
@@ -114,22 +117,32 @@ class LedsWS2812 : public LedsBase {
     void effect_rainbow();
     void effect_heartbeat();
 
+    inline Pixel apply_alpha(Pixel *input, uint8_t alpha);
+
     /**
      * @brief Trigger the DMA refresh sequence.
      *
      */
     void refresh_leds();
 
+    void compute_timer_cycles();
+    void send_buffer();
+
   protected:
     void on_timer_tick(ULONG arg) override;
 
   public:
-    LedsWS2812(TX_TIMER *timer, TIM_HandleTypeDef *htim, uint32_t TimerFreq);
+    LedsWS2812(
+        TX_TIMER *timer,
+        TIM_HandleTypeDef *htim,
+        uint32_t timer_channel,
+        uint32_t TimerFreq);
 
     LedsWS2812(
         TX_TIMER *timer,
-        const char timer_name,
+        const char *timer_name,
         TIM_HandleTypeDef *htim,
+        uint32_t timer_channel,
         uint32_t TimerFreq);
 
     ~LedsWS2812();

@@ -44,7 +44,8 @@ class LedsBlinker : public LedsBase {
 
   public:
     LedsBlinker(TX_TIMER *timer, GPIO_TypeDef *port, uint16_t pin);
-    LedsBlinker(TX_TIMER *timer, const char timer_name, GPIO_TypeDef *port, uint16_t pin);
+    LedsBlinker(
+        TX_TIMER *timer, const char *timer_name, GPIO_TypeDef *port, uint16_t pin);
     ~LedsBlinker();
 };
 

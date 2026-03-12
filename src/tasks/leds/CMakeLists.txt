@@ -67,4 +67,5 @@ target_link_libraries(LEDS THREADX HAL)
 # Adding the include folder
 target_include_directories(LEDS PUBLIC 
 	${CMAKE_CURRENT_SOURCE_DIR}/include/
+    ${CMAKE_CURRENT_BINARY_DIR}/
 )
