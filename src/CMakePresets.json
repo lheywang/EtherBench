@@ -1,0 +1,46 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "STM32",
+            "displayName": "🛠️ Configure for STM32 (ARM)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/stm32",
+            "toolchainFile": "${sourceDir}/gcc-arm-none-eabi.cmake",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "BUILD_TESTING": "OFF"
+            }
+        },
+        {
+            "name": "HOST",
+            "displayName": "🧪 Configure for HOST (Host)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/host",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "BUILD_TESTING": "ON"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "firmware",
+            "configurePreset": "STM32",
+            "displayName": "🚀 Build the firmware"
+        },
+        {
+            "name": "tests",
+            "configurePreset": "HOST",
+            "displayName": "⚙️ Build the tests"
+        },
+        {
+            "name": "doc",
+            "configurePreset": "HOST",
+            "displayName": "📚 Build the documentation",
+            "targets": [
+                "doc"
+            ]
+        }
+    ]
+}
