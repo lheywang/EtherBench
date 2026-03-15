@@ -1,0 +1,28 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "HOST-WINDOWS",
+            "displayName": "🧪 Windows config, with PATH override",
+            "inherits": "HOST",
+            "environment": {
+                "PATH": "C:/msys64/ucrt64/bin;$penv{PATH}"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "tests-windows",
+            "configurePreset": "HOST-WINDOWS",
+            "displayName": "⚙️ Build tests (Windows)"
+        },
+        {
+            "name": "doc-windows",
+            "configurePreset": "HOST-WINDOWS",
+            "displayName": "📚 Generate documentation (Windows)",
+            "targets": [
+                "doc"
+            ]
+        }
+    ]
+}

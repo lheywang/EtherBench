@@ -48,5 +48,6 @@ src/build/*
 
 # VSCodeExtensions
 .VSCodeCounter/
+src/.vscode/*
 
 

@@ -3,7 +3,7 @@
     "configurePresets": [
         {
             "name": "STM32",
-            "displayName": "🛠️ Configure for STM32 (ARM)",
+            "displayName": "🛠️ Build Firmware (ARM)",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/stm32",
             "toolchainFile": "${sourceDir}/gcc-arm-none-eabi.cmake",
@@ -14,12 +14,14 @@
         },
         {
             "name": "HOST",
-            "displayName": "🧪 Configure for HOST (Host)",
+            "displayName": "🧪 Build tests and doc (default to Linux CI)",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/host",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "BUILD_TESTING": "ON"
+                "BUILD_TESTING": "ON",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
             }
         }
     ],
@@ -27,12 +29,12 @@
         {
             "name": "firmware",
             "configurePreset": "STM32",
-            "displayName": "🚀 Build the firmware"
+            "displayName": "🚀 Build firmware"
         },
         {
             "name": "tests",
             "configurePreset": "HOST",
-            "displayName": "⚙️ Build the tests"
+            "displayName": "⚙️ Build untests"
         },
         {
             "name": "doc",
