@@ -38,6 +38,8 @@
 // STD
 #include <stdint.h>
 
+extern TIM_HandleTypeDef htim2;
+extern DCACHE_HandleTypeDef hdcache1;
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
@@ -61,6 +63,25 @@ uint32_t init(void) {
     MX_GPIO_Init();
     MX_USART3_UART_Init();
     MX_ETH_Init();
+    MX_TIM2_Init();
+
+    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 156);
+
+    // HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+
+#define CCRValue_BufferSize 24
+
+    ALIGN_32BYTES(uint32_t DiscontinuousSineCCRValue_Buffer[CCRValue_BufferSize]) = {
+        208, 208, 208, 208, 208, 208, 208, 208, 104, 104, 104, 104,
+        104, 104, 104, 104, 208, 208, 208, 208, 208, 208, 208, 208};
+
+    HAL_DCACHE_InvalidateByAddr(
+        &hdcache1,
+        DiscontinuousSineCCRValue_Buffer,
+        sizeof(DiscontinuousSineCCRValue_Buffer));
+
+    HAL_TIM_PWM_Start_DMA(
+        &htim2, TIM_CHANNEL_1, DiscontinuousSineCCRValue_Buffer, CCRValue_BufferSize);
 
     // Computation peripherals init
     MX_CORDIC_Init();

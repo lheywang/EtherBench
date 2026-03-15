@@ -40,7 +40,7 @@
 # debug information files
 *.dwo
 
-# STM32 build files
+# STM32 build files and doc
 src/build/*
 
 # Formatter outputs
@@ -48,3 +48,5 @@ src/build/*
 
 # VSCodeExtensions
 .VSCodeCounter/
+
+

@@ -17,6 +17,7 @@
 #include "task_leds.h"
 
 // Local libraries
+#include "Leds/LedsBaseCommands.h"
 #include "Leds/LedsBlinker.hpp"
 #include "Leds/LedsWS2812.hpp"
 
@@ -65,6 +66,20 @@ LedsBlinker eth_green = LedsBlinker(&eth_green_timer, LED_GREEN_GPIO_Port, LED_G
 
 void leds_task(ULONG arg) {
     TX_PARAMETER_NOT_USED(arg);
+
+    Pixel a = {._raw = 0xFFFFFFFF};
+
+    PixelEffect test = {
+        .type = leds_effects::EFFECT_BREATHING,
+        .primary = a,
+        .secondary = a,
+        .speed = 50,
+        .width = 50,
+        .progress = 50,
+        .tick = 0};
+
+    ring.set_effect(test);
+
     /*
      * That's just an infinite loop, which blink a led
      */

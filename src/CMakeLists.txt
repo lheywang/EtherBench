@@ -5,6 +5,90 @@
 # author : l.heywang <leonard.heywang@proton.me>
 # date : 20/02/2026
 #############################################################################################################################
+
+
+# ==============================================================================
+# DOCUMENTATION (DOXYGEN)
+# ==============================================================================
+# Finding tools
+find_package(Doxygen)
+
+if(DOXYGEN_FOUND)
+
+    # Fetch dot (will ensure that the build WILL work)
+    find_program(
+        DOT_EXECUTABLE 
+        NAMES dot
+        DOC "Path to Graphviz dot executable"
+    )
+
+    if(NOT DOT_EXECUTABLE)
+        message(WARNING "Graphviz (dot.exe) was not found. Errors may occurs when generating the doc.")
+    else()
+        get_filename_component(DOT_PATH_DIR "${DOT_EXECUTABLE}" DIRECTORY)
+    endif()
+
+    include(FetchContent)
+    FetchContent_Declare(
+        doxygen-awesome-css
+        URL https://github.com/jothepro/doxygen-awesome-css/archive/refs/heads/main.zip
+        DOWNLOAD_EXTRACT_TIMESTAMP  TRUE
+    )
+    FetchContent_MakeAvailable(doxygen-awesome-css)
+
+    # Configure some variables here and here
+    set(AWESOME_CSS_DIR ${doxygen-awesome-css_SOURCE_DIR})
+
+    set(DOXYFILE_IN   ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
+    set(DOXYFILE_OUT  ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+    set(DOXYGEN_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/doc")
+    file(MAKE_DIRECTORY "${DOXYGEN_OUTPUT_DIR}")
+
+    set(DOXYGEN_HTML_ADDON ${CMAKE_CURRENT_SOURCE_DIR}/doc/html/)
+    set(DOXYGEN_CSS_ADDON ${CMAKE_CURRENT_SOURCE_DIR}/doc/css/)
+    set(DOXYGEN_XML_ADDON ${CMAKE_CURRENT_SOURCE_DIR}/doc/xml/)
+    set(DOXYGEN_IMAGES_ADDON ${CMAKE_CURRENT_SOURCE_DIR}/doc/images/)
+    set(DOXYGEN_MARKDOWN_ADDON ${CMAKE_CURRENT_SOURCE_DIR}/doc/markdown/)
+
+    set(DOXYGEN_ROOT_FOLDER ${CMAKE_CURRENT_SOURCE_DIR})
+
+    # Configure the file
+    configure_file(${DOXYFILE_IN} ${DOXYFILE_OUT} @ONLY)
+
+    # Add the doc target
+    add_custom_target(doc
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Génération de la documentation Doxygen..."
+        VERBATIM
+    )
+else()
+    message(WARNING "Could not find Doxygen. Documentation won't be available.")
+endif()
+
+# ==============================================================================
+# TESTS (GOOGLE TEST)
+# ==============================================================================
+option(BUILD_TESTING "Build unit tests (Host only)" OFF)
+
+if(BUILD_TESTING)
+    include(FetchContent)
+    FetchContent_Declare(
+        googletest
+        URL                         https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
+        DOWNLOAD_EXTRACT_TIMESTAMP  TRUE
+    )
+    # GTest force parfois l'installation, on la désactive pour rester propre
+    set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+    
+    enable_testing()
+endif()
+
+# ==============================================================================
+# STANDARD BUILD
+# ==============================================================================
 cmake_minimum_required(VERSION 3.20)
 project("EtherBench")
 enable_language(ASM C CXX)
