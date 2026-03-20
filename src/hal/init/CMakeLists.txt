@@ -16,13 +16,19 @@ list(APPEND SOURCES
 	src/peripherals/cordic.c
 	src/peripherals/dcache.c
 	src/peripherals/eth.c
+    src/peripherals/fdcan.c
 	src/peripherals/fmac.c
 	src/peripherals/gpdma.c
 	src/peripherals/gpio.c
+    src/peripherals/gtzc.c
+    src/peripherals/hash.c
 	src/peripherals/i2c.c
 	src/peripherals/icache.c
+    src/peripherals/lptim.c
 	src/peripherals/octospi.c
+    src/peripherals/pka.c
 	src/peripherals/rcc.c
+    src/peripherals/rng.c
 	src/peripherals/sdmmc.c
 	src/peripherals/spi.c
 	src/peripherals/stm32h5xx_hal_msp.c
