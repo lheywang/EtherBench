@@ -125,6 +125,15 @@ shell = "io"
 handler_shell = "shell_io"
 
 # ------------------------------------
+# Hardware easy access
+# ------------------------------------
+[hardware.i2c.scan]
+handler_scpi_query = "scpi_hard_i2c_scan_r"
+
+shell = "io"
+handler_shell = "shell_io"
+
+# ------------------------------------
 # SPY Module
 # ------------------------------------
 [hardware.spy.i2c]

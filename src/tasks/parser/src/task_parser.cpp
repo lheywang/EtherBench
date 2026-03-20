@@ -19,7 +19,7 @@
 #include "task_parser.h"
 
 // Local libraries
-#include "ShellStream/ShellStreambase.hpp"
+#include "ShellStream/ShellStreamBase.hpp"
 #include "commands/gperf.h"
 #include "logger.h"
 

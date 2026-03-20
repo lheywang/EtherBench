@@ -68,6 +68,8 @@ int scpi_hard_spi(char *args, void *context);
 int scpi_hard_usart_r(char *args, void *context);
 int scpi_hard_usart(char *args, void *context);
 
+int scpi_hard_i2c_scan_r(char *args, void *context);
+
 int scpi_log_subscribe(char *args, void *context);
 int scpi_log_unsubscribe(char *args, void *context);
 int scpi_log_list(char *args, void *context);
