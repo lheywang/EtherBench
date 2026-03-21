@@ -11,6 +11,16 @@ set(SOURCES
 	src/task_programmer.cpp
 )
 
+## Add the programming classes sources
+list(APPEND SOURCES
+	src/Programmer/Programmer.cpp
+	src/Programmer/HardwareProbeManager/HardwareProbeManager.cpp
+	src/Programmer/Probes/JTAGProbe/JTAGProbe.cpp
+	src/Programmer/Probes/SPIProbe/SPIProbe.cpp
+	src/Programmer/Probes/SWDProbe/SWDProbe.cpp
+
+)
+
 # list(APPEND SOURCES
 #     CMSIS-DAP/src/DAP_vendor.c
 #     CMSIS-DAP/src/DAP.c
