@@ -1,5 +1,5 @@
 /**
- * @file    shell_log.cpp
+ * @file    shell_scan.cpp
  * @author  lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
@@ -22,4 +22,4 @@
 //                              FUNCTIONS
 // ======================================================================
 
-int shell_log(char *args, void *context) { return 0; }
+int shell_scan(char *args, void *context) { return 0; }

@@ -68,8 +68,6 @@ int scpi_hard_spi(char *args, void *context);
 int scpi_hard_usart_r(char *args, void *context);
 int scpi_hard_usart(char *args, void *context);
 
-int scpi_hard_i2c_scan_r(char *args, void *context);
-
 int scpi_log_subscribe(char *args, void *context);
 int scpi_log_unsubscribe(char *args, void *context);
 int scpi_log_list(char *args, void *context);
@@ -82,6 +80,11 @@ int scpi_prog_flash(char *args, void *context);
 int scpi_prog_read(char *args, void *context);
 int scpi_prog_status(char *args, void *context);
 int scpi_prog_verify(char *args, void *context);
+
+int scpi_scan_can_r(char *args, void *context);
+int scpi_scan_i2c_r(char *args, void *context);
+int scpi_scan_spi_r(char *args, void *context);
+int scpi_scan_usart_r(char *args, void *context);
 
 int scpi_seq_add(char *args, void *context);
 int scpi_seq_get_r(char *args, void *context);

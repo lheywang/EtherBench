@@ -125,13 +125,33 @@ shell = "io"
 handler_shell = "shell_io"
 
 # ------------------------------------
-# Hardware easy access
+# SCAN module
 # ------------------------------------
-[hardware.i2c.scan]
-handler_scpi_query = "scpi_hard_i2c_scan_r"
+[scan.can]
+handler_scpi_query = "scpi_scan_can_r"
 
-shell = "io"
-handler_shell = "shell_io"
+shell = "scan"
+handler_shell = "shell_scan"
+
+[scan.i2c]
+handler_scpi_query = "scpi_scan_i2c_r"
+
+shell = "scan"
+handler_shell = "shell_scan"
+
+
+[scan.spi]
+handler_scpi_query = "scpi_scan_spi_r"
+
+shell = "scan"
+handler_shell = "shell_scan"
+
+
+[scan.uart]
+handler_scpi_query = "scpi_scan_usart_r"
+
+shell = "scan"
+handler_shell = "shell_scan"
 
 # ------------------------------------
 # SPY Module

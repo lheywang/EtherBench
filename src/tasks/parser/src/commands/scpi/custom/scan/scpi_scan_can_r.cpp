@@ -1,12 +1,12 @@
 /**
- * @file    scpi_hard_i2c_scan_r.cpp
- * @author  lheywang (leonard.heywang@proton.me)
- * @brief
+ * @file    scpi_scan_can_r.cpp
+ * @author  your name (you@domain.com)
+ * @brief 
  * @version 0.1
- * @date    2026-03-05
- *
+ * @date 2026-03-21
+ * 
  * @copyright Copyright (c) 2026
- *
+ * 
  */
 
 // ======================================================================
@@ -22,4 +22,4 @@
 //                              FUNCTIONS
 // ======================================================================
 
-int scpi_hard_i2c_scan_r(char *args, void *context) { return 0; }
+int scpi_scan_can_r(char *args, void *context) { return 0; }

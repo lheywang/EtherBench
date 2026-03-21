@@ -41,6 +41,7 @@ int shell_conf(char *args, void *context);
 int shell_io(char *args, void *context);
 int shell_log(char *args, void *context);
 int shell_prog(char *args, void *context);
+int shell_scan(char *args, void *context);
 int shell_seq(char *args, void *context);
 int shell_spy(char *args, void *context);
 

@@ -35,6 +35,7 @@ set(ARGS_GPERF    "${CMAKE_CURRENT_SOURCE_DIR}/gperf/keywords.gperf")
 
 # Set sources list
 set(SOURCES)
+set(GPERF_SOURCES)
 
 # ===============================================
 # SECOND : TOML 2 GPERF
@@ -104,15 +105,17 @@ foreach(GPERF_FILE IN LISTS GPERF_FILES)
     )
 
     # On append ce fichier à la liste des sources
-    list(APPEND SOURCES
+    list(APPEND GPERF_SOURCES
         ${GPERF_OUTPUT}
     )
 endforeach()
 
+# ===============================================
+# THIRD : GPERF 2 C (for custom based .gperf)
+# ===============================================
 set(GPERF_FILES 
     ${ARGS_GPERF} 
 )
-
 foreach(GPERF_FILE IN LISTS GPERF_FILES)
 
     # Rename the .gperf file into it's .c equivalent
@@ -149,14 +152,32 @@ foreach(GPERF_FILE IN LISTS GPERF_FILES)
     )
 
     # On append ce fichier à la liste des sources
-    list(APPEND SOURCES
-        ${GPERF_OUTPUT}
+    list(APPEND GPERF_SOURCES
+        ${GPERF_OUTPUT} 
     )
 endforeach()
 
+# ===============================================
+# CREATE THE GLOBAL LIBRARY
+# ===============================================
+# Creating the library
+add_library(GPERF STATIC ${GPERF_SOURCES})
+
+target_compile_options(GPERF PRIVATE
+    -Wno-missing-field-initializers 
+    -Wno-unused-parameter 
+    -Wno-old-style-definition
+)
+
+target_link_libraries(GPERF PARSER)
+
+# Adding the include folder
+target_include_directories(GPERF PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
+)
 
 # ===============================================
-# FINALLY : CREATE THE LIBRARY
+# FINALLY : CREATE CALLBACK THE LIBRARY
 # ===============================================
 # Add the common function sources
 list(APPEND SOURCES
@@ -192,6 +213,10 @@ list(APPEND SOURCES
     src/commands/scpi/custom/prog/scpi_prog_flash.cpp
     src/commands/scpi/custom/prog/scpi_prog_read.cpp
     src/commands/scpi/custom/prog/scpi_prog_status.cpp
+    src/commands/scpi/custom/scan/scpi_scan_can_r.cpp
+    src/commands/scpi/custom/scan/scpi_scan_i2c_r.cpp
+    src/commands/scpi/custom/scan/scpi_scan_spi_r.cpp
+    src/commands/scpi/custom/scan/scpi_scan_usart_r.cpp
     src/commands/scpi/custom/prog/scpi_prog_verify.cpp
     src/commands/scpi/custom/sequence/scpi_seq_add.cpp
     src/commands/scpi/custom/sequence/scpi_seq_get.cpp
@@ -240,13 +265,16 @@ list(APPEND SOURCES
     src/task_parser.cpp
 )
 
-# Removing compilations errors from gperf
-add_compile_options(-Wno-missing-field-initializers -Wno-unused-parameter)
-
 # Creating the library
 add_library(PARSER STATIC ${SOURCES})
 
+# Link against some libraries
 target_link_libraries(PARSER THREADX_OS LOGGER SHELL)
+
+# Clear compilations warnings (temp)
+target_compile_options(PARSER PRIVATE
+    -Wno-unused-parameter 
+)
 
 # Adding the include folder
 target_include_directories(PARSER PUBLIC 
