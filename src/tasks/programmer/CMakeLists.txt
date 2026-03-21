@@ -35,6 +35,8 @@ list(APPEND SOURCES
 # Creating the library
 add_library(PROGRAMMER STATIC ${SOURCES})
 
+target_link_libraries(PROGRAMMER HAL THREADX)
+
 # Adding the include folder
 target_include_directories(PROGRAMMER PUBLIC 
 	${CMAKE_CURRENT_SOURCE_DIR}/include/
