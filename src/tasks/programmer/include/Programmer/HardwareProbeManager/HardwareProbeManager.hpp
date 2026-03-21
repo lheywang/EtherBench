@@ -132,6 +132,8 @@ class HardwareProbeManager {
 
         void serial_receive(uint8_t* buffer, uint32_t *size);
 
+        void reset_target();
+
         inline bool set_spi_speed(uint32_t bit_rate);
 
     private:

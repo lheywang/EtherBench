@@ -244,6 +244,11 @@ void HardwareProbeManager::serial_receive(uint8_t* buffer, uint32_t *size) {
 
 }
 
+void HardwareProbeManager::reset_target()
+{
+    
+}
+
 inline void HardwareProbeManager::set_spi_size(uint32_t bit_count) {
     return;
 }
