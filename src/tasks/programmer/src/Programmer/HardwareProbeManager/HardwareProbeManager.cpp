@@ -245,14 +245,14 @@ void HardwareProbeManager::serial_receive(uint8_t* buffer, uint32_t *size) {
 }
 
 inline void HardwareProbeManager::set_spi_size(uint32_t bit_count) {
-
+    return;
 }
 
 inline void HardwareProbeManager::set_spim_direction(TransferDirection direction) {
 
 }
 
-inline void HardwareProbeManager::set_spi_speed(uint32_t bit_rate)
+inline bool HardwareProbeManager::set_spi_speed(uint32_t bit_rate)
 {
     
 }

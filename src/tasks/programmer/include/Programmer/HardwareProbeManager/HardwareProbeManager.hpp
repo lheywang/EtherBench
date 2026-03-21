@@ -132,11 +132,12 @@ class HardwareProbeManager {
 
         void serial_receive(uint8_t* buffer, uint32_t *size);
 
+        inline bool set_spi_speed(uint32_t bit_rate);
+
     private:
         inline void set_spi_size(uint32_t bit_count);
         inline void set_spim_direction(TransferDirection direction);
-        inline void set_spi_speed(uint32_t bit_rate);
-
+        
         /*
          * All the following function are calling the CubeMX init functions.
          * This ensure the user can change settings within the CubeMX,

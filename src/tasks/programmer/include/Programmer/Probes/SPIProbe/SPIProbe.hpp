@@ -13,7 +13,37 @@
 // ======================================================================
 //                              INCLUDE
 // ======================================================================
+// Local library
+#include "Programmer/Probes/Probe.hpp"
+#include "Programmer/HardwareProbeManager/HardwareProbeManager.hpp"
 
 // ======================================================================
 //                               CLASS
 // ======================================================================
+class SPIProbe : public Probe {
+
+    private:
+        HardwareProbeManager* probe_manager;
+
+    public:
+        /*
+         * Constructors & destructors
+         */
+        explicit SPIProbe(HardwareProbeManager* manager);
+
+        /*
+         * Overrides for the probe class
+         */
+        bool connect() override;
+        bool disconnect() override; 
+        uint32_t transfer(
+            const uint8_t size,
+            const uint8_t* request,
+            uint8_t* response
+        ) override; 
+        bool set_clock_frequency(uint32_t frequency_hz) override;
+
+        /*
+         * Additional methods for SPIProbe
+         */
+};
