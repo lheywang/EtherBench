@@ -20,7 +20,6 @@ list(APPEND SOURCES
 	src/peripherals/fmac.c
 	src/peripherals/gpdma.c
 	src/peripherals/gpio.c
-    src/peripherals/gtzc.c
     src/peripherals/hash.c
 	src/peripherals/i2c.c
 	src/peripherals/icache.c
