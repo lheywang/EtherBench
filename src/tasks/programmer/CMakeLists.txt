@@ -15,6 +15,8 @@ set(SOURCES
 list(APPEND SOURCES
 	src/Programmer/Programmer.cpp
 	src/Programmer/HardwareProbeManager/HardwareProbeManager.cpp
+	src/Programmer/Probes/cJTAGProbe/cJTAGProbe.cpp
+	src/Programmer/Probes/ICSPProbe/ICSPProbe.cpp
 	src/Programmer/Probes/JTAGProbe/JTAGProbe.cpp
 	src/Programmer/Probes/SPIProbe/SPIProbe.cpp
 	src/Programmer/Probes/SWDProbe/SWDProbe.cpp
