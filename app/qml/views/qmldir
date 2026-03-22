@@ -1,6 +1,0 @@
-module App.Views
-
-Debugger 1.0 debugger.qml
-Home 1.0 home.qml
-Memory 1.0 memory.qml
-Sequences 1.0 sequences.qml

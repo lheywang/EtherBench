@@ -14,7 +14,6 @@ int main(
     
     engine.rootContext()->setContextProperty("sysController", &sysController);
 
-    const QUrl url(QStringLiteral("qrc:/qt/qml/App/qml/main.qml"));
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
@@ -23,7 +22,7 @@ int main(
         Qt::QueuedConnection
     );
 
-    engine.load(url);
+    engine.loadFromModule("App", "Main");
 
     return app.exec();
 }
