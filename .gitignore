@@ -40,8 +40,9 @@
 # debug information files
 *.dwo
 
-# STM32 build files and doc
+# Build files and doc
 src/build/*
+app/build/*
 
 # Formatter outputs
 */.cache/*
