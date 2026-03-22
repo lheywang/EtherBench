@@ -51,4 +51,11 @@ app/build/*
 .VSCodeCounter/
 .vscode/*
 
+# QT
+*.qmlls*
+
+# Third party
+!app/third_party/libusb/lib/libusb-1.0.a
+!app/third_party/libusb/lib/libusb-1.0.dll.a
+
 
