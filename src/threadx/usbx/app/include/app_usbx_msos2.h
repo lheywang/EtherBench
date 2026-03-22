@@ -22,7 +22,6 @@
 #include "ux_api.h"
 #include "ux_system.h"
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif

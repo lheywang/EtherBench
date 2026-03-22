@@ -403,8 +403,8 @@ typedef struct __attribute__((packed)) {
         uint16_t langid;
         uint8_t str_id;
         uint8_t len;
-        char str[GET_USB_STRING_LEN(STR_DBG1)];
-    } string7;
+        char str[GET_USB_STRING_LEN(STR_MS_OS_10)];
+    } string238;
 
 } usbx_string_framework_t;
 

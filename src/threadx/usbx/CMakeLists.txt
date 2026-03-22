@@ -459,6 +459,7 @@ list(APPEND SOURCES
 list(APPEND SOURCES
     descriptors/src/descriptors2.c
     descriptors/src/msos2.c
+    descriptors/src/msos1.c
 )
 
 list(APPEND SOURCES

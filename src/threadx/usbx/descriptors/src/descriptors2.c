@@ -33,7 +33,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_device_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_DEVICE,
-            .bcdUSB = USB_BCDC_USB2_1,
+            .bcdUSB = USB_BCDC_USB2_0,
             .bDeviceClass = USB_CLASS_MISC,
             .bDeviceSubClass = USB_SUBCLASS_MISC,
             .bDeviceProtocol = USB_PROTOCOL_MISC_IAD,
@@ -354,6 +354,14 @@ const usbx_string_framework_t usb_device_string_framework = {
             .str_id = 7,
             .len = GET_USB_STRING_LEN(STR_DBG1),
             .str = STR_DBG1,
+        },
+
+    .string238 =
+        {
+            .langid = 0x0000,
+            .str_id = 0xEE,
+            .len = GET_USB_STRING_LEN(STR_MS_OS_10),
+            .str = STR_MS_OS_10,
         },
 };
 
