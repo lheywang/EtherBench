@@ -17,6 +17,9 @@
 // Header
 #include "descriptors2.h"
 
+// Local library
+#include "descriptor_config.h"
+
 // STD
 #include <stdint.h>
 
@@ -30,7 +33,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_device_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_DEVICE,
-            .bcdUSB = USB_BCDC_USB2_0,
+            .bcdUSB = USB_BCDC_USB2_1,
             .bDeviceClass = USB_CLASS_MISC,
             .bDeviceSubClass = USB_SUBCLASS_MISC,
             .bDeviceProtocol = USB_PROTOCOL_MISC_IAD,
@@ -79,7 +82,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_interface_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_INTERFACE,
-            .bInterfaceNumber = 0,
+            .bInterfaceNumber = CDC_TERMINAL_INTERFACE_0,
             .bAlternateSetting = 0x00,
             .bNumEndpoints = 1,
             .bInterfaceClass = USB_CLASS_CDC,
@@ -132,7 +135,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_interface_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_INTERFACE,
-            .bInterfaceNumber = 1,
+            .bInterfaceNumber = CDC_TERMINAL_INTERFACE_1,
             .bAlternateSetting = 0x00,
             .bNumEndpoints = 2,
             .bInterfaceClass = USB_CLASS_CDC_DATA,
@@ -180,7 +183,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_interface_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_INTERFACE,
-            .bInterfaceNumber = 2,
+            .bInterfaceNumber = CDC_STREAM_INTERFACE_0,
             .bAlternateSetting = 0x00,
             .bNumEndpoints = 1,
             .bInterfaceClass = USB_CLASS_CDC,
@@ -233,7 +236,7 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         {
             .bLength = sizeof(usb_interface_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_INTERFACE,
-            .bInterfaceNumber = 3,
+            .bInterfaceNumber = CDC_STREAM_INTERFACE_1,
             .bAlternateSetting = 0x00,
             .bNumEndpoints = 2,
             .bInterfaceClass = USB_CLASS_CDC_DATA,
@@ -261,48 +264,13 @@ const usb_composite_configuration_tree_t usb_device_desc = {
         },
 
     // ==========================================
-    // MSC DEVICE. INTERFACE 4.
-    // ==========================================
-    // Commented out in the final version. MSC Won't be used.
-    // .itf_msc =
-    //     {
-    //         .bLength = sizeof(usb_interface_descriptor_t),
-    //         .bDescriptorType = USB_DESC_TYPE_INTERFACE,
-    //         .bInterfaceNumber = 4,
-    //         .bAlternateSetting = 0x00,
-    //         .bNumEndpoints = 2,
-    //         .bInterfaceClass = USB_CLASS_MASS_STORAGE,
-    //         .bInterfaceSubClass = USB_SUBCLASS_SCSI,
-    //         .bInterfaceProtocol = USB_PROTOCOL_MSC_BOT,
-    //         .iInterface = 6,
-    //     },
-    // .ep_msc_out =
-    //     {
-    //         .bLength = sizeof(usb_endpoint_descriptor_t),
-    //         .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-    //         .bEndpointAddress = (USB_ENDP_OUT | 5),
-    //         .bEndpointType = USB_ENDP_BULK,
-    //         .wMaxPacketSize = 64,
-    //         .bInterval = 0x00,
-    //     },
-    // .ep_msc_in =
-    //     {
-    //         .bLength = sizeof(usb_endpoint_descriptor_t),
-    //         .bDescriptorType = USB_DESC_TYPE_ENDPOINT,
-    //         .bEndpointAddress = (USB_ENDP_IN | 5),
-    //         .bEndpointType = USB_ENDP_BULK,
-    //         .wMaxPacketSize = 64,
-    //         .bInterval = 0x00,
-    //     },
-
-    // ==========================================
-    // CMSIS-DAP. INTERFACE 5
+    // CMSIS-DAP. INTERFACE 4
     // ==========================================
     .itf_custom =
         {
             .bLength = sizeof(usb_interface_descriptor_t),
             .bDescriptorType = USB_DESC_TYPE_INTERFACE,
-            .bInterfaceNumber = 4,
+            .bInterfaceNumber = DEBUGGER_INTERFACE_0,
             .bAlternateSetting = 0x00,
             .bNumEndpoints = 2,
             .bInterfaceClass = USB_CLASS_VENDOR_SPECIFIC,

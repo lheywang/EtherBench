@@ -4,9 +4,9 @@
  * @brief   Implement the SWD probing methods.
  * @version 0.1
  * @date    2026-03-20
- * 
+ *
  * @copyright Copyright (c) 2026
- * 
+ *
  */
 
 // ======================================================================
@@ -24,7 +24,7 @@
 /*
  * Constructors & destructors
  */
-SWDProbe::SWDProbe(HardwareProbeManager* manager){
+SWDProbe::SWDProbe(HardwareProbeManager *manager) {
     this->probe_manager = manager;
     return;
 }
@@ -32,19 +32,12 @@ SWDProbe::SWDProbe(HardwareProbeManager* manager){
 /*
  * Overrides for the probe class
  */
-bool SWDProbe::connect() {
-    return true;
-}
+bool SWDProbe::connect() { return true; }
 
-bool SWDProbe::disconnect() {
-    return true;
-}
+bool SWDProbe::disconnect() { return true; }
 
-uint32_t SWDProbe::transfer(
-    const uint8_t size,
-    const uint8_t* request,
-    uint8_t* response
-) {
+uint32_t
+SWDProbe::transfer(const uint8_t size, const uint8_t *request, uint8_t *response) {
     return true;
 }
 

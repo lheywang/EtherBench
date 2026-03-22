@@ -13,10 +13,15 @@
 //                              INCLUDES
 // ======================================================================
 // Header
+#include "app_usbx_device.h"
+
+// Descriptors
 #include "descriptors2.h"
+#include "msos2.h"
 
 // Local libraries
 #include "app_usbx_device.h"
+#include "app_usbx_msos2.h"
 #include "app_usbx_status.h"
 
 #define LOG_MODULE "USBX_APP"
@@ -101,6 +106,14 @@ UINT MX_USBX_Device_Init(void) {
 
     if (status != UX_SUCCESS)
         Error_Handler();
+
+    /*
+     * Ensure the Microsoft BOS header will be treated as well.
+     *
+     * This might look a bit sketchy as it, but that's the ""official"" hack.
+     */
+    _ux_system_slave->ux_system_slave_device_vendor_request_function =
+        bsp_usb_custom_request_handler;
 
     /*
      * Add the USB classes

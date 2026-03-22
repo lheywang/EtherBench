@@ -4,9 +4,9 @@
  * @brief   Define the SPI probing methods.
  * @version 0.1
  * @date    2026-03-20
- * 
+ *
  * @copyright Copyright (c) 2026
- * 
+ *
  */
 #pragma once
 
@@ -14,36 +14,34 @@
 //                              INCLUDE
 // ======================================================================
 // Local library
-#include "Programmer/Probes/Probe.hpp"
 #include "Programmer/HardwareProbeManager/HardwareProbeManager.hpp"
+#include "Programmer/Probes/Probe.hpp"
+
 
 // ======================================================================
 //                               CLASS
 // ======================================================================
 class SPIProbe : public Probe {
 
-    private:
-        HardwareProbeManager* probe_manager;
+  private:
+    HardwareProbeManager *probe_manager;
 
-    public:
-        /*
-         * Constructors & destructors
-         */
-        explicit SPIProbe(HardwareProbeManager* manager);
+  public:
+    /*
+     * Constructors & destructors
+     */
+    explicit SPIProbe(HardwareProbeManager *manager);
 
-        /*
-         * Overrides for the probe class
-         */
-        bool connect() override;
-        bool disconnect() override; 
-        uint32_t transfer(
-            const uint8_t size,
-            const uint8_t* request,
-            uint8_t* response
-        ) override; 
-        bool set_clock_frequency(uint32_t frequency_hz) override;
+    /*
+     * Overrides for the probe class
+     */
+    bool connect() override;
+    bool disconnect() override;
+    uint32_t
+    transfer(const uint8_t size, const uint8_t *request, uint8_t *response) override;
+    bool set_clock_frequency(uint32_t frequency_hz) override;
 
-        /*
-         * Additional methods for SPIProbe
-         */
+    /*
+     * Additional methods for SPIProbe
+     */
 };

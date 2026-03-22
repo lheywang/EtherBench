@@ -4,9 +4,9 @@
  * @brief   Implement the JTAG probing methods.
  * @version 0.1
  * @date    2026-03-20
- * 
+ *
  * @copyright Copyright (c) 2026
- * 
+ *
  */
 
 // ======================================================================
@@ -24,7 +24,7 @@
 /*
  * Constructors & destructors
  */
-JTAGProbe::JTAGProbe(HardwareProbeManager* manager)  {
+JTAGProbe::JTAGProbe(HardwareProbeManager *manager) {
     this->probe_manager = manager;
     return;
 }
@@ -32,19 +32,12 @@ JTAGProbe::JTAGProbe(HardwareProbeManager* manager)  {
 /*
  * Overrides for the probe class
  */
-bool JTAGProbe::connect() {
-    return true;
-}
+bool JTAGProbe::connect() { return true; }
 
-bool JTAGProbe::disconnect() {
-    return true;
-}
+bool JTAGProbe::disconnect() { return true; }
 
-uint32_t JTAGProbe::transfer(
-    const uint8_t size,
-    const uint8_t* request,
-    uint8_t* response
-) {
+uint32_t
+JTAGProbe::transfer(const uint8_t size, const uint8_t *request, uint8_t *response) {
     return true;
 }
 

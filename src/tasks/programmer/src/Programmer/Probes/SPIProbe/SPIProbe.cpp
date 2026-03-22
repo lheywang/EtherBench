@@ -4,9 +4,9 @@
  * @brief   Implement the SPI probing methods.
  * @version 0.1
  * @date    2026-03-20
- * 
+ *
  * @copyright Copyright (c) 2026
- * 
+ *
  */
 
 // ======================================================================
@@ -24,7 +24,7 @@
 /*
  * Constructors & destructors
  */
-SPIProbe::SPIProbe(HardwareProbeManager* manager) {
+SPIProbe::SPIProbe(HardwareProbeManager *manager) {
     this->probe_manager = manager;
     return;
 }
@@ -32,19 +32,12 @@ SPIProbe::SPIProbe(HardwareProbeManager* manager) {
 /*
  * Overrides for the probe class
  */
-bool SPIProbe::connect() {
-    return true;
-}
+bool SPIProbe::connect() { return true; }
 
-bool SPIProbe::disconnect() {
-    return true;
-}
+bool SPIProbe::disconnect() { return true; }
 
-uint32_t SPIProbe::transfer(
-    const uint8_t size,
-    const uint8_t* request,
-    uint8_t* response
-) {
+uint32_t
+SPIProbe::transfer(const uint8_t size, const uint8_t *request, uint8_t *response) {
     return true;
 }
 

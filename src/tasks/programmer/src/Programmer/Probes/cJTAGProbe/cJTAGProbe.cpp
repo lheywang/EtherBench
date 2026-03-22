@@ -4,9 +4,9 @@
  * @brief   Implement the cJTAG probing methods.
  * @version 0.1
  * @date    2026-03-20
- * 
+ *
  * @copyright Copyright (c) 2026
- * 
+ *
  */
 
 // ======================================================================
@@ -24,7 +24,7 @@
 /*
  * Constructors & destructors
  */
-cJTAGProbe::cJTAGProbe(HardwareProbeManager* manager){
+cJTAGProbe::cJTAGProbe(HardwareProbeManager *manager) {
     this->probe_manager = manager;
     return;
 }
@@ -32,19 +32,12 @@ cJTAGProbe::cJTAGProbe(HardwareProbeManager* manager){
 /*
  * Overrides for the probe class
  */
-bool cJTAGProbe::connect() {
-    return true;
-}
+bool cJTAGProbe::connect() { return true; }
 
-bool cJTAGProbe::disconnect() {
-    return true;
-}
+bool cJTAGProbe::disconnect() { return true; }
 
-uint32_t cJTAGProbe::transfer(
-    const uint8_t size,
-    const uint8_t* request,
-    uint8_t* response
-) {
+uint32_t
+cJTAGProbe::transfer(const uint8_t size, const uint8_t *request, uint8_t *response) {
     return true;
 }
 

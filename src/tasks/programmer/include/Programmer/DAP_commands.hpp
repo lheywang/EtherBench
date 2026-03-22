@@ -2,13 +2,13 @@
  * @file    DAP_commands.hpp
  * @author  your name (you@domain.com)
  * @brief   Define the DAP commands that are usefull.
- *          Full documentation here : 
+ *          Full documentation here :
  *          https://arm-software.github.io/CMSIS-DAP/latest/group__DAP__Commands__gr.html
  * @version 0.1
  * @date    2026-03-21
- * 
+ *
  * @copyright Copyright (c) 2026
- * 
+ *
  */
 
 #pragma once
@@ -19,9 +19,9 @@
 /*
  * Markers
  */
-constexpr char DAP_VENDOR[] = "EtherBench";
-constexpr char DAP_PRODUCT[] = "EtherBench Programmer";
-constexpr char DAP_SER_NUM[] = "EB-001";
+constexpr char DAP_VENDOR[] = "";  // Empty. Will use the USB ones.
+constexpr char DAP_PRODUCT[] = ""; // Empty. Will use the USB ones.
+constexpr char DAP_SER_NUM[] = ""; // Empty. Will use the USB ones.
 
 constexpr char DAP_FW_VER[] = "2.1.2";
 
@@ -33,7 +33,7 @@ constexpr char DAP_INFO_TARGET_VERSION[] = "";
 /*
  * Defaults settings
  */
-constexpr uint32_t DAP_DEFAULT_MODE = 0x01; // SWD
+constexpr uint32_t DAP_DEFAULT_MODE = 0x01;        // SWD
 constexpr uint32_t DAP_DEFAULT_CLOCK_HZ = 1000000; // 1 MHz
 
 // ======================================================================
@@ -78,13 +78,11 @@ enum class DAP_COMMANDS {
     QueueCommands = 0x7E,
     ExecuteCommands = 0x7F
 
-    // TODO : Add SPI Support here, but it is not in the CMSIS-DAP specification, so we need to implement it ourselves.
+    // TODO : Add SPI Support here, but it is not in the CMSIS-DAP specification, so we
+    // need to implement it ourselves.
 };
 
-enum class DAP_RESULTS_CODES {
-    OK = 0x00,
-    ERROR = 0xFF
-};
+enum class DAP_RESULTS_CODES { OK = 0x00, ERROR = 0xFF };
 
 /*
  * DAP_INFO Sub-commands
@@ -110,7 +108,7 @@ enum class DAP_INFO_COMMANDS {
 
 enum class DAP_CAPABILITIES {
     SWD = 0x01,
-    JTAG = 0x02,   
+    JTAG = 0x02,
     SWO_UART = 0x04,
     SWO_MANCHESTER = 0x08,
     ATOMIC_COMMANDS = 0x10,
@@ -120,15 +118,6 @@ enum class DAP_CAPABILITIES {
     USB_COM_PORT = 0x01
 };
 
-enum class DAP_STATUS_FLAGS {
-    CONNECT = 0x00,
-    RUNNING = 0x01
-};
+enum class DAP_STATUS_FLAGS { CONNECT = 0x00, RUNNING = 0x01 };
 
-enum class DAP_CONNECT_FLAGS {
-    DEFAULT = 0x00,
-    SWD = 0x01,
-    JTAG = 0x02
-};
-
-
+enum class DAP_CONNECT_FLAGS { DEFAULT = 0x00, SWD = 0x01, JTAG = 0x02 };

@@ -16,32 +16,15 @@
 // ======================================================================
 //                              INCLUDES
 // ======================================================================
+// Local libraries
+#include "descriptor_config.h"
+
+// STD
 #include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-// ======================================================================
-//                        VENDORS ID & SETTINGS
-// ======================================================================
-// Here we're using the ST ones, because the MCU is an ST one.
-// Ensure to use the correct ones !
-#define ST_VENDORID (0x0483)
-#define ST_PRODUCTID (0x5740)
-#define DEVICE_ID (0x0100)
-
-// Here, we're defining values about the strings.
-// This can make sure the compiler will work for us, when needed !
-#define STR_MANUFACTURER "EtherBench Labs"
-#define STR_PRODUCT "EtherBench v1"
-#define STR_SERIAL "EB-2026-0001"
-
-// Here we define what the task manager show as device names :
-#define STR_COM1 "EtherBench TERMINAL"
-#define STR_COM2 "EtherBench USART"
-#define STR_MSC1 "EtherBench FLASH"
-#define STR_DBG1 "EtherBench CMSIS-DAP Debugger"
 
 // ======================================================================
 //                              ENUMS
@@ -55,7 +38,7 @@ enum bDescriptorType {
     USB_DESC_TYPE_DEVICE_QUALIFIER = 0x06,
     USB_DESC_TYPE_IAD = 0x0B,
     USB_DESC_TYPE_CDC_INTERFACE = 0x24,
-    USB_DESC_TYPE_CDc_ENDPOINT = 0x25
+    USB_DESC_TYPE_CDC_ENDPOINT = 0x25
 };
 
 enum bDescriptorSubType {
@@ -65,7 +48,14 @@ enum bDescriptorSubType {
     USB_DESC_SUBTYPE_CDC_UNION = 0x06,
 };
 
-enum bcdUSB { USB_BCD_USB1_1 = 0x0110, USB_BCDC_USB2_0 = 0x0200 };
+enum bcdUSB {
+    USB_BCD_USB1_1 = 0x0110,
+    USB_BCDC_USB2_0 = 0x0200,
+    USB_BCDC_USB2_1 = 0x0201,
+    USB_BCDC_USB3_0 = 0x0300,
+    USB_BCDC_USB3_1 = 0x0301,
+    USB_BCDC_USB3_2 = 0x0302
+};
 
 enum bDeviceClass {
     USB_CLASS_BASE = 0x00,
@@ -401,6 +391,13 @@ typedef struct __attribute__((packed)) {
         uint8_t len;
         char str[GET_USB_STRING_LEN(STR_MSC1)];
     } string6;
+
+    struct __attribute__((packed)) {
+        uint16_t langid;
+        uint8_t str_id;
+        uint8_t len;
+        char str[GET_USB_STRING_LEN(STR_DBG1)];
+    } string7;
 
     struct __attribute__((packed)) {
         uint16_t langid;

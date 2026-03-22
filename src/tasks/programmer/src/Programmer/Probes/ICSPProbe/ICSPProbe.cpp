@@ -4,9 +4,9 @@
  * @brief   Implement the ICSP probing methods.
  * @version 0.1
  * @date    2026-03-20
- * 
+ *
  * @copyright Copyright (c) 2026
- * 
+ *
  */
 
 // ======================================================================
@@ -24,7 +24,7 @@
 /*
  * Constructors & destructors
  */
-ICSPProbe::ICSPProbe(HardwareProbeManager* manager) {
+ICSPProbe::ICSPProbe(HardwareProbeManager *manager) {
     this->probe_manager = manager;
     return;
 }
@@ -32,19 +32,12 @@ ICSPProbe::ICSPProbe(HardwareProbeManager* manager) {
 /*
  * Overrides for the probe class
  */
-bool ICSPProbe::connect() {
-    return true;
-}
+bool ICSPProbe::connect() { return true; }
 
-bool ICSPProbe::disconnect() {
-    return true;
-}
+bool ICSPProbe::disconnect() { return true; }
 
-uint32_t ICSPProbe::transfer(
-    const uint8_t size,
-    const uint8_t* request,
-    uint8_t* response
-) {
+uint32_t
+ICSPProbe::transfer(const uint8_t size, const uint8_t *request, uint8_t *response) {
     return true;
 }
 

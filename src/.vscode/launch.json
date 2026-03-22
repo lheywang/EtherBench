@@ -4,7 +4,7 @@
         {
             "name": "Debug (ST-Link)",
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceFolder}/build/EtherBench.elf",
+            "executable": "${workspaceFolder}/build/stm32/EtherBench.elf",
             "request": "launch",
             "type": "cortex-debug",
             "runToEntryPoint": "main",
