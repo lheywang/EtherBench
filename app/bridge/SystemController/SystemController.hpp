@@ -2,47 +2,34 @@
 
 #include <QObject>
 #include <QString>
-#include <qtmetamacros.h>
+#include <QtQml/qqml.h> // <- INDISPENSABLE POUR LES MACROS QT6
 
 class SystemController : public QObject {
-    Q_OBJECT
+  Q_OBJECT
+QML_ELEMENT       // Dit à CMake d'exposer cette classe au QML
+    QML_SINGLETON // Précise qu'il n'y aura qu'une seule instance (Singleton)
 
-    Q_PROPERTY(int clickCount READ getClickCount NOTIFY clickCountChanged)
+    Q_PROPERTY(ViewId currentView READ getCurrentView WRITE setCurrentView
+                   NOTIFY currentViewChanged)
 
-public:
+        public : enum ViewId {
+          Home = 0,
+          Memory,
+          InputOutput,
+          Sequences,
+          Debugger
+        };
+  Q_ENUM(ViewId)
 
-    enum class ActiveView {
-        Home = 0,
-        Debugger,
-        Memory,
-        Sequences,
-        Settings
-    };
-    Q_ENUM(ActiveView);
-
-    explicit SystemController(
-        QObject* parent = nullptr
-    );
-
-    [[nodiscard]] int getClickCount() const;
-    [[nodiscard]] int getCurrentView() const;
+  explicit SystemController(QObject *parent = nullptr);
+  [[nodiscard]] ViewId getCurrentView() const;
 
 public slots:
-
-    void executeAction(
-        const QString& actionName
-    );
-
-    void setCurrentView(
-        int viewId
-    );
+  void setCurrentView(ViewId view);
 
 signals:
-
-    void clickCountChanged();
-    void currentViewChanged();
+  void currentViewChanged();
 
 private:
-    int m_clickCount; 
-    int m_currentView;
+  ViewId m_currentView;
 };

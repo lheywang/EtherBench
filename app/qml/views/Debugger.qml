@@ -5,7 +5,7 @@ import QtQuick.Layouts
 Page {
     Text {
         anchors.centerIn: parent
-        text: "Settings"
+        text: "Debugger"
         font.pixelSize: 24
         color: "#555"
     }

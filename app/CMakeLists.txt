@@ -10,7 +10,6 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/qml_imports)
 
-add_subdirectory(qml)
 add_subdirectory(third_party)
 
 qt_add_executable(${PROJECT_NAME}
@@ -18,15 +17,24 @@ qt_add_executable(${PROJECT_NAME}
     bridge/SystemController/SystemController.cpp
 )
 
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}       
+    ${CMAKE_CURRENT_SOURCE_DIR}/bridge/SystemController
+)
+
 qt_add_qml_module(${PROJECT_NAME}
     URI App
     VERSION 1.0
-    RESOURCE_PREFIX "/qt/qml"
     QML_FILES 
         qml/Main.qml
-    DEPENDENCIES
-        App.Views
-        App.Components
+        qml/views/Debugger.qml
+        qml/views/Home.qml
+        qml/views/InputOutput.qml
+        qml/views/Memory.qml
+        qml/views/Sequences.qml
+        qml/views/Settings.qml
+        qml/components/Button.qml
+        qml/components/Toggle.qml
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -36,3 +44,20 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Quick
     libusb
 )
+
+if(WIN32)
+    # Recherche de l'outil de déploiement Qt
+    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT6_INSTALL_PREFIX}/bin")
+    
+    if(WINDEPLOYQT_EXECUTABLE)
+        # Exécution automatique après chaque build réussi
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${WINDEPLOYQT_EXECUTABLE} 
+                --qmldir ${CMAKE_CURRENT_SOURCE_DIR}/qml 
+                $<TARGET_FILE:${PROJECT_NAME}>
+            COMMENT "Deploying QT DLLs..."
+        )
+    else()
+        message("Could not find QT deployement utility. Program may not work.")
+    endif()
+endif()

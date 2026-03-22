@@ -4,7 +4,9 @@ import QtQuick.Layouts
 
 import QtQuick.Controls.Material
 
-import App.Views 1.0
+import App
+import "views"
+import "components"
 
 ApplicationWindow {
     visible: true
@@ -17,16 +19,16 @@ ApplicationWindow {
         Menu {
             title: qsTr("&File")
 
-            MenuItem {
+            Action {
                 text: qsTr("Settings")
                 shortcut: "Ctrl+,"
                 onTriggered: console.log("Not implemented for now...")
             }
 
-            MenuSeparator{}
+            MenuSeparator {}
 
-            MenuItem {
-                text: qsTr("&Quitter")
+            Action {
+                text: qsTr("&Quit")
                 shortcut: StandardKey.Quit
                 onTriggered: Qt.quit()
             }
@@ -34,26 +36,31 @@ ApplicationWindow {
 
         Menu {
             title: qsTr("&View")
-            
-            MenuItem {
+
+            Action {
                 text: qsTr("Home")
                 shortcut: "Ctrl+H"
-                onTriggered: sysController.setCurrentView(SystemController.Home)
+                onTriggered: SystemController.setCurrentView(SystemController.Home)
             }
-            MenuItem {
-                text: qsTr("Debugger")
-                shortcut: "Ctrl+D"
-                onTriggered: sysController.setCurrentView(SystemController.Debugger)
-            }
-            MenuItem {
+            Action {
                 text: qsTr("Memory")
                 shortcut: "Ctrl+M"
-                onTriggered: sysController.setCurrentView(SystemController.Memory)
+                onTriggered: SystemController.setCurrentView(SystemController.Memory)
             }
-            MenuItem {
+            Action {
+                text: qsTr("Serial IO")
+                shortcut: "Ctrl+B"
+                onTriggered: SystemController.setCurrentView(SystemController.InputOutput)
+            }
+            Action {
                 text: qsTr("Sequences")
                 shortcut: "Ctrl+K"
-                onTriggered: sysController.setCurrentView(SystemController.Memory)
+                onTriggered: SystemController.setCurrentView(SystemController.Sequences)
+            }
+            Action {
+                text: qsTr("Debugger")
+                shortcut: "Ctrl+D"
+                onTriggered: SystemController.setCurrentView(SystemController.Debugger)
             }
         }
     }
@@ -62,27 +69,27 @@ ApplicationWindow {
         id: viewContainer
         anchors.fill: parent
 
-        currentIndex: sysController.currentView
+        currentIndex: SystemController.currentView
 
         Home {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-
         Memory {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-
-        Sequences {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-
         InputOutput {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-
+        Sequences {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+        Debugger {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
     }
 }
