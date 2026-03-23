@@ -9,7 +9,7 @@ Menu {
     Action {
         text: qsTr("Settings")
         shortcut: "Ctrl+,"
-        onTriggered: console.log("Not implemented for now...")
+        onTriggered: SystemController.setCurrentView(SystemController.Settings)
     }
 
     Action {

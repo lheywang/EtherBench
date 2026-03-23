@@ -1,12 +1,48 @@
 import QtQuick
 import QtQuick.Controls
+import Qt.labs.qmlmodels
 import QtQuick.Layouts
 
 Page {
-    Text {
-        anchors.centerIn: parent
-        text: "Settings"
-        font.pixelSize: 24
-        color: "#555"
+
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 10
+        spacing: 10
+
+        // RowLayout {
+        //     Layout.fillWidth: true
+        //     Button {
+        //         text: "Clear Buffer"
+        //     }
+        //     Item {
+        //         Layout.fillWidth: true
+        //     } // Espaceur
+        // }
+
+        SplitView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            orientation: Qt.Horizontal
+
+            Rectangle {
+                id: selectionPanel
+                color: "#1e1e1e"
+                border.color: "#333333"
+
+                SplitView.fillWidth: true
+                SplitView.minimumWidth: 300
+            }
+
+            Rectangle {
+                id: detailPane
+                color: "#252526"
+                border.color: "#333333"
+
+                SplitView.preferredWidth: 250
+                SplitView.minimumWidth: 150
+                SplitView.maximumWidth: 500
+            }
+        }
     }
 }

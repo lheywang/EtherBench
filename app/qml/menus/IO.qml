@@ -3,35 +3,23 @@ import QtQuick.Controls
 
 import App
 
-Instantiator {
-    active: SystemController.currentView === SystemController.Debugger || SystemController.currentView === SystemController.InputOutput
+Menu {
+    title: qsTr("IO")
 
-    delegate: Menu {
-        title: qsTr("IO")
-
-        Action {
-            text: qsTr("Save session")
-            onTriggered: console.log("Saving debugging session")
-        }
-
-        Action {
-            text: qsTr("Load session")
-            onTriggered: console.log("Loading a debugging session")
-        }
-
-        MenuSeparator {}
-
-        Action {
-            text: qsTr("Save session to logs")
-            onTriggered: console.log("Writting human log text")
-        }
+    Action {
+        text: qsTr("Save session")
+        onTriggered: console.log("Saving debugging session")
     }
 
-    // Callbacks
-    onObjectAdded: function (index, object) {
-        menuBar.insertMenu(2, object);
+    Action {
+        text: qsTr("Load session")
+        onTriggered: console.log("Loading a debugging session")
     }
-    onObjectRemoved: function (index, object) {
-        menuBar.removeMenu(object);
+
+    MenuSeparator {}
+
+    Action {
+        text: qsTr("Save session to logs")
+        onTriggered: console.log("Writting human log text")
     }
 }

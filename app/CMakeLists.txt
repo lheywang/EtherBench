@@ -34,14 +34,20 @@ qt_add_qml_module(${PROJECT_NAME}
         qml/views/Memory.qml
         qml/views/Sequences.qml
         qml/views/Settings.qml
-        qml/components/Button.qml
-        qml/components/Toggle.qml
+        qml/components/StatusETH.qml
+        qml/components/StatusUSB.qml
+        qml/components/ContextualMenu.qml
         qml/menus/File.qml
         qml/menus/View.qml
         qml/menus/Build.qml
         qml/menus/Debugger.qml
         qml/menus/IO.qml
         qml/menus/Memory.qml
+        qml/views/debugger/Details.qml
+        qml/views/debugger/Logs.qml
+        qml/views/settings/SettingsTree.qml
+        qml/views/settings/app/App.qml
+        qml/views/settings/probe/Probe.qml
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

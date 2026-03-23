@@ -3,48 +3,36 @@ import QtQuick.Controls
 
 import App
 
-Instantiator {
-    active: SystemController.currentView === SystemController.Sequences
+Menu {
+    title: qsTr("Build")
 
-    delegate: Menu {
-        title: qsTr("Build")
-
-        Action {
-            text: qsTr("Load source")
-            onTriggered: console.log("Loading raw sequence file")
-        }
-
-        Action {
-            text: qsTr("Export to file")
-            onTriggered: console.log("Writting raw")
-        }
-
-        MenuSeparator {}
-
-        Action {
-            text: qsTr("Compile")
-            shortcut: "Ctrl+B"
-            onTriggered: console.log("Compiling sequence")
-        }
-
-        Action {
-            text: qsTr("Decompile")
-            onTriggered: console.log("Decompiling sequence")
-        }
-
-        MenuSeparator {}
-
-        Action {
-            text: qsTr("Load to device")
-            onTriggered: console.log("Sending sequence to device")
-        }
+    Action {
+        text: qsTr("Load source")
+        onTriggered: console.log("Loading raw sequence file")
     }
 
-    // Callbacks
-    onObjectAdded: function (index, object) {
-        menuBar.insertMenu(2, object);
+    Action {
+        text: qsTr("Export to file")
+        onTriggered: console.log("Writting raw")
     }
-    onObjectRemoved: function (index, object) {
-        menuBar.removeMenu(object);
+
+    MenuSeparator {}
+
+    Action {
+        text: qsTr("Compile")
+        shortcut: "Ctrl+B"
+        onTriggered: console.log("Compiling sequence")
+    }
+
+    Action {
+        text: qsTr("Decompile")
+        onTriggered: console.log("Decompiling sequence")
+    }
+
+    MenuSeparator {}
+
+    Action {
+        text: qsTr("Load to device")
+        onTriggered: console.log("Sending sequence to device")
     }
 }
