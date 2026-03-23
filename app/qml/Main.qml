@@ -5,8 +5,9 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 
 import App
-import "views"
-import "components"
+import "views" as Views
+import "menus" as Menus
+import "components" as Components
 
 ApplicationWindow {
     visible: true
@@ -15,55 +16,17 @@ ApplicationWindow {
     title: qsTr("EtherBench")
     color: "#ececec"
 
+    // These are always on screen
     menuBar: MenuBar {
-        Menu {
-            title: qsTr("&File")
-
-            Action {
-                text: qsTr("Settings")
-                shortcut: "Ctrl+,"
-                onTriggered: console.log("Not implemented for now...")
-            }
-
-            MenuSeparator {}
-
-            Action {
-                text: qsTr("&Quit")
-                shortcut: StandardKey.Quit
-                onTriggered: Qt.quit()
-            }
-        }
-
-        Menu {
-            title: qsTr("&View")
-
-            Action {
-                text: qsTr("Home")
-                shortcut: "Ctrl+H"
-                onTriggered: SystemController.setCurrentView(SystemController.Home)
-            }
-            Action {
-                text: qsTr("Memory")
-                shortcut: "Ctrl+M"
-                onTriggered: SystemController.setCurrentView(SystemController.Memory)
-            }
-            Action {
-                text: qsTr("Serial IO")
-                shortcut: "Ctrl+B"
-                onTriggered: SystemController.setCurrentView(SystemController.InputOutput)
-            }
-            Action {
-                text: qsTr("Sequences")
-                shortcut: "Ctrl+K"
-                onTriggered: SystemController.setCurrentView(SystemController.Sequences)
-            }
-            Action {
-                text: qsTr("Debugger")
-                shortcut: "Ctrl+D"
-                onTriggered: SystemController.setCurrentView(SystemController.Debugger)
-            }
-        }
+        Menus.File {}
+        Menus.View {}
     }
+
+    // These aren't always shown :
+    Menus.Build {}
+    Menus.IO {}
+    Menus.Memory {}
+    Menus.Debugger {}
 
     StackLayout {
         id: viewContainer
@@ -71,23 +34,31 @@ ApplicationWindow {
 
         currentIndex: SystemController.currentView
 
-        Home {
+        Views.Home {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-        Memory {
+        Views.Memory {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-        InputOutput {
+        Views.InputOutput {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-        Sequences {
+        Views.Sequences {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-        Debugger {
+        Views.Debugger {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+        Views.Settings {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+        Views.Help {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }

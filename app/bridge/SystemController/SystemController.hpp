@@ -2,23 +2,26 @@
 
 #include <QObject>
 #include <QString>
-#include <QtQml/qqml.h> // <- INDISPENSABLE POUR LES MACROS QT6
+#include <QtQml/qqml.h>
 
 class SystemController : public QObject {
   Q_OBJECT
-QML_ELEMENT       // Dit à CMake d'exposer cette classe au QML
-    QML_SINGLETON // Précise qu'il n'y aura qu'une seule instance (Singleton)
+  QML_ELEMENT
+  QML_SINGLETON
 
-    Q_PROPERTY(ViewId currentView READ getCurrentView WRITE setCurrentView
-                   NOTIFY currentViewChanged)
+  Q_PROPERTY(ViewId currentView READ getCurrentView WRITE setCurrentView NOTIFY
+                 currentViewChanged)
 
-        public : enum ViewId {
-          Home = 0,
-          Memory,
-          InputOutput,
-          Sequences,
-          Debugger
-        };
+public:
+  enum ViewId {
+    Home = 0,
+    Memory,
+    InputOutput,
+    Sequences,
+    Debugger,
+    Settings,
+    Help
+  };
   Q_ENUM(ViewId)
 
   explicit SystemController(QObject *parent = nullptr);

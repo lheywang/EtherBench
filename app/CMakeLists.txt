@@ -28,6 +28,7 @@ qt_add_qml_module(${PROJECT_NAME}
     QML_FILES 
         qml/Main.qml
         qml/views/Debugger.qml
+        qml/views/Help.qml
         qml/views/Home.qml
         qml/views/InputOutput.qml
         qml/views/Memory.qml
@@ -35,6 +36,12 @@ qt_add_qml_module(${PROJECT_NAME}
         qml/views/Settings.qml
         qml/components/Button.qml
         qml/components/Toggle.qml
+        qml/menus/File.qml
+        qml/menus/View.qml
+        qml/menus/Build.qml
+        qml/menus/Debugger.qml
+        qml/menus/IO.qml
+        qml/menus/Memory.qml
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
