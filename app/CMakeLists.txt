@@ -15,6 +15,17 @@ add_subdirectory(third_party)
 qt_add_executable(${PROJECT_NAME}
     main.cpp
     bridge/SystemController/SystemController.cpp
+    bridge/Pages/Debugger/Debugger.cpp
+    bridge/Pages/Home/Home.cpp
+    bridge/Pages/Memory/Memory.cpp
+    bridge/Pages/Sequences/Sequences.cpp
+    core/AppCore.cpp
+    core/IOController/CommandParser/CommandParser.cpp
+    core/IOController/InterfaceController/EthernetController/EthernetController.cpp
+    core/IOController/InterfaceController/USBController/USBController.cpp
+    core/Models/DebuggerModel/DebuggerModel.cpp
+    core/Models/DebuggerModel/DecoderModel/DecoderModel.cpp
+    core/Models/MemoryModel/MemoryModel.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE

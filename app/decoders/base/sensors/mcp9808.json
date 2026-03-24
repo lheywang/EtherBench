@@ -1,0 +1,25 @@
+{
+    "protocolName": "MCP9808 Decoder",
+    "targetBus": "I2C",
+    "triggerCondition": {
+        "byteOffset": 0,
+        "matchValue": "0x3X"
+    },
+    "fields": [
+        {
+            "name": "Configuration Register",
+            "byteOffset": 0,
+            "byteLength": 1,
+            "type": "uint8",
+            "displayFormat": "hex"
+        },
+        {
+            "name": "Payload",
+            "byteOffset": 0,
+            "byteLength": 2,
+            "type": "uint16",
+            "endianness": "big",
+            "displayFormat": "dec"
+        }
+    ]
+}

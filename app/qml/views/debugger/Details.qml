@@ -3,13 +3,14 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import App
+import EtherBench.Backend
 
 Rectangle {
     id: detailPane
     color: "#252526"
     border.color: "#333333"
 
-    property var currentLog: null
+    property bool hasData: SystemCore.decoder.decodedTimestamp !== ""
 
     ColumnLayout {
         anchors.fill: parent
@@ -36,14 +37,14 @@ Rectangle {
             rowSpacing: 10
             columnSpacing: 10
 
-            visible: currentLog !== null
+            visible: detailPane.hasData
 
             Label {
                 text: "Timestamp:"
                 color: "#888888"
             }
             Label {
-                text: currentLog ? currentLog.timeStr : ""
+                text: SystemCore.decoder.decodedTimestamp
                 font.family: "Consolas"
                 color: "#ffffff"
                 Layout.fillWidth: true
@@ -54,17 +55,17 @@ Rectangle {
                 color: "#888888"
             }
             Label {
-                text: currentLog ? (currentLog.busStr + " (" + currentLog.dirStr + ")") : ""
+                text: SystemCore.decoder.decodedBus
                 font.family: "Consolas"
                 color: "#ffffff"
             }
 
             Label {
-                text: "Raw Hex:"
+                text: "Payload:"
                 color: "#888888"
             }
             Label {
-                text: currentLog ? currentLog.dataHex : ""
+                text: SystemCore.decoder.decodedPayload
                 font.family: "Consolas"
                 color: "#00BCD4"
             }
@@ -75,7 +76,7 @@ Rectangle {
             color: "#666666"
             font.italic: true
             Layout.alignment: Qt.AlignCenter
-            visible: currentLog === null
+            visible: !detailPane.hasData
         }
 
         Item {

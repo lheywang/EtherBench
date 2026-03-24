@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Qt.labs.qmlmodels
 
 import App
+import EtherBench.Backend
 
 Rectangle {
     id: logsRoot
@@ -12,7 +13,6 @@ Rectangle {
     border.color: "#333333"
 
     property int selectedRow: -1
-    property var selectedData: null
 
     TableModel {
         id: mockModel
@@ -142,7 +142,7 @@ Rectangle {
                 TapHandler {
                     onTapped: {
                         logsRoot.selectedRow = row;
-                        console.log("Trame selectionnee, index :", row);
+                        SystemCore.decoder.decodeFrameAt(row);
                     }
                 }
 

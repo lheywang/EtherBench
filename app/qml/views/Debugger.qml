@@ -38,8 +38,6 @@ Page {
                 SplitView.preferredWidth: 250
                 SplitView.minimumWidth: 150
                 SplitView.maximumWidth: 500
-
-                currentLog: logsPane.selectedData
             }
         }
     }

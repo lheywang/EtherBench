@@ -1,0 +1,17 @@
+{
+    "protocolName": "Base USART decoder",
+    "targetBus": "USART",
+    "triggerCondition": {
+        "byteOffset": 0,
+        "matchValue": "-1"
+    },
+    "fields": [
+        {
+            "name": "Payload",
+            "byteOffset": 0,
+            "byteLength": -1,
+            "type": "uint8",
+            "displayFormat": "text"
+        }
+    ]
+}

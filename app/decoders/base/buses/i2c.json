@@ -1,0 +1,24 @@
+{
+    "protocolName": "Base I2C decoder",
+    "targetBus": "I2C",
+    "triggerCondition": {
+        "byteOffset": 0,
+        "matchValue": "-1"
+    },
+    "fields": [
+        {
+            "name": "Register Address",
+            "byteOffset": 0,
+            "byteLength": 1,
+            "type": "uint8",
+            "displayFormat": "hex"
+        },
+        {
+            "name": "Payload",
+            "byteOffset": 1,
+            "byteLength": -1,
+            "type": "uint8",
+            "displayFormat": "hex"
+        }
+    ]
+}
