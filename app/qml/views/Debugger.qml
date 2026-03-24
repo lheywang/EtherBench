@@ -13,15 +13,6 @@ Page {
         anchors.margins: 10
         spacing: 10
 
-        RowLayout {
-            Layout.fillWidth: true
-
-            Button {
-                text: "Clear buffer"
-                onClicked: console.log("Cliked clear buffer !")
-            }
-        }
-
         SplitView {
             Layout.fillWidth: true
             Layout.fillHeight: true

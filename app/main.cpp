@@ -25,6 +25,7 @@
 // ENTRY POINT
 // =============================================================
 int main(int argc, char *argv[]) {
+    qputenv("QT_QUICK_CONTROLS_STYLE", "Material");
 
     // Create the GUI applications
     qInfo("[Main] STEP 1 : Initializing OS part.");

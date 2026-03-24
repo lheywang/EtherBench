@@ -74,7 +74,7 @@ QVariant DebuggerModel::data(const QModelIndex &index, int role) const {
 }
 
 void DebuggerModel::appendPayload(const SpyPacket &packet) {
-    qInfo("[DebuggerMode] Added payload to the current FIFO");
+    qInfo("[DebuggerModel] Added payload to the current FIFO");
 
     const int newRow = static_cast<int>(this->m_packets.size());
 

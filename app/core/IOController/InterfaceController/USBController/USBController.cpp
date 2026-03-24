@@ -47,7 +47,7 @@ QByteArray USBController::getData() const {
 void USBController::connectDevice() {
     qInfo("[USBController] Connecting to device");
 
-    if (this->m_mockTimer) {
+    if (!this->m_mockTimer) {
         this->m_mockTimer = new QTimer(this);
         connect(
             this->m_mockTimer, &QTimer::timeout, this, &USBController::generateFakeData);
