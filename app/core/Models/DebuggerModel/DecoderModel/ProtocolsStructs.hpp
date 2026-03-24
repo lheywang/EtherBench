@@ -15,6 +15,7 @@
 // INCLUDES
 // =============================================================
 #include <QByteArray>
+#include <QMetaType>
 #include <cstdint>
 
 // =============================================================
@@ -26,3 +27,5 @@ struct SpyPacket {
     bool isTx;
     QByteArray payload;
 };
+
+Q_DECLARE_METATYPE(SpyPacket)

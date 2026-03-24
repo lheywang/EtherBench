@@ -27,9 +27,6 @@
 // =============================================================
 class DecoderModel : public QObject {
     Q_OBJECT
-    QML_SINGLETON
-
-    QML_UNCREATABLE("Could not be created. Handled by the AppCore class")
 
     Q_PROPERTY(QString decodedTimestamp READ getDecodedTimestamp NOTIFY decodingComplete)
     Q_PROPERTY(QString decodedBus READ getDecodedBus NOTIFY decodingComplete)

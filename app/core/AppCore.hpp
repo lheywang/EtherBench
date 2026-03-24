@@ -31,8 +31,10 @@
 // =============================================================
 class AppCore : public QObject {
     Q_OBJECT
+    QML_SINGLETON
 
-    Q_PROPERTY(DecoderModel *decoder READ getDecoder CONSTANT);
+    Q_PROPERTY(DecoderModel *decoder READ getDecoder CONSTANT)
+    Q_PROPERTY(DebuggerModel *debuggerModel READ getDebuggerModel CONSTANT)
 
   public:
     /*
@@ -43,6 +45,7 @@ class AppCore : public QObject {
 
   public:
     [[nodiscard]] DecoderModel *getDecoder() const;
+    [[nodiscard]] DebuggerModel *getDebuggerModel() const;
 
   private:
     /*

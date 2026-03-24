@@ -15,7 +15,6 @@ ApplicationWindow {
     height: 450
     title: qsTr("EtherBench")
     color: "#ececec"
-
     /*
      * Header bar
      */

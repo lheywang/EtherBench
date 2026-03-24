@@ -29,33 +29,6 @@ Rectangle {
         TableModelColumn {
             display: "dataHex"
         }
-
-        rows: [
-            {
-                timeStr: "10:15:02.123",
-                busStr: "CAN",
-                dirStr: "TX",
-                dataHex: "DE AD BE EF"
-            },
-            {
-                timeStr: "10:15:02.145",
-                busStr: "I2C",
-                dirStr: "RX",
-                dataHex: "04 4A"
-            },
-            {
-                timeStr: "10:15:02.180",
-                busStr: "CAN",
-                dirStr: "RX",
-                dataHex: "00 11 22 33 44 55"
-            },
-            {
-                timeStr: "10:15:02.201",
-                busStr: "SPI",
-                dirStr: "TX",
-                dataHex: "FF FF"
-            }
-        ]
     }
 
     ColumnLayout {
@@ -116,7 +89,7 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            model: mockModel
+            // model: SystemCore.debuggerModel
             columnSpacing: 1
             rowSpacing: 1
             clip: true

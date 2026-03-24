@@ -13,6 +13,7 @@
 // =============================================================
 // INCLUDES
 // =============================================================
+#include "DebuggerModel/DecoderModel/ProtocolsStructs.hpp"
 #include <QByteArray>
 #include <qobject.h>
 #include <qqmlintegration.h>
@@ -42,7 +43,7 @@ class EthernetController : public QObject {
 
   signals:
     void connectionChanged();
-    void dataReady();
+    void dataReady(const SpyPacket &packet);
 
   private:
     bool m_isConnected;

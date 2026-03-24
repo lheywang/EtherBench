@@ -13,7 +13,10 @@
 // =============================================================
 // INCLUDES
 // =============================================================
+#include "DebuggerModel/DecoderModel/ProtocolsStructs.hpp"
 #include <QByteArray>
+#include <QObject>
+#include <QTimer>
 #include <qobject.h>
 #include <qqmlintegration.h>
 #include <qtmetamacros.h>
@@ -42,9 +45,15 @@ class USBController : public QObject {
 
   signals:
     void connectionChanged();
-    void dataReady();
+    void dataReady(const SpyPacket &packet);
+
+  private slots:
+    void generateFakeData();
 
   private:
     bool m_isConnected;
     QByteArray m_getData;
+
+    QTimer *m_mockTimer{nullptr};
+    uint64_t m_mockCounter{0};
 };

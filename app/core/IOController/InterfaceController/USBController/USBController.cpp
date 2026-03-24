@@ -16,6 +16,7 @@
 #include "USBController.hpp"
 
 // Libs
+#include "DebuggerModel/DecoderModel/ProtocolsStructs.hpp"
 #include <QByteArray>
 #include <QObject>
 #include <qobject.h>
@@ -45,11 +46,32 @@ QByteArray USBController::getData() const {
 
 void USBController::connectDevice() {
     qInfo("[USBController] Connecting to device");
+
+    if (this->m_mockTimer) {
+        this->m_mockTimer = new QTimer(this);
+        connect(
+            this->m_mockTimer, &QTimer::timeout, this, &USBController::generateFakeData);
+    }
+    this->m_mockTimer->start(500);
     emit connectionChanged();
     return;
 }
 
 void USBController::disconnectDevice() {
     qInfo("[USBController] Disconnecting from device");
+    return;
+}
+
+void USBController::generateFakeData() {
+    SpyPacket packet;
+
+    packet.timestamp = 1000000 + (this->m_mockCounter * 50000);
+    packet.busId = (this->m_mockCounter % 2 == 0) ? 0x01 : 0x02;
+    packet.isTx = (this->m_mockCounter % 3 == 0);
+    packet.payload = QByteArray("\xDE\xAD\xBE\xEF");
+
+    this->m_mockCounter += 1;
+
+    emit this->dataReady(packet);
     return;
 }

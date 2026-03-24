@@ -36,6 +36,10 @@ AppCore::AppCore(QObject *parent)
     : QObject(parent), m_debuggerModel(std::make_unique<DebuggerModel>()),
       m_decoderModel(std::make_unique<DecoderModel>()) {
 
+    // Register private structs
+    qRegisterMetaType<SpyPacket>("SpyPacket");
+
+    // Start execution engine
     this->setupHardwareThreads();
     qInfo("[AppCore] Created the IO threads.");
 }
@@ -54,6 +58,7 @@ AppCore::~AppCore() {
 }
 
 DecoderModel *AppCore::getDecoder() const { return this->m_decoderModel.get(); }
+DebuggerModel *AppCore::getDebuggerModel() const { return this->m_debuggerModel.get(); }
 
 void AppCore::setupHardwareThreads() {
 

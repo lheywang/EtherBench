@@ -29,8 +29,11 @@ qt_add_executable(${PROJECT_NAME}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}       
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/Models   
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/IOConctroller       
     ${CMAKE_CURRENT_SOURCE_DIR}/bridge/SystemController
+    ${CMAKE_CURRENT_SOURCE_DIR}/Pages
 )
 
 qt_add_qml_module(${PROJECT_NAME}

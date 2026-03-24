@@ -14,10 +14,12 @@
 // INCLUDES
 // =============================================================
 #include "DebuggerField.hpp"
+#include "DecoderModel/ProtocolsStructs.hpp"
 
+#include <QAbstractTableModel>
 #include <QObject>
 #include <QtQml/qqml.h>
-#include <memory>
+#include <deque>
 #include <qobject.h>
 #include <qtmetamacros.h>
 
@@ -25,18 +27,25 @@
 // CLASS
 // =============================================================
 
-class DebuggerModel : public QObject {
+class DebuggerModel : public QAbstractTableModel {
     Q_OBJECT
 
   public:
     DebuggerModel(QObject *parent = nullptr);
     ~DebuggerModel();
 
-  signals:
-
   public:
-    void get();
-    void appendPayload();
+    [[nodiscard]] int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+
+    [[nodiscard]] int
+    columnCount(const QModelIndex &parent = QModelIndex()) const override;
+
+    [[nodiscard]] QVariant
+    data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+  public slots:
+    void appendPayload(const SpyPacket &packet);
 
   private:
+    std::deque<SpyPacket> m_packets;
 };
