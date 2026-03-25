@@ -6,7 +6,7 @@
 
 class SystemController : public QObject {
     Q_OBJECT
-    QML_ELEMENT
+    QML_NAMED_ELEMENT(SystemController)
     QML_SINGLETON
 
     Q_PROPERTY(

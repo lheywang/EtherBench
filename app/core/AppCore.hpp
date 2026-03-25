@@ -31,6 +31,7 @@
 // =============================================================
 class AppCore : public QObject {
     Q_OBJECT
+    QML_NAMED_ELEMENT(SystemCore)
     QML_SINGLETON
 
     Q_PROPERTY(DecoderModel *decoder READ getDecoder CONSTANT)

@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import App
-import EtherBench.Backend
+import EtherBench.Core
 
 Rectangle {
     id: detailPane

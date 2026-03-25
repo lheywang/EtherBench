@@ -16,7 +16,7 @@
 #include "EthernetController.hpp"
 
 // Libs
-#include "DebuggerModel/DecoderModel/ProtocolsStructs.hpp"
+#include "DecoderModel/ProtocolsStructs.hpp"
 #include <QByteArray>
 #include <QObject>
 #include <qobject.h>

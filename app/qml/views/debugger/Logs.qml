@@ -1,10 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt.labs.qmlmodels
 
-import App
-import EtherBench.Backend
+import EtherBench.Core
 
 Rectangle {
     id: logsRoot

@@ -13,7 +13,7 @@
 // =============================================================
 // INCLUDES
 // =============================================================
-#include "DebuggerModel/DecoderModel/ProtocolsStructs.hpp"
+#include "DecoderModel/ProtocolsStructs.hpp"
 #include <QByteArray>
 #include <qobject.h>
 #include <qqmlintegration.h>

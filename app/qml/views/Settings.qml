@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import Qt.labs.qmlmodels
 import QtQuick.Layouts
 
 Page {
@@ -9,16 +8,6 @@ Page {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 10
-
-        // RowLayout {
-        //     Layout.fillWidth: true
-        //     Button {
-        //         text: "Clear Buffer"
-        //     }
-        //     Item {
-        //         Layout.fillWidth: true
-        //     } // Espaceur
-        // }
 
         SplitView {
             Layout.fillWidth: true

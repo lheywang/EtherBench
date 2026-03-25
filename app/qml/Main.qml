@@ -4,15 +4,15 @@ import QtQuick.Layouts
 
 import QtQuick.Controls.Material
 
-import App
+import EtherBench.Bridge
 import "views" as Views
 import "menus" as Menus
 import "components" as Components
 
 ApplicationWindow {
     visible: true
-    width: 800
-    height: 450
+    width: 1280
+    height: 720
     title: qsTr("EtherBench")
     color: "#ececec"
     /*
