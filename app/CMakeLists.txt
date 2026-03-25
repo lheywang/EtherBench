@@ -47,9 +47,8 @@ set(QML_SOURCES
     qml/menus/Memory.qml
     qml/views/debugger/Details.qml
     qml/views/debugger/Logs.qml
-    qml/views/settings/SettingsTree.qml
-    qml/views/settings/app/App.qml
-    qml/views/settings/probe/Probe.qml
+    qml/views/settings/Tree.qml
+    qml/views/settings/Editor.qml
 )
 
 # Build the app : 
