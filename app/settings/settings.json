@@ -1,0 +1,405 @@
+{
+    "settingsVersion": "v1.0",
+    "firmwareVersion": "v0.1",
+    "App": [
+        {
+            "Connection": {
+                "preferredMode": "Auto",
+                "allowedValues": [
+                    "IP",
+                    "USB",
+                    "Auto"
+                ],
+                "addToParent": true
+            }
+        }
+    ],
+    "Probe": [
+        {
+            "Board settings": [
+                {
+                    "IO voltage": "3.3V",
+                    "Led mode": {
+                        "value": "Default",
+                        "allowedValues": [
+                            "Default",
+                            "AlwaysOn",
+                            "AlwaysOff"
+                        ],
+                        "addToParent": true
+                    }
+                }
+            ],
+            "Programmer settings": [
+                {
+                    "Bus": {
+                        "value": "SWD",
+                        "allowedValues": [
+                            "SWD",
+                            "JTAG"
+                        ],
+                        "addToParent": true
+                    },
+                    "Speed": {
+                        "value": "4000 kHz",
+                        "allowedValues": [
+                            "100 kHz",
+                            "250 kHz",
+                            "500 kHz",
+                            "1000 kHz",
+                            "2000 kHz"
+                        ],
+                        "addToParent": true
+                    },
+                    "Reset": {
+                        "value": "Connect under reset",
+                        "allowedValues": [
+                            "No reset",
+                            "Connect under reset",
+                            "Software reset"
+                        ],
+                        "addToParent": true
+                    }
+                }
+            ],
+            "Interface Settings": [
+                {
+                    "USART 0": [
+                        {
+                            "Baudrate": {
+                                "value": "115200",
+                                "allowedValues": [
+                                    "4 800",
+                                    "9 600",
+                                    "19 200",
+                                    "38 400",
+                                    "57 600",
+                                    "115 200",
+                                    "230 400",
+                                    "460 800",
+                                    "921 600",
+                                    "1 000 000",
+                                    "2 000 000",
+                                    "4 000 000",
+                                    "8 000 000",
+                                    "15 000 000"
+                                ],
+                                "addToParent": true
+                            },
+                            "Parity": {
+                                "value": "None",
+                                "allowedValues": [
+                                    "None",
+                                    "Even",
+                                    "Odd"
+                                ],
+                                "addToParent": true
+                            },
+                            "Stop bits": {
+                                "value": "1",
+                                "allowedValues": [
+                                    "1",
+                                    "2"
+                                ],
+                                "addToParent": true
+                            },
+                            "Data width": {
+                                "value": "8",
+                                "allowedValues": [
+                                    "7",
+                                    "8",
+                                    "9"
+                                ],
+                                "addToParent": true
+                            },
+                            "Flow control": {
+                                "value": "hardware",
+                                "allowedValues": [
+                                    "None",
+                                    "RTS",
+                                    "CTS",
+                                    "RTS/CTS",
+                                    "Software"
+                                ],
+                                "addToParent": true
+                            }
+                        }
+                    ],
+                    "USART 1": [
+                        {
+                            "Baudrate": {
+                                "value": "115200",
+                                "allowedValues": [
+                                    "4 800",
+                                    "9 600",
+                                    "19 200",
+                                    "38 400",
+                                    "57 600",
+                                    "115 200",
+                                    "230 400",
+                                    "460 800",
+                                    "921 600",
+                                    "1 000 000",
+                                    "2 000 000",
+                                    "4 000 000",
+                                    "8 000 000",
+                                    "15 000 000"
+                                ],
+                                "addToParent": true
+                            },
+                            "parity": {
+                                "value": "None",
+                                "allowedValues": [
+                                    "None",
+                                    "Even",
+                                    "Odd"
+                                ],
+                                "addToParent": true
+                            },
+                            "Stop bits": {
+                                "value": "1",
+                                "allowedValues": [
+                                    "1",
+                                    "2"
+                                ],
+                                "addToParent": true
+                            },
+                            "Data width": {
+                                "value": "8",
+                                "allowedValues": [
+                                    "7",
+                                    "8",
+                                    "9"
+                                ],
+                                "addToParent": true
+                            },
+                            "Flow control": {
+                                "value": "None",
+                                "allowedValues": [
+                                    "None",
+                                    "Software"
+                                ],
+                                "addToParent": true
+                            }
+                        }
+                    ],
+                    "I2C": [
+                        {
+                            "Mode": {
+                                "value": "Standard",
+                                "allowedValues": [
+                                    "Standard",
+                                    "Fast",
+                                    "Fast Plus"
+                                ],
+                                "addToParent": true
+                            },
+                            "Address width": {
+                                "value": "7",
+                                "allowedValues": [
+                                    "7",
+                                    "10"
+                                ],
+                                "addToParent": true
+                            },
+                            "slave address": "0x11"
+                        }
+                    ],
+                    "spi": [
+                        {
+                            "Baudrate": {
+                                "value": "8 000 000",
+                                "allowedValues": [
+                                    "488 281",
+                                    "976 562",
+                                    "1 953 125",
+                                    "3 906 250",
+                                    "7 812 500",
+                                    "15 625 000",
+                                    "31 250 000"
+                                ],
+                                "addToParent": true
+                            },
+                            "Clock polarity": {
+                                "value": "Low",
+                                "allowedValues": [
+                                    "Low",
+                                    "High"
+                                ],
+                                "addToParent": true
+                            },
+                            "Clock phase": {
+                                "value": "Low",
+                                "allowedValues": [
+                                    "Low",
+                                    "High"
+                                ],
+                                "addToParent": true
+                            },
+                            "Data width": {
+                                "value": "8",
+                                "allowedValues": [
+                                    "4",
+                                    "5",
+                                    "6",
+                                    "7",
+                                    "8",
+                                    "9",
+                                    "10",
+                                    "11",
+                                    "12",
+                                    "13",
+                                    "14",
+                                    "15",
+                                    "16",
+                                    "17",
+                                    "18",
+                                    "19",
+                                    "20",
+                                    "21",
+                                    "22",
+                                    "23",
+                                    "24",
+                                    "25",
+                                    "26",
+                                    "27",
+                                    "28",
+                                    "29",
+                                    "30",
+                                    "31",
+                                    "32"
+                                ],
+                                "addToParent": true
+                            },
+                            "Data direction": {
+                                "value": "MSB",
+                                "allowedValues": [
+                                    "MSB",
+                                    "LSB"
+                                ],
+                                "addToParent": true
+                            },
+                            "Data format": {
+                                "value": "Motorola",
+                                "allowedValues": [
+                                    "Motorola",
+                                    "TI"
+                                ],
+                                "addToParent": true
+                            },
+                            "Slave select": {
+                                "value": "enabled",
+                                "allowedValues": [
+                                    "enabled",
+                                    "disabled"
+                                ],
+                                "addToParent": true
+                            }
+                        }
+                    ],
+                    "can": [
+                        {
+                            "Frame format": {
+                                "value": "Classic",
+                                "allowedValues": [
+                                    "Classic",
+                                    "FD (with bitrate switch)",
+                                    "FD (without bitrate switch)"
+                                ],
+                                "addToParent": true
+                            },
+                            "Mode": {
+                                "value": "Normal",
+                                "allowedValues": [
+                                    "Normal",
+                                    "Restricted",
+                                    "Bus monitoring",
+                                    "Internal loopback",
+                                    "External loopback"
+                                ],
+                                "addToParent": true
+                            },
+                            "Quantum": {
+                                "value": "64",
+                                "allowedValues": [
+                                    "1",
+                                    "2",
+                                    "4",
+                                    "8",
+                                    "16",
+                                    "32",
+                                    "64",
+                                    "128",
+                                    "256",
+                                    "512"
+                                ],
+                                "addToParent": true
+                            }
+                        }
+                    ]
+                }
+            ],
+            "analogSettings": [
+                {
+                    "adc0": [
+                        {
+                            "Sweep Speed": {
+                                "value": "Normal",
+                                "allowedValues": [
+                                    "Slow",
+                                    "Normal",
+                                    "Fast",
+                                    "Very Fast"
+                                ],
+                                "addToParent": true
+                            },
+                            "Resolution": {
+                                "value": "12",
+                                "allowedValues": [
+                                    "6",
+                                    "8",
+                                    "10",
+                                    "12",
+                                    "14 (oversampling)",
+                                    "16 (oversampling)"
+                                ],
+                                "addToParent": true
+                            }
+                        }
+                    ],
+                    "adc1": [
+                        {
+                            "Sweep Speed": {
+                                "value": "Normal",
+                                "allowedValues": [
+                                    "Slow",
+                                    "Normal",
+                                    "Fast",
+                                    "Very Fast"
+                                ],
+                                "addToParent": true
+                            },
+                            "Resolution": {
+                                "value": "12",
+                                "allowedValues": [
+                                    "6",
+                                    "8",
+                                    "10",
+                                    "12",
+                                    "14 (oversampling)",
+                                    "16 (oversampling)"
+                                ],
+                                "addToParent": true
+                            }
+                        }
+                    ],
+                    "dac0": [
+                        {
+                            "value": "1.65 V"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -6,10 +6,12 @@
 
 add_subdirectory(DebuggerModel)
 add_subdirectory(MemoryModel)
+add_subdirectory(SettingsModel)
 
 add_library(EtherBenchModels INTERFACE)
 
 target_link_libraries(EtherBenchModels INTERFACE
     EtherBenchModelsMemory
     EtherBenchModelsDebugger
+    EtherBenchModelsSettings
 )

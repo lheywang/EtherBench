@@ -14,10 +14,11 @@
 // =============================================================
 // INCLUDES
 // =============================================================
+#include "DebuggerModel.hpp"
+#include "DecoderModel/DecoderModel.hpp"
 #include "IOController/InterfaceController/EthernetController/EthernetController.hpp"
 #include "IOController/InterfaceController/USBController/USBController.hpp"
-#include "Models/DebuggerModel/DebuggerModel.hpp"
-#include "Models/DebuggerModel/DecoderModel/DecoderModel.hpp"
+#include "SettingsModel.hpp"
 
 #include <QObject>
 #include <QThread>
@@ -36,6 +37,7 @@ class AppCore : public QObject {
 
     Q_PROPERTY(DecoderModel *decoder READ getDecoder CONSTANT)
     Q_PROPERTY(DebuggerModel *debuggerModel READ getDebuggerModel CONSTANT)
+    Q_PROPERTY(ConfigModel *settings READ getSettingsModel CONSTANT)
 
   public:
     /*
@@ -47,6 +49,7 @@ class AppCore : public QObject {
   public:
     [[nodiscard]] DecoderModel *getDecoder() const;
     [[nodiscard]] DebuggerModel *getDebuggerModel() const;
+    [[nodiscard]] ConfigModel *getSettingsModel() const;
 
   private:
     /*
@@ -66,6 +69,7 @@ class AppCore : public QObject {
      */
     std::unique_ptr<DebuggerModel> m_debuggerModel;
     std::unique_ptr<DecoderModel> m_decoderModel;
+    std::unique_ptr<ConfigModel> m_settingModel;
 
     /*
      * Functions

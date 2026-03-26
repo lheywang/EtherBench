@@ -16,10 +16,11 @@
 #include "AppCore.hpp"
 
 // Libraries
+#include "DebuggerModel.hpp"
+#include "DecoderModel/DecoderModel.hpp"
 #include "IOController/InterfaceController/EthernetController/EthernetController.hpp"
 #include "IOController/InterfaceController/USBController/USBController.hpp"
-#include "Models/DebuggerModel/DebuggerModel.hpp"
-#include "Models/DebuggerModel/DecoderModel/DecoderModel.hpp"
+#include "SettingsModel.hpp"
 
 #include <QMetaObject>
 #include <QObject>
@@ -59,6 +60,7 @@ AppCore::~AppCore() {
 
 DecoderModel *AppCore::getDecoder() const { return this->m_decoderModel.get(); }
 DebuggerModel *AppCore::getDebuggerModel() const { return this->m_debuggerModel.get(); }
+ConfigModel *AppCore::getSettingsModel() const { return this->m_settingModel.get(); }
 
 void AppCore::setupHardwareThreads() {
 
