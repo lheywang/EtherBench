@@ -35,8 +35,8 @@ Rectangle {
                 Component {
                     id: comboBoxComponent
                     ComboBox {
-                        model: treeDelegate.model.allowedValues // Utilise les contraintes
-                        currentText: treeDelegate.model.parameterValue
+                        model: treeDelegate.model.allowedValues
+                        currentIndex: indexOfValue(treeDelegate.model.parameterValue)
                         onActivated: {
                             treeDelegate.model.parameterValue = currentText;
                         }
