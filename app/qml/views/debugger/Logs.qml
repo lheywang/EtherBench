@@ -104,11 +104,11 @@ Rectangle {
             columnWidthProvider: function (column) {
                 switch (column) {
                 case 0:
-                    return 120; // Timestamp
+                    return 120;
                 case 1:
-                    return 60;  // Bus
+                    return 60;
                 case 2:
-                    return 60;  // Direction
+                    return 60;
                 case 3:
                     return Math.max(100, debuggerTable.width - 240);
                 }

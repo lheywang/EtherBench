@@ -34,11 +34,15 @@
 /*
  * Constructors and destructord
  */
-ConfigModel::ConfigModel(QObject *parent) : QAbstractItemModel(parent) {
+ConfigModel::ConfigModel(QObject *parent, QString fileName) : QAbstractItemModel(parent) {
 
+    // Init some data
     QList<QVariant> rootData;
     rootData << "Paramètre" << "Valeur";
     this->m_rootNode = std::make_unique<ConfigNode>(rootData);
+
+    // Load the config file
+    this->loadFromFile(fileName);
     return;
 }
 

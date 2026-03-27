@@ -76,19 +76,52 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     EtherBenchSystem
 )
 
-# If under Windows developpement, we just ensure all the correct DLL are placed
-# alongside the executable.
+# Finally, package the app into an output/ folder : 
+set(LOCAL_OUTPUT_DIR "${CMAKE_BINARY_DIR}/../output")
+
+set(EXTERNAL_LIBRARIES "")
 if(WIN32)
-    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT6_INSTALL_PREFIX}/bin")
-    
-    if(WINDEPLOYQT_EXECUTABLE)
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${WINDEPLOYQT_EXECUTABLE} 
-                --qmldir ${CMAKE_CURRENT_SOURCE_DIR}/qml 
-                $<TARGET_FILE:${PROJECT_NAME}>
-            COMMENT "Deploying QT DLLs..."
-        )
-    else()
-        message("Could not find QT deployement utility. Program may not work.")
+    set(EXTERNAL_LIBRARIES "")
+else()
+    if(LINUX)
+        set(EXTERNAL_LIBRARIES "")
     endif()
 endif()
+
+install(
+    TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION .
+    LIBRARY DESTINATION .
+    ARCHIVE DESTINATION .
+)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/settings/
+    DESTINATION settings   
+)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/decoders
+    DESTINATION .    
+)
+
+install(FILES ${EXTERNAL_DLLS} DESTINATION .)
+
+qt_generate_deploy_app_script(
+    TARGET ${PROJECT_NAME}
+    OUTPUT_SCRIPT deploy_script
+    QML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/qml"
+)
+
+install(SCRIPT ${deploy_script})
+
+add_custom_target(bundle 
+    COMMAND 
+        ${CMAKE_COMMAND} 
+            --install ${CMAKE_BINARY_DIR} 
+            --prefix ${LOCAL_OUTPUT_DIR}
+    COMMENT 
+        "Packaging app into ${LOCAL_OUTPUT_DIR}"
+    DEPENDS 
+        ${PROJECT_NAME}
+)
