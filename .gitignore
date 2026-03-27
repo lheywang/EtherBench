@@ -43,6 +43,7 @@
 # Build files and doc
 src/build/*
 app/build/*
+app/output/*
 
 # Formatter outputs
 */.cache/*

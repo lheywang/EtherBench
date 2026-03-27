@@ -12,6 +12,15 @@ project(EtherBenchApp VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# We just set that variable to ensure the system will find .so libs (shall not be copied anyway).
+# Windows require a flat architecture, so we do the same on Linux to get simpler builds.
+if(UNIX AND NOT APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES 
+        INSTALL_RPATH "$ORIGIN"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
+endif()
+
 # Configure QT
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Widgets)
 qt_standard_project_setup(REQUIRES 6.5)
@@ -88,6 +97,12 @@ else()
     endif()
 endif()
 
+# Configure the project build procedure : 
+
+set(CMAKE_INSTALL_BINDIR ".")
+set(CMAKE_INSTALL_LIBDIR ".")
+set(CMAKE_INSTALL_INCLUDEDIR ".")
+
 install(
     TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION .
@@ -97,7 +112,7 @@ install(
 
 install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/settings/
-    DESTINATION settings   
+    DESTINATION .   
 )
 
 install(
@@ -107,14 +122,28 @@ install(
 
 install(FILES ${EXTERNAL_DLLS} DESTINATION .)
 
-qt_generate_deploy_app_script(
+qt_generate_deploy_qml_app_script(
     TARGET ${PROJECT_NAME}
     OUTPUT_SCRIPT deploy_script
-    QML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/qml"
 )
 
 install(SCRIPT ${deploy_script})
 
+# This messy, AI generated snipplet ensure Windows will find .dll (otherwise, the scripts seems to be broken).
+install(CODE [[
+    set(BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
+    if(EXISTS "${BIN_DIR}")
+        message(STATUS "Flattening: Moving files from ${BIN_DIR} to root...")
+        file(GLOB ITEMS "${BIN_DIR}/*")
+        foreach(ITEM ${ITEMS})
+            get_filename_component(NAME "${ITEM}" NAME)
+            file(RENAME "${ITEM}" "${CMAKE_INSTALL_PREFIX}/${NAME}")
+        endforeach()
+        file(REMOVE_RECURSE "${BIN_DIR}")
+    endif()
+]] COMPONENT Runtime)
+
+# Finally add a custom target that create the output/ folder
 add_custom_target(bundle 
     COMMAND 
         ${CMAKE_COMMAND} 
@@ -125,3 +154,35 @@ add_custom_target(bundle
     DEPENDS 
         ${PROJECT_NAME}
 )
+
+# Configure CPack : 
+include(CPack)
+
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+set(CPACK_PACKAGE_VENDOR "EtherBenchLabs")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "EtherBench Companion App")
+
+if(WIN32)
+    set(CPACK_GENERATOR "ZIP;NSIS") # Generates a Zip AND an Installer
+else()
+    if(LINUX)
+        set(CPACK_GENERATOR "TGZ;DEB") # Generates a .tar.gz AND a Debian package
+    endif()
+endif()
+
+# To conclude, add a custom dist command
+add_custom_target(dist
+    COMMAND 
+        ${CMAKE_COMMAND}
+            --build ${CMAKE_CURRENT_BINARY_DIR}
+            --target package
+    WORKING_DIRECTORY
+        ${CMAKE_BINARY_DIR}
+    COMMENT
+        "Creating the installer file"
+    VERBATIM
+)
+
+add_dependencies(dist bundle)
+add_dependencies(dist ${PROJECT_NAME})
