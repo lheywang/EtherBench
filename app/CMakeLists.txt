@@ -12,14 +12,9 @@ project(EtherBenchApp VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# We just set that variable to ensure the system will find .so libs (shall not be copied anyway).
-# Windows require a flat architecture, so we do the same on Linux to get simpler builds.
-if(UNIX AND NOT APPLE)
-    set_target_properties(${PROJECT_NAME} PROPERTIES 
-        INSTALL_RPATH "$ORIGIN"
-        BUILD_WITH_INSTALL_RPATH TRUE
-    )
-endif()
+set(CMAKE_INSTALL_BINDIR ".")
+set(CMAKE_INSTALL_LIBDIR ".")
+set(CMAKE_INSTALL_INCLUDEDIR ".")
 
 # Configure QT
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Widgets)
@@ -97,12 +92,7 @@ else()
     endif()
 endif()
 
-# Configure the project build procedure : 
-
-set(CMAKE_INSTALL_BINDIR ".")
-set(CMAKE_INSTALL_LIBDIR ".")
-set(CMAKE_INSTALL_INCLUDEDIR ".")
-
+# Configure the project build procedure :
 install(
     TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION .
@@ -122,26 +112,15 @@ install(
 
 install(FILES ${EXTERNAL_DLLS} DESTINATION .)
 
+set(QT_DEPLOY_OPTIONS "--compiler-runtime" "--no-translations")
 qt_generate_deploy_qml_app_script(
     TARGET ${PROJECT_NAME}
     OUTPUT_SCRIPT deploy_script
+    DEPLOY_TOOL_OPTIONS ${QT_DEPLOY_OPTIONS}
+    NO_UNSUPPORTED_PLATFORM_ERROR
 )
 
 install(SCRIPT ${deploy_script})
-
-# This messy, AI generated snipplet ensure Windows will find .dll (otherwise, the scripts seems to be broken).
-install(CODE [[
-    set(BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
-    if(EXISTS "${BIN_DIR}")
-        message(STATUS "Flattening: Moving files from ${BIN_DIR} to root...")
-        file(GLOB ITEMS "${BIN_DIR}/*")
-        foreach(ITEM ${ITEMS})
-            get_filename_component(NAME "${ITEM}" NAME)
-            file(RENAME "${ITEM}" "${CMAKE_INSTALL_PREFIX}/${NAME}")
-        endforeach()
-        file(REMOVE_RECURSE "${BIN_DIR}")
-    endif()
-]] COMPONENT Runtime)
 
 # Finally add a custom target that create the output/ folder
 add_custom_target(bundle 

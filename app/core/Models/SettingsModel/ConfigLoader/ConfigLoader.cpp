@@ -51,6 +51,7 @@ bool ConfigLoader::parseFile(const QString &filePath, ConfigNode *rootNode) {
     // That's OK, because a JSON file isn't expected to be that big.
     // If needed, we may required to changed that to a bufferised reading.
     QByteArray rawData = file.readAll();
+    qInfo() << "[ConfigLoader] Fetch the whole settings file. Will now parse it.";
     file.close();
 
     // Parse the bytestream into a structured JSON object :
@@ -75,13 +76,63 @@ bool ConfigLoader::parseFile(const QString &filePath, ConfigNode *rootNode) {
 
 void ConfigLoader::parseObject(const QJsonObject &jsonObject, ConfigNode *parentNode) {
 
-    // We just need to iterate over all the keys :
+    if (!parentNode) {
+        qCritical() << "[ConfigLoader] Null parent node. Aborting parsing.";
+        return;
+    }
+
     for (auto it = jsonObject.constBegin(); it != jsonObject.constEnd(); it += 1) {
         const QString key = it.key();
         const QJsonValue value = it.value();
 
-        if (value.isObject()) {
-            ConfigLoader::extractNodeData(key, value.toObject(), parentNode);
+        const QJsonObject obj = value.toObject();
+
+        // Case : key / value pair
+        if (obj.contains("value")) {
+            QList<QVariant> data;
+            data << key << obj.value("value").toVariant();
+            qInfo() << "Loaded key : " << key << " = " << value;
+
+            ConfigNode *childNode = new ConfigNode(data, parentNode);
+
+            if (obj.contains("allowedValues") && obj.value("allowedValues").isArray()) {
+                QStringList allowed;
+                for (const QJsonValue &av : obj.value("allowedValues").toArray()) {
+                    allowed << av.toString();
+                }
+                childNode->setAllowedValues(allowed);
+            }
+            parentNode->appendChild(childNode);
+        } else if (value.isObject()) {
+            QList<QVariant> data;
+            data << key << QVariant();
+
+            ConfigNode *branch = new ConfigNode(data, parentNode);
+            parentNode->appendChild(branch);
+
+            // Recursive call for the sub-object
+            ConfigLoader::parseObject(value.toObject(), branch);
+        } else if (value.isArray()) {
+            QList<QVariant> data;
+            data << key << QVariant();
+
+            ConfigNode *branch = new ConfigNode(data, parentNode);
+            parentNode->appendChild(branch);
+
+            // Iterate over the array and parse any objects inside it,
+            // attaching them to the same branch node.
+            const QJsonArray arr = value.toArray();
+            for (const QJsonValue &arrElement : arr) {
+                if (arrElement.isObject()) {
+                    ConfigLoader::parseObject(arrElement.toObject(), branch);
+                }
+            }
+        } else {
+            QList<QVariant> data;
+            data << key << value.toVariant();
+
+            ConfigNode *childNode = new ConfigNode(data, parentNode);
+            parentNode->appendChild(childNode);
         }
     }
 

@@ -35,7 +35,8 @@
 // =============================================================
 AppCore::AppCore(QObject *parent)
     : QObject(parent), m_debuggerModel(std::make_unique<DebuggerModel>()),
-      m_decoderModel(std::make_unique<DecoderModel>()) {
+      m_decoderModel(std::make_unique<DecoderModel>()),
+      m_settingModel(std::make_unique<ConfigModel>()) {
 
     // Register private structs
     qRegisterMetaType<SpyPacket>("SpyPacket");

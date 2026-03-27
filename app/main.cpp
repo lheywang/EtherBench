@@ -17,10 +17,25 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+// WINDOWS Specific :
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 // =============================================================
 // ENTRY POINT
 // =============================================================
 int main(int argc, char *argv[]) {
+
+#ifdef _WIN32
+    if (!SetDllDirectoryA("bin")) {
+        printf(
+            "Failed to add the bin/ folder into the lookup path. Cannot launch "
+            "properly.");
+        exit(-1);
+    }
+#endif
+
     qputenv("QT_QUICK_CONTROLS_STYLE", "Material");
 
     // Create the GUI applications

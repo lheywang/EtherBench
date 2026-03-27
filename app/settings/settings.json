@@ -9,8 +9,7 @@
                     "IP",
                     "USB",
                     "Auto"
-                ],
-                "addToParent": true
+                ]
             }
         }
     ],
@@ -25,8 +24,7 @@
                             "Default",
                             "AlwaysOn",
                             "AlwaysOff"
-                        ],
-                        "addToParent": true
+                        ]
                     }
                 }
             ],
@@ -37,8 +35,7 @@
                         "allowedValues": [
                             "SWD",
                             "JTAG"
-                        ],
-                        "addToParent": true
+                        ]
                     },
                     "Speed": {
                         "value": "4000 kHz",
@@ -48,8 +45,7 @@
                             "500 kHz",
                             "1000 kHz",
                             "2000 kHz"
-                        ],
-                        "addToParent": true
+                        ]
                     },
                     "Reset": {
                         "value": "Connect under reset",
@@ -57,8 +53,7 @@
                             "No reset",
                             "Connect under reset",
                             "Software reset"
-                        ],
-                        "addToParent": true
+                        ]
                     }
                 }
             ],
@@ -83,8 +78,7 @@
                                     "4 000 000",
                                     "8 000 000",
                                     "15 000 000"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Parity": {
                                 "value": "None",
@@ -92,16 +86,14 @@
                                     "None",
                                     "Even",
                                     "Odd"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Stop bits": {
                                 "value": "1",
                                 "allowedValues": [
                                     "1",
                                     "2"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Data width": {
                                 "value": "8",
@@ -109,8 +101,7 @@
                                     "7",
                                     "8",
                                     "9"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Flow control": {
                                 "value": "hardware",
@@ -120,8 +111,7 @@
                                     "CTS",
                                     "RTS/CTS",
                                     "Software"
-                                ],
-                                "addToParent": true
+                                ]
                             }
                         }
                     ],
@@ -144,8 +134,7 @@
                                     "4 000 000",
                                     "8 000 000",
                                     "15 000 000"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "parity": {
                                 "value": "None",
@@ -153,16 +142,14 @@
                                     "None",
                                     "Even",
                                     "Odd"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Stop bits": {
                                 "value": "1",
                                 "allowedValues": [
                                     "1",
                                     "2"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Data width": {
                                 "value": "8",
@@ -170,16 +157,14 @@
                                     "7",
                                     "8",
                                     "9"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Flow control": {
                                 "value": "None",
                                 "allowedValues": [
                                     "None",
                                     "Software"
-                                ],
-                                "addToParent": true
+                                ]
                             }
                         }
                     ],
@@ -191,16 +176,14 @@
                                     "Standard",
                                     "Fast",
                                     "Fast Plus"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Address width": {
                                 "value": "7",
                                 "allowedValues": [
                                     "7",
                                     "10"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "slave address": "0x11"
                         }
@@ -217,24 +200,21 @@
                                     "7 812 500",
                                     "15 625 000",
                                     "31 250 000"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Clock polarity": {
                                 "value": "Low",
                                 "allowedValues": [
                                     "Low",
                                     "High"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Clock phase": {
                                 "value": "Low",
                                 "allowedValues": [
                                     "Low",
                                     "High"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Data width": {
                                 "value": "8",
@@ -268,32 +248,28 @@
                                     "30",
                                     "31",
                                     "32"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Data direction": {
                                 "value": "MSB",
                                 "allowedValues": [
                                     "MSB",
                                     "LSB"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Data format": {
                                 "value": "Motorola",
                                 "allowedValues": [
                                     "Motorola",
                                     "TI"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Slave select": {
                                 "value": "enabled",
                                 "allowedValues": [
                                     "enabled",
                                     "disabled"
-                                ],
-                                "addToParent": true
+                                ]
                             }
                         }
                     ],
@@ -305,8 +281,7 @@
                                     "Classic",
                                     "FD (with bitrate switch)",
                                     "FD (without bitrate switch)"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Mode": {
                                 "value": "Normal",
@@ -316,8 +291,7 @@
                                     "Bus monitoring",
                                     "Internal loopback",
                                     "External loopback"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Quantum": {
                                 "value": "64",
@@ -332,8 +306,7 @@
                                     "128",
                                     "256",
                                     "512"
-                                ],
-                                "addToParent": true
+                                ]
                             }
                         }
                     ]
@@ -350,8 +323,7 @@
                                     "Normal",
                                     "Fast",
                                     "Very Fast"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Resolution": {
                                 "value": "12",
@@ -362,8 +334,7 @@
                                     "12",
                                     "14 (oversampling)",
                                     "16 (oversampling)"
-                                ],
-                                "addToParent": true
+                                ]
                             }
                         }
                     ],
@@ -376,8 +347,7 @@
                                     "Normal",
                                     "Fast",
                                     "Very Fast"
-                                ],
-                                "addToParent": true
+                                ]
                             },
                             "Resolution": {
                                 "value": "12",
@@ -388,8 +358,7 @@
                                     "12",
                                     "14 (oversampling)",
                                     "16 (oversampling)"
-                                ],
-                                "addToParent": true
+                                ]
                             }
                         }
                     ],

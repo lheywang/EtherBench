@@ -46,8 +46,8 @@ class ConfigModel : public QAbstractItemModel {
      */
     /**
      */
-    explicit ConfigModel(QObject *parent = nullptr, QString fileName = 
-      QString("settings/settings.json"));
+    explicit ConfigModel(
+        QObject *parent = nullptr, QString fileName = QString("settings.json"));
     ~ConfigModel() override;
 
     /*
