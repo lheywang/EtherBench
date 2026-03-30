@@ -2,11 +2,15 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import App
+import EtherBench
 import "debugger" as Debugger
 
 Page {
     id: debuggerView
+
+    background: Rectangle {
+        color: Theme.background
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -21,14 +25,15 @@ Page {
             Debugger.Logs {
                 id: logsPane
                 SplitView.fillWidth: true
-                SplitView.minimumWidth: 300
+                SplitView.minimumWidth: Theme.panelMinimalWidth
             }
+
             Debugger.Details {
                 id: detailsPane
                 SplitView.fillWidth: true
-                SplitView.preferredWidth: 250
-                SplitView.minimumWidth: 150
-                SplitView.maximumWidth: 500
+                SplitView.preferredWidth: Theme.panelPreferredWidth
+                SplitView.minimumWidth: Theme.panelMinimalWidth
+                SplitView.maximumWidth: Theme.panelMaximalWidth
             }
         }
     }

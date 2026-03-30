@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     QQmlApplicationEngine engine;
 
     qInfo("[Main] STEP 3 : Loading Main.qml");
-    engine.loadFromModule("App", "Main");
+    engine.loadFromModule("EtherBench", "Main");
     if (engine.rootObjects().isEmpty()) {
         qCritical() << "[Main] Failed to launch the GUI.";
         qCritical() << "[Main] Check the logs.";

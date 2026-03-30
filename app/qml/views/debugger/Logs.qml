@@ -2,13 +2,16 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import EtherBench
 import EtherBench.Core
 
 Rectangle {
     id: logsRoot
 
-    color: "#1e1e1e"
-    border.color: "#333333"
+    border.color: Theme.border
+    radius: Theme.borderRadius
+
+    color: Theme.background
 
     property int selectedRow: -1
 
@@ -36,7 +39,7 @@ Rectangle {
 
                 contentItem: Text {
                     text: autoScrollToggle.text
-                    color: autoScrollToggle.checked ? "#4CAF50" : "#888888"
+                    color: autoScrollToggle.checked ? Theme.textStatusAccentGreen : Theme.textPrimary
                     leftPadding: autoScrollToggle.indicator.width + autoScrollToggle.spacing
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -52,19 +55,19 @@ Rectangle {
             delegate: Rectangle {
                 implicitWidth: 100
                 implicitHeight: 28
-                color: "#2d2d30"
+                color: Theme.panelBackground
 
                 Rectangle {
                     anchors.right: parent.right
                     width: 1
                     height: parent.height
-                    color: "#3e3e42"
+                    color: Theme.panelBackground
                 }
                 Rectangle {
                     anchors.bottom: parent.bottom
                     width: parent.width
                     height: 1
-                    color: "#3e3e42"
+                    color: Theme.panelBackground
                 }
 
                 Label {
@@ -86,8 +89,15 @@ Rectangle {
                     }
                     font.bold: true
                     font.pixelSize: 12
-                    color: "#cccccc"
+                    color: Theme.textPrimary
                 }
+            }
+
+            Rectangle {
+                anchors.bottom: parent.bottom
+                width: parent.width
+                height: Theme.borderHeight
+                color: Theme.border
             }
         }
 
@@ -135,7 +145,13 @@ Rectangle {
             delegate: Rectangle {
                 implicitHeight: 24
 
-                color: (logsRoot.selectedRow === row) ? "#094771" : ((row % 2 === 0) ? "#252526" : "#2d2d30")
+                color: {
+                    if (logsRoot.selectedRow === row)
+                        return Theme.textStatusAccentBlue2;
+                    if (row % 2 === 0)
+                        return Theme.background;
+                    return Theme.panelBackground;
+                }
 
                 TapHandler {
                     onTapped: {
@@ -147,16 +163,19 @@ Rectangle {
                 Label {
                     anchors.centerIn: parent
                     text: display
-                    font.family: "Consolas"
+                    font.family: Theme.fontStandard
 
                     color: {
                         if (logsRoot.selectedRow === row)
-                            return "#ffffff";
+                            return Theme.textSelected;
+
                         if (display === "RX")
-                            return "#4CAF50";
+                            return Theme.textStatusAccentGreen;
+
                         if (display === "TX")
-                            return "#00BCD4";
-                        return "#cccccc";
+                            return Theme.textStatusAccentBlue1;
+
+                        return Theme.textPrimary;
                     }
                 }
             }

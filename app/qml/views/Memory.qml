@@ -2,11 +2,18 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import EtherBench
+
 Page {
+
+    background: Rectangle {
+        color: Theme.background
+    }
+
     Text {
         anchors.centerIn: parent
         text: "Memory"
-        font.pixelSize: 24
-        color: "#555"
+        font.pixelSize: Theme.fontSizeTitle
+        color: Theme.textPrimary
     }
 }

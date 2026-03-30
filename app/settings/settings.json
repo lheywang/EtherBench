@@ -4,7 +4,7 @@
     "App": [
         {
             "Connection": {
-                "preferredMode": "Auto",
+                "value": "Auto",
                 "allowedValues": [
                     "IP",
                     "USB",

@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import App
+import EtherBench
 
 RowLayout {
     spacing: 5
@@ -12,12 +12,12 @@ RowLayout {
         height: 12
         radius: 6
 
-        color: '#e01010'
+        color: Theme.textStatusInvalid
     }
 
     Label {
         text: "Ethernet"
-        font.bold: true
-        color: "#cccccc"
+        font.bold: Theme.textStatusBold
+        color: Theme.textPrimary
     }
 }

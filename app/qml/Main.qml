@@ -5,6 +5,8 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 
 import EtherBench.Bridge
+import EtherBench
+
 import "views" as Views
 import "menus" as Menus
 import "components" as Components
@@ -14,25 +16,33 @@ ApplicationWindow {
     width: 1280
     height: 720
     title: qsTr("EtherBench")
-    color: "#ececec"
+    color: Theme.panelBackground
+
     /*
      * Header bar
      */
     header: ToolBar {
+
         background: Rectangle {
-            color: '#b1b1b1'
+            color: Theme.panelBackground
         }
 
         RowLayout {
-            anchors.fill: parent
-            spacing: 0
+            anchors {
+                fill: parent
+                leftMargin: Theme.standardMargin
+                rightMargin: Theme.standardMargin
+            }
+
+            spacing: Theme.standardSpacing
 
             MenuBar {
                 id: mainMenuBar
 
                 Layout.fillWidth: true
+
                 background: Rectangle {
-                    color: "transparent"
+                    color: Theme.panelBackground
                 }
 
                 // These are always shows
@@ -40,10 +50,11 @@ ApplicationWindow {
                 Menus.View {}
             }
 
+            // Usefull statuses on the top right corner
             RowLayout {
                 Layout.alignment: Qt.AlignVCenter
-                Layout.rightMargin: 15
-                spacing: 15
+                Layout.rightMargin: Theme.standardMargin
+                spacing: Theme.standardSpacing
 
                 Components.StatusETH {}
                 Components.StatusUSB {}
@@ -51,6 +62,9 @@ ApplicationWindow {
         }
     }
 
+    /*
+     * Instantiate all the conditionnal elements on the menubar :
+     */
     Components.ContextualMenu {
         targetMenuBar: mainMenuBar
         active: SystemController.currentView === SystemController.Memory

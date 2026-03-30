@@ -2,30 +2,24 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import EtherBench
+
 import "settings" as Settings
 
 Page {
     id: settingsPage
 
+    background: Rectangle {
+        color: Theme.background
+    }
+
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 10
+        anchors.margins: Theme.standardMargin
 
-        SplitView {
+        Settings.Tree {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            orientation: Qt.Horizontal
-
-            Settings.Tree {
-                SplitView.fillWidth: true
-                SplitView.minimumWidth: 300
-            }
-
-            Settings.Editor {
-                SplitView.fillWidth: true
-                SplitView.minimumWidth: 150
-                SplitView.maximumWidth: 500
-            }
         }
     }
 }

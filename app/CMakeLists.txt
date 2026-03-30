@@ -33,6 +33,7 @@ set(SOURCES
 
 set(QML_SOURCES 
     qml/Main.qml
+    qml/theme/Theme.qml
     qml/views/Debugger.qml
     qml/views/Help.qml
     qml/views/Home.qml
@@ -52,8 +53,10 @@ set(QML_SOURCES
     qml/views/debugger/Details.qml
     qml/views/debugger/Logs.qml
     qml/views/settings/Tree.qml
-    qml/views/settings/Editor.qml
 )
+
+# Set the Theme as a special file
+set_source_files_properties(qml/theme/Theme.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 # Build the app : 
 qt_add_executable(${PROJECT_NAME}
@@ -61,7 +64,7 @@ qt_add_executable(${PROJECT_NAME}
 )
 
 qt_add_qml_module(${PROJECT_NAME}
-    URI App
+    URI EtherBench
     VERSION 1.0
     QML_FILES 
         ${QML_SOURCES}
