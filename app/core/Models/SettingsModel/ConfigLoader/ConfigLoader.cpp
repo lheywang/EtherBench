@@ -91,7 +91,7 @@ void ConfigLoader::parseObject(const QJsonObject &jsonObject, ConfigNode *parent
         if (obj.contains("value")) {
             QList<QVariant> data;
             data << key << obj.value("value").toVariant();
-            qInfo() << "Loaded key : " << key << " = " << value;
+            qInfo() << "Loaded key : " << key;
 
             ConfigNode *childNode = new ConfigNode(data, parentNode);
 

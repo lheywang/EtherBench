@@ -7,10 +7,11 @@ QtObject {
      */
     readonly property color background: '#191a1b'
     readonly property color panelBackground: '#313233'
+    readonly property color popUpBackground: '#b3b9be'
     readonly property color border: '#707070'
-    readonly property color borderSelected: '#b9b9b9'
+    readonly property color borderSelected: '#8755c0'
     readonly property int standardMargin: 15
-    readonly property int standardSpacing: 0
+    readonly property int standardSpacing: 20
 
     readonly property int borderHeight: 3
     readonly property int borderRadius: 10
@@ -31,11 +32,14 @@ QtObject {
      */
     // General purpose text
     readonly property color textPrimary: "#90a4ae"
+    readonly property color textSecondary: '#6e7b81'
     readonly property color textDisabled: "#2e2f30"
     readonly property int fontSizeNormal: 12
     readonly property bool fontBoldNormal: false
     readonly property int fontSizeTitle: 14
     readonly property bool fontBoldTitle: true
+    readonly property int fontSizeSmall: 11
+    readonly property bool fontBoldSmall: false
     readonly property string fontStandard: "Consolas"
 
     // Statuses

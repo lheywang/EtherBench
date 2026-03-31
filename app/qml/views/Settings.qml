@@ -13,13 +13,27 @@ Page {
         color: Theme.background
     }
 
-    ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: Theme.standardMargin
+    SplitView {
+        anchors {
+            fill: parent
+            margins: Theme.standardMargin
+        }
 
         Settings.Tree {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+            id: settingsNav
+            SplitView.fillWidth: true
+            SplitView.fillHeight: true
+        }
+
+        Settings.Editor {
+            SplitView.fillWidth: true
+            SplitView.fillHeight: true
+
+            SplitView.minimumWidth: Theme.panelMinimalWidth
+            SplitView.preferredWidth: Theme.panelPreferredWidth
+            SplitView.maximumWidth: Theme.panelMaximalWidth
+
+            targetIndex: settingsNav.currentIndex
         }
     }
 }

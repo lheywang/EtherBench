@@ -53,6 +53,7 @@ set(QML_SOURCES
     qml/views/debugger/Details.qml
     qml/views/debugger/Logs.qml
     qml/views/settings/Tree.qml
+    qml/views/settings/Editor.qml
 )
 
 # Set the Theme as a special file
@@ -68,6 +69,7 @@ qt_add_qml_module(${PROJECT_NAME}
     VERSION 1.0
     QML_FILES 
         ${QML_SOURCES}
+    ENABLE_TYPE_COMPILER
     SOURCES
         ${SOURCES}
 )
