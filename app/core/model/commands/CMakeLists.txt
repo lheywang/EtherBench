@@ -14,11 +14,15 @@ set(LIBNAME libCommands)
 set(SOURCES
     src/commands.cpp   
 )
+set(HEADERS
+    include/models/commands.hpp
+)
 
 # Create the library
 add_library(${LIBNAME} STATIC)
 target_sources(${LIBNAME} PRIVATE
     ${SOURCES}
+    ${HEADERS}
 )
 
 # Add the include directory. Since it's named views, we can just do #include "views/settingsViews.hpp" 

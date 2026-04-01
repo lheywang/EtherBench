@@ -13,11 +13,11 @@
 // INCLUDES
 // =============================================================
 // Header
-#include "SettingsModel.hpp"
+#include "models/settings.hpp"
 
 // Local libraries
-#include "ConfigLoader/ConfigLoader.hpp"
-#include "ConfigNode/ConfigNode.hpp"
+#include "models/settings/loader/loader.hpp"
+#include "models/settings/node/node.hpp"
 
 // QT
 #include <QAbstractItemModel>

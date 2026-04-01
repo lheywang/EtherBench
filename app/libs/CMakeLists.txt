@@ -9,7 +9,7 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME ExternalLibs)
+set(LIBNAME LIBEXTERNAL)
 
 # Include all subfolders
 add_subdirectory(third_party)

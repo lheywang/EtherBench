@@ -14,7 +14,7 @@
 // INCLUDES
 // =============================================================
 // Local libraries
-#include "ConfigNode/ConfigNode.hpp"
+#include "models/settings/node/node.hpp"
 
 // QT
 #include <QFile>

@@ -1,4 +1,4 @@
-#include "MainWindow.hpp"
+#include "window.hpp"
 #include <QVBoxLayout>
 
 namespace EtherBench::UI {

@@ -14,11 +14,15 @@ set(LIBNAME ioLAN)
 set(SOURCES
     src/lan.cpp   
 )
+set(HEADERS
+    include/lan.hpp
+)
 
 # Create the library
 add_library(${LIBNAME} STATIC)
 target_sources(${LIBNAME} PRIVATE
     ${SOURCES}
+    ${HEADERS}
 )
 
 # Add the include directory. Since it's named views, we can just do #include "views/settingsViews.hpp" 

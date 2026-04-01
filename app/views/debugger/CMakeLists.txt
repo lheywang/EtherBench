@@ -14,11 +14,15 @@ set(LIBNAME DebuggerView)
 set(SOURCES
     src/debuggerView.cpp   
 )
+set(HEADERS
+    include/views/debuggerView.hpp
+)
 
 # Create the library
 add_library(${LIBNAME} STATIC)
 target_sources(${LIBNAME} PRIVATE
     ${SOURCES}
+    ${HEADERS}
 )
 
 # Add the include directory. Since it's named views, we can just do #include "views/settingsViews.hpp" 
@@ -28,4 +32,4 @@ target_include_directories(${LIBNAME} PUBLIC
 )
 
 # Link against the required libs
-target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets CORELIB)
+target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets LIBCORE)

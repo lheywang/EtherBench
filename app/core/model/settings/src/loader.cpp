@@ -13,10 +13,10 @@
 // INCLUDES
 // =============================================================
 // Header
-#include "ConfigLoader.hpp"
+#include "models/settings/loader/loader.hpp"
 
 // Local libraries
-#include "ConfigNode/ConfigNode.hpp"
+#include "models/settings/node/node.hpp"
 
 // QT
 #include <QDebug>

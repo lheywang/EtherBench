@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/counter/counter.hpp"
+#include "models/counter.hpp"
 #include <QLabel>
 #include <QMainWindow>
 #include <QPushButton>

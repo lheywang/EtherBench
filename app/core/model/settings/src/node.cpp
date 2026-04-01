@@ -13,7 +13,7 @@
 // INCLUDES
 // =============================================================
 // Header
-#include "ConfigNode.hpp"
+#include "models/settings/node/node.hpp"
 
 // QT
 #include <QList>

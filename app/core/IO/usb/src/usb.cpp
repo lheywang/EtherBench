@@ -13,7 +13,7 @@
 // INCLUDES
 // =============================================================
 // Header
-#include "USBController.hpp"
+#include "usb.hpp"
 
 // Libs
 #include "DecoderModel/ProtocolsStructs.hpp"

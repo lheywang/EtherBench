@@ -19,11 +19,6 @@ add_library(${LIBNAME} INTERFACE)
 
 # Link all the sub libraries
 target_link_libraries(${LIBNAME} INTERFACE
-    DebuggerView
-    HelpView
-    HomeView
-    IOView
-    MemoryView
-    ProgrammerView
-    SettingsView
+    libModel
+    libIO
 )

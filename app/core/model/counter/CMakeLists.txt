@@ -14,11 +14,15 @@ set(LIBNAME libCounter)
 set(SOURCES
     src/counter.cpp   
 )
+set(HEADERS
+    include/models/counter.hpp
+)
 
 # Create the library
 add_library(${LIBNAME} STATIC)
 target_sources(${LIBNAME} PRIVATE
     ${SOURCES}
+    ${HEADERS}
 )
 
 # Add the include directory. Since it's named views, we can just do #include "views/settingsViews.hpp" 

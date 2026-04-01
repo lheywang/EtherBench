@@ -16,11 +16,15 @@ set(SOURCES
     src/node.cpp
     src/loader.cpp
 )
+set(HEADERS
+    include/models/settings.hpp # No need for others : They're not Q_OBJECTS.
+)
 
 # Create the library
 add_library(${LIBNAME} STATIC)
 target_sources(${LIBNAME} PRIVATE
     ${SOURCES}
+    ${HEADERS}
 )
 
 # Add the include directory. Since it's named views, we can just do #include "views/settingsViews.hpp" 

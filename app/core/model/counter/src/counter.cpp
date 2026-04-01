@@ -1,4 +1,4 @@
-#include "core/CounterManager.hpp"
+#include "models/counter.hpp"
 
 namespace EtherBench::Core {
 
