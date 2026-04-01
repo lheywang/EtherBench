@@ -52,9 +52,12 @@ add_subdirectory(views)
 set(SOURCES
     main.cpp
 )
+set(RESSOURCES
+    ressources/ressources.qrc
+)
 
 # Add the main executable
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} ${RESSOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     LIBEXTERNAL
     LIBMAIN
