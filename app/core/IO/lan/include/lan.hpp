@@ -1,5 +1,5 @@
 /**
- * @file    EthernetController.hpp
+ * @file    lan.hpp
  * @author  lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
@@ -23,7 +23,7 @@
 // CLASS
 // =============================================================
 
-class EthernetController : public QObject {
+class Lan : public QObject {
     Q_OBJECT
     QML_SINGLETON
 
@@ -31,8 +31,8 @@ class EthernetController : public QObject {
     Q_PROPERTY(QByteArray getData READ getData NOTIFY dataReady);
 
   public:
-    explicit EthernetController(QObject *parent = nullptr);
-    ~EthernetController();
+    explicit Lan(QObject *parent = nullptr);
+    ~Lan();
 
   public:
     [[nodiscard]] bool isConnected() const;

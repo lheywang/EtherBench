@@ -1,5 +1,5 @@
 /**
- * @file    EthernetController.cpp
+ * @file    lan.cpp
  * @author  lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
@@ -13,7 +13,7 @@
 // INCLUDES
 // =============================================================
 // Header
-#include "EthernetController.hpp"
+#include "Lan.hpp"
 
 // Libs
 #include "DecoderModel/ProtocolsStructs.hpp"
@@ -27,30 +27,30 @@
 // CLASS
 // =============================================================
 
-EthernetController::EthernetController(QObject *parent) : QObject(parent) {
-    qInfo("[EthernetController] Created the class instance");
+Lan::Lan(QObject *parent) : QObject(parent) {
+    qInfo("[Lan] Created the class instance");
     return;
 }
 
-EthernetController::~EthernetController() {
-    qInfo("[EthernetController] Deleted the class instance");
+Lan::~Lan() {
+    qInfo("[Lan] Deleted the class instance");
     return;
 }
 
-bool EthernetController::isConnected() const { return m_isConnected; }
+bool Lan::isConnected() const { return m_isConnected; }
 
-QByteArray EthernetController::getData() const {
-    qInfo("[EthernetController] Fetched data buffer.");
+QByteArray Lan::getData() const {
+    qInfo("[Lan] Fetched data buffer.");
     return this->m_getData;
 }
 
-void EthernetController::connectDevice() {
-    qInfo("[EthernetController] Connecting to device");
+void Lan::connectDevice() {
+    qInfo("[Lan] Connecting to device");
     emit connectionChanged();
     return;
 }
 
-void EthernetController::disconnectDevice() {
-    qInfo("[EthernetController] Disconnecting from device");
+void Lan::disconnectDevice() {
+    qInfo("[Lan] Disconnecting from device");
     return;
 }

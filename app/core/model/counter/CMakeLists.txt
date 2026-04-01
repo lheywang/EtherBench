@@ -8,13 +8,11 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME libSettings)
+set(LIBNAME libCounter)
 
 # Configure the sources
 set(SOURCES
-    src/settings.cpp
-    src/node.cpp
-    src/loader.cpp
+    src/counter.cpp   
 )
 
 # Create the library

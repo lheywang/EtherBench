@@ -8,13 +8,11 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME libSettings)
+set(LIBNAME libCommands)
 
 # Configure the sources
 set(SOURCES
-    src/settings.cpp
-    src/node.cpp
-    src/loader.cpp
+    src/commands.cpp   
 )
 
 # Create the library

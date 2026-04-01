@@ -1,6 +1,6 @@
 # ===================================================================
 # @file     CMakeLists.txt
-# @brief    Build recipe for a view library
+# @brief    Build recipe for athe main Window library
 #
 # @author   l.heywang <leonard.heywang@proton.me>
 # @date     2026-04-01
@@ -8,13 +8,11 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME libSettings)
+set(LIBNAME MainWindow)
 
 # Configure the sources
 set(SOURCES
-    src/settings.cpp
-    src/node.cpp
-    src/loader.cpp
+    src/window.cpp   
 )
 
 # Create the library
@@ -30,4 +28,4 @@ target_include_directories(${LIBNAME} PUBLIC
 )
 
 # Link against the required libs
-target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets)
+target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets CORELIB)

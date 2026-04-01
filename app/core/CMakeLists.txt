@@ -1,0 +1,29 @@
+# ===================================================================
+# @file     CMakeLists.txt
+# @brief    Build recipe the global view library
+#
+# @author   l.heywang <leonard.heywang@proton.me>
+# @date     2026-04-01
+# 
+# ===================================================================
+
+# Set lib name
+set(LIBNAME LIBCORE)
+
+# Include all subfolders
+add_subdirectory(IO)
+add_subdirectory(model)
+
+# Create the umbrella library
+add_library(${LIBNAME} INTERFACE)
+
+# Link all the sub libraries
+target_link_libraries(${LIBNAME} INTERFACE
+    DebuggerView
+    HelpView
+    HomeView
+    IOView
+    MemoryView
+    ProgrammerView
+    SettingsView
+)
