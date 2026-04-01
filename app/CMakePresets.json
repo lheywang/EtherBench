@@ -1,0 +1,32 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "HOST",
+            "displayName": "🧪 Build tests and doc (default to Linux CI)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/host",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "BUILD_TESTING": "ON",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "tests",
+            "configurePreset": "HOST",
+            "displayName": "⚙️ Build untests"
+        },
+        {
+            "name": "doc",
+            "configurePreset": "HOST",
+            "displayName": "📚 Build the documentation",
+            "targets": [
+                "doc"
+            ]
+        }
+    ]
+}

@@ -22,13 +22,13 @@ Page {
             Layout.fillHeight: true
             orientation: Qt.Horizontal
 
-            Debugger.Logs {
+            Debugger.DebuggerLogs {
                 id: logsPane
                 SplitView.fillWidth: true
                 SplitView.minimumWidth: Theme.panelMinimalWidth
             }
 
-            Debugger.Details {
+            Debugger.DebuggerDetails {
                 id: detailsPane
                 SplitView.fillWidth: true
                 SplitView.preferredWidth: Theme.panelPreferredWidth

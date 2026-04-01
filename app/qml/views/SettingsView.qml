@@ -19,13 +19,13 @@ Page {
             margins: Theme.standardMargin
         }
 
-        Settings.Tree {
+        Settings.SettingsTree {
             id: settingsNav
             SplitView.fillWidth: true
             SplitView.fillHeight: true
         }
 
-        Settings.Editor {
+        Settings.SettingsEditor {
             SplitView.fillWidth: true
             SplitView.fillHeight: true
 

@@ -1,0 +1,32 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "HOST-WINDOWS",
+            "displayName": "🧪 Windows Desktop (Qt 6.10 LLVM)",
+            "inherits": "HOST",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang.exe",
+                "CMAKE_CXX_COMPILER": "clang++.exe"
+            },
+            "environment": {
+                "PATH": "C:/Qt/6.10.2/llvm-mingw_64/bin;C:/Qt/Tools/llvm-mingw1706_64/bin/;$penv{PATH}"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "tests-windows",
+            "configurePreset": "HOST-WINDOWS",
+            "displayName": "⚙️ Build tests (Windows)"
+        },
+        {
+            "name": "doc-windows",
+            "configurePreset": "HOST-WINDOWS",
+            "displayName": "📚 Generate documentation (Windows)",
+            "targets": [
+                "doc"
+            ]
+        }
+    ]
+}

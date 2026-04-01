@@ -8,6 +8,10 @@
 cmake_minimum_required(VERSION 3.16)
 project(EtherBenchApp VERSION 1.0.0 LANGUAGES CXX)
 
+# QML Config
+set(QTP0004 NEW)
+set(QTP0001 NEW)
+
 # Project Setup
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -34,26 +38,26 @@ set(SOURCES
 set(QML_SOURCES 
     qml/Main.qml
     qml/theme/Theme.qml
-    qml/views/Debugger.qml
-    qml/views/Help.qml
-    qml/views/Home.qml
-    qml/views/InputOutput.qml
-    qml/views/Memory.qml
-    qml/views/Sequences.qml
-    qml/views/Settings.qml
+    qml/views/DebuggerView.qml
+    qml/views/HelpView.qml
+    qml/views/HomeView.qml
+    qml/views/InputOutputView.qml
+    qml/views/MemoryView.qml
+    qml/views/SequencesView.qml
+    qml/views/SettingsView.qml
     qml/components/StatusETH.qml
     qml/components/StatusUSB.qml
     qml/components/ContextualMenu.qml
-    qml/menus/File.qml
-    qml/menus/View.qml
-    qml/menus/Build.qml
-    qml/menus/Debugger.qml
-    qml/menus/IO.qml
-    qml/menus/Memory.qml
-    qml/views/debugger/Details.qml
-    qml/views/debugger/Logs.qml
-    qml/views/settings/Tree.qml
-    qml/views/settings/Editor.qml
+    qml/menus/FileMenu.qml
+    qml/menus/ViewMenu.qml
+    qml/menus/BuildMenu.qml
+    qml/menus/DebuggerMenu.qml
+    qml/menus/IOMenu.qml
+    qml/menus/MemoryMenu.qml
+    qml/views/debugger/DebuggerDetails.qml
+    qml/views/debugger/DebuggerLogs.qml
+    qml/views/settings/SettingsTree.qml
+    qml/views/settings/SettingsEditor.qml
 )
 
 # Set the Theme as a special file
@@ -70,8 +74,6 @@ qt_add_qml_module(${PROJECT_NAME}
     QML_FILES 
         ${QML_SOURCES}
     ENABLE_TYPE_COMPILER
-    SOURCES
-        ${SOURCES}
 )
 
 # Link libraries
