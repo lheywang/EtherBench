@@ -49,8 +49,10 @@ app/output/*
 */.cache/*
 
 # VSCodeExtensions
-.VSCodeCounter/
-.vscode/*
+src/.VSCodeCounter/*
+src/.vscode/*
+app/.VSCodeCounter/*
+app/.vscode/*
 
 # QT
 *.qmlls*

@@ -32,4 +32,4 @@ target_include_directories(${LIBNAME} PUBLIC
 )
 
 # Link against the required libs
-target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets LIBCORE)
+target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets LIBCORE LIBVIEWS)
