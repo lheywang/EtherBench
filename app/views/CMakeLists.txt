@@ -17,6 +17,7 @@ add_subdirectory(home)
 add_subdirectory(io)
 add_subdirectory(memory)
 add_subdirectory(programmer)
+add_subdirectory(sequence)
 add_subdirectory(settings)
 
 # Create the umbrella library
@@ -30,5 +31,6 @@ target_link_libraries(${LIBNAME} INTERFACE
     IOView
     MemoryView
     ProgrammerView
+    SequenceView
     SettingsView
 )

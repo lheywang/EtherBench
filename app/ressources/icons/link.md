@@ -17,3 +17,4 @@ Here a complete list of all the icons we did used :
 - [Programmer](https://icons8.com/icon/DEeZAtE1gIXO/refresh-processor)
 - [Settings](https://icons8.com/icon/364/settings)
 - [Help](https://icons8.com/icon/17077/info-squared)
+- [Sequences](https://icons8.com/icon/PIxApDfIMz9p/timeline)

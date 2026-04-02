@@ -15,33 +15,136 @@
 // ----------------------------------------------------------------------
 // Local libraries
 #include "models/counter.hpp"
+#include <views/debuggerView.hpp>
+#include <views/helpView.hpp>
+#include <views/homeView.hpp>
+#include <views/ioView.hpp>
+#include <views/memoryView.hpp>
+#include <views/programmerView.hpp>
+#include <views/sequenceView.hpp>
+#include <views/settingsView.hpp>
 
 // Qt
 #include <QLabel>
 #include <QMainWindow>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <qaction.h>
+#include <qapplication.h>
+#include <qnamespace.h>
 
 // ----------------------------------------------------------------------
 // CLASS
 // ----------------------------------------------------------------------
 
+// FORWARDS
+class QStackedWidget;
+class QAction;
+class QMenu;
+
 namespace EtherBench::UI {
 
+// FORWARDS
+class DebuggerView;
+class HelpView;
+class HomeView;
+class IOView;
+class MemoryView;
+class ProgrammerView;
+class SettingsView;
+
+/**
+ * @class   MainWindow  Hold the window UI, and define the most basic elements (what's
+ *                      seen, menubar...)
+ *
+ */
 class MainWindow : public QMainWindow {
     Q_OBJECT
+
   public:
+    /*
+     * Constructors and destructors
+     */
+    /**
+     * @brief Construct a new MainWindow element.
+     */
     explicit MainWindow(QWidget *parent = nullptr);
 
   private:
+    /*
+     * Setup functions
+     */
+    /**
+     * @brief Configure the UI for the MainWindow (stacked layout).
+     */
     void setupUI();
+
+    /**
+     * @brief Configure the sidebar naviguation
+     *
+     */
+    void setupSideBar();
+
+    /**
+     * @brief Configure the menubar top level.
+     *
+     */
+    void setupMenuBar();
+
+    /**
+     * @brief Configure the connection between clickable elements,
+     *        and their associated actions on the C++ part.
+     *
+     */
     void makeConnections();
 
-    QPushButton *m_btn;
-    QLabel *m_label;
+    /*
+     * Naviguation functions
+     */
+    /**
+     * @brief Change the currently displayed view.
+     *
+     * @param[in] index The target index
+     */
+    void switchView(int index);
+
+    /*
+     * Private members, that hold pointers to elements
+     */
+    // Views
     QStackedWidget *m_viewStack;
 
-    EtherBench::Core::CounterManager m_counter;
+    // Menus
+    QMenu *fileMenu;
+    QMenu *viewMenu;
+
+    QMenu *memoryMenu;
+    QMenu *serialMenu;
+    QMenu *buildMenu;
+    QMenu *debuggerMenu;
+
+    // Actions
+    QAction *actHome;
+    QAction *actDebugger;
+    QAction *actMemory;
+    QAction *actIO;
+    QAction *actProgrammer;
+    QAction *actSettings;
+    QAction *actHelp;
+
+    // Pages
+    DebuggerView *debuggerPage;
+    HelpView *helpPage;
+    HomeView *homePage;
+    IOView *ioPage;
+    MemoryView *memoryPage;
+    ProgrammerView *programmerPage;
+    SequenceView *sequencePage;
+    SettingsView *settingsPage;
+
+    /*
+     * Private models
+     */
 };
 
 } // namespace EtherBench::UI

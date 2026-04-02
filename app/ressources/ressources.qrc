@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/icons/navbar">
+    <qresource prefix="/">
         <file>icons/navbar/debugger.png</file>
         <file>icons/navbar/memory.png</file>
         <file>icons/navbar/help.png</file>
@@ -7,11 +7,12 @@
         <file>icons/navbar/programmer.png</file>
         <file>icons/navbar/settings.png</file>
         <file>icons/navbar/io.png</file>
+        <file>icons/navbar/sequences.png</file>
     </qresource>
-    <qresource prefix="/icons/app">
+    <qresource prefix="/">
         <file>icons/app/icon.png</file>
     </qresource>
-    <qresource prefix="/styles">
+    <qresource prefix="/">
         <file>styles/dark.qss</file>
         <file>styles/light.qss</file>
     </qresource>
