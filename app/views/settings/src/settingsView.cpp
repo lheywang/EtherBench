@@ -16,6 +16,10 @@
 #include <views/settingsView.hpp>
 
 // Local libraries
+#include <views/baseView.hpp>
+
+// QT
+#include <QDebug>
 #include <QLabel>
 #include <QString>
 #include <QVBoxLayout>
@@ -29,13 +33,25 @@
 // ----------------------------------------------------------------------
 namespace EtherBench::UI {
 
-SettingsView::SettingsView(QWidget *parent) : QWidget(parent) {
+SettingsView::SettingsView(QWidget *parent) : BaseView(parent) {
 
     auto *layout = new QVBoxLayout(this);
     auto *label = new QLabel("Settings", this);
 
     label->setAlignment(Qt::AlignCenter);
     layout->addWidget(label);
+}
+
+QString SettingsView::viewTitle() const {
+    return "Settings";
+}
+
+void SettingsView::onActivated() {
+    qDebug() << "Welcome to settings";
+}
+
+void SettingsView::onDeactivated() {
+    qDebug() << "Exiting ...";
 }
 
 } // namespace EtherBench::UI

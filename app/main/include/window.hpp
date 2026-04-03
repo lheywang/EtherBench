@@ -15,6 +15,8 @@
 // ----------------------------------------------------------------------
 // Local libraries
 #include "models/counter.hpp"
+
+#include <views/baseView.hpp>
 #include <views/debuggerView.hpp>
 #include <views/helpView.hpp>
 #include <views/homeView.hpp>
@@ -24,7 +26,10 @@
 #include <views/sequenceView.hpp>
 #include <views/settingsView.hpp>
 
-// Qt
+#include <views/definitions/baseDefinitions.hpp>
+
+// 
+#include <QMap>
 #include <QLabel>
 #include <QMainWindow>
 #include <QPushButton>
@@ -104,9 +109,9 @@ class MainWindow : public QMainWindow {
     /**
      * @brief Change the currently displayed view.
      *
-     * @param[in] index The target index
+     * @param[in] type The target index
      */
-    void switchView(int index);
+    void switchView(ViewType type);
 
     /*
      * Private members, that hold pointers to elements
@@ -133,14 +138,7 @@ class MainWindow : public QMainWindow {
     QAction *actHelp;
 
     // Pages
-    DebuggerView *debuggerPage;
-    HelpView *helpPage;
-    HomeView *homePage;
-    IOView *ioPage;
-    MemoryView *memoryPage;
-    ProgrammerView *programmerPage;
-    SequenceView *sequencePage;
-    SettingsView *settingsPage;
+    QMap<ViewType, BaseView*> pages;
 
     /*
      * Private models

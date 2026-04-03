@@ -16,6 +16,10 @@
 #include <views/debuggerView.hpp>
 
 // Local libraries
+#include <views/baseView.hpp>
+
+// QT
+#include <QDebug>
 #include <QLabel>
 #include <QString>
 #include <QVBoxLayout>
@@ -29,13 +33,25 @@
 // ----------------------------------------------------------------------
 namespace EtherBench::UI {
 
-DebuggerView::DebuggerView(QWidget *parent) : QWidget(parent) {
+DebuggerView::DebuggerView(QWidget *parent) : BaseView(parent) {
 
     auto *layout = new QVBoxLayout(this);
     auto *label = new QLabel("Debugger", this);
 
     label->setAlignment(Qt::AlignCenter);
     layout->addWidget(label);
+}
+
+QString DebuggerView::viewTitle() const {
+    return "Debugger";
+}
+
+void DebuggerView::onActivated() {
+    qDebug() << "Welcome to debugger";
+}
+
+void DebuggerView::onDeactivated() {
+    qDebug() << "Exiting ...";
 }
 
 } // namespace EtherBench::UI

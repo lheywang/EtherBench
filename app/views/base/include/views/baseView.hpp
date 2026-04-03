@@ -1,7 +1,7 @@
 /**
- * @file    programmerView.hpp
+ * @file    debuggerView.hpp
  * @author  lheywang (leonard.heywang@proton.me)
- * @brief   Implement the home menu view for the EtherBenchApp project.
+ * @brief   Implement the debugger view for the EtherBenchApp project.
  * @version 0.1
  * @date    2026-04-02
  *
@@ -14,10 +14,6 @@
 // ----------------------------------------------------------------------
 // INCLUDES
 // ----------------------------------------------------------------------
-// Local libraries
-#include <views/baseView.hpp>
-
-// QT
 #include <QLabel>
 #include <QString>
 #include <QWidget>
@@ -28,15 +24,28 @@
 
 namespace EtherBench::UI {
 
-class ProgrammerView : public BaseView {
+class BaseView : public QWidget {
     Q_OBJECT
 
   public:
-    explicit ProgrammerView(QWidget *parent = nullptr);
+    using QWidget::QWidget;
 
-    QString viewTitle() const override;
-    void onActivated() override;
-    void onDeactivated() override;
+    /*
+     * Constructors and destructors
+     */
+    explicit BaseView(QWidget *parent = nullptr) : QWidget(parent) {}
+    virtual ~BaseView() = default;
+
+    /*
+     * String based functions
+     */
+    virtual QString viewTitle() const = 0;
+
+    /*
+     * Window handling procedure (called when chaning the view !)
+     */
+    virtual void onActivated() = 0;
+    virtual void onDeactivated() = 0;
 };
 
 } // namespace EtherBench::UI

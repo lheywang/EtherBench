@@ -16,6 +16,10 @@
 #include <views/programmerView.hpp>
 
 // Local libraries
+#include <views/baseView.hpp>
+
+// QT
+#include <QDebug>
 #include <QLabel>
 #include <QString>
 #include <QVBoxLayout>
@@ -29,13 +33,25 @@
 // ----------------------------------------------------------------------
 namespace EtherBench::UI {
 
-ProgrammerView::ProgrammerView(QWidget *parent) : QWidget(parent) {
+ProgrammerView::ProgrammerView(QWidget *parent) : BaseView(parent) {
 
     auto *layout = new QVBoxLayout(this);
     auto *label = new QLabel("Programmer", this);
 
     label->setAlignment(Qt::AlignCenter);
     layout->addWidget(label);
+}
+
+QString ProgrammerView::viewTitle() const {
+    return "Programmer";
+}
+
+void ProgrammerView::onActivated() {
+    qDebug() << "Welcome to programmer";
+}
+
+void ProgrammerView::onDeactivated() {
+    qDebug() << "Exiting ...";
 }
 
 } // namespace EtherBench::UI

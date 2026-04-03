@@ -16,6 +16,10 @@
 #include <views/memoryView.hpp>
 
 // Local libraries
+#include <views/baseView.hpp>
+
+// QT
+#include <QDebug>
 #include <QLabel>
 #include <QString>
 #include <QVBoxLayout>
@@ -29,13 +33,25 @@
 // ----------------------------------------------------------------------
 namespace EtherBench::UI {
 
-MemoryView::MemoryView(QWidget *parent) : QWidget(parent) {
+MemoryView::MemoryView(QWidget *parent) : BaseView(parent) {
 
     auto *layout = new QVBoxLayout(this);
     auto *label = new QLabel("Memory", this);
 
     label->setAlignment(Qt::AlignCenter);
     layout->addWidget(label);
+}
+
+QString MemoryView::viewTitle() const {
+    return "Memory";
+}
+
+void MemoryView::onActivated() {
+    qDebug() << "Welcome to memory";
+}
+
+void MemoryView::onDeactivated() {
+    qDebug() << "Exiting ...";
 }
 
 } // namespace EtherBench::UI

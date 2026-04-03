@@ -59,30 +59,29 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 void MainWindow::setupUI() {
 
     // Configure window parameters
-    setWindowTitle("EtherBenchApp");
+    setWindowTitle("EtherBenchApp - Home");
     resize(1280, 720);
 
     // Configure the children windows
-    this->debuggerPage = new DebuggerView(this);
-    this->helpPage = new HelpView(this);
-    this->homePage = new HomeView(this);
-    this->ioPage = new IOView(this);
-    this->memoryPage = new MemoryView(this);
-    this->programmerPage = new ProgrammerView(this);
-    this->sequencePage = new SequenceView(this);
-    this->settingsPage = new SettingsView(this);
+    this->pages[ViewType::Home] = new HomeView(this);
+    this->pages[ViewType::Debugger] = new DebuggerView(this);
+    this->pages[ViewType::Memory] = new MemoryView(this);
+    this->pages[ViewType::Serial] = new IOView(this);
+    this->pages[ViewType::Programmer] = new ProgrammerView(this);
+    this->pages[ViewType::Sequences] = new SequenceView(this);
+    this->pages[ViewType::Settings] = new SettingsView(this);
+    this->pages[ViewType::Help] = new HelpView(this);
 
     // Create the stacked layout
     this->m_viewStack = new QStackedWidget(this);
 
-    m_viewStack->addWidget(homePage);
-    m_viewStack->addWidget(debuggerPage);
-    m_viewStack->addWidget(memoryPage);
-    m_viewStack->addWidget(ioPage);
-    m_viewStack->addWidget(programmerPage);
-    m_viewStack->addWidget(sequencePage);
-    m_viewStack->addWidget(settingsPage);
-    m_viewStack->addWidget(helpPage);
+    // Add all the windows
+    for (int i = 0; i < static_cast<int>(ViewType::Count); i += 1) {
+        ViewType type = static_cast<ViewType>(i);
+        if (this->pages.contains(type)) {
+            this->m_viewStack->addWidget(this->pages[type]);
+        }
+    }
 
     setCentralWidget(m_viewStack);
 }
@@ -166,7 +165,7 @@ void MainWindow::setupSideBar() {
         act->setCheckable(true);
         navgroup->addAction(act);
         connect(act, &QAction::triggered, this, [this, viewIndex]() {
-            switchView(viewIndex);
+            switchView(static_cast<ViewType>(viewIndex));
         });
         return act;
     };
@@ -202,14 +201,20 @@ void MainWindow::makeConnections() {
  * Naviguation functions
  */
 
-void MainWindow::switchView(int index) {
+void MainWindow::switchView(ViewType type) {
 
-    // Update the index
-    this->m_viewStack->setCurrentIndex(index);
+    // Disable the previous page
+    ViewType current = static_cast<ViewType>(this->m_viewStack->currentIndex());
+    this->pages[current]->onDeactivated();
 
-    // We also need to update the menu bar here
+    // Update the view
+    m_viewStack->setCurrentWidget(this->pages[type]);
 
-    // We can also configure the Window Title (and, perhaps, icon ? )
+    // Set the new config of the window
+    setWindowTitle("EtherBench - " + this->pages[type]->viewTitle());
+    this->pages[type]->onActivated();
+
+    // Update the menubar
 }
 
 } // namespace EtherBench::UI

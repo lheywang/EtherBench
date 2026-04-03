@@ -14,6 +14,10 @@
 // ----------------------------------------------------------------------
 // INCLUDES
 // ----------------------------------------------------------------------
+// Local libraries
+#include <views/baseView.hpp>
+
+// QT
 #include <QLabel>
 #include <QString>
 #include <QWidget>
@@ -24,11 +28,15 @@
 
 namespace EtherBench::UI {
 
-class IOView : public QWidget {
+class IOView : public BaseView {
     Q_OBJECT
 
   public:
     explicit IOView(QWidget *parent = nullptr);
+
+    QString viewTitle() const override;
+    void onActivated() override;
+    void onDeactivated() override;
 };
 
 } // namespace EtherBench::UI

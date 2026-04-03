@@ -16,6 +16,10 @@
 #include <views/sequenceView.hpp>
 
 // Local libraries
+#include <views/baseView.hpp>
+
+// QT
+#include <QDebug>
 #include <QLabel>
 #include <QString>
 #include <QVBoxLayout>
@@ -29,13 +33,25 @@
 // ----------------------------------------------------------------------
 namespace EtherBench::UI {
 
-SequenceView::SequenceView(QWidget *parent) : QWidget(parent) {
+SequenceView::SequenceView(QWidget *parent) : BaseView(parent) {
 
     auto *layout = new QVBoxLayout(this);
     auto *label = new QLabel("Sequences", this);
 
     label->setAlignment(Qt::AlignCenter);
     layout->addWidget(label);
+}
+
+QString SequenceView::viewTitle() const {
+    return "Sequencer";
+}
+
+void SequenceView::onActivated() {
+    qDebug() << "Welcome to sequencer";
+}
+
+void SequenceView::onDeactivated() {
+    qDebug() << "Exiting ...";
 }
 
 } // namespace EtherBench::UI

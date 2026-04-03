@@ -16,6 +16,10 @@
 #include <views/homeView.hpp>
 
 // Local libraries
+#include <views/baseView.hpp>
+
+// QT
+#include <QDebug>
 #include <QLabel>
 #include <QString>
 #include <QVBoxLayout>
@@ -29,13 +33,25 @@
 // ----------------------------------------------------------------------
 namespace EtherBench::UI {
 
-HomeView::HomeView(QWidget *parent) : QWidget(parent) {
+HomeView::HomeView(QWidget *parent) : BaseView(parent) {
 
     auto *layout = new QVBoxLayout(this);
     auto *label = new QLabel("Home", this);
 
     label->setAlignment(Qt::AlignCenter);
     layout->addWidget(label);
+}
+
+QString HomeView::viewTitle() const {
+    return "Home";
+}
+
+void HomeView::onActivated() {
+    qDebug() << "Welcome to home";
+}
+
+void HomeView::onDeactivated() {
+    qDebug() << "Exiting ...";
 }
 
 } // namespace EtherBench::UI

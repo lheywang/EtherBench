@@ -16,6 +16,10 @@
 #include <views/helpView.hpp>
 
 // Local libraries
+#include <views/baseView.hpp>
+
+// QT
+#include <QDebug>
 #include <QLabel>
 #include <QString>
 #include <QVBoxLayout>
@@ -29,13 +33,25 @@
 // ----------------------------------------------------------------------
 namespace EtherBench::UI {
 
-HelpView::HelpView(QWidget *parent) : QWidget(parent) {
+HelpView::HelpView(QWidget *parent) : BaseView(parent) {
 
     auto *layout = new QVBoxLayout(this);
     auto *label = new QLabel("Help", this);
 
     label->setAlignment(Qt::AlignCenter);
     layout->addWidget(label);
+}
+
+QString HelpView::viewTitle() const {
+    return "Help";
+}
+
+void HelpView::onActivated() {
+    qDebug() << "Welcome to help";
+}
+
+void HelpView::onDeactivated() {
+    qDebug() << "Exiting ...";
 }
 
 } // namespace EtherBench::UI

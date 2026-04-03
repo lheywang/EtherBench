@@ -8,14 +8,13 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME HelpView)
+set(LIBNAME BaseView)
 
 # Configure the sources
-set(SOURCES
-    src/helpView.cpp   
+set(SOURCES 
 )
 set(HEADERS
-    include/views/helpView.hpp
+    include/views/baseView.hpp
 )
 
 # Create the library
@@ -32,4 +31,4 @@ target_include_directories(${LIBNAME} PUBLIC
 )
 
 # Link against the required libs
-target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets LIBCORE BaseView)
+target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets LIBCORE)

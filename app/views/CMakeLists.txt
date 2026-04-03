@@ -11,6 +11,7 @@
 set(LIBNAME LIBVIEWS)
 
 # Include all subfolders
+add_subdirectory(base)
 add_subdirectory(debugger)
 add_subdirectory(help)
 add_subdirectory(home)
