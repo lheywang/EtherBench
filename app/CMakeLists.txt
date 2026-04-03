@@ -38,6 +38,7 @@ set(CMAKE_AUTORCC ON)
 
 # Search for Qt
 find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui)
+qt_standard_project_setup()
 
 # -------------------------------------------------------------------
 # EXECUTABLE BUILD
@@ -57,7 +58,7 @@ set(RESSOURCES
 )
 
 # Add the main executable
-add_executable(${PROJECT_NAME} ${SOURCES} ${RESSOURCES})
+qt_add_executable(${PROJECT_NAME} ${SOURCES} ${RESSOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     LIBEXTERNAL
     LIBMAIN
@@ -104,11 +105,12 @@ install(
 )
 install(FILES ${EXTERNAL_DLLS} DESTINATION .)
 
-set(QT_DEPLOY_OPTIONS "--compiler-runtime" "--no-translations")
 qt_generate_deploy_app_script(
     TARGET ${PROJECT_NAME}
     OUTPUT_SCRIPT ${deploy_script}
     NO_UNSUPPORTED_PLATFORM_ERROR
+    NO_TRANSLATIONS
+    NO_COMPILER_RUNTIME
 )
 
 install(SCRIPT ${deploy_script})
@@ -119,6 +121,8 @@ add_custom_target(bundle
         ${CMAKE_COMMAND} 
             --install ${CMAKE_BINARY_DIR} 
             --prefix ${LOCAL_OUTPUT_DIR}
+    COMMAND # Just delete the qt.conf file, which is not needed and can cause issues with some plugins
+        ${CMAKE_COMMAND} -E $<$<PLATFORM_ID:Linux>:remove> -f ${LOCAL_OUTPUT_DIR}/qt.conf
     COMMENT 
         "Packaging app into ${LOCAL_OUTPUT_DIR}"
     DEPENDS 
