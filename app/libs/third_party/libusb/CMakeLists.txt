@@ -8,14 +8,18 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME libUSB)
+include(FetchContent)
 
-add_library(${LIBNAME} STATIC IMPORTED GLOBAL)
-
-set_target_properties(${LIBNAME} PROPERTIES
-    IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/libusb-1.0.a
+# Fetch the library
+FetchContent_Declare(
+    libusb
+    GIT_REPOSITORY  https://github.com/libusb/libusb.git
+    GIT_TAG         v1.0.29
 )
 
-target_include_directories(${LIBNAME} INTERFACE
-    {CMAKE_CURRENT_SOURCE_DIR}/include
-)
+# Configure it
+set(LIBUSB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(LIBUSB_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+
+# Build it link it 
+FetchContent_MakeAvailable(libusb)

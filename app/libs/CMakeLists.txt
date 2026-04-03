@@ -19,5 +19,5 @@ add_library(${LIBNAME} INTERFACE)
 
 # Link all the sub libraries
 target_link_libraries(${LIBNAME} INTERFACE
-    libUSB
+    usb-1.0
 )

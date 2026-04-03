@@ -100,7 +100,7 @@ install(
 )
 install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/configs/decoders
-    DESTINATION ./decoders/ 
+    DESTINATION . 
 )
 install(FILES ${EXTERNAL_DLLS} DESTINATION .)
 

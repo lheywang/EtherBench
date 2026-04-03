@@ -15,7 +15,7 @@ set(SOURCES
     src/homeView.cpp   
 )
 set(HEADERS
-    include/views/homeVIew.hpp
+    include/views/homeView.hpp
 )
 
 # Create the library
