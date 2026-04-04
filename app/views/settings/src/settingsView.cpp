@@ -18,14 +18,19 @@
 // Local libraries
 #include <views/baseView.hpp>
 
+// Models
+#include <models/parameterRegistry.hpp>
+
 // QT
 #include <QCheckBox>
+#include <QComboBox>
 #include <QDebug>
 #include <QFormLayout>
 #include <QHeaderView>
 #include <QLabel>
 #include <QLineEdit>
 #include <QScrollArea>
+#include <QSpinBox>
 #include <QSplitter>
 #include <QString>
 #include <QTreeView>
@@ -51,15 +56,10 @@ void SettingsView::populateTree() {
     m_treeWidget->clear();
 
     /*
-     * TESTING ONLY. SHALL BE DELETED
+     * Fetch the key list :
      */
-    QStringList keys = {
-        "Network/Ethernet/IP Address",
-        "Network/Ethernet/Gateway",
-        "Network/WiFi/SSID",
-        "Display/Brightness",
-        "Display/Language",
-        "System/Logging/Enabled"};
+    auto &reg = EtherBench::Models::ParameterRegistry::instance();
+    QStringList keys = reg.allKeys();
 
     for (const QString &key : keys) {
         QStringList parts = key.split('/');
@@ -131,6 +131,7 @@ void SettingsView::setupTreeView() {
     m_treeWidget = new QTreeWidget(this);
     m_treeWidget->setHeaderLabel("Parameters");
     m_treeWidget->header()->setStretchLastSection(true);
+    m_treeWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 void SettingsView::setupEditor() {
@@ -144,21 +145,77 @@ void SettingsView::setupEditor() {
 }
 
 void SettingsView::onCategorySelected(QTreeWidgetItem *current, QTreeWidgetItem *) {
+    // Check if we're not already good
     if (!current)
         return;
 
-    QLayoutItem *child;
-    while ((child = m_editorLayout->takeAt(0)) != nullptr) {
-        if (child->widget())
-            delete child->widget();
-        delete child;
+    // If not, clean the current editor
+    clearLayout(m_editorLayout);
+
+    // Then, fill all the new keys
+    QString categoryPath = getCategoryPath(current);
+    auto &reg = EtherBench::Models::ParameterRegistry::instance();
+    QStringList allKeys = reg.allKeys();
+
+    for (const QString &key : reg.allKeys()) {
+        QString paramParentPath = key.section('/', 0, -2);
+
+        if (paramParentPath == categoryPath) {
+            const auto &param = reg.get(key);
+            m_editorLayout->addRow(param.label + " :", createEditorWidget(key, param));
+        }
+    }
+}
+
+QWidget *SettingsView::createEditorWidget(
+    const QString &key, const EtherBench::Models::Parameter &param) {
+    auto &reg = EtherBench::Models::ParameterRegistry::instance();
+
+    switch (param.type) {
+    case Models::ParamType::Bool: {
+        QCheckBox *cb = new QCheckBox();
+        cb->setChecked(param.value.toBool());
+        // Binding : Quand on coche, on met à jour le registre
+        connect(cb, &QCheckBox::toggled, [key, &reg](bool checked) {
+            reg.setValue(key, checked);
+        });
+        return cb;
     }
 
-    QString fullPath = getCategoryPath(current);
+    case Models::ParamType::Number: {
+        QSpinBox *sb = new QSpinBox();
+        sb->setRange(param.minValue.toInt(), param.maxValue.toInt());
+        sb->setValue(param.value.toInt());
 
-    m_editorLayout->addRow(new QLabel("Settings for .... : " + fullPath));
-    m_editorLayout->addRow("Value :", new QLineEdit());
-    m_editorLayout->addRow("Active :", new QCheckBox());
+        connect(sb, &QSpinBox::valueChanged, [key, &reg](int val) {
+            reg.setValue(key, val);
+        });
+        return sb;
+    }
+
+    case Models::ParamType::Selection: {
+        // Menu déroulant pour les Enums
+        QComboBox *combo = new QComboBox();
+        combo->addItems(param.options);
+        combo->setCurrentText(param.value.toString());
+
+        connect(combo, &QComboBox::currentTextChanged, [key, &reg](const QString &text) {
+            reg.setValue(key, text);
+        });
+        return combo;
+    }
+
+    case Models::ParamType::Text:
+    default: {
+        QLineEdit *le = new QLineEdit();
+        le->setText(param.value.toString());
+
+        connect(le, &QLineEdit::textChanged, [key, &reg](const QString &text) {
+            reg.setValue(key, text);
+        });
+        return le;
+    }
+    }
 }
 
 QString SettingsView::getCategoryPath(QTreeWidgetItem *item) const {
@@ -168,6 +225,19 @@ QString SettingsView::getCategoryPath(QTreeWidgetItem *item) const {
         path = item->text(0) + "/" + path;
     }
     return path;
+}
+
+void SettingsView::clearLayout(QLayout *layout) {
+    if (!layout)
+        return;
+
+    while (m_editorLayout->count() > 0) {
+        QLayoutItem *item = m_editorLayout->takeAt(0);
+        if (QWidget *w = item->widget()) {
+            w->deleteLater();
+        }
+        delete item;
+    }
 }
 
 } // namespace EtherBench::UI

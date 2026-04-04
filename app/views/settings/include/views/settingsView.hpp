@@ -17,19 +17,16 @@
 // Local libraries
 #include <views/baseView.hpp>
 
+// Models
+#include <models/parameterRegistry.hpp>
+
 // QT
-#include <QCheckBox>
-#include <QDebug>
 #include <QFormLayout>
-#include <QLabel>
-#include <QLineEdit>
 #include <QScrollArea>
 #include <QSplitter>
 #include <QString>
-#include <QTreeView>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QVBoxLayout>
 #include <QWidget>
 
 // ----------------------------------------------------------------------
@@ -48,6 +45,9 @@ class SettingsView : public BaseView {
     void onActivated() override;
     void onDeactivated() override;
 
+    QWidget *
+    createEditorWidget(const QString &key, const EtherBench::Models::Parameter &param);
+
   private slots:
     void onCategorySelected(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
@@ -56,6 +56,7 @@ class SettingsView : public BaseView {
     void setupTreeView();
     void setupEditor();
     void populateTree();
+    void clearLayout(QLayout *layout);
 
     QString getCategoryPath(QTreeWidgetItem *item) const;
 

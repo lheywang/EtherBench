@@ -26,6 +26,9 @@
 #include <views/programmerView.hpp>
 #include <views/settingsView.hpp>
 
+// Models
+#include <models/parameterRegistry.hpp>
+
 // QT
 #include <QActionGroup>
 #include <QMenuBar>
@@ -43,6 +46,14 @@
 namespace EtherBench::UI {
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+
+    /*
+     * Load the settings
+     */
+    auto &reg = EtherBench::Models::ParameterRegistry::instance();
+    reg.initParams();
+    reg.loadFromFile("settings.ebs");
+
     /*
      * First, configure the global UI :
      */

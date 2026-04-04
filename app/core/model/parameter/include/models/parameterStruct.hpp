@@ -25,7 +25,9 @@ namespace EtherBench::Models {
 // =============================================================
 // ENUMS
 // =============================================================
+// Parameter config
 enum class ParamType { Text, Number, Bool, Selection };
+enum class ParamAttributes { READ_WRITE, READ, WRITE };
 
 // =============================================================
 // STRUCTS
@@ -38,63 +40,54 @@ struct Parameter {
 
     ParamType type = ParamType::Text; //! Define the type of the stored setting. Will
                                       //! ensure a consistent edit page.
-
-    QString key;    //! The key name of the parameter.
-    QVariant value; //! The actual value of the parameter.
-
-    QString label;       //! The label of the text prompt near it.
+    QString key;                      //! The key name of the parameter.
+    QVariant value;                   //! The actual value of the parameter.
+    QVariant defaultValue;            //! The default loaded value.
+    QString label;                    //! The label of the text prompt near it.
     QStringList options; //! The list of options, only used for ParamType::Selection
-
-    QString group;
-
-    QVariant minValue; // The minimal value to be set. Unused if -1.
-    QVariant maxValue; // The maximal value to be set. Unused if -1.
-    QString regex;
+    QString group;       //! the related group. Unused for now.
+    QVariant minValue;   //! The minimal value to be set.
+    QVariant maxValue;   //! The maximal value to be set.
+    QString regex;       //! A regex expression to validate (or not) the input field.
+    QString description; //! When hovering the settings.
+    ParamAttributes access = ParamAttributes::READ_WRITE; //! Define access rights.
 
     /*
      * Utility function
      */
     bool isValid(const QVariant &newValue) const {
-        if (type == ParamType::Number) {
-            int val = newValue.toInt();
+
+        // If we're read only --> Set to false. User can't edit.
+        if (access == ParamAttributes::READ)
+            return false;
+
+        // Apply selection based on filters
+        switch (type) {
+        case ParamType::Number: {
+            double val = newValue.toDouble();
 
             if ((minValue.isValid()) && (maxValue.isValid()))
-                return (val >= minValue.toInt()) && (val <= maxValue.toInt());
+                return (val >= minValue.toDouble()) && (val <= maxValue.toDouble());
 
             return true;
+            break;
         }
-        if (type == ParamType::Selection) {
+
+        case ParamType::Selection: {
             return options.contains(newValue.toString());
+            break;
         }
+        }
+
+        // If nothing worked, apply the regex.
         if (!regex.isEmpty()) {
             QRegularExpression re(regex);
             return re.match(newValue.toString()).hasMatch();
         }
+
+        // Default return
         return true;
     }
-};
-
-class ParameterRegistry : public QObject {
-    Q_OBJECT
-
-  public:
-    explicit ParameterRegistry(QObject *parent = nullptr);
-    static ParameterRegistry &instance();
-
-    void registerParam(
-        const QString &key,
-        const QVariant &defaultValue,
-        const QString &label,
-        ParamType type = ParamType::Text);
-
-    QVariant value(const QString &key) const;
-    bool setValue(const QString &key, const QVariant &val);
-
-    QStringList allKeys() const;
-    const Parameter &get(const QString &key) const;
-
-  private:
-    QMap<QString, Parameter> m_parameters;
 };
 
 } // namespace EtherBench::Models

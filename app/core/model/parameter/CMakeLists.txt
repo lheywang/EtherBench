@@ -12,12 +12,11 @@ set(LIBNAME libParameter)
 
 # Configure the sources
 set(SOURCES
-    src/parameterModel.cpp
-    src/parameterStruct.cpp
+    src/parameterRegistry.cpp
 )
 set(HEADERS
-    include/models/parameterModel.hpp
-    include/models/parameters/parameterStruct.hpp
+    include/models/parameterStruct.hpp
+    include/models/parameterRegistry.hpp
 )
 
 # Create the library
