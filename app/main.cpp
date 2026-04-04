@@ -51,11 +51,11 @@ void apply_theme(QApplication &app, const QString &themePath) {
     // Open and load the file
     QFile file(themePath);
 
-    if (file.open(QFile::ReadOnly |QFile::Text)) {
-
+    if (file.open(QFile::ReadOnly | QFile::Text)) {
         QString styleSheet = QLatin1String(file.readAll());
         app.setStyleSheet(styleSheet);
         file.close();
+
     } else {
         qWarning() << "Unable to load the requested stylesheet : " << themePath;
     }

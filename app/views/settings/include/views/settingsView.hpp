@@ -18,8 +18,18 @@
 #include <views/baseView.hpp>
 
 // QT
+#include <QCheckBox>
+#include <QDebug>
+#include <QFormLayout>
 #include <QLabel>
+#include <QLineEdit>
+#include <QScrollArea>
+#include <QSplitter>
 #include <QString>
+#include <QTreeView>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QVBoxLayout>
 #include <QWidget>
 
 // ----------------------------------------------------------------------
@@ -37,6 +47,23 @@ class SettingsView : public BaseView {
     QString viewTitle() const override;
     void onActivated() override;
     void onDeactivated() override;
+
+  private slots:
+    void onCategorySelected(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+  private:
+    void setupUI();
+    void setupTreeView();
+    void setupEditor();
+    void populateTree();
+
+    QString getCategoryPath(QTreeWidgetItem *item) const;
+
+    QTreeWidget *m_treeWidget;
+    QWidget *m_editorContainer;
+    QFormLayout *m_editorLayout;
+    QSplitter *m_splitter;
+    QScrollArea *m_scrollArea;
 };
 
 } // namespace EtherBench::UI

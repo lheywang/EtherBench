@@ -8,16 +8,16 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME libSettings)
+set(LIBNAME libParameter)
 
 # Configure the sources
 set(SOURCES
-    src/settings.cpp
-    src/node.cpp
-    src/loader.cpp
+    src/parameterModel.cpp
+    src/parameterStruct.cpp
 )
 set(HEADERS
-    include/models/settings.hpp # No need for others : They're not Q_OBJECTS.
+    include/models/parameterModel.hpp
+    include/models/parameters/parameterStruct.hpp
 )
 
 # Create the library

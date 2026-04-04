@@ -11,16 +11,12 @@
 set(LIBNAME libModel)
 
 # Include all subfolders
-add_subdirectory(commands)
-add_subdirectory(counter)
-add_subdirectory(settings)
+add_subdirectory(parameter)
 
 # Create the umbrella library
 add_library(${LIBNAME} INTERFACE)
 
 # Link all the sub libraries
 target_link_libraries(${LIBNAME} INTERFACE
-    libCommands
-    libCounter
-    libSettings
+    libParameter
 )

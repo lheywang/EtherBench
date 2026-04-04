@@ -13,9 +13,7 @@
 // ----------------------------------------------------------------------
 // INCLUDES
 // ----------------------------------------------------------------------
-// Local libraries
-#include "models/counter.hpp"
-
+// Views libraries
 #include <views/baseView.hpp>
 #include <views/debuggerView.hpp>
 #include <views/helpView.hpp>
@@ -28,10 +26,12 @@
 
 #include <views/definitions/baseDefinitions.hpp>
 
-// 
-#include <QMap>
+// Models
+
+// QT
 #include <QLabel>
 #include <QMainWindow>
+#include <QMap>
 #include <QPushButton>
 #include <QStackedWidget>
 #include <qaction.h>
@@ -138,7 +138,7 @@ class MainWindow : public QMainWindow {
     QAction *actHelp;
 
     // Pages
-    QMap<ViewType, BaseView*> pages;
+    QMap<ViewType, BaseView *> pages;
 
     /*
      * Private models

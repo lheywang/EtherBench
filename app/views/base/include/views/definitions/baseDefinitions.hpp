@@ -1,12 +1,12 @@
 /**
  * @file    baseDefinitions.hpp
  * @author  l.heywang <leonard.heywang@proton.me>
- * @brief 
+ * @brief
  * @version 0.1
  * @date    2026-04-03
- * 
+ *
  * @copyright Copyright (c) 2026
- * 
+ *
  */
 
 #pragma once
@@ -16,7 +16,7 @@
 // ----------------------------------------------------------------------
 enum class ViewType {
     Home = 0,
-    Debugger, 
+    Debugger,
     Memory,
     Serial,
     Programmer,
