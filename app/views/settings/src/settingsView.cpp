@@ -120,6 +120,9 @@ void SettingsView::setupUI() {
         &QTreeWidget::currentItemChanged,
         this,
         &SettingsView::onCategorySelected);
+
+    // Finally, fill the tree
+    populateTree();
 }
 
 void SettingsView::setupTreeView() {

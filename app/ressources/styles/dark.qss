@@ -1,34 +1,118 @@
-/* MainWindow et conteneurs */
-QMainWindow, QWidget#CentralArea {
-    background-color: #1e1e1e;
-    color: #dbdbdb;
+QTreeView {
+    border: none;
+    background-color: @bg_dark;
+    show-decoration-selected: 1;
+    outline: 0;
 }
 
-/* Sidebar (ToolBar à gauche) */
+QTreeView::item {
+    height: 30px;
+    padding-left: 5px;
+}
+
+QTreeView::item:selected {
+    background-color: @bg_light;
+    border-left: 3px solid @accent;
+}
+
+QSplitter::handle {
+    background-color: @bg_dark;
+    width: 1px;
+}
+
+QWidget#editorContainer {
+    background-color: @bg_med;
+}
+
+QLineEdit, QSpinBox, QComboBox {
+    background-color: @bg_light;
+    border: 1px solid @border;
+    border-radius: 3px;
+    padding: 4px;
+    color: white;
+}
+
+QLabel {
+    color: #aaaaaa;
+    font-weight: bold;
+}
+
+QMenuBar {
+    background-color: @bg_med; 
+    color: #dcdcdc;
+    padding: 2px;
+    border-bottom: 1px solid @border;
+    border-radius: 2px; 
+}
+
+QMenuBar::item {
+    background-color: transparent;
+    padding: 5px 12px;
+    margin-right: 2px;
+    border-radius: 3px;
+}
+
+QMenuBar::item:selected { 
+    background-color: @bg_light;
+    color: #2a82da; 
+}
+
+QMenu {
+    background-color: bg_med;
+    border: 1px solid @border;
+    padding: 4px;
+}
+
+QMenu::item {
+    padding: 6px 30px 6px 25px;
+    border-radius: 2px;
+    color: #e0e0e0;
+}
+
+QMenu::item:selected {
+    background-color: @accent; 
+    color: white;
+}
+
+QMenu::separator {
+    height: 1px;
+    background: @bg_light;
+    margin: 5px 10px;
+}
+
+QMenu::shortcut {
+    color: #888888;
+    padding-left: 20px;
+}
+
 QToolBar {
-    background-color: #333333;
-    border-right: 1px solid #252526;
-    spacing: 10px;
-    padding-top: 10px;
+    spacing: 3px;
+    border-right: 3px solid @border; 
+    border-radius: 3px;
 }
 
-/* Boutons de la Sidebar */
+QToolBar::handle {
+    color: @accent;
+}
+
 QToolButton {
     background-color: transparent;
     border: none;
-    padding: 5px;
+    border-radius: 4px;
+    margin: 4px;
+    padding: 4px;
+}
+
+QToolButton:hover {
+    background-color: @bg_light;
 }
 
 QToolButton:checked {
-    border-left: 2px solid #007acc;
-    background-color: #37373d;
+    background-color: @bg_med; 
+    border-left: 3px solid @accent;
+    border-radius: 0px;
 }
 
-/* MenuBar en haut */
-QMenuBar {
-    background-color: #3c3c3c;
-    color: #cccccc;
-    border-bottom: 1px solid #252526;
+QToolButton:checked {
+    color: @accent;
 }
-
-QMenuBar::item:selected { background-color: #505050; }

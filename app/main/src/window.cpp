@@ -84,6 +84,9 @@ void MainWindow::setupUI() {
     }
 
     setCentralWidget(m_viewStack);
+
+    centralWidget()->layout()->setContentsMargins(0, 0, 0, 0);
+    centralWidget()->layout()->setSpacing(0);
 }
 
 void MainWindow::setupMenuBar() {

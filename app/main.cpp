@@ -23,6 +23,7 @@
 // PROTOTYPES
 // ----------------------------------------------------------------------
 void apply_theme(QApplication &app, const QString &themePath);
+void applyDarkPalette(QApplication &app);
 
 // ----------------------------------------------------------------------
 // MAIN
@@ -35,6 +36,7 @@ int main(int argc, char *argv[]) {
     // Configure style
     app.setStyle("Fusion");
     apply_theme(app, ":/styles/dark.qss");
+    applyDarkPalette(app);
 
     // Launch the app
     EtherBench::UI::MainWindow win;
@@ -53,10 +55,41 @@ void apply_theme(QApplication &app, const QString &themePath) {
 
     if (file.open(QFile::ReadOnly | QFile::Text)) {
         QString styleSheet = QLatin1String(file.readAll());
+
+        QMap<QString, QString> variables;
+        variables["@accent"] = "#2a82da";
+        variables["@bg_dark"] = "#1e1e1e";
+        variables["@bg_med"] = "#2d2d2d";
+        variables["@bg_light"] = "#3d3d3d";
+        variables["@text"] = "#ffffff";
+        variables["@text_dim"] = "#aaaaaa";
+        variables["@border"] = "#0e4a87";
+
+        for (auto it = variables.begin(); it != variables.end(); ++it) {
+            styleSheet.replace(it.key(), it.value());
+        }
         app.setStyleSheet(styleSheet);
         file.close();
 
     } else {
         qWarning() << "Unable to load the requested stylesheet : " << themePath;
     }
+}
+
+void applyDarkPalette(QApplication &app) {
+    QPalette darkPalette;
+    darkPalette.setColor(QPalette::Window, QColor(45, 45, 45));
+    darkPalette.setColor(QPalette::WindowText, Qt::white);
+    darkPalette.setColor(QPalette::Base, QColor(30, 30, 30));
+    darkPalette.setColor(QPalette::AlternateBase, QColor(45, 45, 45));
+    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+    darkPalette.setColor(QPalette::Text, Qt::white);
+    darkPalette.setColor(QPalette::Button, QColor(45, 45, 45));
+    darkPalette.setColor(QPalette::ButtonText, Qt::white);
+    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+
+    app.setPalette(darkPalette);
 }
