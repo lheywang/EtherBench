@@ -18,6 +18,7 @@
 #include "parameterStruct.hpp"
 
 // Qt
+#include <QMutex>
 #include <QRegularExpression>
 #include <QString>
 #include <QStringList>
@@ -118,6 +119,8 @@ class ParameterRegistry : public QObject {
      * Variables
      */
     QMap<QString, Parameter> m_parameters;
+    QMutex m_mutex;
+    bool m_dirty;
 
     /**
      * @brief Construct a new Parameter Registry object
@@ -174,6 +177,53 @@ class ParameterRegistry : public QObject {
      * @param prefix The root of all settings.
      */
     void addPaths(QString prefix);
+
+    /*
+     * Registering helpers
+     */
+    /*
+     * Register a text parameter, cleaner than calling the whole
+     * constructor.
+     */
+    void register_text(
+        QString prefix,
+        QString key,
+        QString value,
+        QString label,
+        QString group,
+        QString regex,
+        QString description,
+        ParamAttributes attr = ParamAttributes::READ_WRITE);
+
+    void register_number(
+        QString prefix,
+        QString key,
+        QString value,
+        QString label,
+        QString group,
+        QVariant minimum,
+        QVariant maximum,
+        QString description,
+        ParamAttributes attr = ParamAttributes::READ_WRITE);
+
+    void register_selection(
+        QString prefix,
+        QString key,
+        QString value,
+        QString label,
+        QString group,
+        QStringList options,
+        QString description,
+        ParamAttributes attr = ParamAttributes::READ_WRITE);
+
+    void register_bool(
+        QString prefix,
+        QString key,
+        QString value,
+        QString label,
+        QString group,
+        QString description,
+        ParamAttributes attr = ParamAttributes::READ_WRITE);
 };
 
 } // namespace EtherBench::Models

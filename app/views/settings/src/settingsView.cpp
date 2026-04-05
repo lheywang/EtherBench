@@ -48,9 +48,18 @@ SettingsView::SettingsView(QWidget *parent) : BaseView(parent) { setupUI(); }
 
 QString SettingsView::viewTitle() const { return "Settings"; }
 
-void SettingsView::onActivated() { qDebug() << "Welcome to settings"; }
+void SettingsView::onActivated() {
+    auto &reg = EtherBench::Models::ParameterRegistry::instance();
+    reg.initParams();
+    reg.loadFromFile("settings.ebs");
+}
 
-void SettingsView::onDeactivated() { qDebug() << "Exiting ..."; }
+void SettingsView::onDeactivated() {
+    // Save our settings on the file
+    auto &reg = EtherBench::Models::ParameterRegistry::instance();
+    reg.writeToFile("settings.ebs");
+    qInfo() << "Saved parameter registry to file.";
+}
 
 void SettingsView::populateTree() {
     m_treeWidget->clear();

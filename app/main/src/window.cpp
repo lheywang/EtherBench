@@ -31,14 +31,10 @@
 
 // QT
 #include <QActionGroup>
+#include <QCloseEvent>
 #include <QMenuBar>
 #include <QToolBar>
 #include <QVBoxLayout>
-#include <qaction.h>
-#include <qapplication.h>
-#include <qmainwindow.h>
-#include <qnamespace.h>
-#include <qstackedwidget.h>
 
 // ----------------------------------------------------------------------
 // CLASS
@@ -106,7 +102,7 @@ void MainWindow::setupMenuBar() {
      * Globals menus
      */
     fileMenu = menuBar()->addMenu("&Files");
-    fileMenu->addAction("Exit", qApp, &QApplication::quit);
+    fileMenu->addAction("Exit", qApp, &MainWindow::exit);
 
     viewMenu = menuBar()->addMenu("&View");
     viewMenu->addAction("Screenshot");
@@ -229,6 +225,28 @@ void MainWindow::switchView(ViewType type) {
     this->pages[type]->onActivated();
 
     // Update the menubar
+}
+
+/*
+ * Window management
+ */
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    prepare_exit();
+    event->accept();
+}
+
+void MainWindow::exit() {
+
+    prepare_exit();
+    QApplication::quit();
+}
+
+void MainWindow::prepare_exit() {
+    // Save parameter registry
+    auto &reg = EtherBench::Models::ParameterRegistry::instance();
+    reg.writeToFile("settings.ebs");
+    qInfo() << "Saved parameter registry to file.";
 }
 
 } // namespace EtherBench::UI

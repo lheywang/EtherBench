@@ -75,6 +75,14 @@ class MainWindow : public QMainWindow {
      */
     explicit MainWindow(QWidget *parent = nullptr);
 
+  protected:
+    /**
+     * @brief Ensure we fetch even if the user did close with the cross.
+     *
+     * @param event
+     */
+    void closeEvent(QCloseEvent *event) override;
+
   private:
     /*
      * Setup functions
@@ -112,6 +120,17 @@ class MainWindow : public QMainWindow {
      * @param[in] type The target index
      */
     void switchView(ViewType type);
+
+    /*
+     * Window management
+     */
+    static void prepare_exit();
+
+    /**
+     * @brief Exit the app. This enable us to save data before quitting.
+     *
+     */
+    static void exit();
 
     /*
      * Private members, that hold pointers to elements

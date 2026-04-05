@@ -19,6 +19,13 @@
 #include <models/parameterStruct.hpp>
 
 // Qt
+#include <QByteArray>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
+#include <QJsonValue>
+#include <QMutexLocker>
 #include <QRegularExpression>
 #include <QString>
 #include <QStringList>
@@ -55,6 +62,7 @@ QVariant ParameterRegistry::value(const QString &key) const {
 bool ParameterRegistry::setValue(const QString &key, const QVariant &val) {
     if (m_parameters[key].isValid(val)) {
         m_parameters[key].value = val;
+        m_dirty = true;
         return true;
     }
     return false;
@@ -78,41 +86,28 @@ const Parameter &ParameterRegistry::get(const QString &key) const {
 void ParameterRegistry::initParams() {
 
     // Register app version
-    registerParam(
-        "info/version",
-        Parameter{
-            .type = ParamType::Text,
-            .key = "app version",
-            .value = "1.0.0",
-            .defaultValue = "0.0.0",
-            .label = "App version",
-            .options = {},
-            .group = "",
-            .minValue = 0,
-            .maxValue = 0xFFFFFFFF,
-            .regex = "",
-            .description = "Application versiion",
-            .access = ParamAttributes::READ});
+    register_text(
+        "info/",
+        "version",
+        "1.0.0",
+        "App version",
+        "info",
+        "",
+        "Application version",
+        ParamAttributes::READ);
 
     // Register the common settings
     addInterface("device/interface/ethernet/", InterfaceType::ETH);
     addInterface("device/interface/usb/", InterfaceType::USB);
-    registerParam(
-        "device/interface/connection",
-        Parameter{
-            .type = ParamType::Selection,
-            .key = "connection",
-            .value = "Auto",
-            .defaultValue = "Auto",
-            .label = "Connection",
-            .options = {"Auto", "IP", "USB"},
-            .group = "device",
-            .minValue = 0,
-            .maxValue = 0xFFFFFFFF,
-            .regex = "",
-            .description =
-                "Change the preferred connection method. When Auto, both are used.",
-            .access = ParamAttributes::READ_WRITE});
+
+    register_selection(
+        "device/interface/",
+        "connection",
+        "Auto",
+        "Connection method",
+        "device",
+        {"Auto", "IP", "USB"},
+        "Change the preferred connection method. When Auto, both are used.");
 
     addPaths("paths/");
 
@@ -139,338 +134,219 @@ void ParameterRegistry::addHardwareIO(QString prefix, HardwareType type) {
     switch (type) {
 
     case HardwareType::I2C: {
-        registerParam(
-            prefix + "mode",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "mode",
-                .value = "Standard",
-                .defaultValue = "Standard",
-                .label = "I2C Mode",
-                .options = {"Standard", "Fast", "Fast plus"},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Change the I2C operating mode.",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "address_width",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "address_width",
-                .value = "7 bits",
-                .defaultValue = "7 bits",
-                .label = "Address size",
-                .options = {"7 bits", "10 bits"},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Change the I2C address size",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "slave_address",
-            Parameter{
-                .type = ParamType::Number,
-                .key = "slave_address",
-                .value = "0x11",
-                .defaultValue = "0x11",
-                .label = "I2C Slave address",
-                .options = {},
-                .group = "interface",
-                .minValue = 0x00,
-                .maxValue = 0xFF,
-                .regex = "",
-                .description = "Change the slave I2C address. Used only when actively "
-                               "reading from it. Make sure to not set invalid values, as "
-                               "theses are possible (may be required), but not in the "
-                               "spec (start from 0x10 and go to 0xF0).",
-                .access = ParamAttributes::READ_WRITE});
+        register_selection(
+            prefix,
+            "mode",
+            "Standard",
+            "I2C Mode",
+            "interface",
+            {"Standard", "Fast", "Fast plus"},
+            "Change the I2C operating mode.");
+
+        register_selection(
+            prefix,
+            "address_width",
+            "7 bits",
+            "Address size",
+            "interface",
+            {"7 bits", "10 bits"},
+            "Change the I2C address size");
+
+        register_number(
+            prefix,
+            "slave_address",
+            "0x11",
+            "I2C Slave address",
+            "interface",
+            0x00,
+            0xFF,
+            "Change the slave I2C address. Used only when actively "
+            "reading from it. Make sure to not set invalid values, as "
+            "theses are possible (may be required), but not in the "
+            "spec (start from 0x10 and go to 0xF0).");
         break;
     }
     case HardwareType::SPI: {
-        registerParam(
-            prefix + "baudrate",
-            Parameter{
-                .type = ParamType::Number,
-                .key = "baudrate",
-                .value = "8000000",
-                .defaultValue = "8000000",
-                .label = "Baudrate",
-                .options = {},
-                .group = "interface",
-                .minValue = 1000000,
-                .maxValue = 31250000,
-                .regex = "",
-                .description = "Change the SPI Baudrate",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "mode",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "mode",
-                .value = "MODE 1",
-                .defaultValue = "MODE 1",
-                .label = "Mode",
-                .options = {"MODE 0", "MODE 1", "MODE 2", "MODE 3"},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Change the SPI Mode",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "size",
-            Parameter{
-                .type = ParamType::Number,
-                .key = "size",
-                .value = "8",
-                .defaultValue = "8",
-                .label = "Transfer size",
-                .options = {},
-                .group = "interface",
-                .minValue = 4,
-                .maxValue = 32,
-                .regex = "",
-                .description = "Change the SPI transfer size",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "data_direction",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "sweep_speed",
-                .value = "MSB",
-                .defaultValue = "MSB",
-                .label = "Data reading direction",
-                .options = {"MSB", "LSB"},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Change the data reading direction",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "data_format",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "sweep_speed",
-                .value = "Motorola",
-                .defaultValue = "Motorola",
-                .label = "Data format",
-                .options = {"Motorola", "TI"},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Change the SPI data format",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "slave_selection",
-            Parameter{
-                .type = ParamType::Bool,
-                .key = "slave_selection",
-                .value = "Enabled",
-                .defaultValue = "Normal",
-                .label = "Slave selection",
-                .options = {},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Enable the slave select action.",
-                .access = ParamAttributes::READ_WRITE});
+        register_number(
+            prefix,
+            "baudrate",
+            "8000000",
+            "Baudrate",
+            "interface",
+            1000000,
+            31250000,
+            "Change the SPI Baudrate");
+
+        register_selection(
+            prefix,
+            "mode",
+            "MODE 1",
+            "Mode",
+            "interface",
+            {"MODE 0", "MODE 1", "MODE 2", "MODE 3"},
+            "Change the SPI Mode");
+
+        register_number(
+            prefix,
+            "size",
+            "8",
+            "Transfer size",
+            "interface",
+            4,
+            32,
+            "Change the SPI transfer size");
+
+        register_selection(
+            prefix,
+            "data_direction",
+            "MSB",
+            "Data reading direction",
+            "interface",
+            {"MSB", "LSB"},
+            "Change the data reading direction");
+
+        register_selection(
+            prefix,
+            "data_format",
+            "Motorola",
+            "Data format",
+            "interface",
+            {"Motorola", "TI"},
+            "Change the SPI data format");
+
+        register_bool(
+            prefix,
+            "slave_selection",
+            "True",
+            "Slave select",
+            "interface",
+            "Enable the slave select action.");
+
         break;
     }
     case HardwareType::USART: {
-        registerParam(
-            prefix + "baudrate",
-            Parameter{
-                .type = ParamType::Number,
-                .key = "baudrate",
-                .value = "115200",
-                .defaultValue = "115200",
-                .label = "Baudrate",
-                .options = {},
-                .group = "interface",
-                .minValue = 4800,
-                .maxValue = 15000000,
-                .regex = "",
-                .description = "Change the used USART baudrate",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "parity",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "parity",
-                .value = "None",
-                .defaultValue = "None",
-                .label = "Parity mode",
-                .options = {"None", "Odd", "Even"},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Change the USART parity mode",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "stop_bits",
-            Parameter{
-                .type = ParamType::Number,
-                .key = "stop_bits",
-                .value = "1",
-                .defaultValue = "1",
-                .label = "Stop bits",
-                .options = {},
-                .group = "interface",
-                .minValue = 1,
-                .maxValue = 2,
-                .regex = "",
-                .description = "Change the number of stop bits",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "width",
-            Parameter{
-                .type = ParamType::Number,
-                .key = "width",
-                .value = "8",
-                .defaultValue = "8",
-                .label = "Data width",
-                .options = {},
-                .group = "interface",
-                .minValue = 7,
-                .maxValue = 9,
-                .regex = "",
-                .description = "Change the data size on the USART Bus",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "flow_control",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "flow_control",
-                .value = "None",
-                .defaultValue = "None",
-                .label = "Flow control",
-                .options = {"None", "Hardware", "Software"},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Change the flow control used on the USART bus.",
-                .access = ParamAttributes::READ_WRITE});
+
+        register_number(
+            prefix,
+            "baudrate",
+            "115200",
+            "Baudrate",
+            "interface",
+            4800,
+            15000000,
+            "Change the used USART baudrate");
+
+        register_selection(
+            prefix,
+            "parity",
+            "None",
+            "Parity",
+            "interface",
+            {"None", "Odd", "Even"},
+            "Change the USART parity mode");
+
+        register_selection(
+            prefix,
+            "stop_bits",
+            "1",
+            "Stop bits",
+            "interface",
+            {"1", "2"},
+            "Change the number of stop bits");
+
+        register_selection(
+            prefix,
+            "width",
+            "8",
+            "Data width",
+            "interface",
+            {"7", "8", "9"},
+            "Change the data size on the USART Bus");
+
+        register_selection(
+            prefix,
+            "flow_control",
+            "None",
+            "Flow control",
+            "interface",
+            {"None", "Hardware", "Software"},
+            "Change the flow control used on the USART bus.");
+
         break;
     }
     case HardwareType::CAN: {
-        registerParam(
-            prefix + "frame_format",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "frame_format",
-                .value = "Classic",
-                .defaultValue = "Classic",
-                .label = "CAN Frame format",
-                .options =
-                    {"Classic",
-                     "FD (with bitrate switch)",
-                     "FD (without bitrate switch)"},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Change the scanning speed of the integrated ADC. Slower "
-                               "mean higher precision.",
-                .access = ParamAttributes::READ_WRITE});
 
-        registerParam(
-            prefix + "mode",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "mode",
-                .value = "Normal",
-                .defaultValue = "Normal",
-                .label = "Sweep speed",
-                .options =
-                    {"Normal",
-                     "Restricted",
-                     "Bus monitoring",
-                     "Internal loopback",
-                     "External loopback"},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Change the CAN operating mode.",
-                .access = ParamAttributes::READ_WRITE});
+        register_selection(
+            prefix,
+            "frame_format",
+            "Classic",
+            "CAN Frame format",
+            "interface",
+            {"Classic", "FD (with bitrate switch)", "FD (without bitrate switch)"},
+            "Change the CAN frame format.");
 
-        registerParam(
-            prefix + "quantum",
-            Parameter{
-                .type = ParamType::Number,
-                .key = "quantum",
-                .value = "64",
-                .defaultValue = "64",
-                .label = "Quantum size",
-                .options = {},
-                .group = "interface",
-                .minValue = 1,
-                .maxValue = 1024,
-                .regex = "",
-                .description = "Change the CAN quantum size",
-                .access = ParamAttributes::READ_WRITE});
+        register_selection(
+            prefix,
+            "mode",
+            "Normal",
+            "CAN operation mode",
+            "interface",
+            {"Normal",
+             "Restricted",
+             "Bus monitoring",
+             "Internal loopback",
+             "External loopback"},
+            "Change the CAN operating mode.");
+
+        register_number(
+            prefix,
+            "quantum",
+            "64",
+            "Quantum size",
+            "interface",
+            1,
+            1024,
+            "Change the CAN quantum size");
+
         break;
     }
     case HardwareType::CLOCK: {
-        registerParam(
-            prefix + "enable",
-            Parameter{
-                .type = ParamType::Bool,
-                .key = "enable",
-                .value = "0",
-                .defaultValue = "0",
-                .label = "Enable clock output",
-                .options = {},
-                .group = "interface",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description =
-                    "Enable the clock output. May be required for some devices.",
-                .access = ParamAttributes::READ_WRITE});
-        registerParam(
-            prefix + "speed",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "speed",
-                .value = "8 MHz",
-                .defaultValue = "8 MHz",
-                .label = "Clock speed",
-                .options =
-                    {"32.768 kHz",
-                     "50 kHz",
-                     "100 kHz",
-                     "125 kHz",
-                     "250 kHz",
-                     "500 kHz",
-                     "1 MHz",
-                     "2 MHz",
-                     "4 MHz",
-                     "8 MHz",
-                     "10 MHz",
-                     "12 MHz",
-                     "16 MHz",
-                     "20 MHz",
-                     "25 MHz",
-                     "30 MHz",
-                     "32 MHz",
-                     "40 MHz",
-                     "48 MHz"},
-                .group = "analog",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description =
-                    "Set the clock output frequency, over a broad range of values.",
-                .access = ParamAttributes::READ_WRITE});
+
+        register_bool(
+            prefix,
+            "enable",
+            "False",
+            "Enable clock output",
+            "interface",
+            "Enable the clock output. May be required for some devices.");
+
+        register_selection(
+            prefix,
+            "speed",
+            "8 MHz",
+            "Clock speed",
+            "interface",
+            {"32.768 kHz",
+             "50 kHz",
+             "100 kHz",
+             "125 kHz",
+             "250 kHz",
+             "500 kHz",
+             "1 MHz",
+             "2 MHz",
+             "4 MHz",
+             "8 MHz",
+             "10 MHz",
+             "12 MHz",
+             "16 MHz",
+             "20 MHz",
+             "25 MHz",
+             "30 MHz",
+             "32 MHz",
+             "40 MHz",
+             "48 MHz"},
+            "Set the clock output frequency, over a broad range of values.");
+
         break;
     }
     }
@@ -482,63 +358,44 @@ void ParameterRegistry::addAnalogIO(QString prefix, AnalogType type) {
     switch (type) {
 
     case AnalogType::ADC: {
-        registerParam(
-            prefix + "sweepspeed",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "sweep_speed",
-                .value = "Normal",
-                .defaultValue = "Normal",
-                .label = "Sweep speed",
-                .options = {"Slow", "Normal", "Fast", "Very Fast"},
-                .group = "analog",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description = "Change the scanning speed of the integrated ADC. Slower "
-                               "mean higher precision.",
-                .access = ParamAttributes::READ_WRITE});
 
-        registerParam(
-            prefix + "resolution",
-            Parameter{
-                .type = ParamType::Selection,
-                .key = "resolution",
-                .value = "12",
-                .defaultValue = "12",
-                .label = "Resolution",
-                .options =
-                    {"6", "8", "10", "12", "14 (oversampling)", "16 (oversampling)"},
-                .group = "analog",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "",
-                .description =
-                    "Change the resolution of the analog ADC. The lowest enable a faster "
-                    "operation (at a reliable value, nothing block you from requesting "
-                    "16 bits at very fast rate). The higher resolutions are done in "
-                    "software, by averaging enough samples.",
-                .access = ParamAttributes::READ_WRITE});
+        register_selection(
+            prefix,
+            "sweepspeed",
+            "Normal",
+            "Sweep speed",
+            "analog",
+            {"Slow", "Normal", "Fast", "Very Fast"},
+            "Change the scanning speed of the integrated ADC. Slower "
+            "mean higher precision.");
+
+        register_selection(
+            prefix,
+            "resolution",
+            "12 bits",
+            "Resolution",
+            "analog",
+            {"6", "8", "10", "12", "14 (oversampling)", "16 (oversampling)"},
+            "Change the resolution of the analog ADC. The lowest enable a faster "
+            "operation (at a reliable value, nothing block you from requesting "
+            "16 bits at very fast rate). The higher resolutions are done in "
+            "software, by averaging enough samples.");
+
         break;
     }
     case AnalogType::DAC: {
-        registerParam(
-            prefix + "value",
-            Parameter{
-                .type = ParamType::Number,
-                .key = "value",
-                .value = "1.65",
-                .defaultValue = "1.65",
-                .label = "Value",
-                .options = {},
-                .group = "analog",
-                .minValue = 0,
-                .maxValue = 5.5,
-                .regex = "",
-                .description =
-                    "Change the default, on boot DAC value. May be changed when running "
-                    "a sequence, without propagating changes up to here.",
-                .access = ParamAttributes::READ_WRITE});
+
+        register_number(
+            prefix,
+            "value",
+            "1.65",
+            "Value",
+            "analog",
+            0,
+            5.5,
+            "Change the default, on boot DAC value. May be changed when running "
+            "a sequence, without propagating changes up to here.");
+
         break;
     }
     }
@@ -546,86 +403,57 @@ void ParameterRegistry::addAnalogIO(QString prefix, AnalogType type) {
 
 void ParameterRegistry::addProgrammer(QString prefix) {
 
-    registerParam(
-        prefix + "bus",
-        Parameter{
-            .type = ParamType::Selection,
-            .key = "bus",
-            .value = "SWD",
-            .defaultValue = "SWD",
-            .label = "Bus",
-            .options = {"SWD", "JATG", "ICSP", "SPI"},
-            .group = "programmer",
-            .minValue = 0,
-            .maxValue = 0xFFFFFFFF,
-            .regex = "",
-            .description = "Change the default used programmer bus.",
-            .access = ParamAttributes::READ_WRITE});
+    register_selection(
+        prefix,
+        "bus",
+        "SWD",
+        "Bus",
+        "programmer",
+        {"SWD", "JATG", "ICSP", "SPI"},
+        "Change the default used programmer bus.");
 
-    registerParam(
-        prefix + "speed",
-        Parameter{
-            .type = ParamType::Selection,
-            .key = "speed",
-            .value = "4000 kHz",
-            .defaultValue = "4000 kHz",
-            .label = "Speed",
-            .options =
-                {"100 kHz",
-                 "250 kHz",
-                 "500 kHz",
-                 "1000 kHz",
-                 "2000 kHz",
-                 "4000 kHz",
-                 "8000 kHz",
-                 "10 000 kHz",
-                 "12 000 kHz",
-                 "15 000 kHz",
-                 "20 000 kHz"},
-            .group = "programmer",
-            .minValue = 0,
-            .maxValue = 0xFFFFFFFF,
-            .regex = "",
-            .description = "Change the programmer speed. Higher speed are indeed faster, "
-                           "but are more likely subject to interferences. This is the "
-                           "first setting to tweak if the connection is not stable.",
-            .access = ParamAttributes::READ_WRITE});
+    register_selection(
+        prefix,
+        "speed",
+        "4000 kHz",
+        "Speed",
+        "programmer",
+        {"100 kHz",
+         "250 kHz",
+         "500 kHz",
+         "1000 kHz",
+         "2000 kHz",
+         "4000 kHz",
+         "8000 kHz",
+         "10 000 kHz",
+         "12 000 kHz",
+         "15 000 kHz",
+         "20 000 kHz"},
+        "Change the programmer speed. Higher speed are indeed faster, "
+        "but are more likely subject to interferences. This is the "
+        "first setting to tweak if the connection is not stable.");
 
-    registerParam(
-        prefix + "reset",
-        Parameter{
-            .type = ParamType::Selection,
-            .key = "reset",
-            .value = "Connect under reset",
-            .defaultValue = "Connect under reset",
-            .label = "Connection method",
-            .options = {"Connect under reset", "No reset", "Software reset"},
-            .group = "programmer",
-            .minValue = 0,
-            .maxValue = 0xFFFFFFFF,
-            .regex = "",
-            .description = "Change the programmer connection behavior.",
-            .access = ParamAttributes::READ_WRITE});
+    register_selection(
+        prefix,
+        "reset",
+        "Connect under reset",
+        "Connection method",
+        "programmer",
+        {"Connect under reset", "No reset", "Software reset"},
+        "Change the programmer connection behavior.");
 }
 
 void ParameterRegistry::addBoard(QString prefix) {
 
-    registerParam(
-        prefix + "voltage",
-        Parameter{
-            .type = ParamType::Selection,
-            .key = "voltage",
-            .value = "3.3V",
-            .defaultValue = "3.3V",
-            .label = "IO Voltage",
-            .options = {"1.2V", "1.65V", "1.8V", "2.5V", "3.3V", "4V", "5V", "5.5V"},
-            .group = "board",
-            .minValue = 0,
-            .maxValue = 0xFFFFFFFF,
-            .regex = "",
-            .description = "Change the used IO voltage level. Enable a broad range of "
-                           "devices to be wired without adapters.",
-            .access = ParamAttributes::READ_WRITE});
+    register_selection(
+        prefix,
+        "voltage",
+        "3.3V",
+        "IO Voltage level",
+        "board",
+        {"1.2V", "1.65V", "1.8V", "2.5V", "3.3V", "4V", "5V", "5.5V"},
+        "Change the used IO voltage level. Enable a broad range of "
+        "devices to be wired without adapters.");
 }
 
 void ParameterRegistry::addInterface(QString prefix, InterfaceType type) {
@@ -634,88 +462,250 @@ void ParameterRegistry::addInterface(QString prefix, InterfaceType type) {
     switch (type) {
 
     case InterfaceType::USB: {
-        registerParam(
-            prefix + "port",
-            Parameter{
-                .type = ParamType::Number,
-                .key = "port",
-                .value = "1",
-                .defaultValue = "1",
-                .label = "COM port",
-                .options = {},
-                .group = "device",
-                .minValue = 0,
-                .maxValue = 0xFF,
-                .regex = "",
-                .description = "Change the used COM port to communicate with the device.",
-                .access = ParamAttributes::READ_WRITE});
+
+        register_number(
+            prefix,
+            "port",
+            "1",
+            "COM / tty",
+            "device",
+            1,
+            255,
+            "Change the used COM port to communicate with the device.");
         break;
     }
     case InterfaceType::ETH: {
-        registerParam(
-            prefix + "address",
-            Parameter{
-                .type = ParamType::Text,
-                .key = "address",
-                .value = "192.168.1.10",
-                .defaultValue = "192.168.1.10",
-                .label = "IP address",
-                .options = {"Slow", "Normal", "Fast", "Very Fast"},
-                .group = "device",
-                .minValue = 0,
-                .maxValue = 0xFFFFFFFF,
-                .regex = "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|["
-                         "01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25["
-                         "0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
-                .description = "Change the default used IP address of the device. If not "
-                               "found, and mode is AUTO, a querry over USB will be done.",
-                .access = ParamAttributes::READ_WRITE});
 
-        registerParam(
-            prefix + "port",
-            Parameter{
-                .type = ParamType::Number,
-                .key = "port",
-                .value = "0",
-                .defaultValue = "0",
-                .label = "Port",
-                .options = {},
-                .group = "device",
-                .minValue = 0,
-                .maxValue = 65535,
-                .regex = "",
-                .description = "Change the used port for input streaming. Let 0 to leave "
-                               "the OS choose it.",
-                .access = ParamAttributes::READ_WRITE});
+        register_text(
+            prefix,
+            "address",
+            "192.168.1.10",
+            "IP address (of device)",
+            "device",
+            "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|["
+            "01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25["
+            "0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+            "Change the default used IP address of the device. If not "
+            "found, and mode is AUTO, a querry over USB will be done.");
+
+        register_text(
+            prefix,
+            "target",
+            "0.0.0.0",
+            "IP address (stream target)",
+            "device",
+            "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|["
+            "01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25["
+            "0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+            "Change the streaming destination of the device. By default (0.0.0.0), it's "
+            "the current device IP. May be usefull to process / logs over the network to "
+            "another device.");
+
+        register_number(
+            prefix,
+            "port",
+            "0",
+            "Port",
+            "device",
+            0,
+            65535,
+            "Change the used port for input streaming. Let 0 to leave "
+            "the OS choose it.");
+
         break;
     }
     }
 }
 
 void ParameterRegistry::addPaths(QString prefix) {
-    registerParam(
-        prefix + "decoders",
-        Parameter{
-            .type = ParamType::Text,
-            .key = "decoders",
-            .value = "decoders/",
-            .defaultValue = "decoders/",
-            .label = "decoders",
-            .options = {},
-            .group = "path",
-            .minValue = 0,
-            .maxValue = 0xFFFFFFFF,
-            .regex = "",
-            .description = "Change the emplacement where we shall read the decoders. May "
-                           "be usefull to share them over a network drive.",
-            .access = ParamAttributes::READ_WRITE});
+
+    register_text(
+        prefix,
+        "decoders",
+        "decoders/",
+        "Decoder path",
+        "paths",
+        "",
+        "Change the emplacement where we shall read the decoders. May "
+        "be usefull to share them over a network drive.");
 }
 
 /*
  * File IO
  */
-bool ParameterRegistry::loadFromFile(QString path) { return true; }
+bool ParameterRegistry::loadFromFile(QString path) {
+    QFile file(path);
+    if (!file.open(QFile::ReadOnly)) {
+        qWarning() << "Unable to open config file :" << path;
+        return false;
+    }
 
-bool ParameterRegistry::writeToFile(QString path) { return true; }
+    QByteArray data = file.readAll();
+
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &error);
+
+    if (doc.isNull()) {
+        qCritical()
+            << "Failed to parse config. Ensure the syntax is a valid JSON one ... :"
+            << error.errorString();
+        return false;
+    }
+
+    QJsonObject root = doc.object();
+    QMutexLocker locker(&m_mutex);
+
+    for (auto it = root.begin(); it != root.end(); ++it) {
+        QString key = it.key();
+
+        if (m_parameters.contains(key)) {
+            QVariant newValue = it.value().toVariant();
+
+            m_parameters[key].value = newValue;
+            qInfo() << "Loaded parameter (" << key << ") : " << newValue;
+
+        } else {
+            qDebug() << "Unknown key in file (was ignored):" << key;
+        }
+    }
+
+    m_dirty = false;
+
+    return true;
+}
+
+/*
+ * Register helpers
+ */
+void ParameterRegistry::register_text(
+    QString prefix,
+    QString key,
+    QString value,
+    QString label,
+    QString group,
+    QString regex,
+    QString description,
+    ParamAttributes attr) {
+    registerParam(
+        prefix + key,
+        Parameter{
+            .type = ParamType::Text,
+            .key = key,
+            .value = value,
+            .defaultValue = value,
+            .label = label,
+            .options = {},
+            .group = group,
+            .minValue = 0,
+            .maxValue = 0xFFFFFFFF,
+            .regex = regex,
+            .description = description,
+            .access = attr});
+}
+
+void ParameterRegistry::register_number(
+    QString prefix,
+    QString key,
+    QString value,
+    QString label,
+    QString group,
+    QVariant minimum,
+    QVariant maximum,
+    QString description,
+    ParamAttributes attr) {
+    registerParam(
+        prefix + key,
+        Parameter{
+            .type = ParamType::Number,
+            .key = key,
+            .value = value,
+            .defaultValue = value,
+            .label = label,
+            .options = {},
+            .group = group,
+            .minValue = minimum,
+            .maxValue = maximum,
+            .regex = "",
+            .description = description,
+            .access = attr});
+}
+
+void ParameterRegistry::register_selection(
+    QString prefix,
+    QString key,
+    QString value,
+    QString label,
+    QString group,
+    QStringList options,
+    QString description,
+    ParamAttributes attr) {
+    registerParam(
+        prefix + key,
+        Parameter{
+            .type = ParamType::Selection,
+            .key = key,
+            .value = value,
+            .defaultValue = value,
+            .label = label,
+            .options = options,
+            .group = group,
+            .minValue = 0,
+            .maxValue = 0xFFFFFFFF,
+            .regex = "",
+            .description = description,
+            .access = attr});
+}
+
+void ParameterRegistry::register_bool(
+    QString prefix,
+    QString key,
+    QString value,
+    QString label,
+    QString group,
+    QString description,
+    ParamAttributes attr) {
+    registerParam(
+        prefix + key,
+        Parameter{
+            .type = ParamType::Bool,
+            .key = key,
+            .value = value,
+            .defaultValue = value,
+            .label = label,
+            .options = {},
+            .group = group,
+            .minValue = 0,
+            .maxValue = 0xFFFFFFFF,
+            .regex = "",
+            .description = description,
+            .access = attr});
+}
+
+/*
+ * File IO
+ */
+bool ParameterRegistry::writeToFile(QString path) {
+
+    // if nothing was modified...
+    if (m_dirty == false)
+        return true;
+
+    QJsonObject root;
+    QMutexLocker locker(&m_mutex);
+
+    for (auto it = m_parameters.begin(); it != m_parameters.end(); ++it) {
+        if (it.value().value != it.value().defaultValue) {
+            root.insert(it.key(), QJsonValue::fromVariant(it.value().value));
+        }
+    }
+
+    QFile file(path);
+    if (!file.open(QFile::WriteOnly))
+        return false;
+
+    QJsonDocument doc(root);
+    file.write(doc.toJson(QJsonDocument::Indented));
+    return true;
+}
 
 } // namespace EtherBench::Models

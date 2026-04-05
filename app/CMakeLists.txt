@@ -96,10 +96,6 @@ install(
 )
 
 install(
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/configs/settings/
-    DESTINATION .   
-)
-install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/configs/decoders
     DESTINATION . 
 )
