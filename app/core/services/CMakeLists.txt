@@ -8,17 +8,15 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME libModel)
+set(LIBNAME libServices)
 
 # Include all subfolders
-add_subdirectory(parameter)
-add_subdirectory(memory)
+add_subdirectory(dataCast)
 
 # Create the umbrella library
 add_library(${LIBNAME} INTERFACE)
 
 # Link all the sub libraries
 target_link_libraries(${LIBNAME} INTERFACE
-    libParameter
-    libMemory
+    libDataCast
 )

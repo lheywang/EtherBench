@@ -13,6 +13,7 @@ set(LIBNAME LIBCORE)
 # Include all subfolders
 add_subdirectory(IO)
 add_subdirectory(model)
+add_subdirectory(services)
 
 # Create the umbrella library
 add_library(${LIBNAME} INTERFACE)
