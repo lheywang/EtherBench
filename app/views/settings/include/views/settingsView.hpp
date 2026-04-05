@@ -22,6 +22,8 @@
 
 // QT
 #include <QFormLayout>
+#include <QMenu>
+#include <QMenuBar>
 #include <QScrollArea>
 #include <QSplitter>
 #include <QString>
@@ -39,12 +41,22 @@ class SettingsView : public BaseView {
     Q_OBJECT
 
   public:
+    /*
+     * Constructors and destructors
+     */
     explicit SettingsView(QWidget *parent = nullptr);
 
+    /*
+     * Overrides
+     */
     QString viewTitle() const override;
     void onActivated() override;
     void onDeactivated() override;
+    void fillMenubar(QMenuBar *menuBar) override;
 
+    /*
+     * Editor changes
+     */
     QWidget *
     createEditorWidget(const QString &key, const EtherBench::Models::Parameter &param);
 
@@ -52,19 +64,38 @@ class SettingsView : public BaseView {
     void onCategorySelected(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
   private:
+    /*
+     * Utility functions, to setup the view
+     */
     void setupUI();
     void setupTreeView();
     void setupEditor();
     void populateTree();
     void clearLayout(QLayout *layout);
 
+    /*
+     * Settings import and export
+     */
+    void settingsExport();
+    void settingsImport();
+    void resetSettings();
+
+    /*
+     * Utility called when building the treeview
+     */
     QString getCategoryPath(QTreeWidgetItem *item) const;
+
+    /*
+     * Variables
+     */
+    QSplitter *m_splitter;
 
     QTreeWidget *m_treeWidget;
     QWidget *m_editorContainer;
     QFormLayout *m_editorLayout;
-    QSplitter *m_splitter;
     QScrollArea *m_scrollArea;
+
+    QMenu *m_settingsMenu;
 };
 
 } // namespace EtherBench::UI

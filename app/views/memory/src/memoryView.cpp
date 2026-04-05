@@ -21,12 +21,10 @@
 // QT
 #include <QDebug>
 #include <QLabel>
+#include <QMenuBar>
 #include <QString>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qboxlayout.h>
-#include <qnamespace.h>
-#include <qwidget.h>
 
 // ----------------------------------------------------------------------
 // CLASS
@@ -42,16 +40,12 @@ MemoryView::MemoryView(QWidget *parent) : BaseView(parent) {
     layout->addWidget(label);
 }
 
-QString MemoryView::viewTitle() const {
-    return "Memory";
-}
+QString MemoryView::viewTitle() const { return "Memory"; }
 
-void MemoryView::onActivated() {
-    qDebug() << "Welcome to memory";
-}
+void MemoryView::onActivated() { qDebug() << "Welcome to memory"; }
 
-void MemoryView::onDeactivated() {
-    qDebug() << "Exiting ...";
-}
+void MemoryView::onDeactivated() { qDebug() << "Exiting ..."; }
+
+void MemoryView::fillMenubar(QMenuBar *menuBar) { return; }
 
 } // namespace EtherBench::UI

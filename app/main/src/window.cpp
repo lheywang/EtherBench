@@ -98,55 +98,63 @@ void MainWindow::setupUI() {
 
 void MainWindow::setupMenuBar() {
 
+    m_menuBar = new QMenuBar();
+    this->setMenuBar(m_menuBar);
+
+    addMenuBarElements();
+
+    // /*
+    //  * Menus that aren't always showns :
+    //  */
+    // // Memory
+    // memoryMenu = m_menuBar->addMenu("&Memory");
+    // memoryMenu->menuAction()->setVisible(false);
+    // memoryMenu->addAction("Load binary");
+    // memoryMenu->addAction("Load executable");
+    // memoryMenu->addSeparator();
+    // memoryMenu->addAction("Export to file");
+    // memoryMenu->addSeparator();
+    // memoryMenu->addAction("Convert to executable");
+    // memoryMenu->addAction("Convert to binary");
+
+    // // Serial
+    // serialMenu = m_menuBar->addMenu("&Serial");
+    // serialMenu->menuAction()->setVisible(false);
+    // serialMenu->addAction("Load serial session");
+    // serialMenu->addAction("Export serial session");
+    // serialMenu->addSeparator();
+    // serialMenu->addAction("Export session");
+
+    // // Build
+    // buildMenu = m_menuBar->addMenu("&Build");
+    // buildMenu->menuAction()->setVisible(false);
+    // buildMenu->addAction("Open source");
+    // buildMenu->addAction("Save source");
+    // buildMenu->addSeparator();
+    // buildMenu->addAction("Compile");
+    // buildMenu->addAction("Decompile");
+    // buildMenu->addSeparator();
+    // buildMenu->addAction("Save to device");
+    // buildMenu->addAction("Load from device");
+
+    // // Debugger
+    // debuggerMenu = m_menuBar->addMenu("&Debugger");
+    // debuggerMenu->menuAction()->setVisible(false);
+    // debuggerMenu->addAction("Save debugging session");
+    // debuggerMenu->addAction("Load debugging session");
+}
+
+void MainWindow::addMenuBarElements() {
+
     /*
      * Globals menus
      */
-    fileMenu = menuBar()->addMenu("&Files");
-    fileMenu->addAction("Exit", qApp, &MainWindow::exit);
+    fileMenu = m_menuBar->addMenu("&Files");
+    fileMenu->addAction("Exit", this, &MainWindow::exit);
 
-    viewMenu = menuBar()->addMenu("&View");
+    viewMenu = m_menuBar->addMenu("&View");
     viewMenu->addAction("Screenshot");
     viewMenu->addAction("Export to image");
-
-    /*
-     * Menus that aren't always showns :
-     */
-    // Memory
-    memoryMenu = menuBar()->addMenu("&Memory");
-    memoryMenu->menuAction()->setVisible(false);
-    memoryMenu->addAction("Load binary");
-    memoryMenu->addAction("Load executable");
-    memoryMenu->addSeparator();
-    memoryMenu->addAction("Export to file");
-    memoryMenu->addSeparator();
-    memoryMenu->addAction("Convert to executable");
-    memoryMenu->addAction("Convert to binary");
-
-    // Serial
-    serialMenu = menuBar()->addMenu("&Serial");
-    serialMenu->menuAction()->setVisible(false);
-    serialMenu->addAction("Load serial session");
-    serialMenu->addAction("Export serial session");
-    serialMenu->addSeparator();
-    serialMenu->addAction("Export session");
-
-    // Build
-    buildMenu = menuBar()->addMenu("&Build");
-    buildMenu->menuAction()->setVisible(false);
-    buildMenu->addAction("Open source");
-    buildMenu->addAction("Save source");
-    buildMenu->addSeparator();
-    buildMenu->addAction("Compile");
-    buildMenu->addAction("Decompile");
-    buildMenu->addSeparator();
-    buildMenu->addAction("Save to device");
-    buildMenu->addAction("Load from device");
-
-    // Debugger
-    debuggerMenu = menuBar()->addMenu("&Debugger");
-    debuggerMenu->menuAction()->setVisible(false);
-    debuggerMenu->addAction("Save debugging session");
-    debuggerMenu->addAction("Load debugging session");
 }
 
 void MainWindow::setupSideBar() {
@@ -185,8 +193,8 @@ void MainWindow::setupSideBar() {
     actMemory = addNavAction(":/icons/navbar/memory.png", "Memory", 2);
     actIO = addNavAction(":/icons/navbar/io.png", "Serial IO", 3);
     actProgrammer = addNavAction(":/icons/navbar/programmer.png", "Programmer", 4);
-    actSettings = addNavAction(":/icons/navbar/settings.png", "Settings", 5);
-    actSettings = addNavAction(":/icons/navbar/sequences.png", "Sequences", 6);
+    actSequences = addNavAction(":/icons/navbar/sequences.png", "Sequences", 5);
+    actSettings = addNavAction(":/icons/navbar/settings.png", "Settings", 6);
     actHelp = addNavAction(":/icons/navbar/help.png", "Help", 7);
 
     // Set the default
@@ -223,6 +231,13 @@ void MainWindow::switchView(ViewType type) {
     // Set the new config of the window
     setWindowTitle("EtherBench - " + this->pages[type]->viewTitle());
     this->pages[type]->onActivated();
+
+    // Clear the current menubar
+    m_menuBar->clear();
+
+    // Add the "new" menubar
+    addMenuBarElements();
+    this->pages[type]->fillMenubar(this->m_menuBar);
 
     // Update the menubar
 }

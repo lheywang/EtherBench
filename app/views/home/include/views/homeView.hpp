@@ -19,6 +19,7 @@
 
 // QT
 #include <QLabel>
+#include <QMenuBar>
 #include <QString>
 #include <QWidget>
 
@@ -37,6 +38,7 @@ class HomeView : public BaseView {
     QString viewTitle() const override;
     void onActivated() override;
     void onDeactivated() override;
+    void fillMenubar(QMenuBar *menuBar) override;
 };
 
 } // namespace EtherBench::UI

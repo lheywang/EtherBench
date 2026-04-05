@@ -20,13 +20,13 @@
 
 // QT
 #include <QDebug>
+#include <QFileDialog>
 #include <QLabel>
+#include <QMenuBar>
+#include <QStandardPaths>
 #include <QString>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qboxlayout.h>
-#include <qnamespace.h>
-#include <qwidget.h>
 
 // ----------------------------------------------------------------------
 // CLASS
@@ -42,16 +42,12 @@ SequenceView::SequenceView(QWidget *parent) : BaseView(parent) {
     layout->addWidget(label);
 }
 
-QString SequenceView::viewTitle() const {
-    return "Sequencer";
-}
-
-void SequenceView::onActivated() {
-    qDebug() << "Welcome to sequencer";
-}
-
-void SequenceView::onDeactivated() {
-    qDebug() << "Exiting ...";
-}
+/*
+ * Overrides from the base class
+ */
+QString SequenceView::viewTitle() const { return "Sequencer"; }
+void SequenceView::onActivated() { qDebug() << "Welcome to sequencer"; }
+void SequenceView::onDeactivated() { qDebug() << "Exiting ..."; }
+void SequenceView::fillMenubar(QMenuBar *menuBar) { return; }
 
 } // namespace EtherBench::UI

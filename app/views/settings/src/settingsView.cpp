@@ -25,13 +25,16 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDebug>
+#include <QFileDialog>
 #include <QFormLayout>
 #include <QHeaderView>
 #include <QLabel>
 #include <QLineEdit>
+#include <QMenuBar>
 #include <QScrollArea>
 #include <QSpinBox>
 #include <QSplitter>
+#include <QStandardPaths>
 #include <QString>
 #include <QTreeView>
 #include <QTreeWidget>
@@ -59,6 +62,29 @@ void SettingsView::onDeactivated() {
     auto &reg = EtherBench::Models::ParameterRegistry::instance();
     reg.writeToFile("settings.ebs");
     qInfo() << "Saved parameter registry to file.";
+}
+
+void SettingsView::fillMenubar(QMenuBar *menuBar) {
+
+    // Add the menu
+    m_settingsMenu = menuBar->addMenu("&Settings");
+
+    // Configure it
+    m_settingsMenu->addAction("Export settings as", this, &SettingsView::settingsExport);
+    m_settingsMenu->addAction("Import settings as", this, &SettingsView::settingsImport);
+    m_settingsMenu->addSeparator();
+    m_settingsMenu->addAction(
+        "Reset settings to defaults", this, &SettingsView::resetSettings);
+}
+
+void SettingsView::resetSettings() {
+
+    // Clear the settings
+    auto &reg = EtherBench::Models::ParameterRegistry::instance();
+    reg.resetToDefault();
+
+    // Redraw them
+    onCategorySelected(m_treeWidget->currentItem(), nullptr);
 }
 
 void SettingsView::populateTree() {
@@ -246,6 +272,64 @@ void SettingsView::clearLayout(QLayout *layout) {
             w->deleteLater();
         }
         delete item;
+    }
+}
+
+/*
+ * Settings import and export
+ */
+void SettingsView::settingsExport() {
+    // Get a default path
+    QString defaultPath = QDir::homePath() + "/settings.ebs";
+
+    QString fileName = QFileDialog::getSaveFileName(
+        this,
+        "Export settings to",
+        defaultPath,
+        "EtherBench Settings (*.ebs);;All Files (*)");
+
+    // If the user didn't clicked on cancel :
+    if (!fileName.isEmpty()) {
+
+        // Add the extension, if not present
+        if (!fileName.endsWith(".ebs")) {
+            fileName += ".ebs";
+        }
+
+        bool success =
+            EtherBench::Models::ParameterRegistry::instance().writeToFile(fileName, true);
+
+        if (success) {
+            qInfo() << "Exported settings to " << fileName;
+            return;
+        }
+    }
+    qWarning() << "Failed settings export";
+}
+
+void SettingsView::settingsImport() {
+
+    // Get a default path
+    QString defaultPath = QDir::homePath() + "/settings.ebs";
+
+    QString fileName = QFileDialog::getOpenFileName(
+        this,
+        "Import settings from",
+        defaultPath,
+        "EtherBench Settings (*.ebs);;All Files (*)");
+
+    // If the user didn't clicked on cancel :
+    if (!fileName.isEmpty()) {
+
+        bool success =
+            EtherBench::Models::ParameterRegistry::instance().loadFromFile(fileName);
+
+        if (success) {
+            qInfo() << "Imported settings from : " << fileName;
+            return;
+        }
+
+        qWarning() << "Failed settings import.";
     }
 }
 

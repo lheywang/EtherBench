@@ -15,6 +15,7 @@
 // INCLUDES
 // ----------------------------------------------------------------------
 #include <QLabel>
+#include <QMenuBar>
 #include <QString>
 #include <QWidget>
 
@@ -44,8 +45,25 @@ class BaseView : public QWidget {
     /*
      * Window handling procedure (called when chaning the view !)
      */
+    /**
+     * @brief Called when the view is set as active. Can be used to fill custom logic on
+     * it.
+     */
     virtual void onActivated() = 0;
+
+    /**
+     * @brief Called when the view is set as inactive. Can be used to clear states.
+     *
+     */
     virtual void onDeactivated() = 0;
+
+    /**
+     * @brief Called right after setup, to ask for the window to fill the menubar, with
+     * it's own logic.
+     *
+     * @param menuBar Handle to the menubar, to add menus.
+     */
+    virtual void fillMenubar(QMenuBar *menuBar) = 0;
 };
 
 } // namespace EtherBench::UI

@@ -64,7 +64,22 @@ class ParameterRegistry : public QObject {
      */
     void registerParam(const QString &key, const Parameter param);
 
+    /**
+     * @brief Return the value of a key.
+     *
+     * @param key The target key
+     * @return QVariant The value
+     */
     QVariant value(const QString &key) const;
+
+    /**
+     * @brief Set the Value object
+     *
+     * @param key The target key
+     * @param val The new object
+     * @return true Value was set
+     * @return false Value was not set (missing key).
+     */
     bool setValue(const QString &key, const QVariant &val);
 
     /*
@@ -112,7 +127,12 @@ class ParameterRegistry : public QObject {
      * @return true Write went correct.
      * @return false Failed to write.
      */
-    bool writeToFile(QString path);
+    bool writeToFile(QString path, bool forceWrite = false);
+
+    /*
+     * Reset
+     */
+    void resetToDefault();
 
   private:
     /*

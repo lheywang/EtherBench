@@ -103,6 +103,7 @@ class MainWindow : public QMainWindow {
      *
      */
     void setupMenuBar();
+    void addMenuBarElements();
 
     /**
      * @brief Configure the connection between clickable elements,
@@ -139,13 +140,10 @@ class MainWindow : public QMainWindow {
     QStackedWidget *m_viewStack;
 
     // Menus
+    QMenuBar *m_menuBar;
+
     QMenu *fileMenu;
     QMenu *viewMenu;
-
-    QMenu *memoryMenu;
-    QMenu *serialMenu;
-    QMenu *buildMenu;
-    QMenu *debuggerMenu;
 
     // Actions
     QAction *actHome;
@@ -153,6 +151,7 @@ class MainWindow : public QMainWindow {
     QAction *actMemory;
     QAction *actIO;
     QAction *actProgrammer;
+    QAction *actSequences;
     QAction *actSettings;
     QAction *actHelp;
 

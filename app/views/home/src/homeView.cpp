@@ -21,12 +21,10 @@
 // QT
 #include <QDebug>
 #include <QLabel>
+#include <QMenuBar>
 #include <QString>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qboxlayout.h>
-#include <qnamespace.h>
-#include <qwidget.h>
 
 // ----------------------------------------------------------------------
 // CLASS
@@ -42,16 +40,12 @@ HomeView::HomeView(QWidget *parent) : BaseView(parent) {
     layout->addWidget(label);
 }
 
-QString HomeView::viewTitle() const {
-    return "Home";
-}
+QString HomeView::viewTitle() const { return "Home"; }
 
-void HomeView::onActivated() {
-    qDebug() << "Welcome to home";
-}
+void HomeView::onActivated() { qDebug() << "Welcome to home"; }
 
-void HomeView::onDeactivated() {
-    qDebug() << "Exiting ...";
-}
+void HomeView::onDeactivated() { qDebug() << "Exiting ..."; }
+
+void HomeView::fillMenubar(QMenuBar *menuBar) { return; }
 
 } // namespace EtherBench::UI

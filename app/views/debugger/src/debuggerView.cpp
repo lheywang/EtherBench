@@ -21,12 +21,10 @@
 // QT
 #include <QDebug>
 #include <QLabel>
+#include <QMenuBar>
 #include <QString>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qboxlayout.h>
-#include <qnamespace.h>
-#include <qwidget.h>
 
 // ----------------------------------------------------------------------
 // CLASS
@@ -42,16 +40,12 @@ DebuggerView::DebuggerView(QWidget *parent) : BaseView(parent) {
     layout->addWidget(label);
 }
 
-QString DebuggerView::viewTitle() const {
-    return "Debugger";
-}
+QString DebuggerView::viewTitle() const { return "Debugger"; }
 
-void DebuggerView::onActivated() {
-    qDebug() << "Welcome to debugger";
-}
+void DebuggerView::onActivated() { qDebug() << "Welcome to debugger"; }
 
-void DebuggerView::onDeactivated() {
-    qDebug() << "Exiting ...";
-}
+void DebuggerView::onDeactivated() { qDebug() << "Exiting ..."; }
+
+void DebuggerView::fillMenubar(QMenuBar *menuBar) { return; }
 
 } // namespace EtherBench::UI

@@ -1,3 +1,50 @@
+QLabel#viewTitle, 
+#navButton {
+    font-family: "Cinzel";
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+QHeaderView::section {
+    font-family: "Cinzel";
+    font-size: 10pt;
+    padding: 4px;
+    background-color: #252525;
+    border: 1px solid #333;
+}
+
+QTreeView::item {
+    font-family: "Fira Code"; /* Plus lisible pour les données */
+    height: 25px;            /* On force une hauteur pour que Fira respire */
+    padding-left: 5px;
+}
+
+QTreeView::branch {
+    background-color: transparent; /* Pour éviter les carrés bizarres sur les flèches */
+}
+
+QMenu {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+}
+
+QMenu::item {
+    padding: 6px 25px 6px 20px;
+}
+
+QMenu::item:selected {
+    background-color: #3d5a80;
+}
+
+QTableView, 
+QLineEdit, 
+QTreeView, 
+#hexView, 
+#logArea {
+    font-family: "Fira Code";
+}
+
 QTreeView {
     border: none;
     background-color: @bg_dark;

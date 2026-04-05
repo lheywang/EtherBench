@@ -21,12 +21,10 @@
 // QT
 #include <QDebug>
 #include <QLabel>
+#include <QMenuBar>
 #include <QString>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qboxlayout.h>
-#include <qnamespace.h>
-#include <qwidget.h>
 
 // ----------------------------------------------------------------------
 // CLASS
@@ -42,16 +40,12 @@ HelpView::HelpView(QWidget *parent) : BaseView(parent) {
     layout->addWidget(label);
 }
 
-QString HelpView::viewTitle() const {
-    return "Help";
-}
+QString HelpView::viewTitle() const { return "Help"; }
 
-void HelpView::onActivated() {
-    qDebug() << "Welcome to help";
-}
+void HelpView::onActivated() { qDebug() << "Welcome to help"; }
 
-void HelpView::onDeactivated() {
-    qDebug() << "Exiting ...";
-}
+void HelpView::onDeactivated() { qDebug() << "Exiting ..."; }
+
+void HelpView::fillMenubar(QMenuBar *menuBar) { return; }
 
 } // namespace EtherBench::UI

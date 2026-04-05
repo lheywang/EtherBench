@@ -20,12 +20,10 @@
 // QT
 #include <QDebug>
 #include <QLabel>
+#include <QMenuBar>
 #include <QString>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qboxlayout.h>
-#include <qnamespace.h>
-#include <qwidget.h>
 
 // ----------------------------------------------------------------------
 // CLASS
@@ -41,16 +39,12 @@ IOView::IOView(QWidget *parent) : BaseView(parent) {
     layout->addWidget(label);
 }
 
-QString IOView::viewTitle() const {
-    return "Serial IO";
-}
+QString IOView::viewTitle() const { return "Serial IO"; }
 
-void IOView::onActivated() {
-    qDebug() << "Welcome to serial IO";
-}
+void IOView::onActivated() { qDebug() << "Welcome to serial IO"; }
 
-void IOView::onDeactivated() {
-    qDebug() << "Exiting ...";
-}
+void IOView::onDeactivated() { qDebug() << "Exiting ..."; }
+
+void IOView::fillMenubar(QMenuBar *menuBar) { return; }
 
 } // namespace EtherBench::UI

@@ -21,12 +21,10 @@
 // QT
 #include <QDebug>
 #include <QLabel>
+#include <QMenuBar>
 #include <QString>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qboxlayout.h>
-#include <qnamespace.h>
-#include <qwidget.h>
 
 // ----------------------------------------------------------------------
 // CLASS
@@ -42,16 +40,12 @@ ProgrammerView::ProgrammerView(QWidget *parent) : BaseView(parent) {
     layout->addWidget(label);
 }
 
-QString ProgrammerView::viewTitle() const {
-    return "Programmer";
-}
+QString ProgrammerView::viewTitle() const { return "Programmer"; }
 
-void ProgrammerView::onActivated() {
-    qDebug() << "Welcome to programmer";
-}
+void ProgrammerView::onActivated() { qDebug() << "Welcome to programmer"; }
 
-void ProgrammerView::onDeactivated() {
-    qDebug() << "Exiting ...";
-}
+void ProgrammerView::onDeactivated() { qDebug() << "Exiting ..."; }
+
+void ProgrammerView::fillMenubar(QMenuBar *menuBar) { return; }
 
 } // namespace EtherBench::UI

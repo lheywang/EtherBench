@@ -80,6 +80,17 @@ const Parameter &ParameterRegistry::get(const QString &key) const {
     return it.value();
 }
 
+void ParameterRegistry::resetToDefault() {
+
+    for (auto it = m_parameters.begin(); it != m_parameters.end(); ++it) {
+        it.value().value = it.value().defaultValue;
+    }
+
+    writeToFile("settings.ebs", true);
+    m_dirty = false;
+    qInfo() << "Resetted all settings to the default value";
+}
+
 /*
  * Param init
  */
@@ -562,15 +573,42 @@ bool ParameterRegistry::loadFromFile(QString path) {
             QVariant newValue = it.value().toVariant();
 
             m_parameters[key].value = newValue;
-            qInfo() << "Loaded parameter (" << key << ") : " << newValue;
+            qDebug() << "Loaded parameter (" << key << ") : " << newValue;
 
         } else {
-            qDebug() << "Unknown key in file (was ignored):" << key;
+            qWarning() << "Unknown key in file (was ignored):" << key;
         }
     }
 
     m_dirty = false;
+    qInfo() << "Loaded settings from file";
 
+    return true;
+}
+
+bool ParameterRegistry::writeToFile(QString path, bool forceWrite) {
+
+    // if nothing was modified...
+    if ((m_dirty == false) && (forceWrite == false))
+        return true;
+
+    QJsonObject root;
+    QMutexLocker locker(&m_mutex);
+
+    for (auto it = m_parameters.begin(); it != m_parameters.end(); ++it) {
+        if (it.value().value != it.value().defaultValue) {
+            root.insert(it.key(), QJsonValue::fromVariant(it.value().value));
+        }
+    }
+
+    QFile file(path);
+    if (!file.open(QFile::WriteOnly | QFile::Text))
+        return false;
+
+    QJsonDocument doc(root);
+    file.write(doc.toJson(QJsonDocument::Indented));
+
+    m_dirty = false; // As we performed the write, changes are updated.
     return true;
 }
 
@@ -679,33 +717,6 @@ void ParameterRegistry::register_bool(
             .regex = "",
             .description = description,
             .access = attr});
-}
-
-/*
- * File IO
- */
-bool ParameterRegistry::writeToFile(QString path) {
-
-    // if nothing was modified...
-    if (m_dirty == false)
-        return true;
-
-    QJsonObject root;
-    QMutexLocker locker(&m_mutex);
-
-    for (auto it = m_parameters.begin(); it != m_parameters.end(); ++it) {
-        if (it.value().value != it.value().defaultValue) {
-            root.insert(it.key(), QJsonValue::fromVariant(it.value().value));
-        }
-    }
-
-    QFile file(path);
-    if (!file.open(QFile::WriteOnly))
-        return false;
-
-    QJsonDocument doc(root);
-    file.write(doc.toJson(QJsonDocument::Indented));
-    return true;
 }
 
 } // namespace EtherBench::Models
