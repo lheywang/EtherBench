@@ -15,4 +15,19 @@
     <qresource prefix="/">
         <file>styles/dark.qss</file>
     </qresource>
+    <qresource prefix="/">
+        <file>fonts/firacode/FiraCode-VariableFont_wght.ttf</file>
+        <file>fonts/firacode/static/FiraCode-Bold.ttf</file>
+        <file>fonts/firacode/static/FiraCode-SemiBold.ttf</file>
+        <file>fonts/firacode/static/FiraCode-Light.ttf</file>
+        <file>fonts/firacode/static/FiraCode-Medium.ttf</file>
+        <file>fonts/firacode/static/FiraCode-Regular.ttf</file>
+        <file>fonts/cinzel/Cinzel-VariableFont_wght.ttf</file>
+        <file>fonts/cinzel/static/Cinzel-Black.ttf</file>
+        <file>fonts/cinzel/static/Cinzel-Bold.ttf</file>
+        <file>fonts/cinzel/static/Cinzel-ExtraBold.ttf</file>
+        <file>fonts/cinzel/static/Cinzel-Medium.ttf</file>
+        <file>fonts/cinzel/static/Cinzel-Regular.ttf</file>
+        <file>fonts/cinzel/static/Cinzel-SemiBold.ttf</file>
+    </qresource>
 </RCC>
