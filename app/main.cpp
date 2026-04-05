@@ -18,12 +18,14 @@
 // QT
 #include <QApplication>
 #include <QFile>
+#include <QFontDatabase>
 
 // ----------------------------------------------------------------------
 // PROTOTYPES
 // ----------------------------------------------------------------------
 void apply_theme(QApplication &app, const QString &themePath);
 void applyDarkPalette(QApplication &app);
+void load_fonts();
 
 // ----------------------------------------------------------------------
 // MAIN
@@ -37,6 +39,7 @@ int main(int argc, char *argv[]) {
     app.setStyle("Fusion");
     apply_theme(app, ":/styles/dark.qss");
     applyDarkPalette(app);
+    load_fonts();
 
     // Launch the app
     EtherBench::UI::MainWindow win;
@@ -92,4 +95,22 @@ void applyDarkPalette(QApplication &app) {
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
 
     app.setPalette(darkPalette);
+}
+
+void load_fonts() {
+    // Cinzel
+    QFontDatabase::addApplicationFont(":/fonts/cinzel/static/Cinzel-Regular.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/cinzel/static/Cinzel-Bold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/cinzel/static/Cinzel-ExtraBold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/cinzel/static/Cinzel-Medium.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/cinzel/static/Cinzel-SemiBold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/cinzel/Cinzel-VariableFont_wght.ttf");
+
+    // Fira Code
+    QFontDatabase::addApplicationFont(":/fonts/firacode/static/FiraCode-Regular.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/firacode/static/FiraCode-Bold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/firacode/static/FiraCode-Light.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/firacode/static/Cinzel-Medium.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/firacode/static/Cinzel-SemiBold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/firacode/FiraCode-VariableFont_wght.ttf");
 }
