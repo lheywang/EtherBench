@@ -11,7 +11,7 @@
 set(LIBNAME LIBCORE)
 
 # Include all subfolders
-add_subdirectory(IO)
+add_subdirectory(io)
 add_subdirectory(model)
 add_subdirectory(services)
 
