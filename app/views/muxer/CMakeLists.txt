@@ -8,22 +8,14 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME libMemory)
+set(LIBNAME MuxerView)
 
 # Configure the sources
 set(SOURCES
-    src/memoryBuffer/memoryBuffer.cpp
-    src/memoryBuffer/memoryFile.cpp
-    src/memoryBuffer/memoryRam.cpp
-    src/memoryBuffer/memoryCircular.cpp
-    src/memoryPool.cpp
+    src/muxerView.cpp   
 )
 set(HEADERS
-    include/models/memoryBuffer/memoryBuffer.hpp
-    include/models/memoryBuffer/memoryFile.hpp
-    include/models/memoryBuffer/memoryRam.hpp
-    include/models/memoryBuffer/memoryCircular.hpp
-    include/models/memoryPool.hpp
+    include/views/muxerView.hpp
 )
 
 # Create the library
@@ -40,4 +32,4 @@ target_include_directories(${LIBNAME} PUBLIC
 )
 
 # Link against the required libs
-target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets)
+target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets LIBCORE BaseView)

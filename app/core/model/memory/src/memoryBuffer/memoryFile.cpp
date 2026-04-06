@@ -1,7 +1,7 @@
 /**
- * @file    memoryRam.cpp
+ * @file    memoryFile.cpp
  * @author  l.heywang <leonard.heywang@proton.me>
- * @brief   Implement the MemoryRam class.
+ * @brief   Implement the MemoryFile class
  * @version 0.1
  * @date    2026-04-05
  *
@@ -13,7 +13,7 @@
 // INCLUDES
 // =============================================================
 // Header
-#include <models/memoryRam.hpp>
+#include <models/memoryBuffer/memoryFile.hpp>
 
 // Local libraries
 #include <models/memoryBuffer/memoryBuffer.hpp>
@@ -34,18 +34,18 @@ namespace EtherBench::Models {
 // =============================================================
 // CLASS
 // =============================================================
-MemoryRam::MemoryRam(QObject *parent) : MemoryBuffer(parent) {}
-MemoryRam::~MemoryRam() {}
+MemoryFile::MemoryFile(QObject *parent) : MemoryBuffer(parent) {}
+MemoryFile::~MemoryFile() {}
 
 /*
  * Overrides
  */
-std::vector<uint8_t> MemoryRam::get(uint64_t offset, uint64_t size) {
+std::vector<uint8_t> MemoryFile::get(uint64_t offset, uint64_t size) {
     return std::vector<uint8_t>(0);
 }
-bool MemoryRam::append(std::vector<uint8_t> &data) { return true; }
-bool MemoryRam::set(uint64_t offset, std::vector<uint8_t> &data) { return true; }
-uint64_t MemoryRam::size() { return 0; }
-uint8_t MemoryRam::at(uint64_t offset) const { return 0; }
+bool MemoryFile::append(std::vector<uint8_t> &data) { return true; }
+bool MemoryFile::set(uint64_t offset, std::vector<uint8_t> &data) { return true; }
+uint64_t MemoryFile::size() { return 0; }
+uint8_t MemoryFile::at(uint64_t offset) const { return 0; }
 
 } // namespace EtherBench::Models

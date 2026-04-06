@@ -152,6 +152,7 @@ class MainWindow : public QMainWindow {
     QAction *actIO;
     QAction *actProgrammer;
     QAction *actSequences;
+    QAction *actMuxer;
     QAction *actSettings;
     QAction *actHelp;
 

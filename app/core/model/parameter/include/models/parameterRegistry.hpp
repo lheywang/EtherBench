@@ -198,6 +198,13 @@ class ParameterRegistry : public QObject {
      */
     void addPaths(QString prefix);
 
+    /**
+     * @brief Initialize the memory settings, to configure the different types for slots.
+     *
+     * @param prefix
+     */
+    void addMemory(QString prefix);
+
     /*
      * Registering helpers
      */

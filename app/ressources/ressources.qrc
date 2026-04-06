@@ -8,6 +8,7 @@
         <file>icons/navbar/settings.png</file>
         <file>icons/navbar/io.png</file>
         <file>icons/navbar/sequences.png</file>
+        <file>icons/navbar/routing.png</file>
     </qresource>
     <qresource prefix="/">
         <file>icons/app/icon.png</file>

@@ -96,9 +96,11 @@ void ParameterRegistry::resetToDefault() {
  */
 void ParameterRegistry::initParams() {
 
-    // Register app version
+    /*
+     * APP
+     */
     register_text(
-        "info/",
+        "device/info/",
         "version",
         "1.0.0",
         "App version",
@@ -120,12 +122,18 @@ void ParameterRegistry::initParams() {
         {"Auto", "IP", "USB"},
         "Change the preferred connection method. When Auto, both are used.");
 
-    addPaths("paths/");
+    addPaths("device/paths/");
+
+    // Register memory settings
+    addMemory("device/memory/");
 
     // Register some board settings
     addBoard("probe/board/");
     addProgrammer("probe/programmer/");
 
+    /*
+     * PROBE
+     */
     // Register the IO
     addAnalogIO("probe/analog/adc0/", AnalogType::ADC);
     addAnalogIO("probe/analog/adc1/", AnalogType::ADC);
@@ -539,6 +547,40 @@ void ParameterRegistry::addPaths(QString prefix) {
         "",
         "Change the emplacement where we shall read the decoders. May "
         "be usefull to share them over a network drive.");
+}
+
+void ParameterRegistry::addMemory(QString prefix) {
+
+    QStringList options = {"Classic buffer", "Circular buffer", "File buffer"};
+    QStringList defaults = {
+        "Classic buffer",
+        "Classic buffer",
+        "Classic buffer",
+        "Classic buffer",
+        "Circular buffer",
+        "Circular buffer",
+        "File buffer",
+        "File buffer"};
+
+    int id = 1;
+    for (auto &value : defaults) {
+        register_selection(
+            prefix,
+            "slot" + QString::number(id),
+            value,
+            "Slot " + QString::number(id) + " memory type",
+            "memory",
+            options,
+            "Configure the memory type for the buffer X. Classic can hold up to 16 EB "
+            "(yes, really). Ideal for logging before further exploration. Circular has a "
+            "fixed size of about 32 MB, which is way smaller. Ideal for fast logging, "
+            "but be aware that it'll be overwritten with time. File buffer is different, "
+            "it isn't designed for fast logging, but rather open a file into a slot, and "
+            "use it as reference for further operations, such as comparaison. Write "
+            "operations are supported, but this may induce latencies on slower storages "
+            "types.");
+        id += 1;
+    }
 }
 
 /*

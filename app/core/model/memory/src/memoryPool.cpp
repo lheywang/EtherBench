@@ -1,21 +1,25 @@
 /**
- * @file    memoryRam.hpp
+ * @file    memoryPool.cpp
  * @author  l.heywang <leonard.heywang@proton.me>
- * @brief
+ * @brief   Hold the memory down, and coordinates IO over it.
  * @version 0.1
- * @date 2026-04-05
+ * @date    2026-04-06
  *
  * @copyright Copyright (c) 2026
  *
  */
 
-#pragma once
-
 // =============================================================
 // INCLUDES
 // =============================================================
+// Header
+#include <models/memoryPool.hpp>
+
 // Local libraries
 #include <models/memoryBuffer/memoryBuffer.hpp>
+#include <models/memoryBuffer/memoryCircular.hpp>
+#include <models/memoryBuffer/memoryFile.hpp>
+#include <models/memoryBuffer/memoryRam.hpp>
 
 // Qt
 #include <QObject>
@@ -25,36 +29,14 @@
 #include <array>
 #include <vector>
 
-// =============================================================
-// INCLUDES
-// =============================================================
 namespace EtherBench::Models {
+
+// =============================================================
+// CONSTEXPR
+// =============================================================
 
 // =============================================================
 // CLASS
 // =============================================================
-
-class MemoryRam : public MemoryBuffer {
-
-    Q_OBJECT
-
-  public:
-    /*
-     * Constructor and destructors
-     */
-    explicit MemoryRam(QObject *parent = nullptr);
-    ~MemoryRam() override;
-
-    /*
-     * Overrides
-     */
-    std::vector<uint8_t> get(uint64_t offset, uint64_t size) override;
-    bool append(std::vector<uint8_t> &data) override;
-    bool set(uint64_t offset, std::vector<uint8_t> &data) override;
-    uint64_t size() override;
-    uint8_t at(uint64_t offset) const override;
-
-  private:
-};
 
 } // namespace EtherBench::Models

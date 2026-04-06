@@ -21,6 +21,7 @@ enum class ViewType {
     Serial,
     Programmer,
     Sequences,
+    Muxer,
     Settings,
     Help,
     Count

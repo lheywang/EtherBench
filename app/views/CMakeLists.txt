@@ -17,6 +17,7 @@ add_subdirectory(help)
 add_subdirectory(home)
 add_subdirectory(io)
 add_subdirectory(memory)
+add_subdirectory(muxer)
 add_subdirectory(programmer)
 add_subdirectory(sequence)
 add_subdirectory(settings)
@@ -31,6 +32,7 @@ target_link_libraries(${LIBNAME} INTERFACE
     HomeView
     IOView
     MemoryView
+    MuxerView
     ProgrammerView
     SequenceView
     SettingsView

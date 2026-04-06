@@ -1,8 +1,7 @@
 /**
- * @file    memoryFile.hpp
+ * @file    memoryRam.cpp
  * @author  l.heywang <leonard.heywang@proton.me>
- * @brief   Implement a file based memoryBuffer, to be able to edit and see binary files
- * locally.
+ * @brief   Implement the MemoryRam class.
  * @version 0.1
  * @date    2026-04-05
  *
@@ -10,11 +9,12 @@
  *
  */
 
-#pragma once
-
 // =============================================================
 // INCLUDES
 // =============================================================
+// Header
+#include <models/memoryBuffer/memoryRam.hpp>
+
 // Local libraries
 #include <models/memoryBuffer/memoryBuffer.hpp>
 
@@ -34,28 +34,18 @@ namespace EtherBench::Models {
 // =============================================================
 // CLASS
 // =============================================================
+MemoryRam::MemoryRam(QObject *parent) : MemoryBuffer(parent) {}
+MemoryRam::~MemoryRam() {}
 
-class MemoryFile : public MemoryBuffer {
-
-    Q_OBJECT
-
-  public:
-    /*
-     * Constructor and destructors
-     */
-    explicit MemoryFile(QObject *parent = nullptr);
-    ~MemoryFile() override;
-
-    /*
-     * Overrides
-     */
-    std::vector<uint8_t> get(uint64_t offset, uint64_t size) override;
-    bool append(std::vector<uint8_t> &data) override;
-    bool set(uint64_t offset, std::vector<uint8_t> &data) override;
-    uint64_t size() override;
-    uint8_t at(uint64_t offset) const override;
-
-  private:
-};
+/*
+ * Overrides
+ */
+std::vector<uint8_t> MemoryRam::get(uint64_t offset, uint64_t size) {
+    return std::vector<uint8_t>(0);
+}
+bool MemoryRam::append(std::vector<uint8_t> &data) { return true; }
+bool MemoryRam::set(uint64_t offset, std::vector<uint8_t> &data) { return true; }
+uint64_t MemoryRam::size() { return 0; }
+uint8_t MemoryRam::at(uint64_t offset) const { return 0; }
 
 } // namespace EtherBench::Models

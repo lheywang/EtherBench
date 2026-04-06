@@ -23,6 +23,7 @@
 #include <views/homeView.hpp>
 #include <views/ioView.hpp>
 #include <views/memoryView.hpp>
+#include <views/muxerView.hpp>
 #include <views/programmerView.hpp>
 #include <views/settingsView.hpp>
 
@@ -76,6 +77,7 @@ void MainWindow::setupUI() {
     this->pages[ViewType::Serial] = new IOView(this);
     this->pages[ViewType::Programmer] = new ProgrammerView(this);
     this->pages[ViewType::Sequences] = new SequenceView(this);
+    this->pages[ViewType::Muxer] = new MuxerView(this);
     this->pages[ViewType::Settings] = new SettingsView(this);
     this->pages[ViewType::Help] = new HelpView(this);
 
@@ -173,11 +175,11 @@ void MainWindow::setupSideBar() {
     auto *navgroup = new QActionGroup(this);
     navgroup->setExclusive(true);
 
-    // A small function to add a navaction without repeating too much the same coe ...
+    // A small function to add a navaction without repeating too much the same code ...
     auto addNavAction = [&](const QString &iconPath, const QString &text, int viewIndex) {
         QIcon icon(iconPath);
         if (icon.isNull()) {
-            qWarning() << "ERREUR : Icône introuvable ->" << iconPath;
+            qWarning() << "Failed to find icon : " << iconPath;
         }
         QAction *act = sidebar->addAction(icon, text);
         act->setCheckable(true);
@@ -194,8 +196,9 @@ void MainWindow::setupSideBar() {
     actIO = addNavAction(":/icons/navbar/io.png", "Serial IO", 3);
     actProgrammer = addNavAction(":/icons/navbar/programmer.png", "Programmer", 4);
     actSequences = addNavAction(":/icons/navbar/sequences.png", "Sequences", 5);
-    actSettings = addNavAction(":/icons/navbar/settings.png", "Settings", 6);
-    actHelp = addNavAction(":/icons/navbar/help.png", "Help", 7);
+    actMuxer = addNavAction(":/icons/navbar/routing.png", "IO Mux", 6);
+    actSettings = addNavAction(":/icons/navbar/settings.png", "Settings", 7);
+    actHelp = addNavAction(":/icons/navbar/help.png", "Help", 8);
 
     // Set the default
     actHome->setChecked(true);
