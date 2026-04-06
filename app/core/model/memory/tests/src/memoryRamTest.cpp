@@ -61,7 +61,7 @@ class MemoryRamTest : public QObject {
     }
 
     void testMultiplePageWrite() {
-        uint64_t page_count = 256;
+        uint64_t page_count = 65536;
         EtherBench::Models::MemoryRam mem;
         std::vector<uint8_t> data(EtherBench::Models::ALLOC_SIZE * page_count, 0xFF);
         uint64_t offset = 0;
@@ -86,6 +86,59 @@ class MemoryRamTest : public QObject {
         QCOMPARE(mem.size(), (uint64_t)4);
         QCOMPARE(mem.at(0), 0xDE);
         QCOMPARE(mem.get(0, 4), data);
+    }
+
+    void testFileRoundtrip() {
+        EtherBench::Models::MemoryRam mem;
+        QString testPath = "roundtrip_test_ram.bin";
+
+        std::vector<uint8_t> originalData = {0x45, 0x74, 0x68, 0x65, 0x72};
+        mem.append(originalData);
+
+        mem.writeToFile(testPath);
+        QVERIFY(QFile::exists(testPath));
+
+        EtherBench::Models::MemoryRam memLoaded;
+        memLoaded.loadFromFile(testPath);
+
+        QCOMPARE(memLoaded.size(), (uint64_t)originalData.size());
+        QCOMPARE(memLoaded.get(0, 5), originalData);
+
+        QFile::remove(testPath);
+    }
+
+    void testLargeFileIO() {
+        EtherBench::Models::MemoryRam mem;
+        QString testPath = "large_io_test_ram.bin";
+
+        uint64_t totalSize = (2.5 * 1024 * 1024);
+        std::vector<uint8_t> largeData(totalSize, 0xAB);
+        mem.set(0, largeData);
+
+        mem.writeToFile(testPath);
+
+        QFileInfo info(testPath);
+        QCOMPARE((uint64_t)info.size(), totalSize);
+
+        EtherBench::Models::MemoryRam memLoaded;
+        memLoaded.loadFromFile(testPath);
+
+        QCOMPARE(memLoaded.size(), totalSize);
+        QCOMPARE(memLoaded.at(1024 * 1024 + 50), 0xAB);
+        QCOMPARE(memLoaded.at(totalSize - 1), 0xAB);
+
+        QFile::remove(testPath);
+    }
+
+    void testInvalidFile() {
+        EtherBench::Models::MemoryRam mem;
+
+        mem.loadFromFile("non_existent_file_ram.bin");
+        QCOMPARE(mem.size(), (uint64_t)0);
+
+        if (QSysInfo::productType() == "windows") {
+            mem.writeToFile("Z:/unlikely/path/file_ram.bin");
+        }
     }
 };
 

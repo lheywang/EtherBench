@@ -31,7 +31,7 @@ foreach(test_source ${SOURCES})
     set(target_name "test_${test_name}")
 
     add_executable(${target_name} ${test_source})
-    target_link_libraries(${target_name} PRIVATE LIBCORE Qt6::Test)
+    target_link_libraries(${target_name} PRIVATE LIBCORE Qt6::Test libParameter)
 
     add_test(NAME ${test_name} COMMAND $<TARGET_FILE:${target_name}>)
 

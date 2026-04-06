@@ -35,7 +35,10 @@ namespace EtherBench::Models {
 // =============================================================
 // CLASS
 // =============================================================
-MemoryRam::MemoryRam(QObject *parent) : MemoryBuffer(parent) { allocatePage(); }
+MemoryRam::MemoryRam(QObject *parent) : MemoryBuffer(parent) {
+    buffer_size = 0;
+    allocatePage();
+}
 MemoryRam::~MemoryRam() {
 
     // Clear the memory
@@ -138,13 +141,12 @@ uint8_t MemoryRam::at(uint64_t offset) const {
 }
 
 bool MemoryRam::allocatePage() {
-    // Add the first buffer
+    // Allocate the pool
     auto arr = new std::array<uint8_t, ALLOC_SIZE>;
 
-    // If not
+    // If not zero (hence, the alloc did sucess, append it, and increase the pointer)
     if (arr != nullptr) {
         buffer.push_back(arr);
-        buffer_size = 0;
         return true;
     } else {
         qCritical() << "[MemoryRam] Could not allocate a memory page.";

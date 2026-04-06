@@ -30,8 +30,8 @@ namespace EtherBench::Models {
 // =============================================================
 // CONSTEXPR
 // =============================================================
-// Define the max size of a single array
-constexpr uint64_t MAX_SIZE = 1ULL << 32; // 4 GB of data.
+// Define the unit size of allocated blocks
+constexpr uint64_t ALLOC_SIZE = 1ULL << 12; // About 4 kB of data.
 
 // =============================================================
 // CLASS

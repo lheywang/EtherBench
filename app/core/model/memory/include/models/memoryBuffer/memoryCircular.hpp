@@ -32,12 +32,6 @@
 namespace EtherBench::Models {
 
 // =============================================================
-// CONSTEXPR
-// =============================================================
-// Define the max size of this class
-constexpr uint64_t MAX_CIRCULAR_SIZE = 1ULL << 25; // 32 MB of data.
-
-// =============================================================
 // CLASS
 // =============================================================
 
@@ -67,7 +61,27 @@ class MemoryCircular : public MemoryBuffer {
     uint64_t size() override;
     uint8_t at(uint64_t offset) const override;
 
+    /*
+     * Special functions
+     */
+    uint64_t head();
+
   private:
+    /*
+     * Variables
+     */
+    uint64_t buffer_size;
+    uint64_t max_buffer_size;
+    uint64_t max_page_count;
+    uint64_t head_pos;
+    uint64_t writes;
+
+    std::vector<std::array<uint8_t, ALLOC_SIZE> *> buffer;
+
+    /*
+     * Functions
+     */
+    bool allocatePage();
 };
 
 } // namespace EtherBench::Models

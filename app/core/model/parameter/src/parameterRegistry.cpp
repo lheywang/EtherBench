@@ -581,6 +581,25 @@ void ParameterRegistry::addMemory(QString prefix) {
             "types.");
         id += 1;
     }
+
+    register_selection(
+        prefix,
+        "circ_size",
+        "1 MB",
+        "Circular buffer size (bytes)",
+        "memory",
+        {"1 MB",
+         "2 MB",
+         "4 MB",
+         "8 MB",
+         "16 MB",
+         "32 MB",
+         "64 MB",
+         "128 MB",
+         "256 MB",
+         "512 MB"},
+        "Change the buffer size used within the circular buffers. Warning : This "
+        "settings is only updated after a program restart, cannot be changed in live.");
 }
 
 /*
