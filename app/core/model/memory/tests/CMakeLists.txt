@@ -12,8 +12,10 @@ set(TESTNAME testMemory)
 
 # Configure the sources
 set(SOURCES
-    src/memoryTest.cpp
-    src/memoryTest2.cpp
+    src/memoryCircularTest.cpp
+    src/memoryFileTest.cpp
+    src/memoryPoolTest.cpp
+    src/memoryRamTest.cpp
 )
 
 # Fetch some paths by defaults

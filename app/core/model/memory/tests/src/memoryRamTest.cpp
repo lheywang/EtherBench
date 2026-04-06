@@ -23,7 +23,7 @@
 // CLASS
 // =============================================================
 
-class MemoryTest : public QObject {
+class MemoryRamTest : public QObject {
     Q_OBJECT
 
   private slots:
@@ -71,7 +71,23 @@ class MemoryTest : public QObject {
         QCOMPARE(mem.at(offset + data.size() - 1), 0xFF);
         QCOMPARE(mem.size(), data.size());
     }
+
+    void testOutOfBoundValue() {
+        EtherBench::Models::MemoryRam mem;
+
+        QCOMPARE(mem.at(5000), 0x00);
+    }
+
+    void testAppendRead() {
+        EtherBench::Models::MemoryRam mem;
+        std::vector<uint8_t> data = {0xDE, 0xAD, 0xBE, 0xEF};
+        mem.append(data);
+
+        QCOMPARE(mem.size(), (uint64_t)4);
+        QCOMPARE(mem.at(0), 0xDE);
+        QCOMPARE(mem.get(0, 4), data);
+    }
 };
 
-QTEST_MAIN(MemoryTest)
-#include "memoryTest.moc"
+QTEST_MAIN(MemoryRamTest)
+#include "memoryRamTest.moc"
