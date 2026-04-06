@@ -30,7 +30,12 @@ namespace EtherBench::Models {
 
 MemoryBuffer::MemoryBuffer(QObject *parent) : QObject(parent) {}
 
-bool MemoryBuffer::erase(uint64_t offset, uint64_t size) { return true; }
+bool MemoryBuffer::erase(uint64_t offset, uint64_t size) {
+
+    // An erase command is basically a write with 0x00...
+    std::vector<uint8_t> buf(size, 0);
+    return set(offset, buf);
+}
 
 void MemoryBuffer::loadFromFile(QString path) {}
 

@@ -67,6 +67,11 @@ class MemoryRam : public MemoryBuffer {
     uint8_t at(uint64_t offset) const override;
 
   private:
+    /*
+     * Variables
+     */
+    std::vector<std::array<uint8_t, ALLOC_SIZE> *> buffer;
+    uint64_t buffer_size;
 };
 
 } // namespace EtherBench::Models

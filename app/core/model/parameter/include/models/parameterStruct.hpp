@@ -77,6 +77,9 @@ struct Parameter {
             return options.contains(newValue.toString());
             break;
         }
+
+        default:
+            break;
         }
 
         // If nothing worked, apply the regex.

@@ -32,6 +32,14 @@ if(WIN32)
     message("Linking the libGCC statically, because you're on a Windows platform.")
 endif()
 
+# Add some parameters about the config build
+add_compile_options("-Wall" "-Wextra")
+if(CMAKE_BUILD_TYPE==debug)
+    add_compile_options("-Og" "-g3")
+else()
+    add_compile_options("-O3" "-g0")
+endif()
+
 # Configure Qt
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
