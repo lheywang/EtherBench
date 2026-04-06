@@ -1,8 +1,10 @@
 # Icons
+
 All icons come from this website : [icons8.com](https://icons8.com)
 
 ## List
-Here a complete list of all the icons we did used : 
+
+Here a complete list of all the icons we did used :
 
 ### App Icon
 
@@ -18,3 +20,4 @@ Here a complete list of all the icons we did used :
 - [Settings](https://icons8.com/icon/364/settings)
 - [Help](https://icons8.com/icon/17077/info-squared)
 - [Sequences](https://icons8.com/icon/PIxApDfIMz9p/timeline)
+- [Routing](https://icons8.com/icon/2228/multicast)
