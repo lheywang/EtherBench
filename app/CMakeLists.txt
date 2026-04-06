@@ -128,8 +128,6 @@ endif()
 install(
     TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION .
-    LIBRARY DESTINATION .
-    ARCHIVE DESTINATION .
 )
 
 install(

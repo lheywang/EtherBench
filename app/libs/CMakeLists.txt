@@ -12,7 +12,7 @@
 set(LIBNAME LIBEXTERNAL)
 
 # Include all subfolders
-add_subdirectory(third_party)
+add_subdirectory(third_party EXCLUDE_FROM_ALL)
 
 # Create the umbrella library
 add_library(${LIBNAME} INTERFACE)
