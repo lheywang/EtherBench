@@ -14,6 +14,9 @@
 cmake_minimum_required(VERSION 3.20)
 project(EtherBenchApp LANGUAGES CXX)
 
+# Declare options
+option(BUILD_TESTING "Build unit tests" ON)
+
 # Set C++ version used. We just use the latest.
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -40,12 +43,18 @@ else()
     add_compile_options("-O3" "-g0")
 endif()
 
+# Configure testing
+if(BUILD_TESTING)
+    enable_testing()
+    message(STATUS "Unit tests are ENABLED")
+endif()
+
 # Configure Qt
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 # Search for Qt
-find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui Test)
 qt_standard_project_setup()
 
 # -------------------------------------------------------------------
@@ -79,6 +88,25 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 set_target_properties(${PROJECT_NAME} PROPERTIES
     WIN32_EXECUTABLE ON
 )
+
+# -------------------------------------------------------------------
+# EXECUTABLE BUILD
+# -------------------------------------------------------------------
+if (BUILD_TESTING)
+    set(TESTING_ARGS 
+        --output-on-failure
+        --parallel
+        --progress
+        --repeat-until-fail 10
+        --output-log logs.txt
+    )
+
+    add_custom_target(tests
+            COMMAND ${CMAKE_CTEST_COMMAND} ${TESTING_ARGS}
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            COMMENT "Running unit tests for EtherBench"
+        )
+endif()
 
 # -------------------------------------------------------------------
 # ADD SCRIPTS TO FETCH DEPENDENCIES

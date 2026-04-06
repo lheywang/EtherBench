@@ -41,3 +41,8 @@ target_include_directories(${LIBNAME} PUBLIC
 
 # Link against the required libs
 target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets)
+
+# If testing is enabled
+if(BUILD_TESTING) 
+    add_subdirectory(tests)
+endif()
