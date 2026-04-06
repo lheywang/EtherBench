@@ -21,3 +21,12 @@ add_library(${LIBNAME} INTERFACE)
 target_link_libraries(${LIBNAME} INTERFACE
     usb-1.0
 )
+
+# On windows system, we just need to also link agains the standard libs
+if(WIN32)
+    target_link_libraries(${LIBNAME} INTERFACE
+        setupapi
+        advapi32
+        winusb
+    )
+endif()

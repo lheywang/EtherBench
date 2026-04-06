@@ -29,12 +29,6 @@ set(CMAKE_INSTALL_INCLUDEDIR ".")
 # Force static builds
 set(BUILD_SHARED_LIBS OFF)
 
-# Configuring the linking, depending on the target platform
-if(WIN32)
-    add_link_options("-static" "-static-libgcc" "-static-libstdc++")
-    message("Linking the libGCC statically, because you're on a Windows platform.")
-endif()
-
 # Add some parameters about the config build
 add_compile_options("-Wall" "-Wextra")
 if(CMAKE_BUILD_TYPE==debug)
@@ -154,6 +148,15 @@ qt_generate_deploy_app_script(
 
 install(SCRIPT ${deploy_script})
 
+if(WIN32)
+    get_filename_component(COMPILER_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
+    set(LLVM_RUNTIME_DLLS
+        "${COMPILER_DIR}/libc++.dll"
+        "${COMPILER_DIR}/libunwind.dll"
+    )
+    install(FILES ${LLVM_RUNTIME_DLLS} DESTINATION .)
+endif()
+
 # Finally add a custom target that create the output/ folder
 add_custom_target(bundle 
     COMMAND 
@@ -161,7 +164,7 @@ add_custom_target(bundle
             --install ${CMAKE_BINARY_DIR} 
             --prefix ${LOCAL_OUTPUT_DIR}
     COMMAND # Just delete the qt.conf file, which is not needed and can cause issues with some plugins
-        ${CMAKE_COMMAND} -E $<$<PLATFORM_ID:Linux>:remove> -f ${LOCAL_OUTPUT_DIR}/qt.conf
+        ${CMAKE_COMMAND} -E rm -f ${LOCAL_OUTPUT_DIR}/qt.conf
     COMMENT 
         "Packaging app into ${LOCAL_OUTPUT_DIR}"
     DEPENDS 

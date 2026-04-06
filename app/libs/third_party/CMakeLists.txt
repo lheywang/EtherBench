@@ -8,4 +8,5 @@
 # 
 # ===================================================================
 
-add_subdirectory(libusb)
+add_compile_options(-Wno-pragma-pack)
+add_subdirectory(libusb-cmake)

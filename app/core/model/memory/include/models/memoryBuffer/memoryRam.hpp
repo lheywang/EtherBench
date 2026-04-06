@@ -72,6 +72,11 @@ class MemoryRam : public MemoryBuffer {
      */
     std::vector<std::array<uint8_t, ALLOC_SIZE> *> buffer;
     uint64_t buffer_size;
+
+    /*
+     * Functions
+     */
+    bool allocatePage();
 };
 
 } // namespace EtherBench::Models

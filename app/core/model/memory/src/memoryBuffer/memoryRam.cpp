@@ -19,6 +19,7 @@
 #include <models/memoryBuffer/memoryBuffer.hpp>
 
 // Qt
+#include <QDebug>
 #include <QObject>
 #include <QString>
 
@@ -34,13 +35,7 @@ namespace EtherBench::Models {
 // =============================================================
 // CLASS
 // =============================================================
-MemoryRam::MemoryRam(QObject *parent) : MemoryBuffer(parent) {
-
-    // Add the first buffer
-    auto arr = new std::array<uint8_t, ALLOC_SIZE>;
-    buffer.push_back(arr);
-    buffer_size = 0;
-}
+MemoryRam::MemoryRam(QObject *parent) : MemoryBuffer(parent) { allocatePage(); }
 MemoryRam::~MemoryRam() {
 
     // Clear the memory
@@ -100,7 +95,9 @@ bool MemoryRam::set(uint64_t offset, std::vector<uint8_t> &data) {
 
         // Allocate the data until we have enough pages.
         while (page_id >= buffer.size()) {
-            buffer.push_back(new std::array<uint8_t, ALLOC_SIZE>{0});
+            if (!allocatePage()) {
+                return false;
+            }
         }
 
         uint64_t remaining_in_page = ALLOC_SIZE - page_offset;
@@ -138,6 +135,21 @@ uint8_t MemoryRam::at(uint64_t offset) const {
     if (page_id >= buffer.size())
         return 0;
     return buffer[page_id]->at(page_offset);
+}
+
+bool MemoryRam::allocatePage() {
+    // Add the first buffer
+    auto arr = new std::array<uint8_t, ALLOC_SIZE>;
+
+    // If not
+    if (arr != nullptr) {
+        buffer.push_back(arr);
+        buffer_size = 0;
+        return true;
+    } else {
+        qCritical() << "[MemoryRam] Could not allocate a memory page.";
+        return false;
+    }
 }
 
 } // namespace EtherBench::Models
