@@ -98,13 +98,20 @@ if (BUILD_TESTING)
         --parallel
         --progress
         --repeat-until-fail 10
-        --output-log logs.txt
+        --output-log "logs.txt"
+        --schedule-random
+        --output-junit "report.xml"
+    
     )
 
     add_custom_target(tests
-            COMMAND ${CMAKE_CTEST_COMMAND} ${TESTING_ARGS}
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            COMMENT "Running unit tests for EtherBench"
+            COMMAND 
+                ${CMAKE_CTEST_COMMAND} ${TESTING_ARGS}
+            WORKING_DIRECTORY 
+                ${CMAKE_BINARY_DIR}
+            COMMENT 
+                "Running unit tests for EtherBench"
+            VERBATIM
         )
 endif()
 
