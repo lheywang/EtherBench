@@ -19,6 +19,7 @@
 #include <models/memoryBuffer/memoryBuffer.hpp>
 
 // Qt
+#include <QFile>
 #include <QObject>
 #include <QString>
 
@@ -30,6 +31,15 @@
 // NAMESPACE
 // =============================================================
 namespace EtherBench::Models {
+
+// =============================================================
+// CONSTEXPR
+// =============================================================
+// Define how much memory we shall add each time
+constexpr uint64_t
+get_new_buffer_size(uint64_t currentSize, uint64_t request = (1ULL << 20)) {
+    return currentSize + request;
+}
 
 // =============================================================
 // CLASS
@@ -51,6 +61,7 @@ class MemoryFile : public MemoryBuffer {
      * Constructor and destructors
      */
     explicit MemoryFile(QObject *parent = nullptr);
+    explicit MemoryFile(QObject *parent = nullptr, QString filePath = "");
     ~MemoryFile() override;
 
     /*
@@ -62,7 +73,28 @@ class MemoryFile : public MemoryBuffer {
     uint64_t size() override;
     uint8_t at(uint64_t offset) const override;
 
+    /*
+     * Additional overides
+     */
+    void loadFromFile(QString path) override;
+    void writeToFile(QString path = "") override;
+
   private:
+    /*
+     * Variables
+     */
+    QFile memfile;
+    QString filename;
+
+    uint8_t *buffer;
+    uint64_t buffer_size;
+    uint64_t head;
+
+    /*
+     * Functions
+     */
+    bool resize(uint64_t request);
+    bool unmap();
 };
 
 } // namespace EtherBench::Models

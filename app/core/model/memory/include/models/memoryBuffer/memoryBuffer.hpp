@@ -16,6 +16,7 @@
 // =============================================================
 // Qt
 #include <QObject>
+#include <QReadWriteLock>
 #include <QString>
 
 // STD
@@ -129,15 +130,19 @@ class MemoryBuffer : public QObject {
      *
      * @param path
      */
-    void loadFromFile(QString path);
+    virtual void loadFromFile(QString path);
 
     /**
      * @brief
      *
      * @param path
      */
-    void writeToFile(QString path);
+    virtual void writeToFile(QString path);
 
   private:
+    /*
+     * Variables
+     */
+    mutable QReadWriteLock m_lock;
 };
 } // namespace EtherBench::Models

@@ -39,7 +39,7 @@ namespace EtherBench::Models {
 /*
  * Constructor and destructors
  */
-ParameterRegistry::ParameterRegistry(QObject *parent) : QObject(parent) {}
+ParameterRegistry::ParameterRegistry(QObject *parent) : QObject(parent) { initParams(); }
 
 /*
  * Instance access

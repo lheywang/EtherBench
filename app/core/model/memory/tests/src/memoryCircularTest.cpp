@@ -28,15 +28,9 @@
 class MemoryCircularTest : public QObject {
     Q_OBJECT
 
-    void init() {
-        auto &reg = EtherBench::Models::ParameterRegistry::instance();
-        reg.initParams();
-    }
-
   private slots:
 
     void testAppendRead() {
-        init();
         EtherBench::Models::MemoryCircular mem;
         std::vector<uint8_t> data = {0xDE, 0xAD, 0xBE, 0xEF};
         mem.append(data);
@@ -48,7 +42,6 @@ class MemoryCircularTest : public QObject {
     }
 
     void testPageBoundary() {
-        init();
         EtherBench::Models::MemoryCircular mem;
         std::vector<uint8_t> data(10, 0xFF);
         uint64_t offset = EtherBench::Models::ALLOC_SIZE - 5;
@@ -60,7 +53,6 @@ class MemoryCircularTest : public QObject {
     }
 
     void testPageWrite() {
-        init();
         EtherBench::Models::MemoryCircular mem;
         std::vector<uint8_t> data(EtherBench::Models::ALLOC_SIZE, 0xFF);
         uint64_t offset = 0;
@@ -72,7 +64,6 @@ class MemoryCircularTest : public QObject {
     }
 
     void testMultiplePageWrite() {
-        init();
         uint64_t page_count = 65536;
         EtherBench::Models::MemoryCircular mem;
         std::vector<uint8_t> data(EtherBench::Models::ALLOC_SIZE * page_count, 0xFF);
@@ -86,14 +77,12 @@ class MemoryCircularTest : public QObject {
     }
 
     void testOutOfBoundValue() {
-        init();
         EtherBench::Models::MemoryCircular mem;
 
         QCOMPARE(mem.at(5000), 0x00);
     }
 
     void testFileRoundtrip() {
-        init();
         EtherBench::Models::MemoryCircular mem;
         QString testPath = "roundtrip_test_circ.bin";
 
@@ -113,7 +102,6 @@ class MemoryCircularTest : public QObject {
     }
 
     void testLargeFileIO() {
-        init();
         EtherBench::Models::MemoryCircular mem;
         QString testPath = "large_io_test_circ.bin";
 
@@ -137,7 +125,7 @@ class MemoryCircularTest : public QObject {
     }
 
     void testInvalidFile() {
-        init();
+
         EtherBench::Models::MemoryCircular mem;
 
         mem.loadFromFile("non_existent_file_circ.bin");
