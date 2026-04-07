@@ -33,7 +33,7 @@ class MemoryFileTest : public QObject {
         QFile::remove(path);
 
         {
-            EtherBench::Models::MemoryFile mem(nullptr, path);
+            EtherBench::Models::MemoryFile mem(path);
             std::vector<uint8_t> data = {0xAA, 0xBB, 0xCC, 0xDD};
             mem.set(0, data);
 
@@ -49,7 +49,7 @@ class MemoryFileTest : public QObject {
         QString path = "test_resize_file.bin";
         QFile::remove(path);
 
-        EtherBench::Models::MemoryFile mem(nullptr, path);
+        EtherBench::Models::MemoryFile mem(path);
 
         uint64_t farOffset = 20 * 1024 * 1024;
         std::vector<uint8_t> data = {0xFF};
@@ -68,13 +68,13 @@ class MemoryFileTest : public QObject {
         QFile::remove(path);
 
         {
-            EtherBench::Models::MemoryFile mem(nullptr, path);
+            EtherBench::Models::MemoryFile mem(path);
             std::vector<uint8_t> data = {0x11, 0x22, 0x33, 0x44};
             mem.append(data);
         }
 
         {
-            EtherBench::Models::MemoryFile memLoaded(nullptr, path);
+            EtherBench::Models::MemoryFile memLoaded(path);
 
             // 1 MB, as the file is loaded, we lost track of head.
             QCOMPARE(memLoaded.size(), (uint64_t)(1ULL << 20));
@@ -91,7 +91,7 @@ class MemoryFileTest : public QObject {
         QFile::remove(original);
         QFile::remove(backup);
 
-        EtherBench::Models::MemoryFile mem(nullptr, original);
+        EtherBench::Models::MemoryFile mem(original);
         std::vector<uint8_t> data = {0xDE, 0xAD, 0xBE, 0xEF};
         mem.append(data);
         mem.writeToFile(backup);

@@ -20,12 +20,13 @@
 #include <QDebug>
 #include <QFile>
 #include <QObject>
+#include <QReadLocker>
+#include <QReadWriteLock>
 #include <QString>
+#include <QWriteLocker>
 
 // STD
 #include <array>
-#include <qlogging.h>
-#include <qstringview.h>
 #include <vector>
 
 // =============================================================
@@ -43,6 +44,9 @@ bool MemoryBuffer::erase(uint64_t offset, uint64_t size) {
 }
 
 void MemoryBuffer::loadFromFile(QString path) {
+
+    // Block everyone from touching the buffer
+    QWriteLocker locker(&m_lock);
 
     // Open the file and read the bytestream
     QFile file(path);
@@ -72,6 +76,9 @@ void MemoryBuffer::loadFromFile(QString path) {
 }
 
 void MemoryBuffer::writeToFile(QString path) {
+
+    // Ensure data won't changed until we finished.
+    QReadLocker locker(&m_lock);
 
     // Open the file :
     QFile file(path);

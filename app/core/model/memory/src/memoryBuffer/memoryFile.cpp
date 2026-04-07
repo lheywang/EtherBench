@@ -23,7 +23,10 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QObject>
+#include <QReadLocker>
+#include <QReadWriteLock>
 #include <QString>
+#include <QWriteLocker>
 
 // STD
 #include <array>
@@ -38,8 +41,8 @@ namespace EtherBench::Models {
 // =============================================================
 // CLASS
 // =============================================================
-MemoryFile::MemoryFile(QObject *parent) : MemoryFile(parent, "") {};
-MemoryFile::MemoryFile(QObject *parent, QString filepath) : MemoryBuffer(parent) {
+MemoryFile::MemoryFile(QObject *parent) : MemoryFile("", parent) {};
+MemoryFile::MemoryFile(QString filepath, QObject *parent) : MemoryBuffer(parent) {
     buffer = nullptr;
     buffer_size = 0;
     head = 0;
@@ -56,6 +59,9 @@ MemoryFile::~MemoryFile() { unmap(); }
  * Overrides
  */
 std::vector<uint8_t> MemoryFile::get(uint64_t offset, uint64_t size) {
+
+    // Ensure data won't changed until we finished.
+    QReadLocker locker(&m_lock);
 
     // Create our response buffer
     std::vector<uint8_t> vec(size, 0x00);
@@ -77,6 +83,9 @@ bool MemoryFile::append(std::vector<uint8_t> &data) {
 }
 
 bool MemoryFile::set(uint64_t offset, std::vector<uint8_t> &data) {
+
+    // Block everyone from touching the buffer
+    QWriteLocker locker(&m_lock);
 
     // First, ensure our memory space is correctly configured.
     // if not, request the missing byte (round to 16 MB, because this operation is costly,
@@ -101,6 +110,9 @@ uint64_t MemoryFile::size() { return head; }
 
 uint8_t MemoryFile::at(uint64_t offset) const {
 
+    // Ensure data won't changed until we finished.
+    QReadLocker locker(&m_lock);
+
     if ((buffer) && (offset < head)) {
         return buffer[offset];
     }
@@ -108,6 +120,9 @@ uint8_t MemoryFile::at(uint64_t offset) const {
 }
 
 void MemoryFile::loadFromFile(QString path) {
+
+    // Block everyone from touching the buffer
+    QWriteLocker locker(&m_lock);
 
     // Ensure the file isn't already openned (as this function won't close it afterward)
     if (buffer) {
@@ -147,6 +162,9 @@ void MemoryFile::loadFromFile(QString path) {
     return;
 }
 void MemoryFile::writeToFile(QString path) {
+
+    // Ensure data won't changed until we finished.
+    QReadLocker locker(&m_lock);
 
     // Flush on disk
     unmap();

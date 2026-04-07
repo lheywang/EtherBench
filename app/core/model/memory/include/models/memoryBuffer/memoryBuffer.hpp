@@ -139,10 +139,10 @@ class MemoryBuffer : public QObject {
      */
     virtual void writeToFile(QString path);
 
-  private:
+  protected:
     /*
      * Variables
      */
-    mutable QReadWriteLock m_lock;
+    mutable QReadWriteLock m_lock{QReadWriteLock::Recursive};
 };
 } // namespace EtherBench::Models

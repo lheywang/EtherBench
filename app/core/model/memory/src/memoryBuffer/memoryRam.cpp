@@ -21,7 +21,10 @@
 // Qt
 #include <QDebug>
 #include <QObject>
+#include <QReadLocker>
+#include <QReadWriteLock>
 #include <QString>
+#include <QWriteLocker>
 
 // STD
 #include <array>
@@ -51,6 +54,9 @@ MemoryRam::~MemoryRam() {
  * Overrides
  */
 std::vector<uint8_t> MemoryRam::get(uint64_t offset, uint64_t size) {
+
+    // Ensure data won't changed until we finished.
+    QReadLocker locker(&m_lock);
 
     // Allocate the future buffer
     std::vector<uint8_t> arr(size, 0);
@@ -87,6 +93,9 @@ bool MemoryRam::append(std::vector<uint8_t> &data) {
 }
 
 bool MemoryRam::set(uint64_t offset, std::vector<uint8_t> &data) {
+
+    // Block everyone from touching the buffer
+    QWriteLocker locker(&m_lock);
 
     // Copy the required content into a linear buffer.
     uint64_t bytes_copied = 0;
@@ -129,6 +138,9 @@ uint64_t MemoryRam::size() {
 }
 
 uint8_t MemoryRam::at(uint64_t offset) const {
+
+    // Ensure data won't changed until we finished.
+    QReadLocker locker(&m_lock);
 
     // Get the access address
     uint64_t page_id = offset / ALLOC_SIZE;

@@ -61,7 +61,7 @@ class MemoryFile : public MemoryBuffer {
      * Constructor and destructors
      */
     explicit MemoryFile(QObject *parent = nullptr);
-    explicit MemoryFile(QObject *parent = nullptr, QString filePath = "");
+    explicit MemoryFile(QString filePath = "", QObject *parent = nullptr);
     ~MemoryFile() override;
 
     /*

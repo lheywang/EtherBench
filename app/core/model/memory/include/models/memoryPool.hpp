@@ -71,7 +71,7 @@ class MemoryPool : public QObject {
      * @param IO The requested IO direction.
      * @return MemoryBuffer (may be nullptr !)
      */
-    MemoryBuffer &getBuffer(BufferSlot bufferId, BufferType type, BufferIO IO);
+    MemoryBuffer *getBuffer(BufferSlot bufferId, BufferType type, BufferIO IO);
 
     /**
      * @brief Mark the buffer as out of usage, and free for any usage. This actually does
@@ -102,7 +102,7 @@ class MemoryPool : public QObject {
     /*
      * Variables
      */
-    std::array<BufferSlot, MemoryBuffer *> m_slots;
+    std::array<MemoryBuffer *, SLOT_COUNT> m_slots;
     bool m_status[SLOT_COUNT];      // To keep track of which slot was given or not.
     BufferIO m_IO[SLOT_COUNT];      // To keep track of the currently used direction.
     BufferType m_types[SLOT_COUNT]; // To keep track of the current types.
@@ -115,6 +115,13 @@ class MemoryPool : public QObject {
      *
      */
     void initBuffers();
+
+    void initBuffer(BufferSlot bufferId, BufferType type);
+
+    /*
+     * Mutexes
+     */
+    mutable QReadWriteLock m_lock{QReadWriteLock::Recursive};
 };
 
 } // namespace EtherBench::Models
