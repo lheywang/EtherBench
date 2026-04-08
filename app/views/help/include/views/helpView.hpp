@@ -15,12 +15,18 @@
 // INCLUDES
 // ----------------------------------------------------------------------
 // Local libraries
+#include <qboxlayout.h>
+#include <qtextbrowser.h>
 #include <views/baseView.hpp>
 
 // QT
+#include <QDebug>
 #include <QLabel>
 #include <QMenuBar>
 #include <QString>
+#include <QTextBrowser>
+#include <QUrl>
+#include <QVBoxLayout>
 #include <QWidget>
 
 // ----------------------------------------------------------------------
@@ -35,10 +41,26 @@ class HelpView : public BaseView {
   public:
     explicit HelpView(QWidget *parent = nullptr);
 
+    /*
+     * Overrides
+     */
     QString viewTitle() const override;
     void onActivated() override;
     void onDeactivated() override;
     void fillMenubar(QMenuBar *menuBar) override;
+
+  private:
+    /*
+     * Standard functions
+     */
+    void setupUI();
+    void makeConnections();
+
+    /*
+     * Private variables
+     */
+    QVBoxLayout *m_layout;
+    QTextBrowser *m_browser;
 };
 
 } // namespace EtherBench::UI

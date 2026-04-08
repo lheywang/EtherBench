@@ -1,0 +1,28 @@
+body {
+  background-color: #2b2b2b;
+  color: #e0e0e0;
+  font-family: sans-serif;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+h1 {
+  color: #007acc;
+  border-bottom: 1px solid #3d3d3d;
+  padding-bottom: 10px;
+}
+
+code {
+  background-color: #1e1e1e;
+  padding: 2px 5px;
+  border-radius: 3px;
+  color: #dcdcdc;
+}
+
+.card {
+  background: #333;
+  border: 1px solid #444;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+}

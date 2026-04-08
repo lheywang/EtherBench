@@ -32,4 +32,8 @@
     <qresource prefix="/">
         <file>icons/app/etherbench.ico</file>
     </qresource>
+    <qresource prefix="/">
+        <file>docs/css/style.css</file>
+        <file>docs/html/main.html</file>
+    </qresource>
 </RCC>
