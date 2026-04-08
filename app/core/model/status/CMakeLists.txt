@@ -8,15 +8,14 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME libParameter)
+set(LIBNAME libStatus)
 
 # Configure the sources
 set(SOURCES
-    src/parameterRegistry.cpp
+    src/statusHub.cpp
 )
 set(HEADERS
-    include/models/parameterStruct.hpp
-    include/models/parameterRegistry.hpp
+    include/models/statusHub.hpp
 )
 
 # Create the library
@@ -33,4 +32,4 @@ target_include_directories(${LIBNAME} PUBLIC
 )
 
 # Link against the required libs
-target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets libStatus)
+target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets)

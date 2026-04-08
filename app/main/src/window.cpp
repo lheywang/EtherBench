@@ -15,9 +15,11 @@
 // ----------------------------------------------------------------------
 // Header
 #include "window.hpp"
+#include "models/statusHub.hpp"
 #include "views/sequenceView.hpp"
 
 // Local Libraries
+#include <qstatusbar.h>
 #include <views/debuggerView.hpp>
 #include <views/helpView.hpp>
 #include <views/homeView.hpp>
@@ -29,11 +31,13 @@
 
 // Models
 #include <models/parameterRegistry.hpp>
+#include <models/statusHub.hpp>
 
 // QT
 #include <QActionGroup>
 #include <QCloseEvent>
 #include <QMenuBar>
+#include <QStatusBar>
 #include <QToolBar>
 #include <QVBoxLayout>
 
@@ -57,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setupUI();
     setupMenuBar();
     setupSideBar();
+    setupStatusBar();
 
     /*
      * Ensure objects are correctly linked to their models :
@@ -69,6 +74,8 @@ void MainWindow::setupUI() {
     // Configure window parameters
     setWindowTitle("EtherBenchApp - Home");
     resize(1280, 720);
+    this->setMinimumHeight(700);
+    this->setMinimumWidth(800);
 
     // Configure the children windows
     this->pages[ViewType::Home] = new HomeView(this);
@@ -197,6 +204,12 @@ void MainWindow::setupSideBar() {
     actProgrammer = addNavAction(":/icons/navbar/programmer.png", "Programmer", 4);
     actSequences = addNavAction(":/icons/navbar/sequences.png", "Sequences", 5);
     actMuxer = addNavAction(":/icons/navbar/routing.png", "IO Mux", 6);
+
+    // Add a space, just to make things look a bit better.
+    QWidget *spacer = new QWidget();
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    sidebar->addWidget(spacer);
+
     actSettings = addNavAction(":/icons/navbar/settings.png", "Settings", 7);
     actHelp = addNavAction(":/icons/navbar/help.png", "Help", 8);
 
@@ -204,18 +217,21 @@ void MainWindow::setupSideBar() {
     actHome->setChecked(true);
 }
 
-void MainWindow::makeConnections() {
-    // connect(
-    //     m_btn,
-    //     &QPushButton::clicked,
-    //     &m_counter,
-    //     &EtherBench::Core::CounterManager::increment);
+void MainWindow::setupStatusBar() {
 
-    // connect(
-    //     &m_counter,
-    //     &EtherBench::Core::CounterManager::countChanged,
-    //     this,
-    //     [this](int val) { m_label->setText(QString("Compteur : %1").arg(val)); });
+    setStatusBar(new QStatusBar(this));
+    statusBar()->show();
+    statusBar()->showMessage("Ready", 5000);
+}
+
+void MainWindow::makeConnections() {
+
+    // Connecting the statusbar event
+    connect(
+        &Models::StatusHub::instance(),
+        &Models::StatusHub::messageRequested,
+        this->statusBar(),
+        &QStatusBar::showMessage);
 }
 
 /*

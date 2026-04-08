@@ -20,6 +20,7 @@
 
 // Models
 #include <models/parameterRegistry.hpp>
+#include <models/statusHub.hpp>
 
 // QT
 #include <QCheckBox>
@@ -61,7 +62,6 @@ void SettingsView::onDeactivated() {
     // Save our settings on the file
     auto &reg = EtherBench::Models::ParameterRegistry::instance();
     reg.writeToFile("settings.ebs");
-    qInfo() << "Saved parameter registry to file.";
 }
 
 void SettingsView::fillMenubar(QMenuBar *menuBar) {
@@ -299,10 +299,7 @@ void SettingsView::settingsExport() {
         bool success =
             EtherBench::Models::ParameterRegistry::instance().writeToFile(fileName, true);
 
-        if (success) {
-            qInfo() << "Exported settings to " << fileName;
-            return;
-        }
+        return;
     }
     qWarning() << "Failed settings export";
 }
@@ -324,12 +321,7 @@ void SettingsView::settingsImport() {
         bool success =
             EtherBench::Models::ParameterRegistry::instance().loadFromFile(fileName);
 
-        if (success) {
-            qInfo() << "Imported settings from : " << fileName;
-            return;
-        }
-
-        qWarning() << "Failed settings import.";
+        return;
     }
 }
 

@@ -17,6 +17,7 @@
 
 // Local libraries
 #include <models/parameterStruct.hpp>
+#include <models/statusHub.hpp>
 
 // Qt
 #include <QByteArray>
@@ -618,9 +619,9 @@ bool ParameterRegistry::loadFromFile(QString path) {
     QJsonDocument doc = QJsonDocument::fromJson(data, &error);
 
     if (doc.isNull()) {
-        qCritical()
-            << "Failed to parse config. Ensure the syntax is a valid JSON one ... :"
-            << error.errorString();
+        EtherBench::Models::StatusHub::instance().error(
+            "Failed to parse config. Ensure the syntax is a valid JSON one ... :" +
+            error.errorString());
         return false;
     }
 
@@ -642,7 +643,7 @@ bool ParameterRegistry::loadFromFile(QString path) {
     }
 
     m_dirty = false;
-    qInfo() << "Loaded settings from file";
+    EtherBench::Models::StatusHub::instance().info("Loaded settings from file : " + path);
 
     return true;
 }
@@ -669,6 +670,7 @@ bool ParameterRegistry::writeToFile(QString path, bool forceWrite) {
     QJsonDocument doc(root);
     file.write(doc.toJson(QJsonDocument::Indented));
 
+    EtherBench::Models::StatusHub::instance().info("Wrote settings to file : " + path);
     m_dirty = false; // As we performed the write, changes are updated.
     return true;
 }

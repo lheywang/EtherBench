@@ -13,6 +13,7 @@ set(LIBNAME libModel)
 # Include all subfolders
 add_subdirectory(parameter)
 add_subdirectory(memory)
+add_subdirectory(status)
 
 # Create the umbrella library
 add_library(${LIBNAME} INTERFACE)
@@ -21,4 +22,5 @@ add_library(${LIBNAME} INTERFACE)
 target_link_libraries(${LIBNAME} INTERFACE
     libParameter
     libMemory
+    libStatus
 )

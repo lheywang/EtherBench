@@ -106,6 +106,12 @@ class MainWindow : public QMainWindow {
     void addMenuBarElements();
 
     /**
+     * @brief Configure the statusbar (bottom).
+     *
+     */
+    void setupStatusBar();
+
+    /**
      * @brief Configure the connection between clickable elements,
      *        and their associated actions on the C++ part.
      *
