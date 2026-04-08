@@ -14,6 +14,7 @@
 // ----------------------------------------------------------------------
 // INCLUDES
 // ----------------------------------------------------------------------
+// Qt
 #include <QLabel>
 #include <QMenuBar>
 #include <QString>
@@ -64,6 +65,11 @@ class BaseView : public QWidget {
      * @param menuBar Handle to the menubar, to add menus.
      */
     virtual void fillMenubar(QMenuBar *menuBar) = 0;
+
+    /*
+     * Utility functions
+     */
+    QActionGroup *addSlotSelection(QMenu *parent, QString title);
 };
 
 } // namespace EtherBench::UI

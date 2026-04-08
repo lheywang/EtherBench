@@ -46,6 +46,19 @@ void DebuggerView::onActivated() { qDebug() << "Welcome to debugger"; }
 
 void DebuggerView::onDeactivated() { qDebug() << "Exiting ..."; }
 
-void DebuggerView::fillMenubar(QMenuBar *menuBar) { return; }
+void DebuggerView::fillMenubar(QMenuBar *menuBar) {
+
+    // Debugger
+    QMenu *debuggerMenu = menuBar->addMenu("&Debugger");
+    debuggerMenu->addAction("Save debugging session");
+    debuggerMenu->addAction("Load debugging session");
+    debuggerMenu->addSeparator();
+    debuggerMenu->addAction("Clear all logs");
+
+    // Export
+    QMenu *exportMenu = menuBar->addMenu("&Export");
+    exportMenu->addAction("Export to VCD");
+    exportMenu->addAction("Export to CSV");
+}
 
 } // namespace EtherBench::UI

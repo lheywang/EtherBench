@@ -48,6 +48,22 @@ SequenceView::SequenceView(QWidget *parent) : BaseView(parent) {
 QString SequenceView::viewTitle() const { return "Sequencer"; }
 void SequenceView::onActivated() { qDebug() << "Welcome to sequencer"; }
 void SequenceView::onDeactivated() { qDebug() << "Exiting ..."; }
-void SequenceView::fillMenubar(QMenuBar *menuBar) { return; }
+void SequenceView::fillMenubar(QMenuBar *menuBar) {
+
+    // Builder
+    QMenu *buildMenu = menuBar->addMenu("&Build");
+    buildMenu->addAction("Open source");
+    buildMenu->addAction("Save source");
+    buildMenu->addSeparator();
+    buildMenu->addAction("Compile");
+    buildMenu->addAction("Decompile");
+    buildMenu->addSeparator();
+    buildMenu->addAction("Save to device");
+    buildMenu->addAction("Load from device");
+
+    // Memory IO
+    QMenu *saveMenu = menuBar->addMenu("&Memory");
+    saveMenu->addAction("Save to slot");
+}
 
 } // namespace EtherBench::UI

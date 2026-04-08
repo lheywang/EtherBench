@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QFontDatabase>
+#include <QIcon>
 
 // ----------------------------------------------------------------------
 // PROTOTYPES
@@ -26,6 +27,7 @@
 void apply_theme(QApplication &app, const QString &themePath);
 void applyDarkPalette(QApplication &app);
 void load_fonts();
+void set_icon(QApplication &app, const QString &icon);
 
 // ----------------------------------------------------------------------
 // MAIN
@@ -40,6 +42,7 @@ int main(int argc, char *argv[]) {
     apply_theme(app, ":/styles/dark.qss");
     applyDarkPalette(app);
     load_fonts();
+    set_icon(app, ":/icons/app/etherbench.ico");
 
     // Launch the app
     EtherBench::UI::MainWindow win;
@@ -113,4 +116,9 @@ void load_fonts() {
     QFontDatabase::addApplicationFont(":/fonts/firacode/static/Cinzel-Medium.ttf");
     QFontDatabase::addApplicationFont(":/fonts/firacode/static/Cinzel-SemiBold.ttf");
     QFontDatabase::addApplicationFont(":/fonts/firacode/FiraCode-VariableFont_wght.ttf");
+}
+
+void set_icon(QApplication &app, const QString &icon) {
+    QIcon appIcon(icon);
+    app.setWindowIcon(appIcon);
 }

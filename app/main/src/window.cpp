@@ -26,6 +26,7 @@
 #include <views/ioView.hpp>
 #include <views/memoryView.hpp>
 #include <views/muxerView.hpp>
+#include <views/plotView.hpp>
 #include <views/programmerView.hpp>
 #include <views/settingsView.hpp>
 
@@ -74,8 +75,8 @@ void MainWindow::setupUI() {
     // Configure window parameters
     setWindowTitle("EtherBenchApp - Home");
     resize(1280, 720);
-    this->setMinimumHeight(700);
-    this->setMinimumWidth(800);
+    this->setMinimumHeight(650);
+    this->setMinimumWidth(700);
 
     // Configure the children windows
     this->pages[ViewType::Home] = new HomeView(this);
@@ -87,6 +88,7 @@ void MainWindow::setupUI() {
     this->pages[ViewType::Muxer] = new MuxerView(this);
     this->pages[ViewType::Settings] = new SettingsView(this);
     this->pages[ViewType::Help] = new HelpView(this);
+    this->pages[ViewType::Plot] = new PlotView(this);
 
     // Create the stacked layout
     this->m_viewStack = new QStackedWidget(this);
@@ -111,46 +113,6 @@ void MainWindow::setupMenuBar() {
     this->setMenuBar(m_menuBar);
 
     addMenuBarElements();
-
-    // /*
-    //  * Menus that aren't always showns :
-    //  */
-    // // Memory
-    // memoryMenu = m_menuBar->addMenu("&Memory");
-    // memoryMenu->menuAction()->setVisible(false);
-    // memoryMenu->addAction("Load binary");
-    // memoryMenu->addAction("Load executable");
-    // memoryMenu->addSeparator();
-    // memoryMenu->addAction("Export to file");
-    // memoryMenu->addSeparator();
-    // memoryMenu->addAction("Convert to executable");
-    // memoryMenu->addAction("Convert to binary");
-
-    // // Serial
-    // serialMenu = m_menuBar->addMenu("&Serial");
-    // serialMenu->menuAction()->setVisible(false);
-    // serialMenu->addAction("Load serial session");
-    // serialMenu->addAction("Export serial session");
-    // serialMenu->addSeparator();
-    // serialMenu->addAction("Export session");
-
-    // // Build
-    // buildMenu = m_menuBar->addMenu("&Build");
-    // buildMenu->menuAction()->setVisible(false);
-    // buildMenu->addAction("Open source");
-    // buildMenu->addAction("Save source");
-    // buildMenu->addSeparator();
-    // buildMenu->addAction("Compile");
-    // buildMenu->addAction("Decompile");
-    // buildMenu->addSeparator();
-    // buildMenu->addAction("Save to device");
-    // buildMenu->addAction("Load from device");
-
-    // // Debugger
-    // debuggerMenu = m_menuBar->addMenu("&Debugger");
-    // debuggerMenu->menuAction()->setVisible(false);
-    // debuggerMenu->addAction("Save debugging session");
-    // debuggerMenu->addAction("Load debugging session");
 }
 
 void MainWindow::addMenuBarElements() {
@@ -174,7 +136,7 @@ void MainWindow::setupSideBar() {
 
     // Configure the toolbar :
     sidebar->setMovable(false);
-    sidebar->setIconSize(QSize(48, 48));
+    sidebar->setIconSize(QSize(32, 32));
     sidebar->setToolButtonStyle(Qt::ToolButtonIconOnly);
     sidebar->setContextMenuPolicy(Qt::PreventContextMenu);
 
@@ -199,19 +161,20 @@ void MainWindow::setupSideBar() {
 
     actHome = addNavAction(":/icons/navbar/home.png", "Home", 0);
     actDebugger = addNavAction(":/icons/navbar/debugger.png", "Debugger", 1);
-    actMemory = addNavAction(":/icons/navbar/memory.png", "Memory", 2);
+    actPlotter = addNavAction(":/icons/navbar/plot.png", "Plots", 2);
     actIO = addNavAction(":/icons/navbar/io.png", "Serial IO", 3);
-    actProgrammer = addNavAction(":/icons/navbar/programmer.png", "Programmer", 4);
-    actSequences = addNavAction(":/icons/navbar/sequences.png", "Sequences", 5);
-    actMuxer = addNavAction(":/icons/navbar/routing.png", "IO Mux", 6);
+    actMemory = addNavAction(":/icons/navbar/memory.png", "Memory", 4);
+    actProgrammer = addNavAction(":/icons/navbar/programmer.png", "Programmer", 5);
+    actSequences = addNavAction(":/icons/navbar/sequences.png", "Sequences", 6);
+    actMuxer = addNavAction(":/icons/navbar/routing.png", "IO Mux", 7);
 
     // Add a space, just to make things look a bit better.
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     sidebar->addWidget(spacer);
 
-    actSettings = addNavAction(":/icons/navbar/settings.png", "Settings", 7);
-    actHelp = addNavAction(":/icons/navbar/help.png", "Help", 8);
+    actSettings = addNavAction(":/icons/navbar/settings.png", "Settings", 8);
+    actHelp = addNavAction(":/icons/navbar/help.png", "Help", 9);
 
     // Set the default
     actHome->setChecked(true);

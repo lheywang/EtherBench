@@ -48,6 +48,12 @@ MuxerView::MuxerView(QWidget *parent) : BaseView(parent) {
 QString MuxerView::viewTitle() const { return "Muxer"; }
 void MuxerView::onActivated() { qDebug() << "Welcome to muxer"; }
 void MuxerView::onDeactivated() { qDebug() << "Exiting ..."; }
-void MuxerView::fillMenubar(QMenuBar *menuBar) { return; }
+void MuxerView::fillMenubar(QMenuBar *menuBar) {
+
+    // Muxer menu
+    QMenu *muxerMenu = menuBar->addMenu("&Router");
+    muxerMenu->addAction("Disconnect all");
+    muxerMenu->addAction("Restore defaults");
+}
 
 } // namespace EtherBench::UI

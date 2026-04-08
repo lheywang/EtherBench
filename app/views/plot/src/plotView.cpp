@@ -1,5 +1,5 @@
 /**
- * @file ioView.cpp
+ * @file helpView.cpp
  * @author lheywang (leonard.heywang@proton.me)
  * @brief
  * @version 0.1
@@ -8,11 +8,12 @@
  * @copyright Copyright (c) 2026
  *
  */
+
 // ----------------------------------------------------------------------
 // INCLUDES
 // ----------------------------------------------------------------------
 // Header
-#include <views/ioView.hpp>
+#include <views/plotView.hpp>
 
 // Local libraries
 #include <views/baseView.hpp>
@@ -30,33 +31,33 @@
 // ----------------------------------------------------------------------
 namespace EtherBench::UI {
 
-IOView::IOView(QWidget *parent) : BaseView(parent) {
+PlotView::PlotView(QWidget *parent) : BaseView(parent) {
 
     auto *layout = new QVBoxLayout(this);
-    auto *label = new QLabel("IO", this);
+    auto *label = new QLabel("Plot", this);
 
     label->setAlignment(Qt::AlignCenter);
     layout->addWidget(label);
 }
 
-QString IOView::viewTitle() const { return "Serial IO"; }
+QString PlotView::viewTitle() const { return "Plot"; }
 
-void IOView::onActivated() { qDebug() << "Welcome to serial IO"; }
+void PlotView::onActivated() { qDebug() << "Welcome to plotter"; }
 
-void IOView::onDeactivated() { qDebug() << "Exiting ..."; }
+void PlotView::onDeactivated() { qDebug() << "Exiting ..."; }
 
-void IOView::fillMenubar(QMenuBar *menuBar) {
+void PlotView::fillMenubar(QMenuBar *menuBar) {
 
-    // Serial
-    QMenu *serialMenu = menuBar->addMenu("&Serial");
-    serialMenu->addAction("Load serial session");
-    serialMenu->addAction("Export serial session");
-    serialMenu->addSeparator();
-    serialMenu->addAction("Export session (pcap)");
+    // Save
+    QMenu *saveMenu = menuBar->addMenu("&Save");
+    saveMenu->addAction("Save to file");
+    saveMenu->addAction("Load from file");
 
-    // Memory
-    QMenu *memoryMenu = menuBar->addMenu("&Memory");
-    addSlotSelection(memoryMenu, "Export to slot");
+    // Plotter menu
+    QMenu *exportMenu = menuBar->addMenu("&Export");
+    exportMenu->addAction("Export to CSV");
+    exportMenu->addAction("Export to Matlab");
+    exportMenu->addAction("Export to Python");
 }
 
 } // namespace EtherBench::UI

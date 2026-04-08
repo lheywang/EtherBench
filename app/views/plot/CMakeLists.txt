@@ -8,14 +8,14 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME BaseView)
+set(LIBNAME PlotView)
 
 # Configure the sources
-set(SOURCES 
-    src/baseView.cpp
+set(SOURCES
+    src/plotView.cpp   
 )
 set(HEADERS
-    include/views/baseView.hpp
+    include/views/plotView.hpp
 )
 
 # Create the library
@@ -32,4 +32,4 @@ target_include_directories(${LIBNAME} PUBLIC
 )
 
 # Link against the required libs
-target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets LIBCORE)
+target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets LIBCORE BaseView)

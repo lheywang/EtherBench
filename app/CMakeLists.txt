@@ -68,6 +68,12 @@ set(RESSOURCES
     ressources/ressources.qrc
 )
 
+if(WIN32)
+    list(APPEND RESSOURCES
+        ressources/icons/app/ressources.rc
+    )
+endif()
+
 # Add the main executable
 qt_add_executable(${PROJECT_NAME} ${SOURCES} ${RESSOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE 

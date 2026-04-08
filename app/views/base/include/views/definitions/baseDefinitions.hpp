@@ -17,6 +17,7 @@
 enum class ViewType {
     Home = 0,
     Debugger,
+    Plot,
     Memory,
     Serial,
     Programmer,

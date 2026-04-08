@@ -46,6 +46,18 @@ void ProgrammerView::onActivated() { qDebug() << "Welcome to programmer"; }
 
 void ProgrammerView::onDeactivated() { qDebug() << "Exiting ..."; }
 
-void ProgrammerView::fillMenubar(QMenuBar *menuBar) { return; }
+void ProgrammerView::fillMenubar(QMenuBar *menuBar) {
+
+    // Add Menu (Programmer).
+    QMenu *programmerMenu = menuBar->addMenu("&Programmer");
+
+    QMenu *saveSubMenu = programmerMenu->addMenu("Save");
+    saveSubMenu->addAction("Save to disk");
+    addSlotSelection(saveSubMenu, "Save to slot");
+
+    QMenu *loadSubMenu = programmerMenu->addMenu("Load");
+    loadSubMenu->addAction("Load from disk");
+    addSlotSelection(loadSubMenu, "Load from slot");
+}
 
 } // namespace EtherBench::UI

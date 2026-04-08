@@ -161,6 +161,7 @@ class MainWindow : public QMainWindow {
     QAction *actMuxer;
     QAction *actSettings;
     QAction *actHelp;
+    QAction *actPlotter;
 
     // Pages
     QMap<ViewType, BaseView *> pages;
