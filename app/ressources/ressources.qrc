@@ -9,9 +9,7 @@
         <file>icons/navbar/io.png</file>
         <file>icons/navbar/sequences.png</file>
         <file>icons/navbar/routing.png</file>
-    </qresource>
-    <qresource prefix="/">
-        <file>icons/app/icon.png</file>
+        <file>icons/navbar/plot.png</file>
     </qresource>
     <qresource prefix="/">
         <file>styles/dark.qss</file>
@@ -30,5 +28,8 @@
         <file>fonts/cinzel/static/Cinzel-Medium.ttf</file>
         <file>fonts/cinzel/static/Cinzel-Regular.ttf</file>
         <file>fonts/cinzel/static/Cinzel-SemiBold.ttf</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>icons/app/etherbench.ico</file>
     </qresource>
 </RCC>

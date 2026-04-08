@@ -8,7 +8,7 @@ Here a complete list of all the icons we did used :
 
 ### App Icon
 
-- [Icon](https://icons8.com/icon/2230/broadcasting)
+- [Icon](https://icons8.com/icon/JiqO0yeG9iLN/ethernet) 
 
 ### Naviguation bar
 
