@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "cordic.h"
+extern void Error_Handler();
 
 CORDIC_HandleTypeDef hcordic;
 

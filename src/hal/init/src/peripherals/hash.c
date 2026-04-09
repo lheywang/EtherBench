@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "hash.h"
+extern void Error_Handler();
 
 HASH_HandleTypeDef hhash;
 

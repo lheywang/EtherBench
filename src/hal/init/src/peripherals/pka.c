@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "pka.h"
+extern void Error_Handler();
 
 PKA_HandleTypeDef hpka;
 

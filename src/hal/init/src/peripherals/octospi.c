@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "octospi.h"
+extern void Error_Handler();
 
 XSPI_HandleTypeDef hospi1;
 

@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "rng.h"
+extern void Error_Handler();
 
 RNG_HandleTypeDef hrng;
 

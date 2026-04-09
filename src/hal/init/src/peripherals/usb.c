@@ -14,6 +14,7 @@
 // ======================================================================
 #include "usb.h"
 #include <string.h>
+extern void Error_Handler();
 
 PCD_HandleTypeDef hpcd_USB_DRD_FS;
 

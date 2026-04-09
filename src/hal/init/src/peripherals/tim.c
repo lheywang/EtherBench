@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "tim.h"
+extern void Error_Handler();
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;

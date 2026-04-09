@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "lptim.h"
+extern void Error_Handler();
 
 LPTIM_HandleTypeDef hlptim5;
 

@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "eth.h"
+extern void Error_Handler();
 
 ETH_BufferTypeDef Txbuffer[ETH_TX_DESC_CNT * 2U];
 ETH_DMADescTypeDef DMARxDscrTab[ETH_RX_DESC_CNT]; /* Ethernet Rx DMA Descriptors */

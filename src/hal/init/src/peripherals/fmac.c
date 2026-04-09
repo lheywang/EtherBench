@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "fmac.h"
+extern void Error_Handler();
 
 FMAC_HandleTypeDef hfmac;
 

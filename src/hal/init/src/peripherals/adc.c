@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "adc.h"
+extern void Error_Handler();
 
 ADC_HandleTypeDef hadc1;
 

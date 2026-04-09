@@ -14,6 +14,7 @@
 // ======================================================================
 
 #include "dcache.h"
+extern void Error_Handler();
 
 DCACHE_HandleTypeDef hdcache1;
 

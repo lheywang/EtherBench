@@ -14,6 +14,7 @@
 // ======================================================================
 #include "usart.h"
 #include "main.h"
+extern void Error_Handler();
 
 UART_HandleTypeDef huart3;
 extern DMA_HandleTypeDef hdma_usart3_tx;

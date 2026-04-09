@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "i2c.h"
+extern void Error_Handler();
 
 I2C_HandleTypeDef hi2c1;
 

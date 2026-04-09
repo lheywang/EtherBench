@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "sdmmc.h"
+extern void Error_Handler();
 
 SD_HandleTypeDef hsd1;
 

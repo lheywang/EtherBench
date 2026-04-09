@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "fdcan.h"
+extern void Error_Handler();
 
 FDCAN_HandleTypeDef hfdcan1;
 

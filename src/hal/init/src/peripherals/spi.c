@@ -13,6 +13,7 @@
 //                              INCLUDE
 // ======================================================================
 #include "spi.h"
+extern void Error_Handler();
 
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi3;
