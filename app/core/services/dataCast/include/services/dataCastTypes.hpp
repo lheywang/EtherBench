@@ -51,11 +51,11 @@ struct dataCastResult {
     QString i128;
 
     // Standard float types
-    QString f16;
-    QString f16b;
+    // QString f16;
+    // QString f16b;
     QString f32;
     QString f64;
-    QString f128;
+    // QString f128;
 
     // Others data types
     QString ts32;

@@ -17,10 +17,6 @@
 // Qt
 #include <QString>
 
-// STD
-#include <stdfloat>
-#include <stdint>
-
 // =============================================================
 // MACRO PLAY
 // =============================================================
@@ -38,26 +34,25 @@ constexpr uint32_t byte_length = 32;
 
 // Compute the size of some values
 // output
-constexpr uint32_t U8_COUNT = byte_length / sizeof(uint8_t);
-constexpr uint32_t I8_COUNT = byte_length / sizeof(int8_t);
+constexpr uint32_t U8_COUNT = byte_length / sizeof(unsigned char);
+constexpr uint32_t I8_COUNT = byte_length / sizeof(signed char);
 
-constexpr uint32_t U16_COUNT = byte_length / sizeof(uint16_t);
-constexpr uint32_t I16_COUT = byte_length / sizeof(int16_t);
+constexpr uint32_t U16_COUNT = byte_length / sizeof(unsigned short);
+constexpr uint32_t I16_COUT = byte_length / sizeof(signed short);
 
-constexpr uint32_t U32_COUNT = byte_length / sizeof(uint32_t);
-constexpr uint32_t I32_COUNT = byte_length / sizeof(int32_t);
+constexpr uint32_t U32_COUNT = byte_length / sizeof(unsigned int);
+constexpr uint32_t I32_COUNT = byte_length / sizeof(int);
 
-constexpr uint32_t U64_COUNT = byte_length / sizeof(uint64_t);
-constexpr uint32_t I64_COUNT = byte_length / sizeof(int64_t);
+constexpr uint32_t U64_COUNT = byte_length / sizeof(unsigned long long int);
+constexpr uint32_t I64_COUNT = byte_length / sizeof(long long int);
 
 constexpr uint32_t U128_COUNT = byte_length / sizeof(__int128_t);
 constexpr uint32_t I128_COUNT = byte_length / sizeof(__uint128_t);
 
-constexpr uint32_t F16_COUNT = byte_length / sizeof(float16_t);
-constexpr uint32_t F16B_COUNT = byte_length / sizeof(bfloat16_t);
-constexpr uint32_t F32_COUNT = byte_length / sizeof(float32_t);
-constexpr uint32_t F64_COUNT = byte_length / sizeof(float64_t);
-constexpr uint32_t F128_COUNT = byte_length / sizeof(float128_t);
+// constexpr uint32_t F16_COUNT = byte_length / sizeof(float16_t);
+// constexpr uint32_t F16B_COUNT = byte_length / sizeof(bfloat16_t);
+constexpr uint32_t F32_COUNT = byte_length / sizeof(float);
+constexpr uint32_t F64_COUNT = byte_length / sizeof(double);
 
 // =============================================================
 // UNIONS
@@ -73,7 +68,7 @@ union dataCastUnion {
     int8_t i8[I8_COUNT];
 
     uint16_t u16[U16_COUNT];
-    int16_t i16[I16_COUNT];
+    int16_t i16[I16_COUT];
 
     uint32_t u32[U32_COUNT];
     int32_t i32[I32_COUNT];
@@ -88,11 +83,10 @@ union dataCastUnion {
     __uint128_t i128[I128_COUNT];
 #endif
 
-    float16_t f16[F16_COUNT];
-    bfloat16_t f16b[F16B_COUNT];
-    float32_t f32[F32_COUNT];
-    float64_t f64[F64_COUNT];
-    float128_t f128[F128_COUNT];
+    // float16_t f16[F16_COUNT];
+    // bfloat16_t f16b[F16B_COUNT];
+    float f32[F32_COUNT];
+    double f64[F64_COUNT];
 };
 
 } // namespace EtherBench::Services
