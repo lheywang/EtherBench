@@ -67,7 +67,7 @@ void HelpView::setupUI() {
     QFile cssFile("qrc:/docs/css/style.css");
     if (cssFile.open(QIODevice::ReadOnly)) {
         QString styleSheet = QString::fromUtf8(cssFile.readAll());
-        browser->document()->setDefaultStyleSheet(styleSheet);
+        m_browser->document()->setDefaultStyleSheet(styleSheet);
     }
 
     // Configure browser UI

@@ -12,7 +12,7 @@
 # -------------------------------------------------------------------
 # CMake configuration
 cmake_minimum_required(VERSION 3.20)
-project(EtherBenchApp LANGUAGES CXX)
+project(EtherBenchApp LANGUAGES C CXX)
 
 # Declare options
 option(BUILD_TESTING "Build unit tests" ON)

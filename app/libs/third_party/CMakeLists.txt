@@ -8,5 +8,10 @@
 # 
 # ===================================================================
 
+# Just include all sub libraries
+add_subdirectory(elfparser)
+add_subdirectory(libcintelhex)
+
+# An error occured in this module, so just remove the faulty warning
 add_compile_options(-Wno-pragma-pack)
 add_subdirectory(libusb-cmake)
