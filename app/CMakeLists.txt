@@ -97,7 +97,7 @@ if (BUILD_TESTING)
         --output-on-failure
         --parallel
         --progress
-        --repeat-until-fail 10
+        # --repeat-until-fail 10
         --output-log "logs.txt"
         --schedule-random
         --output-junit "report.xml"

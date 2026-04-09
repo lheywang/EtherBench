@@ -92,6 +92,22 @@ class MemoryPool : public QObject {
      */
     void changeBufferType(BufferSlot bufferId, BufferType requested_type);
 
+    /**
+     * @brief Get the Buffer Type object
+     *
+     * @param bufferId  The target slot
+     * @return BufferType
+     */
+    BufferType getBufferType(BufferSlot bufferId);
+
+    /**
+     * @brief Get the Buffer IO object
+     *
+     * @param bufferId The target slot
+     * @return BufferIO
+     */
+    BufferIO getBufferIO(BufferSlot bufferId);
+
   private:
     /*
      * Private constructors and destructors

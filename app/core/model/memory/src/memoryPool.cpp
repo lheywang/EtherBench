@@ -65,12 +65,14 @@ MemoryBuffer *MemoryPool::getBuffer(BufferSlot bufferId, BufferType type, Buffer
 
     // First, checks things about the buffer types
     if (type != m_types[bufferId]) {
+        qWarning() << "Wrong types requested !";
         return nullptr;
     }
 
     // Check that both the write bit it set, as well the current one.
     if ((IO & BufferIO::WRITE) != 0) {
         if ((m_IO[bufferId] & BufferIO::WRITE) != 0) {
+            qWarning() << "Buffer already assigned in WRITE";
             return nullptr;
         }
     }
@@ -140,20 +142,31 @@ void MemoryPool::initBuffer(BufferSlot bufferId, BufferType type) {
     switch (type) {
     case BufferType::RAM:
         m_slots[bufferId] = new MemoryRam(this);
+        m_types[bufferId] = BufferType::RAM;
         break;
     case BufferType::CIRCULAR:
         m_slots[bufferId] = new MemoryCircular(this);
+        m_types[bufferId] = BufferType::CIRCULAR;
         break;
     case BufferType::FILE:
         m_slots[bufferId] = new MemoryFile(this);
+        m_types[bufferId] = BufferType::FILE;
         break;
     default:
         m_slots[bufferId] = nullptr;
+        m_types[bufferId] = BufferType::NONE;
         qCritical() << "Got a NONE memory type as init. Pointer will remain null.";
         break;
     }
 
+    // Set the default value for all (free)
+    m_IO[bufferId] = static_cast<BufferIO>(0);
+
     return;
 }
+
+BufferType MemoryPool::getBufferType(BufferSlot bufferId) { return m_types[bufferId]; }
+
+BufferIO MemoryPool::getBufferIO(BufferSlot bufferId) { return m_IO[bufferId]; }
 
 } // namespace EtherBench::Models
