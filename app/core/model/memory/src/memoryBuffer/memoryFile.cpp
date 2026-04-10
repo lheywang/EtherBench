@@ -41,7 +41,7 @@ namespace EtherBench::Models {
 // =============================================================
 // CLASS
 // =============================================================
-MemoryFile::MemoryFile(QObject *parent) : MemoryFile("", parent) {};
+MemoryFile::MemoryFile(QObject *parent) : MemoryFile("", parent){};
 MemoryFile::MemoryFile(QString filepath, QObject *parent) : MemoryBuffer(parent) {
     buffer = nullptr;
     buffer_size = 0;
@@ -92,7 +92,8 @@ bool MemoryFile::set(uint64_t offset, std::vector<uint8_t> &data) {
     // this, we won't map for 2 bytes...).
     uint64_t requested = offset + data.size();
     if (requested > buffer_size) {
-        if (!resize(std::max((requested - buffer_size), (1ULL << 24)))) {
+        if (!resize(
+                std::max((requested - buffer_size), static_cast<uint64_t>(1ULL << 24)))) {
             return false;
         }
     }
