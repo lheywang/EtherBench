@@ -15,7 +15,7 @@
 // INCLUDES
 // =============================================================
 // Qt
-#include <QString>
+#include <QStringList>
 
 // =============================================================
 // STRUCTS
@@ -28,38 +28,38 @@ struct dataCastResult {
     bool convertedAsLe;
 
     // Raw data (first byte only)
-    QString binary;
-    QString octal;
+    QStringList binary;
+    QStringList octal;
 
     // Text
-    QString ascii; // All data converted !
-    QString utf8;
-    QString utf16;
+    QStringList ascii; // All data converted !
+    QStringList utf8;
+    QStringList utf16;
 
     // Standard integer types
-    QString u8;
-    QString i8;
-    QString u16;
-    QString i16;
-    QString u24;
-    QString i24;
-    QString u32;
-    QString i32;
-    QString u64;
-    QString i64;
-    QString u128;
-    QString i128;
+    QStringList u8;
+    QStringList i8;
+    QStringList u16;
+    QStringList i16;
+    QStringList u24;
+    QStringList i24;
+    QStringList u32;
+    QStringList i32;
+    QStringList u64;
+    QStringList i64;
+    QStringList u128;
+    QStringList i128;
 
     // Standard float types
-    // QString f16;
-    // QString f16b;
-    QString f32;
-    QString f64;
-    // QString f128;
+    // QStringList f16;
+    // QStringList f16b;
+    QStringList f32;
+    QStringList f64;
+    // QStringList f128;
 
     // Others data types
-    QString ts32;
-    QString ts64;
+    QStringList ts32;
+    QStringList ts64;
 };
 
 } // namespace EtherBench::Services

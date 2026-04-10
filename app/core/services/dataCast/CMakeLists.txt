@@ -17,7 +17,6 @@ set(SOURCES
 set(HEADERS
     include/services/dataCast.hpp
     include/services/dataCastTypes.hpp
-    include/services/dataCastUnion.hpp
 )
 
 # Create the library

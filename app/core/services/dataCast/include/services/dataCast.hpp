@@ -17,18 +17,15 @@
 // =============================================================
 // Local libraries
 #include <services/dataCastTypes.hpp>
-#include <services/dataCastUnion.hpp>
 
 // Qt
-#include <QString>
+#include <QByteArray>
+#include <QDataStream>
+#include <QStringList>
 #include <vector>
 
 namespace EtherBench::Services {
 
-// =============================================================
-// CLASS
-// =============================================================
-enum class CasterEndianness { LITTLE_ENDIAN, BIG_ENDIAN };
 // =============================================================
 // CLASS
 // =============================================================
@@ -53,45 +50,54 @@ class dataCast {
      * @param input The input vector of bytes.
      * @param endianness Does we need to perform an endianess swap ?
      */
-    dataCastResult *cast(
+    dataCastResult cast(
         std::vector<uint8_t> input,
-        CasterEndianness endianness = CasterEndianness::LITTLE_ENDIAN);
+        QDataStream::ByteOrder endianness = QDataStream::LittleEndian);
 
     dataCastResult *last_cast();
 
   private:
     /*
+     * Private templates and utility
+     */
+    template <typename T>
+    QStringList vec2type(const QByteArray &data, QDataStream::ByteOrder order) {
+        QStringList list;
+        QDataStream ds(data);
+        ds.setByteOrder(order);
+
+        int count = data.size() / sizeof(T);
+        for (int i = 0; i < count; ++i) {
+            T val;
+            ds >> val;
+            list << QString::number(val);
+        }
+        return list;
+    }
+
+    uint32_t
+    raw24bval(uint8_t byte0, uint8_t byte1, uint8_t byte2, QDataStream::ByteOrder order);
+
+    /*
      * Private caster helpers
      */
-    QString vec2binary();
-    QString vec2octal();
-    QString vec2ascii();
-    QString vec2utf8();
-    QString vec2utf16();
-    QString vec2u8();
-    QString vec2i8();
-    QString vec2u16();
-    QString vec2i16();
-    QString vec2u24();
-    QString vec2i24();
-    QString vec2u32();
-    QString vec2i32();
-    QString vec2u64();
-    QString vec2i64();
-    QString vec2u128();
-    QString vec2i128();
-    QString vec2f32();
-    QString vec2f64();
-    QString vec2ts32();
-    QString vec2ts64();
+    QStringList vec2binary(const QByteArray &data, QDataStream::ByteOrder order);
+    QStringList vec2octal(const QByteArray &data, QDataStream::ByteOrder order);
+    QStringList vec2ascii(const QByteArray &data, QDataStream::ByteOrder order);
+    QStringList vec2utf8(const QByteArray &data, QDataStream::ByteOrder order);
+    QStringList vec2utf16(const QByteArray &data, QDataStream::ByteOrder order);
+    QStringList vec2u24(const QByteArray &data, QDataStream::ByteOrder order);
+    QStringList vec2i24(const QByteArray &data, QDataStream::ByteOrder order);
+    QStringList vec2u128(const QByteArray &data, QDataStream::ByteOrder order);
+    QStringList vec2i128(const QByteArray &data, QDataStream::ByteOrder order);
+    QStringList vec2ts32(const QByteArray &data, QDataStream::ByteOrder order);
+    QStringList vec2ts64(const QByteArray &data, QDataStream::ByteOrder order);
 
     /*
      * Private variables
      */
     dataCastResult result;
-    dataCastUnion caster;
     size_t byte_size;
-    CasterEndianness current_endianness;
 };
 
 } // namespace EtherBench::Services
