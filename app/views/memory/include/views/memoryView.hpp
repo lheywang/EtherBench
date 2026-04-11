@@ -17,10 +17,16 @@
 // Local libraries
 #include <views/baseView.hpp>
 
+// Private libraries
+#include "../../private/memoryHexView.hpp"
+
 // QT
 #include <QLabel>
 #include <QMenuBar>
+#include <QSplitter>
 #include <QString>
+#include <QTreeView>
+#include <QVBoxLayout>
 #include <QWidget>
 
 // ----------------------------------------------------------------------
@@ -39,6 +45,24 @@ class MemoryView : public BaseView {
     void onActivated() override;
     void onDeactivated() override;
     void fillMenubar(QMenuBar *menuBar) override;
+
+  private:
+    /*
+     * Private variables
+     */
+    QVBoxLayout *layout;
+    QSplitter *masterSplitter;
+    QSplitter *tableSplitter;
+
+    HexViewWidget *viewA;
+    HexViewWidget *viewB;
+    QTreeView *analysisTree;
+
+    /*
+     * Private functions
+     */
+    void setHexEditors();
+    void setHexAnalyse();
 };
 
 } // namespace EtherBench::UI

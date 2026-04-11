@@ -22,4 +22,5 @@ add_library(${LIBNAME} INTERFACE)
 target_link_libraries(${LIBNAME} INTERFACE
     libModel
     libIO
+    libServices
 )

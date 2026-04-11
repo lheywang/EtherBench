@@ -8,16 +8,14 @@
 # ===================================================================
 
 # Set lib name
-set(LIBNAME MemoryView)
+set(LIBNAME libBufferAnalyse)
 
 # Configure the sources
 set(SOURCES
-    src/memoryHexView.cpp   
-    src/memoryView.cpp       
+    src/bufferAnalyse.cpp
 )
 set(HEADERS
-    include/views/memoryView.hpp
-    private/memoryHexView.hpp
+    include/services/bufferAnalyse.hpp
 )
 
 # Create the library
@@ -32,9 +30,6 @@ target_sources(${LIBNAME} PRIVATE
 target_include_directories(${LIBNAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
 )
-target_include_directories(${LIBNAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/private/
-)
 
 # Link against the required libs
-target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets LIBCORE BaseView LIBCORE)
+target_link_libraries(${LIBNAME} PUBLIC Qt6::Widgets)
