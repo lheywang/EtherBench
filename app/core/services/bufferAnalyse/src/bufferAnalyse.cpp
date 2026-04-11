@@ -61,7 +61,6 @@ entropy(const std::vector<uint8_t> &data, size_t windowSize, size_t step) {
 
     // Iterate
     for (size_t i = 0; i <= data.size() - windowSize; i += step) {
-
         double sumCountLogCount = 0;
         int counts[256] = {0};
 
@@ -69,11 +68,13 @@ entropy(const std::vector<uint8_t> &data, size_t windowSize, size_t step) {
             counts[data[i + j]]++;
 
         for (int c = 0; c < 256; ++c) {
-            if (counts[c] > 0)
-                sumCountLogCount += entropy_lut[counts[c]];
+            if (counts[c] > 0) {
+                float n = static_cast<float>(counts[c]);
+                sumCountLogCount += n * std::log2(n);
+            }
         }
 
-        //  H = log2(N) - (1/N * sum(ni * log2(ni)))
+        // H = log2(N) - (1/N * sum(ni * log2(ni)))
         double h = log2N - (sumCountLogCount / static_cast<double>(windowSize));
 
         results.push_back(std::clamp(h / log2N, 0.0, 1.0));

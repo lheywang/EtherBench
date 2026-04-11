@@ -138,26 +138,19 @@ void HexViewWidget::drawHexLine(
         QRect cellRect(x, y - p.fontMetrics().ascent(), cw * 2, p.fontMetrics().height());
 
         // Fetch the associated entropy and derivative.
-        double e = (i < ent.size()) ? ent[i] : 0;
+        double e = (i < ent.size()) ? std::pow(ent[i], 3) : 0;
         double d = (i < der.size()) ? der[i] : 0;
 
         // Get the color (default to black)
+        if (displayColor && (e > 0.05 || d > 0.05)) {
+            int alpha = static_cast<int>(std::max(e, d) * 160);
 
-        QColor color(0, 0, 0, 255);
-        QColor red(252, 186, 3);  // Orange
-        QColor blue(12, 87, 179); // Cyan
+            int r = static_cast<int>(252 * d);
+            int g = static_cast<int>(87 * e + 186 * d) / 2;
+            int b = static_cast<int>(179 * e);
 
-        if (displayColor) {
-            color.setRed((red.red() * d + blue.red() * e) / (d + e + 0.001));
-            color.setGreen((red.green() * d + blue.green() * e) / (d + e + 0.001));
-            color.setBlue((red.blue() * d + blue.blue() * e) / (d + e + 0.001));
-
-            // Max --> Better render
-            color.setAlpha(static_cast<int>(std::max(d, e) * 80));
+            p.fillRect(cellRect, QColor(r, g, b, alpha));
         }
-
-        // Fill the rectangle
-        p.fillRect(cellRect, color);
 
         // Write the text
         p.setPen(Qt::white);
