@@ -56,10 +56,13 @@ entropy(const std::vector<uint8_t> &data, size_t windowSize, size_t step) {
     if (data.size() < windowSize)
         return results;
 
+    // Pre calculate a factor
+    double log2N = std::log2(static_cast<double>(windowSize));
+
     // Iterate
     for (size_t i = 0; i <= data.size() - windowSize; i += step) {
-        double val = 0;
 
+        double sumCountLogCount = 0;
         int counts[256] = {0};
 
         for (size_t j = 0; j < windowSize; ++j)
@@ -67,10 +70,13 @@ entropy(const std::vector<uint8_t> &data, size_t windowSize, size_t step) {
 
         for (int c = 0; c < 256; ++c) {
             if (counts[c] > 0)
-                val += entropy_lut[counts[c]] / windowSize;
+                sumCountLogCount += entropy_lut[counts[c]];
         }
 
-        results.push_back(std::clamp(val / 8.0, 0.0, 1.0));
+        //  H = log2(N) - (1/N * sum(ni * log2(ni)))
+        double h = log2N - (sumCountLogCount / static_cast<double>(windowSize));
+
+        results.push_back(std::clamp(h / log2N, 0.0, 1.0));
     }
     return results;
 }
@@ -87,7 +93,7 @@ derivative(const std::vector<uint8_t> &data, size_t windowSize, size_t step) {
         for (size_t j = 1; j < windowSize; ++j) {
             val += std::abs(data[i + j] - data[i + j - 1]);
         }
-        val /= (windowSize >> 8); // * 256, shall be 255 but we'll round up (faster)
+        val /= (windowSize << 8); // * 256, shall be 255 but we'll round up (faster)
 
         results.push_back(std::clamp(val, 0.0, 1.0));
     }

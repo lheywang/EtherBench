@@ -21,6 +21,7 @@
 
 // Qt
 #include <QAbstractScrollArea>
+#include <QColor>
 #include <QFont>
 #include <QPainter>
 #include <QRect>
@@ -67,6 +68,7 @@ void HexViewWidget::setDisplaMode(bool color) {
 }
 
 void HexViewWidget::paintEvent(QPaintEvent *event) {
+    Q_UNUSED(event);
     QPainter painter(viewport());
     painter.setFont(QFont("FiraCode-Regular", 12));
 
@@ -78,7 +80,6 @@ void HexViewWidget::paintEvent(QPaintEvent *event) {
     // Compute number of colums we need :
     int xAddr = 10;
     int xHex = xAddr + (charWidth * 10);
-    int xAscii = xHex + (charWidth * 3 * 16);
 
     // Enter render loop
     int firstLine = verticalScrollBar()->value();
@@ -112,9 +113,9 @@ void HexViewWidget::paintEvent(QPaintEvent *event) {
     pool.freeBuffer(mainBuffer);
 }
 
-void HexViewWidget::mousePressEvent(QMouseEvent *event) {}
+void HexViewWidget::mousePressEvent(QMouseEvent *event) { Q_UNUSED(event;) }
 
-void HexViewWidget::mouseMoveEvent(QMouseEvent *event) {}
+void HexViewWidget::mouseMoveEvent(QMouseEvent *event) { Q_UNUSED(event;) }
 
 void HexViewWidget::drawHexLine(
     QPainter &p,
@@ -124,7 +125,7 @@ void HexViewWidget::drawHexLine(
     int startX,
     int y,
     int cw) {
-    for (int i = 0; i < 16; ++i) {
+    for (long unsigned int i = 0; i < 16; ++i) {
 
         // Ensure we did get enough data
         if (i >= data.size())
@@ -141,23 +142,25 @@ void HexViewWidget::drawHexLine(
         double d = (i < der.size()) ? der[i] : 0;
 
         // Get the color (default to black)
-        int r = 0;
-        int g = 0;
-        int b = 0;
-        int alpha = 255;
+
+        QColor color(0, 0, 0, 255);
+        QColor red(252, 186, 3);  // Orange
+        QColor blue(12, 87, 179); // Cyan
 
         if (displayColor) {
-            r = static_cast<int>(255 * d);
-            g = static_cast<int>(255 * e * 0.8 + 165 * d * 0.5);
-            b = static_cast<int>(255 * e);
-            alpha = static_cast<int>(std::max(e, d) * 150);
+            color.setRed((red.red() * d + blue.red() * e) / (d + e + 0.001));
+            color.setGreen((red.green() * d + blue.green() * e) / (d + e + 0.001));
+            color.setBlue((red.blue() * d + blue.blue() * e) / (d + e + 0.001));
+
+            // Max --> Better render
+            color.setAlpha(static_cast<int>(std::max(d, e) * 80));
         }
 
         // Fill the rectangle
-        p.fillRect(cellRect, QColor(r, g, b, alpha));
+        p.fillRect(cellRect, color);
 
         // Write the text
-        p.setPen(alpha > 100 ? Qt::white : Qt::black);
+        p.setPen(Qt::white);
         QString hex = QString("%1").arg(data[i], 2, 16, QChar('0')).toUpper();
         p.drawText(cellRect, Qt::AlignCenter, hex);
     }
