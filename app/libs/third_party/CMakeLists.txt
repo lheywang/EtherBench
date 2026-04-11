@@ -9,7 +9,7 @@
 # ===================================================================
 
 # Just include all sub libraries
-add_subdirectory(elfparser)
+add_subdirectory(LIEF)
 add_subdirectory(libcintelhex)
 
 # An error occured in this module, so just remove the faulty warning
