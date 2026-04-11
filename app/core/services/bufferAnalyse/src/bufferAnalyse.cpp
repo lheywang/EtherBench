@@ -38,7 +38,6 @@ constexpr std::array<float, ENTROPY_LUT_SIZE> generate_entropy_lut() {
     }
     return arr;
 }
-
 constexpr auto entropy_lut = generate_entropy_lut();
 
 // =============================================================
@@ -85,11 +84,10 @@ derivative(const std::vector<uint8_t> &data, size_t windowSize, size_t step) {
     for (size_t i = 0; i <= data.size() - windowSize; i += step) {
         double val = 0;
 
-        // Mode Dérivée (Variation moyenne sur la fenêtre)
         for (size_t j = 1; j < windowSize; ++j) {
             val += std::abs(data[i + j] - data[i + j - 1]);
         }
-        val /= (windowSize * 255.0); // Normalisation
+        val /= (windowSize >> 8); // * 256, shall be 255 but we'll round up (faster)
 
         results.push_back(std::clamp(val, 0.0, 1.0));
     }
