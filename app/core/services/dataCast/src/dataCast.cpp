@@ -248,33 +248,48 @@ QStringList dataCast::vec2i128(const QByteArray &data, QDataStream::ByteOrder or
 }
 
 QStringList dataCast::vec2ts32(const QByteArray &data, QDataStream::ByteOrder order) {
+
     if (data.size() < 4)
         return {};
 
+    QStringList list;
+
     QDataStream ds(data);
     ds.setByteOrder(order);
-    quint32 secs;
-    ds >> secs;
 
-    QDateTime time = QDateTime();
-    time.setSecsSinceEpoch(secs);
+    for (int i = 0; i + 3 < data.size(); i += 4) {
+        quint32 secs;
+        ds >> secs;
 
-    return {time.toString("yyyy-MM-dd HH:mm:ss 'UTC'")};
+        QDateTime time = QDateTime();
+        time.setSecsSinceEpoch(secs);
+
+        QString str = time.toString("yyyy-MM-dd HH:mm:ss 'UTC'");
+        list << str;
+    }
+
+    return list;
 }
 
 QStringList dataCast::vec2ts64(const QByteArray &data, QDataStream::ByteOrder order) {
     if (data.size() < 8)
         return {};
 
+    QStringList list;
+
     QDataStream ds(data);
     ds.setByteOrder(order);
-    quint64 secs;
-    ds >> secs;
 
-    QDateTime time = QDateTime();
-    time.setSecsSinceEpoch(secs);
+    for (int i = 0; i + 7 < data.size(); i += 8) {
+        quint64 secs;
+        ds >> secs;
 
-    return {time.toString("yyyy-MM-dd HH:mm:ss.zzz 'UTC'")};
+        QDateTime time = QDateTime();
+        time.setSecsSinceEpoch(secs);
+
+        QString str = time.toString("yyyy-MM-dd HH:mm:ss.zzz 'UTC'");
+        list << str;
+    }
 }
 
 } // namespace EtherBench::Services

@@ -8,6 +8,11 @@
 # 
 # ===================================================================
 
+# Configure libs
+set(LIEF_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(LIEF_TESTS OFF CACHE BOOL "" FORCE)
+set(LIEF_INSTALL OFF CACHE BOOL "" FORCE)
+
 # Just include all sub libraries
 add_subdirectory(LIEF)
 add_subdirectory(libcintelhex)

@@ -30,7 +30,10 @@ target_sources(${LIBNAME} PRIVATE
 # Add the include directory. Since it's named views, we can just do #include "views/settingsViews.hpp" 
 # even when the header is located within it's dedicated space here.
 target_include_directories(${LIBNAME} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/elf-parser/
+    ${CMAKE_CURRENT_SOURCE_DIR}/libcintelhex/include/
+)
+target_include_directories(${LIBNAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/
 )
 
 # Link against the required libs

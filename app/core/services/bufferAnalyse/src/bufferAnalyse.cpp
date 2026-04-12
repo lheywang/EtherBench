@@ -23,24 +23,6 @@
 #include <vector>
 
 // =============================================================
-// CONSTEXPR
-// =============================================================
-constexpr int ENTROPY_LUT_SIZE = 256;
-constexpr std::array<float, ENTROPY_LUT_SIZE> generate_entropy_lut() {
-    std::array<float, ENTROPY_LUT_SIZE> arr;
-    for (int i = 0; i < 256; ++i) {
-        if (i == 0)
-            arr[i] = 0;
-        else {
-            float p = static_cast<float>(i);
-            arr[i] = -p * std::log2(p);
-        }
-    }
-    return arr;
-}
-constexpr auto entropy_lut = generate_entropy_lut();
-
-// =============================================================
 // FUNCTIONS
 // =============================================================
 

@@ -20,6 +20,8 @@ add_library(${LIBNAME} INTERFACE)
 # Link all the sub libraries
 target_link_libraries(${LIBNAME} INTERFACE
     usb-1.0
+    libcintelhex
+    LIB_LIEF
 )
 
 # On windows system, we just need to also link agains the standard libs
