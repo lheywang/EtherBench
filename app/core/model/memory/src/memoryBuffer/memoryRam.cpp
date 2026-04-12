@@ -155,6 +155,7 @@ uint8_t MemoryRam::at(uint64_t offset) const {
 bool MemoryRam::allocatePage() {
     // Allocate the pool
     auto arr = new std::array<uint8_t, ALLOC_SIZE>;
+    arr->fill(0x00);
 
     // If not zero (hence, the alloc did sucess, append it, and increase the pointer)
     if (arr != nullptr) {

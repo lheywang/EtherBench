@@ -60,6 +60,8 @@ struct dataCastResult {
     // Others data types
     QStringList ts32;
     QStringList ts64;
+
+    // TODO : Add IP, MAC ...
 };
 
 } // namespace EtherBench::Services

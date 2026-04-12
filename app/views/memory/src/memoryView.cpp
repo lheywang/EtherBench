@@ -81,7 +81,7 @@ void MemoryView::onActivated() {
     testData.reserve(16384);
 
     for (int i = 0; i < 16384; ++i) {
-        testData[i] = static_cast<char>(QRandomGenerator::global()->bounded(256));
+        testData.push_back(static_cast<char>(QRandomGenerator::global()->bounded(256)));
     }
 
     buffer1->set(0, testData);
@@ -107,6 +107,15 @@ void MemoryView::fillMenubar(QMenuBar *menuBar) {
 
     QActionGroup *slotGroup = addSlotSelection(memoryMenu, "Select main source");
     slotGroup->setExclusive(true);
+
+    QAction *toggleColor = memoryMenu->addAction("Toggle buffer color");
+    toggleColor->setCheckable(true);
+    toggleColor->setChecked(true);
+
+    connect(toggleColor, &QAction::toggled, this, [this]() {
+        viewA->toggleDisplayMode();
+        viewB->toggleDisplayMode();
+    });
 
     // Add the comparison menu
     QMenu *compareMenu = menuBar->addMenu("&Compare");

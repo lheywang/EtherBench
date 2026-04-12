@@ -45,6 +45,16 @@ QTreeView,
     font-family: "Fira Code";
 }
 
+QSplitter::handle {
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #222, stop:0.5 #333, stop:1 #222);
+    border-left: 2px solid #444;
+    border-right: 2px solid #111;
+}
+
+QSplitter::handle:horizontal {
+   width: 8px;
+}
+
 QTreeView {
     border: none;
     background-color: @bg_dark;

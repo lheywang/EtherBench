@@ -187,6 +187,7 @@ bool MemoryCircular::allocatePage() {
 
     if (buffer.size() < max_page_count) {
         auto arr = new std::array<uint8_t, ALLOC_SIZE>;
+        arr->fill(0x00);
 
         // If not
         if (arr != nullptr) {

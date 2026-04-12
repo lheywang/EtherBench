@@ -23,9 +23,14 @@
 #include <QAbstractScrollArea>
 #include <QColor>
 #include <QFont>
+#include <QMouseEvent>
 #include <QPainter>
+#include <QPoint>
 #include <QRect>
 #include <QScrollBar>
+
+// STD
+#include <algorithm>
 
 namespace EtherBench::UI {
 
@@ -33,7 +38,13 @@ namespace EtherBench::UI {
 // CLASS
 // ----------------------------------------------------------------------
 
-HexViewWidget::HexViewWidget(QWidget *parent) : QAbstractScrollArea(parent) {}
+HexViewWidget::HexViewWidget(QWidget *parent) : QAbstractScrollArea(parent) {
+
+    // Add the scrollbar
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    updateScrollRange();
+}
 
 void HexViewWidget::setData(EtherBench::Models::BufferSlot target) {
     mainBuffer = target;
@@ -49,22 +60,22 @@ void HexViewWidget::setData(EtherBench::Models::BufferSlot target) {
 
     // Update the scrollbar
     updateScrollRange();
-    update();
+    viewport()->update();
 }
 
 void HexViewWidget::setBaseAddress(uint64_t addr) {
     baseAddress = addr;
-    update();
+    viewport()->update();
 }
 
 void HexViewWidget::setCompareBuffer(EtherBench::Models::BufferSlot target) {
     compareBuffer = target;
-    update();
+    viewport()->update();
 }
 
-void HexViewWidget::setDisplaMode(bool color) {
-    displayColor = color;
-    update();
+void HexViewWidget::toggleDisplayMode() {
+    displayColor = !displayColor;
+    viewport()->update();
 }
 
 void HexViewWidget::paintEvent(QPaintEvent *event) {
@@ -74,12 +85,12 @@ void HexViewWidget::paintEvent(QPaintEvent *event) {
 
     // Fetch some sizes
     QFontMetrics fm = painter.fontMetrics();
-    int charWidth = fm.horizontalAdvance("0");
-    int lineHeight = fm.height() + 2;
+    cw = fm.horizontalAdvance("0");
+    lineHeight = fm.height() + 2;
 
     // Compute number of colums we need :
     int xAddr = 10;
-    int xHex = xAddr + (charWidth * 10);
+    xHex = xAddr + (cw * 10);
 
     // Enter render loop
     int firstLine = verticalScrollBar()->value();
@@ -106,25 +117,51 @@ void HexViewWidget::paintEvent(QPaintEvent *event) {
         auto entropyVal = EtherBench::Services::entropy(lineData, 4, 1);
         auto derivVal = EtherBench::Services::derivative(lineData, 4, 1);
 
-        drawHexLine(painter, lineData, entropyVal, derivVal, xHex, y, charWidth);
+        drawHexLine(painter, lineData, entropyVal, derivVal, y, line);
     }
 
     // Free the buffer
     pool.freeBuffer(mainBuffer);
 }
 
-void HexViewWidget::mousePressEvent(QMouseEvent *event) { Q_UNUSED(event;) }
+void HexViewWidget::mousePressEvent(QMouseEvent *event) {
+    if (event->button() == Qt::LeftButton) {
+        selectionStart = selectionEnd = offsetAt(event->pos());
+        isSelecting = true;
+        viewport()->update();
+    }
+}
 
-void HexViewWidget::mouseMoveEvent(QMouseEvent *event) { Q_UNUSED(event;) }
+void HexViewWidget::mouseMoveEvent(QMouseEvent *event) {
+    if (isSelecting) {
+
+        int64_t targetEnd = offsetAt(event->pos());
+        int64_t diff = targetEnd - selectionStart;
+
+        if (std::abs(diff) >= 32) {
+            selectionEnd = selectionStart + (diff > 0 ? 31 : -31);
+        } else {
+            selectionEnd = targetEnd;
+        }
+
+        viewport()->update();
+    }
+}
+
+void HexViewWidget::mouseReleaseEvent(QMouseEvent *event) {
+    Q_UNUSED(event);
+    isSelecting = false;
+    emit selectionChanged(
+        std::min(selectionStart, selectionEnd), std::max(selectionEnd, selectionStart));
+}
 
 void HexViewWidget::drawHexLine(
     QPainter &p,
     const std::vector<uint8_t> &data,
     const std::vector<double> &ent,
     const std::vector<double> &der,
-    int startX,
     int y,
-    int cw) {
+    int line) {
     for (long unsigned int i = 0; i < 16; ++i) {
 
         // Ensure we did get enough data
@@ -132,7 +169,7 @@ void HexViewWidget::drawHexLine(
             break;
 
         // Get the start coordinates.
-        int x = startX + (i * cw * 3);
+        int x = xHex + (i * cw * 3);
 
         // Get our rectangle, used to draw the current data
         QRect cellRect(x, y - p.fontMetrics().ascent(), cw * 2, p.fontMetrics().height());
@@ -141,19 +178,31 @@ void HexViewWidget::drawHexLine(
         double e = (i < ent.size()) ? std::pow(ent[i], 3) : 0;
         double d = (i < der.size()) ? der[i] : 0;
 
-        // Get the color (default to black)
-        if (displayColor && (e > 0.05 || d > 0.05)) {
-            int alpha = static_cast<int>(std::max(e, d) * 160);
+        int64_t currentOffset = baseAddress + (line * 16) + i;
+        int64_t selMin = std::min(selectionStart, selectionEnd);
+        int64_t selMax = std::max(selectionStart, selectionEnd);
 
-            int r = static_cast<int>(252 * d);
-            int g = static_cast<int>(87 * e + 186 * d) / 2;
-            int b = static_cast<int>(179 * e);
+        if ((selectionStart != -1) && (currentOffset >= selMin) &&
+            (currentOffset <= selMax)) {
+            p.fillRect(cellRect, QColor(0x64, 0xab, 0xf1, 255));
+            p.setPen(Qt::black);
 
-            p.fillRect(cellRect, QColor(r, g, b, alpha));
+        } else {
+            // Get the color (default to black)
+            if (displayColor && ((e > 0.05) || (d > 0.05))) {
+                int alpha = static_cast<int>(std::max(e, d) * 127);
+
+                int r = static_cast<int>(252 * d);
+                int g = static_cast<int>(87 * e + 186 * d) / 2;
+                int b = static_cast<int>(179 * e);
+
+                p.fillRect(cellRect, QColor(r, g, b, alpha));
+            }
+
+            p.setPen(Qt::white);
         }
 
         // Write the text
-        p.setPen(Qt::white);
         QString hex = QString("%1").arg(data[i], 2, 16, QChar('0')).toUpper();
         p.drawText(cellRect, Qt::AlignCenter, hex);
     }
@@ -161,11 +210,32 @@ void HexViewWidget::drawHexLine(
 
 void HexViewWidget::updateScrollRange() {
 
+    // Fetch the general properties
     int totalLines = (bufferSize + 15) / 16;
     int visibleLines = viewport()->height() / lineHeight;
 
-    verticalScrollBar()->setRange(0, qMax(0, totalLines - visibleLines));
+    // Ensure we have enough to show
+    int maxScroll = std::max(0, totalLines - visibleLines);
+
+    if (maxScroll < 0) {
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    } else {
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    }
+
+    // Configure the range
+    verticalScrollBar()->setRange(0, maxScroll);
     verticalScrollBar()->setPageStep(visibleLines);
+}
+
+int64_t HexViewWidget::offsetAt(const QPoint &pos) {
+
+    int64_t line = (pos.y() / lineHeight) + (verticalScrollBar()->value());
+    int64_t col = (pos.x() - xHex) / (cw * 3);
+
+    col = std::clamp(col, static_cast<int64_t>(0), static_cast<int64_t>(15));
+
+    return (line * 16) + col;
 }
 
 } // namespace EtherBench::UI

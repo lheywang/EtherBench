@@ -19,7 +19,9 @@
 
 // Qt
 #include <QAbstractScrollArea>
+#include <QMouseEvent>
 #include <QPainter>
+#include <QPoint>
 
 namespace EtherBench::UI {
 // ----------------------------------------------------------------------
@@ -62,11 +64,9 @@ class HexViewWidget : public QAbstractScrollArea {
     void setCompareBuffer(EtherBench::Models::BufferSlot target);
 
     /**
-     * @brief Enable or disable the colorations of the cells background.
-     *
-     * @param color
+     * @brief Toggle the colorations of the cells background.
      */
-    void setDisplaMode(bool color);
+    void toggleDisplayMode();
 
   signals:
     /**
@@ -100,6 +100,13 @@ class HexViewWidget : public QAbstractScrollArea {
      */
     void mouseMoveEvent(QMouseEvent *event) override;
 
+    /**
+     * @brief Callback when the mouse is released.
+     *
+     * @param event
+     */
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
   private:
     /*
      * Variables
@@ -112,11 +119,14 @@ class HexViewWidget : public QAbstractScrollArea {
     int bytesPerLine = 16;
     int lineHeight = 20;
 
-    int cursorOffset = -1;
-    int selectionStart = -1;
-    int selectionEnd = -1;
+    int64_t selectionStart = -1;
+    int64_t selectionEnd = -1;
+    bool isSelecting = false;
 
     bool displayColor = true;
+
+    int cw;
+    int xHex;
 
     /*
      * Functions
@@ -128,18 +138,16 @@ class HexViewWidget : public QAbstractScrollArea {
      * @param data      The data to be shown.
      * @param ent       The entropies of the data.
      * @param der       The derivatifs of the data.
-     * @param startX    The X value for the start.
      * @param y         The current Y position.
-     * @param cw        Character width on pixels.
+     * @param line      The current line number.
      */
     void drawHexLine(
         QPainter &p,
         const std::vector<uint8_t> &data,
         const std::vector<double> &ent,
         const std::vector<double> &der,
-        int startX,
         int y,
-        int cw);
+        int line);
 
     /**
      * @brief Update the scrollbar, to set where are we, and how many do wee need to show
@@ -147,6 +155,14 @@ class HexViewWidget : public QAbstractScrollArea {
      *
      */
     void updateScrollRange();
+
+    /**
+     * @brief Handle to compute the selection.
+     *
+     * @param pos       The current position.
+     * @return int64_t
+     */
+    int64_t offsetAt(const QPoint &pos);
 };
 
 } // namespace EtherBench::UI

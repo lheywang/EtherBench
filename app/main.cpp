@@ -64,6 +64,7 @@ void apply_theme(QApplication &app, const QString &themePath) {
 
         QMap<QString, QString> variables;
         variables["@accent"] = "#2a82da";
+        variables["@accent_light"] = "#64abf1";
         variables["@bg_dark"] = "#1e1e1e";
         variables["@bg_med"] = "#2d2d2d";
         variables["@bg_light"] = "#3d3d3d";
