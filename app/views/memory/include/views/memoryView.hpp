@@ -21,8 +21,11 @@
 #include "../../private/memoryHexView.hpp"
 
 // QT
+#include <QEvent>
+#include <QKeyEvent>
 #include <QLabel>
 #include <QMenuBar>
+#include <QObject>
 #include <QSplitter>
 #include <QString>
 #include <QTreeView>
@@ -45,6 +48,8 @@ class MemoryView : public BaseView {
     void onActivated() override;
     void onDeactivated() override;
     void fillMenubar(QMenuBar *menuBar) override;
+
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
   private:
     /*
@@ -85,6 +90,7 @@ class MemoryView : public BaseView {
      */
     void setShortcuts();
 
+  public:
     /**
      * @brief Find the next difference on the selected buffers.
      *

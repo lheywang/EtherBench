@@ -85,12 +85,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Widgets
 )
 
-if (BUILD_TESTING)
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        WIN32_EXECUTABLE ON
-    )
-endif()
-
 # -------------------------------------------------------------------
 # EXECUTABLE BUILD
 # -------------------------------------------------------------------
@@ -103,7 +97,6 @@ if (BUILD_TESTING)
         --output-log "logs.txt"
         --schedule-random
         --output-junit "report.xml"
-    
     )
 
     add_custom_target(tests

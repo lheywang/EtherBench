@@ -40,6 +40,10 @@ namespace EtherBench::UI {
 
 HexViewWidget::HexViewWidget(QWidget *parent) : QAbstractScrollArea(parent) {
 
+    // Configure the shortcuts policies
+    viewport()->setFocusPolicy(Qt::StrongFocus);
+    setFocusProxy(viewport());
+
     // Add the scrollbar
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -269,5 +273,9 @@ int64_t HexViewWidget::offsetAt(const QPoint &pos) {
 
     return (line * 16) + col;
 }
+
+uint64_t HexViewWidget::getStartSelection() { return selectionStart; }
+
+uint64_t HexViewWidget::getStopSelection() { return selectionEnd; }
 
 } // namespace EtherBench::UI

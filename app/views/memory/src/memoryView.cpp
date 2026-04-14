@@ -14,6 +14,8 @@
 // ----------------------------------------------------------------------
 // Header
 #include <qactiongroup.h>
+#include <qkeysequence.h>
+#include <qnamespace.h>
 #include <views/memoryView.hpp>
 
 // Local libraries
@@ -27,8 +29,12 @@
 // QT
 #include <QActionGroup>
 #include <QDebug>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QKeySequence>
 #include <QLabel>
 #include <QMenuBar>
+#include <QObject>
 #include <QRandomGenerator>
 #include <QScrollBar>
 #include <QShortcut>
@@ -64,9 +70,6 @@ MemoryView::MemoryView(QWidget *parent) : BaseView(parent) {
     masterSplitter->setStretchFactor(1, 0);
 
     layout->addWidget(masterSplitter);
-
-    // Finally, add the shortcuts
-    setShortcuts();
 }
 
 QString MemoryView::viewTitle() const { return "Memory"; }
@@ -97,7 +100,7 @@ void MemoryView::onActivated() {
         testData2.push_back(val);
     }
     for (int i = 0; i < 16384; ++i) {
-        if (i % 128)
+        if (i % 128 == 0)
             testData2[i] = static_cast<char>(QRandomGenerator::global()->bounded(256));
     }
 
@@ -112,6 +115,12 @@ void MemoryView::onActivated() {
 
     viewB->setData(EtherBench::Models::BufferSlot::SLOT2);
     viewB->setCompareBuffer(EtherBench::Models::BufferSlot::SLOT1);
+
+    slotA = EtherBench::Models::BufferSlot::SLOT1;
+    slotB = EtherBench::Models::BufferSlot::SLOT2;
+
+    // Finally, add the shortcuts
+    setShortcuts();
 }
 
 void MemoryView::onDeactivated() { qDebug() << "Exiting ..."; }
@@ -169,7 +178,7 @@ void MemoryView::fillMenubar(QMenuBar *menuBar) {
     toggleCompare->setCheckable(true);
 
     // Connect the callback when the data is changed
-    connect(slotGroup, &QActionGroup::triggered, this, [this](QAction *action) {
+    connect(slotCompareGroup, &QActionGroup::triggered, this, [this](QAction *action) {
         int slotID = action->data().toInt();
         slotB = static_cast<EtherBench::Models::BufferSlot>(slotID);
         viewB->setData(slotB);
@@ -202,11 +211,19 @@ void MemoryView::fillMenubar(QMenuBar *menuBar) {
     toggleComp->setCheckable(true);
     toggleComp->setChecked(false);
 
-    connect(toggleComp, &QAction::toggled, this, [this]() {
+    connect(toggleComp, &QAction::toggled, this, [this, toggleCompare]() {
         viewA->toggleCompMode();
         viewB->toggleCompMode();
+        toggleCompare->setChecked(true);
         compareEnabled = !compareEnabled;
     });
+
+    /*
+     * Difference search
+     */
+    compareMenu->addSeparator();
+    QAction *findNextDiff = compareMenu->addAction("Find next diff\tF3");
+    connect(findNextDiff, &QAction::triggered, this, &MemoryView::findNextDifference);
 }
 
 void MemoryView::setHexEditors() {
@@ -246,9 +263,24 @@ void MemoryView::setHexAnalyse() {
 }
 
 void MemoryView::setShortcuts() {
-    QShortcut *nextDiffShortcut = new QShortcut(QKeySequence(Qt::Key_F3), this);
-    connect(
-        nextDiffShortcut, &QShortcut::activated, this, &MemoryView::findNextDifference);
+
+    QWidget *win = window();
+
+    QShortcut *f3 = new QShortcut(QKeySequence(Qt::Key_F3), win);
+    f3->setContext(Qt::WindowShortcut);
+
+    connect(f3, &QShortcut::activated, this, &MemoryView::findNextDifference);
+}
+
+bool MemoryView::eventFilter(QObject *obj, QEvent *event) {
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_F3) {
+            findNextDifference();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(obj, event);
 }
 
 void MemoryView::findNextDifference() {
@@ -269,8 +301,11 @@ void MemoryView::findNextDifference() {
     if (!bufferA || !bufferB)
         return;
 
-    // Fetch the first byte we're seing...
-    uint64_t startOffset = (viewA->verticalScrollBar()->value() * 16) + 1;
+    // Fetch the first byte, or the current selection.
+    uint64_t startOffset = std::max(
+        static_cast<uint64_t>((viewA->verticalScrollBar()->value() * 16)),
+        viewA->getStartSelection());
+    startOffset += 1; // Increment to not re-land on the current selection.
 
     // Get the usefull comparison range
     uint64_t size = std::min(bufferA->size(), bufferB->size());
@@ -305,8 +340,6 @@ void MemoryView::findNextDifference() {
 
             viewA->setSelection(absoluteOffset, absoluteOffset);
             viewB->setSelection(absoluteOffset, absoluteOffset);
-
-            qInfo() << "Found different byte at offset = " << absoluteOffset;
 
             return;
         }

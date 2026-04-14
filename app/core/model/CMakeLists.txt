@@ -11,6 +11,7 @@
 set(LIBNAME libModel)
 
 # Include all subfolders
+add_subdirectory(caster)
 add_subdirectory(parameter)
 add_subdirectory(memory)
 add_subdirectory(status)
@@ -23,4 +24,5 @@ target_link_libraries(${LIBNAME} INTERFACE
     libParameter
     libMemory
     libStatus
+    libCaster
 )

@@ -290,6 +290,8 @@ QStringList dataCast::vec2ts64(const QByteArray &data, QDataStream::ByteOrder or
         QString str = time.toString("yyyy-MM-dd HH:mm:ss.zzz 'UTC'");
         list << str;
     }
+
+    return list;
 }
 
 } // namespace EtherBench::Services

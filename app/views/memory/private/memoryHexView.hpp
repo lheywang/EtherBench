@@ -19,6 +19,7 @@
 
 // Qt
 #include <QAbstractScrollArea>
+#include <QKeyEvent>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPoint>
@@ -81,6 +82,20 @@ class HexViewWidget : public QAbstractScrollArea {
      */
     void setSelection(uint64_t offset, uint64_t length);
 
+    /**
+     * @brief Get the Start Selection object
+     *
+     * @return uint64_t
+     */
+    uint64_t getStartSelection();
+
+    /**
+     * @brief Get the Stop Selection object
+     *
+     * @return uint64_t
+     */
+    uint64_t getStopSelection();
+
   signals:
     /**
      * @brief Emitted when we're changing the selection --> Will trigger cast update
@@ -90,7 +105,7 @@ class HexViewWidget : public QAbstractScrollArea {
      */
     void selectionChanged(int offset, int length);
 
-  protected:
+  public:
     /**
      * @brief Callback called when an update is required ! Generally, on the buffer
      * openning, or on a scrollbar events
