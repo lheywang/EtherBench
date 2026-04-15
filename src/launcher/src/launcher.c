@@ -20,6 +20,7 @@
 #include "main.h"
 
 // ThreadX libraries
+#include "app_filex.h"
 #include "app_netxduo.h"
 #include "app_threadx.h"
 #include "app_usbx_device.h"
@@ -30,7 +31,6 @@
 #include "logger.h"
 #include "task_leds.h"
 #include "task_parser.h"
-
 
 // STD
 #include <stdint.h>
@@ -120,6 +120,11 @@ uint32_t launcher(void) {
      * Launch the NetXDuo task
      */
     MX_NetXDuo_Init();
+
+    /*
+     * Launch the FileX task
+     */
+    MX_FileX_Init();
 
     /*
      * Creating the idle task

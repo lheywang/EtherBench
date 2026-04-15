@@ -101,6 +101,8 @@ add_compile_definitions(
 	-DTX_INCLUDE_USER_DEFINE_FILE 
 	-DUX_INCLUDE_USER_DEFINE_FILE
 	-D$<$<CONFIG:Debug>:DEBUG>
+    -DFX_ENABLE_EXFAT
+    -DFX_MAX_LONG_NAME_LEN=256
 )
 
 add_compile_options(

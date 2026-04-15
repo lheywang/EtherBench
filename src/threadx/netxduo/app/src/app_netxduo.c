@@ -10,9 +10,6 @@
  */
 
 // Just a quick logger config
-#include "nx_udp.h"
-#include "tx_api.h"
-#include <sys/cdefs.h>
 #define LOG_MODULE "NETX_APP"
 
 // ======================================================================
@@ -27,14 +24,19 @@
 #include "nx_stm32_eth_driver.h"
 
 // ThreadX
+#include "tx_api.h"
 #include "tx_handler.h"
 
 // NetXDuo
 #include "nx_api.h"
+#include "nx_udp.h"
 
 // Addons
 #include "nxd_dhcp_client.h"
 #include "nxd_telnet_server.h"
+
+// STD
+#include <sys/cdefs.h>
 
 // ======================================================================
 //                               EXTERNS

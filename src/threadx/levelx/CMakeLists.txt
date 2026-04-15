@@ -77,7 +77,7 @@ add_library(LEVELX STATIC ${SOURCES})
 add_compile_options(-Wno-maybe-uninitialized)
 
 # Link against the correct libraries
-target_link_libraries(LEVELX HAL THREADX_OS FILEX)
+target_link_libraries(LEVELX HAL THREADX_OS FILEX LOGGER)
 
 # Adding the include folder
 target_include_directories(LEVELX PUBLIC 

@@ -1,65 +1,42 @@
-
-/* USER CODE BEGIN Header */
 /**
- ******************************************************************************
  * @file    app_filex.h
- * @author  MCD Application Team
- * @brief   FileX applicative header file
- ******************************************************************************
- * @attention
+ * @author  lheywang (leonard.heywang@proton.me)
+ * @brief
+ * @version 0.1
+ * @date    2026-04-15
  *
- * Copyright (c) 2026 STMicroelectronics.
- * All rights reserved.
+ * @copyright Copyright (c) 2026
  *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
  */
-/* USER CODE END Header */
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __APP_FILEX_H__
-#define __APP_FILEX_H__
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
+// ======================================================================
+//                              INCLUDES
+// ======================================================================
+// ThreadX
+#include "tx_handler.h"
+
+// FileX
 #include "fx_api.h"
 #include "fx_stm32_custom_driver.h"
 #include "fx_stm32_sd_driver.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+// ======================================================================
+//                              FUNCTIONS
+// ======================================================================
+UINT MX_FileX_Init();
 
-/* USER CODE END Includes */
+// ======================================================================
+//                              DEFINES
+// ======================================================================
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+#define FX_APP_THREAD_STACK_SIZE 3072
+#define FX_APP_THREAD_PRIO 10
 
-/* USER CODE END ET */
-
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
-
-/* USER CODE END EC */
-
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-
-/* USER CODE END EM */
-
-/* Exported functions prototypes ---------------------------------------------*/
-UINT MX_FileX_Init(VOID *memory_ptr);
-
-/* USER CODE BEGIN EFP */
-
-/* USER CODE END EFP */
-
-/* Private defines -----------------------------------------------------------*/
-/* Main thread Name */
 #ifndef FX_APP_THREAD_NAME
 #define FX_APP_THREAD_NAME "FileX app thread"
 #endif
@@ -83,6 +60,7 @@ UINT MX_FileX_Init(VOID *memory_ptr);
 #ifndef FX_SD_VOLUME_NAME
 #define FX_SD_VOLUME_NAME "STM32_SDIO_DISK"
 #endif
+
 /* fx sd number of FATs */
 #ifndef FX_SD_NUMBER_OF_FATS
 #define FX_SD_NUMBER_OF_FATS 1
@@ -93,14 +71,6 @@ UINT MX_FileX_Init(VOID *memory_ptr);
 #define FX_SD_HIDDEN_SECTORS 0
 #endif
 
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
 #ifdef __cplusplus
 }
 #endif
-#endif /* __APP_FILEX_H__ */

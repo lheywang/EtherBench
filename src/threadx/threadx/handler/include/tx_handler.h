@@ -41,6 +41,8 @@ enum tx_error_codes {
     ETH_TELNET_FAILED = 0x0000B001,
     RING_FAIL_TIM_INIT = 0x0A000001,
     RING_FAIL_PWM_INIT = 0x0A000002,
+    SD_HW_INIT_FAILED = 0x0000C000,
+    SD_HW_FMT_FAILED = 0x0000C001,
 };
 
 // ======================================================================

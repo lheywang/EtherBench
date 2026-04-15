@@ -261,7 +261,7 @@ list(APPEND SOURCES
 add_library(FILEX STATIC ${SOURCES})
 
 # Link against the base OS
-target_link_libraries(FILEX HAL THREADX_OS)
+target_link_libraries(FILEX HAL THREADX_OS LOGGER)
 
 # Adding the include folder
 target_include_directories(FILEX PUBLIC 

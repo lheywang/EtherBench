@@ -20,6 +20,7 @@ add_library(THREADX INTERFACE)
 # --> But that slow down the compilation !
 target_sources(THREADX INTERFACE
     $<TARGET_OBJECTS:USBX>
+    $<TARGET_OBJECTS:FILEX>
 )
 
 # Some arguments are needed to ensure we link against the whole lib
