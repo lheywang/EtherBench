@@ -28,6 +28,7 @@
 #include "gpio.h"
 #include "i2c.h"
 #include "icache.h"
+#include "octospi.h"
 #include "rcc.h"
 #include "sdmmc.h"
 #include "spi.h"
@@ -63,10 +64,14 @@ uint32_t init(void) {
     MX_ETH_Init();
     MX_TIM2_Init();
     MX_SDMMC1_SD_Init();
+    MX_OCTOSPI1_Init();
 
     // Computation peripherals init
     MX_CORDIC_Init();
     MX_FMAC_Init();
+
+    // QUick check
+    MX_OCTOSPI1_GetJEDEC();
 
     return HAL_OK;
 }

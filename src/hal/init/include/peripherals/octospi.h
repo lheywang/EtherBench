@@ -17,7 +17,11 @@ extern "C" {
 // ======================================================================
 //                              INCLUDE
 // ======================================================================
+// Headers
 #include "main.h"
+
+// STD
+#include <stdbool.h>
 
 extern XSPI_HandleTypeDef hospi1;
 
@@ -26,6 +30,8 @@ extern XSPI_HandleTypeDef hospi1;
 // ======================================================================
 
 void MX_OCTOSPI1_Init(void);
+
+bool MX_OCTOSPI1_GetJEDEC();
 
 #ifdef __cplusplus
 }

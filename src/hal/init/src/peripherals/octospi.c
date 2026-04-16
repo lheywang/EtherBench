@@ -25,18 +25,19 @@ void MX_OCTOSPI1_Init(void) {
     hospi1.Instance = OCTOSPI1;
     hospi1.Init.FifoThresholdByte = 1;
     hospi1.Init.MemoryMode = HAL_XSPI_SINGLE_MEM;
-    hospi1.Init.MemoryType = HAL_XSPI_MEMTYPE_MICRON;
-    hospi1.Init.MemorySize = HAL_XSPI_SIZE_16B;
-    hospi1.Init.ChipSelectHighTimeCycle = 1;
+    hospi1.Init.MemoryType = HAL_XSPI_MEMTYPE_MACRONIX;
+    hospi1.Init.MemorySize = HAL_XSPI_SIZE_1GB;
+    hospi1.Init.ChipSelectHighTimeCycle = 2;
     hospi1.Init.FreeRunningClock = HAL_XSPI_FREERUNCLK_DISABLE;
     hospi1.Init.ClockMode = HAL_XSPI_CLOCK_MODE_0;
     hospi1.Init.WrapSize = HAL_XSPI_WRAP_NOT_SUPPORTED;
-    hospi1.Init.ClockPrescaler = 0;
+    hospi1.Init.ClockPrescaler = 8;
     hospi1.Init.SampleShifting = HAL_XSPI_SAMPLE_SHIFT_NONE;
     hospi1.Init.DelayHoldQuarterCycle = HAL_XSPI_DHQC_DISABLE;
     hospi1.Init.ChipSelectBoundary = HAL_XSPI_BONDARYOF_NONE;
     hospi1.Init.DelayBlockBypass = HAL_XSPI_DELAY_BLOCK_BYPASS;
     hospi1.Init.Refresh = 0;
+
     if (HAL_XSPI_Init(&hospi1) != HAL_OK) {
         Error_Handler();
     }
@@ -48,7 +49,6 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef *xspiHandle) {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
     if (xspiHandle->Instance == OCTOSPI1) {
-
         /** Initializes the peripherals clock
          */
         PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_OSPI;
@@ -61,14 +61,16 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef *xspiHandle) {
         __HAL_RCC_OSPI1_CLK_ENABLE();
 
         __HAL_RCC_GPIOE_CLK_ENABLE();
-        __HAL_RCC_GPIOF_CLK_ENABLE();
+        __HAL_RCC_GPIOB_CLK_ENABLE();
+        __HAL_RCC_GPIOD_CLK_ENABLE();
+        __HAL_RCC_GPIOG_CLK_ENABLE();
         /**OCTOSPI1 GPIO Configuration
         PE2     ------> OCTOSPI1_IO2
-        PF6     ------> OCTOSPI1_IO3
-        PF8     ------> OCTOSPI1_IO0
-        PF9     ------> OCTOSPI1_IO1
-        PF10     ------> OCTOSPI1_CLK
-        PE11     ------> OCTOSPI1_NCS
+        PB2     ------> OCTOSPI1_CLK
+        PD11     ------> OCTOSPI1_IO0
+        PD12     ------> OCTOSPI1_IO1
+        PD13     ------> OCTOSPI1_IO3
+        PG6     ------> OCTOSPI1_NCS
         */
         GPIO_InitStruct.Pin = GPIO_PIN_2;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -77,28 +79,27 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef *xspiHandle) {
         GPIO_InitStruct.Alternate = GPIO_AF9_OCTOSPI1;
         HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-        GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_8 | GPIO_PIN_9;
-        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-        GPIO_InitStruct.Alternate = GPIO_AF10_OCTOSPI1;
-        HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
-
-        GPIO_InitStruct.Pin = GPIO_PIN_10;
+        GPIO_InitStruct.Pin = GPIO_PIN_2;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
         GPIO_InitStruct.Alternate = GPIO_AF9_OCTOSPI1;
-        HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-        GPIO_InitStruct.Pin = GPIO_PIN_11;
+        GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_12 | GPIO_PIN_13;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-        GPIO_InitStruct.Alternate = GPIO_AF6_OCTOSPI1;
-        HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+        GPIO_InitStruct.Alternate = GPIO_AF9_OCTOSPI1;
+        HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = GPIO_PIN_6;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        GPIO_InitStruct.Alternate = GPIO_AF10_OCTOSPI1;
+        HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
     }
-    return;
 }
 
 void HAL_XSPI_MspDeInit(XSPI_HandleTypeDef *xspiHandle) {
@@ -110,15 +111,47 @@ void HAL_XSPI_MspDeInit(XSPI_HandleTypeDef *xspiHandle) {
 
         /**OCTOSPI1 GPIO Configuration
         PE2     ------> OCTOSPI1_IO2
-        PF6     ------> OCTOSPI1_IO3
-        PF8     ------> OCTOSPI1_IO0
-        PF9     ------> OCTOSPI1_IO1
-        PF10     ------> OCTOSPI1_CLK
-        PE11     ------> OCTOSPI1_NCS
+        PB2     ------> OCTOSPI1_CLK
+        PD11     ------> OCTOSPI1_IO0
+        PD12     ------> OCTOSPI1_IO1
+        PD13     ------> OCTOSPI1_IO3
+        PG6     ------> OCTOSPI1_NCS
         */
-        HAL_GPIO_DeInit(GPIOE, GPIO_PIN_2 | GPIO_PIN_11);
+        HAL_GPIO_DeInit(GPIOE, GPIO_PIN_2);
 
-        HAL_GPIO_DeInit(GPIOF, GPIO_PIN_6 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10);
+        HAL_GPIO_DeInit(GPIOB, GPIO_PIN_2);
+
+        HAL_GPIO_DeInit(GPIOD, GPIO_PIN_11 | GPIO_PIN_12 | GPIO_PIN_13);
+
+        HAL_GPIO_DeInit(GPIOG, GPIO_PIN_6);
     }
-    return;
+}
+
+bool MX_OCTOSPI1_GetJEDEC() {
+
+    XSPI_RegularCmdTypeDef sCommand = {0};
+    uint8_t jedec_data[4] = {0, 0, 0, 0};
+
+    sCommand.OperationType = HAL_XSPI_OPTYPE_COMMON_CFG;
+    sCommand.InstructionMode = HAL_XSPI_INSTRUCTION_1_LINE;
+    sCommand.Instruction = 0x9F;
+    sCommand.AddressMode = HAL_XSPI_ADDRESS_NONE;
+    sCommand.AlternateBytesMode = HAL_XSPI_ALT_BYTES_NONE;
+    sCommand.DataMode = HAL_XSPI_DATA_1_LINE;
+    sCommand.DataLength = 4;
+    sCommand.DummyCycles = 0;
+
+    if (HAL_XSPI_Command(&hospi1, &sCommand, HAL_MAX_DELAY) != HAL_OK) {
+        return HAL_ERROR;
+    }
+
+    if (HAL_XSPI_Receive(&hospi1, jedec_data, HAL_MAX_DELAY) != HAL_OK) {
+        return HAL_ERROR;
+    }
+
+    if (jedec_data[0] != 0xC8) {
+        return HAL_ERROR;
+    }
+
+    return HAL_OK;
 }
