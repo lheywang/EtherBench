@@ -70,6 +70,20 @@ set(SOURCES
     common/src/lx_nor_flash_system_error.c
 )
 
+# Add the BSP files
+list(APPEND SOURCES
+    bsp/GD5F1GO4UBY1G/src/common.c
+    bsp/GD5F1GO4UBY1G/src/erase.c
+    bsp/GD5F1GO4UBY1G/src/read.c
+    bsp/GD5F1GO4UBY1G/src/status.c
+    bsp/GD5F1GO4UBY1G/src/verify.c
+    bsp/GD5F1GO4UBY1G/src/write.c
+)
+
+list(APPEND SOURCES
+    app/src/app_levelx.c
+)
+
 # Creating the library
 add_library(LEVELX STATIC ${SOURCES})
 
@@ -83,4 +97,5 @@ target_link_libraries(LEVELX HAL THREADX_OS FILEX LOGGER)
 target_include_directories(LEVELX PUBLIC 
 	${CMAKE_CURRENT_SOURCE_DIR}/common/include/
 	${CMAKE_CURRENT_SOURCE_DIR}/app/include/
+    ${CMAKE_CURRENT_SOURCE_DIR}/bsp/GD5F1GO4UBY1G/include/
 )
