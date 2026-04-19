@@ -18,7 +18,11 @@
 #include "app_filex.h"
 
 // Libraries
+#include "app_levelx.h"
 #include "logger.h"
+
+// Drivers
+#include "fx_levelx_driver.h"
 
 // ThreadX
 #include "tx_api.h"
@@ -29,6 +33,9 @@
 #include "fx_stm32_custom_driver.h"
 #include "fx_stm32_sd_driver.h"
 
+// LevelX
+#include "lx_api.h"
+
 // ======================================================================
 //                              DEFINES
 // ======================================================================
@@ -36,11 +43,19 @@
 // Internal thread
 TX_THREAD fx_app_thread;
 
+// Temp memories
 uint32_t
     __aligned(32) fx_sd_media_memory[FX_STM32_SD_DEFAULT_SECTOR_SIZE / sizeof(uint32_t)];
+uint8_t __aligned(32) fx_flash_media_memory[GD25_PAGE_SIZE];
+
+// Thread memory
 uint32_t __aligned(32) fx_stack[FX_APP_THREAD_STACK_SIZE];
 
+// Disks
 FX_MEDIA sdio_disk;
+FX_MEDIA flash_disk;
+
+// Sd card info
 HAL_SD_CardInfoTypeDef *pCardInfoSD;
 
 // Externs
@@ -57,14 +72,15 @@ void fx_app_thread_entry(ULONG thread_input);
  * @retval int
  */
 UINT MX_FileX_Init() {
-    UINT ret = FX_SUCCESS;
 
-    /* Check FX_APP_THREAD_STACK_SIZE allocation*/
-    if (ret != FX_SUCCESS) {
-        return TX_POOL_ERROR;
-    }
+    /*
+     * Initialize both LevelX and FileX components
+     */
+    app_levelx_thread_entry(0x00);
+    fx_system_initialize();
 
     /* Create the main thread.  */
+    UINT ret;
     ret = tx_thread_create(
         &fx_app_thread,
         FX_APP_THREAD_NAME,
@@ -82,15 +98,13 @@ UINT MX_FileX_Init() {
         return TX_THREAD_ERROR;
     }
 
-    /* Initialize FileX.  */
-    fx_system_initialize();
-
     return ret;
 }
 
 void fx_app_thread_entry(ULONG thread_input) {
 
     UINT sd_status = FX_SUCCESS;
+    UINT flash_status = FX_SUCCESS;
 
     /*
      * Wait, if the SD hasn't booted yet...
@@ -164,6 +178,53 @@ void fx_app_thread_entry(ULONG thread_input) {
     /* Check the media open sd_status */
     if (sd_status != FX_SUCCESS) {
         LOG("SD was openneded");
+    }
+
+    /*
+     * Then, try to open the Flash area
+     */
+    flash_status = fx_media_open(
+        &flash_disk,
+        "QSPI_NAND",
+        fx_levelx_nand_driver,
+        &NAND_filex,
+        fx_flash_media_memory,
+        sizeof(fx_flash_media_memory));
+
+    /*
+     * If failed, try to format it
+     */
+    if (flash_status != FX_SUCCESS) {
+
+        ULONG total_logical_sectors = NAND_filex.lx_nand_flash_total_pages;
+        flash_status = fx_media_format(
+            &flash_disk,
+            fx_levelx_nand_driver,
+            &NAND_filex,
+            fx_flash_media_memory,
+            sizeof(fx_flash_media_memory),
+            "QSPI_NAND",
+            1,                     /* FAT count */
+            256,                   /* Directory Entries */
+            0,                     /* Hidden sectors */
+            total_logical_sectors, /* Total Sectors */
+            GD25_PAGE_SIZE,        /* Sector size */
+            1,                     /* Sectors */
+            1,                     /* Heads */
+            1                      /* Sectors per track*/
+        );
+
+        if (flash_status == FX_SUCCESS) {
+            flash_status = fx_media_open(
+                &flash_disk,
+                "QSPI_NAND",
+                fx_levelx_nand_driver,
+                &NAND_filex,
+                fx_flash_media_memory,
+                sizeof(fx_flash_media_memory));
+        } else {
+            Tx_Error_Handler(FLASH_HW_FMT_FAILED);
+        }
     }
 
     while (1) {

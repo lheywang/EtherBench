@@ -252,6 +252,7 @@ list(APPEND SOURCES
 )
 
 list(APPEND SOURCES
+    drivers/src/fx_levelx_driver.c
     drivers/src/fx_stm32_custom_driver.c
     drivers/src/fx_stm32_sd_driver.c
     drivers/src/fx_stm32_sd_driver_glue.c
@@ -261,7 +262,7 @@ list(APPEND SOURCES
 add_library(FILEX STATIC ${SOURCES})
 
 # Link against the base OS
-target_link_libraries(FILEX HAL THREADX_OS LOGGER)
+target_link_libraries(FILEX HAL THREADX_OS LEVELX LOGGER)
 
 # Adding the include folder
 target_include_directories(FILEX PUBLIC 

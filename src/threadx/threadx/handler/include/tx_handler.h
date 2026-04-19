@@ -43,6 +43,8 @@ enum tx_error_codes {
     RING_FAIL_PWM_INIT = 0x0A000002,
     SD_HW_INIT_FAILED = 0x0000C000,
     SD_HW_FMT_FAILED = 0x0000C001,
+    FLASH_HW_INIT_FAILED = 0x0000D000,
+    FLASH_HW_FMT_FAILED = 0x0000D001,
 };
 
 // ======================================================================

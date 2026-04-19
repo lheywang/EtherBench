@@ -1,37 +1,42 @@
 /**
- * @file    GD5F1GO4UBY1G.h
+ * @file    ll_vfs.h
  * @author  lheywang (leonard.heywang@proton.me)
- * @brief   BSP for the GD5F1GO4UBY1G FLASH memory.
+ * @brief   low level virtual file system interface for the NAND memory.
  * @version 0.1
- * @date    2026-04-16
+ * @date    2026-04-19
  *
  * @copyright Copyright (c) 2026
- *
- * @details As this memory is NAND based, we cannot just map it into the memory space as a
- *          NOR could be. That's still possible, but as we can't access a raw address, the
- *          still need to pass trough an adaptation layer.
  *
  */
 
 #pragma once
 
 // ======================================================================
-//                              INCLUDES
+//                             INCLUDES
 // ======================================================================
+// Local libraries
+#include "GD5F1GO4UBY1G.h"
+#include "commands.h"
+
 // ThreadX
 #include "tx_api.h"
 
 // ======================================================================
-//                              SHARED VARIABLES
+//                             DEFINES
 // ======================================================================
-// Main semaphore for the RTOS
-extern TX_SEMAPHORE qspi_ready_semaphore;
-extern TX_SEMAPHORE qspi_txfer_semaphore;
+// Partitions sizes
+#define SETTINGS_PARTITION_SIZE 10
+#define BACKTRACE_PARTITION_SIZE 10
+#define FLASH_PARTITION_SIZE (GD25_BLOCK_COUNT_NORMAL - BACKTRACE_PARTITION_SIZE)
+
+// Partitions offsets
+#define SETTINGS_PARTITION_OFFSET 0
+#define FLASH_PARTITION_OFFSET 10
+#define BACKTRACE_PARTITION_OFFSET (GD25_BLOCK_COUNT_NORMAL - BACKTRACE_PARTITION_SIZE)
 
 // ======================================================================
-//                        FUNCTIONS (PUBLIC API)
+//                            FUNCTIONS
 // ======================================================================
-
 /*
  * Page IO
  */
@@ -47,7 +52,9 @@ extern TX_SEMAPHORE qspi_txfer_semaphore;
  * @retval LX_ERROR An error occured when writting to the device.
  * @retval LX_SUCESS The page was successfully read.
  */
-UINT GD5F1GO4UBY1G_page_read(ULONG block, ULONG page, ULONG *destination, ULONG words);
+UINT settings_page_read(ULONG block, ULONG page, ULONG *destination, ULONG words);
+UINT flash_page_read(ULONG block, ULONG page, ULONG *destination, ULONG words);
+UINT backtrace_page_read(ULONG block, ULONG page, ULONG *destination, ULONG words);
 
 /**
  * @brief Write a page on the GD5F1GO4UBY1G device.
@@ -61,7 +68,9 @@ UINT GD5F1GO4UBY1G_page_read(ULONG block, ULONG page, ULONG *destination, ULONG 
  * @retval LX_ERROR An error occured when reading from the device.
  * @retval LX_SUCESS The page was successfully wrote.
  */
-UINT GD5F1GO4UBY1G_page_write(ULONG block, ULONG page, ULONG *source, ULONG words);
+UINT settings_page_write(ULONG block, ULONG page, ULONG *source, ULONG words);
+UINT flash_page_write(ULONG block, ULONG page, ULONG *source, ULONG words);
+UINT backtrace_page_write(ULONG block, ULONG page, ULONG *source, ULONG words);
 
 /*
  * Erase
@@ -77,7 +86,9 @@ UINT GD5F1GO4UBY1G_page_write(ULONG block, ULONG page, ULONG *source, ULONG word
  * @retval LX_ERROR An error occured when erasing from the device.
  * @retval LX_SUCESS The page was successfully erased.
  */
-UINT GD5F1GO4UBY1G_block_erase(ULONG block, ULONG erase_count);
+UINT settings_block_erase(ULONG block, ULONG erase_count);
+UINT flash_block_erase(ULONG block, ULONG erase_count);
+UINT backtrace_block_erase(ULONG block, ULONG erase_count);
 
 /*
  * Bad blocks handling
@@ -92,7 +103,9 @@ UINT GD5F1GO4UBY1G_block_erase(ULONG block, ULONG erase_count);
  * @retval LX_ERROR An error occured when reading from the device.
  * @retval LX_SUCESS The marker was successfully read.
  */
-UINT GD5F1GO4UBY1G_block_status_get(ULONG block, UCHAR *bad_block_byte);
+UINT settings_block_status_get(ULONG block, UCHAR *bad_block_byte);
+UINT flash_block_status_get(ULONG block, UCHAR *bad_block_byte);
+UINT backtrace_block_status_get(ULONG block, UCHAR *bad_block_byte);
 
 /**
  * @brief Set the block status (bad block)
@@ -104,7 +117,9 @@ UINT GD5F1GO4UBY1G_block_status_get(ULONG block, UCHAR *bad_block_byte);
  * @retval LX_ERROR An error occured when writting from the device.
  * @retval LX_SUCESS The marker was successfully wrote.
  */
-UINT GD5F1GO4UBY1G_block_status_set(ULONG block, UCHAR bad_block_byte);
+UINT settings_block_status_set(ULONG block, UCHAR bad_block_byte);
+UINT flash_block_status_set(ULONG block, UCHAR bad_block_byte);
+UINT backtrace_block_status_set(ULONG block, UCHAR bad_block_byte);
 
 /*
  * Write verifications
@@ -119,7 +134,9 @@ UINT GD5F1GO4UBY1G_block_status_set(ULONG block, UCHAR bad_block_byte);
  * @retval LX_ERROR The block was not erased.
  * @retval LX_SUCESS The block was erased.
  */
-UINT GD5F1GO4UBY1G_block_erase_verify(ULONG block);
+UINT settings_block_erase_verify(ULONG block);
+UINT flash_block_erase_verify(ULONG block);
+UINT backtrace_block_erase_verify(ULONG block);
 
 /**
  * @brief Check for a page erasing.
@@ -131,36 +148,6 @@ UINT GD5F1GO4UBY1G_block_erase_verify(ULONG block);
  * @retval LX_ERROR The page was not erased.
  * @retval LX_SUCESS The page was erased.
  */
-UINT GD5F1GO4UBY1G_page_erase_verify(ULONG block, ULONG page);
-
-// ======================================================================
-//                        FUNCTIONS (PRIVATE API)
-// ======================================================================
-
-/**
- * @brief Wait for the device to finish it's operation.
- *
- * @retval LX_ERROR Timeout was reached. Bus may be stalled, or a wrong command was sent.
- * @retval LX_SUCESS The device finished it's pending operation.
- */
-UINT GD5F1GO4UBY1G_wait_for_complete();
-
-/**
- * @brief Enable the write operations on the flash.
- *
- * @warning This function is "private", as it better not be called outside of it's
- *          context.
- *
- * @return UINT
- */
-UINT GD5F1GO4UBY1G_write_enable();
-
-/**
- * @brief Disable the write operations on the flash.
- *
- * @warning This function is "private", as it better not be called outside of it's
- *          context.
- *
- * @return UINT
- */
-UINT GD5F1GO4UBY1G_write_disable();
+UINT settings_page_erase_verify(ULONG block, ULONG page);
+UINT flash_page_erase_verify(ULONG block, ULONG page);
+UINT backtrace_page_erase_verify(ULONG block, ULONG page);
