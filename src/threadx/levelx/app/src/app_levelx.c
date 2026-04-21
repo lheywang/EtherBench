@@ -81,10 +81,19 @@ UINT settings_init(LX_NAND_FLASH *nand) {
     nand->lx_nand_flash_pages_per_block = GD25_BLOCK_PAGES;
 
     /*
+     * Configure the OOB channel
+     */
+    nand->lx_nand_flash_spare_data1_offset = 2; // 2 bytes for the bad block marker
+    nand->lx_nand_flash_spare_data1_length = 60; // 60 bytes for the LevelX spare buffer
+
+    /*
      * Configure the callbacks
      */
     nand->lx_nand_flash_driver_read = settings_page_read;
     nand->lx_nand_flash_driver_write = settings_page_write;
+    nand->lx_nand_flash_driver_pages_read = settings_pages_read;
+    nand->lx_nand_flash_driver_pages_write = settings_pages_write;
+    nand->lx_nand_flash_driver_pages_copy = settings_page_copy;
     nand->lx_nand_flash_driver_block_erase = settings_block_erase;
     nand->lx_nand_flash_driver_block_erased_verify = settings_block_erase_verify;
     nand->lx_nand_flash_driver_page_erased_verify = settings_page_erase_verify;
@@ -102,12 +111,21 @@ UINT flash_init(LX_NAND_FLASH *nand) {
     nand->lx_nand_flash_total_blocks = FLASH_PARTITION_SIZE;
     nand->lx_nand_flash_words_per_page = (GD25_PAGE_SIZE / sizeof(ULONG));
     nand->lx_nand_flash_pages_per_block = GD25_BLOCK_PAGES;
+    
+    /*
+     * Configure the OOB channel
+     */
+    nand->lx_nand_flash_spare_data1_offset = 2; // 2 bytes for the bad block marker
+    nand->lx_nand_flash_spare_data1_length = 60; // 60 bytes for the LevelX spare buffer
 
     /*
      * Configure the callbacks
      */
     nand->lx_nand_flash_driver_read = flash_page_read;
     nand->lx_nand_flash_driver_write = flash_page_write;
+    nand->lx_nand_flash_driver_pages_read = flash_pages_read;
+    nand->lx_nand_flash_driver_pages_write = flash_pages_write;
+    nand->lx_nand_flash_driver_pages_copy = flash_page_copy;
     nand->lx_nand_flash_driver_block_erase = flash_block_erase;
     nand->lx_nand_flash_driver_block_erased_verify = flash_block_erase_verify;
     nand->lx_nand_flash_driver_page_erased_verify = flash_page_erase_verify;
@@ -127,10 +145,19 @@ UINT backtrace_init(LX_NAND_FLASH *nand) {
     nand->lx_nand_flash_pages_per_block = GD25_BLOCK_PAGES;
 
     /*
+     * Configure the OOB channel
+     */
+    nand->lx_nand_flash_spare_data1_offset = 2; // 2 bytes for the bad block marker
+    nand->lx_nand_flash_spare_data1_length = 60; // 60 bytes for the LevelX spare buffer
+
+    /*
      * Configure the callbacks
      */
     nand->lx_nand_flash_driver_read = backtrace_page_read;
     nand->lx_nand_flash_driver_write = backtrace_page_write;
+    nand->lx_nand_flash_driver_pages_read = backtrace_pages_read;
+    nand->lx_nand_flash_driver_pages_write = backtrace_pages_write;
+    nand->lx_nand_flash_driver_pages_copy = backtrace_page_copy;
     nand->lx_nand_flash_driver_block_erase = backtrace_block_erase;
     nand->lx_nand_flash_driver_block_erased_verify = backtrace_block_erase_verify;
     nand->lx_nand_flash_driver_page_erased_verify = backtrace_page_erase_verify;

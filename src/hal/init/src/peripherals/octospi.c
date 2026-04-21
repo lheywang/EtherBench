@@ -41,6 +41,13 @@ void MX_OCTOSPI1_Init(void) {
     if (HAL_XSPI_Init(&hospi1) != HAL_OK) {
         Error_Handler();
     }
+
+    /*
+     * Enable interrupts
+     */
+    HAL_NVIC_SetPriority(OCTOSPI1_IRQn, 5, 0); 
+    HAL_NVIC_EnableIRQ(OCTOSPI1_IRQn);
+
     return;
 }
 

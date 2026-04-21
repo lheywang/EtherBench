@@ -73,12 +73,6 @@ void fx_app_thread_entry(ULONG thread_input);
  */
 UINT MX_FileX_Init() {
 
-    /*
-     * Initialize both LevelX and FileX components
-     */
-    app_levelx_thread_entry(0x00);
-    fx_system_initialize();
-
     /* Create the main thread.  */
     UINT ret;
     ret = tx_thread_create(
@@ -102,6 +96,13 @@ UINT MX_FileX_Init() {
 }
 
 void fx_app_thread_entry(ULONG thread_input) {
+
+    /*
+     * Initialize both LevelX and FileX components.
+     * Doing it inside the thread, to be able to use semaphore and so on...
+     */
+    app_levelx_thread_entry(0x00);
+    fx_system_initialize();
 
     UINT sd_status = FX_SUCCESS;
     UINT flash_status = FX_SUCCESS;

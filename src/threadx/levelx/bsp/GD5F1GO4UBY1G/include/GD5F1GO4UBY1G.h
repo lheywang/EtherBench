@@ -21,12 +21,16 @@
 // ThreadX
 #include "tx_api.h"
 
+// HAL
+#include "stm32h5xx_hal.h"
+#include "stm32h5xx_hal_xspi.h"
+
 // ======================================================================
 //                              SHARED VARIABLES
 // ======================================================================
 // Main semaphore for the RTOS
-extern TX_SEMAPHORE qspi_ready_semaphore;
-extern TX_SEMAPHORE qspi_txfer_semaphore;
+extern TX_SEMAPHORE flash_wip;
+extern TX_SEMAPHORE flash_dma_done;
 
 // ======================================================================
 //                        FUNCTIONS (PUBLIC API)
@@ -50,6 +54,19 @@ extern TX_SEMAPHORE qspi_txfer_semaphore;
 UINT GD5F1GO4UBY1G_page_read(ULONG block, ULONG page, ULONG *destination, ULONG words);
 
 /**
+ * @brief Read more than one page on the GD5F device.
+ * 
+ * @param block The target block
+ * @param page The first page to be read
+ * @param destination The target buffer
+ * @param spare_buffer The ECC buffer. Unused.
+ * @param pages The number of pages to be read
+ *
+ * @return UINT 
+ */
+UINT GD5F1GO4UBY1G_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
+
+/**
  * @brief Write a page on the GD5F1GO4UBY1G device.
  *
  * @param block The target block to be read.
@@ -62,6 +79,31 @@ UINT GD5F1GO4UBY1G_page_read(ULONG block, ULONG page, ULONG *destination, ULONG 
  * @retval LX_SUCESS The page was successfully wrote.
  */
 UINT GD5F1GO4UBY1G_page_write(ULONG block, ULONG page, ULONG *source, ULONG words);
+
+/**
+ * @brief Perform write for more than a single page.
+ * 
+ * @param block The target block
+ * @param page The target, starting page address
+ * @param main_buffer The main buffer to be used.
+ * @param spare_buffer The ECC buffer. Unused.
+ * @param pages The number of pages.
+ * @return UINT 
+ */
+UINT GD5F1GO4UBY1G_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
+
+/**
+ * @brief Perform a copy from a page to another one.
+ * 
+ * @param src_block The source block.
+ * @param src_page The source page
+ * @param dest_block The destination block
+ * @param dest_page The destination page
+ * @param pages The number of pages to be copied
+ * @param buffer A buffer to be used for the copying process. Unused (as the GD Flash has hardware copy back !)
+ * @return UINT 
+ */
+UINT GD5F1GO4UBY1G_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR* buffer);
 
 /*
  * Erase
@@ -164,3 +206,15 @@ UINT GD5F1GO4UBY1G_write_enable();
  * @return UINT
  */
 UINT GD5F1GO4UBY1G_write_disable();
+
+// ======================================================================
+//                           INTERRUPTS
+// ======================================================================
+
+/**
+ * @brief All theses functions are overriding HAL functions. Ensure they're correctly linked ! 
+ */
+void flash_command_complete();
+void flash_tx_complete();
+void flash_rx_complete();
+void flash_polling_complete();

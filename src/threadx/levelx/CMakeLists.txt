@@ -73,7 +73,9 @@ set(SOURCES
 # Add the BSP files
 list(APPEND SOURCES
     bsp/GD5F1GO4UBY1G/src/common.c
+    bsp/GD5F1GO4UBY1G/src/copy.c
     bsp/GD5F1GO4UBY1G/src/erase.c
+    bsp/GD5F1GO4UBY1G/src/isr.c
     bsp/GD5F1GO4UBY1G/src/read.c
     bsp/GD5F1GO4UBY1G/src/status.c
     bsp/GD5F1GO4UBY1G/src/verify.c

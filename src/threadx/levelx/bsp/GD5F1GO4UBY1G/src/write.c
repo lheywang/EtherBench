@@ -84,3 +84,21 @@ UINT GD5F1GO4UBY1G_page_write(ULONG block, ULONG page, ULONG *source, ULONG word
 
     return GD5F1GO4UBY1G_wait_for_complete();
 }
+
+UINT GD5F1GO4UBY1G_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
+
+    TX_PARAMETER_NOT_USED(spare_buffer);
+
+    UINT status = LX_SUCCESS;
+    ULONG *src = (ULONG *)main_buffer;
+
+    for (ULONG i = 0; i < pages; i++) {
+        status = GD5F1GO4UBY1G_page_write(block, page + i, src, GD25_PAGE_SIZE);
+        if (status != LX_SUCCESS) {
+            break;
+        }
+        src += GD25_PAGE_SIZE;
+    }
+
+    return status;
+}

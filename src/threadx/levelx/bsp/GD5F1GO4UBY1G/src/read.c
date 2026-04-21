@@ -85,3 +85,23 @@ UINT GD5F1GO4UBY1G_page_read(ULONG block, ULONG page, ULONG *destination, ULONG 
 
     return LX_SUCCESS;
 }
+
+UINT GD5F1GO4UBY1G_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
+
+    TX_PARAMETER_NOT_USED(spare_buffer);
+
+    UINT status = LX_SUCCESS;
+    ULONG *dest = (ULONG *)main_buffer;
+
+
+    for (ULONG i = 0; i < pages; i++) {        
+        status = GD5F1GO4UBY1G_page_read(block, page + i, dest, GD25_PAGE_SIZE);
+        if (status != LX_SUCCESS) {
+            break;
+        }
+        
+        dest += GD25_PAGE_SIZE; 
+    }
+    
+    return status;
+}

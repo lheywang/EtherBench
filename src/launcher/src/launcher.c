@@ -67,6 +67,9 @@ static __aligned(8) ULONG parser_fifo_mem[SHELL_COMMAND_FIFO_DEPTH];
 TX_SEMAPHORE dma_trigger;
 TX_SEMAPHORE dma_tx_done;
 
+TX_SEMAPHORE flash_wip;
+TX_SEMAPHORE flash_dma_done;
+
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================extern
@@ -78,6 +81,9 @@ uint32_t launcher(void) {
      */
     tx_semaphore_create(&dma_trigger, "dma trigger", 0);
     tx_semaphore_create(&dma_tx_done, "dma done", 0);
+
+    tx_semaphore_create(&flash_wip, "flash write in progress", 0);
+    tx_semaphore_create(&flash_dma_done, "flash dma done", 0);
 
     /*
      * Create memory pool

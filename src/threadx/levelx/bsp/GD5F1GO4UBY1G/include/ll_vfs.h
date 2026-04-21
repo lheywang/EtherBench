@@ -56,6 +56,10 @@ UINT settings_page_read(ULONG block, ULONG page, ULONG *destination, ULONG words
 UINT flash_page_read(ULONG block, ULONG page, ULONG *destination, ULONG words);
 UINT backtrace_page_read(ULONG block, ULONG page, ULONG *destination, ULONG words);
 
+UINT settings_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
+UINT flash_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
+UINT backtrace_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
+
 /**
  * @brief Write a page on the GD5F1GO4UBY1G device.
  *
@@ -71,6 +75,24 @@ UINT backtrace_page_read(ULONG block, ULONG page, ULONG *destination, ULONG word
 UINT settings_page_write(ULONG block, ULONG page, ULONG *source, ULONG words);
 UINT flash_page_write(ULONG block, ULONG page, ULONG *source, ULONG words);
 UINT backtrace_page_write(ULONG block, ULONG page, ULONG *source, ULONG words);
+
+UINT settings_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
+UINT flash_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
+UINT backtrace_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
+
+/**
+ * @brief Perform a copy from a page to another one.
+ * 
+ * @param src_block The source block.
+ * @param src_page The source page
+ * @param dest_block The destination block
+ * @param dest_page The destination page
+ * @param pages The number of pages to be copied
+ * @return UINT 
+ */
+UINT settings_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR* buffer);
+UINT flash_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR* buffer);
+UINT backtrace_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR* buffer);
 
 /*
  * Erase

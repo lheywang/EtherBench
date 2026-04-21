@@ -114,10 +114,23 @@ add_compile_options(
 )
 
 # Add the config directory, which is global
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/config/
+    ${CMAKE_CURRENT_SOURCE_DIR}/interrupts/include/
+)
 
 # We only add the main.c file, all the remaining is built arround libraries.
-add_executable(${CMAKE_PROJECT_NAME} main.c startup/startup_stm32h563zitx.s startup/system_stm32h5xx.c)
+set(SOURCES
+    main.c
+    startup/startup_stm32h563zitx.s
+    startup/system_stm32h5xx.c
+    interrupts/src/it.c
+    interrupts/src/error_handler.c
+    interrupts/src/hal_it.c
+    interrupts/src/stm32h5xx_it.c
+)
+
+add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
 
 # Add the different folders (Vendor and RTOS ones)
 add_subdirectory(hal)
@@ -132,10 +145,12 @@ add_subdirectory(launcher)
 # Add libraries
 # Will need to add TASKS when they're complete !
 target_link_libraries(${PROJECT_NAME} 
-	HAL 
-	BSP
+    -Wl,--start-group
 	THREADX
 	TASKS
 	LAUNCHER
+    BSP
+    HAL
+    -Wl,--end-group 
 )
 

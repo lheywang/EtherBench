@@ -45,6 +45,19 @@ UINT backtrace_page_read(ULONG block, ULONG page, ULONG *destination, ULONG word
         block + BACKTRACE_PARTITION_OFFSET, page, destination, words);
 }
 
+UINT settings_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
+    return GD5F1GO4UBY1G_pages_read(block + SETTINGS_PARTITION_OFFSET, page, main_buffer, spare_buffer, pages);
+}
+
+UINT flash_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
+    return GD5F1GO4UBY1G_pages_read(block + FLASH_PARTITION_OFFSET, page, main_buffer, spare_buffer, pages);
+}
+
+UINT backtrace_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
+    return GD5F1GO4UBY1G_pages_read(block + BACKTRACE_PARTITION_OFFSET, page, main_buffer, spare_buffer, pages);
+}
+
+
 // ------------------
 // PAGE WRITE
 // ------------------
@@ -60,6 +73,57 @@ UINT flash_page_write(ULONG block, ULONG page, ULONG *source, ULONG words) {
 UINT backtrace_page_write(ULONG block, ULONG page, ULONG *source, ULONG words) {
     return GD5F1GO4UBY1G_page_write(
         block + BACKTRACE_PARTITION_OFFSET, page, source, words);
+}
+
+UINT settings_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
+    return GD5F1GO4UBY1G_pages_write(
+        block + SETTINGS_PARTITION_OFFSET, page, main_buffer, spare_buffer, pages);
+}
+
+UINT flash_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
+    return GD5F1GO4UBY1G_pages_write(block + FLASH_PARTITION_OFFSET, page, main_buffer, spare_buffer, pages);
+}
+
+UINT backtrace_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
+    return GD5F1GO4UBY1G_pages_write(
+        block + BACKTRACE_PARTITION_OFFSET, page, main_buffer, spare_buffer, pages);
+}
+
+
+// ------------------
+// PAGE COPY
+// ------------------
+UINT settings_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR* buffer) {
+    return GD5F1GO4UBY1G_page_copy(
+        src_block + SETTINGS_PARTITION_OFFSET, 
+        src_page, 
+        dest_block + SETTINGS_PARTITION_OFFSET,
+        dest_page, 
+        pages,
+        buffer
+    );
+}
+
+UINT flash_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR* buffer) {
+    return GD5F1GO4UBY1G_page_copy(
+        src_block + FLASH_PARTITION_OFFSET, 
+        src_page, 
+        dest_block + FLASH_PARTITION_OFFSET,
+        dest_page, 
+        pages,
+        buffer
+    );
+}
+
+UINT backtrace_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR* buffer) {
+    return GD5F1GO4UBY1G_page_copy(
+        src_block + BACKTRACE_PARTITION_OFFSET, 
+        src_page, 
+        dest_block + BACKTRACE_PARTITION_OFFSET,
+        dest_page, 
+        pages,
+        buffer
+    );
 }
 
 // ------------------

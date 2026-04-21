@@ -33,6 +33,8 @@
 
 // Extern
 extern XSPI_HandleTypeDef hospi1; // From HAL
+extern TX_SEMAPHORE flash_wip; // From launcher
+extern TX_SEMAPHORE flash_dma_done; // From launcher
 
 // ======================================================================
 //                              FUNCTIONS
@@ -66,11 +68,15 @@ UINT GD5F1GO4UBY1G_wait_for_complete() {
     cfg.IntervalTime = 0x40;
     cfg.AutomaticStop = HAL_XSPI_AUTOMATIC_STOP_ENABLE;
 
+    if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK) {
+        return LX_ERROR;
+    }
+
     if (HAL_XSPI_AutoPolling_IT(&hospi1, &cfg) != HAL_OK) {
         return LX_ERROR;
     }
 
-    if (tx_semaphore_get(&qspi_ready_semaphore, 10000) != TX_SUCCESS) { // 10s
+    if (tx_semaphore_get(&flash_wip, 10000) != TX_SUCCESS) { // 10s
         return LX_ERROR;
     }
 
@@ -136,10 +142,3 @@ UINT GD5F1GO4UBY1G_write_disable() {
     }
     return LX_SUCCESS;
 }
-
-// ======================================================================
-//                              VARIABLES
-// ======================================================================
-// Semaphores
-TX_SEMAPHORE qspi_ready_semaphore;
-TX_SEMAPHORE qspi_txfer_semaphore;
