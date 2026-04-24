@@ -26,7 +26,7 @@
 #include "stm32h5xx_hal_xspi.h"
 
 // ======================================================================
-//                              SHARED VARIABLES
+//                           SHARED VARIABLES
 // ======================================================================
 // Main semaphore for the RTOS
 extern TX_SEMAPHORE flash_wip;
@@ -175,6 +175,21 @@ UINT GD5F1GO4UBY1G_block_erase_verify(ULONG block);
  */
 UINT GD5F1GO4UBY1G_page_erase_verify(ULONG block, ULONG page);
 
+/**
+ * @brief Set the protection byte into the FLASH.
+ * 
+ * @param   status The protection byte. 0x00 for NONE.
+ * @return  UINT 
+ */
+UINT GD5F1GO4UBY1G_set_protected_blocks(UCHAR status);
+
+/**
+ * @brief Enable the QUAD-SPI communication mode.
+ * 
+ * @return UINT 
+ */
+UINT GD5F1GO4UBY1G_enable_quad();
+
 // ======================================================================
 //                        FUNCTIONS (PRIVATE API)
 // ======================================================================
@@ -218,3 +233,15 @@ void flash_command_complete();
 void flash_tx_complete();
 void flash_rx_complete();
 void flash_polling_complete();
+
+// ======================================================================
+//                           RESCUE
+// ======================================================================
+
+/**
+ * @brief Rescue the NAND from bad blocks. Will ERASE ALL BLOCKS. Nothing will be checked.
+ *        Used when debugging, do not use in prod at ALL !
+ * 
+ * @return UINT 
+ */
+UINT GD5F1GO4UBY1G_rescue();

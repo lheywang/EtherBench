@@ -51,7 +51,12 @@ void MX_OCTOSPI1_Init(void) {
     return;
 }
 
-void HAL_XSPI_MspInit(XSPI_HandleTypeDef *xspiHandle) {
+/**
+ * @brief The full init as QSPI is done here
+ * 
+ * @param xspiHandle 
+ */
+void HAL_XSPI_InitAsQSPI(XSPI_HandleTypeDef *xspiHandle) {
 
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
@@ -106,6 +111,81 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef *xspiHandle) {
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
         GPIO_InitStruct.Alternate = GPIO_AF10_OCTOSPI1;
         HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+    }
+}
+
+void HAL_XSPI_MspInit(XSPI_HandleTypeDef *xspiHandle) {
+
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitTypeDef GPIO_InitStruct2 = {0};
+    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+
+    if (xspiHandle->Instance == OCTOSPI1) {
+        /** Initializes the peripherals clock
+         */
+        PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_OSPI;
+        PeriphClkInitStruct.OspiClockSelection = RCC_OSPICLKSOURCE_HCLK;
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK) {
+            Error_Handler();
+        }
+
+        /* OCTOSPI1 clock enable */
+        __HAL_RCC_OSPI1_CLK_ENABLE();
+
+        __HAL_RCC_GPIOE_CLK_ENABLE();
+        __HAL_RCC_GPIOB_CLK_ENABLE();
+        __HAL_RCC_GPIOD_CLK_ENABLE();
+        __HAL_RCC_GPIOG_CLK_ENABLE();
+        /**OCTOSPI1 GPIO Configuration
+        PE2     ------> OCTOSPI1_IO2
+        PB2     ------> OCTOSPI1_CLK
+        PD11     ------> OCTOSPI1_IO0
+        PD12     ------> OCTOSPI1_IO1
+        PD13     ------> OCTOSPI1_IO3
+        PG6     ------> OCTOSPI1_NCS
+        */
+
+        /*
+         * Init only the minimal set of pins as SPI.
+         */
+        GPIO_InitStruct.Pin = GPIO_PIN_2;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        GPIO_InitStruct.Alternate = GPIO_AF9_OCTOSPI1;
+        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_12;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        GPIO_InitStruct.Alternate = GPIO_AF9_OCTOSPI1;
+        HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = GPIO_PIN_6;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        GPIO_InitStruct.Alternate = GPIO_AF10_OCTOSPI1;
+        HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+        /*
+         * The other pins are let as GPIO HIGH for now, to latch the WP and HOLD as "enabled".
+         */
+        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, GPIO_PIN_SET);
+
+        GPIO_InitStruct2.Pin =  GPIO_PIN_13;
+        GPIO_InitStruct2.Mode = GPIO_MODE_OUTPUT_PP;
+        GPIO_InitStruct2.Pull = GPIO_NOPULL;
+        GPIO_InitStruct2.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        HAL_GPIO_Init(GPIOD, &GPIO_InitStruct2);
+
+        GPIO_InitStruct2.Pin = GPIO_PIN_2;
+        GPIO_InitStruct2.Mode = GPIO_MODE_OUTPUT_PP;
+        GPIO_InitStruct2.Pull = GPIO_NOPULL;
+        GPIO_InitStruct2.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        HAL_GPIO_Init(GPIOE, &GPIO_InitStruct2);
     }
 }
 

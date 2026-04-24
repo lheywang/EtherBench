@@ -31,6 +31,13 @@ extern XSPI_HandleTypeDef hospi1;
 
 void MX_OCTOSPI1_Init(void);
 
+/**
+ * @brief Enable the QSPI Mode on the HOST side.
+ * 
+ * @param xspiHandle 
+ */
+void HAL_XSPI_InitAsQSPI(XSPI_HandleTypeDef *xspiHandle);
+
 bool MX_OCTOSPI1_GetJEDEC();
 
 #ifdef __cplusplus

@@ -54,7 +54,7 @@ UINT GD5F1GO4UBY1G_wait_for_complete() {
     cmd.Instruction = GD25_GET_FEATURES;
     cmd.AddressMode = HAL_XSPI_ADDRESS_1_LINE;
     cmd.AddressWidth = HAL_XSPI_ADDRESS_8_BITS;
-    cmd.Address = GD25_FEATURE_REG_FEATURE_1;
+    cmd.Address = GD25_FEATURE_REG_STATUS_1;
     cmd.AlternateBytesMode = HAL_XSPI_ALT_BYTES_NONE;
     cmd.DataMode = HAL_XSPI_DATA_1_LINE;
     cmd.DataLength = 1;

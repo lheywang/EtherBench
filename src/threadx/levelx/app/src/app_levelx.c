@@ -48,6 +48,24 @@ UINT app_levelx_thread_entry(ULONG arg) {
     lx_nand_flash_initialize();
 
     /*
+     * Enable the QUAD SPI for maximal performance
+     */
+    GD5F1GO4UBY1G_enable_quad();
+
+    /*
+     * Disable the block protection to NONE.
+     */
+    GD5F1GO4UBY1G_set_protected_blocks(0x00);
+
+    /*
+     *
+     */
+#ifdef RESCUE_NAND
+#warning "[NAND] Rescue mode is enabled. Do not leave that in prod !!!"
+    GD5F1GO4UBY1G_rescue();
+#endif
+
+    /*
      * Add the different partitions
      */
     UINT status = 0x00;

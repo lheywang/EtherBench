@@ -76,11 +76,13 @@ list(APPEND SOURCES
     bsp/GD5F1GO4UBY1G/src/copy.c
     bsp/GD5F1GO4UBY1G/src/erase.c
     bsp/GD5F1GO4UBY1G/src/isr.c
+    bsp/GD5F1GO4UBY1G/src/ll_vfs.c
+    bsp/GD5F1GO4UBY1G/src/protection.c
     bsp/GD5F1GO4UBY1G/src/read.c
+    bsp/GD5F1GO4UBY1G/src/rescue.c
     bsp/GD5F1GO4UBY1G/src/status.c
     bsp/GD5F1GO4UBY1G/src/verify.c
-    bsp/GD5F1GO4UBY1G/src/write.c
-    bsp/GD5F1GO4UBY1G/src/ll_vfs.c
+    bsp/GD5F1GO4UBY1G/src/write.c 
 )
 
 list(APPEND SOURCES
