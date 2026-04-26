@@ -85,7 +85,8 @@ UINT GD5F1GO4UBY1G_page_write(ULONG block, ULONG page, ULONG *source, ULONG word
     return GD5F1GO4UBY1G_wait_for_complete();
 }
 
-UINT GD5F1GO4UBY1G_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
+UINT GD5F1GO4UBY1G_pages_write(
+    ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
 
     TX_PARAMETER_NOT_USED(spare_buffer);
 

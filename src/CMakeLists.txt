@@ -93,6 +93,9 @@ cmake_minimum_required(VERSION 3.20)
 project("EtherBench")
 enable_language(ASM C CXX)
 
+# Ensure the formatter could read the output
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # We just need to configure variables
 add_compile_definitions(
 	-DUSE_HAL_DRIVER 

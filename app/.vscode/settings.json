@@ -1,1 +1,3 @@
-{}
+{
+    "stm32cube-ide-clangd.path": "clang"
+}

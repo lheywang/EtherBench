@@ -32,8 +32,8 @@
 #include <string.h>
 
 // Extern
-extern XSPI_HandleTypeDef hospi1; // From HAL
-extern TX_SEMAPHORE flash_wip; // From launcher
+extern XSPI_HandleTypeDef hospi1;   // From HAL
+extern TX_SEMAPHORE flash_wip;      // From launcher
 extern TX_SEMAPHORE flash_dma_done; // From launcher
 
 // ======================================================================
@@ -194,16 +194,16 @@ UCHAR GD5F1GO4UBY1G_Read_Register(UCHAR reg_addr) {
     XSPI_RegularCmdTypeDef cmd = {0};
     UCHAR reg_val = 0;
 
-    cmd.OperationType      = HAL_XSPI_OPTYPE_COMMON_CFG;
-    cmd.InstructionMode    = HAL_XSPI_INSTRUCTION_1_LINE;
-    cmd.Instruction        = GD25_GET_FEATURES;    
-    cmd.AddressMode        = HAL_XSPI_ADDRESS_1_LINE;
-    cmd.AddressWidth       = HAL_XSPI_ADDRESS_8_BITS;
-    cmd.Address            = reg_addr; 
+    cmd.OperationType = HAL_XSPI_OPTYPE_COMMON_CFG;
+    cmd.InstructionMode = HAL_XSPI_INSTRUCTION_1_LINE;
+    cmd.Instruction = GD25_GET_FEATURES;
+    cmd.AddressMode = HAL_XSPI_ADDRESS_1_LINE;
+    cmd.AddressWidth = HAL_XSPI_ADDRESS_8_BITS;
+    cmd.Address = reg_addr;
     cmd.AlternateBytesMode = HAL_XSPI_ALT_BYTES_NONE;
-    cmd.DataMode           = HAL_XSPI_DATA_1_LINE;
-    cmd.DataLength         = 1;
-    cmd.DummyCycles        = 0;
+    cmd.DataMode = HAL_XSPI_DATA_1_LINE;
+    cmd.DataLength = 1;
+    cmd.DummyCycles = 0;
 
     HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY);
     HAL_XSPI_Receive(&hospi1, &reg_val, HAL_MAX_DELAY);
@@ -215,13 +215,13 @@ UINT GD5F1GO4UBY1G_reset() {
 
     XSPI_RegularCmdTypeDef cmd = {0};
 
-    cmd.OperationType      = HAL_XSPI_OPTYPE_COMMON_CFG;
-    cmd.InstructionMode    = HAL_XSPI_INSTRUCTION_1_LINE;
-    cmd.Instruction        = GD25_RESET;    
-    cmd.AddressMode        = HAL_XSPI_ADDRESS_NONE;
-    cmd.DataMode           = HAL_XSPI_DATA_NONE;
-    cmd.DataLength         = 0;
-    cmd.DummyCycles        = 0;
+    cmd.OperationType = HAL_XSPI_OPTYPE_COMMON_CFG;
+    cmd.InstructionMode = HAL_XSPI_INSTRUCTION_1_LINE;
+    cmd.Instruction = GD25_RESET;
+    cmd.AddressMode = HAL_XSPI_ADDRESS_NONE;
+    cmd.DataMode = HAL_XSPI_DATA_NONE;
+    cmd.DataLength = 0;
+    cmd.DummyCycles = 0;
 
     HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY);
 
