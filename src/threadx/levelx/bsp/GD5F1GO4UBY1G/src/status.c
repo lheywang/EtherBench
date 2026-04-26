@@ -69,7 +69,7 @@ UINT GD5F1GO4UBY1G_block_status_get(ULONG block, UCHAR *bad_block_byte) {
     cmd.Address = (uint16_t)GD25_PAGE_OOD_ADDR;
     cmd.DataMode = HAL_XSPI_DATA_1_LINE;
     cmd.DataLength = 1;
-    cmd.DummyCycles = 0;
+    cmd.DummyCycles = 8;
 
     if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
         return LX_ERROR;

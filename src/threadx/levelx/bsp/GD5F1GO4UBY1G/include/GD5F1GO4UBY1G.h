@@ -222,6 +222,13 @@ UINT GD5F1GO4UBY1G_write_enable();
  */
 UINT GD5F1GO4UBY1G_write_disable();
 
+/**
+ * @brief Reset the NAND flash to it's default config.
+ * 
+ * @return UINT 
+ */
+UINT GD5F1GO4UBY1G_reset();
+
 // ======================================================================
 //                           INTERRUPTS
 // ======================================================================
@@ -245,3 +252,10 @@ void flash_polling_complete();
  * @return UINT 
  */
 UINT GD5F1GO4UBY1G_rescue();
+
+/**
+ * @brief Read a register from the nand, to debug some values.
+ * 
+ * @param reg_addr 
+ */
+UCHAR GD5F1GO4UBY1G_Read_Register(UCHAR reg_addr);

@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2026
  *
  */
+ #define LOG_MODULE "NAND"
 
 // ======================================================================
 //                              INCLUDES
@@ -17,6 +18,7 @@
 
 // Local libraries
 #include "ll_vfs.h"
+#include "logger.h"
 
 // ThreadX
 #include "tx_api.h"
@@ -48,14 +50,43 @@ UINT app_levelx_thread_entry(ULONG arg) {
     lx_nand_flash_initialize();
 
     /*
-     * Enable the QUAD SPI for maximal performance
+     * Reset the flash (ensure default settings are loaded)
      */
-    GD5F1GO4UBY1G_enable_quad();
+    GD5F1GO4UBY1G_reset();
+
+    /*
+     * Debug : Read some registers
+     */
+#ifdef DEBUG_NAND
+    UCHAR reg_A0 = GD5F1GO4UBY1G_Read_Register(0xA0);
+    UCHAR reg_B0 = GD5F1GO4UBY1G_Read_Register(0xB0);
+    UCHAR reg_C0 = GD5F1GO4UBY1G_Read_Register(0xC0);
+    UCHAR reg_D0 = GD5F1GO4UBY1G_Read_Register(0xD0);
+    UCHAR reg_F0 = GD5F1GO4UBY1G_Read_Register(0xF0);
+    LOG("Registers (A0, B0, C0, D0, F0) = %x | %x | %x | %x | %x", reg_A0, reg_B0, reg_C0, reg_D0, reg_F0);
+#endif
 
     /*
      * Disable the block protection to NONE.
      */
     GD5F1GO4UBY1G_set_protected_blocks(0x00);
+
+    /*
+     * Enable the QUAD SPI for maximal performance
+     */
+    GD5F1GO4UBY1G_enable_quad();
+
+    /*
+     * Debug : Read some registers
+     */
+#ifdef DEBUG_NAND
+    reg_A0 = GD5F1GO4UBY1G_Read_Register(0xA0);
+    reg_B0 = GD5F1GO4UBY1G_Read_Register(0xB0);
+    reg_C0 = GD5F1GO4UBY1G_Read_Register(0xC0);
+    reg_D0 = GD5F1GO4UBY1G_Read_Register(0xD0);
+    reg_F0 = GD5F1GO4UBY1G_Read_Register(0xF0);
+    LOG("Registers (A0, B0, C0, D0, F0) = %x | %x | %x | %x | %x", reg_A0, reg_B0, reg_C0, reg_D0, reg_F0);
+#endif
 
     /*
      *

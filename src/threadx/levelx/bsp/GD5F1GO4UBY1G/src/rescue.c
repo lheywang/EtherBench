@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2026
  *
  */
+#define LOG_MODULE "NAND"
 
 // ======================================================================
 //                              INCLUDES
@@ -17,6 +18,7 @@
 
 // Local libraries
 #include "commands.h"
+#include "logger.h"
 
 // HAL
 #include "stm32h5xx_hal.h"
@@ -55,7 +57,10 @@ UINT GD5F1GO4UBY1G_rescue() {
         cmd.Address = block * GD25_BLOCK_PAGES; 
         HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY);
 
-        GD5F1GO4UBY1G_wait_for_complete();
+        UINT status = GD5F1GO4UBY1G_wait_for_complete();
+        if (status){
+            LOG("Block %d marked as BAD.", block);
+        }
     }
 
     return LX_SUCCESS;

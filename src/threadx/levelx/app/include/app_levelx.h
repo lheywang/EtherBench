@@ -50,7 +50,13 @@ extern LX_NAND_FLASH NAND_backtrace;
  * @brief Erase all blocks, to perform an hard reset
  * 
  */
-#define RESCUE_NAND
+// #define RESCUE_NAND
+
+/**
+ * @brief Reads some registers for debugging.
+ * 
+ */
+// #define DEBUG_NAND
 
 // ======================================================================
 //                              FUNCTIONS

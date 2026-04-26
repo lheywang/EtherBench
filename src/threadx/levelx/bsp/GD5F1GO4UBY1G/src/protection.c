@@ -69,6 +69,11 @@ UINT GD5F1GO4UBY1G_set_protected_blocks(UCHAR status) {
     if (HAL_XSPI_Transmit(&hospi1, &status, HAL_MAX_DELAY) != HAL_OK)
         return LX_ERROR;
 
+    /*
+     * Wait for finish
+     */
+    GD5F1GO4UBY1G_wait_for_complete();
+
     return LX_SUCCESS;
 }
 
@@ -102,6 +107,11 @@ UINT GD5F1GO4UBY1G_enable_quad() {
         return LX_ERROR;
     if (HAL_XSPI_Transmit(&hospi1, &reg, HAL_MAX_DELAY) != HAL_OK)
         return LX_ERROR;
+
+    /*
+     * Wait for finish
+     */
+    GD5F1GO4UBY1G_wait_for_complete();
 
     /*
      * Finally, enable the QSPI communication on the host side 
