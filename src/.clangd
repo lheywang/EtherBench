@@ -4,11 +4,13 @@ CompileFlags:
         - '-Wno-implicit-int'
         - '--target=arm-none-eabi'
     CompilationDatabase: build/stm32
+
 Diagnostics:
-     Suppress:
+    Suppress:
         - unused-includes
         - unknown_typename
         - unknown_typename_suggest
         - typename_requires_specqual
+
 Index:
     Background: Build

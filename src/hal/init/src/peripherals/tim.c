@@ -139,8 +139,7 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *tim_pwmHandle) {
         handle_GPDMA1_Channel1.Init.Priority = DMA_LOW_PRIORITY_LOW_WEIGHT;
         handle_GPDMA1_Channel1.Init.SrcBurstLength = 1;
         handle_GPDMA1_Channel1.Init.DestBurstLength = 1;
-        handle_GPDMA1_Channel1.Init.TransferAllocatedPort =
-            DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT1;
+        handle_GPDMA1_Channel1.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT1;
         handle_GPDMA1_Channel1.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
         handle_GPDMA1_Channel1.Init.Mode = DMA_NORMAL;
         if (HAL_DMA_Init(&handle_GPDMA1_Channel1) != HAL_OK) {
@@ -149,8 +148,7 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *tim_pwmHandle) {
 
         __HAL_LINKDMA(tim_pwmHandle, hdma[TIM_DMA_ID_CC2], handle_GPDMA1_Channel1);
 
-        if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel1, DMA_CHANNEL_NPRIV) !=
-            HAL_OK) {
+        if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel1, DMA_CHANNEL_NPRIV) != HAL_OK) {
             Error_Handler();
         }
     }
@@ -177,8 +175,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *tim_baseHandle) {
         handle_GPDMA2_Channel0.Init.Priority = DMA_LOW_PRIORITY_LOW_WEIGHT;
         handle_GPDMA2_Channel0.Init.SrcBurstLength = 1;
         handle_GPDMA2_Channel0.Init.DestBurstLength = 1;
-        handle_GPDMA2_Channel0.Init.TransferAllocatedPort =
-            DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT0;
+        handle_GPDMA2_Channel0.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT0;
         handle_GPDMA2_Channel0.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
         handle_GPDMA2_Channel0.Init.Mode = DMA_NORMAL;
         if (HAL_DMA_Init(&handle_GPDMA2_Channel0) != HAL_OK) {
@@ -187,8 +184,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *tim_baseHandle) {
 
         __HAL_LINKDMA(tim_baseHandle, hdma[TIM_DMA_ID_CC1], handle_GPDMA2_Channel0);
 
-        if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA2_Channel0, DMA_CHANNEL_NPRIV) !=
-            HAL_OK) {
+        if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA2_Channel0, DMA_CHANNEL_NPRIV) != HAL_OK) {
             Error_Handler();
         }
     }

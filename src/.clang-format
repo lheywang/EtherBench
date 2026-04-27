@@ -1,0 +1,22 @@
+BasedOnStyle: LLVM
+
+BinPackParameters: false
+BinPackArguments: false
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+ColumnLimit: 120
+
+AllowAllParametersOfDeclarationOnNextLine: false
+AlwaysBreakAfterReturnType: None
+AlignAfterOpenBracket: Align
+
+ContinuationIndentWidth: 4
+
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  PadOperators: true

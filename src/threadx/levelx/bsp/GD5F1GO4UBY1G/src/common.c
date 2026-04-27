@@ -86,8 +86,7 @@ UINT GD5F1GO4UBY1G_wait_for_complete() {
     uint8_t status_reg = 0;
     if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) == HAL_OK) {
         HAL_XSPI_Receive(&hospi1, &status_reg, HAL_MAX_DELAY);
-        if ((status_reg & GD25_FEATURE_BIT_E_FAIL) ||
-            (status_reg & GD25_FEATURE_BIT_P_FAIL)) {
+        if ((status_reg & GD25_FEATURE_BIT_E_FAIL) || (status_reg & GD25_FEATURE_BIT_P_FAIL)) {
 
             /*
              * In case of failure, just reset (to clear the flag).

@@ -50,15 +50,15 @@ UINT GD5F1GO4UBY1G_rescue() {
     cmd.DataMode = HAL_XSPI_DATA_NONE;
     cmd.DummyCycles = 0;
 
-    for(uint32_t block = 0; block < 1024; block++) {
+    for (uint32_t block = 0; block < 1024; block++) {
         GD5F1GO4UBY1G_write_enable();
 
-        cmd.Instruction = 0xD8; 
-        cmd.Address = block * GD25_BLOCK_PAGES; 
+        cmd.Instruction = 0xD8;
+        cmd.Address = block * GD25_BLOCK_PAGES;
         HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY);
 
         UINT status = GD5F1GO4UBY1G_wait_for_complete();
-        if (status){
+        if (status) {
             LOG("Block %d marked as BAD.", block);
         }
     }

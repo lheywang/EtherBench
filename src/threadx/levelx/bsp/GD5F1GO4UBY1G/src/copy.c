@@ -38,13 +38,12 @@ extern XSPI_HandleTypeDef hospi1; // From HAL
 //                              FUNCTIONS
 // ======================================================================
 
-UINT GD5F1GO4UBY1G_page_copy(
-    ULONG src_block,
-    ULONG src_page,
-    ULONG dest_block,
-    ULONG dest_page,
-    ULONG pages,
-    UCHAR *buffer) {
+UINT GD5F1GO4UBY1G_page_copy(ULONG src_block,
+                             ULONG src_page,
+                             ULONG dest_block,
+                             ULONG dest_page,
+                             ULONG pages,
+                             UCHAR *buffer) {
 
     TX_PARAMETER_NOT_USED(buffer);
 

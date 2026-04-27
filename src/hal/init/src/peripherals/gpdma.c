@@ -29,9 +29,16 @@ void MX_GPDMA1_Init(void) {
     /* Peripheral clock enable */
     __HAL_RCC_GPDMA1_CLK_ENABLE();
 
-    /* GPDMA2 interrupt Init */
+    /* GPDMA1 interrupt Init */
+    // USART3 TX --> Logger
     HAL_NVIC_SetPriority(GPDMA1_Channel0_IRQn, 8, 0);
     HAL_NVIC_EnableIRQ(GPDMA1_Channel0_IRQn);
+
+    //  OCTOSPI --> NAND Flash
+    HAL_NVIC_SetPriority(GPDMA1_Channel7_IRQn, 8, 0);
+    HAL_NVIC_EnableIRQ(GPDMA1_Channel7_IRQn);
+    HAL_NVIC_SetPriority(GPDMA1_Channel6_IRQn, 8, 0);
+    HAL_NVIC_EnableIRQ(GPDMA1_Channel6_IRQn);
     return;
 }
 

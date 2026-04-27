@@ -56,8 +56,7 @@ UINT GD5F1GO4UBY1G_page_erase_verify(ULONG block, ULONG page) {
     /*
      * Read the whole page
      */
-    if (GD5F1GO4UBY1G_page_read(
-            block, page, page_buffer, GD25_PAGE_SIZE / sizeof(ULONG)) != LX_SUCCESS) {
+    if (GD5F1GO4UBY1G_page_read(block, page, page_buffer, GD25_PAGE_SIZE / sizeof(ULONG)) != LX_SUCCESS) {
         return LX_ERROR;
     }
 

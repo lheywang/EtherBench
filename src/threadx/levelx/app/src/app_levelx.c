@@ -55,12 +55,11 @@ static ULONG filex_cache[GET_BUFFER_SIZE(FLASH_PARTITION_SIZE) / sizeof(ULONG)];
  *
  * @return UINT
  */
-UINT open_levelx_nand_volume(
-    LX_NAND_FLASH *volume,
-    char *name,
-    UINT (*funcptr)(LX_NAND_FLASH *),
-    ULONG *cache,
-    size_t cache_size);
+UINT open_levelx_nand_volume(LX_NAND_FLASH *volume,
+                             char *name,
+                             UINT (*funcptr)(LX_NAND_FLASH *),
+                             ULONG *cache,
+                             size_t cache_size);
 
 UINT app_levelx_thread_entry(ULONG arg) {
 
@@ -83,12 +82,7 @@ UINT app_levelx_thread_entry(ULONG arg) {
     UCHAR reg_C0 = GD5F1GO4UBY1G_Read_Register(0xC0);
     UCHAR reg_D0 = GD5F1GO4UBY1G_Read_Register(0xD0);
     UCHAR reg_F0 = GD5F1GO4UBY1G_Read_Register(0xF0);
-    LOG("Registers (A0, B0, C0, D0, F0) = %x | %x | %x | %x | %x",
-        reg_A0,
-        reg_B0,
-        reg_C0,
-        reg_D0,
-        reg_F0);
+    LOG("Registers (A0, B0, C0, D0, F0) = %x | %x | %x | %x | %x", reg_A0, reg_B0, reg_C0, reg_D0, reg_F0);
 #endif
 
     /*
@@ -110,12 +104,7 @@ UINT app_levelx_thread_entry(ULONG arg) {
     reg_C0 = GD5F1GO4UBY1G_Read_Register(0xC0);
     reg_D0 = GD5F1GO4UBY1G_Read_Register(0xD0);
     reg_F0 = GD5F1GO4UBY1G_Read_Register(0xF0);
-    LOG("Registers (A0, B0, C0, D0, F0) = %x | %x | %x | %x | %x",
-        reg_A0,
-        reg_B0,
-        reg_C0,
-        reg_D0,
-        reg_F0);
+    LOG("Registers (A0, B0, C0, D0, F0) = %x | %x | %x | %x | %x", reg_A0, reg_B0, reg_C0, reg_D0, reg_F0);
 #endif
 
     /*
@@ -135,20 +124,11 @@ UINT app_levelx_thread_entry(ULONG arg) {
      * SETTINGS MEMORY
      */
     UINT status = 0x00;
+    status |=
+        open_levelx_nand_volume(&NAND_settings, "SETTINGS", &settings_init, settings_cache, sizeof(settings_cache));
+    status |= open_levelx_nand_volume(&NAND_filex, "FILEX", &flash_init, filex_cache, sizeof(filex_cache));
     status |= open_levelx_nand_volume(
-        &NAND_settings,
-        "SETTINGS",
-        &settings_init,
-        settings_cache,
-        sizeof(settings_cache));
-    status |= open_levelx_nand_volume(
-        &NAND_filex, "FILEX", &flash_init, filex_cache, sizeof(filex_cache));
-    status |= open_levelx_nand_volume(
-        &NAND_backtrace,
-        "BACKTRACE",
-        &backtrace_init,
-        backtrace_cache,
-        sizeof(backtrace_cache));
+        &NAND_backtrace, "BACKTRACE", &backtrace_init, backtrace_cache, sizeof(backtrace_cache));
 
     return status;
 }
@@ -177,10 +157,13 @@ UINT settings_init(LX_NAND_FLASH *nand) {
     nand->lx_nand_flash_driver_pages_write = settings_pages_write;
     nand->lx_nand_flash_driver_pages_copy = settings_page_copy;
     nand->lx_nand_flash_driver_block_erase = settings_block_erase;
+
     nand->lx_nand_flash_driver_block_erased_verify = settings_block_erase_verify;
     nand->lx_nand_flash_driver_page_erased_verify = settings_page_erase_verify;
     nand->lx_nand_flash_driver_block_status_get = settings_block_status_get;
     nand->lx_nand_flash_driver_block_status_set = settings_block_status_set;
+    nand->lx_nand_flash_driver_extra_bytes_get = settings_extra_bytes_get;
+    nand->lx_nand_flash_driver_extra_bytes_set = settings_extra_bytes_set;
 
     return LX_SUCCESS;
 }
@@ -209,10 +192,13 @@ UINT flash_init(LX_NAND_FLASH *nand) {
     nand->lx_nand_flash_driver_pages_write = flash_pages_write;
     nand->lx_nand_flash_driver_pages_copy = flash_page_copy;
     nand->lx_nand_flash_driver_block_erase = flash_block_erase;
+
     nand->lx_nand_flash_driver_block_erased_verify = flash_block_erase_verify;
     nand->lx_nand_flash_driver_page_erased_verify = flash_page_erase_verify;
     nand->lx_nand_flash_driver_block_status_get = flash_block_status_get;
     nand->lx_nand_flash_driver_block_status_set = flash_block_status_set;
+    nand->lx_nand_flash_driver_extra_bytes_get = flash_extra_bytes_get;
+    nand->lx_nand_flash_driver_extra_bytes_set = flash_extra_bytes_set;
 
     return LX_SUCCESS;
 }
@@ -241,20 +227,22 @@ UINT backtrace_init(LX_NAND_FLASH *nand) {
     nand->lx_nand_flash_driver_pages_write = backtrace_pages_write;
     nand->lx_nand_flash_driver_pages_copy = backtrace_page_copy;
     nand->lx_nand_flash_driver_block_erase = backtrace_block_erase;
+
     nand->lx_nand_flash_driver_block_erased_verify = backtrace_block_erase_verify;
     nand->lx_nand_flash_driver_page_erased_verify = backtrace_page_erase_verify;
     nand->lx_nand_flash_driver_block_status_get = backtrace_block_status_get;
     nand->lx_nand_flash_driver_block_status_set = backtrace_block_status_set;
+    nand->lx_nand_flash_driver_extra_bytes_get = backtrace_extra_bytes_get;
+    nand->lx_nand_flash_driver_extra_bytes_set = backtrace_extra_bytes_set;
 
     return LX_SUCCESS;
 }
 
-UINT open_levelx_nand_volume(
-    LX_NAND_FLASH *volume,
-    char *name,
-    UINT (*funcptr)(LX_NAND_FLASH *),
-    ULONG *cache,
-    size_t cache_size) {
+UINT open_levelx_nand_volume(LX_NAND_FLASH *volume,
+                             char *name,
+                             UINT (*funcptr)(LX_NAND_FLASH *),
+                             ULONG *cache,
+                             size_t cache_size) {
 
     /*
      * First open try

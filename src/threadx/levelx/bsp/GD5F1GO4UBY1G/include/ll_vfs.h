@@ -25,13 +25,13 @@
 //                             DEFINES
 // ======================================================================
 // Partitions sizes
-#define SETTINGS_PARTITION_SIZE 10
+#define SETTINGS_PARTITION_SIZE  10
 #define BACKTRACE_PARTITION_SIZE 10
-#define FLASH_PARTITION_SIZE (GD25_BLOCK_COUNT_NORMAL - BACKTRACE_PARTITION_SIZE)
+#define FLASH_PARTITION_SIZE     (GD25_BLOCK_COUNT_NORMAL - BACKTRACE_PARTITION_SIZE)
 
 // Partitions offsets
-#define SETTINGS_PARTITION_OFFSET 0
-#define FLASH_PARTITION_OFFSET 10
+#define SETTINGS_PARTITION_OFFSET  0
+#define FLASH_PARTITION_OFFSET     10
 #define BACKTRACE_PARTITION_OFFSET (GD25_BLOCK_COUNT_NORMAL - BACKTRACE_PARTITION_SIZE)
 
 // ======================================================================
@@ -60,6 +60,10 @@ UINT settings_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spa
 UINT flash_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
 UINT backtrace_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
 
+UINT settings_extra_bytes_get(ULONG block, ULONG page, UCHAR *destination, UINT size);
+UINT flash_extra_bytes_get(ULONG block, ULONG page, UCHAR *destination, UINT size);
+UINT backtrace_extra_bytes_get(ULONG block, ULONG page, UCHAR *destination, UINT size);
+
 /**
  * @brief Write a page on the GD5F1GO4UBY1G device.
  *
@@ -80,19 +84,28 @@ UINT settings_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *sp
 UINT flash_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
 UINT backtrace_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages);
 
+UINT settings_extra_bytes_set(ULONG block, ULONG page, UCHAR *source, UINT size);
+UINT flash_extra_bytes_set(ULONG block, ULONG page, UCHAR *source, UINT size);
+UINT backtrace_extra_bytes_set(ULONG block, ULONG page, UCHAR *source, UINT size);
+
 /**
  * @brief Perform a copy from a page to another one.
- * 
+ *
  * @param src_block The source block.
  * @param src_page The source page
  * @param dest_block The destination block
  * @param dest_page The destination page
  * @param pages The number of pages to be copied
- * @return UINT 
+ * @return UINT
  */
-UINT settings_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR* buffer);
-UINT flash_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR* buffer);
-UINT backtrace_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR* buffer);
+UINT settings_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR *buffer);
+UINT flash_page_copy(ULONG src_block, ULONG src_page, ULONG dest_block, ULONG dest_page, ULONG pages, UCHAR *buffer);
+UINT backtrace_page_copy(ULONG src_block,
+                         ULONG src_page,
+                         ULONG dest_block,
+                         ULONG dest_page,
+                         ULONG pages,
+                         UCHAR *buffer);
 
 /*
  * Erase

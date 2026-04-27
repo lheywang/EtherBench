@@ -19,9 +19,9 @@
 #include "commands.h"
 
 // HAL
+#include "peripherals/octospi.h"
 #include "stm32h5xx_hal.h"
 #include "stm32h5xx_hal_xspi.h"
-#include "peripherals/octospi.h"
 
 // LevelX
 #include "lx_api.h"
@@ -56,7 +56,7 @@ UINT GD5F1GO4UBY1G_set_protected_blocks(UCHAR status) {
     cmd.InstructionMode = HAL_XSPI_INSTRUCTION_1_LINE;
     cmd.AddressMode = HAL_XSPI_ADDRESS_1_LINE;
     cmd.AddressWidth = HAL_XSPI_ADDRESS_8_BITS;
-    cmd.Address =  GD25_FEATURE_REG_PROTECTION;
+    cmd.Address = GD25_FEATURE_REG_PROTECTION;
     cmd.DataMode = HAL_XSPI_DATA_1_LINE;
     cmd.DataLength = 1;
     cmd.DummyCycles = 0;
@@ -94,7 +94,7 @@ UINT GD5F1GO4UBY1G_enable_quad() {
     cmd.InstructionMode = HAL_XSPI_INSTRUCTION_1_LINE;
     cmd.AddressMode = HAL_XSPI_ADDRESS_1_LINE;
     cmd.AddressWidth = HAL_XSPI_ADDRESS_8_BITS;
-    cmd.Address =  GD25_FEATURE_REG_FEATURE_1;
+    cmd.Address = GD25_FEATURE_REG_FEATURE_1;
     cmd.DataMode = HAL_XSPI_DATA_1_LINE;
     cmd.DataLength = 1;
     cmd.DummyCycles = 0;
@@ -114,7 +114,7 @@ UINT GD5F1GO4UBY1G_enable_quad() {
     GD5F1GO4UBY1G_wait_for_complete();
 
     /*
-     * Finally, enable the QSPI communication on the host side 
+     * Finally, enable the QSPI communication on the host side
      */
     HAL_XSPI_InitAsQSPI(&hospi1);
 

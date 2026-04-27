@@ -12,9 +12,15 @@
 // ======================================================================
 //                              INCLUDE
 // ======================================================================
+// Header
 #include "octospi.h"
 
+// Local libraries
+#include "gpdma.h"
+
 XSPI_HandleTypeDef hospi1;
+DMA_HandleTypeDef handle_GPDMA1_octospiTX;
+DMA_HandleTypeDef handle_GPDMA1_octospiRX;
 
 // ======================================================================
 //                              FUNCTIONS
@@ -22,6 +28,9 @@ XSPI_HandleTypeDef hospi1;
 
 void MX_OCTOSPI1_Init(void) {
 
+    /*
+     * Configure peripheral
+     */
     hospi1.Instance = OCTOSPI1;
     hospi1.Init.FifoThresholdByte = 1;
     hospi1.Init.MemoryMode = HAL_XSPI_SINGLE_MEM;
@@ -43,9 +52,64 @@ void MX_OCTOSPI1_Init(void) {
     }
 
     /*
+     * Configure GPDMA for the reads :
+     */
+    handle_GPDMA1_octospiRX.Instance = GPDMA1_Channel7;
+    handle_GPDMA1_octospiRX.Init.Request = GPDMA1_REQUEST_OCTOSPI1;
+    handle_GPDMA1_octospiRX.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
+    handle_GPDMA1_octospiRX.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    handle_GPDMA1_octospiRX.Init.SrcInc = DMA_SINC_FIXED;
+    handle_GPDMA1_octospiRX.Init.DestInc = DMA_DINC_INCREMENTED;
+    handle_GPDMA1_octospiRX.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
+    handle_GPDMA1_octospiRX.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
+    handle_GPDMA1_octospiRX.Init.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
+    handle_GPDMA1_octospiRX.Init.SrcBurstLength = 1;
+    handle_GPDMA1_octospiRX.Init.DestBurstLength = 64;
+    handle_GPDMA1_octospiRX.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT0;
+    handle_GPDMA1_octospiRX.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
+    handle_GPDMA1_octospiRX.Init.Mode = DMA_NORMAL;
+    if (HAL_DMA_Init(&handle_GPDMA1_octospiRX) != HAL_OK) {
+        Error_Handler();
+    }
+
+    __HAL_LINKDMA(&hospi1, hdmarx, handle_GPDMA1_octospiRX);
+
+    if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_octospiRX, DMA_CHANNEL_NPRIV) != HAL_OK) {
+        Error_Handler();
+    }
+
+    /*
+     * Configure GPDMA for the writes :
+     */
+
+    handle_GPDMA1_octospiTX.Instance = GPDMA1_Channel6;
+    handle_GPDMA1_octospiTX.Init.Request = GPDMA1_REQUEST_OCTOSPI1;
+    handle_GPDMA1_octospiTX.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
+    handle_GPDMA1_octospiTX.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    handle_GPDMA1_octospiTX.Init.SrcInc = DMA_SINC_INCREMENTED;
+    handle_GPDMA1_octospiTX.Init.DestInc = DMA_DINC_FIXED;
+    handle_GPDMA1_octospiTX.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
+    handle_GPDMA1_octospiTX.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
+    handle_GPDMA1_octospiTX.Init.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
+    handle_GPDMA1_octospiTX.Init.SrcBurstLength = 64;
+    handle_GPDMA1_octospiTX.Init.DestBurstLength = 1;
+    handle_GPDMA1_octospiTX.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT1;
+    handle_GPDMA1_octospiTX.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
+    handle_GPDMA1_octospiTX.Init.Mode = DMA_NORMAL;
+    if (HAL_DMA_Init(&handle_GPDMA1_octospiTX) != HAL_OK) {
+        Error_Handler();
+    }
+
+    __HAL_LINKDMA(&hospi1, hdmatx, handle_GPDMA1_octospiTX);
+
+    if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_octospiTX, DMA_CHANNEL_NPRIV) != HAL_OK) {
+        Error_Handler();
+    }
+
+    /*
      * Enable interrupts
      */
-    HAL_NVIC_SetPriority(OCTOSPI1_IRQn, 5, 0); 
+    HAL_NVIC_SetPriority(OCTOSPI1_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(OCTOSPI1_IRQn);
 
     return;
@@ -53,8 +117,8 @@ void MX_OCTOSPI1_Init(void) {
 
 /**
  * @brief The full init as QSPI is done here
- * 
- * @param xspiHandle 
+ *
+ * @param xspiHandle
  */
 void HAL_XSPI_InitAsQSPI(XSPI_HandleTypeDef *xspiHandle) {
 
@@ -111,6 +175,17 @@ void HAL_XSPI_InitAsQSPI(XSPI_HandleTypeDef *xspiHandle) {
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
         GPIO_InitStruct.Alternate = GPIO_AF10_OCTOSPI1;
         HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+        /*
+         * Disable DMA
+         */
+        HAL_DMA_DeInit(xspiHandle->hdmarx);
+        HAL_DMA_DeInit(xspiHandle->hdmatx);
+
+        /*
+         * Turn off ISR
+         */
+        HAL_NVIC_DisableIRQ(OCTOSPI1_IRQn);
     }
 }
 
@@ -175,7 +250,7 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef *xspiHandle) {
         HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
         HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, GPIO_PIN_SET);
 
-        GPIO_InitStruct2.Pin =  GPIO_PIN_13;
+        GPIO_InitStruct2.Pin = GPIO_PIN_13;
         GPIO_InitStruct2.Mode = GPIO_MODE_OUTPUT_PP;
         GPIO_InitStruct2.Pull = GPIO_NOPULL;
         GPIO_InitStruct2.Speed = GPIO_SPEED_FREQ_VERY_HIGH;

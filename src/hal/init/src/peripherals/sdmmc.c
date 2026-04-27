@@ -73,8 +73,7 @@ void HAL_SD_MspInit(SD_HandleTypeDef *sdHandle) {
         PC12     ------> SDMMC1_CK
         PD2     ------> SDMMC1_CMD
         */
-        GPIO_InitStruct.Pin =
-            GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
+        GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -104,8 +103,7 @@ void HAL_SD_MspDeInit(SD_HandleTypeDef *sdHandle) {
         PC12     ------> SDMMC1_CK
         PD2     ------> SDMMC1_CMD
         */
-        HAL_GPIO_DeInit(
-            GPIOC, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12);
+        HAL_GPIO_DeInit(GPIOC, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12);
 
         HAL_GPIO_DeInit(GPIOD, GPIO_PIN_2);
     }
