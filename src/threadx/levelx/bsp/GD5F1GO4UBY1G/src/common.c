@@ -68,6 +68,10 @@ UINT GD5F1GO4UBY1G_wait_for_complete() {
     cfg.IntervalTime = 0x40;
     cfg.AutomaticStop = HAL_XSPI_AUTOMATIC_STOP_ENABLE;
 
+    // Clean the semaphore...
+    while (tx_semaphore_get(&flash_wip, TX_NO_WAIT) == TX_SUCCESS)
+        ;
+
     if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK) {
         return LX_ERROR;
     }
@@ -119,47 +123,6 @@ UINT GD5F1GO4UBY1G_write_enable() {
      */
     if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK) {
         return LX_ERROR;
-    }
-
-    /*
-     * Start and auto polling to check that the WEL bit is set (ready).
-     */
-    cmd.Instruction = GD25_GET_FEATURES;
-    cmd.AddressMode = HAL_XSPI_ADDRESS_1_LINE;
-    cmd.AddressWidth = HAL_XSPI_ADDRESS_8_BITS;
-    cmd.Address = GD25_FEATURE_REG_STATUS_1;
-    cmd.DataMode = HAL_XSPI_DATA_1_LINE;
-    cmd.DataLength = 1;
-
-    XSPI_AutoPollingTypeDef cfg = {0};
-
-    cfg.MatchValue = GD25_FEATURE_BIT_WEL;
-    cfg.MatchMask = GD25_FEATURE_BIT_WEL;
-    cfg.MatchMode = HAL_XSPI_MATCH_MODE_AND;
-    cfg.IntervalTime = 0x40;
-    cfg.AutomaticStop = HAL_XSPI_AUTOMATIC_STOP_ENABLE;
-
-    if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK) {
-        return LX_ERROR;
-    }
-
-    if (HAL_XSPI_AutoPolling_IT(&hospi1, &cfg) != HAL_OK) {
-        return LX_ERROR;
-    }
-
-    if (tx_semaphore_get(&flash_wip, 10000) != TX_SUCCESS) { // 10s
-        return LX_ERROR;
-    }
-
-    /*
-     * Then, fetch the result, and ensure the operation did ended up sucessfully.
-     */
-    uint8_t status_reg = 0;
-    if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) == HAL_OK) {
-        HAL_XSPI_Receive(&hospi1, &status_reg, HAL_MAX_DELAY);
-        if ((status_reg & GD25_FEATURE_BIT_WEL) == 0) {
-            return LX_ERROR;
-        }
     }
 
     return LX_SUCCESS;

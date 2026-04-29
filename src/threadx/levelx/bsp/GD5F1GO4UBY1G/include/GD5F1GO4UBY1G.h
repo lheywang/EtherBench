@@ -29,8 +29,8 @@
 //                           SHARED VARIABLES
 // ======================================================================
 // Main semaphore for the RTOS
-extern TX_SEMAPHORE flash_wip;
-extern TX_SEMAPHORE flash_dma_done;
+extern TX_SEMAPHORE flash_wip;      // From launcher
+extern TX_SEMAPHORE flash_dma_done; // From launcher
 
 // ======================================================================
 //                        FUNCTIONS (PUBLIC API)

@@ -4,9 +4,9 @@
  * @brief   ST Interrupt file
  * @version 0.1
  * @date    2026-04-21
- * 
+ *
  * @copyright Copyright (c) 2026
- * 
+ *
  */
 
 // ======================================================================
@@ -66,10 +66,6 @@ void TIM6_IRQHandler(void) { HAL_TIM_IRQHandler(&htim6); }
 void USART3_IRQHandler(void) { HAL_UART_IRQHandler(&huart3); }
 
 void USB_DRD_FS_IRQHandler(void) { HAL_PCD_IRQHandler(&hpcd_USB_DRD_FS); }
-
-void GPDMA2_Channel0_IRQHandler(void) {
-    // HAL_DMA_IRQHandler(&handle_GPDMA2_Channel0);
-}
 
 void FPU_IRQHandler(void) {}
 

@@ -65,7 +65,7 @@ void MX_USART3_UART_Init(void) {
     hdma_usart3_tx.Init.SrcBurstLength = 1;
     hdma_usart3_tx.Init.DestBurstLength = 1;
 
-    hdma_usart3_tx.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT1;
+    hdma_usart3_tx.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT0;
     hdma_usart3_tx.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
 
     hdma_usart3_tx.Init.Mode = DMA_NORMAL;

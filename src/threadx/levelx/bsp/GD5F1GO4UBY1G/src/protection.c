@@ -114,6 +114,12 @@ UINT GD5F1GO4UBY1G_enable_quad() {
     GD5F1GO4UBY1G_wait_for_complete();
 
     /*
+     * Then, enable the write operation
+     */
+    if (GD5F1GO4UBY1G_write_disable() != LX_SUCCESS)
+        return LX_ERROR;
+
+    /*
      * Finally, enable the QSPI communication on the host side
      */
     HAL_XSPI_InitAsQSPI(&hospi1);

@@ -262,7 +262,7 @@ UINT open_levelx_nand_volume(LX_NAND_FLASH *volume,
         status = lx_nand_flash_format(volume, name, funcptr, cache, cache_size);
 
         if (status != LX_SUCCESS) {
-            LOG("Volume : %s format failed. Volume may not be working correctly.", name);
+            LOG("Volume : %s format failed. Volume may not be working correctly. Error code = 0x%x", name, status);
         } else {
             LOG("Volume : %s format suceeded. Trying a reopen now ...", name);
         }
@@ -275,6 +275,8 @@ UINT open_levelx_nand_volume(LX_NAND_FLASH *volume,
 
     if (status == LX_SUCCESS) {
         LOG("Volume : %s openned. Ready for IO operations.", name);
+    } else {
+        LOG("Volume : %s is NOT openned. Any IO operation will STALL. Stop code = 0x%x", name, status);
     }
 
     return status;

@@ -60,7 +60,7 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
     cmd.AddressWidth = HAL_XSPI_ADDRESS_16_BITS;
     cmd.AlternateBytesMode = HAL_XSPI_ALT_BYTES_NONE;
     cmd.DataMode = HAL_XSPI_DATA_4_LINES;
-    cmd.DummyCycles = 1;
+    cmd.DummyCycles = 0;
 
     /*
      * Write the first elements for the buffer (as PROGRAM_LOAD --> Set all to 0xFF !)
@@ -68,7 +68,7 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
     if ((main_buffer != NULL) && (main_size > 0)) {
 
         cmd.DataLength = main_size;
-        cmd.Address = row_addr;
+        cmd.Address = 0;
 
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
@@ -86,6 +86,11 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
             /*
              * Call here the DMA setup + semaphore get.
              */
+            // Clean the semaphore...
+            while (tx_semaphore_get(&flash_dma_done, TX_NO_WAIT) == TX_SUCCESS)
+                ;
+
+            // Run the transfer
             if (HAL_XSPI_Transmit_DMA(&hospi1, (uint8_t *)main_buffer) != HAL_OK)
                 return LX_ERROR;
             if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
@@ -100,15 +105,16 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
         /*
          * Ensure the next command won't erase our buffer.
          */
-        cmd.Instruction = GD25_LOAD_RANDOM_DATA_QIO;
+        cmd.Instruction = GD25_LOAD_RANDOM_DATA_X4;
     }
 
     /*
      * Add the next elements of the buffer :
      */
-    if ((spare_buffer != NULL) && (main_size > 0)) {
+    if ((spare_buffer != NULL) && (spare_size > 0)) {
 
         cmd.DataLength = spare_size;
+        cmd.Address = GD25_PAGE_OOD_ADDR;
 
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
@@ -126,6 +132,11 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
             /*
              * Call here the DMA setup + semaphore get.
              */
+            // Clean the semaphore...
+            while (tx_semaphore_get(&flash_dma_done, TX_NO_WAIT) == TX_SUCCESS)
+                ;
+
+            // Run the transfer
             if (HAL_XSPI_Transmit_DMA(&hospi1, (uint8_t *)spare_buffer) != HAL_OK)
                 return LX_ERROR;
             if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
@@ -153,6 +164,7 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
     cmd.Address = row_addr;
     cmd.DataMode = HAL_XSPI_DATA_NONE;
     cmd.DataLength = 0;
+    cmd.DummyCycles = 0;
 
     if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK) {
         return LX_ERROR;
@@ -175,22 +187,25 @@ UINT GD5F1GO4UBY1G_extra_bytes_set(ULONG block, ULONG page, UCHAR *source, UINT 
 UINT GD5F1GO4UBY1G_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
 
     UINT status = LX_SUCCESS;
-    ULONG *src = (ULONG *)main_buffer;
-    ULONG *spare = (ULONG *)spare_buffer;
+    UCHAR *src = main_buffer;
+    UCHAR *spare = spare_buffer;
 
     for (ULONG i = 0; i < pages; i++) {
-        status = GD5F1GO4UBY1G_generic_write(block,
-                                             page + i,
-                                             (UCHAR *)src,
-                                             GD25_PAGE_SIZE * (sizeof(ULONG) / sizeof(UCHAR)),
-                                             (UCHAR *)spare,
-                                             GD25_PAGE_OOB * (sizeof(ULONG) / sizeof(UCHAR)));
+
+        ULONG current_main_size = (main_buffer != NULL) ? GD25_PAGE_SIZE : 0;
+        ULONG current_spare_size = (spare_buffer != NULL) ? GD25_PAGE_OOB : 0;
+
+        status = GD5F1GO4UBY1G_generic_write(block, page + i, src, current_main_size, spare, current_spare_size);
         if (status != LX_SUCCESS) {
             break;
         }
 
-        src += (GD25_PAGE_SIZE / sizeof(ULONG));
-        spare += (GD25_PAGE_OOB / sizeof(ULONG));
+        if (src != NULL) {
+            src += GD25_PAGE_SIZE;
+        }
+        if (spare != NULL) {
+            spare += GD25_PAGE_OOB;
+        }
     }
 
     return status;

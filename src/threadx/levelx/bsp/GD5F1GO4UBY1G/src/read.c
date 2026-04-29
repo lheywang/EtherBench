@@ -95,6 +95,11 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
             /*
              * Call here the DMA setup + semaphore get.
              */
+            // Clean the semaphore...
+            while (tx_semaphore_get(&flash_dma_done, TX_NO_WAIT) == TX_SUCCESS)
+                ;
+
+            // Run the transfer
             if (HAL_XSPI_Receive_DMA(&hospi1, (uint8_t *)main_buffer) != HAL_OK)
                 return LX_ERROR;
             if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
@@ -126,6 +131,11 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
             /*
              * Call here the DMA setup + semaphore get.
              */
+            // Clean the semaphore...
+            while (tx_semaphore_get(&flash_dma_done, TX_NO_WAIT) == TX_SUCCESS)
+                ;
+
+            // Run the transfer
             if (HAL_XSPI_Receive_DMA(&hospi1, (uint8_t *)spare_buffer) != HAL_OK)
                 return LX_ERROR;
             if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
@@ -158,22 +168,25 @@ UINT GD5F1GO4UBY1G_extra_bytes_get(ULONG block, ULONG page, UCHAR *destination, 
 UINT GD5F1GO4UBY1G_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
 
     UINT status = LX_SUCCESS;
-    ULONG *dest = (ULONG *)main_buffer;
-    ULONG *spare = (ULONG *)spare_buffer;
+    UCHAR *dest = (UCHAR *)main_buffer;
+    UCHAR *spare = (UCHAR *)spare_buffer;
 
     for (ULONG i = 0; i < pages; i++) {
-        status = GD5F1GO4UBY1G_generic_read(block,
-                                            page + i,
-                                            (UCHAR *)dest,
-                                            GD25_PAGE_SIZE * (sizeof(ULONG) / sizeof(UCHAR)),
-                                            (UCHAR *)spare,
-                                            GD25_PAGE_OOB * (sizeof(ULONG) / sizeof(UCHAR)));
+
+        ULONG current_main_size = (main_buffer != NULL) ? GD25_PAGE_SIZE : 0;
+        ULONG current_spare_size = (spare_buffer != NULL) ? GD25_PAGE_OOB : 0;
+
+        status = GD5F1GO4UBY1G_generic_read(block, page + i, dest, current_main_size, spare, current_spare_size);
         if (status != LX_SUCCESS) {
             break;
         }
 
-        dest += GD25_PAGE_SIZE;
-        spare += GD25_PAGE_OOB;
+        if (dest != NULL) {
+            dest += GD25_PAGE_SIZE;
+        }
+        if (spare != NULL) {
+            spare += GD25_PAGE_OOB;
+        }
     }
 
     return status;

@@ -11,7 +11,7 @@
  *
  */
 
- // ======================================================================
+// ======================================================================
 //                             INCLUDES
 // ======================================================================
 // Header
@@ -27,8 +27,10 @@ extern void flash_tx_complete();
 extern void flash_rx_complete();
 extern void flash_polling_complete();
 
-extern DMA_HandleTypeDef hdma_usart3_tx;
-extern XSPI_HandleTypeDef hospi1; // From HAL
+extern DMA_HandleTypeDef hdma_usart3_tx;          // From HAL
+extern XSPI_HandleTypeDef hospi1;                 // From HAL
+extern DMA_HandleTypeDef handle_GPDMA1_octospiTX; // From HAL
+extern DMA_HandleTypeDef handle_GPDMA1_octospiRX; // From HAL
 
 // ======================================================================
 //                             FUNCTIONS
@@ -45,6 +47,8 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
 }
 
 void GPDMA1_Channel0_IRQHandler(void) { HAL_DMA_IRQHandler(&hdma_usart3_tx); }
+void GPDMA1_Channel6_IRQHandler(void) { HAL_DMA_IRQHandler(&handle_GPDMA1_octospiTX); }
+void GPDMA1_Channel7_IRQHandler(void) { HAL_DMA_IRQHandler(&handle_GPDMA1_octospiRX); }
 
 void HAL_XSPI_CmdCpltCallback(XSPI_HandleTypeDef *hxspi) {
     if (hxspi->Instance == OCTOSPI1) {

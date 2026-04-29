@@ -32,7 +32,7 @@ void MX_OCTOSPI1_Init(void) {
      * Configure peripheral
      */
     hospi1.Instance = OCTOSPI1;
-    hospi1.Init.FifoThresholdByte = 1;
+    hospi1.Init.FifoThresholdByte = 24;
     hospi1.Init.MemoryMode = HAL_XSPI_SINGLE_MEM;
     hospi1.Init.MemoryType = HAL_XSPI_MEMTYPE_MACRONIX;
     hospi1.Init.MemorySize = HAL_XSPI_SIZE_1GB;
@@ -65,7 +65,7 @@ void MX_OCTOSPI1_Init(void) {
     handle_GPDMA1_octospiRX.Init.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
     handle_GPDMA1_octospiRX.Init.SrcBurstLength = 1;
     handle_GPDMA1_octospiRX.Init.DestBurstLength = 64;
-    handle_GPDMA1_octospiRX.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT0;
+    handle_GPDMA1_octospiRX.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT1;
     handle_GPDMA1_octospiRX.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
     handle_GPDMA1_octospiRX.Init.Mode = DMA_NORMAL;
     if (HAL_DMA_Init(&handle_GPDMA1_octospiRX) != HAL_OK) {
@@ -93,7 +93,7 @@ void MX_OCTOSPI1_Init(void) {
     handle_GPDMA1_octospiTX.Init.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
     handle_GPDMA1_octospiTX.Init.SrcBurstLength = 64;
     handle_GPDMA1_octospiTX.Init.DestBurstLength = 1;
-    handle_GPDMA1_octospiTX.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT1;
+    handle_GPDMA1_octospiTX.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT0;
     handle_GPDMA1_octospiTX.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
     handle_GPDMA1_octospiTX.Init.Mode = DMA_NORMAL;
     if (HAL_DMA_Init(&handle_GPDMA1_octospiTX) != HAL_OK) {
@@ -175,17 +175,6 @@ void HAL_XSPI_InitAsQSPI(XSPI_HandleTypeDef *xspiHandle) {
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
         GPIO_InitStruct.Alternate = GPIO_AF10_OCTOSPI1;
         HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
-
-        /*
-         * Disable DMA
-         */
-        HAL_DMA_DeInit(xspiHandle->hdmarx);
-        HAL_DMA_DeInit(xspiHandle->hdmatx);
-
-        /*
-         * Turn off ISR
-         */
-        HAL_NVIC_DisableIRQ(OCTOSPI1_IRQn);
     }
 }
 
@@ -286,6 +275,17 @@ void HAL_XSPI_MspDeInit(XSPI_HandleTypeDef *xspiHandle) {
         HAL_GPIO_DeInit(GPIOD, GPIO_PIN_11 | GPIO_PIN_12 | GPIO_PIN_13);
 
         HAL_GPIO_DeInit(GPIOG, GPIO_PIN_6);
+
+        /*
+         * Disable DMA
+         */
+        HAL_DMA_DeInit(xspiHandle->hdmarx);
+        HAL_DMA_DeInit(xspiHandle->hdmatx);
+
+        /*
+         * Turn off ISR
+         */
+        HAL_NVIC_DisableIRQ(OCTOSPI1_IRQn);
     }
 }
 

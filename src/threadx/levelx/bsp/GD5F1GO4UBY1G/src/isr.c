@@ -44,4 +44,4 @@ void flash_tx_complete() { tx_semaphore_put(&flash_dma_done); }
 
 void flash_rx_complete() { tx_semaphore_put(&flash_dma_done); }
 
-extern void flash_polling_complete() { tx_semaphore_put(&flash_wip); }
+void flash_polling_complete() { tx_semaphore_put(&flash_wip); }

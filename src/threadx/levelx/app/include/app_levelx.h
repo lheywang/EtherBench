@@ -40,23 +40,22 @@ extern LX_NAND_FLASH NAND_backtrace;
  *        8 bytes per pages are required, plus one byte per physical block.
  *
  */
-#define GET_BUFFER_SIZE(block_count)                                                     \
-    (LX_NAND_FLASH_SECTOR_MAPPING_CACHE_SIZE * 8 + block_count)
+#define GET_BUFFER_SIZE(block_count) (LX_NAND_FLASH_SECTOR_MAPPING_CACHE_SIZE * 8 + block_count)
 
 // ======================================================================
 //                               DEFINES
 // ======================================================================
 /**
  * @brief Erase all blocks, to perform an hard reset
- * 
+ *
  */
 // #define RESCUE_NAND
 
 /**
  * @brief Reads some registers for debugging.
- * 
+ *
  */
-// #define DEBUG_NAND
+#define DEBUG_NAND
 
 // ======================================================================
 //                              FUNCTIONS
