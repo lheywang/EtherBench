@@ -22,6 +22,10 @@ XSPI_HandleTypeDef hospi1;
 DMA_HandleTypeDef handle_GPDMA1_octospiTX;
 DMA_HandleTypeDef handle_GPDMA1_octospiRX;
 
+// From the QSPI flash driver
+extern void flash_tx_complete();
+extern void flash_rx_complete();
+
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
@@ -55,25 +59,14 @@ void MX_OCTOSPI1_Init(void) {
      * Configure GPDMA for the reads :
      */
     handle_GPDMA1_octospiRX.Instance = GPDMA1_Channel7;
-    handle_GPDMA1_octospiRX.Init.Request = GPDMA1_REQUEST_OCTOSPI1;
-    handle_GPDMA1_octospiRX.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
-    handle_GPDMA1_octospiRX.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    handle_GPDMA1_octospiRX.Init.SrcInc = DMA_SINC_FIXED;
-    handle_GPDMA1_octospiRX.Init.DestInc = DMA_DINC_INCREMENTED;
-    handle_GPDMA1_octospiRX.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
-    handle_GPDMA1_octospiRX.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
-    handle_GPDMA1_octospiRX.Init.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
-    handle_GPDMA1_octospiRX.Init.SrcBurstLength = 1;
-    handle_GPDMA1_octospiRX.Init.DestBurstLength = 64;
-    handle_GPDMA1_octospiRX.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT1;
-    handle_GPDMA1_octospiRX.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
-    handle_GPDMA1_octospiRX.Init.Mode = DMA_NORMAL;
-    if (HAL_DMA_Init(&handle_GPDMA1_octospiRX) != HAL_OK) {
+    handle_GPDMA1_octospiRX.InitLinkedList.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
+    handle_GPDMA1_octospiRX.InitLinkedList.LinkStepMode = DMA_LSM_FULL_EXECUTION;
+    handle_GPDMA1_octospiRX.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT0;
+    handle_GPDMA1_octospiRX.InitLinkedList.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
+    handle_GPDMA1_octospiRX.InitLinkedList.LinkedListMode = DMA_LINKEDLIST_NORMAL;
+    if (HAL_DMAEx_List_Init(&handle_GPDMA1_octospiRX) != HAL_OK) {
         Error_Handler();
     }
-
-    __HAL_LINKDMA(&hospi1, hdmarx, handle_GPDMA1_octospiRX);
-
     if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_octospiRX, DMA_CHANNEL_NPRIV) != HAL_OK) {
         Error_Handler();
     }
@@ -83,28 +76,21 @@ void MX_OCTOSPI1_Init(void) {
      */
 
     handle_GPDMA1_octospiTX.Instance = GPDMA1_Channel6;
-    handle_GPDMA1_octospiTX.Init.Request = GPDMA1_REQUEST_OCTOSPI1;
-    handle_GPDMA1_octospiTX.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
-    handle_GPDMA1_octospiTX.Init.Direction = DMA_MEMORY_TO_PERIPH;
-    handle_GPDMA1_octospiTX.Init.SrcInc = DMA_SINC_INCREMENTED;
-    handle_GPDMA1_octospiTX.Init.DestInc = DMA_DINC_FIXED;
-    handle_GPDMA1_octospiTX.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
-    handle_GPDMA1_octospiTX.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
-    handle_GPDMA1_octospiTX.Init.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
-    handle_GPDMA1_octospiTX.Init.SrcBurstLength = 64;
-    handle_GPDMA1_octospiTX.Init.DestBurstLength = 1;
-    handle_GPDMA1_octospiTX.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT0;
-    handle_GPDMA1_octospiTX.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
-    handle_GPDMA1_octospiTX.Init.Mode = DMA_NORMAL;
-    if (HAL_DMA_Init(&handle_GPDMA1_octospiTX) != HAL_OK) {
+    handle_GPDMA1_octospiTX.InitLinkedList.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
+    handle_GPDMA1_octospiTX.InitLinkedList.LinkStepMode = DMA_LSM_FULL_EXECUTION;
+    handle_GPDMA1_octospiTX.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT0;
+    handle_GPDMA1_octospiTX.InitLinkedList.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
+    handle_GPDMA1_octospiTX.InitLinkedList.LinkedListMode = DMA_LINKEDLIST_NORMAL;
+
+    if (HAL_DMAEx_List_Init(&handle_GPDMA1_octospiTX) != HAL_OK) {
         Error_Handler();
     }
-
-    __HAL_LINKDMA(&hospi1, hdmatx, handle_GPDMA1_octospiTX);
-
     if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_octospiTX, DMA_CHANNEL_NPRIV) != HAL_OK) {
         Error_Handler();
     }
+
+    __HAL_LINKDMA(&hospi1, hdmarx, handle_GPDMA1_octospiRX);
+    __HAL_LINKDMA(&hospi1, hdmatx, handle_GPDMA1_octospiTX);
 
     /*
      * Enable interrupts

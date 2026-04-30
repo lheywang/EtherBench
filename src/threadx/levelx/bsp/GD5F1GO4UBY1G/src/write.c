@@ -21,6 +21,8 @@
 // HAL
 #include "stm32h5xx_hal.h"
 #include "stm32h5xx_hal_dcache.h"
+#include "stm32h5xx_hal_dma.h"
+#include "stm32h5xx_hal_dma_ex.h"
 #include "stm32h5xx_hal_xspi.h"
 
 // LevelX
@@ -33,8 +35,10 @@
 #include <string.h>
 
 // Extern
-extern XSPI_HandleTypeDef hospi1;     // From HAL
-extern DCACHE_HandleTypeDef hdcache1; // From HAL
+extern XSPI_HandleTypeDef hospi1;                 // From HAL
+extern DCACHE_HandleTypeDef hdcache1;             // From HAL
+extern DMA_HandleTypeDef handle_GPDMA1_octospiTX; // from hal/init/octospi.c
+extern DMA_HandleTypeDef handle_GPDMA1_octospiRX; // from hal/init/octospi.c
 
 // ======================================================================
 //                              FUNCTIONS
@@ -50,6 +54,8 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
     /*
      * First, transfer the target page into the cache register
      */
+    ULONG xfer_size = ((main_buffer) ? main_size : 0) + ((spare_buffer) ? spare_size : 0);
+
     XSPI_RegularCmdTypeDef cmd = {0};
     uint32_t row_addr = (block * GD25_BLOCK_PAGES) + page;
 
@@ -61,92 +67,61 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
     cmd.AlternateBytesMode = HAL_XSPI_ALT_BYTES_NONE;
     cmd.DataMode = HAL_XSPI_DATA_4_LINES;
     cmd.DummyCycles = 0;
+    cmd.DataLength = xfer_size;
+    cmd.Address = (main_buffer != NULL) ? 0 : GD25_PAGE_OOD_ADDR;
 
     /*
-     * Write the first elements for the buffer (as PROGRAM_LOAD --> Set all to 0xFF !)
+     * Launch the transfer if we need more than the DMA threshold
      */
-    if ((main_buffer != NULL) && (main_size > 0)) {
 
-        cmd.DataLength = main_size;
-        cmd.Address = 0;
+    if (xfer_size > GD25_DMA_THRESHOLD) {
 
-        if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
-            return LX_ERROR;
+        // Clean the semaphore...
+        while (tx_semaphore_get(&flash_dma_done, TX_NO_WAIT) == TX_SUCCESS)
+            ;
 
         /*
-         * If the size if greater than the DMA threshold, run with it. Otherwise, perform the standard reading method.
+         * Ensure that all the data is into the RAM.
          */
-        if (main_size > GD25_DMA_THRESHOLD) {
-
-            /*
-             * Ensure the data in RAM does match the one we have in cache...
-             */
+        if (main_buffer)
             HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)main_buffer, main_size);
-
-            /*
-             * Call here the DMA setup + semaphore get.
-             */
-            // Clean the semaphore...
-            while (tx_semaphore_get(&flash_dma_done, TX_NO_WAIT) == TX_SUCCESS)
-                ;
-
-            // Run the transfer
-            if (HAL_XSPI_Transmit_DMA(&hospi1, (uint8_t *)main_buffer) != HAL_OK)
-                return LX_ERROR;
-            if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
-                return LX_ERROR;
-
-        } else {
-
-            if (HAL_XSPI_Transmit(&hospi1, (uint8_t *)main_buffer, HAL_MAX_DELAY) != HAL_OK)
-                return LX_ERROR;
-        }
-
-        /*
-         * Ensure the next command won't erase our buffer.
-         */
-        cmd.Instruction = GD25_LOAD_RANDOM_DATA_X4;
-    }
-
-    /*
-     * Add the next elements of the buffer :
-     */
-    if ((spare_buffer != NULL) && (spare_size > 0)) {
-
-        cmd.DataLength = spare_size;
-        cmd.Address = GD25_PAGE_OOD_ADDR;
-
-        if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
-            return LX_ERROR;
-
-        /*
-         * If the size if greater than the DMA threshold, run with it. Otherwise, perform the standard reading method.
-         */
-        if (spare_size > GD25_DMA_THRESHOLD) {
-
-            /*
-             * Ensure the data in RAM does match the one we have in cache...
-             */
+        if (spare_buffer)
             HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)spare_buffer, spare_size);
 
-            /*
-             * Call here the DMA setup + semaphore get.
-             */
-            // Clean the semaphore...
-            while (tx_semaphore_get(&flash_dma_done, TX_NO_WAIT) == TX_SUCCESS)
-                ;
+        if (STM32H563_prepare_dma_xfer(main_buffer, main_size, spare_buffer, spare_size, true) != LX_SUCCESS)
+            return LX_ERROR;
 
-            // Run the transfer
-            if (HAL_XSPI_Transmit_DMA(&hospi1, (uint8_t *)spare_buffer) != HAL_OK)
-                return LX_ERROR;
-            if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
-                return LX_ERROR;
+        if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_octospiTX, &dma_xfer) != HAL_OK)
+            return LX_ERROR;
 
-        } else {
+        if (HAL_XSPI_Transmit_DMA(&hospi1, main_buffer) != HAL_OK)
+            return LX_ERROR;
 
-            if (HAL_XSPI_Transmit(&hospi1, (uint8_t *)spare_buffer, HAL_MAX_DELAY) != HAL_OK)
-                return LX_ERROR;
+        if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
+            return LX_ERROR;
+
+    } else {
+
+        /*
+         * Build the buffer
+         */
+        uint8_t buf[GD25_DMA_THRESHOLD + 2] = {0};
+
+        if (main_buffer) {
+            memcpy(buf, main_buffer, main_size);
         }
+        if (spare_buffer) {
+            memcpy(buf + main_size, spare_buffer, spare_size);
+        }
+
+        /*
+         * Transfer from the local buffer
+         */
+        // Launch
+        if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
+            return LX_ERROR;
+        if (HAL_XSPI_Transmit(&hospi1, buf, HAL_MAX_DELAY) != HAL_OK)
+            return LX_ERROR;
     }
 
     /*

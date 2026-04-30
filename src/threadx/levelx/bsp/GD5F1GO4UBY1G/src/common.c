@@ -20,6 +20,8 @@
 
 // HAL
 #include "stm32h5xx_hal.h"
+#include "stm32h5xx_hal_dma.h"
+#include "stm32h5xx_hal_dma_ex.h"
 #include "stm32h5xx_hal_xspi.h"
 
 // LevelX
@@ -29,12 +31,22 @@
 #include "tx_api.h"
 
 // STD
+#include <stdbool.h>
 #include <string.h>
 
 // Extern
-extern XSPI_HandleTypeDef hospi1;   // From HAL
-extern TX_SEMAPHORE flash_wip;      // From launcher
-extern TX_SEMAPHORE flash_dma_done; // From launcher
+extern XSPI_HandleTypeDef hospi1;                 // From HAL
+extern TX_SEMAPHORE flash_wip;                    // From launcher
+extern TX_SEMAPHORE flash_dma_done;               // From launcher
+extern DMA_HandleTypeDef handle_GPDMA1_octospiTX; // from hal/init/octospi.c
+extern DMA_HandleTypeDef handle_GPDMA1_octospiRX; // from hal/init/octospi.c
+
+// ======================================================================
+//                              VARIABLES
+// ======================================================================
+DMA_NodeTypeDef master_xfer;
+DMA_NodeTypeDef slave_xfer;
+DMA_QListTypeDef dma_xfer;
 
 // ======================================================================
 //                              FUNCTIONS
@@ -186,6 +198,107 @@ UINT GD5F1GO4UBY1G_reset() {
     cmd.DummyCycles = 0;
 
     HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY);
+
+    return LX_SUCCESS;
+}
+
+UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spare_buffer, ULONG spare_size, bool isTx) {
+
+    /*
+     * Clearing the list
+     */
+    if (HAL_DMAEx_List_ResetQ(&dma_xfer) != HAL_OK)
+        return LX_ERROR;
+    if (HAL_DMAEx_List_Init(&handle_GPDMA1_octospiRX) != HAL_OK)
+        return LX_ERROR;
+    if (HAL_DMAEx_List_Init(&handle_GPDMA1_octospiTX) != HAL_OK)
+        return LX_ERROR;
+
+    /*
+     * First, configure the common node to be passed to the GPDMA :
+     */
+    DMA_NodeConfTypeDef node_config = {0};
+
+    // General settings about the DMA.
+    node_config.NodeType = DMA_GPDMA_LINEAR_NODE;
+    node_config.Init.Request = GPDMA1_REQUEST_OCTOSPI1;
+    node_config.Init.Direction = (isTx) ? DMA_MEMORY_TO_PERIPH : DMA_PERIPH_TO_MEMORY;
+    node_config.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
+    node_config.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
+
+    if (isTx) {
+        node_config.Init.SrcBurstLength = 64;
+        node_config.Init.DestBurstLength = 1;
+    } else {
+        node_config.Init.SrcBurstLength = 1;
+        node_config.Init.DestBurstLength = 64;
+    }
+
+    node_config.Init.Mode = DMA_NORMAL;
+
+    if (isTx) {
+        node_config.Init.SrcInc = DMA_SINC_INCREMENTED;
+        node_config.Init.DestInc = DMA_DINC_FIXED;
+    } else {
+        node_config.Init.SrcInc = DMA_SINC_FIXED;
+        node_config.Init.DestInc = DMA_DINC_INCREMENTED;
+    }
+
+    // As the datasheet recommand !
+    if (isTx) {
+        node_config.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT0;
+    } else {
+        node_config.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT1;
+    }
+
+    node_config.Init.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER; // IT for the last transfer.
+
+    /*
+     * Build the first node. For the main buffer.
+     */
+    node_config.DataSize = main_size;
+
+    if (isTx) {
+        node_config.SrcAddress = (uint32_t)main_buffer;
+        node_config.DstAddress = (uint32_t)&OCTOSPI1->DR;
+    } else {
+        node_config.SrcAddress = (uint32_t)&OCTOSPI1->DR;
+        node_config.DstAddress = (uint32_t)main_buffer;
+    }
+
+    if (HAL_DMAEx_List_BuildNode(&node_config, &master_xfer) != HAL_OK)
+        return LX_ERROR;
+
+    /*
+     * Build the second node. For the spare buffer.
+     */
+    node_config.DataSize = spare_size;
+
+    if (isTx) {
+        node_config.SrcAddress = (uint32_t)spare_buffer;
+        node_config.DstAddress = (uint32_t)&OCTOSPI1->DR;
+    } else {
+        node_config.SrcAddress = (uint32_t)&OCTOSPI1->DR;
+        node_config.DstAddress = (uint32_t)spare_buffer;
+    }
+
+    if (HAL_DMAEx_List_BuildNode(&node_config, &slave_xfer) != HAL_OK)
+        return LX_ERROR;
+
+    /*
+     * Link both nodes together, and add them to the DMA list.
+     */
+    if ((main_buffer) && (main_size > 0)) {
+        if (HAL_DMAEx_List_InsertNode_Tail(&dma_xfer, &master_xfer) != HAL_OK)
+            return LX_ERROR;
+        if ((spare_buffer) && (spare_size > 0)) {
+            if (HAL_DMAEx_List_InsertNode_Tail(&dma_xfer, &slave_xfer) != HAL_OK)
+                return LX_ERROR;
+        }
+    } else if ((spare_buffer) && (spare_size > 0)) {
+        if (HAL_DMAEx_List_InsertNode_Tail(&dma_xfer, &slave_xfer) != HAL_OK)
+            return LX_ERROR;
+    }
 
     return LX_SUCCESS;
 }

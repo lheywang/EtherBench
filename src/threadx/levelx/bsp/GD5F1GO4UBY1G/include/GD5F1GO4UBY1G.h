@@ -25,12 +25,19 @@
 #include "stm32h5xx_hal.h"
 #include "stm32h5xx_hal_xspi.h"
 
+// STD
+#include <stdbool.h>
+
 // ======================================================================
 //                           SHARED VARIABLES
 // ======================================================================
 // Main semaphore for the RTOS
 extern TX_SEMAPHORE flash_wip;      // From launcher
 extern TX_SEMAPHORE flash_dma_done; // From launcher
+
+extern DMA_NodeTypeDef master_xfer; // from common.c
+extern DMA_NodeTypeDef slave_xfer;  // from common.c
+extern DMA_QListTypeDef dma_xfer;   // from common.c
 
 // ======================================================================
 //                        FUNCTIONS (PUBLIC API)
@@ -299,6 +306,20 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
                                  ULONG main_size,
                                  UCHAR *spare_buffer,
                                  ULONG spare_size);
+
+/**
+ * @brief Prepare a linked list DMA transfer from or to the NAND.
+ *        Use the advanced GPDMA architecture to ensure the fastest operation as possible with the lowest overhead.
+ *
+ * @param main_buffer Pointer to the first buffer to be transfered.
+ * @param main_size The size of the first buffer to be sent.
+ * @param spare_buffer Pointer to the second buffer to be transfered.
+ * @param spare_size The size of the second buffer to be sent.
+ * @param isTx True if the transfer is to the NAND. False otherwise.
+ *
+ * @return UINT
+ */
+UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spare_buffer, ULONG spare_size, bool isTx);
 
 // ======================================================================
 //                           INTERRUPTS
