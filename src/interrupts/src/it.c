@@ -54,20 +54,12 @@ void HAL_XSPI_CmdCpltCallback(XSPI_HandleTypeDef *hxspi) {
 
 void HAL_XSPI_TxCpltCallback(XSPI_HandleTypeDef *hxspi) {
     if (hxspi->Instance == OCTOSPI1) {
-        CLEAR_BIT(hospi1.Instance->CR, OCTOSPI_CR_DMAEN);
-        CLEAR_BIT(hospi1.Instance->CR, XSPI_CR_FMODE);
-        HAL_XSPI_CLEAR_FLAG(&hospi1, HAL_XSPI_FLAG_TC);
-        hospi1.State = HAL_XSPI_STATE_READY;
         flash_tx_complete();
     }
 }
 
 void HAL_XSPI_RxCpltCallback(XSPI_HandleTypeDef *hxspi) {
     if (hxspi->Instance == OCTOSPI1) {
-        CLEAR_BIT(hospi1.Instance->CR, OCTOSPI_CR_DMAEN);
-        CLEAR_BIT(hospi1.Instance->CR, XSPI_CR_FMODE);
-        HAL_XSPI_CLEAR_FLAG(&hospi1, HAL_XSPI_FLAG_TC);
-        hospi1.State = HAL_XSPI_STATE_READY;
         flash_rx_complete();
     }
 }
@@ -82,7 +74,6 @@ void HAL_DMA_LinkedList_CpltCallback(DMA_HandleTypeDef *hdma) {
     if (hdma == &handle_GPDMA1_octospiRX) {
         HAL_XSPI_RxCpltCallback(&hospi1);
     } else if (hdma == &handle_GPDMA1_octospiTX) {
-        CLEAR_BIT(hospi1.Instance->CR, OCTOSPI_CR_DMAEN);
         HAL_XSPI_ENABLE_IT(&hospi1, HAL_XSPI_IT_TC);
     }
 }

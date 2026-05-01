@@ -109,6 +109,19 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
         if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
             return LX_ERROR;
 
+        /*
+         * Clear the transfer
+         */
+        CLEAR_BIT(hospi1.Instance->CR, OCTOSPI_CR_DMAEN);
+
+        handle_GPDMA1_octospiRX.Instance->CCR |= DMA_CCR_RESET;
+
+        HAL_XSPI_CLEAR_FLAG(&hospi1, HAL_XSPI_FLAG_TC | HAL_XSPI_FLAG_TE);
+        HAL_XSPI_DISABLE_IT(&hospi1, HAL_XSPI_IT_TE);
+
+        hospi1.State = HAL_XSPI_STATE_READY;
+        MODIFY_REG(hospi1.Instance->CR, XSPI_CR_FMODE, 0x1UL << XSPI_CR_FMODE_Pos);
+
     } else {
 
         /*
