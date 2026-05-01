@@ -96,22 +96,38 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
 
     if (xfer_size > GD25_DMA_THRESHOLD) {
 
-        // Clean the semaphore...
+        /*
+         * Clean the semaphore, to ensure we restart from 0.
+         */
         while (tx_semaphore_get(&flash_dma_done, TX_NO_WAIT) == TX_SUCCESS)
             ;
 
+        /*
+         * Build the linked list for the DMA
+         */
         if (STM32H563_prepare_dma_xfer(main_buffer, main_size, spare_buffer, spare_size, false) != LX_SUCCESS)
             return LX_ERROR;
-
         if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_octospiRX, &dma_xfer) != HAL_OK)
             return LX_ERROR;
 
+        /*
+         * Start the transfer
+         */
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
 
-        if (HAL_XSPI_Receive_DMA(&hospi1, main_buffer) != HAL_OK)
-            return LX_ERROR;
+        MODIFY_REG(hospi1.Instance->CR, XSPI_CR_FMODE, 0x1UL << XSPI_CR_FMODE_Pos);
+        hospi1.State = HAL_XSPI_STATE_BUSY_RX;
+        HAL_XSPI_ENABLE_IT(&hospi1, HAL_XSPI_IT_TE);
 
+        HAL_DMAEx_List_Start_IT(&handle_GPDMA1_octospiRX);
+
+        WRITE_REG(hospi1.Instance->AR, hospi1.Instance->AR);
+        SET_BIT(hospi1.Instance->CR, OCTOSPI_CR_DMAEN);
+
+        /*
+         * Wait, in another task for the transfer to finish.
+         */
         if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
             return LX_ERROR;
 

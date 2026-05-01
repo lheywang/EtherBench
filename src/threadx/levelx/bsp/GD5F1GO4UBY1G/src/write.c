@@ -76,7 +76,9 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
 
     if (xfer_size > GD25_DMA_THRESHOLD) {
 
-        // Clean the semaphore...
+        /*
+         * Clean the semaphore, to ensure we restart from 0.
+         */
         while (tx_semaphore_get(&flash_dma_done, TX_NO_WAIT) == TX_SUCCESS)
             ;
 
@@ -88,12 +90,19 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
         if (spare_buffer)
             HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)spare_buffer, spare_size);
 
+        /*
+         * Build the linked list for the DMA
+         */
         if (STM32H563_prepare_dma_xfer(main_buffer, main_size, spare_buffer, spare_size, true) != LX_SUCCESS)
             return LX_ERROR;
-
         if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_octospiTX, &dma_xfer) != HAL_OK)
             return LX_ERROR;
 
+        /*
+         * Start the transfer
+         */
+        if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
+            return LX_ERROR;
         if (HAL_XSPI_Transmit_DMA(&hospi1, main_buffer) != HAL_OK)
             return LX_ERROR;
 
@@ -117,11 +126,17 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
         /*
          * Transfer from the local buffer
          */
-        // Launch
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
-        if (HAL_XSPI_Transmit(&hospi1, buf, HAL_MAX_DELAY) != HAL_OK)
-            return LX_ERROR;
+
+        MODIFY_REG(hospi1.Instance->CR, XSPI_CR_FMODE, 0x0UL);
+        hospi1.State = HAL_XSPI_STATE_BUSY_TX;
+        HAL_XSPI_ENABLE_IT(&hospi1, HAL_XSPI_IT_TE);
+
+        HAL_DMAEx_List_Start_IT(&handle_GPDMA1_octospiTX);
+
+        WRITE_REG(hospi1.Instance->AR, hospi1.Instance->AR);
+        SET_BIT(hospi1.Instance->CR, OCTOSPI_CR_DMAEN);
     }
 
     /*

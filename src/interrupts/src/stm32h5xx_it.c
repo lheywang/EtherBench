@@ -22,6 +22,10 @@ extern PCD_HandleTypeDef hpcd_USB_DRD_FS;
 extern TIM_HandleTypeDef htim6;
 extern SD_HandleTypeDef hsd1;
 extern XSPI_HandleTypeDef hospi1;
+extern DMA_HandleTypeDef hdma_usart3_tx;          // From HAL
+extern XSPI_HandleTypeDef hospi1;                 // From HAL
+extern DMA_HandleTypeDef handle_GPDMA1_octospiTX; // From HAL
+extern DMA_HandleTypeDef handle_GPDMA1_octospiRX; // From HAL
 
 // ======================================================================
 //                              CORTEX HANDLERS
@@ -78,3 +82,9 @@ void ETH_WKUP_IRQHandler(void) { HAL_ETH_IRQHandler(&heth); }
 void SDMMC1_IRQHandler(void) { HAL_SD_IRQHandler(&hsd1); }
 
 void OCTOSPI1_IRQHandler(void) { HAL_XSPI_IRQHandler(&hospi1); }
+
+void GPDMA1_Channel0_IRQHandler(void) { HAL_DMA_IRQHandler(&hdma_usart3_tx); }
+
+void GPDMA1_Channel6_IRQHandler(void) { HAL_DMA_IRQHandler(&handle_GPDMA1_octospiTX); }
+
+void GPDMA1_Channel7_IRQHandler(void) { HAL_DMA_IRQHandler(&handle_GPDMA1_octospiRX); }

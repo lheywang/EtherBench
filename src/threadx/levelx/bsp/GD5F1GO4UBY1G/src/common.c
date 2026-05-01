@@ -209,10 +209,6 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
      */
     if (HAL_DMAEx_List_ResetQ(&dma_xfer) != HAL_OK)
         return LX_ERROR;
-    if (HAL_DMAEx_List_Init(&handle_GPDMA1_octospiRX) != HAL_OK)
-        return LX_ERROR;
-    if (HAL_DMAEx_List_Init(&handle_GPDMA1_octospiTX) != HAL_OK)
-        return LX_ERROR;
 
     /*
      * First, configure the common node to be passed to the GPDMA :
@@ -251,53 +247,58 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
         node_config.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT1;
     }
 
-    node_config.Init.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER; // IT for the last transfer.
-
     /*
      * Build the first node. For the main buffer.
      */
-    node_config.DataSize = main_size;
+    if (main_buffer) {
+        node_config.DataSize = main_size;
 
-    if (isTx) {
-        node_config.SrcAddress = (uint32_t)main_buffer;
-        node_config.DstAddress = (uint32_t)&OCTOSPI1->DR;
-    } else {
-        node_config.SrcAddress = (uint32_t)&OCTOSPI1->DR;
-        node_config.DstAddress = (uint32_t)main_buffer;
+        if (spare_buffer) {
+            node_config.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
+        } else {
+            node_config.Init.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
+        }
+
+        if (isTx) {
+            node_config.SrcAddress = (uint32_t)main_buffer;
+            node_config.DstAddress = (uint32_t)&OCTOSPI1->DR;
+        } else {
+            node_config.SrcAddress = (uint32_t)&OCTOSPI1->DR;
+            node_config.DstAddress = (uint32_t)main_buffer;
+        }
+
+        if (HAL_DMAEx_List_BuildNode(&node_config, &master_xfer) != HAL_OK)
+            return LX_ERROR;
+
+        if ((main_buffer) && (main_size > 0)) {
+            if (HAL_DMAEx_List_InsertNode_Tail(&dma_xfer, &master_xfer) != HAL_OK)
+                return LX_ERROR;
+        }
     }
-
-    if (HAL_DMAEx_List_BuildNode(&node_config, &master_xfer) != HAL_OK)
-        return LX_ERROR;
 
     /*
      * Build the second node. For the spare buffer.
      */
-    node_config.DataSize = spare_size;
+    if (spare_buffer) {
 
-    if (isTx) {
-        node_config.SrcAddress = (uint32_t)spare_buffer;
-        node_config.DstAddress = (uint32_t)&OCTOSPI1->DR;
-    } else {
-        node_config.SrcAddress = (uint32_t)&OCTOSPI1->DR;
-        node_config.DstAddress = (uint32_t)spare_buffer;
-    }
+        node_config.DataSize = spare_size;
+        node_config.Init.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
 
-    if (HAL_DMAEx_List_BuildNode(&node_config, &slave_xfer) != HAL_OK)
-        return LX_ERROR;
+        if (isTx) {
+            node_config.SrcAddress = (uint32_t)spare_buffer;
+            node_config.DstAddress = (uint32_t)&OCTOSPI1->DR;
+        } else {
+            node_config.SrcAddress = (uint32_t)&OCTOSPI1->DR;
+            node_config.DstAddress = (uint32_t)spare_buffer;
+        }
 
-    /*
-     * Link both nodes together, and add them to the DMA list.
-     */
-    if ((main_buffer) && (main_size > 0)) {
-        if (HAL_DMAEx_List_InsertNode_Tail(&dma_xfer, &master_xfer) != HAL_OK)
+        if (HAL_DMAEx_List_BuildNode(&node_config, &slave_xfer) != HAL_OK)
             return LX_ERROR;
+
         if ((spare_buffer) && (spare_size > 0)) {
             if (HAL_DMAEx_List_InsertNode_Tail(&dma_xfer, &slave_xfer) != HAL_OK)
                 return LX_ERROR;
         }
-    } else if ((spare_buffer) && (spare_size > 0)) {
-        if (HAL_DMAEx_List_InsertNode_Tail(&dma_xfer, &slave_xfer) != HAL_OK)
-            return LX_ERROR;
     }
 
     return LX_SUCCESS;

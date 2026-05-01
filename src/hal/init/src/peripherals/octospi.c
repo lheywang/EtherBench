@@ -26,6 +26,8 @@ DMA_HandleTypeDef handle_GPDMA1_octospiRX;
 extern void flash_tx_complete();
 extern void flash_rx_complete();
 
+extern void HAL_DMA_LinkedList_CpltCallback(DMA_HandleTypeDef *hdma);
+
 // ======================================================================
 //                              FUNCTIONS
 // ======================================================================
@@ -64,6 +66,7 @@ void MX_OCTOSPI1_Init(void) {
     handle_GPDMA1_octospiRX.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT0;
     handle_GPDMA1_octospiRX.InitLinkedList.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
     handle_GPDMA1_octospiRX.InitLinkedList.LinkedListMode = DMA_LINKEDLIST_NORMAL;
+    // handle_GPDMA1_octospiRX.XferCpltCallback = flash_rx_complete;
     if (HAL_DMAEx_List_Init(&handle_GPDMA1_octospiRX) != HAL_OK) {
         Error_Handler();
     }
@@ -81,7 +84,7 @@ void MX_OCTOSPI1_Init(void) {
     handle_GPDMA1_octospiTX.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT0;
     handle_GPDMA1_octospiTX.InitLinkedList.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
     handle_GPDMA1_octospiTX.InitLinkedList.LinkedListMode = DMA_LINKEDLIST_NORMAL;
-
+    // handle_GPDMA1_octospiTX.XferCpltCallback = flash_tx_complete;
     if (HAL_DMAEx_List_Init(&handle_GPDMA1_octospiTX) != HAL_OK) {
         Error_Handler();
     }
@@ -91,6 +94,12 @@ void MX_OCTOSPI1_Init(void) {
 
     __HAL_LINKDMA(&hospi1, hdmarx, handle_GPDMA1_octospiRX);
     __HAL_LINKDMA(&hospi1, hdmatx, handle_GPDMA1_octospiTX);
+
+    /*
+     * Register ISR
+     */
+    HAL_DMA_RegisterCallback(&handle_GPDMA1_octospiRX, HAL_DMA_XFER_CPLT_CB_ID, HAL_DMA_LinkedList_CpltCallback);
+    HAL_DMA_RegisterCallback(&handle_GPDMA1_octospiTX, HAL_DMA_XFER_CPLT_CB_ID, HAL_DMA_LinkedList_CpltCallback);
 
     /*
      * Enable interrupts
