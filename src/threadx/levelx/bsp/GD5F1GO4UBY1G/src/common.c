@@ -36,6 +36,7 @@
 
 // Extern
 extern XSPI_HandleTypeDef hospi1;                 // From HAL
+extern DCACHE_HandleTypeDef hdcache1;             // From HAL
 extern TX_SEMAPHORE flash_wip;                    // From launcher
 extern TX_SEMAPHORE flash_dma_done;               // From launcher
 extern DMA_HandleTypeDef handle_GPDMA1_octospiTX; // from hal/init/octospi.c
@@ -44,9 +45,9 @@ extern DMA_HandleTypeDef handle_GPDMA1_octospiRX; // from hal/init/octospi.c
 // ======================================================================
 //                              VARIABLES
 // ======================================================================
-DMA_NodeTypeDef master_xfer;
-DMA_NodeTypeDef slave_xfer;
-DMA_QListTypeDef dma_xfer;
+DMA_NodeTypeDef __aligned(32) master_xfer;
+DMA_NodeTypeDef __aligned(32) slave_xfer;
+DMA_QListTypeDef __aligned(32) dma_xfer;
 
 // ======================================================================
 //                              FUNCTIONS
@@ -222,13 +223,11 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
     node_config.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
     node_config.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
 
-    if (isTx) {
-        node_config.Init.SrcBurstLength = 64;
-        node_config.Init.DestBurstLength = 1;
-    } else {
-        node_config.Init.SrcBurstLength = 1;
-        node_config.Init.DestBurstLength = 64;
-    }
+    /*
+     * Set the burst sizes. Fixed to 1, otherwise non-round transfers will fail.
+     */
+    node_config.Init.SrcBurstLength = 1;
+    node_config.Init.DestBurstLength = 1;
 
     node_config.Init.Mode = DMA_NORMAL;
 
@@ -274,6 +273,11 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
             if (HAL_DMAEx_List_InsertNode_Tail(&dma_xfer, &master_xfer) != HAL_OK)
                 return LX_ERROR;
         }
+
+        /*
+         * Push the variable into RAM.
+         */
+        HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)&master_xfer, sizeof(DMA_NodeTypeDef));
     }
 
     /*
@@ -299,6 +303,24 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
             if (HAL_DMAEx_List_InsertNode_Tail(&dma_xfer, &slave_xfer) != HAL_OK)
                 return LX_ERROR;
         }
+
+        /*
+         * Push the variable into the RAM.
+         */
+        HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)&slave_xfer, sizeof(DMA_NodeTypeDef));
+    }
+
+    /*
+     * Push the whole transfer into the RAM.
+     */
+    HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)&dma_xfer, sizeof(DMA_QListTypeDef));
+
+    if (isTx) {
+        if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_octospiTX, &dma_xfer) != HAL_OK)
+            return LX_ERROR;
+    } else {
+        if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_octospiRX, &dma_xfer) != HAL_OK)
+            return LX_ERROR;
     }
 
     return LX_SUCCESS;
