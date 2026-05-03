@@ -27,6 +27,7 @@ extern void flash_tx_complete();
 extern void flash_rx_complete();
 
 extern void HAL_DMA_LinkedList_CpltCallback(DMA_HandleTypeDef *hdma);
+extern void HAL_DMA_LinkedList_ErrorCallback(DMA_HandleTypeDef *hdma);
 
 // ======================================================================
 //                              FUNCTIONS
@@ -100,6 +101,9 @@ void MX_OCTOSPI1_Init(void) {
      */
     HAL_DMA_RegisterCallback(&handle_GPDMA1_octospiRX, HAL_DMA_XFER_CPLT_CB_ID, HAL_DMA_LinkedList_CpltCallback);
     HAL_DMA_RegisterCallback(&handle_GPDMA1_octospiTX, HAL_DMA_XFER_CPLT_CB_ID, HAL_DMA_LinkedList_CpltCallback);
+
+    HAL_DMA_RegisterCallback(&handle_GPDMA1_octospiRX, HAL_DMA_XFER_ERROR_CB_ID, HAL_DMA_LinkedList_ErrorCallback);
+    HAL_DMA_RegisterCallback(&handle_GPDMA1_octospiTX, HAL_DMA_XFER_ERROR_CB_ID, HAL_DMA_LinkedList_ErrorCallback);
 
     /*
      * Enable interrupts

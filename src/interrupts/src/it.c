@@ -77,3 +77,5 @@ void HAL_DMA_LinkedList_CpltCallback(DMA_HandleTypeDef *hdma) {
         HAL_XSPI_ENABLE_IT(&hospi1, HAL_XSPI_IT_TC);
     }
 }
+
+void HAL_DMA_LinkedList_ErrorCallback(DMA_HandleTypeDef *hdma) { Error_Handler(); }
