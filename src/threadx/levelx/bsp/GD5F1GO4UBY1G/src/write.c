@@ -97,15 +97,29 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
             return LX_ERROR;
 
         /*
+         * Patch the HAL that would, otherwise override our settings. They'll be, but, with the rights ones
+         */
+        cmd.DataLength = dma_xfer.Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET];           // Xfer Size
+        uint8_t *pBuf = (uint8_t *)dma_xfer.Head->LinkRegisters[NODE_CSAR_DEFAULT_OFFSET]; // Target buffer
+
+        /*
          * Start the transfer
          */
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
-        if (HAL_XSPI_Transmit_DMA(&hospi1, main_buffer) != HAL_OK)
+        if (HAL_XSPI_Transmit_DMA(&hospi1, pBuf) != HAL_OK)
             return LX_ERROR;
 
+        /*
+         * Wait for the transfer to finish, and then, exit. We poll for the last bytes, should not be long.
+         */
         if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
             return LX_ERROR;
+
+        /*
+         * Reset a flag to ensure the next call will also work !
+         */
+        dma_xfer.State = HAL_DMA_QUEUE_STATE_READY;
 
     } else {
 
@@ -126,8 +140,8 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
          */
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
-
-        HAL_XSPI_Transmit(&hospi1, buf, HAL_MAX_DELAY);
+        if (HAL_XSPI_Transmit(&hospi1, buf, HAL_MAX_DELAY) != HAL_OK)
+            return LX_ERROR;
     }
 
     /*
@@ -137,7 +151,7 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
         return LX_ERROR;
 
     /*
-     * Then, ask the NAND to write the data into the array
+     * Ask the NAND to write the data into the array
      */
     cmd.Instruction = GD25_PROGRAM_EXECUTE;
     cmd.AddressMode = HAL_XSPI_ADDRESS_1_LINE;
@@ -152,7 +166,7 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
     }
 
     /*
-     * Wait for finish..
+     * Wait for finish before exiting.
      */
     return GD5F1GO4UBY1G_wait_for_complete();
 }

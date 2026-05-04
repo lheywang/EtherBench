@@ -34,9 +34,9 @@ LX_NAND_FLASH NAND_settings;
 LX_NAND_FLASH NAND_filex;
 LX_NAND_FLASH NAND_backtrace;
 
-static ULONG settings_cache[GET_BUFFER_SIZE(SETTINGS_PARTITION_SIZE) / sizeof(ULONG)];
-static ULONG backtrace_cache[GET_BUFFER_SIZE(BACKTRACE_PARTITION_SIZE) / sizeof(ULONG)];
-static ULONG filex_cache[GET_BUFFER_SIZE(FLASH_PARTITION_SIZE) / sizeof(ULONG)];
+static ULONG __aligned(32) settings_cache[GET_BUFFER_SIZE(SETTINGS_PARTITION_SIZE) / sizeof(ULONG)];
+static ULONG __aligned(32) backtrace_cache[GET_BUFFER_SIZE(BACKTRACE_PARTITION_SIZE) / sizeof(ULONG)];
+static ULONG __aligned(32) filex_cache[GET_BUFFER_SIZE(FLASH_PARTITION_SIZE) / sizeof(ULONG)];
 
 // ======================================================================
 //                              FUNCTIONS

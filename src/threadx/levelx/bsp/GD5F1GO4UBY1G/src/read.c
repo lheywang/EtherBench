@@ -109,18 +109,29 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
             return LX_ERROR;
 
         /*
-         * Start the transfer
+         * Patch the HAL that would, otherwise override our settings. They'll be, but, with the rights ones
+         */
+        cmd.DataLength = dma_xfer.Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET];           // Xfer Size
+        uint8_t *pBuf = (uint8_t *)dma_xfer.Head->LinkRegisters[NODE_CDAR_DEFAULT_OFFSET]; // Target buffer
+
+        /*
+         * Start the transfer.
          */
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
-        if (HAL_XSPI_Receive_DMA(&hospi1, main_buffer) != HAL_OK)
+        if (HAL_XSPI_Receive_DMA(&hospi1, pBuf) != HAL_OK)
             return LX_ERROR;
 
         /*
-         * Wait, in another task for the transfer to finish.
+         * Wait for the transfer to finish.
          */
         if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
             return LX_ERROR;
+
+        /*
+         * Reset a flag to ensure the next call will also work !
+         */
+        dma_xfer.State = HAL_DMA_QUEUE_STATE_READY;
 
         /*
          * Ensure the data we got is nice.
@@ -129,6 +140,8 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
             HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)main_buffer, main_size);
         if (spare_buffer)
             HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)spare_buffer, spare_size);
+
+        dma_xfer.State = HAL_DMA_QUEUE_STATE_READY;
 
     } else {
 

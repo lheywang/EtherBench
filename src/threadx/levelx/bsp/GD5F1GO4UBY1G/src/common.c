@@ -219,7 +219,13 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
     // General settings about the DMA.
     node_config.NodeType = DMA_GPDMA_LINEAR_NODE;
     node_config.Init.Request = GPDMA1_REQUEST_OCTOSPI1;
-    node_config.Init.Direction = (isTx) ? DMA_MEMORY_TO_PERIPH : DMA_PERIPH_TO_MEMORY;
+
+    if (isTx) {
+        node_config.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    } else {
+        node_config.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    }
+
     node_config.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
     node_config.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
 
@@ -241,9 +247,9 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
 
     // As the datasheet recommand !
     if (isTx) {
-        node_config.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT0;
-    } else {
         node_config.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT1;
+    } else {
+        node_config.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT0;
     }
 
     /*
