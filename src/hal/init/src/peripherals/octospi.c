@@ -62,6 +62,7 @@ void MX_OCTOSPI1_Init(void) {
      * Configure GPDMA for the reads :
      */
     handle_GPDMA1_octospiRX.Instance = GPDMA1_Channel7;
+    handle_GPDMA1_octospiRX.Mode = DMA_LINKEDLIST;
     handle_GPDMA1_octospiRX.InitLinkedList.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
     handle_GPDMA1_octospiRX.InitLinkedList.LinkStepMode = DMA_LSM_FULL_EXECUTION;
     handle_GPDMA1_octospiRX.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT0;
@@ -80,6 +81,7 @@ void MX_OCTOSPI1_Init(void) {
      */
 
     handle_GPDMA1_octospiTX.Instance = GPDMA1_Channel6;
+    handle_GPDMA1_octospiTX.Mode = DMA_LINKEDLIST;
     handle_GPDMA1_octospiTX.InitLinkedList.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
     handle_GPDMA1_octospiTX.InitLinkedList.LinkStepMode = DMA_LSM_FULL_EXECUTION;
     handle_GPDMA1_octospiTX.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT0;

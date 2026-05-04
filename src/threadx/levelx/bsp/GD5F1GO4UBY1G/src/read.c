@@ -111,9 +111,9 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
         /*
          * Start the transfer
          */
-        if (HAL_DMAEx_List_Start(&handle_GPDMA1_octospiRX) != HAL_OK)
-            return LX_ERROR;
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
+            return LX_ERROR;
+        if (HAL_XSPI_Receive_DMA(&hospi1, main_buffer) != HAL_OK)
             return LX_ERROR;
 
         /*

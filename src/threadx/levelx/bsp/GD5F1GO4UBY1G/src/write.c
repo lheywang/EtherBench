@@ -99,9 +99,9 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
         /*
          * Start the transfer
          */
-        if (HAL_DMAEx_List_Start(&handle_GPDMA1_octospiTX) != HAL_OK)
-            return LX_ERROR;
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
+            return LX_ERROR;
+        if (HAL_XSPI_Transmit_DMA(&hospi1, main_buffer) != HAL_OK)
             return LX_ERROR;
 
         if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
