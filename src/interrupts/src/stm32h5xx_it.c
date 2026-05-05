@@ -85,6 +85,6 @@ void OCTOSPI1_IRQHandler(void) { HAL_XSPI_IRQHandler(&hospi1); }
 
 void GPDMA1_Channel0_IRQHandler(void) { HAL_DMA_IRQHandler(&hdma_usart3_tx); }
 
-void GPDMA1_Channel6_IRQHandler(void) { HAL_DMA_IRQHandler(&handle_GPDMA1_octospiTX); }
+void GPDMA1_Channel4_IRQHandler(void) { HAL_DMA_IRQHandler(&handle_GPDMA1_octospiTX); }
 
-void GPDMA1_Channel7_IRQHandler(void) { HAL_DMA_IRQHandler(&handle_GPDMA1_octospiRX); }
+void GPDMA1_Channel5_IRQHandler(void) { HAL_DMA_IRQHandler(&handle_GPDMA1_octospiRX); }

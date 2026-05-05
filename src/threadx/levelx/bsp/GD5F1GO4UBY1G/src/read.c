@@ -37,7 +37,7 @@
 // Extern
 extern XSPI_HandleTypeDef hospi1;                 // From HAL
 extern DCACHE_HandleTypeDef hdcache1;             // From HAL
-extern DMA_QListTypeDef dma_xfer;                 // from common.c
+extern DMA_QListTypeDef dma_xfer_rx;              // from common.c
 extern DMA_HandleTypeDef handle_GPDMA1_octospiTX; // from hal/init/octospi.c
 extern DMA_HandleTypeDef handle_GPDMA1_octospiRX; // from hal/init/octospi.c
 
@@ -111,8 +111,7 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
         /*
          * Patch the HAL that would, otherwise override our settings. They'll be, but, with the rights ones
          */
-        cmd.DataLength = dma_xfer.Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET];           // Xfer Size
-        uint8_t *pBuf = (uint8_t *)dma_xfer.Head->LinkRegisters[NODE_CDAR_DEFAULT_OFFSET]; // Target buffer
+        uint8_t *pBuf = (uint8_t *)dma_xfer_rx.Head->LinkRegisters[NODE_CDAR_DEFAULT_OFFSET]; // Target buffer
 
         /*
          * Start the transfer.
@@ -129,19 +128,12 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
             return LX_ERROR;
 
         /*
-         * Reset a flag to ensure the next call will also work !
-         */
-        dma_xfer.State = HAL_DMA_QUEUE_STATE_READY;
-
-        /*
          * Ensure the data we got is nice.
          */
         if (main_buffer)
             HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)main_buffer, main_size);
         if (spare_buffer)
             HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)spare_buffer, spare_size);
-
-        dma_xfer.State = HAL_DMA_QUEUE_STATE_READY;
 
     } else {
 

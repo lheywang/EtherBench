@@ -35,10 +35,10 @@ void MX_GPDMA1_Init(void) {
     HAL_NVIC_EnableIRQ(GPDMA1_Channel0_IRQn);
 
     //  OCTOSPI --> NAND Flash
-    HAL_NVIC_SetPriority(GPDMA1_Channel7_IRQn, 4, 0);
-    HAL_NVIC_EnableIRQ(GPDMA1_Channel7_IRQn);
-    HAL_NVIC_SetPriority(GPDMA1_Channel6_IRQn, 4, 0);
-    HAL_NVIC_EnableIRQ(GPDMA1_Channel6_IRQn);
+    HAL_NVIC_SetPriority(GPDMA1_Channel5_IRQn, 4, 0);
+    HAL_NVIC_EnableIRQ(GPDMA1_Channel5_IRQn);
+    HAL_NVIC_SetPriority(GPDMA1_Channel4_IRQn, 4, 0);
+    HAL_NVIC_EnableIRQ(GPDMA1_Channel4_IRQn);
     return;
 }
 

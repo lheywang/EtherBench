@@ -37,6 +37,7 @@
 // Extern
 extern XSPI_HandleTypeDef hospi1;                 // From HAL
 extern DCACHE_HandleTypeDef hdcache1;             // From HAL
+extern DMA_QListTypeDef dma_xfer_tx;              // from common.c
 extern DMA_HandleTypeDef handle_GPDMA1_octospiTX; // from hal/init/octospi.c
 extern DMA_HandleTypeDef handle_GPDMA1_octospiRX; // from hal/init/octospi.c
 
@@ -99,8 +100,7 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
         /*
          * Patch the HAL that would, otherwise override our settings. They'll be, but, with the rights ones
          */
-        cmd.DataLength = dma_xfer.Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET];           // Xfer Size
-        uint8_t *pBuf = (uint8_t *)dma_xfer.Head->LinkRegisters[NODE_CSAR_DEFAULT_OFFSET]; // Target buffer
+        uint8_t *pBuf = (uint8_t *)dma_xfer_tx.Head->LinkRegisters[NODE_CSAR_DEFAULT_OFFSET]; // Target buffer
 
         /*
          * Start the transfer
@@ -115,11 +115,6 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
          */
         if (tx_semaphore_get(&flash_dma_done, TX_WAIT_FOREVER) != TX_SUCCESS)
             return LX_ERROR;
-
-        /*
-         * Reset a flag to ensure the next call will also work !
-         */
-        dma_xfer.State = HAL_DMA_QUEUE_STATE_READY;
 
     } else {
 

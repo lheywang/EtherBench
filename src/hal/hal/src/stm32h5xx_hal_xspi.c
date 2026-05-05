@@ -299,12 +299,12 @@
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-#define XSPI_FUNCTIONAL_MODE_INDIRECT_WRITE ((uint32_t)0x00000000)     /*!< Indirect write mode    */
-#define XSPI_FUNCTIONAL_MODE_INDIRECT_READ ((uint32_t)XSPI_CR_FMODE_0) /*!< Indirect read mode     */
-#define XSPI_FUNCTIONAL_MODE_AUTO_POLLING ((uint32_t)XSPI_CR_FMODE_1)  /*!< Automatic polling mode */
-#define XSPI_FUNCTIONAL_MODE_MEMORY_MAPPED ((uint32_t)XSPI_CR_FMODE)   /*!< Memory-mapped mode     */
+#define XSPI_FUNCTIONAL_MODE_INDIRECT_WRITE ((uint32_t)0x00000000)      /*!< Indirect write mode    */
+#define XSPI_FUNCTIONAL_MODE_INDIRECT_READ  ((uint32_t)XSPI_CR_FMODE_0) /*!< Indirect read mode     */
+#define XSPI_FUNCTIONAL_MODE_AUTO_POLLING   ((uint32_t)XSPI_CR_FMODE_1) /*!< Automatic polling mode */
+#define XSPI_FUNCTIONAL_MODE_MEMORY_MAPPED  ((uint32_t)XSPI_CR_FMODE)   /*!< Memory-mapped mode     */
 
-#define XSPI_CFG_STATE_MASK 0x00000004U
+#define XSPI_CFG_STATE_MASK  0x00000004U
 #define XSPI_BUSY_STATE_MASK 0x00000008U
 
 /* Private macro -------------------------------------------------------------*/
@@ -319,8 +319,11 @@ static void XSPI_DMACplt(DMA_HandleTypeDef *hdma);
 static void XSPI_DMAHalfCplt(DMA_HandleTypeDef *hdma);
 static void XSPI_DMAError(DMA_HandleTypeDef *hdma);
 static void XSPI_DMAAbortCplt(DMA_HandleTypeDef *hdma);
-static HAL_StatusTypeDef XSPI_WaitFlagStateUntilTimeout(XSPI_HandleTypeDef *hxspi, uint32_t Flag, FlagStatus State,
-                                                        uint32_t Tickstart, uint32_t Timeout);
+static HAL_StatusTypeDef XSPI_WaitFlagStateUntilTimeout(XSPI_HandleTypeDef *hxspi,
+                                                        uint32_t Flag,
+                                                        FlagStatus State,
+                                                        uint32_t Tickstart,
+                                                        uint32_t Timeout);
 static HAL_StatusTypeDef XSPI_ConfigCmd(XSPI_HandleTypeDef *hxspi, XSPI_RegularCmdTypeDef *const pCmd);
 /**
   @endcond
@@ -429,29 +432,31 @@ HAL_StatusTypeDef HAL_XSPI_Init(XSPI_HandleTypeDef *hxspi) {
             MODIFY_REG(hxspi->Instance->DCR2, XSPI_DCR2_WRAPSIZE, hxspi->Init.WrapSize);
 
             /* Configure chip select boundary */
-            MODIFY_REG(hxspi->Instance->DCR3, XSPI_DCR3_CSBOUND,
-                       (hxspi->Init.ChipSelectBoundary << XSPI_DCR3_CSBOUND_Pos));
+            MODIFY_REG(
+                hxspi->Instance->DCR3, XSPI_DCR3_CSBOUND, (hxspi->Init.ChipSelectBoundary << XSPI_DCR3_CSBOUND_Pos));
 
             /* Configure refresh */
             hxspi->Instance->DCR4 = hxspi->Init.Refresh;
 
             /* Configure FIFO threshold */
-            MODIFY_REG(hxspi->Instance->CR, XSPI_CR_FTHRES,
-                       ((hxspi->Init.FifoThresholdByte - 1U) << XSPI_CR_FTHRES_Pos));
+            MODIFY_REG(
+                hxspi->Instance->CR, XSPI_CR_FTHRES, ((hxspi->Init.FifoThresholdByte - 1U) << XSPI_CR_FTHRES_Pos));
 
             /* Wait till busy flag is reset */
             status = XSPI_WaitFlagStateUntilTimeout(hxspi, HAL_XSPI_FLAG_BUSY, RESET, tickstart, hxspi->Timeout);
 
             if (status == HAL_OK) {
                 /* Configure clock prescaler */
-                MODIFY_REG(hxspi->Instance->DCR2, XSPI_DCR2_PRESCALER,
+                MODIFY_REG(hxspi->Instance->DCR2,
+                           XSPI_DCR2_PRESCALER,
                            ((hxspi->Init.ClockPrescaler) << XSPI_DCR2_PRESCALER_Pos));
 
                 /* Configure Dual Memory mode */
                 MODIFY_REG(hxspi->Instance->CR, XSPI_CR_DMM, hxspi->Init.MemoryMode);
 
                 /* Configure sample shifting and delay hold quarter cycle */
-                MODIFY_REG(hxspi->Instance->TCR, (XSPI_TCR_SSHIFT | XSPI_TCR_DHQC),
+                MODIFY_REG(hxspi->Instance->TCR,
+                           (XSPI_TCR_SSHIFT | XSPI_TCR_DHQC),
                            (hxspi->Init.SampleShifting | hxspi->Init.DelayHoldQuarterCycle));
 
                 /* Enable XSPI */
@@ -975,8 +980,8 @@ HAL_StatusTypeDef HAL_XSPI_Command_IT(XSPI_HandleTypeDef *hxspi, XSPI_RegularCmd
  * @param  Timeout : Timeout duration
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_XSPI_HyperbusCfg(XSPI_HandleTypeDef *hxspi, XSPI_HyperbusCfgTypeDef *const pCfg,
-                                       uint32_t Timeout) {
+HAL_StatusTypeDef
+HAL_XSPI_HyperbusCfg(XSPI_HandleTypeDef *hxspi, XSPI_HyperbusCfgTypeDef *const pCfg, uint32_t Timeout) {
     HAL_StatusTypeDef status;
     uint32_t state;
     uint32_t tickstart = HAL_GetTick();
@@ -1019,8 +1024,8 @@ HAL_StatusTypeDef HAL_XSPI_HyperbusCfg(XSPI_HandleTypeDef *hxspi, XSPI_HyperbusC
  * @param  Timeout : Timeout duration
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_XSPI_HyperbusCmd(XSPI_HandleTypeDef *hxspi, XSPI_HyperbusCmdTypeDef *const pCmd,
-                                       uint32_t Timeout) {
+HAL_StatusTypeDef
+HAL_XSPI_HyperbusCmd(XSPI_HandleTypeDef *hxspi, XSPI_HyperbusCmdTypeDef *const pCmd, uint32_t Timeout) {
     HAL_StatusTypeDef status;
     uint32_t tickstart = HAL_GetTick();
 
@@ -1047,10 +1052,12 @@ HAL_StatusTypeDef HAL_XSPI_HyperbusCmd(XSPI_HandleTypeDef *hxspi, XSPI_HyperbusC
                - DQS signal enabled (used as RWDS)
                - DTR mode enabled on address and data */
             /* - address and data on 8 lines */
-            WRITE_REG(hxspi->Instance->CCR, (pCmd->DQSMode | XSPI_CCR_DDTR | XSPI_CCR_DMODE_2 | pCmd->AddressWidth |
-                                             XSPI_CCR_ADDTR | XSPI_CCR_ADMODE_2));
-            WRITE_REG(hxspi->Instance->WCCR, (pCmd->DQSMode | XSPI_WCCR_DDTR | XSPI_WCCR_DMODE_2 | pCmd->AddressWidth |
-                                              XSPI_WCCR_ADDTR | XSPI_WCCR_ADMODE_2));
+            WRITE_REG(hxspi->Instance->CCR,
+                      (pCmd->DQSMode | XSPI_CCR_DDTR | XSPI_CCR_DMODE_2 | pCmd->AddressWidth | XSPI_CCR_ADDTR |
+                       XSPI_CCR_ADMODE_2));
+            WRITE_REG(hxspi->Instance->WCCR,
+                      (pCmd->DQSMode | XSPI_WCCR_DDTR | XSPI_WCCR_DMODE_2 | pCmd->AddressWidth | XSPI_WCCR_ADDTR |
+                       XSPI_WCCR_ADMODE_2));
 
             /* Configure the DLR register with the number of data */
             WRITE_REG(hxspi->Instance->DLR, (pCmd->DataLength - 1U));
@@ -1176,8 +1183,8 @@ HAL_StatusTypeDef HAL_XSPI_Receive(XSPI_HandleTypeDef *hxspi, uint8_t *const pDa
             do {
                 /* Wait till fifo threshold or transfer complete flags are set to read
                  * received data */
-                status = XSPI_WaitFlagStateUntilTimeout(hxspi, (HAL_XSPI_FLAG_FT | HAL_XSPI_FLAG_TC), SET, tickstart,
-                                                        Timeout);
+                status = XSPI_WaitFlagStateUntilTimeout(
+                    hxspi, (HAL_XSPI_FLAG_FT | HAL_XSPI_FLAG_TC), SET, tickstart, Timeout);
 
                 if (status != HAL_OK) {
                     break;
@@ -1402,11 +1409,14 @@ HAL_StatusTypeDef HAL_XSPI_Transmit_DMA(XSPI_HandleTypeDef *hxspi, const uint8_t
                     if (hxspi->hdmatx->LinkedListQueue != NULL) {
                         /* Enable the DMA channel */
                         MODIFY_REG(p_queue->Head->LinkRegisters[NODE_CTR1_DEFAULT_OFFSET],
-                                   (DMA_CTR1_SINC | DMA_CTR1_DINC), (DMA_SINC_INCREMENTED | DMA_DINC_FIXED));
-                        MODIFY_REG(p_queue->Head->LinkRegisters[NODE_CTR2_DEFAULT_OFFSET], DMA_CTR2_DREQ,
+                                   (DMA_CTR1_SINC | DMA_CTR1_DINC),
+                                   (DMA_SINC_INCREMENTED | DMA_DINC_FIXED));
+                        MODIFY_REG(p_queue->Head->LinkRegisters[NODE_CTR2_DEFAULT_OFFSET],
+                                   DMA_CTR2_DREQ,
                                    DMA_MEMORY_TO_PERIPH);
-                        /* Set DMA data size*/
-                        p_queue->Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET] = hxspi->XferSize;
+                        // EDIT HERE --> NO, Don't need that; Already set within the LL
+                        // /* Set DMA data size*/
+                        // p_queue->Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET] = hxspi->XferSize;
                         /* Set DMA source address */
                         p_queue->Head->LinkRegisters[NODE_CSAR_DEFAULT_OFFSET] = (uint32_t)pData;
                         /* Set DMA destination address */
@@ -1426,8 +1436,8 @@ HAL_StatusTypeDef HAL_XSPI_Transmit_DMA(XSPI_HandleTypeDef *hxspi, const uint8_t
                     if ((hxspi->hdmatx->Init.Direction == DMA_MEMORY_TO_PERIPH) &&
                         (hxspi->hdmatx->Init.SrcInc == DMA_SINC_INCREMENTED) &&
                         (hxspi->hdmatx->Init.DestInc == DMA_DINC_FIXED)) {
-                        status = HAL_DMA_Start_IT(hxspi->hdmatx, (uint32_t)pData, (uint32_t)&hxspi->Instance->DR,
-                                                  hxspi->XferSize);
+                        status = HAL_DMA_Start_IT(
+                            hxspi->hdmatx, (uint32_t)pData, (uint32_t)&hxspi->Instance->DR, hxspi->XferSize);
                     } else {
                         /* no transmit possible with DMA peripheral, invalid configuration
                          */
@@ -1554,11 +1564,15 @@ HAL_StatusTypeDef HAL_XSPI_Receive_DMA(XSPI_HandleTypeDef *hxspi, uint8_t *const
                     if (hxspi->hdmarx->LinkedListQueue != NULL) {
                         /* Enable the DMA channel */
                         MODIFY_REG(p_queue->Head->LinkRegisters[NODE_CTR1_DEFAULT_OFFSET],
-                                   (DMA_CTR1_SINC | DMA_CTR1_DINC), (DMA_SINC_FIXED | DMA_DINC_INCREMENTED));
-                        MODIFY_REG(p_queue->Head->LinkRegisters[NODE_CTR2_DEFAULT_OFFSET], DMA_CTR2_DREQ,
+                                   (DMA_CTR1_SINC | DMA_CTR1_DINC),
+                                   (DMA_SINC_FIXED | DMA_DINC_INCREMENTED));
+                        MODIFY_REG(p_queue->Head->LinkRegisters[NODE_CTR2_DEFAULT_OFFSET],
+                                   DMA_CTR2_DREQ,
                                    DMA_PERIPH_TO_MEMORY);
+
+                        // EDIT HERE --> NO, Don't need that; Already set within the LL
                         /* Set DMA data size */
-                        p_queue->Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET] = hxspi->XferSize;
+                        // p_queue->Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET] = hxspi->XferSize;
                         /* Set DMA source address */
                         p_queue->Head->LinkRegisters[NODE_CSAR_DEFAULT_OFFSET] = (uint32_t)&hxspi->Instance->DR;
                         /* Set DMA destination address */
@@ -1578,8 +1592,8 @@ HAL_StatusTypeDef HAL_XSPI_Receive_DMA(XSPI_HandleTypeDef *hxspi, uint8_t *const
                     if ((hxspi->hdmarx->Init.Direction == DMA_PERIPH_TO_MEMORY) &&
                         (hxspi->hdmarx->Init.SrcInc == DMA_SINC_FIXED) &&
                         (hxspi->hdmarx->Init.DestInc == DMA_DINC_INCREMENTED)) {
-                        status = HAL_DMA_Start_IT(hxspi->hdmarx, (uint32_t)&hxspi->Instance->DR, (uint32_t)pData,
-                                                  hxspi->XferSize);
+                        status = HAL_DMA_Start_IT(
+                            hxspi->hdmarx, (uint32_t)&hxspi->Instance->DR, (uint32_t)pData, hxspi->XferSize);
                     } else {
                         /* no receive possible with DMA peripheral, invalid configuration */
                         hxspi->ErrorCode = HAL_XSPI_ERROR_INVALID_PARAM;
@@ -1627,8 +1641,8 @@ HAL_StatusTypeDef HAL_XSPI_Receive_DMA(XSPI_HandleTypeDef *hxspi, uint8_t *const
  * @note   This function is used only in Automatic Polling Mode
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_XSPI_AutoPolling(XSPI_HandleTypeDef *hxspi, XSPI_AutoPollingTypeDef *const pCfg,
-                                       uint32_t Timeout) {
+HAL_StatusTypeDef
+HAL_XSPI_AutoPolling(XSPI_HandleTypeDef *hxspi, XSPI_AutoPollingTypeDef *const pCfg, uint32_t Timeout) {
     HAL_StatusTypeDef status;
     uint32_t tickstart = HAL_GetTick();
     uint32_t addr_reg = hxspi->Instance->AR;
@@ -1653,7 +1667,8 @@ HAL_StatusTypeDef HAL_XSPI_AutoPolling(XSPI_HandleTypeDef *hxspi, XSPI_AutoPolli
             WRITE_REG(hxspi->Instance->PSMAR, pCfg->MatchValue);
             WRITE_REG(hxspi->Instance->PSMKR, pCfg->MatchMask);
             WRITE_REG(hxspi->Instance->PIR, pCfg->IntervalTime);
-            MODIFY_REG(hxspi->Instance->CR, (XSPI_CR_PMM | XSPI_CR_APMS | XSPI_CR_FMODE),
+            MODIFY_REG(hxspi->Instance->CR,
+                       (XSPI_CR_PMM | XSPI_CR_APMS | XSPI_CR_FMODE),
                        (pCfg->MatchMode | pCfg->AutomaticStop | XSPI_FUNCTIONAL_MODE_AUTO_POLLING));
 
             /* Trig the transfer by re-writing address or instruction register */
@@ -1720,7 +1735,8 @@ HAL_StatusTypeDef HAL_XSPI_AutoPolling_IT(XSPI_HandleTypeDef *hxspi, XSPI_AutoPo
             WRITE_REG(hxspi->Instance->PSMAR, pCfg->MatchValue);
             WRITE_REG(hxspi->Instance->PSMKR, pCfg->MatchMask);
             WRITE_REG(hxspi->Instance->PIR, pCfg->IntervalTime);
-            MODIFY_REG(hxspi->Instance->CR, (XSPI_CR_PMM | XSPI_CR_APMS | XSPI_CR_FMODE),
+            MODIFY_REG(hxspi->Instance->CR,
+                       (XSPI_CR_PMM | XSPI_CR_APMS | XSPI_CR_FMODE),
                        (pCfg->MatchMode | pCfg->AutomaticStop | XSPI_FUNCTIONAL_MODE_AUTO_POLLING));
 
             /* Clear flags related to interrupt */
@@ -1787,7 +1803,8 @@ HAL_StatusTypeDef HAL_XSPI_MemoryMapped(XSPI_HandleTypeDef *hxspi, XSPI_MemoryMa
             }
 
             /* Configure CR register with functional mode as memory-mapped */
-            MODIFY_REG(hxspi->Instance->CR, (XSPI_CR_TCEN | XSPI_CR_FMODE),
+            MODIFY_REG(hxspi->Instance->CR,
+                       (XSPI_CR_TCEN | XSPI_CR_FMODE),
                        (pCfg->TimeOutActivation | XSPI_FUNCTIONAL_MODE_MEMORY_MAPPED));
         }
     } else {
@@ -1967,7 +1984,8 @@ __weak void HAL_XSPI_TimeOutCallback(XSPI_HandleTypeDef *hxspi) {
  * @param pCallback : pointer to the Callback function
  * @retval status
  */
-HAL_StatusTypeDef HAL_XSPI_RegisterCallback(XSPI_HandleTypeDef *hxspi, HAL_XSPI_CallbackIDTypeDef CallbackID,
+HAL_StatusTypeDef HAL_XSPI_RegisterCallback(XSPI_HandleTypeDef *hxspi,
+                                            HAL_XSPI_CallbackIDTypeDef CallbackID,
                                             pXSPI_CallbackTypeDef pCallback) {
     HAL_StatusTypeDef status = HAL_OK;
 
@@ -2421,8 +2439,8 @@ HAL_StatusTypeDef HAL_XSPI_SetClockPrescaler(XSPI_HandleTypeDef *hxspi, uint32_t
         hxspi->Init.ClockPrescaler = Prescaler;
 
         /* Configure clock prescaler */
-        MODIFY_REG(hxspi->Instance->DCR2, XSPI_DCR2_PRESCALER,
-                   ((hxspi->Init.ClockPrescaler) << XSPI_DCR2_PRESCALER_Pos));
+        MODIFY_REG(
+            hxspi->Instance->DCR2, XSPI_DCR2_PRESCALER, ((hxspi->Init.ClockPrescaler) << XSPI_DCR2_PRESCALER_Pos));
     } else {
         status = HAL_ERROR;
         hxspi->ErrorCode = HAL_XSPI_ERROR_INVALID_SEQUENCE;
@@ -2700,8 +2718,11 @@ static void XSPI_DMAAbortCplt(DMA_HandleTypeDef *hdma) {
  * @param  Tickstart : Tick start value
  * @retval HAL status
  */
-static HAL_StatusTypeDef XSPI_WaitFlagStateUntilTimeout(XSPI_HandleTypeDef *hxspi, uint32_t Flag, FlagStatus State,
-                                                        uint32_t Tickstart, uint32_t Timeout) {
+static HAL_StatusTypeDef XSPI_WaitFlagStateUntilTimeout(XSPI_HandleTypeDef *hxspi,
+                                                        uint32_t Flag,
+                                                        FlagStatus State,
+                                                        uint32_t Tickstart,
+                                                        uint32_t Timeout) {
     /* Wait until flag is in expected state */
     while ((HAL_XSPI_GET_FLAG(hxspi, Flag)) != State) {
         /* Check for the Timeout */
@@ -2773,7 +2794,8 @@ static HAL_StatusTypeDef XSPI_ConfigCmd(XSPI_HandleTypeDef *hxspi, XSPI_RegularC
 
         /* Configure the CCR register with alternate bytes communication parameters
          */
-        MODIFY_REG((*ccr_reg), (XSPI_CCR_ABMODE | XSPI_CCR_ABDTR | XSPI_CCR_ABSIZE),
+        MODIFY_REG((*ccr_reg),
+                   (XSPI_CCR_ABMODE | XSPI_CCR_ABDTR | XSPI_CCR_ABSIZE),
                    (pCmd->AlternateBytesMode | pCmd->AlternateBytesDTRMode | pCmd->AlternateBytesWidth));
     }
 
@@ -2846,7 +2868,8 @@ static HAL_StatusTypeDef XSPI_ConfigCmd(XSPI_HandleTypeDef *hxspi, XSPI_RegularC
                 /* ---- Command with only instruction ---- */
 
                 /* Configure the CCR register with all communication parameters */
-                MODIFY_REG((*ccr_reg), (XSPI_CCR_IMODE | XSPI_CCR_IDTR | XSPI_CCR_ISIZE),
+                MODIFY_REG((*ccr_reg),
+                           (XSPI_CCR_IMODE | XSPI_CCR_IDTR | XSPI_CCR_ISIZE),
                            (pCmd->InstructionMode | pCmd->InstructionDTRMode | pCmd->InstructionWidth));
 
                 /* The DHQC bit is linked with DDTR bit which should be activated */
@@ -2873,7 +2896,8 @@ static HAL_StatusTypeDef XSPI_ConfigCmd(XSPI_HandleTypeDef *hxspi, XSPI_RegularC
                 /* ---- Command with only address ---- */
 
                 /* Configure the CCR register with all communication parameters */
-                MODIFY_REG((*ccr_reg), (XSPI_CCR_ADMODE | XSPI_CCR_ADDTR | XSPI_CCR_ADSIZE),
+                MODIFY_REG((*ccr_reg),
+                           (XSPI_CCR_ADMODE | XSPI_CCR_ADDTR | XSPI_CCR_ADSIZE),
                            (pCmd->AddressMode | pCmd->AddressDTRMode | pCmd->AddressWidth));
             }
 

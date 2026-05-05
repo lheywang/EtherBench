@@ -39,7 +39,7 @@ void MX_OCTOSPI1_Init(void) {
      * Configure peripheral
      */
     hospi1.Instance = OCTOSPI1;
-    hospi1.Init.FifoThresholdByte = 24;
+    hospi1.Init.FifoThresholdByte = 16;
     hospi1.Init.MemoryMode = HAL_XSPI_SINGLE_MEM;
     hospi1.Init.MemoryType = HAL_XSPI_MEMTYPE_MACRONIX;
     hospi1.Init.MemorySize = HAL_XSPI_SIZE_1GB;
@@ -47,7 +47,7 @@ void MX_OCTOSPI1_Init(void) {
     hospi1.Init.FreeRunningClock = HAL_XSPI_FREERUNCLK_DISABLE;
     hospi1.Init.ClockMode = HAL_XSPI_CLOCK_MODE_0;
     hospi1.Init.WrapSize = HAL_XSPI_WRAP_NOT_SUPPORTED;
-    hospi1.Init.ClockPrescaler = 8;
+    hospi1.Init.ClockPrescaler = 16;
     hospi1.Init.SampleShifting = HAL_XSPI_SAMPLE_SHIFT_NONE;
     hospi1.Init.DelayHoldQuarterCycle = HAL_XSPI_DHQC_DISABLE;
     hospi1.Init.ChipSelectBoundary = HAL_XSPI_BONDARYOF_NONE;
@@ -61,11 +61,25 @@ void MX_OCTOSPI1_Init(void) {
     /*
      * Configure GPDMA for the reads :
      */
-    handle_GPDMA1_octospiRX.Instance = GPDMA1_Channel7;
+    handle_GPDMA1_octospiRX.Instance = GPDMA1_Channel5;
     handle_GPDMA1_octospiRX.Mode = DMA_LINKEDLIST;
-    handle_GPDMA1_octospiRX.InitLinkedList.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
+
+    handle_GPDMA1_octospiRX.Init.Request = GPDMA1_REQUEST_OCTOSPI1;
+    handle_GPDMA1_octospiRX.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    handle_GPDMA1_octospiRX.Init.SrcInc = DMA_SINC_FIXED;
+    handle_GPDMA1_octospiRX.Init.DestInc = DMA_DINC_INCREMENTED;
+    handle_GPDMA1_octospiRX.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
+    handle_GPDMA1_octospiRX.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
+    handle_GPDMA1_octospiRX.Init.Priority = DMA_HIGH_PRIORITY;
+    handle_GPDMA1_octospiRX.Init.SrcBurstLength = 1;
+    handle_GPDMA1_octospiRX.Init.DestBurstLength = 1;
+    handle_GPDMA1_octospiRX.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT1;
+    handle_GPDMA1_octospiRX.Init.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
+    handle_GPDMA1_octospiRX.Init.Mode = DMA_NORMAL;
+
+    handle_GPDMA1_octospiRX.InitLinkedList.Priority = DMA_HIGH_PRIORITY;
     handle_GPDMA1_octospiRX.InitLinkedList.LinkStepMode = DMA_LSM_FULL_EXECUTION;
-    handle_GPDMA1_octospiRX.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT0;
+    handle_GPDMA1_octospiRX.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT1;
     handle_GPDMA1_octospiRX.InitLinkedList.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
     handle_GPDMA1_octospiRX.InitLinkedList.LinkedListMode = DMA_LINKEDLIST_NORMAL;
     // handle_GPDMA1_octospiRX.XferCpltCallback = flash_rx_complete;
@@ -79,12 +93,25 @@ void MX_OCTOSPI1_Init(void) {
     /*
      * Configure GPDMA for the writes :
      */
-
-    handle_GPDMA1_octospiTX.Instance = GPDMA1_Channel6;
+    handle_GPDMA1_octospiTX.Instance = GPDMA1_Channel4;
     handle_GPDMA1_octospiTX.Mode = DMA_LINKEDLIST;
-    handle_GPDMA1_octospiTX.InitLinkedList.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
+
+    handle_GPDMA1_octospiTX.Init.Request = GPDMA1_REQUEST_OCTOSPI1;
+    handle_GPDMA1_octospiTX.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    handle_GPDMA1_octospiTX.Init.SrcInc = DMA_SINC_INCREMENTED;
+    handle_GPDMA1_octospiTX.Init.DestInc = DMA_DINC_FIXED;
+    handle_GPDMA1_octospiTX.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
+    handle_GPDMA1_octospiTX.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
+    handle_GPDMA1_octospiTX.Init.Priority = DMA_HIGH_PRIORITY;
+    handle_GPDMA1_octospiTX.Init.SrcBurstLength = 1;
+    handle_GPDMA1_octospiTX.Init.DestBurstLength = 1;
+    handle_GPDMA1_octospiTX.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1 | DMA_DEST_ALLOCATED_PORT0;
+    handle_GPDMA1_octospiTX.Init.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
+    handle_GPDMA1_octospiTX.Init.Mode = DMA_NORMAL;
+
+    handle_GPDMA1_octospiTX.InitLinkedList.Priority = DMA_HIGH_PRIORITY;
     handle_GPDMA1_octospiTX.InitLinkedList.LinkStepMode = DMA_LSM_FULL_EXECUTION;
-    handle_GPDMA1_octospiTX.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT0;
+    handle_GPDMA1_octospiTX.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT1;
     handle_GPDMA1_octospiTX.InitLinkedList.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
     handle_GPDMA1_octospiTX.InitLinkedList.LinkedListMode = DMA_LINKEDLIST_NORMAL;
     // handle_GPDMA1_octospiTX.XferCpltCallback = flash_tx_complete;
