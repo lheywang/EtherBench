@@ -26,6 +26,9 @@
 // LevelX
 #include "lx_api.h"
 
+// STD
+#include <string.h>
+
 // ======================================================================
 //                              VARIABLES
 // ======================================================================
@@ -67,6 +70,7 @@ UINT app_levelx_thread_entry(ULONG arg) {
      * Open the lx engine
      */
     lx_nand_flash_initialize();
+    memset((uint8_t *)buffer, 0x00, sizeof(buffer));
 
     /*
      * Reset the flash (ensure default settings are loaded)
@@ -86,18 +90,11 @@ UINT app_levelx_thread_entry(ULONG arg) {
 #endif
 
     /*
-     * Disable the block protection to NONE.
+     * Configure the essentials part of the NAND memory.
      */
     GD5F1GO4UBY1G_set_protected_blocks(0x00);
-
-    /*
-     * Enable the QUAD SPI for maximal performance
-     */
     GD5F1GO4UBY1G_enable_quad();
 
-    /*
-     * Debug : Read some registers
-     */
 #ifdef DEBUG_NAND
     reg_A0 = GD5F1GO4UBY1G_Read_Register(0xA0);
     reg_B0 = GD5F1GO4UBY1G_Read_Register(0xB0);
@@ -107,19 +104,15 @@ UINT app_levelx_thread_entry(ULONG arg) {
     LOG("Registers (A0, B0, C0, D0, F0) = %x | %x | %x | %x | %x", reg_A0, reg_B0, reg_C0, reg_D0, reg_F0);
 #endif
 
+#ifdef RESCUE_NAND
     /*
      * If enable, reset the NAND to it's zero state. This shall not be enabled in prod, as
      * this will clear ALL bad blocks. Thus, writes loss ARE POSSIBLE.
      */
-#ifdef RESCUE_NAND
 #warning "[NAND] Rescue mode is enabled. Do not leave that in prod !!!"
     GD5F1GO4UBY1G_rescue();
 #endif
 
-    /*
-     * Add the different partitions. If a fail occur, store the flag on a side,
-     * clear it, and try to format the array.
-     */
     /*
      * SETTINGS MEMORY
      */

@@ -18,6 +18,9 @@
 // ======================================================================
 //                              INCLUDES
 // ======================================================================
+// Local libraries
+#include "commands.h"
+
 // ThreadX
 #include "tx_api.h"
 
@@ -35,12 +38,13 @@
 extern TX_SEMAPHORE flash_wip;      // From launcher
 extern TX_SEMAPHORE flash_dma_done; // From launcher
 
-extern DMA_NodeTypeDef master_xfer_rx; // from common.c
-extern DMA_NodeTypeDef slave_xfer_rx;  // from common.c
-extern DMA_QListTypeDef dma_xfer_rx;   // from common.c
-extern DMA_NodeTypeDef master_xfer_tx; // from common.c
-extern DMA_NodeTypeDef slave_xfer_tx;  // from common.c
-extern DMA_QListTypeDef dma_xfer_tx;   // from common.c
+extern DMA_NodeTypeDef master_xfer_rx;           // from common.c
+extern DMA_NodeTypeDef slave_xfer_rx;            // from common.c
+extern DMA_QListTypeDef dma_xfer_rx;             // from common.c
+extern DMA_NodeTypeDef master_xfer_tx;           // from common.c
+extern DMA_NodeTypeDef slave_xfer_tx;            // from common.c
+extern DMA_QListTypeDef dma_xfer_tx;             // from common.c
+extern volatile uint8_t buffer[GD25_PAGE_TOTAL]; // from common.c
 
 // ======================================================================
 //                        FUNCTIONS (PUBLIC API)

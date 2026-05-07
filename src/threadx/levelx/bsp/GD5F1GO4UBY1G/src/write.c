@@ -72,6 +72,28 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
     cmd.Address = (main_buffer != NULL) ? 0 : GD25_PAGE_OOD_ADDR;
 
     /*
+     * Ensure that all the data is into the RAM.
+     */
+    if (main_buffer)
+        HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)main_buffer, main_size);
+    if (spare_buffer)
+        HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)spare_buffer, spare_size);
+
+    if (main_buffer) {
+        memcpy((uint8_t *)buffer, main_buffer, main_size);
+    }
+    if (spare_buffer) {
+        memcpy((uint8_t *)buffer + main_size, spare_buffer, spare_size);
+    }
+
+    HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)buffer, sizeof(buffer));
+
+    /*
+     * Wait for the memory IO to finish
+     */
+    __DSB();
+
+    /*
      * Launch the transfer if we need more than the DMA threshold
      */
 
@@ -84,30 +106,11 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
             ;
 
         /*
-         * Ensure that all the data is into the RAM.
-         */
-        if (main_buffer)
-            HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)main_buffer, main_size);
-        if (spare_buffer)
-            HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)spare_buffer, spare_size);
-
-        /*
-         * Build the linked list for the DMA
-         */
-        if (STM32H563_prepare_dma_xfer(main_buffer, main_size, spare_buffer, spare_size, true) != LX_SUCCESS)
-            return LX_ERROR;
-
-        /*
-         * Patch the HAL that would, otherwise override our settings. They'll be, but, with the rights ones
-         */
-        uint8_t *pBuf = (uint8_t *)dma_xfer_tx.Head->LinkRegisters[NODE_CSAR_DEFAULT_OFFSET]; // Target buffer
-
-        /*
          * Start the transfer
          */
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
-        if (HAL_XSPI_Transmit_DMA(&hospi1, pBuf) != HAL_OK)
+        if (HAL_XSPI_Transmit_DMA(&hospi1, (uint8_t *)buffer) != HAL_OK)
             return LX_ERROR;
 
         /*
@@ -119,23 +122,11 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
     } else {
 
         /*
-         * Build the buffer
-         */
-        uint8_t buf[GD25_DMA_THRESHOLD + 2] = {0};
-
-        if (main_buffer) {
-            memcpy(buf, main_buffer, main_size);
-        }
-        if (spare_buffer) {
-            memcpy(buf + main_size, spare_buffer, spare_size);
-        }
-
-        /*
          * Transfer from the local buffer
          */
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
-        if (HAL_XSPI_Transmit(&hospi1, buf, HAL_MAX_DELAY) != HAL_OK)
+        if (HAL_XSPI_Transmit(&hospi1, (uint8_t *)buffer, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
     }
 

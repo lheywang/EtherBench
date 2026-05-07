@@ -45,13 +45,22 @@ extern DMA_HandleTypeDef handle_GPDMA1_octospiRX; // from hal/init/octospi.c
 // ======================================================================
 //                              VARIABLES
 // ======================================================================
-DMA_NodeTypeDef __aligned(32) master_xfer_rx;
-DMA_NodeTypeDef __aligned(32) slave_xfer_rx;
-DMA_QListTypeDef __aligned(32) dma_xfer_rx;
+DMA_NodeTypeDef __aligned(32) master_xfer_rx = {0};
+DMA_NodeTypeDef __aligned(32) slave_xfer_rx = {0};
+DMA_QListTypeDef __aligned(32) dma_xfer_rx = {0};
 
-DMA_NodeTypeDef __aligned(32) master_xfer_tx;
-DMA_NodeTypeDef __aligned(32) slave_xfer_tx;
-DMA_QListTypeDef __aligned(32) dma_xfer_tx;
+DMA_NodeTypeDef __aligned(32) master_xfer_tx = {0};
+DMA_NodeTypeDef __aligned(32) slave_xfer_tx = {0};
+DMA_QListTypeDef __aligned(32) dma_xfer_tx = {0};
+
+/*
+ * Aliases used when building the requests
+ */
+static DMA_QListTypeDef __aligned(32) *dma_xfer = NULL;
+static DMA_NodeTypeDef __aligned(32) *master_xfer = NULL;
+static DMA_NodeTypeDef __aligned(32) *slave_xfer = NULL;
+
+volatile uint8_t __aligned(32) buffer[GD25_PAGE_TOTAL];
 
 // ======================================================================
 //                              FUNCTIONS
@@ -212,9 +221,9 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
     /*
      * Fetch the QList pointer :
      */
-    DMA_QListTypeDef *dma_xfer = (isTx) ? &dma_xfer_tx : &dma_xfer_rx;
-    DMA_NodeTypeDef *master_xfer = (isTx) ? &master_xfer_tx : &master_xfer_rx;
-    DMA_NodeTypeDef *slave_xfer = (isTx) ? &slave_xfer_tx : &slave_xfer_rx;
+    dma_xfer = (isTx) ? &dma_xfer_tx : &dma_xfer_rx;
+    master_xfer = (isTx) ? &master_xfer_tx : &master_xfer_rx;
+    slave_xfer = (isTx) ? &slave_xfer_tx : &slave_xfer_rx;
 
     /*
      * Clearing the list
@@ -224,7 +233,7 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
 
     /*
      * Unlink the other transfer.
-     * Failing to do it will ensure in bus conditions, that will stall the bus.
+     * Failing to do it will stall the buse once the DMA request will be enabled.
      */
     if (isTx) {
         HAL_DMA_Abort(&handle_GPDMA1_octospiRX);
@@ -255,10 +264,11 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
     node_config.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
 
     /*
-     * Set the burst sizes. Fixed to 1, otherwise non-round transfers will fail.
+     * Set the burst sizes. Fixed to 4, as the full FIFO.
+     * Non rounded transfers will be handled by the HAL at the end, properly.
      */
-    node_config.Init.SrcBurstLength = 1;
-    node_config.Init.DestBurstLength = 1;
+    node_config.Init.SrcBurstLength = 4;
+    node_config.Init.DestBurstLength = 4;
 
     node_config.Init.Mode = DMA_NORMAL;
 
@@ -321,9 +331,9 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
 
         if (isTx) {
             node_config.SrcAddress = (uint32_t)spare_buffer;
-            node_config.DstAddress = (uint32_t)&OCTOSPI1->DR;
+            node_config.DstAddress = (uint32_t)hospi1.Instance->DR;
         } else {
-            node_config.SrcAddress = (uint32_t)&OCTOSPI1->DR;
+            node_config.SrcAddress = (uint32_t)hospi1.Instance->DR;
             node_config.DstAddress = (uint32_t)spare_buffer;
         }
 
@@ -342,17 +352,27 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
     }
 
     /*
+     * Link the chain to the descriptor, and flush them on the RAM.
+     */
+    if (isTx) {
+        if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_octospiTX, dma_xfer) != HAL_OK)
+            return LX_ERROR;
+        HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)&handle_GPDMA1_octospiTX, sizeof(DMA_HandleTypeDef));
+    } else {
+        if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_octospiRX, dma_xfer) != HAL_OK)
+            return LX_ERROR;
+        HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)&handle_GPDMA1_octospiRX, sizeof(DMA_HandleTypeDef));
+    }
+
+    /*
      * Push the whole transfer into the RAM.
      */
     HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)dma_xfer, sizeof(DMA_QListTypeDef));
 
-    if (isTx) {
-        if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_octospiTX, dma_xfer) != HAL_OK)
-            return LX_ERROR;
-    } else {
-        if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_octospiRX, dma_xfer) != HAL_OK)
-            return LX_ERROR;
-    }
+    /*
+     * Wait for the memory IO to finish
+     */
+    __DSB();
 
     return LX_SUCCESS;
 }

@@ -103,22 +103,11 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
             ;
 
         /*
-         * Build the linked list for the DMA
-         */
-        if (STM32H563_prepare_dma_xfer(main_buffer, main_size, spare_buffer, spare_size, false) != LX_SUCCESS)
-            return LX_ERROR;
-
-        /*
-         * Patch the HAL that would, otherwise override our settings. They'll be, but, with the rights ones
-         */
-        uint8_t *pBuf = (uint8_t *)dma_xfer_rx.Head->LinkRegisters[NODE_CDAR_DEFAULT_OFFSET]; // Target buffer
-
-        /*
          * Start the transfer.
          */
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
-        if (HAL_XSPI_Receive_DMA(&hospi1, pBuf) != HAL_OK)
+        if (HAL_XSPI_Receive_DMA(&hospi1, (uint8_t *)buffer) != HAL_OK)
             return LX_ERROR;
 
         /*
@@ -130,33 +119,43 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
         /*
          * Ensure the data we got is nice.
          */
-        if (main_buffer)
-            HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)main_buffer, main_size);
-        if (spare_buffer)
-            HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)spare_buffer, spare_size);
+        HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)buffer, sizeof(buffer));
+
+        /*
+         * Wait for the memory IO to finish
+         */
+        __DSB();
 
     } else {
 
         /*
          * Perform the IO from a small local buffer
          */
-        uint8_t buf[GD25_DMA_THRESHOLD + 2] = {0};
-
         if (HAL_XSPI_Command(&hospi1, &cmd, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
-        if (HAL_XSPI_Receive(&hospi1, buf, HAL_MAX_DELAY) != HAL_OK)
+        if (HAL_XSPI_Receive(&hospi1, (uint8_t *)buffer, HAL_MAX_DELAY) != HAL_OK)
             return LX_ERROR;
-
-        /*
-         * Copy the data into the right elements
-         */
-        if (main_buffer) {
-            memcpy(main_buffer, buf, main_size);
-        }
-        if (spare_buffer) {
-            memcpy(spare_buffer, buf + main_size, spare_size);
-        }
     }
+
+    /*
+     * Copy the data into the right elements
+     */
+    if (main_buffer) {
+        memcpy(main_buffer, (uint8_t *)buffer, main_size);
+    }
+    if (spare_buffer) {
+        memcpy(spare_buffer, (uint8_t *)buffer + main_size, spare_size);
+    }
+
+    if (main_buffer)
+        HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)main_buffer, main_size);
+    if (spare_buffer)
+        HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)spare_buffer, spare_size);
+
+    /*
+     * Wait for the memory IO to finish
+     */
+    __DSB();
 
     return LX_SUCCESS;
 }

@@ -1415,8 +1415,8 @@ HAL_StatusTypeDef HAL_XSPI_Transmit_DMA(XSPI_HandleTypeDef *hxspi, const uint8_t
                                    DMA_CTR2_DREQ,
                                    DMA_MEMORY_TO_PERIPH);
                         // EDIT HERE --> NO, Don't need that; Already set within the LL
-                        // /* Set DMA data size*/
-                        // p_queue->Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET] = hxspi->XferSize;
+                        /* Set DMA data size*/
+                        p_queue->Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET] = hxspi->XferSize;
                         /* Set DMA source address */
                         p_queue->Head->LinkRegisters[NODE_CSAR_DEFAULT_OFFSET] = (uint32_t)pData;
                         /* Set DMA destination address */
@@ -1572,7 +1572,7 @@ HAL_StatusTypeDef HAL_XSPI_Receive_DMA(XSPI_HandleTypeDef *hxspi, uint8_t *const
 
                         // EDIT HERE --> NO, Don't need that; Already set within the LL
                         /* Set DMA data size */
-                        // p_queue->Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET] = hxspi->XferSize;
+                        p_queue->Head->LinkRegisters[NODE_CBR1_DEFAULT_OFFSET] = hxspi->XferSize;
                         /* Set DMA source address */
                         p_queue->Head->LinkRegisters[NODE_CSAR_DEFAULT_OFFSET] = (uint32_t)&hxspi->Instance->DR;
                         /* Set DMA destination address */
