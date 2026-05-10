@@ -19,7 +19,10 @@
 //                              INCLUDES
 // ======================================================================
 // Local libraries
+#include "app_levelx.h"
 #include "commands.h"
+
+#undef DEBUG_NAND // Too much logs
 
 // ThreadX
 #include "tx_api.h"
@@ -285,6 +288,7 @@ UINT GD5F1GO4UBY1G_reset();
  * @param main_size The main buffer size.
  * @param spare_buffer The spare buffer, for the OOB bytes.
  * @param spare_size The spare buffer size.
+ * @param spare_offset The offset at which we must look / write into the function.
  *
  * @return UINT
  */
@@ -293,7 +297,8 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
                                 UCHAR *main_buffer,
                                 ULONG main_size,
                                 UCHAR *spare_buffer,
-                                ULONG spare_size);
+                                ULONG spare_size,
+                                ULONG spare_offset);
 
 /**
  * @brief Perform a generic write to the NAND device.
@@ -304,6 +309,7 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
  * @param main_size The main buffer size.
  * @param spare_buffer The spare buffer, for the OOB bytes.
  * @param spare_size The spare buffer size.
+ * @param spare_offset The offset at which we must look / write into the function.
  *
  * @return UINT
  */
@@ -312,7 +318,8 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
                                  UCHAR *main_buffer,
                                  ULONG main_size,
                                  UCHAR *spare_buffer,
-                                 ULONG spare_size);
+                                 ULONG spare_size,
+                                 ULONG spare_offset);
 
 /**
  * @brief Prepare a linked list DMA transfer from or to the NAND.

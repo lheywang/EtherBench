@@ -138,8 +138,8 @@ UINT settings_init(LX_NAND_FLASH *nand) {
     /*
      * Configure the OOB channel
      */
-    nand->lx_nand_flash_spare_data1_offset = 2;  // 2 bytes for the bad block marker
-    nand->lx_nand_flash_spare_data1_length = 60; // 60 bytes for the LevelX spare buffer
+    nand->lx_nand_flash_spare_data1_offset = GD25_SPARE_BLOCK_OFFSET;
+    nand->lx_nand_flash_spare_data1_length = GD25_SPARE_BLOCK_SIZE;
 
     /*
      * Configure the callbacks
@@ -173,8 +173,8 @@ UINT flash_init(LX_NAND_FLASH *nand) {
     /*
      * Configure the OOB channel
      */
-    nand->lx_nand_flash_spare_data1_offset = 2;  // 2 bytes for the bad block marker
-    nand->lx_nand_flash_spare_data1_length = 60; // 60 bytes for the LevelX spare buffer
+    nand->lx_nand_flash_spare_data1_offset = GD25_SPARE_BLOCK_OFFSET;
+    nand->lx_nand_flash_spare_data1_length = GD25_SPARE_BLOCK_SIZE;
 
     /*
      * Configure the callbacks
@@ -208,8 +208,8 @@ UINT backtrace_init(LX_NAND_FLASH *nand) {
     /*
      * Configure the OOB channel
      */
-    nand->lx_nand_flash_spare_data1_offset = 2;  // 2 bytes for the bad block marker
-    nand->lx_nand_flash_spare_data1_length = 60; // 60 bytes for the LevelX spare buffer
+    nand->lx_nand_flash_spare_data1_offset = GD25_SPARE_BLOCK_OFFSET;
+    nand->lx_nand_flash_spare_data1_length = GD25_SPARE_BLOCK_SIZE;
 
     /*
      * Configure the callbacks

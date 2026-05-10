@@ -15,15 +15,23 @@
 //                         DEFINES (SETTINGS)
 // ======================================================================
 // DMA Configuration
-#define GD25_DMA_THRESHOLD 24
+#define GD25_DMA_THRESHOLD 32
 
 // ======================================================================
 //                         DEFINES (DEVICE)
 // ======================================================================
+
 // Pages
-#define GD25_PAGE_SIZE     2048
-#define GD25_PAGE_OOB      128
-#define GD25_PAGE_OOD_ADDR (GD25_PAGE_SIZE)
+#define GD25_PAGE_SIZE 2048
+#define GD25_PAGE_OOB  128
+
+// OOB Config
+#define GD25_BAD_BLOCK_SIZE     2
+#define GD25_BAD_BLOCK_OFFSET   0
+#define GD25_SPARE_BLOCK_SIZE   (GD25_PAGE_OOB - GD25_BAD_BLOCK_SIZE)
+#define GD25_SPARE_BLOCK_OFFSET (GD25_BAD_BLOCK_SIZE)
+
+#define GD25_PAGE_OOD_ADDR GD25_PAGE_SIZE
 #define GD25_PAGE_TOTAL    (GD25_PAGE_SIZE + GD25_PAGE_OOB)
 
 // Blocks

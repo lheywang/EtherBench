@@ -29,6 +29,8 @@
 #include "lx_api.h"
 
 // ThreadX
+#define LOG_MODULE "NAND_READ"
+#include "logger.h"
 #include "tx_api.h"
 
 // STD
@@ -50,7 +52,8 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
                                 UCHAR *main_buffer,
                                 ULONG main_size,
                                 UCHAR *spare_buffer,
-                                ULONG spare_size) {
+                                ULONG spare_size,
+                                ULONG spare_offset) {
 
     /*
      * First, transfer the target page into the cache register
@@ -88,7 +91,7 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
     cmd.DataMode = HAL_XSPI_DATA_4_LINES;
     cmd.DummyCycles = 2;
     cmd.DataLength = xfer_size;
-    cmd.Address = (main_buffer != NULL) ? 0 : GD25_PAGE_OOD_ADDR;
+    cmd.Address = (main_buffer != NULL) ? 0 : (GD25_PAGE_OOD_ADDR + spare_offset);
 
     /*
      * Launch the transfer if we need more than the DMA threshold.
@@ -144,7 +147,7 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
         memcpy(main_buffer, (uint8_t *)buffer, main_size);
     }
     if (spare_buffer) {
-        memcpy(spare_buffer, (uint8_t *)buffer + main_size, spare_size);
+        memcpy(spare_buffer, (uint8_t *)buffer + main_size + spare_offset, spare_size);
     }
 
     if (main_buffer)
@@ -162,11 +165,11 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
 
 UINT GD5F1GO4UBY1G_page_read(ULONG block, ULONG page, ULONG *destination, ULONG words) {
     return GD5F1GO4UBY1G_generic_read(
-        block, page, (UCHAR *)destination, words * (sizeof(ULONG) / sizeof(UCHAR)), NULL, 0);
+        block, page, (UCHAR *)destination, words * (sizeof(ULONG) / sizeof(UCHAR)), NULL, 0, GD25_SPARE_BLOCK_OFFSET);
 }
 
 UINT GD5F1GO4UBY1G_extra_bytes_get(ULONG block, ULONG page, UCHAR *destination, UINT size) {
-    return GD5F1GO4UBY1G_generic_read(block, page, NULL, 0, destination, size);
+    return GD5F1GO4UBY1G_generic_read(block, page, NULL, 0, destination, size, GD25_SPARE_BLOCK_OFFSET);
 }
 
 UINT GD5F1GO4UBY1G_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
@@ -180,7 +183,8 @@ UINT GD5F1GO4UBY1G_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR
         ULONG current_main_size = (main_buffer != NULL) ? GD25_PAGE_SIZE : 0;
         ULONG current_spare_size = (spare_buffer != NULL) ? GD25_PAGE_OOB : 0;
 
-        status = GD5F1GO4UBY1G_generic_read(block, page + i, dest, current_main_size, spare, current_spare_size);
+        status = GD5F1GO4UBY1G_generic_read(
+            block, page + i, dest, current_main_size, spare, current_spare_size, GD25_SPARE_BLOCK_OFFSET);
         if (status != LX_SUCCESS) {
             break;
         }

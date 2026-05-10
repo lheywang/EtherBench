@@ -29,6 +29,8 @@
 #include "lx_api.h"
 
 // ThreadX
+#define LOG_MODULE "NAND_WRITE"
+#include "logger.h"
 #include "tx_api.h"
 
 // STD
@@ -50,7 +52,8 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
                                  UCHAR *main_buffer,
                                  ULONG main_size,
                                  UCHAR *spare_buffer,
-                                 ULONG spare_size) {
+                                 ULONG spare_size,
+                                 ULONG spare_offset) {
 
     /*
      * First, transfer the target page into the cache register
@@ -69,7 +72,7 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
     cmd.DataMode = HAL_XSPI_DATA_4_LINES;
     cmd.DummyCycles = 0;
     cmd.DataLength = xfer_size;
-    cmd.Address = (main_buffer != NULL) ? 0 : GD25_PAGE_OOD_ADDR;
+    cmd.Address = (main_buffer != NULL) ? 0 : (GD25_PAGE_OOD_ADDR + spare_offset);
 
     /*
      * Ensure that all the data is into the RAM.
@@ -83,7 +86,7 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
         memcpy((uint8_t *)buffer, main_buffer, main_size);
     }
     if (spare_buffer) {
-        memcpy((uint8_t *)buffer + main_size, spare_buffer, spare_size);
+        memcpy((uint8_t *)buffer + main_size + spare_offset, spare_buffer, spare_size);
     }
 
     HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)buffer, sizeof(buffer));
@@ -158,11 +161,12 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
 }
 
 UINT GD5F1GO4UBY1G_page_write(ULONG block, ULONG page, ULONG *source, ULONG words) {
-    return GD5F1GO4UBY1G_generic_write(block, page, (UCHAR *)source, words * (sizeof(ULONG) / sizeof(UCHAR)), NULL, 0);
+    return GD5F1GO4UBY1G_generic_write(
+        block, page, (UCHAR *)source, words * (sizeof(ULONG) / sizeof(UCHAR)), NULL, 0, GD25_SPARE_BLOCK_OFFSET);
 }
 
 UINT GD5F1GO4UBY1G_extra_bytes_set(ULONG block, ULONG page, UCHAR *source, UINT size) {
-    return GD5F1GO4UBY1G_generic_write(block, page, NULL, 0, source, size);
+    return GD5F1GO4UBY1G_generic_write(block, page, NULL, 0, source, size, GD25_SPARE_BLOCK_OFFSET);
 }
 
 UINT GD5F1GO4UBY1G_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
@@ -176,7 +180,8 @@ UINT GD5F1GO4UBY1G_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHA
         ULONG current_main_size = (main_buffer != NULL) ? GD25_PAGE_SIZE : 0;
         ULONG current_spare_size = (spare_buffer != NULL) ? GD25_PAGE_OOB : 0;
 
-        status = GD5F1GO4UBY1G_generic_write(block, page + i, src, current_main_size, spare, current_spare_size);
+        status = GD5F1GO4UBY1G_generic_write(
+            block, page + i, src, current_main_size, spare, current_spare_size, GD25_SPARE_BLOCK_OFFSET);
         if (status != LX_SUCCESS) {
             break;
         }

@@ -301,10 +301,10 @@ UINT STM32H563_prepare_dma_xfer(UCHAR *main_buffer, ULONG main_size, UCHAR *spar
 
         if (isTx) {
             node_config.SrcAddress = (uint32_t)main_buffer;
-            node_config.DstAddress = (uint32_t)hospi1.Instance->DR;
+            node_config.DstAddress = (uint32_t)&hospi1.Instance->DR;
         } else {
             node_config.SrcAddress = (uint32_t)hospi1.Instance->DR;
-            node_config.DstAddress = (uint32_t)main_buffer;
+            node_config.DstAddress = (uint32_t)&main_buffer;
         }
 
         if (HAL_DMAEx_List_BuildNode(&node_config, master_xfer) != HAL_OK)
