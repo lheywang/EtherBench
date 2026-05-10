@@ -140,6 +140,9 @@ UINT settings_init(LX_NAND_FLASH *nand) {
      */
     nand->lx_nand_flash_spare_data1_offset = GD25_SPARE_BLOCK_OFFSET;
     nand->lx_nand_flash_spare_data1_length = GD25_SPARE_BLOCK_SIZE;
+    nand->lx_nand_flash_spare_data2_offset = GD25_SPARE_BLOCK2_OFFSET;
+    nand->lx_nand_flash_spare_data2_length = GD25_SPARE_BLOCK2_SIZE;
+    nand->lx_nand_flash_spare_total_length = GD25_SPARE_TOTAL;
 
     /*
      * Configure the callbacks
@@ -175,6 +178,9 @@ UINT flash_init(LX_NAND_FLASH *nand) {
      */
     nand->lx_nand_flash_spare_data1_offset = GD25_SPARE_BLOCK_OFFSET;
     nand->lx_nand_flash_spare_data1_length = GD25_SPARE_BLOCK_SIZE;
+    nand->lx_nand_flash_spare_data2_offset = GD25_SPARE_BLOCK2_OFFSET;
+    nand->lx_nand_flash_spare_data2_length = GD25_SPARE_BLOCK2_SIZE;
+    nand->lx_nand_flash_spare_total_length = GD25_SPARE_TOTAL;
 
     /*
      * Configure the callbacks
@@ -210,6 +216,9 @@ UINT backtrace_init(LX_NAND_FLASH *nand) {
      */
     nand->lx_nand_flash_spare_data1_offset = GD25_SPARE_BLOCK_OFFSET;
     nand->lx_nand_flash_spare_data1_length = GD25_SPARE_BLOCK_SIZE;
+    nand->lx_nand_flash_spare_data2_offset = GD25_SPARE_BLOCK2_OFFSET;
+    nand->lx_nand_flash_spare_data2_length = GD25_SPARE_BLOCK2_SIZE;
+    nand->lx_nand_flash_spare_total_length = GD25_SPARE_TOTAL;
 
     /*
      * Configure the callbacks

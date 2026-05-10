@@ -75,13 +75,9 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
     cmd.Address = (main_buffer != NULL) ? 0 : (GD25_PAGE_OOD_ADDR + spare_offset);
 
     /*
-     * Ensure that all the data is into the RAM.
+     * Build the new buffer
      */
-    if (main_buffer)
-        HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)main_buffer, main_size);
-    if (spare_buffer)
-        HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)spare_buffer, spare_size);
-
+    memset((void *)buffer, 0xFF, sizeof(buffer));
     if (main_buffer) {
         memcpy((uint8_t *)buffer, main_buffer, main_size);
     }
@@ -89,11 +85,10 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
         memcpy((uint8_t *)buffer + main_size + spare_offset, spare_buffer, spare_size);
     }
 
-    HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)buffer, sizeof(buffer));
-
     /*
      * Wait for the memory IO to finish
      */
+    HAL_DCACHE_CleanByAddr(&hdcache1, (uint32_t *)buffer, sizeof(buffer));
     __DSB();
 
     /*
@@ -162,11 +157,11 @@ UINT GD5F1GO4UBY1G_generic_write(ULONG block,
 
 UINT GD5F1GO4UBY1G_page_write(ULONG block, ULONG page, ULONG *source, ULONG words) {
     return GD5F1GO4UBY1G_generic_write(
-        block, page, (UCHAR *)source, words * (sizeof(ULONG) / sizeof(UCHAR)), NULL, 0, GD25_SPARE_BLOCK_OFFSET);
+        block, page, (UCHAR *)source, words * (sizeof(ULONG) / sizeof(UCHAR)), NULL, 0, 0);
 }
 
 UINT GD5F1GO4UBY1G_extra_bytes_set(ULONG block, ULONG page, UCHAR *source, UINT size) {
-    return GD5F1GO4UBY1G_generic_write(block, page, NULL, 0, source, size, GD25_SPARE_BLOCK_OFFSET);
+    return GD5F1GO4UBY1G_generic_write(block, page, NULL, 0, source, size, 0);
 }
 
 UINT GD5F1GO4UBY1G_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
@@ -180,8 +175,7 @@ UINT GD5F1GO4UBY1G_pages_write(ULONG block, ULONG page, UCHAR *main_buffer, UCHA
         ULONG current_main_size = (main_buffer != NULL) ? GD25_PAGE_SIZE : 0;
         ULONG current_spare_size = (spare_buffer != NULL) ? GD25_PAGE_OOB : 0;
 
-        status = GD5F1GO4UBY1G_generic_write(
-            block, page + i, src, current_main_size, spare, current_spare_size, GD25_SPARE_BLOCK_OFFSET);
+        status = GD5F1GO4UBY1G_generic_write(block, page + i, src, current_main_size, spare, current_spare_size, 0);
         if (status != LX_SUCCESS) {
             break;
         }

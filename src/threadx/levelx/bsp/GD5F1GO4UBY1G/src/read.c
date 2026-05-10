@@ -94,6 +94,11 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
     cmd.Address = (main_buffer != NULL) ? 0 : (GD25_PAGE_OOD_ADDR + spare_offset);
 
     /*
+     * Clean up the buffer
+     */
+    memset((void *)buffer, 0xFF, sizeof(buffer));
+
+    /*
      * Launch the transfer if we need more than the DMA threshold.
      */
 
@@ -123,10 +128,6 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
          * Ensure the data we got is nice.
          */
         HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)buffer, sizeof(buffer));
-
-        /*
-         * Wait for the memory IO to finish
-         */
         __DSB();
 
     } else {
@@ -150,26 +151,16 @@ UINT GD5F1GO4UBY1G_generic_read(ULONG block,
         memcpy(spare_buffer, (uint8_t *)buffer + main_size + spare_offset, spare_size);
     }
 
-    if (main_buffer)
-        HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)main_buffer, main_size);
-    if (spare_buffer)
-        HAL_DCACHE_InvalidateByAddr(&hdcache1, (uint32_t *)spare_buffer, spare_size);
-
-    /*
-     * Wait for the memory IO to finish
-     */
-    __DSB();
-
     return LX_SUCCESS;
 }
 
 UINT GD5F1GO4UBY1G_page_read(ULONG block, ULONG page, ULONG *destination, ULONG words) {
     return GD5F1GO4UBY1G_generic_read(
-        block, page, (UCHAR *)destination, words * (sizeof(ULONG) / sizeof(UCHAR)), NULL, 0, GD25_SPARE_BLOCK_OFFSET);
+        block, page, (UCHAR *)destination, words * (sizeof(ULONG) / sizeof(UCHAR)), NULL, 0, 0);
 }
 
 UINT GD5F1GO4UBY1G_extra_bytes_get(ULONG block, ULONG page, UCHAR *destination, UINT size) {
-    return GD5F1GO4UBY1G_generic_read(block, page, NULL, 0, destination, size, GD25_SPARE_BLOCK_OFFSET);
+    return GD5F1GO4UBY1G_generic_read(block, page, NULL, 0, destination, size, 0);
 }
 
 UINT GD5F1GO4UBY1G_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR *spare_buffer, ULONG pages) {
@@ -183,8 +174,7 @@ UINT GD5F1GO4UBY1G_pages_read(ULONG block, ULONG page, UCHAR *main_buffer, UCHAR
         ULONG current_main_size = (main_buffer != NULL) ? GD25_PAGE_SIZE : 0;
         ULONG current_spare_size = (spare_buffer != NULL) ? GD25_PAGE_OOB : 0;
 
-        status = GD5F1GO4UBY1G_generic_read(
-            block, page + i, dest, current_main_size, spare, current_spare_size, GD25_SPARE_BLOCK_OFFSET);
+        status = GD5F1GO4UBY1G_generic_read(block, page + i, dest, current_main_size, spare, current_spare_size, 0);
         if (status != LX_SUCCESS) {
             break;
         }

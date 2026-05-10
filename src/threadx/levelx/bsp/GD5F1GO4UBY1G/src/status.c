@@ -39,9 +39,9 @@ extern XSPI_HandleTypeDef hospi1; // From HAL
 // ======================================================================
 
 UINT GD5F1GO4UBY1G_block_status_get(ULONG block, UCHAR *bad_block_byte) {
-    return GD5F1GO4UBY1G_generic_read(block, 0, NULL, 0, bad_block_byte, 1, GD25_BAD_BLOCK_OFFSET);
+    return GD5F1GO4UBY1G_generic_read(block, 0, NULL, 0, bad_block_byte, 1, 0);
 }
 
 UINT GD5F1GO4UBY1G_block_status_set(ULONG block, UCHAR bad_block_byte) {
-    return GD5F1GO4UBY1G_generic_write(block, 0, NULL, 0, &bad_block_byte, 1, GD25_BAD_BLOCK_OFFSET);
+    return GD5F1GO4UBY1G_generic_write(block, 0, NULL, 0, &bad_block_byte, 1, 0);
 }
