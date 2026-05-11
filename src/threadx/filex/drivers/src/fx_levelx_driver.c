@@ -77,8 +77,7 @@ VOID fx_levelx_nand_driver(FX_MEDIA *media_ptr) {
             sector++;
             buffer += (media_ptr->fx_media_bytes_per_sector / sizeof(ULONG));
         }
-        media_ptr->fx_media_driver_status =
-            (status == LX_SUCCESS) ? FX_SUCCESS : FX_IO_ERROR;
+        media_ptr->fx_media_driver_status = (status == LX_SUCCESS) ? FX_SUCCESS : FX_IO_ERROR;
         break;
 
     /*
@@ -91,6 +90,10 @@ VOID fx_levelx_nand_driver(FX_MEDIA *media_ptr) {
         buffer = (ULONG *)media_ptr->fx_media_driver_buffer;
 
         while (count--) {
+            /*
+             * Fail on THAT call : status = (nand_flash->lx_nand_flash_driver_pages_write)(new_block, page, (UCHAR
+             * *)buffer, spare_buffer_ptr, 1); block = 0x3f5. No idea why.
+             */
             status = lx_nand_flash_sector_write(nand_flash, sector, buffer);
             if (status != LX_SUCCESS) {
                 break;
@@ -98,8 +101,7 @@ VOID fx_levelx_nand_driver(FX_MEDIA *media_ptr) {
             sector++;
             buffer += (media_ptr->fx_media_bytes_per_sector / sizeof(ULONG));
         }
-        media_ptr->fx_media_driver_status =
-            (status == LX_SUCCESS) ? FX_SUCCESS : FX_IO_ERROR;
+        media_ptr->fx_media_driver_status = (status == LX_SUCCESS) ? FX_SUCCESS : FX_IO_ERROR;
         break;
 
     /*

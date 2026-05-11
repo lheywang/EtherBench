@@ -44,9 +44,8 @@
 TX_THREAD fx_app_thread;
 
 // Temp memories
-uint32_t
-    __aligned(32) fx_sd_media_memory[FX_STM32_SD_DEFAULT_SECTOR_SIZE / sizeof(uint32_t)];
-uint8_t __aligned(32) fx_flash_media_memory[GD25_PAGE_SIZE];
+uint32_t __aligned(32) fx_sd_media_memory[FX_STM32_SD_DEFAULT_SECTOR_SIZE / sizeof(uint32_t)];
+uint8_t __aligned(32) fx_flash_media_memory[GD25_PAGE_SIZE * 8];
 
 // Thread memory
 uint32_t __aligned(32) fx_stack[FX_APP_THREAD_STACK_SIZE];
@@ -75,17 +74,16 @@ UINT MX_FileX_Init() {
 
     /* Create the main thread.  */
     UINT ret;
-    ret = tx_thread_create(
-        &fx_app_thread,
-        FX_APP_THREAD_NAME,
-        fx_app_thread_entry,
-        0,
-        fx_stack,
-        FX_APP_THREAD_STACK_SIZE,
-        FX_APP_THREAD_PRIO,
-        FX_APP_PREEMPTION_THRESHOLD,
-        FX_APP_THREAD_TIME_SLICE,
-        FX_APP_THREAD_AUTO_START);
+    ret = tx_thread_create(&fx_app_thread,
+                           FX_APP_THREAD_NAME,
+                           fx_app_thread_entry,
+                           0,
+                           fx_stack,
+                           FX_APP_THREAD_STACK_SIZE,
+                           FX_APP_THREAD_PRIO,
+                           FX_APP_PREEMPTION_THRESHOLD,
+                           FX_APP_THREAD_TIME_SLICE,
+                           FX_APP_THREAD_AUTO_START);
 
     /* Check main thread creation */
     if (ret != FX_SUCCESS) {
@@ -130,34 +128,32 @@ void fx_app_thread_entry(ULONG thread_input) {
     /*
      * First, try to open the SD card :
      */
-    sd_status = fx_media_open(
-        &sdio_disk,
-        FX_SD_VOLUME_NAME,
-        fx_stm32_sd_driver,
-        (VOID *)FX_NULL,
-        (VOID *)fx_sd_media_memory,
-        sizeof(fx_sd_media_memory));
+    sd_status = fx_media_open(&sdio_disk,
+                              FX_SD_VOLUME_NAME,
+                              fx_stm32_sd_driver,
+                              (VOID *)FX_NULL,
+                              (VOID *)fx_sd_media_memory,
+                              sizeof(fx_sd_media_memory));
 
     /*
      * If it failed, format it as FAT32.
      */
     if (sd_status != FX_SUCCESS) {
         LOG("Failed to open the SD card. Will format it ...");
-        sd_status = fx_media_format(
-            &sdio_disk,                      // SD_Disk pointer
-            fx_stm32_sd_driver,              // Driver entry
-            (VOID *)FX_NULL,                 // Device info pointer
-            (UCHAR *)fx_sd_media_memory,     // Media buffer pointer
-            sizeof(fx_sd_media_memory),      // Media buffer size
-            FX_SD_VOLUME_NAME,               // Volume Name
-            FX_SD_NUMBER_OF_FATS,            // Number of FATs
-            0,                               // Directory Entries
-            FX_SD_HIDDEN_SECTORS,            // Hidden sectors
-            block_count,                     // Total sectors
-            FX_STM32_SD_DEFAULT_SECTOR_SIZE, // Sector size
-            64,                              // Sectors per cluster
-            1,                               // Heads
-            1                                // Sectors per track
+        sd_status = fx_media_format(&sdio_disk,                      // SD_Disk pointer
+                                    fx_stm32_sd_driver,              // Driver entry
+                                    (VOID *)FX_NULL,                 // Device info pointer
+                                    (UCHAR *)fx_sd_media_memory,     // Media buffer pointer
+                                    sizeof(fx_sd_media_memory),      // Media buffer size
+                                    FX_SD_VOLUME_NAME,               // Volume Name
+                                    FX_SD_NUMBER_OF_FATS,            // Number of FATs
+                                    0,                               // Directory Entries
+                                    FX_SD_HIDDEN_SECTORS,            // Hidden sectors
+                                    block_count,                     // Total sectors
+                                    FX_STM32_SD_DEFAULT_SECTOR_SIZE, // Sector size
+                                    64,                              // Sectors per cluster
+                                    1,                               // Heads
+                                    1                                // Sectors per track
         );
 
         /* Check the format sd_status */
@@ -167,13 +163,12 @@ void fx_app_thread_entry(ULONG thread_input) {
         }
 
         /* Open the SD disk driver */
-        sd_status = fx_media_open(
-            &sdio_disk,
-            FX_SD_VOLUME_NAME,
-            fx_stm32_sd_driver,
-            (VOID *)FX_NULL,
-            (VOID *)fx_sd_media_memory,
-            sizeof(fx_sd_media_memory));
+        sd_status = fx_media_open(&sdio_disk,
+                                  FX_SD_VOLUME_NAME,
+                                  fx_stm32_sd_driver,
+                                  (VOID *)FX_NULL,
+                                  (VOID *)fx_sd_media_memory,
+                                  sizeof(fx_sd_media_memory));
     }
 
     /* Check the media open sd_status */
@@ -184,13 +179,12 @@ void fx_app_thread_entry(ULONG thread_input) {
     /*
      * Then, try to open the Flash area
      */
-    flash_status = fx_media_open(
-        &flash_disk,
-        "QSPI_NAND",
-        fx_levelx_nand_driver,
-        &NAND_filex,
-        fx_flash_media_memory,
-        sizeof(fx_flash_media_memory));
+    flash_status = fx_media_open(&flash_disk,
+                                 "QSPI_NAND",
+                                 fx_levelx_nand_driver,
+                                 &NAND_filex,
+                                 fx_flash_media_memory,
+                                 sizeof(fx_flash_media_memory));
 
     /*
      * If failed, try to format it
@@ -198,31 +192,29 @@ void fx_app_thread_entry(ULONG thread_input) {
     if (flash_status != FX_SUCCESS) {
 
         ULONG total_logical_sectors = NAND_filex.lx_nand_flash_total_pages;
-        flash_status = fx_media_format(
-            &flash_disk,
-            fx_levelx_nand_driver,
-            &NAND_filex,
-            fx_flash_media_memory,
-            sizeof(fx_flash_media_memory),
-            "QSPI_NAND",
-            1,                     /* FAT count */
-            256,                   /* Directory Entries */
-            0,                     /* Hidden sectors */
-            total_logical_sectors, /* Total Sectors */
-            GD25_PAGE_SIZE,        /* Sector size */
-            1,                     /* Sectors */
-            1,                     /* Heads */
-            1                      /* Sectors per track*/
+        flash_status = fx_media_format(&flash_disk,
+                                       fx_levelx_nand_driver,
+                                       &NAND_filex,
+                                       fx_flash_media_memory,
+                                       sizeof(fx_flash_media_memory),
+                                       "QSPI_NAND",
+                                       1,                     /* FAT count */
+                                       256,                   /* Directory Entries */
+                                       0,                     /* Hidden sectors */
+                                       total_logical_sectors, /* Total Sectors */
+                                       GD25_PAGE_SIZE,        /* Sector size */
+                                       1,                     /* Sectors */
+                                       1,                     /* Heads */
+                                       1                      /* Sectors per track*/
         );
 
         if (flash_status == FX_SUCCESS) {
-            flash_status = fx_media_open(
-                &flash_disk,
-                "QSPI_NAND",
-                fx_levelx_nand_driver,
-                &NAND_filex,
-                fx_flash_media_memory,
-                sizeof(fx_flash_media_memory));
+            flash_status = fx_media_open(&flash_disk,
+                                         "QSPI_NAND",
+                                         fx_levelx_nand_driver,
+                                         &NAND_filex,
+                                         fx_flash_media_memory,
+                                         sizeof(fx_flash_media_memory));
         } else {
             Tx_Error_Handler(FLASH_HW_FMT_FAILED);
         }
