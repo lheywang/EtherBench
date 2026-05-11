@@ -132,8 +132,8 @@ UINT settings_init(LX_NAND_FLASH *nand) {
      * Set the partitions parameters
      */
     nand->lx_nand_flash_total_blocks = SETTINGS_PARTITION_SIZE;
-    nand->lx_nand_flash_words_per_page = (GD25_PAGE_SIZE / sizeof(ULONG));
     nand->lx_nand_flash_pages_per_block = GD25_BLOCK_PAGES;
+    nand->lx_nand_flash_bytes_per_page = GD25_PAGE_SIZE;
 
     /*
      * Configure the OOB channel
@@ -147,8 +147,8 @@ UINT settings_init(LX_NAND_FLASH *nand) {
     /*
      * Configure the callbacks
      */
-    nand->lx_nand_flash_driver_read = settings_page_read;
-    nand->lx_nand_flash_driver_write = settings_page_write;
+    // nand->lx_nand_flash_driver_read = settings_page_read;
+    // nand->lx_nand_flash_driver_write = settings_page_write;
     nand->lx_nand_flash_driver_pages_read = settings_pages_read;
     nand->lx_nand_flash_driver_pages_write = settings_pages_write;
     nand->lx_nand_flash_driver_pages_copy = settings_page_copy;
@@ -170,8 +170,8 @@ UINT flash_init(LX_NAND_FLASH *nand) {
      * Set the partitions parameters
      */
     nand->lx_nand_flash_total_blocks = FLASH_PARTITION_SIZE;
-    nand->lx_nand_flash_words_per_page = (GD25_PAGE_SIZE / sizeof(ULONG));
     nand->lx_nand_flash_pages_per_block = GD25_BLOCK_PAGES;
+    nand->lx_nand_flash_bytes_per_page = GD25_PAGE_SIZE;
 
     /*
      * Configure the OOB channel
@@ -185,8 +185,8 @@ UINT flash_init(LX_NAND_FLASH *nand) {
     /*
      * Configure the callbacks
      */
-    nand->lx_nand_flash_driver_read = flash_page_read;
-    nand->lx_nand_flash_driver_write = flash_page_write;
+    // nand->lx_nand_flash_driver_read = flash_page_read;
+    // nand->lx_nand_flash_driver_write = flash_page_write;
     nand->lx_nand_flash_driver_pages_read = flash_pages_read;
     nand->lx_nand_flash_driver_pages_write = flash_pages_write;
     nand->lx_nand_flash_driver_pages_copy = flash_page_copy;
@@ -208,8 +208,8 @@ UINT backtrace_init(LX_NAND_FLASH *nand) {
      * Set the partitions parameters
      */
     nand->lx_nand_flash_total_blocks = BACKTRACE_PARTITION_SIZE;
-    nand->lx_nand_flash_words_per_page = (GD25_PAGE_SIZE / sizeof(ULONG));
     nand->lx_nand_flash_pages_per_block = GD25_BLOCK_PAGES;
+    nand->lx_nand_flash_bytes_per_page = GD25_PAGE_SIZE;
 
     /*
      * Configure the OOB channel
@@ -223,8 +223,8 @@ UINT backtrace_init(LX_NAND_FLASH *nand) {
     /*
      * Configure the callbacks
      */
-    nand->lx_nand_flash_driver_read = backtrace_page_read;
-    nand->lx_nand_flash_driver_write = backtrace_page_write;
+    // nand->lx_nand_flash_driver_read = backtrace_page_read;
+    // nand->lx_nand_flash_driver_write = backtrace_page_write;
     nand->lx_nand_flash_driver_pages_read = backtrace_pages_read;
     nand->lx_nand_flash_driver_pages_write = backtrace_pages_write;
     nand->lx_nand_flash_driver_pages_copy = backtrace_page_copy;
