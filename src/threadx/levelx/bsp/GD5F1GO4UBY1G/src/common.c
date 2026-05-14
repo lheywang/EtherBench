@@ -122,7 +122,7 @@ UINT GD5F1GO4UBY1G_wait_for_complete() {
              * In case of failure, just reset (to clear the flag).
              */
             GD5F1GO4UBY1G_reset();
-            return LX_ERROR;
+            return LX_ERROR | (status_reg << 8);
         }
     }
 

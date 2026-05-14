@@ -34,8 +34,10 @@ UINT MX_FileX_Init();
 //                              DEFINES
 // ======================================================================
 
+#define FX_RESERVED_BLOCKS 32
+
 #define FX_APP_THREAD_STACK_SIZE 3072
-#define FX_APP_THREAD_PRIO 10
+#define FX_APP_THREAD_PRIO       10
 
 #ifndef FX_APP_THREAD_NAME
 #define FX_APP_THREAD_NAME "FileX app thread"

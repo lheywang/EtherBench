@@ -173,7 +173,7 @@ void fx_app_thread_entry(ULONG thread_input) {
 
     /* Check the media open sd_status */
     if (sd_status != FX_SUCCESS) {
-        LOG("SD was openneded");
+        LOG("SD file system mounted. Ready for operations.");
     }
 
     /*
@@ -191,7 +191,9 @@ void fx_app_thread_entry(ULONG thread_input) {
      */
     if (flash_status != FX_SUCCESS) {
 
-        ULONG total_logical_sectors = NAND_filex.lx_nand_flash_total_pages;
+        LOG("Flash openning failed. Trying to format it");
+
+        ULONG total_logical_sectors = (NAND_filex.lx_nand_flash_total_blocks * GD25_BLOCK_PAGES) - FX_RESERVED_BLOCKS;
         flash_status = fx_media_format(&flash_disk,
                                        fx_levelx_nand_driver,
                                        &NAND_filex,
@@ -203,24 +205,38 @@ void fx_app_thread_entry(ULONG thread_input) {
                                        0,                     /* Hidden sectors */
                                        total_logical_sectors, /* Total Sectors */
                                        GD25_PAGE_SIZE,        /* Sector size */
-                                       1,                     /* Sectors */
+                                       8,                     /* Sectors */
                                        1,                     /* Heads */
                                        1                      /* Sectors per track*/
         );
 
         if (flash_status == FX_SUCCESS) {
+
+            LOG("Flash format OK. Trying to reopen it.");
+
             flash_status = fx_media_open(&flash_disk,
                                          "QSPI_NAND",
                                          fx_levelx_nand_driver,
                                          &NAND_filex,
                                          fx_flash_media_memory,
                                          sizeof(fx_flash_media_memory));
-        } else {
+        }
+
+        if (flash_status != FX_SUCCESS) {
             Tx_Error_Handler(FLASH_HW_FMT_FAILED);
         }
     }
 
+    LOG("Flash file system mounted. Ready for operations.");
+
     while (1) {
-        tx_thread_sleep(100);
+        /*
+         * Infinite loop, flush the filesystem every second.
+         */
+        tx_thread_sleep(1000);
+
+        // Flush
+        fx_media_flush(&flash_disk);
+        fx_media_flush(&sdio_disk);
     }
 }
