@@ -9,6 +9,8 @@
 # Set app sources
 set(SOURCES 
     app/src/app_filex.c
+    app/src/vfs.c
+    app/src/vfs_syscall.c
 )
 
 list(APPEND SOURCES

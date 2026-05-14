@@ -20,6 +20,7 @@
 // Libraries
 #include "app_levelx.h"
 #include "logger.h"
+#include "vfs.h"
 
 // Drivers
 #include "fx_levelx_driver.h"
@@ -228,6 +229,15 @@ void fx_app_thread_entry(ULONG thread_input) {
     }
 
     LOG("Flash file system mounted. Ready for operations.");
+
+    /*
+     * Initializing the VFS system
+     */
+    vfs_init();
+
+    /*
+     * Enterring the app loop. IO are done within syscalls.
+     */
 
     while (1) {
         /*

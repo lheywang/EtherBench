@@ -76,72 +76,72 @@ __attribute__((weak)) int _write(int file, char *ptr, int len) {
     return len;
 }
 
-int _close(int file) {
+__attribute__((weak)) int _close(int file) {
     (void)file;
     return -1;
 }
 
-int _fstat(int file, struct stat *st) {
+__attribute__((weak)) int _fstat(int file, struct stat *st) {
     (void)file;
     st->st_mode = S_IFCHR;
     return 0;
 }
 
-int _isatty(int file) {
+__attribute__((weak)) int _isatty(int file) {
     (void)file;
     return 1;
 }
 
-int _lseek(int file, int ptr, int dir) {
+__attribute__((weak)) int _lseek(int file, int ptr, int dir) {
     (void)file;
     (void)ptr;
     (void)dir;
     return 0;
 }
 
-int _open(char *path, int flags, ...) {
+__attribute__((weak)) int _open(char *path, int flags, ...) {
     (void)path;
     (void)flags;
     /* Pretend like we always fail */
     return -1;
 }
 
-int _wait(int *status) {
+__attribute__((weak)) int _wait(int *status) {
     (void)status;
     errno = ECHILD;
     return -1;
 }
 
-int _unlink(char *name) {
+__attribute__((weak)) int _unlink(char *name) {
     (void)name;
     errno = ENOENT;
     return -1;
 }
 
-int _times(struct tms *buf) {
+__attribute__((weak)) int _times(struct tms *buf) {
     (void)buf;
     return -1;
 }
 
-int _stat(char *file, struct stat *st) {
+__attribute__((weak)) int _stat(char *file, struct stat *st) {
     (void)file;
     st->st_mode = S_IFCHR;
     return 0;
 }
 
-int _link(char *old, char *new) {
+__attribute__((weak)) int _link(char *old, char *new) {
     (void)old;
     (void)new;
     errno = EMLINK;
     return -1;
 }
 
-int _fork(void) {
+__attribute__((weak)) int _fork(void) {
     errno = EAGAIN;
     return -1;
 }
 
-int _execve(char *name, char **argv, char **env) {
+__attribute__((weak)) int _execve(char *name, char **argv, char **env) {
     (void)name;
     (void)argv;
     (void)env;
