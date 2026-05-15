@@ -33,8 +33,17 @@
 // ======================================================================
 //                              DEFINES
 // ======================================================================
+// Parameters
 #define MAX_VFS_CONCURRENT_FILES 16 ///< Max number of files open in the same time.
 #define VFS_FD_OFFSET 3 ///< The offset of the file descriptor. 3 is the first file, as 0-1-2 are STD reserved.
+
+// File descriptors
+#define VFS_FD_STDIN  0 ///< Standard POSIX STDIN value.
+#define VFS_FD_STDOUT 1 ///< Standard POSIX STDOUT value.
+#define VFS_FD_STDERR 2 ///< Standard POSIX STDOUT value.
+
+// Standard configs
+#define VFS_SETTINGS_USED_SECTOR 1 ///< Use the first sector for our config.
 
 // ======================================================================
 //                              ENUMS
@@ -72,8 +81,21 @@ typedef struct {
 } VFS_FILE;
 
 // ======================================================================
+//                              VARIABLES
+// ======================================================================
+extern VFS_FILE vfs_fd_table[MAX_VFS_CONCURRENT_FILES];
+
+// ======================================================================
 //                              FUNCTIONS
 // ======================================================================
+
+/**
+ * @brief Seek for an available file descriptor for openning.
+ *        return the corresponding ID.
+ *
+ * @return UINT
+ */
+UINT vfs_get_fd();
 
 /**
  * @brief Initialize the VFS subsystem. Must be called before any operation
@@ -99,7 +121,7 @@ UINT vfs_init();
  *
  * @return UINT
  */
-UINT vfs_open(char *path, int flags, ...);
+UINT vfs_open(VFS_FILE *file, char *path, int flags, ...);
 
 /**
  * @brief Read data from a file on the right system, without any user operation.
