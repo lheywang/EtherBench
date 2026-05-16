@@ -12,10 +12,10 @@ The goal is to be able to program, test and debug MCUs and MPUs without hassle.
 This too is built around an STM32H563 MCU which act as the core of the probe.
 
 On the device edge, a set of IO are available, which include : 
-- 1x full featured USART (with optional flow control lines).
-- 1x minimal usart (only serial lines).
+- 1x full featured USART (RX & TX & RTS & CTS), up to 20 Mbps.
+- 1x minimal usart (RX & TX), up to 20 Mbps.
 - 1x I2C, up to 1 Mbps.
-- 1x SPI, up to 50 mbps.
+- 1x SPI, up to 50 Mbps.
 - 1x CAN.
 - 1x Clock (derived from the MCU clock tree).
 
@@ -23,7 +23,14 @@ Some analog features :
 - 2x 12 bits, analog input.
 - 1x 12 bits, analog output.
 
-All of these features are behind an isolation barrier, ensuring the device safety. A short circuit on the tested board won't damage the core, and by extension, the host.
+All of these features are behind an isolation barrier, ensuring the device safety. 
+A short circuit on the tested board won't damage the core, and by extension, the host.
+
+> [!IMPORTANT]
+> The isolation barrier is designed to provide voltage level switching, as well as basic
+> isolation. It is **NOT** fully compliant to the latests standards. Therefore, for main
+> powered devices, or where the voltage could be letal, use the proper isolator for your
+> safety.
 
 To extend theses options, some options for the host side: 
 - 1x SD card, to store logs.
@@ -147,20 +154,18 @@ Generally, I greatly recommand using this method over the first one.
 
 ## Memory map
 
-Finally, here the memory map from that device: 
+Finally, here under what names and what size the different elements are available. The three first are located on the internal flash.
+Therefore, they're soldered onto the board, and always available.
 
-### SD
+| Volume      | Size        | Usage                                                                                                           |
+| :---------: | :---------: | :-------------------------------------------------------------------------------------------------------------- |
+| /settings/  | 128 Ko      | Device config. Proprietary Binary format only.                                                                  |
+| /backtrace/ | 128 Ko      | Target crash dump (if any). Proprietary Binary format only.                                                     |
+| /flash/     | 127 Mo      | Firmwares to be flashed, sequences. Anything that may be executed.                                              |
+| /sd/        | Up to 32 GB | Same as flash, actually more oriented to outputs, as it can be read by any other device with an SD slot (FAT32) |
 
-| Volume | Size | Usage                               |
-| :----- | :--- | :---------------------------------- |
-| /sd/   | All  | Outputs (logs, measures, reports... |
-
-### Flash
-
-| Volume      | Size    | Usage                                                               |
-| :---------- | :------ | :------------------------------------------------------------------ |
-| /settings/   | 128 Ko  | Device config. Binaru format only.                                 |
-| /backtrace/ | 128 Ko  | Target crash dump (if any). Binary format only.                                        |
-| /flash/     | 127 Mo  | Firmwares to be flashed, sequences. Anything that may be executed.  |
+> [!WARNING]
+> The SD card **WILL** be formatted as FAT32 immediately after being inserted, or at the next boot. Thus, use only device that may contain
+> important data.
 
 
