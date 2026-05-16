@@ -11,6 +11,8 @@ The goal is to be able to program, test and debug MCUs and MPUs without hassle.
 
 This too is built around an STM32H563 MCU which act as the core of the probe.
 
+![Device schematic](ressources/etherbench.png)
+
 On the device edge, a set of IO are available, which include : 
 - 1x full featured USART (RX & TX & RTS & CTS), up to 20 Mbps.
 - 1x minimal usart (RX & TX), up to 20 Mbps.
@@ -167,5 +169,23 @@ Therefore, they're soldered onto the board, and always available.
 > [!WARNING]
 > The SD card **WILL** be formatted as FAT32 immediately after being inserted, or at the next boot. Thus, use only device that may contain
 > important data.
+
+## Licenses
+
+The project is under a GPL 3.0 License, as I want to leave the project open for anything, but, don't want to provide an income source from it.
+Another license, the CERN-OHL 3.0 is added and restraint the boards.
+
+The later ones aren't commited onto this repo, as I'm using Altium Designer, which rely on heavy binary files, that has nothing to do within a git repo.
+Thus, the project isn't pushed, but, is available under the release panes, within a nicely zip archive. The license apply therefore to these files.
+
+## Contributing
+
+The project is open to any help, under any forms. 
+Knowledge about all topics aren't required.
+
+If some doesn't know what's needed, here some ideas, which are on my todo-list, for one day.
+
+- Support for commercial probes on the Qt App.
+- Extend the SCPI functions and abilities
 
 
