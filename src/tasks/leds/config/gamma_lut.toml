@@ -1,5 +1,0 @@
-[LUT_CFG]
-gamma = 2.3
-size = 256
-maxval = 255
-option = "const"

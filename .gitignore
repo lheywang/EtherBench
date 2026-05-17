@@ -40,14 +40,25 @@
 # debug information files
 *.dwo
 
-# STM32 build files and doc
+# Build files and doc
 src/build/*
+app/build/*
+app/output/*
 
 # Formatter outputs
 */.cache/*
 
 # VSCodeExtensions
-.VSCodeCounter/
-.vscode/*
+src/.VSCodeCounter/*
+src/.vscode/*
+app/.VSCodeCounter/*
+app/.vscode/*
+
+# QT
+*.qmlls*
+
+# Third party
+!app/third_party/libusb/lib/libusb-1.0.a
+!app/third_party/libusb/lib/libusb-1.0.dll.a
 
 
