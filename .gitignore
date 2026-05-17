@@ -1,2 +1,5 @@
 # Only mkdocs output...
 site/*
+
+# Generated data
+*generated*

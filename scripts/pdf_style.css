@@ -39,8 +39,9 @@ h2 {
 table {
     width: 100%;
     border-collapse: collapse;
-    page-break-inside: avoid;
-    font-size: 10pt;
+    font-size: 8.5pt;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 th {
@@ -51,6 +52,17 @@ th {
 }
 
 td, th {
-    padding: 6px;
-    border: 1px solid #b0bec5;
+    padding: 3px 6px; 
+    border: 0.5px solid #b0bec5;
+}
+
+.scpi-command-block {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 30mm;
+}
+
+.scpi-command-block:first-of-type {
+    page-break-before: avoid;
+    break-before: avoid;
 }
