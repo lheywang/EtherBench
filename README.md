@@ -2,11 +2,13 @@
 
 EtherBench is an open hardware debugger based on four components:
 
-- A hardware probe, based on an STM32H5, with it's own hardware.
-- A gui app,based on Qt
-- A C software library, to extend the debug ability.
+- A [hardware probe](https://github.com/lheywang/EtherBenchProbe), based on an STM32H5 and it's [firmware, in C / C++](https://github.com/lheywang/EtherBenchFirmware).
+- A [gui](https://github.com/lheywang/EtherBenchApp) app,based on Qt
+- A [C software library](https://github.com/lheywang/EtherBenchLib), to extend the debug ability.
 
 The goal is to be able to program, test and debug MCUs and MPUs without hassle.
+
+This repo is actually the top level, and only hold the documentation. All subrepos are added as submodules.
 
 ## Hardware :
 

@@ -7,3 +7,15 @@
 [submodule "app/libs/third_party/LIEF"]
 	path = app/libs/third_party/LIEF
 	url = https://github.com/lief-project/LIEF.git
+[submodule "EtherBenchApp"]
+	path = EtherBenchApp
+	url = https://github.com/lheywang/EtherBenchApp
+[submodule "EtherBenchProbe"]
+	path = EtherBenchProbe
+	url = https://github.com/lheywang/EtherBenchProbe
+[submodule "EtherBenchFirmware"]
+	path = EtherBenchFirmware
+	url = https://github.com/lheywang/EtherBenchFirmware
+[submodule "EtherBenchLib"]
+	path = EtherBenchLib
+	url = https://github.com/lheywang/EtherBenchLib
