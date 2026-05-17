@@ -1,0 +1,31 @@
+site_name: EtherBench Documentation
+site_url: https://lheywang.github.io/EtherBench/
+
+theme:
+  name: material
+  language: fr
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+  palette:
+    - scheme: premium
+      primary: blue grey
+      accent: indigo
+
+plugins:
+  - search
+  - with-pdf:
+      author: Leonard HEYWANG / EtherBench Open Hardware
+      copyright: CERN-OHL-S v2 & GPLv3
+      output_path: docs/assets/etherbench_reference_manual.pdf
+      cover: true
+      back_cover: true
+      toc_max_level: 3
+      custom_css: scripts/pdf_style.css
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - tables

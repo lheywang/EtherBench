@@ -1,0 +1,56 @@
+@page {
+    size: A4;
+    margin: 20mm 15mm 20mm 15mm;
+    @top-right {
+        content: "EtherBench Reference Manual";
+        font-family: "Roboto", "Helvetica", sans-serif;
+        font-size: 9pt;
+        color: #555;
+    }
+    @bottom-right {
+        content: "Page " counter(page) " / " counter(pages);
+        font-family: "Roboto", sans-serif;
+        font-size: 9pt;
+    }
+    @bottom-left {
+        content: "CERN-OHL-S v2 | GPLv3";
+        font-size: 8pt;
+        color: #777;
+    }
+}
+
+
+.pdf-cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    border-left: 5mm solid #263238; 
+    padding-left: 10mm;
+}
+
+h2 {
+    page-break-before: always;
+    color: #263238;
+    border-bottom: 1px solid #cfd8dc;
+    padding-bottom: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-inside: avoid;
+    font-size: 10pt;
+}
+
+th {
+    background-color: #263238;
+    color: white;
+    text-align: left;
+    font-weight: bold;
+}
+
+td, th {
+    padding: 6px;
+    border: 1px solid #b0bec5;
+}
