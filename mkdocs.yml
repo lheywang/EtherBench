@@ -34,18 +34,21 @@ plugins:
       output_path: assets/etherbench_reference_manual.pdf
       cover: true
       back_cover: false
-      toc_level: 2
+      toc_level: 3
 
 nav:
   - Home: index.md
-  - Introduction:
-      - introduction/introduction.md
   - Installing:
       - installing/install.md
+      - installing/configuring.md
   - Hardware:
       - hardware/hardware.md
+      - hardware/mechanical.md
   - Programming:
       - programming/programming.md
+      - programming/sequences.md
       - programming/generated/scpi_reference.md
+  - Examples:
+      - examples/examples.md
   - Architecure:
       - architecture/architecture.md

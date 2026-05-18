@@ -5,8 +5,8 @@ args = {}
 returns = { "CLS" = "OK" }
 duration = "very fast"
 blocking = true
-ex_command = "*cls"
-ex_return = "*CLS,OK"
+ex_command = "`*cls`"
+ex_return = "`*CLS,OK`"
 
 ["*ese"]
 description = "Read / Set bits on the Event Status Register. Returns the event status mask."
@@ -14,8 +14,8 @@ args = { "XX" = "Bits to be set (if maskable)." }
 returns = { "0-255" = "Applied mask", "-1" = "Invalid mask" }
 duration = "very fast"
 blocking = true
-ex_command = "*ese 255"
-ex_return = "*ESE,255"
+ex_command = "`*ese 255`"
+ex_return = "`*ESE,255`"
 table = { name = "Bit signification", array = [
     [
         "Bit",
@@ -71,8 +71,8 @@ args = {}
 returns = { "XX" = "255" }
 duration = "very fast"
 blocking = true
-ex_command = "*esr?"
-ex_return = "*ESR,25"
+ex_command = "`*esr?`"
+ex_return = "`*ESR,25`"
 table = { name = "Bit signification", array = [
     [
         "Bit",
@@ -128,8 +128,8 @@ args = {}
 returns = { "IDN" = "<string>" }
 duration = "very fast"
 blocking = true
-ex_command = "*idn?"
-ex_return = "*IDN,EtherBenchv1:[build-date]:[firmware-version]"
+ex_command = "`*idn?`"
+ex_return = "`*IDN,EtherBenchv1:[build-date]:[firmware-version]`"
 
 
 ["*opc"]
@@ -138,7 +138,8 @@ args = { "XX" = "Value" }
 returns = { "0" = "OK" }
 duration = "very fast"
 blocking = true
-ex_command = "*OPC,OK"
+ex_command = "`*opc?`"
+ex_return = "`*OPC,OK`"
 
 
 ["*opt"]
@@ -147,8 +148,8 @@ args = {}
 returns = { "0" = "OK" }
 duration = "very fast"
 blocking = true
-ex_command = "*opt?"
-ex_return = "*OPT,EtherBenchv1:[]"
+ex_command = "`*opt?`"
+ex_return = "`*OPT,EtherBenchv1:[]`"
 
 ["*rst"]
 description = "Reset the device, equivalent to a power on-off-on cycle."
@@ -157,8 +158,8 @@ args = {}
 returns = { "RST" = "OK" }
 duration = "slow"
 blocking = true
-ex_command = "*rst"
-ex_return = "*RST,OK]"
+ex_command = "`*rst`"
+ex_return = "`*RST,OK`"
 
 ["*sre"]
 description = "Return the service query status."
@@ -167,8 +168,8 @@ args = {}
 returns = { "0" = "OK" }
 duration = "very fast"
 blocking = true
-ex_command = "*cls"
-ex_return = "*CLS,0"
+ex_command = "`*sre?`"
+ex_return = "`*SRE,0`"
 
 ["*stb"]
 description = "Read the status byte register"
@@ -177,8 +178,8 @@ args = {}
 returns = { "STB" = "OK" }
 duration = "very fast"
 blocking = true
-ex_command = "*stb?"
-ex_return = "*STB,0"
+ex_command = "`*stb?`"
+ex_return = "`*STB,0`"
 
 ["*tst"]
 description = "Perform the self-test of the device. Check that all threads are running."
@@ -186,8 +187,8 @@ args = {}
 returns = { "TST" = "OK" }
 duration = "very fast"
 blocking = true
-ex_command = "*tst"
-ex_return = "*TST,OK"
+ex_command = "`*tst`"
+ex_return = "`*TST,OK`"
 
 ["*wai"]
 description = "Wait for all IO to be executed."
@@ -195,5 +196,5 @@ args = {}
 returns = { "WAI" = "OK" }
 duration = "slow"
 blocking = true
-ex_command = "*wai"
-ex_return = "*WAI,OK"
+ex_command = "`*wai`"
+ex_return = "`*WAI,OK`"

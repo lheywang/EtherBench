@@ -5,22 +5,26 @@
 Etherbench is a platform, built arround a lot of different projects, designed to make debugging and testing easier, without requiring costly tools.
 
 While it provides basic debugger features, according to the [ARM CMSIS-DAP](https://arm-software.github.io/CMSIS-DAP/latest/) specification, over the two standard buses:
+
 * [SWD](https://developer.arm.com/documentation/101761/1-0/Debug-and-trace-interface/Serial-Wire-Debug-signals) : Serial Wire Debug, common for MCUs
 * [JTAG](https://developer.arm.com/documentation/101761/1-0/Debug-and-trace-interface/JTAG-signals) : Joint Test Action Group, common for FPGAs and MPUs.
 
 It also provides standard buses, to perform most of the IO a chip can do, within a single device. This include:
+
 * 2 x USART buses, up to 20 Mbaud. One of them include the modem features (RTS and CTS signals).
 * 1 x SPI bus, up to 50 Mbaud.
 * 1 x I2C bus, up to 4 MHz.
 * 1x CAN bus
 
 And, some very basic analog features:
+
 * 2 x Analog inputs, up to 16 bits (emulated).
 * 1 x Analog Output.
 
 All of this stuff is isolated from the host, thus even in case of failure on the DUT side, your PC remains safe. 
 
 To interract with the device, multiple options are offered:
+
 * 100 Mbps Ethernet port (including DHCP)
 * 12 Mbps USB port (behind a 480 Mbps hub, to wire others devices !).
 
@@ -40,22 +44,22 @@ the project documentation...
 All of those aspects are detailed within their associated pages. Here a rapid tour of the horizon:
 
 * High performance hardware
-  * STM32H5 MCU, providing all the features of the probe
-  * Isolated PCB, ensuring safety of your designs.
+    * STM32H5 MCU, providing all the features of the probe
+    * Isolated PCB, ensuring safety of your designs.
 * Broad range of communications
-  * Ethernet 
-  * USB
-  * SDMMC
+    * Ethernet 
+    * USB
+    * SDMMC
 * Easy to get hands on
-  * Comprehensive leds signals
-  * Standard interfaces
+    * Comprehensive leds signals
+    * Standard interfaces
 
 ## More infos ? 
 
-There's a lot that isn't documented here. Please check all the subsections, or download the PDF document !
+There's a lot that isn't documented here. Please check all the subsections, or download the [PDF document](assets/etherbench_reference_manual.pdf) !
 
-- Installing the device
-- Hardware schematic and details
-- Programming guides
-- Examples
-- Software architecture
+- [Installing the device](installing/install.md)
+- [Hardware schematic and details](hardware/hardware.md)
+- [Programming guides](programming/programming.md)
+- [Examples](examples/examples.md)
+- [Software architecture](architecture/architecture.md)

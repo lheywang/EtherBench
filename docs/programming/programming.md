@@ -1,4 +1,5 @@
 
+
 The device can be controlled from different ways, over different mediums:
 
 | Interface     | USB                                      | Ethernet                                    |

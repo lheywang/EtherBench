@@ -243,7 +243,7 @@ if __name__ == "__main__":
 </style>
 
 """)
-        f.write("[TOC]\n\n---\n\n")
+        f.write("---\n\n")
         for line in lines:
             f.write(f"{line}\n")
 
