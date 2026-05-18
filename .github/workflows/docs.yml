@@ -33,7 +33,7 @@ jobs:
 
       - name: Generate SCPI Reference Page
         run: |
-          python scripts/scpi2md.py
+          python3 scripts/scpi2md.py
 
       - name: Build and Deploy to GitHub Pages
         run: |
