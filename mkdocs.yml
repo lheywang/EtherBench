@@ -47,6 +47,7 @@ nav:
   - Programming:
       - programming/programming.md
       - programming/sequences.md
+      - programming/markers.md
       - programming/generated/scpi_reference.md
   - Examples:
       - examples/examples.md
