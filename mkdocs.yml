@@ -44,6 +44,7 @@ nav:
   - Hardware:
       - hardware/hardware.md
       - hardware/mechanical.md
+      - hardware/extension.md
   - Programming:
       - programming/programming.md
       - programming/sequences.md
