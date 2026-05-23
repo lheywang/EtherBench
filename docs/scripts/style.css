@@ -1,0 +1,246 @@
+/* =========================================================================
+   1. PAGES AND HEADERS
+   ========================================================================= */
+
+@page {
+    size: A4;
+    margin: 20mm 20mm 25mm 20mm;
+    
+    @top-right {
+        content: "EtherBench Project - Reference Manual";
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-size: 8pt;
+        color: #666666;
+        border-bottom: 0.5px solid #e0e0e0;
+        padding-bottom: 3mm;
+    }
+    
+    @bottom-right {
+        content: "Page " counter(page) " / " counter(pages);
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-size: 8pt;
+        color: #888888;
+    }
+    
+    @bottom-left {
+        content: "Leonard Heywang - leonard.heywang@proton.me";
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-size: 8pt;
+        color: #ca3c3c; 
+        font-weight: bold;
+    }
+}
+
+@page :first {
+    size: A4;
+    margin: 0;
+    background-color: #0f172a;
+    background-image: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    
+    /* On nettoie les en-têtes sur la couverture */
+    @top-right { content: normal; border: none; }
+    @bottom-right { content: normal; }
+    @bottom-left { content: normal; }
+}
+
+/* =========================================================================
+   2. COVER PAGE
+   ========================================================================= */
+
+#cover {
+    padding: 60mm 25mm 25mm 25mm;
+    height: 100%;
+    box-sizing: border-box;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+#cover h1, 
+div#cover h1, 
+#cover h1.title {
+    font-size: 38pt !important;
+    font-weight: 800 !important;
+    color: #2c3e50 !important;
+    margin: 0 0 5mm 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-bottom: 0px solid transparent !important;
+    text-transform: none !important;
+    letter-spacing: -1px;
+}
+
+#cover h1::after {
+    content: "";
+    display: block;
+    width: 30mm;
+    height: 4px;
+    background-color: #3b82f6 !important;  
+    margin-top: 8mm !important;
+}
+
+#cover p.subtitle, #cover .subtitle {
+    font-size: 16pt;
+    color: #93c5fd;
+    font-weight: 300;
+    margin: 0 0 30mm 0;
+}
+
+#cover .author, #cover .copyright {
+    font-size: 10pt;
+    color: #a9abae; 
+    text-align: right;
+    margin-top: 6mm;
+    font-style: normal;
+}
+
+/* =========================================================================
+   3. MAIN STYLES
+   ========================================================================= */
+
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #2c3e50;
+}
+
+h1 {
+    font-size: 24pt;
+    color: #1a365d; 
+    page-break-before: always; 
+    padding-bottom: 5mm;
+    border-bottom: 2px solid #3182ce;
+}
+
+h2 {
+    font-size: 16pt;
+    color: #2b6cb0;
+    margin-top: 20pt;
+    padding-bottom: 3mm;
+}
+
+h3 {
+    font-size: 12pt;
+    color: #4a5568;
+}
+
+.page-break {
+    page-break-before: always;
+}
+
+#content {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 10.5pt;
+    color: #334155;
+}
+
+#content h1 {
+    font-size: 24pt;
+    color: #1a365d;
+    page-break-before: always;
+    padding-bottom: 4mm;
+    border-bottom: 1px solid #cbd5e1;
+    margin-top: 0;
+    margin-bottom: 8mm;
+}
+
+#content h2 {
+    font-size: 16pt;
+    color: #2b6cb0;
+    margin-top: 25pt;
+    margin-bottom: 4mm;
+    padding-bottom: 2mm;
+}
+
+#content h3 {
+    font-size: 12pt;
+    color: #4a5568;
+    margin-top: 18pt;
+    margin-bottom: 3mm;
+}
+
+/* =========================================================================
+   4. TOC
+   ========================================================================= */
+
+#toc {
+    page-break-before: always;
+    page-break-after: always;
+    padding-top: 10mm;
+}
+
+#toc h1.toc-title {
+    font-size: 22pt;
+    color: #1a365d;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 3mm;
+    margin-bottom: 10mm;
+}
+
+#toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}   
+
+#toc li {
+    font-size: 11pt;
+    margin-bottom: 4mm;
+    color: #2c3e50;
+    position: relative;
+}
+
+#toc a::after {
+    content: target-counter(attr(href), page);
+    float: right;
+}
+
+/* =========================================================================
+   5. TABLES AND CODES
+   ========================================================================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15pt 0;
+    page-break-inside: avoid; 
+    font-size: 10pt;
+}
+
+th {
+    background-color: #1a365d;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding: 8px 12px;
+    border: 1px solid #1a365d;
+}
+
+td {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+}
+
+tr:nth-child(even) {
+    background-color: #f7fafc;
+}
+
+pre, code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    background-color: #edf2f7;
+    border-radius: 4px;
+}
+
+pre {
+    padding: 12px;
+    border-left: 4px solid #4a5568;
+    font-size: 9pt;
+    page-break-inside: avoid;
+    white-space: pre-wrap;
+}
+
+.admonition {
+    padding: 12px;
+    margin: 15pt 0;
+    border-left: 4px solid #dd6b20;
+    background-color: #fffaf0;
+    page-break-inside: avoid;
+}

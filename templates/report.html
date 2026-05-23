@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ page_title }}</title>
+    {% if styles %}
+        {{ styles }}
+    {% endif %}
+</head>
+<body>
+    {% if cover %}
+        {{ cover }}
+    {% endif %}
+
+    {% if toc %}
+        <div id="toc">
+            <h1 class="toc-title">Table of Contents</h1>
+            {{ toc }}
+        </div>
+    {% endif %}
+
+    <div id="content">
+        {{ articles }}
+    </div>
+</body>
+</html>

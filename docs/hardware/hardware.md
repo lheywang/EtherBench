@@ -2,9 +2,9 @@
 
 EtherBench, at least the probe is designed around an assembly of three PCB :
 
-* One master board, with six layers. It host all the complex functions of the device.
-* One top board, with the leds and basic leds features.
-* Two lateral boards, with buttons and the screen.
+- One master board, with six layers. It host all the complex functions of the device.
+- One top board, with the leds and basic leds features.
+- Two lateral boards, with buttons and the screen.
 
 The two later ones are done with a two layer boards, as there isn't any high speed signals nor complex requirements.
 Therefore, the cost of the device remains accessible.
@@ -16,19 +16,19 @@ The electrical part fit within a 110 x 110 mm boards assembly.
 The master board is designed around
 
 > **Note**
-> While the global concept of the boards is done, the specific details aren't. Thus, no boards / assemblies / schematic are going to be added. 
+> While the global concept of the boards is done, the specific details aren't. Thus, no boards / assemblies / schematic are going to be added.
 > They'll be once finished.
 
 ## Top board
 
 The top board act as a user interface more than a functionnality board. it comports:
 
-* A ring led, as the main interface with the user
-* Some status leds
+- A ring led, as the main interface with the user
+- Some status leds
 
 ### Led ring
 
-The led rings, based over 20 WS2812 leds show the user animations, and statuses. 
+The led rings, based over 20 WS2812 leds show the user animations, and statuses.
 This replace a complex gui with simpler animations. The GUI is then sent back over buses to the host computer.
 
 Multiple animations can be shown :
@@ -57,29 +57,29 @@ These show the user informations about what's being currently transfered.
 
 ## Side boards
 
-The side boards are used as user inputs, and thus contain essentially buttons. A small I2C screen is added, 
+The side boards are used as user inputs, and thus contain essentially buttons. A small I2C screen is added,
 to display basic informations on it, such as the granted IP in case of the DHCP attribution.
 
 For each EtherBench probe, there's two of these boards, on each side.
 
 |   Feature   | Right board | Left board |
 | :---------: | :---------- | :--------- |
-| OLED screen | 🚫           | ✅          |
-|  Go button  | 🚫           | ✅          |
-| Stop button | 🚫           | ✅          |
-|    Reset    | ✅           | 🚫          |
+| OLED screen | 🚫          | ✅         |
+|  Go button  | 🚫          | ✅         |
+| Stop button | 🚫          | ✅         |
+|    Reset    | ✅          | 🚫         |
 
 ### OLED screen
 
-The onboard screen is used to show specific infos, that can't be reported in any other ways. This include, as 
+The onboard screen is used to show specific infos, that can't be reported in any other ways. This include, as
 explained before the IP, because at this point, your not connected.
 
 It's also used to show additionnal infos, such as:
 
-* Sequences info (what failed ?)
-* Error codes, to get more specific infos (rather than a generic red flash)
-* Progressions
-* Custom infos, from the sequence support.
+- Sequences info (what failed ?)
+- Error codes, to get more specific infos (rather than a generic red flash)
+- Progressions
+- Custom infos, from the sequence support.
 
 ### Go / Stop button
 
@@ -90,4 +90,3 @@ Therefore, it's possible to start or stop a sequence that can be execute from wi
 ### Reset button
 
 The button will perform an hardreset of the device. That's why it's quite "hard"
-

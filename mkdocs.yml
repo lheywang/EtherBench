@@ -1,11 +1,11 @@
 site_name: EtherBench Documentation
 site_url: https://lheywang.github.io/EtherBench/
 extra_css:
-  - scripts/pdf_style.css
+  - scripts/style.css
 
 theme:
   name: material
-  language: fr
+  language: en
   features:
     - navigation.tabs
     - navigation.sections
@@ -14,6 +14,11 @@ theme:
     - scheme: premium
       primary: blue grey
       accent: indigo
+
+  favicon: logos/debugger.png
+  logo: logos/debugger.png
+  icon:
+    logo: logos/debugger.png
 
 markdown_extensions:
   - pymdownx.superfences
@@ -29,7 +34,9 @@ markdown_extensions:
 plugins:
   - search
   - with-pdf:
-      author: Leonard HEYWANG / EtherBench Open Hardware
+      author: Leonard HEYWANG
+      cover_title: "EtherBench Platform"
+      cover_subtitle: "Technical Reference Manual"
       copyright: CERN-OHL-S v2 & GPLv3
       output_path: assets/etherbench_reference_manual.pdf
       cover: true
@@ -48,8 +55,15 @@ nav:
   - Programming:
       - programming/programming.md
       - programming/sequences.md
-      - programming/markers.md
-      - programming/generated/scpi_reference.md
+      - Markers:
+          - programming/markers.md
+          - programming/markers/markers_calibration.md
+          - programming/markers/markers_name.md
+          - programming/markers/markers_pages.md
+          - programming/markers/markers_peripherals.md
+          - programming/markers/markers_serial_number.md
+      - Commands:
+          - programming/generated/scpi_reference.md
   - Examples:
       - examples/examples.md
   - Architecure:

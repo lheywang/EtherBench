@@ -6,15 +6,13 @@ Only the Firmware is required for the device to be working, all other are add-on
 ## Embedded Firmware
 
 1. You'll need a copy of the embedded firmware. The later one can be obtained from two sources:
+   - Downloading a built firmware, on the [releases](https://github.com/lheywang/EtherBenchFirmware/releases).
+   - Building your own, with the [STM32Cube](https://www.st.com/en/development-tools/stm32cubeide.html) environnement.
 
-    * Downloading a built firmware, on the [releases](https://github.com/lheywang/EtherBenchFirmware/releases).
-    * Building your own, with the [STM32Cube](https://www.st.com/en/development-tools/stm32cubeide.html) environnement.
+   For most user, I recommend the first option.
 
-    For most user, I recommend the first option.
-
-
-2. Then, we need to program the chip on the board. Any tool can be used, such as [CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html), 
-    which can use the USB link to upload the firmware.
+2. Then, we need to program the chip on the board. Any tool can be used, such as [CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html),
+   which can use the USB link to upload the firmware.
 
 Alternatively, there's SWD pins available, thus, any USB-SWD probes can be reused.
 
@@ -24,8 +22,7 @@ Alternatively, there's SWD pins available, thus, any USB-SWD probes can be reuse
 
 1. You'll need the installer, for the right exploitation system. You can download them on the [releases](https://github.com/lheywang/EtherBenchApp/releases). pages.
 
-2. Run the installer. 
-   
+2. Run the installer.
 3. Done
 
 Alternatively, you can build the software from sources, over the repo.
