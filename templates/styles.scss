@@ -1,0 +1,192 @@
+$brand-primary:   #1a365d; 
+$brand-accent:    #3b82f6; 
+$text-main:       #334155; 
+$bg-light:        #f8fafc; 
+$border-color:    #e2e8f0; 
+
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: $text-main;
+    line-height: 1.6;
+}
+
+@page {
+    size: A4 portrait;
+    margin: 20mm 20mm 25mm 20mm;
+    
+    @top-right {
+        content: "EtherBench Project - Reference Manual";
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-size: 8pt;
+        color: #64748b;
+        border-bottom: 0.5px solid $border-color;
+        padding-bottom: 3mm;
+    }
+    @bottom-right {
+        content: "Page " counter(page) " / " counter(pages);
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-size: 8pt;
+        color: #64748b;
+    }
+}
+
+@page :first {
+    size: A4 portrait;
+    margin: 0 !important;
+    background-color: #8badfc !important;
+    background-image: linear-gradient(135deg, #8badfc 0%, #dcdcdc 100%) !important;
+    
+    @top-right { content: normal; border: none; }
+    @bottom-right { content: normal; }
+    @bottom-left { content: normal; }
+}
+
+#cover {
+    display: block !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    box-sizing: border-box;
+    padding: 60mm 25mm 25mm 25mm !important;
+    
+    background-color: #8badfc !important;
+    background-image: linear-gradient(135deg, #8badfc 0%, #dcdcdc 100%) !important;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    
+    page-break-after: always !important;
+    break-after: page !important;
+    
+    h1.title, .title {
+        font-size: 38pt !important;
+        font-weight: 800 !important;
+        color: $bg-light !important;
+        margin: 0 0 5mm 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        border-bottom: 0px solid transparent !important; 
+        letter-spacing: -1px;
+        
+        &::after {
+            content: "";
+            display: block;
+            width: 30mm;
+            height: 4px;
+            background-color: $brand-accent !important;
+            margin-top: 8mm !important;
+        }
+    }
+
+    .cover-logo {
+        position: absolute !important;
+        top: 40mm !important; 
+        left: 25mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important; 
+        
+        img {
+            height: 25mm;   
+            width: auto;    
+            object-fit: contain;
+            
+        }
+    }
+
+    .cover-content {
+    margin-top: 35mm !important;
+}
+
+    p.subtitle, .subtitle {
+        font-size: 16pt !important;
+        color: #5181b8 !important;
+        font-weight: 300 !important;
+        margin: 0 0 30mm 0 !important;
+        border: none !important;
+    }
+
+    .meta-bottom {
+        position: absolute !important;
+        bottom: 30mm !important;
+        left: 25mm !important;
+        line-height: 1.8 !important;
+        
+        span {
+            font-size: 10pt !important;
+            color: $brand-accent !important;
+            font-style: normal !important;
+        }
+    }
+
+    .page-breaker {
+    position: relative !important;
+    display: block !important;
+    height: 100vh !important; 
+    width: 100% !important;
+    page-break-after: always !important; 
+    break-after: page !important;
+    visibility: hidden !important; 
+}
+}
+
+#doc-toc {
+    page-break-before: always !important;
+    break-before: page !important;
+    
+    h1 {
+        font-size: 22pt !important;
+        color: $brand-primary !important;
+        border-bottom: 2px solid $brand-accent !important;
+        padding-bottom: 4mm !important;
+    }
+}
+
+article:not(#doc-cover):not(#doc-toc) {
+    h1 {
+        font-size: 24pt !important;
+        color: $brand-primary !important;
+        page-break-before: always !important;
+        padding-bottom: 4mm !important;
+        border-bottom: 1px solid $border-color !important;
+        margin-bottom: 8mm !important;
+    }
+    
+    h2 {
+        font-size: 16pt !important;
+        color: lighten($brand-primary, 10%) !important;
+        border-bottom: none !important;
+        margin-top: 25pt !important;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20pt 0;
+    font-size: 9.5pt;
+    
+    th {
+        background-color: $brand-primary !important;
+        color: #d9d9d9 !important;
+        font-weight: 600;
+        padding: 10px 14px;
+        border: 1px solid $brand-primary !important;
+    }
+    td {
+        padding: 8px 14px;
+        border: 1px solid $border-color !important;
+    }
+    tr:nth-child(even) {
+        background-color: $bg-light !important;
+    }
+}
+
+pre, code {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    background-color: $bg-light !important;
+}
+pre {
+    padding: 14px;
+    border: 1px solid $border-color !important;
+    border-left: 4px solid $brand-primary !important;
+    font-size: 9pt;
+    white-space: pre-wrap;
+}

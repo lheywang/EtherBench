@@ -63,11 +63,11 @@ to display basic informations on it, such as the granted IP in case of the DHCP 
 For each EtherBench probe, there's two of these boards, on each side.
 
 |   Feature   | Right board | Left board |
-| :---------: | :---------- | :--------- |
-| OLED screen | 🚫          | ✅         |
-|  Go button  | 🚫          | ✅         |
-| Stop button | 🚫          | ✅         |
-|    Reset    | ✅          | 🚫         |
+| :---------: | :---------: | :--------: |
+| OLED screen |             |   **X**    |
+|  Go button  |             |   **X**    |
+| Stop button |             |   **X**    |
+|    Reset    |    **X**    |            |
 
 ### OLED screen
 

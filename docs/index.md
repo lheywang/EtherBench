@@ -1,17 +1,4 @@
-<div class="pdf-only cover-page">
-    <div class="cover-content">
-        <h1 class="cover-title">EtherBench Project</h1>
-        <h2 class="cover-subtitle">Open source debugging platform</h2>
-        <div class="cover-divider"></div>
-        <div class="cover-meta">
-            <strong>Author:</strong> Léonard Heywang<br>
-            <strong>License:</strong> CERN-OHL-S v2 & GPLv3<br>
-            <strong>Date:</strong> May 2026
-        </div>
-    </div>
-</div>
-
-<div class="page-break"></div>
+# EtherBench Project
 
 ## What's EtherBench ?
 

@@ -19,14 +19,14 @@
         content: "Page " counter(page) " / " counter(pages);
         font-family: "Helvetica Neue", Arial, sans-serif;
         font-size: 8pt;
-        color: #888888;
+        color: #c4c4c4;
     }
     
     @bottom-left {
         content: "Leonard Heywang - leonard.heywang@proton.me";
         font-family: "Helvetica Neue", Arial, sans-serif;
         font-size: 8pt;
-        color: #ca3c3c; 
+        color: #c4c4c4; 
         font-weight: bold;
     }
 }
