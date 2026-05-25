@@ -1,0 +1,18 @@
+[logger.subscribe]
+description = "Connect a log source (spy, serial bus, Filesystem, UDP Stream ...) to a sink (Filesystem, UDP Stream...)."
+info = "If your application has a lot of IO, this method is preferred."
+args = { "SOURCE" = "str<...>", "TARGET" = "str<...>" }
+returns = { "STATUS" = "int<0...>", "ID" = "int<0...>" }
+duration = "very fast"
+blocking = false
+ex_command = "`LOGGER:SUBSCRIBE /serial/usart0,/network/udp`"
+ex_return = "`0,19`"
+
+[logger.unsubscribe]
+description = "Disconnect a link."
+args = { "ID" = "int<0...>" }
+returns = { "STATUS" = "int<0...>" }
+duration = "very fast"
+blocking = false
+ex_command = "`LOGGER:UNSUBSCRIBE 19`"
+ex_return = "`0`"

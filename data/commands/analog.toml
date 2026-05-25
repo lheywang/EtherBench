@@ -1,0 +1,17 @@
+[analog]
+description = "Perform an IO operation over the analog subsystem. Query target the ADC, Set target the DAC."
+args = { "SOURCE" = "integer<0,1>", "VALUE" = "str<3.19V...>" }
+returns = { "STATUS" = "int<0...>", "[VALUE]" = "str<XX.XV>" }
+duration = "very slow"
+blocking = false
+ex_command = "`ANALOG[?] 1,[3.19V]`"
+ex_return = "`0[,3.28V]`"
+
+[analog.temperature]
+description = "Read the different temperature sensors. Returns statistics about different sources"
+args = {}
+returns = { "STATUS" = "0", "[MIN]" = "str<XX.X>", "[MAX]" = "str<XX.X>", "[MEAN]" = "str<XX.X>", "[MEDIAN]" = "str<XX.X>", "[COUNT]" = "int<0-...>" }
+duration = "very slow"
+blocking = false
+ex_command = "`ANALOG:TEMPERATURE?`"
+ex_return = "`0,18.2,19.3,19,19,2`"

@@ -1,7 +1,5 @@
 site_name: EtherBench Documentation
 site_url: https://lheywang.github.io/EtherBench/
-extra_css:
-  - scripts/style.css
 
 theme:
   name: material

@@ -1,0 +1,36 @@
+[sequences.new]
+description = "Add a new sequence on the device"
+args = { "NAME" = "str<...>" }
+returns = { "STATUS" = "int<0...>" }
+duration = "fast"
+blocking = false
+ex_command = "`SEQUENCE:NEW flasher`"
+ex_return = "`0`"
+
+[sequences.add]
+description = "Add an instruction on the sequence. Instruction will be 'compiled'."
+warning = "For complex sequences, consider transfering it as a whole over the FTP server."
+args = { "NAME" = "str<...>", "INSTRUCTION" = "str<...>" }
+returns = { "STATUS" = "int<0...>" }
+duration = "fast"
+blocking = false
+ex_command = "`SEQUENCE:ADD flasher execute *IDN`"
+ex_return = "`0`"
+
+[sequences.run]
+description = "Execute the sequence."
+args = { "NAME" = "str<...>" }
+returns = { "STATUS" = "int<0...>", "PASS" = "int<0-...>", "FAIL" = "int<0-...>" }
+duration = "slow"
+blocking = false
+ex_command = "`SEQUENCE:RUN flasher`"
+ex_return = "`0,1,0`"
+
+[sequences.get]
+description = "Send the binary file that correspond to the sequence"
+args = { "NAME" = "str<...>" }
+returns = { "STATUS" = "int<0...>", "DATA" = "<int[]<0x98,0x76...>" }
+duration = "slow"
+blocking = true
+ex_command = "`SEQUENCE:GET`"
+ex_return = "`0,0x98,0x87...`"

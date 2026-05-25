@@ -1,0 +1,79 @@
+[hardware.i2c]
+args = { "[ADDRESS]" = "int<0x00--0x3FF>", "[PAYLOAD]" = "int(s),<0x00--0xFF>", "[EXTENDED]" = "int<0,1>", "[SPEED]" = "str<100kHz,400kHz,1MHz>" }
+description = "Perform an IO operation over the I2C bus. Query mean read, Set mean write"
+warning = "This IO operation feature a single operation. Some required back to back operation, thus emit two IO operation."
+returns = { "STATUS" = "int<0...>", "[PAYLOAD]" = "int(s),<0x00--0xFF>" }
+duration = "slow"
+blocking = true
+ex_command = "`HARDWARE:I2C[?] [0x78][,0x487643]`"
+ex_return = "`0,[0x7865456]`"
+
+[hardware.spi]
+description = "Perform an IO operation over the SPI bus. Query mean read, Set mean write. Address is the current selected slave."
+warning = "This IO operation feature a single operation. Some required back to back operation, thus emit two IO operation."
+args = { "[ADDRESS]" = "int<1--2>", "[PAYLOAD]" = "int(s),<0x00--0xFF>" }
+returns = { "STATUS" = "int<0...>", "[PAYLOAD]" = "int(s),<0x00--0xFF>" }
+duration = "slow"
+blocking = true
+ex_command = "`HARDWARE:SPI[?] 1[,0x487643]`"
+ex_return = "`0,[0x7865456]`"
+
+[hardware.uart]
+description = "Perform an IO operation over the UART bus. Query mean read, Set mean write"
+warning = "As this bus is asynchronous, the read command may send back a LOT of data, capped to 1024 bytes (reception memory). If speed is a requirement, consider using the raw UDP streaming."
+args = { "[PAYLOAD]" = "int(s),<0x00--0xFF>" }
+returns = { "STATUS" = "int<0...>", "[PAYLOAD]" = "int(s),<0x00--0xFF>" }
+duration = "slow"
+blocking = true
+ex_command = "`HARDWARE:UART[?] [0x487643]`"
+ex_return = "`0,[0x7865456]`"
+
+[hardware.can]
+description = "Perform an IO operation over the CAN bus. Query mean read, Set mean write"
+warning = "As this bus is asynchronous, the read command may send back a LOT of data, capped to 1024 bytes (reception memory). If speed is a requirement, consider using the raw UDP streaming."
+args = { "[PAYLOAD]" = "int(s),<0x00--0xFF>" }
+returns = { "STATUS" = "int<0...>", "[PAYLOAD]" = "int(s),<0x00--0xFF>" }
+duration = "slow"
+blocking = true
+ex_command = "`HARDWARE:CAN[?] [,0x487643]`"
+ex_return = "`0,[0x7865456]`"
+
+[hardware.spy.i2c]
+description = "Configure the spy module, to look over an I2C bus. The bus is then placed as a slave, and will listen for anything."
+warning = "The reception buffer is capped to 1024 bytes (reception memory). Use the UDP streaming for faster transfers."
+args = { "[ADDRESS]" = "int<0x00--0x3FF>", "[EXTENDED]" = "int<0,1>" }
+returns = { "STATUS" = "int<0...>" }
+duration = "fast"
+blocking = false
+ex_command = "`HARDWARE:SPY:I2C`"
+ex_return = "`0`"
+
+[hardware.spy.spi]
+description = "Configure the spy module, to look over an SPI bus. The bus is then placed as a slave, and will listen for anything."
+warning = "The reception buffer is capped to 1024 bytes (reception memory). Use the UDP streaming for faster transfers."
+args = { "[ADDRESS]" = "int<1--2>" }
+returns = { "STATUS" = "int<0...>" }
+duration = "fast"
+blocking = false
+ex_command = "`HARDWARE:SPY:SPI`"
+ex_return = "`0`"
+
+[hardware.spy.uart]
+description = "Configure the spy module, to look over an UART bus. The bus is then placed as a slave, and will listen for anything."
+warning = "The reception buffer is capped to 1024 bytes (reception memory). Use the UDP streaming for faster transfers."
+args = {}
+returns = { "STATUS" = "int<0...>" }
+duration = "fast"
+blocking = false
+ex_command = "`HARDWARE:SPY:UART`"
+ex_return = "`0`"
+
+[hardware.spy.can]
+description = "Configure the spy module, to look over an CAN bus. The bus is then placed as a slave, and will listen for anything."
+warning = "The reception buffer is capped to 1024 bytes (reception memory). Use the UDP streaming for faster transfers."
+args = {}
+returns = { "STATUS" = "int<0...>" }
+duration = "fast"
+blocking = false
+ex_command = "`HARDWARE:SPY:CAN`"
+ex_return = "`0`"

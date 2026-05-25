@@ -1,0 +1,35 @@
+[extensions]
+description = "Return the description string of the loaded extension board."
+args = {}
+returns = { "STATUS" = "int<0...>", "DESCRIPTION" = "str<...>" }
+duration = "normal"
+blocking = false
+ex_command = "`EXTENSIONS?`"
+ex_return = "0,====== LOADED BOARD =====\\n....`"
+
+[extensions.binary]
+description = "Return the description data of the loaded extension board as a binary stream."
+args = {}
+returns = { "STATUS" = "int<0...>", "DATA" = "int[]<0x48,0x98>" }
+duration = "normal"
+blocking = false
+ex_command = "`EXTENSIONS:BINARY?`"
+ex_return = "`0,0x87,0x92...`"
+
+[extensions.enable]
+description = "Enable the requested peripherals on the board and the requested power. Board must **NOT** be removed."
+args = {}
+returns = { "STATUS" = "int<0...>" }
+duration = "normal"
+blocking = false
+ex_command = "`EXTENSIONS:ENABLE`"
+ex_return = "`0,OK`"
+
+[extensions.disable]
+description = "Set all DUT buses as High-Z and disable the power. Board is safe for removal."
+args = {}
+returns = { "STATUS" = "int<0...>" }
+duration = "normal"
+blocking = false
+ex_command = "`EXTENSIONS:DISABLE`"
+ex_return = "`0`"

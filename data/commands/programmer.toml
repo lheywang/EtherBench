@@ -1,0 +1,69 @@
+[programmation.connect]
+description = "Connect the DUT over the SWD/JTAG buses."
+important = "This command is built on CPU polled interfaces. No other operation will work when running it."
+args = { "BUS" = "str<JTAG/SWD>" }
+returns = { "STATUS" = "int<0...>" }
+duration = "very slow"
+blocking = true
+ex_command = "`PROGRAMMER:CONNECT?`"
+ex_return = "`0`"
+
+[programmation.flash]
+description = "Flash the DUT over the SWD/JTAG buses."
+important = "This command is built on CPU polled interfaces. No other operation will work when running it."
+args = { "BUS" = "str<JTAG/SWD>", "FILE" = "str<...>" }
+returns = { "STATUS" = "int<0...>" }
+duration = "very slow"
+blocking = true
+ex_command = "`PROGRAMMER:FLASH /sd/firmware.bin`"
+ex_return = "`0`"
+
+[programmation.verify]
+description = "Verify the flashed binaries over the SWD/JTAG buses."
+important = "This command is built on CPU polled interfaces. No other operation will work when running it."
+args = { "BUS" = "str<JTAG/SWD>" }
+returns = { "STATUS" = "int<0...>", "RESULT" = "int<0 (sucess),1 (error)>" }
+duration = "very slow"
+blocking = true
+ex_command = "`PROGRAMMER:VERIFY? /sd/firmware.bin`"
+ex_return = "`0,0`"
+
+[programmation.read]
+description = "Read the DUT memory over the SWD/JTAG buses. Push the data over the standard logger source"
+important = "This command is built on CPU polled interfaces. No other operation will work when running it."
+args = { "BUS" = "str<JTAG/SWD>" }
+returns = { "STATUS" = "int<0...>" }
+duration = "very slow"
+blocking = true
+ex_command = "`PROGRAMMER:READ?`"
+ex_return = "`0`"
+
+[programmation.status]
+description = "CHeck if the DUT is still running over the SWD/JTAG buses."
+important = "This command is built on CPU polled interfaces. No other operation will work when running it."
+args = { "BUS" = "str<JTAG/SWD>" }
+returns = { "STATUS" = "int<0...>", "RESULT" = "int<0(yes), 1 (false)" }
+duration = "very slow"
+blocking = true
+ex_command = "`PROGRAMMER:STATUS?`"
+ex_return = "`0,0`"
+
+[programmation.device]
+description = "Read the DUT descriptions values over the SWD/JTAG buses."
+important = "This command is built on CPU polled interfaces. No other operation will work when running it."
+args = { "BUS" = "str<JTAG/SWD>" }
+returns = { "STATUS" = "int<0...>", "VALUES" = "int[]<0x98765432,...>" }
+duration = "very slow"
+blocking = true
+ex_command = "`PROGRAMMER:DEVICE?`"
+ex_return = "`0,0x98765432`"
+
+[programmation.detect]
+description = "Detect if the DUT is present over the SWD/JTAG buses."
+important = "This command is built on CPU polled interfaces. No other operation will work when running it."
+args = { "BUS" = "str<JTAG/SWD>" }
+returns = { "STATUS" = "int<0...>", "RESULT" = "int<0(yes),1(no)>" }
+duration = "very slow"
+blocking = true
+ex_command = "`PROGRAMMER:DETECT?`"
+ex_return = "`0,0`"

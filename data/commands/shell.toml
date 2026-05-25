@@ -14,7 +14,7 @@ returns = { "CD" = "OK" }
 duration = "fast"
 blocking = true
 ex_command = "`cd /sd`"
-ex_return = "`*CD,OK`"
+ex_return = ""
 
 ["clear"]
 description = "Clear the current terminal"
@@ -23,7 +23,7 @@ returns = { "RST" = "OK" }
 duration = "very fast"
 blocking = true
 ex_command = "`clear`"
-ex_return = "`CLEAR,OK`"
+ex_return = ""
 
 ["file"]
 description = "Show informations about a file"
@@ -32,7 +32,7 @@ returns = { "FILE" = "str" }
 duration = "normal"
 blocking = true
 ex_command = "`file /sd/hello.txt`"
-ex_return = "`FILE,text-file,LE"
+ex_return = "`text-file,LE"
 
 ["ls"]
 description = "List files on the current directory"
@@ -41,7 +41,7 @@ returns = { "LS" = "..." }
 duration = "normal"
 blocking = true
 ex_command = "`ls`"
-ex_return = "`LS,hello.txt`"
+ex_return = "`hello.txt`"
 
 ["mkdir"]
 description = "Create a directory on the current location"
@@ -50,7 +50,7 @@ returns = { "MKDIR" = "OK" }
 duration = "fast"
 blocking = true
 ex_command = "`mkdir /sd/test/`"
-ex_return = "`MKDIR,OK`"
+ex_return = ""
 
 ["mv"]
 description = "Move a file from a location to another one"
@@ -59,7 +59,7 @@ returns = { "MV" = "OK" }
 duration = "slow"
 blocking = true
 ex_command = "`mv /sd/hello.txt /sd/hello2.txt`"
-ex_return = "`MV,OK`"
+ex_return = ""
 
 ["cp"]
 description = "Copy a file from a location to another one"
@@ -68,7 +68,7 @@ returns = { "CP" = "OK" }
 duration = "slow"
 blocking = true
 ex_command = "`cp /sd/hello.txt /sd/hello2.txt`"
-ex_return = "`CP,OK`"
+ex_return = ""
 
 ["pwd"]
 description = "Print the current location on the filesystem"
@@ -77,4 +77,4 @@ returns = { "PWD" = "str" }
 duration = "normal"
 blocking = true
 ex_command = "`PWD`"
-ex_return = "`PWD,/sd/example/`"
+ex_return = "`/sd/example/`"

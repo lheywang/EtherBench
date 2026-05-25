@@ -1,0 +1,46 @@
+[file.cd]
+description = "Change the current directory"
+args = { "TARGET" = "str" }
+returns = { "STATUS" = "int<0...>" }
+duration = "fast"
+blocking = true
+ex_command = "`FILE:CD /sd`"
+ex_return = "`0`"
+
+[file.load]
+description = "Load a passed binary file to the filesystem. Data is passed as HEX."
+warning = "This method is very slow. For acceptable performance, please use the integrated SCP server."
+args = { "TARGET" = "str", "DATA" = "[459284...]" }
+returns = { "STATUS" = "int<0...>" }
+duration = "very slow"
+blocking = true
+ex_command = "`FILE:LOAD /sd/firmware.bin,88775242627...72`"
+ex_return = "`0`"
+
+[file.ls]
+description = "List files on the current directory"
+args = {}
+returns = { "STATUS" = "int<0...>", "FILE LIST" = "str[]<...>" }
+duration = "normal"
+blocking = true
+ex_command = "`LS`"
+ex_return = "`0,hello.txt[...]`"
+
+
+[file.mkdir]
+description = "Create a directory on the current location"
+args = { "NAME" = "str" }
+returns = { "STATUS" = "int<0...>" }
+duration = "fast"
+blocking = true
+ex_command = "`FILE:MKDIR /sd/test/`"
+ex_return = "`0`"
+
+[file.pwd]
+description = "Print the current location on the filesystem"
+args = {}
+returns = { "STATUS" = "int<0...>" }
+duration = "normal"
+blocking = true
+ex_command = "`FILE:PWD?`"
+ex_return = "`0,/sd/example/`"

@@ -1,0 +1,19 @@
+[configuration.voltage]
+description = "Configure the IO voltage to be used.<br>Query read back the current voltage.<br>Set configure a new voltage."
+warning = "The configuration range is limited by onboard EEPROM, preventing from any damages."
+args = { "[VALUE]" = "str<3.3V>" }
+returns = { "STATUS" = "int<0...>", "[VALUE]" = "<str<2.8V>" }
+duration = "slow"
+blocking = false
+ex_command = "`CONFIGURATION:VOLTAGE[?] [2.85V]`"
+ex_return = "`0,[2.78V]`"
+
+[configuration.current]
+description = "Configure the IO current max value.<br>Query read back the current voltage.<br>Set configure a new voltage."
+warning = "The configuration range is limited by onboard EEPROM, preventing from any damages."
+args = { "[VALUE]" = "str<1.2AV>" }
+returns = { "STATUS" = "int<0...>", "[VALUE]" = "str<1.2AV>" }
+duration = "slow"
+blocking = false
+ex_command = "`CONFIGURATION:CURRENT[?] [876mA]`"
+ex_return = "`0,[225mA]`"

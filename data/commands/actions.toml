@@ -1,0 +1,18 @@
+[actions]
+description = "Configure a new action to be performed on press of the ACTx buttons."
+warning = "Bount actions aren't checked, and are interpreted as any other command. Therefore, ACTx buttons may be used as reset."
+args = { "ID" = "int<1,2,3>", "ACTION" = "str<ANY SCPI/SHELL COMMAND>" }
+returns = { "STATUS" = "int<0...>" }
+duration = "fast"
+blocking = false
+ex_command = "`ACTION 1,*IDN`"
+ex_return = "`0`"
+
+[actions.reset]
+description = "Reset an action button to it's default state."
+args = { "ID" = "int<1,2,3>" }
+returns = { "STATUS" = "int<0...>" }
+duration = "very fast"
+blocking = false
+ex_command = "`ACTION:RESET 1`"
+ex_return = "` 0`"

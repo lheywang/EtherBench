@@ -1,0 +1,39 @@
+[scan.can]
+description = "Scan the CAN bus for any active device on it."
+args = {}
+returns = { "STATUS" = "int<0...>", "RESULT" = "int<0(yes),1(no)>" }
+duration = "very slow"
+blocking = true
+ex_command = "`SCAN:CAN?`"
+ex_return = "`0,0`"
+
+[scan.i2c]
+description = "Scan the I2C bus for any active device on it."
+info = "The scan is done on the slowest mode available, to fetch any device on it."
+args = {}
+returns = { "STATUS" = "int<0...>", "RESULT" = "int<0(yes),1(no)>" }
+duration = "very slow"
+blocking = true
+ex_command = "`SCAN:I2C?`"
+ex_return = "`0,0`"
+
+
+[scan.spi]
+description = "Scan the SPI bus for any active device on it."
+args = {}
+returns = { "STATUS" = "int<0...>", "RESULT" = "int<0(yes),1(no)>" }
+duration = "very slow"
+blocking = true
+ex_command = "`SCAN:SPI?`"
+ex_return = "`0,0`"
+
+
+[scan.uart]
+description = "Scan the UART bus for any active device on it."
+info = "The command will fail if more than 1 second is required to get any data."
+args = {}
+returns = { "STATUS" = "int<0...>", "RESULT" = "int<0(yes),1(no)>", "[BUS]" = "int<0,1,2>" }
+duration = "very slow"
+blocking = true
+ex_command = "`SCAN:UART?`"
+ex_return = "`0,0,1`"

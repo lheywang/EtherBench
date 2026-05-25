@@ -37,8 +37,14 @@ ALERT_STYLES = {
 CATEGORY_TITLES = {
     "programmation": "Target Programming Interface",
     "analog": "Analog Subsystem Metrology (ADC / DAC)",
-    "digital": "Digital I/O & High-Speed GPIO Matrix",
+    "hardware": "Hardware Input Outputs",
+    "scan": "Bus scanning",
+    "file": "IEEE-488.2 File commands",
     "ieee_core": "IEEE-488.2 Standard Core Commands",
+    "logger": "Logging controls",
+    "sequences": "Sequencing",
+    "extensions": "Extensions configuration",
+    "actions": "Automated actions controls",
     "unix_cli": "POSIX Filesystem & Shell Commands",
     "shell_generic": "Low-Level System Shell Utilities",
 }
@@ -123,11 +129,16 @@ def generate_doc(command_name: str, cmd_data: dict, cmd_cmd: dict) -> list:
     lines.append("")
 
     # Format syntax routing protocols
-    if "handler_scpi_set" in cmd_cmd or "handler_scpi_query" in cmd_cmd:
+    if "handler_scpi_set" in cmd_cmd:
         scpi_syntax = command_name.upper().replace(".", ":")
         if scpi_syntax.startswith("IEEE_CORE:"):
             scpi_syntax = scpi_syntax.replace("IEEE_CORE:", "*")
         lines.append(f"- SCPI Syntax: `{scpi_syntax}`")
+    if "handler_scpi_query" in cmd_cmd:
+        scpi_syntax = command_name.upper().replace(".", ":")
+        if scpi_syntax.startswith("IEEE_CORE:"):
+            scpi_syntax = scpi_syntax.replace("IEEE_CORE:", "*")
+        lines.append(f"- SCPI Syntax: `{scpi_syntax}?`")
 
     if "shell_" in cmd_cmd:
         lines.append(f"- Shell Hook: `{cmd_cmd['shell_']}`")
@@ -141,11 +152,11 @@ def generate_doc(command_name: str, cmd_data: dict, cmd_cmd: dict) -> list:
     if "blocking" in cmd_data:
         if cmd_data["blocking"] in ["Y", "yes", True]:
             lines.append(
-                '<span style="background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">🔒 Blocking</span>'
+                '<span style="background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">Blocking</span>'
             )
         else:
             lines.append(
-                '<span style="background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">🔓 Non-Blocking</span>'
+                '<span style="background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">Non-Blocking</span>'
             )
     lines.append("")
 
@@ -240,22 +251,41 @@ def generate_doc(command_name: str, cmd_data: dict, cmd_cmd: dict) -> list:
 
 
 if __name__ == "__main__":
-    # Load firmware definition maps
+    # 1. Load firmware definition maps
     with open(COMMAND_PATH, "rb") as f:
         commands = tomllib.load(f)
 
-    # Scrape documentation descriptors
-    docs = dict()
+    # 2. Scrape documentation descriptors
+    nested_docs = dict()
     doc_files = pathlib.Path(DOC_PATH).glob("**.toml")
     for doc_file in doc_files:
         with open(doc_file, "rb") as f:
-            docs.update(tomllib.load(f))
+            nested_docs.update(tomllib.load(f))
+
+    # --- NOUVELLE LOGIQUE D'APLATISSEMENT DE LA DOC ---
+    # On utilise une logique similaire à get_flat_keys mais adaptée aux structures de doc
+    def flatten_doc_keys(data, prefix=""):
+        flat_doc = {}
+        for key, value in data.items():
+            current_key = f"{prefix}.{key}" if prefix else key
+
+            # Si le dictionnaire contient 'description', c'est que c'est une feuille de doc
+            if isinstance(value, dict) and "description" not in value:
+                flat_doc.update(flatten_doc_keys(value, current_key))
+            else:
+                flat_doc[current_key] = value
+        return flat_doc
+
+    docs = flatten_doc_keys(nested_docs)
+    # --------------------------------------------------
 
     # Perform static validation check for missing descriptors
-    diffs = get_flat_keys(commands) - set(docs)
+    # (Le reste de ton script reste strictement identique)
+    flat_commands_list = list(get_flat_keys(commands))
+    diffs = set(flat_commands_list) - set(docs.keys())
     if len(diffs) > 0:
-        print("[MISMATCH] Found undocumented firmware commands:")
-        for diff in diffs:
+        print("[MISMATCH] Found undocumented firmware commands :")
+        for diff in sorted(diffs):
             print(f"  - {diff}")
 
     # --- ROUTING FILTER MATRIX ---
