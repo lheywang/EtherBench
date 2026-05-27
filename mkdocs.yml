@@ -58,6 +58,7 @@ nav:
           - hardware/mechanical/daugther_board.md
       - Electrical:
           - hardware/electrical/power.md
+          - hardware/electrical/clocking.md
           - hardware/electrical/extensions.md
           - hardware/electrical/pinout.md
 

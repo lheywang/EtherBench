@@ -1,0 +1,46 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Page-1" id="OKAhZFPxqDRIQJmib-ip">
+    <mxGraphModel dx="679" dy="403" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="CFilixyHC4LEOZwX3Qgt-1" target="CFilixyHC4LEOZwX3Qgt-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-1" value="Quartz" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="310" y="280" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="CFilixyHC4LEOZwX3Qgt-2" target="CFilixyHC4LEOZwX3Qgt-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-2" value="STM32H563" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="440" y="265" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="CFilixyHC4LEOZwX3Qgt-4" target="CFilixyHC4LEOZwX3Qgt-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-4" value="Ethernet PHY" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="630" y="265" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="CFilixyHC4LEOZwX3Qgt-6" target="CFilixyHC4LEOZwX3Qgt-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-6" value="Quartz" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="645" y="210" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-9" value="Ethernet PHY" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="630" y="350" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="CFilixyHC4LEOZwX3Qgt-10" target="CFilixyHC4LEOZwX3Qgt-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-10" value="Quartz" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="645" y="440" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFilixyHC4LEOZwX3Qgt-12" value="DUT (via PCIe)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="440" y="350" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
