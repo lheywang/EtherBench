@@ -11,6 +11,7 @@ safe physical probing.
 
 These signals are used as the core functions, such as host communication or flash storage.
 
+<div style="max-width: 90%; margin: 0 auto;">
 | Peripheral |  Instance  |                                         Signal                                          |                                       Pin                                        |                                   BGA                                   |                        Testpoint                         |                        Description                         |
 | :--------: | :--------: | :-------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------: | :---------------------------------------------------------------------: | :------------------------------------------------------: | :--------------------------------------------------------: |
 |    USB     |  `USBHS1`  |                                      `DP`<br>`DM`                                       |                                `PA12` <br> `PA11`                                |                            `B15` <br> `C15`                             |                           `/`                            |       USB peripheral, routed to the hub as a device        |
@@ -19,15 +20,18 @@ These signals are used as the core functions, such as host communication or flas
 |  Host-SWD  |            |                                   `SWCLK`<br>`SWDIO`                                    |                                 `PA14`<br>`PA13`                                 |                             `A14`<br>`A15`                              |                            /                             | SWD signals, routed to a standard header for initial flash |
 |    UCPD    |  `UCPD1`   |                         `CC1`<br>`CC2`<br>`DB_CC1`<br>`DB_CC2`                          |                            `PB13`<br>`PB14`<br>`<br>`                            |                       `PB13`<br>`PB14`<br>`<br>`                        |                 `P13`<br>`R14`<br>`<br>`                 |  USB-C signals. Routed directly to the USB-C device port.  |
 |   SDMMC    |  `SDMMC2`  |                     `SCK`<br>`CMD`<br>`D0`<br>`D1`<br>`D2`<br>`D3`                      |              `PD6`<br>`PD7`<br>`PG9`<br>`PG10`<br>`PG11`<br>`PG12`               |            `B11`<br>`A11`<br>`C10`<br>`B10`<br>`B9`<br>`B8`             |                            /                             |              SD systems. Limited to 3.3V bus.              |
+</div>
 
 ## Programmer
 
 These signals are the one used as the SWD/JTAG signals to flash the probe. They're placed appart, as they're runned not used as
 standard peripherals.
 
+<div style="max-width: 90%; margin: 0 auto;">
 | Peripheral |     Instance     |               Signal               |                   Pin                    |                  BGA                   | Testpoint |        Description        |
 | :--------: | :--------------: | :--------------------------------: | :--------------------------------------: | :------------------------------------: | :-------: | :-----------------------: |
 | SWD / JTAG | `SPI3`<br>`SPI2` | `SCLK`<br>`MISO`<br>`MOSI`<br>`IO` | `PC10`-`PI1`<br>`PI2`<br>`PI3`<br>`PC12` | `D14`-`B14`<br>`C14`<br>`C13`<br>`A12` |           | DUT Programmation signals |
+</div>
 
 ### Operation principle
 
@@ -41,16 +45,20 @@ When running in SWD mode, the SPI3 peripheral can be reconfigured to a serial re
 
 These signals are used by the hardware IO to the DUT, on the standard serial interfaces.
 
+<div style="max-width: 90%; margin: 0 auto;">
 | Peripheral | Instance  |             Signal             |                Pin                 |             BGA              |              Testpoint               |       Description        |
 | :--------: | :-------: | :----------------------------: | :--------------------------------: | :--------------------------: | :----------------------------------: | :----------------------: |
 |   CLOCK    |  `MCO1`   |             `...`              |                 ``                 |              ``              |      Clock output for the DUT.       |
 | I3C / I2C  |  `I3C1`   |         `SCL`<br>`SDA`         |           `PB8`<br>`PB9`           |         `A5`<br>`B4`         |           `TPxx`<br>`TPxx`           |   I3C master / slave.    |
 |   USART1   | `USART10` | `TX`<br>`RX`<br>`RTS`<br>`CTS` | `PE3`<br>`PE2`<br>`PG14`<br>`PG13` | `A1`<br>`A2`<br>`A7`<br>`A8` | `TPxx`<br>`TPxx`<br>`TPxx`<br>`TPxx` | Full featured USART bus. |
 |    CAN     | `FDCAN1`  |          `TX`<br>`RX`          |           `PE1`<br>`PE0`           |         `A3`<br>`A4`         |           `TPxx`<br>`TPxx`           |     FDCAN peripheral     |
+</div>
 
 ## Miscellaneous
 
 These signals describe all the others pins, for a lot of different functions that may not be linked together.
 
-| Peripheral | Instance | Signal | Pin | BGA | Testpoint | Description |
-| :--------: | :------: | :----: | :-: | :-: | :-------: | :---------: |
+<div style="max-width: 90%; margin: 0 auto;">
+| Peripheral | Instance | Signal |  Pin  |  BGA  | Testpoint | Description |
+| :--------: | :------: | :----: | :---: | :---: | :-------: | :---------: |
+</div>

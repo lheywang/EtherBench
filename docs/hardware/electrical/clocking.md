@@ -5,7 +5,9 @@
 The EtherBench motherboard integrates multiple independent clock domains to ensure optimal signal integrity and flexibility.
 The primary system clock is derived from an external 8 MHz HSE oscillator.
 
-![Clocking schematic](assets/clocking.png)
+<p align="center">
+  <img src="assets/clocking.png" alt="Clocking schematic">
+</p>
 
 The STM32H5 uses its internal Main PLL (PLL1) to scale this reference up to a 250 MHz core clock, while its Master
 Clock Output (MCO1) is routed to the PCIe extension connector to provide a highly configurable clock source for the DUT.
