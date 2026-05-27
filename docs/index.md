@@ -58,7 +58,7 @@ All of those aspects are detailed within their associated pages. Here a rapid to
 
 There's a lot that isn't documented here. Please check all the subsections, or download the [PDF document](assets/etherbench_reference_manual.pdf) !
 
-- [Installing the device](installing/install.md)
+- [Installing the device](installing/install/install.md)
 - [Hardware schematic and details](hardware/hardware.md)
 - [Programming guides](programming/programming.md)
 - [Examples](examples/examples.md)
