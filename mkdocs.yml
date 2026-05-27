@@ -44,15 +44,29 @@ plugins:
 nav:
   - Home: index.md
   - Installing:
-      - installing/install.md
-      - installing/configuring.md
+      - Assembling:
+          - installing/assembling/assembling.md
+      - Software:
+          - installing/software/install.md
+          - installing/software/configuring.md
+
   - Hardware:
       - hardware/hardware.md
-      - hardware/mechanical.md
-      - hardware/extensions.md
+      - Mechanical:
+          - hardware/mechanical/motherboard.md
+          - hardware/mechanical/ui_board.md
+          - hardware/mechanical/daugther_board.md
+      - Electrical:
+          - hardware/electrical/power.md
+          - hardware/electrical/extensions.md
+          - hardware/electrical/pinout.md
+
   - Programming:
       - programming/programming.md
-      - programming/sequences.md
+      - Sequences:
+          - programming/sequences/sequences.md
+          - programming/sequences/internal.md
+          - programming/sequences/external.md
       - Markers:
           - programming/markers.md
           - programming/markers/markers_calibration.md
@@ -62,7 +76,9 @@ nav:
           - programming/markers/markers_serial_number.md
       - Commands:
           - programming/generated/scpi_reference.md
+
   - Examples:
       - examples/examples.md
+
   - Architecure:
       - architecture/architecture.md
