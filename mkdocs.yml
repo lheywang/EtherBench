@@ -1,48 +1,105 @@
 site_name: EtherBench Documentation
 site_url: https://lheywang.github.io/EtherBench/
+repo_url: https://github.com/lheywang/EtherBench
+repo_name: lheywang/EtherBench
+
+hooks:
+  - hooks.py
 
 theme:
   name: material
   language: en
   features:
-    - navigation.tabs
+    - announce.dismiss
+    - content.action.edit
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.progress
     - navigation.sections
-    - content.code.copy
+    - navigation.tabs
+    - navigation.top
+    - navigation.tracking
+    - navigation.prune
+    - toc.follow
   palette:
     - scheme: premium
       primary: blue grey
       accent: indigo
+  font:
+    text: Roboto
+    code: Roboto Mono
 
-  favicon: logos/debugger.png
-  logo: logos/debugger.png
-  icon:
-    logo: logos/debugger.png
+  favicon: assets/icons/favicon.ico
+  logo: assets/images/debugger.png
 
 markdown_extensions:
-  - pymdownx.superfences
-  - pymdownx.emoji
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.inlinehilite
   - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.highlight:
       anchor_linenums: true
+  - pymdownx.arithmatex:
+      generic: true
+      smart_dollar: true
+  - toc:
+      permalink: true
+  - mdx_truly_sane_lists:
+      truly_sane: true
+      nested_indent: 2
   - md_in_html
   - admonition
   - tables
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra:
+  social:
+    - name: GitHub
+      icon: fontawesome/brands/github
+      link: https://github.com/lheywang/EtherBench
+
+
 
 plugins:
+  - awesome-pages
   - search
-  - with-pdf:
-      author: Leonard HEYWANG
-      cover_title: "EtherBench Platform"
-      cover_subtitle: "Technical Reference Manual"
-      copyright: CERN-OHL-S v2 & GPLv3
-      output_path: assets/etherbench_reference_manual.pdf
-      cover: true
-      back_cover: false
-      toc_level: 3
+  - exporter:
+      formats:
+        pdf:
+          enabled: !ENV [MKDOCS_EXPORTER_PDF, true]
+          concurrency: 16
+          stylesheets:
+            - templates/pdf.scss
+          aggregator:
+            enabled: true
+            output: assets/etherbench_reference_manual.pdf
+            covers: limits
+          covers:
+            front: templates/front.html.j2
+      buttons:
+        - title: View as PDF
+          icon: material-file-move-outline
+          enabled: !!python/name:mkdocs_exporter.formats.pdf.buttons.download.enabled
+          attributes:
+            target: _blank
+            href: !!python/name:mkdocs_exporter.formats.pdf.buttons.download.href
+        - title: Download as PDF
+          icon: material-file-download-outline
+          enabled: !!python/name:mkdocs_exporter.formats.pdf.buttons.download.enabled
+          attributes: !!python/name:mkdocs_exporter.formats.pdf.buttons.download.attributes
 
 nav:
   - Home: index.md
+  - Table of Contents: toc.md
   - Installing:
       - Assembling:
           - installing/assembling/assembling.md
@@ -85,10 +142,15 @@ nav:
   - Examples:
       - examples/examples.md
 
-  - Architecure:
+  - Architecture:
       - architecture/architecture.md
       - Threads:
           - architecture/threads/org.md
+          - Services:
+            - architecture/threads/services/shell.md
+          - Board_IO:
+            - architecture/threads/board/board_manager.md
+            
       - IO:
           - architecture/networking/network.md
           - Services:
@@ -98,3 +160,14 @@ nav:
               - architecture/networking/io/telnet.md
       - Programmer:
           - architecture/jtag/jtag.md
+
+extra_javascript:
+  - assets/scripts/katex.js
+  - assets/scripts/mathjax.js
+  - assets/scripts/mkdocs-exporter.js
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js
+  
+extra_css:
+    - https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css

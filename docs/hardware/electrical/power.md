@@ -33,10 +33,9 @@ The `5V @ 0.5A` profile represents the baseline USB 2.0 specification. This mode
 To preserve a reasonable power margin for the DUT and prevent host port overcurrent shutdowns, the Ethernet PHY is held under hardware reset and the ARGB LEDs are
 powered off.
 
-Since modern PC ports can often supply more than 500 mA without advertising it via Type-C analog signaling (or over legacy cables), a dedicated CLI command allows
-the user to manually override the current profile (valid for 5V profiles only).
-
-> Overriding the USB power profile bypasses hardware protections and shall be done at the user's own risk.
+!!! warning "Overriding limitations"
+    Since modern PC ports can often supply more than 500 mA without advertising it via Type-C analog signaling (or over legacy cables), a dedicated CLI command allows the user to manually override the current profile (valid for 5V profiles only).
+    Overriding the USB power profile bypasses hardware protections and shall be done at the user's own risk.
 
 For exigeant or high-power DUTs, an external power supply can be wired directly to the extension board to bypass USB limitations. In that case, the internal
 regulator can be simply turned-off (Request of a 0.0V).

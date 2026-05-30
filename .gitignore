@@ -3,3 +3,6 @@ site/*
 
 # Generated data
 *generated*
+
+# Python
+*__pycache__*

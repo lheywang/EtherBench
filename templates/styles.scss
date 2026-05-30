@@ -26,39 +26,43 @@ body {
     }
 }
 
-@page :first {
+
+@page front-cover-page {
     size: A4 portrait;
     margin: 0 !important;
     background-color: #8badfc !important;
     background-image: linear-gradient(135deg, #8badfc 0%, #dcdcdc 100%) !important;
     
-    @top-right { content: normal; border: none; }
-    @bottom-right { content: normal; }
-    @bottom-left { content: normal; }
+    @top-right { content: none !important; border: none !important; }
+    @bottom-right { content: none !important; }
+    @bottom-left { content: none !important; }
 }
 
-#cover {
+.no-cover-padding {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+}
+
+.front-cover {
+    page: front-cover-page; 
     display: block !important;
     width: 210mm !important;
     height: 297mm !important;
     box-sizing: border-box;
     padding: 60mm 25mm 25mm 25mm !important;
-    
-    background-color: #8badfc !important;
-    background-image: linear-gradient(135deg, #8badfc 0%, #dcdcdc 100%) !important;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    
-    page-break-after: always !important;
-    break-after: page !important;
+    position: relative;
     
     h1.title, .title {
         font-size: 38pt !important;
         font-weight: 800 !important;
-        color: $bg-light !important;
+        color: #1e293b !important; 
         margin: 0 0 5mm 0 !important;
         padding: 0 !important;
         border: none !important;
-        border-bottom: 0px solid transparent !important; 
         letter-spacing: -1px;
         
         &::after {
@@ -83,17 +87,16 @@ body {
             height: 25mm;   
             width: auto;    
             object-fit: contain;
-            
         }
     }
 
     .cover-content {
-    margin-top: 35mm !important;
-}
+        margin-top: 35mm !important;
+    }
 
     p.subtitle, .subtitle {
         font-size: 16pt !important;
-        color: #5181b8 !important;
+        color: #475569 !important;
         font-weight: 300 !important;
         margin: 0 0 30mm 0 !important;
         border: none !important;
@@ -107,31 +110,9 @@ body {
         
         span {
             font-size: 10pt !important;
-            color: $brand-accent !important;
+            color: #0f172a !important;
             font-style: normal !important;
         }
-    }
-
-    .page-breaker {
-    position: relative !important;
-    display: block !important;
-    height: 100vh !important; 
-    width: 100% !important;
-    page-break-after: always !important; 
-    break-after: page !important;
-    visibility: hidden !important; 
-}
-}
-
-#doc-toc {
-    page-break-before: always !important;
-    break-before: page !important;
-    
-    h1 {
-        font-size: 22pt !important;
-        color: $brand-primary !important;
-        border-bottom: 2px solid $brand-accent !important;
-        padding-bottom: 4mm !important;
     }
 }
 
@@ -295,4 +276,17 @@ pre {
         margin: 0 !important;
         display: block !important;
     }
+}
+
+.wy-nav-content {
+    max-width: none !important;
+    width: auto !important;
+}
+
+.wy-nav-content-wrap {
+    max-width: none !important;
+}
+
+.wy-table-responsive table {
+    width: 100% !important;
 }

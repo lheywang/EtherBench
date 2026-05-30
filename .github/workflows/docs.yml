@@ -31,7 +31,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mkdocs-material mkdocs-with-pdf tomli
+          pip install mkdocs-material mkdocs-exporter mkdocs-mermaid-to-svg mkdocs-diagrams tomli mdx_truly_sane_lists mkdocs-awesome-pages-plugin
 
       - name: Generate SCPI Reference Page
         run: |
