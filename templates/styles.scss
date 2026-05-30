@@ -262,3 +262,37 @@ pre {
     font-size: 9pt;
     white-space: pre-wrap;
 }
+
+@media print {
+    .md-typeset .admonition, 
+    .md-typeset admissibility,
+    div.admonition {
+        display: block !important;
+        page-break-inside: avoid;
+        border-left-width: 4px !important;
+        margin-bottom: 1.5em !important;
+        padding: 0 !important;
+    }
+
+    .md-typeset .admonition-title,
+    div.admonition p.admonition-title {
+        display: block !important;
+        position: relative !important;
+        margin: 0 !important;
+        padding: 6px 12px !important;
+        font-weight: bold !important;
+        background-image: none !important; 
+    }
+
+    .md-typeset .admonition-title::before,
+    div.admonition p.admonition-title::before {
+        display: none !important;
+    }
+
+    .md-typeset .admonition > *:not(.admonition-title),
+    div.admonition > *:not(.admonition-title) {
+        padding: 10px 12px !important;
+        margin: 0 !important;
+        display: block !important;
+    }
+}

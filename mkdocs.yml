@@ -73,7 +73,7 @@ nav:
           - programming/sequences/external.md
       - Markers:
           - programming/markers.md
-          - programming/markers/marker_battery.md
+          - programming/markers/markers_battery.md
           - programming/markers/markers_calibration.md
           - programming/markers/markers_name.md
           - programming/markers/markers_pages.md
@@ -87,3 +87,14 @@ nav:
 
   - Architecure:
       - architecture/architecture.md
+      - Threads:
+          - architecture/threads/org.md
+      - IO:
+          - architecture/networking/network.md
+          - Services:
+              - architecture/networking/io/programmer.md
+              - architecture/networking/io/scpi.md
+              - architecture/networking/io/streaming.md
+              - architecture/networking/io/telnet.md
+      - Programmer:
+          - architecture/jtag/jtag.md
