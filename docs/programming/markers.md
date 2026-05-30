@@ -73,3 +73,4 @@ Here the different structures that can be passed:
 |        [**Board name**](markers/markers_name.md)        | `0xEBB3` | Store the human name of the board                                                                                         |
 |    [**Calibration**](markers/markers_calibration.md)    | `0xEBB4` | Store calibration values for the analog IOs                                                                               |
 |  [**Serial Number**](markers/markers_serial_number.md)  | `0xEBB5` | Store informations about how the board itself, to identify it.                                                            |
+|   [**Battery emulation**](markers/marker_battery.md)    | `0xEBBF` | Configure the system in battery mode. A variable voltage will be provided, following the configured curves.               |

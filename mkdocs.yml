@@ -70,6 +70,7 @@ nav:
           - programming/sequences/external.md
       - Markers:
           - programming/markers.md
+          - programming/markers/marker_battery.md
           - programming/markers/markers_calibration.md
           - programming/markers/markers_name.md
           - programming/markers/markers_pages.md
