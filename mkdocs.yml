@@ -61,6 +61,9 @@ nav:
           - hardware/electrical/clocking.md
           - hardware/electrical/extensions.md
           - hardware/electrical/pinout.md
+          - hardware/electrical/trigger.md
+      - Thermal:
+          - hardware/thermal/thermal.md
 
   - Programming:
       - programming/programming.md

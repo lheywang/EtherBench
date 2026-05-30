@@ -77,3 +77,11 @@ Here the complete pinout :
 |  **30**   | USART2 TX        | GND                                    |
 |  **31**   | GND              | USART3 RX                              |
 |  **32**   | GND              | USART3 TX                              |
+
+## Isolation
+
+The PCIe slot isn't isolated from the DUT by default. This remains an option for specific required.
+In that case, an isolated power supply will also be required to convey the provided voltage to the isolated island.
+
+The motherboard was designed with that requirement in mind, therefore only the two support screw require a carefull attention,
+as they're on the main ground domain. It's on the daughter board to treat them correctly.
