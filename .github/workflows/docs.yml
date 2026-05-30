@@ -37,6 +37,10 @@ jobs:
         run: |
           python3 docs/scripts/scpi2md.py
 
+      - name: Install headless browser
+        run: |
+          playwright install
+
       - name: Build and Deploy to GitHub Pages
         run: |
           mkdocs gh-deploy --force
