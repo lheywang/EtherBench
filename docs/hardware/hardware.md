@@ -4,7 +4,7 @@ EtherBench, at least the probe is designed around an assembly of three PCB :
 
 - One master board, with six layers. It host all the complex functions of the device.
 - One top board, with the leds and basic leds features.
-- Two lateral boards, with buttons and the screen.
+- Two lateral boards, with buttons.
 
 The two later ones are done with a two layer boards, as there isn't any high speed signals nor complex requirements.
 Therefore, the cost of the device remains accessible.
@@ -15,9 +15,8 @@ The electrical part fit within a 110 x 110 mm boards assembly.
 
 The master board is designed around
 
-> **Note**
-> While the global concept of the boards is done, the specific details aren't. Thus, no boards / assemblies / schematic are going to be added.
-> They'll be once finished.
+!!! note "Unfinished spec"
+    This document present reflexions about non finished designs. Therefore, details may be changed without notice.
 
 ## Top board
 
@@ -25,6 +24,7 @@ The top board act as a user interface more than a functionnality board. it compo
 
 - A ring led, as the main interface with the user
 - Some status leds
+- An I2C screen
 
 ### Led ring
 
@@ -43,43 +43,36 @@ Multiple animations can be shown :
 | Breathing          |               Green : `#34BA4A` or Red : `#C4314C`               | All 10 LEDs slowly pulse on and off simultaneously using a sine wave function.                                   | Sequence has ended. Here the results.                                                       |
 | Strobe             |                            `#E02926`                             | All 10 LEDs blink on and off rapidly at 5Hz (100ms on, 100ms off). Only for the device error (not the DUT).      | HardFault, Ethernet disconnect, or Storage failure.                                         |
 
-### Leds
+### Led
 
-In addition of the main ring leds, there's 8 leds placed on the side.
-These show the user informations about what's being currently transfered.
+In addition of the main ring leds, there's a single led, that blink when the device is powered on. 
+It's only used to show that the system is alive.
 
-| Leds                               | What it means                                          |
-| :--------------------------------- | :----------------------------------------------------- |
-| Ethernet activity (Green / Yellow) | There's currently Ethernet trafic                      |
-| Usb activity (Blue / Red)          | There's currently USB trafic                           |
-| Flash activity (Orange / Green)    | There's currently memory IO, especially to the SD card |
-| Status (blink, green)              | I'm alive !                                            |
+### Screen
 
-## Side boards
+A small I2C screen is added on the top board, and is used to show the user basic info about the device:
 
-The side boards are used as user inputs, and thus contain essentially buttons. A small I2C screen is added,
-to display basic informations on it, such as the granted IP in case of the DHCP attribution.
-
-For each EtherBench probe, there's two of these boards, on each side.
-
-|   Feature   | Right board | Left board |
-| :---------: | :---------: | :--------: |
-| OLED screen |             |   **X**    |
-|  Go button  |             |   **X**    |
-| Stop button |             |   **X**    |
-|    Reset    |    **X**    |            |
-
-### OLED screen
-
-The onboard screen is used to show specific infos, that can't be reported in any other ways. This include, as
-explained before the IP, because at this point, your not connected.
-
-It's also used to show additionnal infos, such as:
-
+- Can is remove the SD
+- What's it's IP
+- Is there something running currently ?
 - Sequences info (what failed ?)
 - Error codes, to get more specific infos (rather than a generic red flash)
 - Progressions
 - Custom infos, from the sequence support.
+
+The integrated UI remains quite simple, as the device is designed to be operated remotely, over Ethernet or USB.
+
+## Side boards
+
+The side boards are used as user inputs, and thus contain essentially buttons. 
+
+For each EtherBench probe, there's two of these boards, on each side.
+
+On the left side, the reset button is added. It enable to send to the MCU a reset request, which will be treated once the condition permit it.
+This mean before resetting, the network sessions will be closed, and the debugger sessions will be closed.
+
+On the right side, there's three buttons, referred as ACTx, from 0 to 2. These can be freely programmed by the user, to do anything they want.
+By default, the ACT0 and ACT1 are unused, and ACT2 is the STOP button, to stop a currently running operatio?
 
 ### Go / Stop button
 

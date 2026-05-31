@@ -20,12 +20,14 @@ Therefore, the following matrix is applied:
 |        `5V @ 1.5A`         | Enabled | Enabled      | 20 %\*               | 3.5 W                     |
 |        `5V @ 0.5A`         | Enabled | Disabled     | Disabled             | 1 W                       |
 
-> \* LED Luminosity: Can be overridden in software. The effective brightness will always be the lowest value between the user configuration and the hardware
-> profile limit.
+!!! info "Led luminosity"
+    Can be overridden in software. The effective brightness will always be the lowest value between the user configuration and the hardware
+    profile limit.
 
-> \*\* Maximal DUT Power: Represents the theoretical maximum power budget assuming ideal efficiency. Since the PCIe slot physical current limit is capped at
-> 4.5A (up to 12V), the highest DUT power levels can only be achieved with active buck-boost circuitry on the extension board. On the default model, the DUT
-> power is strictly capped at 15W under 3.3V.
+!!! info "Maximal DUT Power"
+    Represents the theoretical maximum power budget assuming ideal efficiency. Since the PCIe slot physical current limit is capped at
+    4.5A (up to 12V), the highest DUT power levels can only be achieved with active buck-boost circuitry on the extension board. 
+    On the default model, the DUT power is strictly capped at 15W under 3.3V.
 
 ## Legacy USB-A operation
 

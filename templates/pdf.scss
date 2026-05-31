@@ -57,10 +57,6 @@ summary::after {
   }
 }
 
-h1, h2, h3 {
-  string-set: chapter content();
-}
-
 body {
   print-color-adjust: exact;
   text-rendering: geometricPrecision;

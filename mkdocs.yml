@@ -98,7 +98,9 @@ plugins:
           attributes: !!python/name:mkdocs_exporter.formats.pdf.buttons.download.attributes
 
 nav:
-  - Home: index.md
+  - Home: 
+      - index.md
+      - project.md
   - Table of Contents: toc.md
   - Installing:
       - Assembling:
@@ -145,21 +147,16 @@ nav:
   - Architecture:
       - architecture/architecture.md
       - Threads:
-          - architecture/threads/org.md
-          - Services:
-            - architecture/threads/services/shell.md
-          - Board_IO:
-            - architecture/threads/board/board_manager.md
-            
-      - IO:
-          - architecture/networking/network.md
-          - Services:
-              - architecture/networking/io/programmer.md
-              - architecture/networking/io/scpi.md
-              - architecture/networking/io/streaming.md
-              - architecture/networking/io/telnet.md
-      - Programmer:
-          - architecture/jtag/jtag.md
+          - architecture/threads/board_manager.md
+          - architecture/threads/cmsis_eth.md
+          - architecture/threads/cmsis_usb.md
+          - architecture/threads/command_parser.md
+          - architecture/threads/hardware.md
+          - architecture/threads/programmer.md
+          - architecture/threads/router.md
+          - architecture/threads/scpi.md
+          - architecture/threads/sequences.md
+          - architecture/threads/shell.md
 
 extra_javascript:
   - assets/scripts/katex.js
