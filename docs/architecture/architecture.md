@@ -12,4 +12,4 @@ On the software side, the global software architecture is done on different thre
 
 ![Software Architecture](../assets/images/architecture.svg)
 
-All of the different threads are going to be described on their own pages.
+All of the different threads are going to be described on their own pages. The remaining 
