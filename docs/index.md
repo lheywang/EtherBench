@@ -4,6 +4,8 @@
 
 Etherbench is a platform, built arround a lot of different projects, designed to make debugging and testing easier, without requiring costly tools.
 
+![Board 3D Model](assets/images/board.png)
+
 While it provides basic debugger features, according to the [ARM CMSIS-DAP](https://arm-software.github.io/CMSIS-DAP/latest/) specification, over the two standard buses:
 
 - [SWD](https://developer.arm.com/documentation/101761/1-0/Debug-and-trace-interface/Serial-Wire-Debug-signals) : Serial Wire Debug, common for MCUs
